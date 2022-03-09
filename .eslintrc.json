@@ -1,0 +1,53 @@
+{
+    "env": {
+        "browser": true,
+        "es2021": true
+    },
+    "extends": [
+        "eslint:recommended",
+
+        "plugin:react/recommended",
+        
+        "plugin:@typescript-eslint/recommended",
+        "plugin:@typescript-eslint/recommended-requiring-type-checking",
+
+        "plugin:prettier/recommended",
+
+        "airbnb",
+        "airbnb/hooks",
+
+        "airbnb-typescript"
+    ],
+    
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+        "ecmaFeatures": {
+            "jsx": true
+        },
+        "ecmaVersion": "latest",
+        "sourceType": "module",
+        "project":"./tsconfig.json" // 경로가 달라지네... client 경로 지정해줘야 할 때도,  없어야 할 때도 있고..?
+    },
+    "plugins": [
+        "react",
+        "@typescript-eslint"
+    ],
+    "settings": {
+        "import/resolver": {
+          "node": {
+            "paths": ["src"],
+            "extensions": [".js", ".jsx", ".ts", ".tsx"]
+          }
+        }
+    },
+    "rules": {
+       "react/jsx-filename-extension": ["off", { "extensions": [".js", ".jsx","ts","tsx"] }],
+       "react/require-default-props": "off",
+       "quotes": "off",
+       "@typescript-eslint/quotes": "off",
+       "linebreak-style":"off",
+       "prettier/prettier": [
+            "error", { "endOfLine": "auto" }
+        ]
+    }
+}
