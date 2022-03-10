@@ -26,7 +26,7 @@
         },
         "ecmaVersion": "latest",
         "sourceType": "module",
-        "project":"./tsconfig.json" // 경로가 달라지네... client 경로 지정해줘야 할 때도,  없어야 할 때도 있고..?
+        "project":["./client/tsconfig.json","./tsconfig.json"]  // 경로가 달라지네... client 경로 지정해줘야 할 때도,  없어야 할 때도 있고..?
     },
     "plugins": [
         "react",
@@ -48,6 +48,8 @@
        "linebreak-style":"off",
        "prettier/prettier": [
             "error", { "endOfLine": "auto" }
-        ]
+        ],
+        "react/react-in-jsx-scope": "warn",
+        "import/prefer-default-export": "warn"
     }
 }

@@ -1,5 +1,6 @@
-import React, { useRef } from "react";
-import styled from "styled-components";
+/* eslint-disable */
+// 지금은 뷰 구성에 집중할 것임. 린트 무시하는 주석은 나중에 해제하기
+import React from "react";
 import { BrowserRouter as Router, Routes, Route, Outlet } from "react-router-dom";
 import {
   ChatList,
@@ -19,6 +20,7 @@ import {
   AfterSearch,
   NovelListByCategory,
 } from "views";
+import GlobalStyle from "./assets/GlobalStyle";
 
 function Home() {
   return <Outlet />;
@@ -28,6 +30,7 @@ function Home() {
 function App() {
   return (
     <Router>
+      <GlobalStyle />
       <header>
         <Routes>
           <Route path="/" element={<Nav />} />

@@ -1,5 +1,12 @@
 import React from "react";
+import { FreeTalks } from "./FreeTalkList.components";
 
 export default function FreeTalkList() {
-  return <>ㅁㅁㅁ</>;
+  return (
+    <FreeTalks>
+      {[0, 0, 0].map(() => (
+        <FreeTalks.Talk />
+      ))}
+    </FreeTalks>
+  );
 }
