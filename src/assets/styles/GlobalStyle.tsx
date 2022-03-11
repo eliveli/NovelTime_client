@@ -13,6 +13,7 @@ const GlobalStyle = createGlobalStyle`
     line-height: 1.5;
     font-family: "Californian FB","D2Coding", "Arial", sans-serif;
     font-size: 16px;
+    word-break: break-all; //줄바꿈 시 문자 단위로 설정(not 단어 단위)
   }
 `;
 

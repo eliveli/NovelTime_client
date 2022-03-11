@@ -23,7 +23,7 @@ export const Talk = styled.article`
   width: 100%;
   display: flex;
   padding: 12px 0;
-  border-bottom: 1px solid rgba(100, 100, 100, 0.2);
+  border-bottom: 1px solid ${(props) => props.theme.color.lightGray100_2};
   &:last-child {
     border-bottom: 0;
   }
@@ -36,7 +36,7 @@ export const FirstLineContainer = styled.div`
   margin-left: 12px;
   padding-bottom: 3px;
 
-  border-bottom: 1px solid rgba(100, 100, 100, 0.1);
+  border-bottom: 1px solid ${(props) => props.theme.color.lightGray100_1};
 `;
 export const BesideImgContainer = styled.div`
   width: 100%;
@@ -189,6 +189,18 @@ export const TalkTitle = styled.div`
   font-size: 17px;
 `;
 export const NovelTitle = styled.div`
-  color: gray;
+  color: ${(props) => props.theme.color.textGray};
   font-weight: 600;
 `;
+
+// (구분) img vs div의 backgorund-image (하기)
+// <img src="" />
+// : 받아오는 이미지 소스의 height를 그대로 가져올 때
+// <div style={{
+//   background-image: url("");
+//   background-position: center;
+//   background-repeat: no-repeat;
+//   background-size: cover;
+// }} />
+// : 이미지 height가 고정되어 있어 받아오는 이미지 소스의 height를 변경해야 할 때
+// : 이 때 원본이미지 비율이 변경되지 않도록 유지하면서 position만 맞춰주는 것
