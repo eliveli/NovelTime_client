@@ -1,11 +1,11 @@
 /* eslint-disable */
 // 지금은 뷰 구성에 집중할 것임. 린트 무시하는 주석은 나중에 해제하기
 import { ThemeProvider } from "styled-components";
-import { FaChevronRight, FaRegHeart } from "react-icons/fa";
-import { AiOutlineRight } from "react-icons/ai";
+import Icon from "../../assets/Icon";
+
 import {
   CreateDate,
-  FirstLineContainer,
+  LastLineContainer,
   NovelImg,
   UserName,
   RecommendBG,
@@ -14,40 +14,34 @@ import {
   IconBox,
   TalkTitle,
   NovelTitle,
-  TalkImg,
   IconNO,
   TalkPreview,
   UserContainer,
-  TalkImgBox,
   NovelContainer,
   NovelInfoBox,
   UserImg,
   NovelInfo,
   NovelSubInfoBox,
   NovelInfoLineHeight,
-  // setImgUrl,
 } from "./RecommendList.styles";
 
 type MyComponentProps = React.PropsWithChildren<{}>;
 
-function Recommend({ children }: MyComponentProps) {
+interface TextProps {
+  novelImg: string;
+  userImg: string;
+}
+
+export default function Recommend({ children }: MyComponentProps) {
   return <RecommendBG>{children}</RecommendBG>;
 }
-export default Recommend;
-// function TitleWithMore() {
-//     return (
-//       <TalkPreview>
-//         <TalkTitle>꾸준히 인기 많은 해포 패러디 계의 탑 작품이야 한 번 봐 봐</TalkTitle>
-//         <AiOutlinePlusCircle />
-//       </TalkPreview>
-//     );
-//   }
-Recommend.Text = function (textProps) {
+
+Recommend.Text = function ({ text }: { text: TextProps }) {
   // props or default props
   const {
     novelImg = "https://dn-img-page.kakao.com/download/resource?kid=xsaRM/hzhOfrO85M/k1jHoCWYGpQkLzI11JXbA0&filename=th1",
     userImg = "https://cdn.pixabay.com/photo/2018/08/31/08/35/toys-3644073_960_720.png",
-  } = textProps;
+  } = text;
   const theme = {
     novelImg,
     userImg,
@@ -70,22 +64,20 @@ Recommend.Text = function (textProps) {
         <UserContainer>
           <TalkPreview>
             <TalkTitle>꾸준히 인기 많은 해포 패러디 계의 탑 작품이야 한 번 봐 봐</TalkTitle>
-            <FaChevronRight
-              style={{ margin: "auto", color: "rgba(100, 100, 100, 0.5)", marginLeft: "6px" }}
-            />
+            <Icon.Right />
           </TalkPreview>
 
-          <FirstLineContainer>
+          <LastLineContainer>
             <UserNameBox>
               <UserImg />
               <UserName>Nana</UserName>
               <CreateDate>22.01.01</CreateDate>
             </UserNameBox>
             <IconBox>
-              <FaRegHeart />
+              <Icon.Heart />
               <IconNO>7</IconNO>
             </IconBox>
-          </FirstLineContainer>
+          </LastLineContainer>
         </UserContainer>
       </Text>
     </ThemeProvider>

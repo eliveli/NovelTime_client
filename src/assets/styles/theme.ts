@@ -1,3 +1,5 @@
+import baseStyled, { ThemedStyledInterface } from "styled-components";
+
 const color = {
   textGray: "#606060c2",
   lightGray100_1: "rgba(100,100,100,0.1)",
@@ -10,3 +12,5 @@ const theme = {
 };
 
 export default theme;
+export type Theme = typeof theme;
+export const styled = baseStyled as ThemedStyledInterface<Theme>;

@@ -1,7 +1,11 @@
 // /* eslint-disable */
 
-import styled, { keyframes } from "styled-components";
+import { keyframes } from "styled-components";
+import { styled } from "assets/styles/theme";
 
+interface Props {
+  theme: { userImg: string; talkImg: string };
+}
 export const TalkBG = styled.section`
   /* 모바일 */
   width: 100%;
@@ -46,7 +50,7 @@ export const BesideImgContainer = styled.div`
 //   imgUrl = img;
 // }
 // let imgUrl = "https://cdn.pixabay.com/photo/2018/08/31/08/35/toys-3644073_960_720.png";
-export const UserImg = styled.div`
+export const UserImg = styled.div<Props>`
   border-radius: 50%;
   min-width: 50px;
   height: 50px;
@@ -136,7 +140,7 @@ const slideImgPC = keyframes`
     top: -510px;
    }
   `;
-export const TalkImg = styled.img`
+export const TalkImg = styled.img<Props>`
   position: absolute;
   left: 0;
 

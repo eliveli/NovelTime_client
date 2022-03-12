@@ -1,7 +1,7 @@
 /* eslint-disable */
 // 지금은 뷰 구성에 집중할 것임. 린트 무시하는 주석은 나중에 해제하기
 import { ThemeProvider } from "styled-components";
-import { FaRegComment, FaRegHeart } from "react-icons/fa";
+import Icon from "../../assets/Icon";
 import {
   CreateDate,
   FirstLineContainer,
@@ -24,16 +24,21 @@ import {
 
 type MyComponentProps = React.PropsWithChildren<{}>;
 
-export function FreeTalks({ children }: MyComponentProps) {
+interface TalkProps {
+  userImg: string;
+  talkImg: string;
+}
+
+export default function FreeTalks({ children }: MyComponentProps) {
   return <TalkBG>{children}</TalkBG>;
 }
 
-FreeTalks.Talk = function (talkProps) {
+FreeTalks.Talk = function ({ talk }: { talk: TalkProps }) {
   // props or default props
   const {
     userImg = "https://cdn.pixabay.com/photo/2018/08/31/08/35/toys-3644073_960_720.png",
     talkImg = "https://cdn.pixabay.com/photo/2018/08/31/08/35/toys-3644073_960_720.png",
-  } = talkProps;
+  } = talk;
   const theme = {
     userImg,
     talkImg,
@@ -51,11 +56,11 @@ FreeTalks.Talk = function (talkProps) {
             </UserNameBox>
             <IconsBox>
               <IconBox>
-                <FaRegHeart />
+                <Icon.Heart />
                 <IconNO>7</IconNO>
               </IconBox>
               <IconBox>
-                <FaRegComment />
+                <Icon.Comment />
                 <IconNO>5</IconNO>
               </IconBox>
             </IconsBox>

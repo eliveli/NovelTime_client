@@ -1,6 +1,10 @@
 /* eslint-disable */
 
-import styled, { keyframes } from "styled-components";
+import { styled } from "assets/styles/theme";
+
+interface Props {
+  theme: { novelImg: string; userImg: string };
+}
 
 export const RecommendBG = styled.section`
   /* 모바일 */
@@ -22,7 +26,7 @@ export const RecommendBG = styled.section`
 export const Text = styled.article`
   /* 모바일 */
   width: 100%;
-  padding: 12px 0 3px;
+  padding: 12px 0 6px;
   border-bottom: 1px solid rgba(100, 100, 100, 0.2);
   &:last-child {
     border-bottom: 0;
@@ -40,7 +44,7 @@ export const Text = styled.article`
   @media screen and (min-width: 1024px) {
   }
 `;
-export const FirstLineContainer = styled.div`
+export const LastLineContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
@@ -90,7 +94,7 @@ export const NovelInfoBox = styled.div`
   }
 `;
 
-export const NovelImg = styled.div`
+export const NovelImg = styled.div<Props>`
   /* 모바일 */
   height: 80px;
   min-width: 70px;
@@ -108,7 +112,7 @@ export const NovelImg = styled.div`
   @media screen and (min-width: 1024px) {
   }
 `;
-export const UserImg = styled.div`
+export const UserImg = styled.div<Props>`
   border-radius: 50%;
   min-width: 20px;
   height: 20px;
@@ -148,7 +152,7 @@ export const TalkPreview = styled.div`
   @media screen and (min-width: 768px) {
     margin: 0;
     margin-bottom: 10px;
-    padding: 6px 8px;
+    padding: 0px 8px;
   }
   /* PC */
   @media screen and (min-width: 1024px) {
@@ -156,116 +160,16 @@ export const TalkPreview = styled.div`
 `;
 export const TalkTitle = styled.div`
   border-right: 1px solid ${(props) => props.theme.color.lightGray0_1};
-  padding: 3px 1px;
+  padding: 3px 1px 3px 0;
 
   font-weight: 600;
   /* font-size: 17px; */
   /* 태블릿 */
   @media screen and (min-width: 768px) {
+    padding: 7px 10px 7px 2px;
   }
   /* PC */
   @media screen and (min-width: 1024px) {
-  }
-`;
-export const TalkImgBox = styled.div`
-  width: 100%;
-
-  text-align: center; // 자식이미지 width 100% 아닐 때 가운데 정렬
-
-  position: relative;
-
-  overflow: hidden;
-
-  /* 모바일 */
-  height: 150px;
-  /* 태블릿 */
-  @media screen and (min-width: 768px) {
-    height: 200px;
-  }
-  /* PC */
-  @media screen and (min-width: 1024px) {
-    height: 250px;
-  }
-
-  /* overflow-x: hidden;  // y스크롤 넣을 경우 */
-  /* scroll-behavior: smooth; */
-`;
-const slideImgMobile = keyframes`
-  0% {
-    top: 0;
-  }
-  10% {
-    top: 0;
-  }
-  90%{
-    top: -110px;
-   }
-  100%{
-    top: -110px;
-   }
-  `;
-const slideImgTablet = keyframes`
-  0% {
-    top: 0;
-  }
-  10% {
-    top: 0;
-  }
-  90%{
-    top: -470px;
-   }
-  100%{
-    top: -470px;
-   }
-  `;
-const slideImgPC = keyframes`
-  0% {
-    top: 0;
-  }
-  10% {
-    top: 0;
-  }
-  90%{
-    top: -510px;
-   }
-  100%{
-    top: -510px;
-   }
-  `;
-export const TalkImg = styled.img`
-  position: absolute;
-  left: 0;
-
-  /* padding-top: 50%; */
-  width: 100%;
-  display: inline-block; // 자식이미지 width 100% 아닐 때 가운데 정렬
-
-  border-radius: 10%;
-
-  content: url(${(props) => props.theme.talkImg});
-
-  /* 모바일 */
-  animation-name: ${slideImgMobile};
-  animation-direction: alternate;
-  animation-iteration-count: infinite;
-  animation-timing-function: ease-in-out;
-  animation-duration: 2s; // 문자열로 넣으면 작동 안 함... (X)"1s"(X)
-  /* animation-delay: 1s; */
-  /* animation-fill-mode: forwards; //애니메이션 종료 후 마지막 keyframe 값 유지(중요!) */
-
-  /* 태블릿 */
-  @media screen and (min-width: 768px) {
-    animation-name: ${slideImgTablet};
-    animation-duration: 3.5s;
-  }
-  /* PC */
-  @media screen and (min-width: 1024px) {
-    animation-name: ${slideImgPC};
-    animation-duration: 4s;
-  }
-
-  &:hover {
-    animation-play-state: paused;
   }
 `;
 
@@ -276,7 +180,6 @@ export const IconBox = styled.div`
 `;
 export const IconNO = styled.span``;
 export const NovelTitle = styled.div`
-  /* color: gray; */
   font-weight: 600;
 `;
 export const NovelSubInfoBox = styled.div`
