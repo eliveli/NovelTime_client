@@ -1,5 +1,6 @@
 /* eslint-disable */
 // 지금은 뷰 구성에 집중할 것임. 린트 무시하는 주석은 나중에 해제하기
+import { useEffect, useRef } from "react";
 import { ThemeProvider } from "styled-components";
 import Icon from "../assets/Icon";
 
@@ -21,7 +22,13 @@ interface TextProps {
   userImg: string;
 }
 
-export default function NovelRow({ novel }: { novel: TextProps }) {
+export default function NovelRow({
+  novel,
+  handleImgHeight,
+}: {
+  novel: TextProps;
+  handleImgHeight: React.Dispatch<React.SetStateAction<number>>;
+}) {
   // props or default props
   const {
     novelImg = "https://dn-img-page.kakao.com/download/resource?kid=xsaRM/hzhOfrO85M/k1jHoCWYGpQkLzI11JXbA0",
@@ -31,12 +38,18 @@ export default function NovelRow({ novel }: { novel: TextProps }) {
     novelImg,
     userImg,
   };
+  const imgRef = useRef<HTMLDivElement>(null);
+
+  //row 이미지 슬라이드 시 화살표 위치 지정 : 이미지 height 필요
+  useEffect(() => {
+    handleImgHeight(imgRef.current?.offsetHeight as number);
+  }, [imgRef.current?.offsetHeight]);
 
   return (
     <ThemeProvider theme={theme}>
       <NovelContainer>
         <NovelImgBox>
-          <NovelImg />
+          <NovelImg ref={imgRef} />
         </NovelImgBox>
         <NovelInfoBox>
           <NovelTitle>[해리포터]지독한 후플푸프</NovelTitle>

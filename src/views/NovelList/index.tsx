@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Novels from "./NovelList.components";
 import NovelColumn from "../../components/NovelColumn";
 import NovelRow from "../../components/NovelRow";
@@ -11,6 +11,8 @@ export default function NovelList() {
   };
   const arrayInfo = [info, info];
   const arrayInfo2 = [info, info, info, info, info, info, info];
+
+  const [imgHeight, setImgHeight] = useState(0); // 작품 이미지 height 받아오기
   return (
     <Novels>
       <Novels.ColumnSlide>
@@ -18,9 +20,9 @@ export default function NovelList() {
           <NovelColumn novel={novel} />
         ))}
       </Novels.ColumnSlide>
-      <Novels.RowSlide>
+      <Novels.RowSlide imgHeight={imgHeight}>
         {arrayInfo2.map((novel) => (
-          <NovelRow novel={novel} />
+          <NovelRow novel={novel} handleImgHeight={setImgHeight} />
         ))}
       </Novels.RowSlide>
     </Novels>

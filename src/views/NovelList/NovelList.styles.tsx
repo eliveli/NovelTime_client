@@ -1,10 +1,53 @@
 /* eslint-disable */
 
 import { styled } from "assets/styles/theme";
+import Icon from "../../assets/Icon";
 
 interface Props {
+  imgHeight: number;
   theme: { novelImg: string; userImg: string };
 }
+
+export const LeftIcon = styled.div<Props>`
+  // 모바일은 아이콘 없음
+  @media screen and (max-width: 767px) {
+    display: none;
+  }
+
+  border-radius: 50%;
+  background-color: white;
+  box-shadow: 0 0 2px rgb(0 0 0 / 60%);
+
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  left: -${30 / 2 - 6}px;
+  top: ${(props) => props.imgHeight / 2 - 30 / 2 + 12}px; // + 12px 은 이미지 위쪽 패딩임
+`;
+export const RightIcon = styled.div<Props>`
+  // 모바일은 아이콘 없음
+  @media screen and (max-width: 767px) {
+    display: none;
+  }
+
+  border-radius: 50%;
+  background-color: white;
+  box-shadow: 0 0 2px rgb(0 0 0 / 60%);
+
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  right: -${30 / 2 - 6}px;
+  top: ${(props) => props.imgHeight / 2 - 30 / 2 + 12}px;
+`;
+export const SlideLeft = styled(Icon.SlideLeft)`
+  width: 100%;
+  height: 100%;
+`;
+export const SlideRight = styled(Icon.SlideRight)`
+  width: 100%;
+  height: 100%;
+`;
 
 export const NovelsBG = styled.section`
   /* 모바일 */
@@ -18,6 +61,8 @@ export const NovelsBG = styled.section`
 
   /* 태블릿 */
   @media screen and (min-width: 768px) {
+    padding: 0 20px 26px;
+    // 내부 컨테이너와 합해 좌우 26px 설정 : row 이미지 슬라이드 시 양끝 화살표 버튼 공간 필요
   }
   /* PC - 모바일,태블릿과 뷰를 다르게 구성 */
   @media screen and (min-width: 1024px) {
@@ -37,8 +82,18 @@ export const RowBG = styled.section`
 
   /* 태블릿 */
   @media screen and (min-width: 768px) {
+    position: relative;
   }
-  /* PC - 모바일,태블릿과 뷰를 다르게 구성 */
+  /* PC */
+  @media screen and (min-width: 1024px) {
+  }
+`;
+export const RowSlideContainer = styled.div`
+  /* 태블릿 */
+  @media screen and (min-width: 768px) {
+    position: relative;
+  }
+  /* PC */
   @media screen and (min-width: 1024px) {
   }
 `;

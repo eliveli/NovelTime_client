@@ -1,7 +1,6 @@
 /* eslint-disable */
 // 지금은 뷰 구성에 집중할 것임. 린트 무시하는 주석은 나중에 해제하기
 import { ThemeProvider } from "styled-components";
-import Icon from "../../assets/Icon";
 
 import {
   CreateDate,
@@ -25,9 +24,14 @@ import {
   NovelInfoLineHeight,
   RowBG,
   ColumnBG,
+  RowSlideContainer,
+  SlideLeft,
+  SlideRight,
+  LeftIcon,
+  RightIcon,
 } from "./NovelList.styles";
 
-type MyComponentProps = React.PropsWithChildren<{}>;
+type MyComponentProps = React.PropsWithChildren<{ imgHeight?: number }>;
 
 interface TextProps {
   novelImg: string;
@@ -37,8 +41,18 @@ export default function Novels({ children }: MyComponentProps) {
   return <NovelsBG>{children}</NovelsBG>;
 }
 
-Novels.RowSlide = function ({ children }: MyComponentProps) {
-  return <RowBG>{children}</RowBG>;
+Novels.RowSlide = function ({ imgHeight = 133, children }: MyComponentProps) {
+  return (
+    <RowSlideContainer>
+      <RowBG>{children}</RowBG>
+      <LeftIcon imgHeight={imgHeight}>
+        <SlideLeft />
+      </LeftIcon>
+      <RightIcon imgHeight={imgHeight}>
+        <SlideRight />
+      </RightIcon>
+    </RowSlideContainer>
+  );
 };
 Novels.ColumnSlide = function ({ children }: MyComponentProps) {
   return <ColumnBG>{children}</ColumnBG>;
@@ -59,7 +73,7 @@ Novels.Text = function ({ novel }: { novel: TextProps }) {
 
   return (
     <ThemeProvider theme={theme}>
-      <Text>
+      {/* <Text>
         <NovelContainer>
           <NovelImg />
           <NovelInfoBox>
@@ -71,7 +85,7 @@ Novels.Text = function ({ novel }: { novel: TextProps }) {
           </NovelInfoBox>
         </NovelContainer>
 
-        {/* <UserContainer>
+        <UserContainer>
           <TalkPreview>
             <TalkTitle>꾸준히 인기 많은 해포 패러디 계의 탑 작품이야 한 번 봐 봐</TalkTitle>
             <Icon.Right />
@@ -88,8 +102,8 @@ Novels.Text = function ({ novel }: { novel: TextProps }) {
               <IconNO>7</IconNO>
             </IconBox>
           </LastLineContainer>
-        </UserContainer> */}
-      </Text>
+        </UserContainer>
+      </Text> */}
     </ThemeProvider>
   );
 };
