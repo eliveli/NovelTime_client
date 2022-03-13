@@ -23,6 +23,8 @@ import {
   NovelInfo,
   NovelSubInfoBox,
   NovelInfoLineHeight,
+  RightIcon,
+  RightIconBox,
 } from "./RecommendList.styles";
 
 type MyComponentProps = React.PropsWithChildren<{}>;
@@ -64,7 +66,9 @@ Recommend.Text = function ({ text }: { text: TextProps }) {
         <UserContainer>
           <TalkPreview>
             <TalkTitle>꾸준히 인기 많은 해포 패러디 계의 탑 작품이야 한 번 봐 봐</TalkTitle>
-            <Icon.Right />
+            <RightIconBox>
+              <RightIcon />
+            </RightIconBox>
           </TalkPreview>
 
           <LastLineContainer>
