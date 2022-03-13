@@ -7,7 +7,7 @@ interface Props {
   theme: { novelImg: string; userImg: string };
 }
 
-export const LeftIcon = styled.div<{ imgHeight: number }>`
+export const LeftIcon = styled.div`
   // 모바일, 태블릿은 아이콘 없음
   @media screen and (max-width: 1023px) {
     display: none;
@@ -21,7 +21,7 @@ export const LeftIcon = styled.div<{ imgHeight: number }>`
   width: 30px;
   height: 30px;
   left: -${30 / 2 - 6}px;
-  top: ${({ imgHeight }) => imgHeight / 2 - 30 / 2 + 12}px; // + 12px 은 이미지 위쪽 패딩임
+  top: ${168.22 / 2 - 30 / 2 + 12}px; // + 12px 은 이미지 위쪽 패딩임
 
   @media (hover: hover) {
     &:hover {
@@ -31,7 +31,7 @@ export const LeftIcon = styled.div<{ imgHeight: number }>`
     }
   }
 `;
-export const RightIcon = styled.div<{ imgHeight: number }>`
+export const RightIcon = styled.div`
   // 모바일, 태블릿은 아이콘 없음
   @media screen and (max-width: 1023px) {
     display: none;
@@ -45,7 +45,7 @@ export const RightIcon = styled.div<{ imgHeight: number }>`
   width: 30px;
   height: 30px;
   right: -${30 / 2 - 6}px;
-  top: ${({ imgHeight }) => imgHeight / 2 - 30 / 2 + 12}px;
+  top: ${168.22 / 2 - 30 / 2 + 12}px;
 
   @media (hover: hover) {
     &:hover {
