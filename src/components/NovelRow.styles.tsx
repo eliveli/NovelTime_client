@@ -14,9 +14,14 @@ export const NovelContainer = styled.div`
   flex-direction: column;
 
   padding: 12px 6px;
-  /* 슬라이드 양끝 좌우 6px 만큼 다른 컨테이너 적용 */
+  /* 슬라이드 양끝 좌우 6px 만큼 다른 컨테이너에 적용 */
 
   &:last-child {
+  }
+
+  @media screen and (min-width: 560px) {
+    min-width: 24%;
+    max-width: 24%;
   }
 
   /* 태블릿 */
@@ -38,8 +43,6 @@ export const NovelInfoBox = styled.div`
 
   /* 태블릿 , PC */
   @media screen and (min-width: 768px) {
-    /* padding-left: 10px; */
-    /* justify-content: space-evenly; */
   }
 `;
 
@@ -48,18 +51,14 @@ export const NovelImgBox = styled.div`
 `;
 export const NovelImg = styled.div<Props>`
   /* 모바일 */
-  /* height: 80px; */
-  /* min-width: 70px; */
   padding-top: 135%;
   border-radius: 5%;
   background-image: url(${(props) => props.theme.novelImg});
-  /* background-position: center; */
   background-repeat: no-repeat;
   background-size: cover;
 
   /* 태블릿 */
   @media screen and (min-width: 768px) {
-    /* height: 100px; */
   }
   /* PC */
   @media screen and (min-width: 1024px) {

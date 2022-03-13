@@ -23,13 +23,11 @@ export const NovelContainer = styled.div`
 export const NovelInfoBox = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  padding-left: 6px;
+  padding-left: 10px;
+  justify-content: space-evenly;
 
   /* 태블릿 , PC */
   @media screen and (min-width: 768px) {
-    padding-left: 10px;
-    justify-content: space-evenly;
   }
 `;
 
@@ -45,7 +43,7 @@ export const NovelImg = styled.div<Props>`
 
   /* 태블릿 */
   @media screen and (min-width: 768px) {
-    height: 100px;
+    /* height: 100px; */
   }
   /* PC */
   @media screen and (min-width: 1024px) {

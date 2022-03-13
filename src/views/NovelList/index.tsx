@@ -14,11 +14,11 @@ export default function NovelList() {
 
   return (
     <Novels>
-      <Novels.ColumnSlide>
+      <Novels.ColumnShow>
         {arrayInfo.map((novel) => (
           <NovelColumn novel={novel} />
         ))}
-      </Novels.ColumnSlide>
+      </Novels.ColumnShow>
       <Novels.RowSlide>
         {arrayInfo2.map((novel) => (
           <NovelRow novel={novel} />
