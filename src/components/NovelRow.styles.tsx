@@ -50,7 +50,7 @@ export const NovelImg = styled.div<Props>`
   /* 모바일 */
   /* height: 80px; */
   /* min-width: 70px; */
-  padding-top: 130%;
+  padding-top: 135%;
   border-radius: 5%;
   background-image: url(${(props) => props.theme.novelImg});
   /* background-position: center; */
