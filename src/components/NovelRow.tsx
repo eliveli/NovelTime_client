@@ -2,6 +2,7 @@
 // 지금은 뷰 구성에 집중할 것임. 린트 무시하는 주석은 나중에 해제하기
 import { useEffect, useRef } from "react";
 import { ThemeProvider } from "styled-components";
+import useComponentHeight from "utils/useComponentHeight";
 import Icon from "../assets/Icon";
 
 import {
@@ -39,11 +40,11 @@ export default function NovelRow({
     userImg,
   };
   const imgRef = useRef<HTMLDivElement>(null);
-
+  const imgHeight = useComponentHeight(imgRef);
   //row 이미지 슬라이드 시 화살표 위치 지정 : 이미지 height 필요
   useEffect(() => {
-    handleImgHeight(imgRef.current?.offsetHeight as number);
-  }, [imgRef.current?.offsetHeight]);
+    handleImgHeight(imgHeight);
+  }, [imgHeight]);
 
   return (
     <ThemeProvider theme={theme}>

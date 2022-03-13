@@ -1,6 +1,8 @@
 /* eslint-disable */
 // 지금은 뷰 구성에 집중할 것임. 린트 무시하는 주석은 나중에 해제하기
+import { useRef, useState } from "react";
 import { ThemeProvider } from "styled-components";
+import useComponentWidth from "utils/useComponentWidth";
 
 import {
   CreateDate,
@@ -22,13 +24,14 @@ import {
   NovelInfo,
   NovelSubInfoBox,
   NovelInfoLineHeight,
-  RowBG,
   ColumnBG,
   RowSlideContainer,
   SlideLeft,
   SlideRight,
   LeftIcon,
   RightIcon,
+  RowAlbumContainer,
+  RowAlbum,
 } from "./NovelList.styles";
 
 type MyComponentProps = React.PropsWithChildren<{ imgHeight?: number }>;
@@ -42,15 +45,40 @@ export default function Novels({ children }: MyComponentProps) {
 }
 
 Novels.RowSlide = function ({ imgHeight = 133, children }: MyComponentProps) {
+  const albumContainerRef = useRef<HTMLDivElement>(null);
+  const albumRef = useRef<HTMLDivElement>(null);
+
+  const showAlbumWidth = useComponentWidth(albumContainerRef); // 보이는 앨범 width
+  const albumWidth = useComponentWidth(albumRef); // 전체 앨범 width
+
+  // 현재 이미지앨범 X좌표 : 최초 0
+  const [albumX, changeAlbumX] = useState(0);
+
+  // 좌우 화살표 클릭 시 앨범 x 좌표 변경 ----//
+  const slideAlbum = (x: number) => {
+    changeAlbumX(x);
+    // setTimeout(()=>imgContainer.current.scrollTo({top:0,left:0,behavior:'smooth'}),100); //스크롤 맨 처음으로 이동. smooth : 이미지앨범의 transition에 의해 이미지 좌우로 이동하면서 화면 최상단 이동도 부드럽게.
+  };
+
   return (
     <RowSlideContainer>
-      <RowBG>{children}</RowBG>
-      <LeftIcon imgHeight={imgHeight}>
-        <SlideLeft />
-      </LeftIcon>
-      <RightIcon imgHeight={imgHeight}>
-        <SlideRight />
-      </RightIcon>
+      <RowAlbumContainer ref={albumContainerRef}>
+        <RowAlbum moveX={albumX} ref={albumRef}>
+          {children}
+        </RowAlbum>
+      </RowAlbumContainer>
+      {/* 이전 이미지 화살표(맨 처음 이미지일 때 제외) */}
+      {albumX !== 0 && (
+        <LeftIcon onClick={() => slideAlbum(albumX + showAlbumWidth)} imgHeight={imgHeight}>
+          <SlideLeft />
+        </LeftIcon>
+      )}
+      {/* 다음 이미지 화살표(맨 끝 이미지일 때 제외) */}
+      {albumX - showAlbumWidth >= -albumWidth && (
+        <RightIcon onClick={() => slideAlbum(albumX - showAlbumWidth)} imgHeight={imgHeight}>
+          <SlideRight />
+        </RightIcon>
+      )}
     </RowSlideContainer>
   );
 };

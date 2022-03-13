@@ -10,7 +10,7 @@ export default function NovelList() {
     userImg: "https://cdn.pixabay.com/photo/2018/08/31/08/35/toys-3644073_960_720.png",
   };
   const arrayInfo = [info, info];
-  const arrayInfo2 = [info, info, info, info, info, info, info];
+  const arrayInfo2 = [info, info, info, info, info, info, info, info, info, info];
 
   const [imgHeight, setImgHeight] = useState(0); // 작품 이미지 height 받아오기
   return (

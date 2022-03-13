@@ -8,6 +8,7 @@ interface Props {
 
 export const NovelContainer = styled.div`
   min-width: 32%;
+  max-width: 32%;
 
   display: flex;
   flex-direction: column;
@@ -21,11 +22,13 @@ export const NovelContainer = styled.div`
   /* 태블릿 */
   @media screen and (min-width: 768px) {
     min-width: 20%;
+    max-width: 20%;
   }
 
   /* PC */
   @media screen and (min-width: 1024px) {
     min-width: 16.66%;
+    max-width: 16.66%;
   }
 `;
 export const NovelInfoBox = styled.div`

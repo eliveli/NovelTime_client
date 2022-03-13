@@ -4,13 +4,12 @@ import { styled } from "assets/styles/theme";
 import Icon from "../../assets/Icon";
 
 interface Props {
-  imgHeight: number;
   theme: { novelImg: string; userImg: string };
 }
 
-export const LeftIcon = styled.div<Props>`
-  // 모바일은 아이콘 없음
-  @media screen and (max-width: 767px) {
+export const LeftIcon = styled.div<{ imgHeight: number }>`
+  // 모바일, 태블릿은 아이콘 없음
+  @media screen and (max-width: 1023px) {
     display: none;
   }
 
@@ -22,11 +21,11 @@ export const LeftIcon = styled.div<Props>`
   width: 30px;
   height: 30px;
   left: -${30 / 2 - 6}px;
-  top: ${(props) => props.imgHeight / 2 - 30 / 2 + 12}px; // + 12px 은 이미지 위쪽 패딩임
+  top: ${({ imgHeight }) => imgHeight / 2 - 30 / 2 + 12}px; // + 12px 은 이미지 위쪽 패딩임
 `;
-export const RightIcon = styled.div<Props>`
-  // 모바일은 아이콘 없음
-  @media screen and (max-width: 767px) {
+export const RightIcon = styled.div<{ imgHeight: number }>`
+  // 모바일, 태블릿은 아이콘 없음
+  @media screen and (max-width: 1023px) {
     display: none;
   }
 
@@ -38,7 +37,7 @@ export const RightIcon = styled.div<Props>`
   width: 30px;
   height: 30px;
   right: -${30 / 2 - 6}px;
-  top: ${(props) => props.imgHeight / 2 - 30 / 2 + 12}px;
+  top: ${({ imgHeight }) => imgHeight / 2 - 30 / 2 + 12}px;
 `;
 export const SlideLeft = styled(Icon.SlideLeft)`
   width: 100%;
@@ -69,23 +68,41 @@ export const NovelsBG = styled.section`
     width: 860px;
   }
 `;
-export const RowBG = styled.section`
+export const RowAlbumContainer = styled.div`
   /* 모바일 */
-  display: flex;
   overflow-x: scroll;
 
   -ms-overflow-style: none;
   &::-webkit-scrollbar {
     display: none;
   }
-  /* 내부 스크롤바 없애기 */
-
   /* 태블릿 */
   @media screen and (min-width: 768px) {
-    position: relative;
+    /* position: relative; */
   }
   /* PC */
   @media screen and (min-width: 1024px) {
+    overflow: hidden;
+  }
+`;
+
+// 1.앨범 컨테이너는 자식인 앨범의 위치값이 (0,0) 일 때 (디폴트값) 앨범 전체 스크롤 가능.
+// 2.컨테이너 안에 있는 앨범의 위치를 이동할 경우(translate)
+//   앨범 컨테이너는 앨범의 이동 위치를 최소값으로 오른쪽으로만 앨범 스크롤 가능
+//   - 이동한 위치의 왼쪽은 스크롤 불가
+export const RowAlbum = styled.div<{ moveX: number }>`
+  /* 모바일 */
+  display: flex; // children 요소인 작품을 가로 방향으로 나열
+
+  /* 태블릿 */
+  @media screen and (min-width: 768px) {
+  }
+  /* PC */
+  @media screen and (min-width: 1024px) {
+    position: relative;
+
+    transition-duration: 0.9s;
+    transform: translate(${({ moveX }) => moveX}px, 0);
   }
 `;
 export const RowSlideContainer = styled.div`
