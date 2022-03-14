@@ -26,7 +26,7 @@
         },
         "ecmaVersion": "latest",
         "sourceType": "module",
-        "project":["./client/tsconfig.json","./tsconfig.json"]  // 경로가 달라지네... client 경로 지정해줘야 할 때도,  없어야 할 때도 있고..?
+        "project":["./tsconfig.json"]  // 경로가 달라지네... client 경로 지정해줘야 할 때도,  없어야 할 때도 있고..?
     },
     "plugins": [
         "react",
