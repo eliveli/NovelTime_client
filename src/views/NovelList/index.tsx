@@ -1,7 +1,6 @@
 import React from "react";
+import { NovelColumn, NovelColumnDetail, NovelRow } from "../../components";
 import Novels from "./NovelList.components";
-import NovelColumn from "../../components/NovelColumn";
-import NovelRow from "../../components/NovelRow";
 
 export default function NovelList() {
   const info = {
@@ -14,11 +13,18 @@ export default function NovelList() {
 
   return (
     <Novels>
-      <Novels.ColumnShow>
+      <Novels.Column>
         {arrayInfo.map((novel) => (
           <NovelColumn novel={novel} />
         ))}
-      </Novels.ColumnShow>
+      </Novels.Column>
+
+      <Novels.ColumnDetail>
+        {arrayInfo.map((novel) => (
+          <NovelColumnDetail novel={novel} />
+        ))}
+      </Novels.ColumnDetail>
+
       <Novels.RowSlide>
         {arrayInfo2.map((novel) => (
           <NovelRow novel={novel} />

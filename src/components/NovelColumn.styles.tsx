@@ -1,4 +1,4 @@
-/* eslint-disable */
+// /* eslint-disable */
 
 import { styled } from "assets/styles/theme";
 
@@ -23,8 +23,9 @@ export const NovelContainer = styled.div`
 export const NovelInfoBox = styled.div`
   display: flex;
   flex-direction: column;
-  padding-left: 10px;
   justify-content: space-evenly;
+  margin-left: 10px;
+  width: 100%;
 
   /* 태블릿 , PC */
   @media screen and (min-width: 768px) {
@@ -49,8 +50,15 @@ export const NovelImg = styled.div<Props>`
   @media screen and (min-width: 1024px) {
   }
 `;
-export const NovelTitle = styled.div`
+export const NovelTitle = styled.div<{ infoWidth: number }>`
   font-weight: 600;
+
+  // 줄 넘어가면 ... 표시
+  display: inline-block;
+  width: ${(props) => props.infoWidth || 248}px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 export const NovelSubInfoBox = styled.div`
   color: ${(props) => props.theme.color.textGray};

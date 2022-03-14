@@ -102,11 +102,13 @@ export const NovelInfoBox = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding-left: 6px;
+
+  margin-left: 6px;
+  width: 100%;
 
   /* 태블릿 , PC */
   @media screen and (min-width: 768px) {
-    padding-left: 10px;
+    margin-left: 10px;
     justify-content: space-evenly;
   }
 `;
@@ -217,8 +219,15 @@ export const IconBox = styled.div`
   align-items: center;
 `;
 export const IconNO = styled.span``;
-export const NovelTitle = styled.div`
+export const NovelTitle = styled.div<{ infoWidth: number }>`
   font-weight: 600;
+
+  // 줄 넘어가면 ... 표시
+  display: inline-block;
+  width: ${(props) => props.infoWidth || 248}px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 export const NovelSubInfoBox = styled.div`
   color: ${(props) => props.theme.color.textGray};

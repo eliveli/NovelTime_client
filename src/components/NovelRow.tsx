@@ -1,7 +1,6 @@
-/* eslint-disable */
+// /* eslint-disable */
 // 지금은 뷰 구성에 집중할 것임. 린트 무시하는 주석은 나중에 해제하기
 import { ThemeProvider } from "styled-components";
-import Icon from "../assets/Icon";
 import {
   NovelImg,
   NovelImgBox,
@@ -13,14 +12,13 @@ import {
   NovelInfoLineHeight,
 } from "./NovelRow.styles";
 
-type MyComponentProps = React.PropsWithChildren<{}>;
-
-interface TextProps {
-  novelImg: string;
-  userImg: string;
-}
-
-export default function NovelRow({ novel }: { novel: TextProps }) {
+type MyComponentProps = React.PropsWithChildren<{
+  novel: {
+    novelImg: string;
+    userImg: string;
+  };
+}>;
+export default function NovelRow({ novel }: MyComponentProps) {
   // props or default props
   const {
     novelImg = "https://dn-img-page.kakao.com/download/resource?kid=xsaRM/hzhOfrO85M/k1jHoCWYGpQkLzI11JXbA0",

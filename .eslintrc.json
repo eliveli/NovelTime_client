@@ -49,7 +49,8 @@
        "prettier/prettier": [
             "error", { "endOfLine": "auto" }
         ],
-        "react/react-in-jsx-scope": "warn",
+        "react/react-in-jsx-scope": "off",
         "import/prefer-default-export": "warn"
+        
     }
 }

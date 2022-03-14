@@ -24,11 +24,6 @@ import {
 } from "./NovelList.styles";
 
 type MyComponentProps = React.PropsWithChildren<{}>;
-
-interface TextProps {
-  novelImg: string;
-  userImg: string;
-}
 export default function Novels({ children }: MyComponentProps) {
   return <NovelsBG>{children}</NovelsBG>;
 }
@@ -84,10 +79,18 @@ Novels.RowSlide = function ({ children }: MyComponentProps) {
     </RowBG>
   );
 };
-Novels.ColumnShow = function ({ children }: MyComponentProps) {
+Novels.Column = function ({ children }: MyComponentProps) {
   return (
     <ColumnBG>
       <CategoryMark desc="소설계의 박스오피스?" />
+      <ColumnListContainer>{children}</ColumnListContainer>
+    </ColumnBG>
+  );
+};
+Novels.ColumnDetail = function ({ children }: MyComponentProps) {
+  return (
+    <ColumnBG>
+      <CategoryMark desc="맞춤 추천은 여기에(상세)" />
       <ColumnListContainer>{children}</ColumnListContainer>
     </ColumnBG>
   );

@@ -1,11 +1,7 @@
-/* eslint-disable */
+// /* eslint-disable */
 
 import { styled } from "assets/styles/theme";
 import Icon from "../../assets/Icon";
-
-interface Props {
-  theme: { novelImg: string; userImg: string };
-}
 
 export const CategoryContainer = styled.div`
   padding: 0 6px;
