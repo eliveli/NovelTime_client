@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 // /* eslint-disable */
 // 지금은 뷰 구성에 집중할 것임. 린트 무시하는 주석은 나중에 해제하기
-import React from "react";
+import React, { useLayoutEffect } from "react";
 import { useEffect, useRef, useState } from "react";
 import { ThemeProvider } from "styled-components";
 import useComponentWidth from "utils/useComponentWidth";
@@ -55,12 +55,40 @@ type MyComponentProps = React.PropsWithChildren<{
 // 3-3. At last, things are unnecessary : key prop and boolean prop for styled-components.
 //      Bye guys...
 //      Now So simple. hahaha....
+// 와우 또다른 문제...
+// 3-1. problem: 모달영역 스크롤 후 닫기 버튼 클릭하면 모달 탑 영역이 보인 후 사라짐.
+//      컴포넌트가 새로 렌더링되며 탑 영역이 보이는 것.
+//      텍스트 영역을 child component로 분리해 React.memo로 감싸주어도 parent가 리렌더링되면 탑 영역이 보임.
+// 3-2. to solve: 모달 닫기 버튼 눌렀을 때 모달T의 스크롤 y값을 가져와 모달F에 적용
+//      making refs for : show true modal, show false modal, scroll y value in show true modal
+//      when clicking the modal closing button, get scrollTop for modalT before changed show state
+//      useLayoutEffect good! useEffect is not good for this time.
+//       : useLayoutEffect works after layout while useEffect works after layout and paint
+//      scrollTop for modalF is set, then modalF is painted
+// 와...풀었다...
 
-function DescModal({ isShowOn, desc }: { isShowOn: boolean; desc: string }) {
+function DescModal({
+  modalScrollY,
+  modalFRef,
+  modalTRef,
+  isShowOn,
+  desc,
+}: {
+  modalScrollY: React.MutableRefObject<number>;
+  modalFRef: React.RefObject<HTMLDivElement>;
+  modalTRef: React.RefObject<HTMLDivElement>;
+  isShowOn: boolean;
+  desc: string;
+}) {
+  // 모달F가 화면에 그려지기 전 스크롤Y 설정
+  useLayoutEffect(() => {
+    modalFRef.current?.scroll(0, modalScrollY.current);
+  }, [isShowOn]);
+
   if (isShowOn) {
-    return <ModalContainerT>{desc}</ModalContainerT>;
+    return <ModalContainerT ref={modalTRef}>{desc}</ModalContainerT>;
   }
-  return <ModalContainerF>{desc}</ModalContainerF>;
+  return <ModalContainerF ref={modalFRef}>{desc}</ModalContainerF>;
 }
 // <ModalContainer key={Math.random()} isShowOn={isShowOn}>
 export default function NovelColumnDetail({ novel }: MyComponentProps) {
@@ -87,6 +115,16 @@ export default function NovelColumnDetail({ novel }: MyComponentProps) {
               남자잖아!”\n“……아니야, 아니야. 그러니 날 버리지 마. 브리.”\n\n심지어 울기까지.\n너 왜
               울어!`;
 
+  // (문제)모달 스크롤을 내린 후 모달을 닫으면 모달 탑 영역이 보이고 사라짐
+  // (대처)닫기 버튼을 누른 직후 모달T의 스크롤y 값을 가져와 모달F에 적용
+  const modalTRef = useRef<HTMLDivElement>(null);
+  const modalFRef = useRef<HTMLDivElement>(null);
+  const modalScrollY = useRef(0);
+
+  const getModalScroll = () => {
+    modalScrollY.current = modalTRef.current?.scrollTop as number;
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <NovelContainer>
@@ -98,7 +136,12 @@ export default function NovelColumnDetail({ novel }: MyComponentProps) {
             <NovelDescBox>
               <NovelDesc>{desc}</NovelDesc>
               {isModal && (
-                <DownIconBox onClick={handleModal}>
+                <DownIconBox
+                  onClick={() => {
+                    getModalScroll();
+                    handleModal();
+                  }}
+                >
                   <DownIcon />
                 </DownIconBox>
               )}
@@ -109,7 +152,15 @@ export default function NovelColumnDetail({ novel }: MyComponentProps) {
               )}
             </NovelDescBox>
           </NovelSubInfoBox>
-          {isModal && <DescModal isShowOn={isShowModal} desc={desc} />}
+          {isModal && (
+            <DescModal
+              modalScrollY={modalScrollY}
+              modalTRef={modalTRef}
+              modalFRef={modalFRef}
+              isShowOn={isShowModal}
+              desc={desc}
+            />
+          )}
         </NovelInfoBox>
       </NovelContainer>
     </ThemeProvider>

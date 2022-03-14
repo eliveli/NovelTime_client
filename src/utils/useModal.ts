@@ -21,10 +21,7 @@ export default function useModal() {
   // setTimeout 이용해 기다린 후 show false animation 끝나고 모달 false (컴포넌트 언마운트)
   useEffect(() => {
     if (isModal && !isShowModal) {
-      setTimeout(() => {
-        setModal(false);
-        console.log(`isShow:${isShowModal}`);
-      }, 500);
+      setTimeout(() => setModal(false), 500);
     }
   }, [isShowModal]);
 
