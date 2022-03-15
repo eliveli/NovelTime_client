@@ -24,7 +24,7 @@ export const ShowAllIcon = styled(Icon.BigRight)`
   margin-left: 6px;
 `;
 
-export const RowBG = styled.div``;
+export const RowBG = styled.article``;
 
 export const LeftIcon = styled.div`
   // 모바일, 태블릿은 아이콘 없음
@@ -159,7 +159,7 @@ export const RowSlideContainer = styled.div`
   @media screen and (min-width: 1024px) {
   }
 `;
-export const ColumnBG = styled.section`
+export const ColumnBG = styled.article`
   /* 모바일 */
 
   /* 태블릿 */

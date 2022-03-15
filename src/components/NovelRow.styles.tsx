@@ -41,11 +41,13 @@ export const NovelInfoBox = styled.div`
   flex-direction: column;
   justify-content: space-between;
 
+  line-height: 1.4;
+  margin-top: 3px;
+
   /* 태블릿 , PC */
   @media screen and (min-width: 768px) {
   }
 `;
-
 export const NovelImgBox = styled.div`
   width: 100%;
 `;
@@ -64,8 +66,32 @@ export const NovelImg = styled.div<Props>`
   @media screen and (min-width: 1024px) {
   }
 `;
+export const NovelTitleBox = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  /* height: 100%; */
+  height: 50px; // child인 Title 대신 적용. title에서 한 줄 제목 정렬 위해.
+  margin-bottom: 7px;
+
+  /* 태블릿 , PC */
+  @media screen and (min-width: 768px) {
+  }
+`;
 export const NovelTitle = styled.div`
   font-weight: 600;
+
+  //2줄 넘어가는 텍스트 ...표시
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+
+  white-space: normal;
+  /* height: 50px;  // parent에 적용 */
+  text-align: left;
+  word-wrap: break-word;
 `;
 export const NovelSubInfoBox = styled.div`
   color: ${(props) => props.theme.color.textGray};

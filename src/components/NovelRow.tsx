@@ -10,6 +10,7 @@ import {
   NovelInfo,
   NovelSubInfoBox,
   NovelInfoLineHeight,
+  NovelTitleBox,
 } from "./NovelRow.styles";
 
 type MyComponentProps = React.PropsWithChildren<{
@@ -36,7 +37,9 @@ export default function NovelRow({ novel }: MyComponentProps) {
           <NovelImg />
         </NovelImgBox>
         <NovelInfoBox>
-          <NovelTitle>[해리포터]지독한 후플푸프</NovelTitle>
+          <NovelTitleBox>
+            <NovelTitle>[해리포터]지독한 후플푸프</NovelTitle>
+          </NovelTitleBox>
           <NovelSubInfoBox>
             <NovelInfoLineHeight>곽정언</NovelInfoLineHeight>
             <NovelInfo>패러디 | 미완</NovelInfo>
