@@ -180,9 +180,13 @@ export const ModalContainerT = styled.div`
     display: none;
   }
 
-  background-color: rgba(240, 240, 240, 0.9);
+  background-color: rgba(255, 255, 255, 0.9);
   color: black;
   font-weight: 600;
+
+  border: 1px solid rgb(100 100 100 / 20%);
+  border-radius: 5px;
+  padding: 5px 7px;
 
   animation-name: ${descShowOn};
   animation-direction: normal;
@@ -202,9 +206,13 @@ export const ModalContainerF = styled.div`
     display: none;
   }
 
-  background-color: rgba(240, 240, 240, 0.9);
+  background-color: rgba(255, 255, 255, 0.9);
   color: black;
   font-weight: 600;
+
+  border: 1px solid rgb(100 100 100 / 20%);
+  border-radius: 5px;
+  padding: 5px 7px;
 
   animation-name: ${descShowOn};
   animation-direction: reverse;
