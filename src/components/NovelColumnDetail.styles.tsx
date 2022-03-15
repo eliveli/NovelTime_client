@@ -46,7 +46,6 @@ export const NovelImg = styled.div<Props>`
 
   /* 태블릿 */
   @media screen and (min-width: 768px) {
-    /* height: 100px; */
   }
   /* PC */
   @media screen and (min-width: 1024px) {
@@ -94,13 +93,15 @@ export const DownIconBox = styled.div`
   background-color: white;
   box-shadow: 0 0 2px rgb(0 0 0 / 60%);
 
-  min-width: 30px;
-  max-width: 30px;
-  min-height: 30px;
-  max-height: 30px;
-  /* position: absolute;
-  right: -${30 / 2 - 6}px;
-  top: ${168.22 / 2 - 30 / 2 + 12}px; */
+  min-width: 20px;
+  max-width: 20px;
+  min-height: 20px;
+  max-height: 20px;
+
+  @media screen and (min-width: 768px) {
+    margin-top: auto;
+    margin-left: 3px;
+  }
 
   @media (hover: hover) {
     &:hover {
@@ -118,14 +119,15 @@ export const UpIconBox = styled.div`
   background-color: white;
   box-shadow: 0 0 2px rgb(0 0 0 / 60%);
 
-  min-width: 30px;
-  max-width: 30px;
-  min-height: 30px;
-  max-height: 30px;
-  /* position: absolute;
-  right: -${30 / 2 - 6}px;
-  top: ${168.22 / 2 - 30 / 2 + 12}px; */
+  min-width: 20px;
+  max-width: 20px;
+  min-height: 20px;
+  max-height: 20px;
 
+  @media screen and (min-width: 768px) {
+    margin-top: auto;
+    margin-left: 3px;
+  }
   @media (hover: hover) {
     &:hover {
       cursor: pointer;
@@ -152,6 +154,7 @@ export const UpIcon = styled(Icon.SmallUp)`
     }
   }
 `;
+
 // animation for novel desc modal
 const descShowOn = keyframes`
   from{
@@ -163,23 +166,19 @@ const descShowOn = keyframes`
     opacity: 1;
   }
 `;
-const descShowOff = keyframes`
-  0% {
-    clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
-    opacity: 1;
-  }
 
- 100%{
-    clip-path:polygon(0 100%, 100% 100%, 100% 100%, 0% 100%);
-    opacity: 0.1;
-
-  }
-`;
 export const ModalContainerT = styled.div`
+  white-space: pre-line; // line break 적용(with tab, use pre-wrap)
+
   position: absolute;
   width: 100%;
   height: 100%;
   overflow-y: scroll;
+
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 
   background-color: rgba(240, 240, 240, 0.9);
   color: black;
@@ -191,10 +190,17 @@ export const ModalContainerT = styled.div`
   animation-fill-mode: forwards;
 `;
 export const ModalContainerF = styled.div`
+  white-space: pre-line; // line break 적용
+
   position: absolute;
   width: 100%;
   height: 100%;
   overflow-y: scroll;
+
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 
   background-color: rgba(240, 240, 240, 0.9);
   color: black;
@@ -202,6 +208,6 @@ export const ModalContainerF = styled.div`
 
   animation-name: ${descShowOn};
   animation-direction: reverse;
-  animation-duration: 0.5s;
+  animation-duration: 0.3s;
   animation-fill-mode: forwards; // 애니메이션 종료 후 마지막 keyframe 값 유지(중요!)
 `;
