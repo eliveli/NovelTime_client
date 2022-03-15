@@ -1,9 +1,6 @@
-/* eslint-disable */
-// 지금은 뷰 구성에 집중할 것임. 린트 무시하는 주석은 나중에 해제하기
 import { useRef, useState } from "react";
-import { ThemeProvider } from "styled-components";
+// import { ThemeProvider } from "styled-components";
 import useComponentWidth from "utils/useComponentWidth";
-
 import {
   NovelsBG,
   ColumnBG,
@@ -16,30 +13,32 @@ import {
   RowAlbum,
   CategoryContainer,
   CategoryDesc,
-  ShowAllContainer,
+  LinkCategory,
   RowBG,
   ShowAllText,
   ShowAllIcon,
   ColumnListContainer,
 } from "./NovelList.styles";
 
-type MyComponentProps = React.PropsWithChildren<{}>;
-export default function Novels({ children }: MyComponentProps) {
+type Props = React.PropsWithChildren<{ isShowAll?: boolean; category: string }>;
+export default function Novels({ children }: { children: React.ReactNode }) {
   return <NovelsBG>{children}</NovelsBG>;
 }
 
-function CategoryMark({ desc }: { desc: string }) {
+function CategoryMark({ category, isShowAll }: { category: string; isShowAll?: boolean }) {
   return (
     <CategoryContainer>
-      <CategoryDesc>{desc}</CategoryDesc>
-      <ShowAllContainer>
-        <ShowAllText>전체보기</ShowAllText>
-        <ShowAllIcon />
-      </ShowAllContainer>
+      <CategoryDesc>{category}</CategoryDesc>
+      {isShowAll === undefined && (
+        <LinkCategory to={`/novel_list/${category}`}>
+          <ShowAllText>전체보기</ShowAllText>
+          <ShowAllIcon />
+        </LinkCategory>
+      )}
     </CategoryContainer>
   );
 }
-Novels.RowSlide = function ({ children }: MyComponentProps) {
+Novels.RowSlide = function RowSlide({ category, children }: Props) {
   const albumContainerRef = useRef<HTMLDivElement>(null);
   const albumRef = useRef<HTMLDivElement>(null);
 
@@ -56,7 +55,7 @@ Novels.RowSlide = function ({ children }: MyComponentProps) {
 
   return (
     <RowBG>
-      <CategoryMark desc="요즘 인기있는" />
+      <CategoryMark category={category} />
       <RowSlideContainer>
         <RowAlbumContainer ref={albumContainerRef}>
           <RowAlbum moveX={albumX} ref={albumRef}>
@@ -79,18 +78,18 @@ Novels.RowSlide = function ({ children }: MyComponentProps) {
     </RowBG>
   );
 };
-Novels.Column = function ({ children }: MyComponentProps) {
+Novels.Column = function Column({ category, children }: Props) {
   return (
     <ColumnBG>
-      <CategoryMark desc="소설계의 박스오피스?" />
+      <CategoryMark category={category} />
       <ColumnListContainer>{children}</ColumnListContainer>
     </ColumnBG>
   );
 };
-Novels.ColumnDetail = function ({ children }: MyComponentProps) {
+Novels.ColumnDetail = function ColumnDetail({ isShowAll, category, children }: Props) {
   return (
     <ColumnBG>
-      <CategoryMark desc="맞춤 추천은 여기에(상세)" />
+      <CategoryMark isShowAll={isShowAll} category={category} />
       <ColumnListContainer>{children}</ColumnListContainer>
     </ColumnBG>
   );

@@ -13,19 +13,19 @@ export default function NovelList() {
 
   return (
     <Novels>
-      <Novels.Column>
+      <Novels.Column category="소설계의 박스오피스">
         {arrayInfo.map((novel) => (
           <NovelColumn novel={novel} />
         ))}
       </Novels.Column>
 
-      <Novels.ColumnDetail>
+      <Novels.ColumnDetail category="맞춤 추천은 여기에(상세)">
         {arrayInfo.map((novel) => (
           <NovelColumnDetail novel={novel} />
         ))}
       </Novels.ColumnDetail>
 
-      <Novels.RowSlide>
+      <Novels.RowSlide category="요즘 인기 있는">
         {arrayInfo2.map((novel) => (
           <NovelRow novel={novel} />
         ))}
