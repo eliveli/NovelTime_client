@@ -1,9 +1,11 @@
 import React from "react";
-import { NovelColumn, NovelColumnDetail, NovelRow } from "../../components";
+import { ColumnList, ColumnDetailList, RowSlide } from "../../components/NovelListFrame";
+import { NovelColumn, NovelColumnDetail, NovelRow } from "../../components/Novel";
 import Novels from "./NovelList.components";
 
 export default function NovelList() {
   const info = {
+    novelId: "20220225082010201",
     novelImg:
       "//dn-img-page.kakao.com/download/resource?kid=bpp9n3/hzp2hVb5sA/z46Nq6YOG1GGdQwKvhYMj1",
     userImg: "https://cdn.pixabay.com/photo/2018/08/31/08/35/toys-3644073_960_720.png",
@@ -13,23 +15,23 @@ export default function NovelList() {
 
   return (
     <Novels>
-      <Novels.Column category="소설계의 박스오피스">
+      <ColumnList category="소설계의 박스오피스">
         {arrayInfo.map((novel) => (
           <NovelColumn novel={novel} />
         ))}
-      </Novels.Column>
+      </ColumnList>
 
-      <Novels.ColumnDetail category="맞춤 추천은 여기에(상세)">
+      <ColumnDetailList category="맞춤 추천은 여기에(상세)">
         {arrayInfo.map((novel) => (
           <NovelColumnDetail novel={novel} />
         ))}
-      </Novels.ColumnDetail>
+      </ColumnDetailList>
 
-      <Novels.RowSlide category="요즘 인기 있는">
+      <RowSlide category="요즘 인기 있는">
         {arrayInfo2.map((novel) => (
           <NovelRow novel={novel} />
         ))}
-      </Novels.RowSlide>
+      </RowSlide>
     </Novels>
   );
 }

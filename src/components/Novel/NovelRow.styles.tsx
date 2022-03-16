@@ -1,12 +1,13 @@
 // /* eslint-disable */
 
 import { styled } from "assets/styles/theme";
+import { Link } from "react-router-dom";
 
 interface Props {
   theme: { novelImg: string; userImg: string };
 }
 
-export const NovelContainer = styled.div`
+export const NovelLink = styled(Link)`
   min-width: 32%;
   max-width: 32%;
 
@@ -19,6 +20,16 @@ export const NovelContainer = styled.div`
   &:last-child {
   }
 
+  text-decoration: none;
+  color: black;
+
+  @media (hover: hover) {
+    &:hover {
+      cursor: pointer;
+      opacity: 0.7;
+      color: rgba(100, 100, 100, 0.8);
+    }
+  }
   @media screen and (min-width: 560px) {
     min-width: 24%;
     max-width: 24%;

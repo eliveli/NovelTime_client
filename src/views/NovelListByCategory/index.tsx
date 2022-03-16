@@ -1,7 +1,7 @@
-import React from "react";
-import NovelColumnDetail from "components/NovelColumnDetail";
-import Novels from "views/NovelList/NovelList.components";
 import { useParams } from "react-router-dom";
+import Novels from "views/NovelList/NovelList.components";
+import { ColumnDetailList } from "../../components/NovelListFrame";
+import { NovelColumnDetail } from "../../components/Novel";
 
 // api 호출, 서버 스테이트 받아오기
 // 네비게이션 바 - 상단 - 뒤로가기 버튼(모바일용) + ...
@@ -9,6 +9,7 @@ import { useParams } from "react-router-dom";
 export default function NovelListByCategory() {
   const { category } = useParams();
   const info = {
+    novelId: "20220225082010201",
     novelImg:
       "//dn-img-page.kakao.com/download/resource?kid=bpp9n3/hzp2hVb5sA/z46Nq6YOG1GGdQwKvhYMj1",
     userImg: "https://cdn.pixabay.com/photo/2018/08/31/08/35/toys-3644073_960_720.png",
@@ -17,11 +18,11 @@ export default function NovelListByCategory() {
 
   return (
     <Novels>
-      <Novels.ColumnDetail isShowAll category={category as string}>
+      <ColumnDetailList isShowAll category={category as string}>
         {arrayInfo2.map((novel) => (
           <NovelColumnDetail novel={novel} />
         ))}
-      </Novels.ColumnDetail>
+      </ColumnDetailList>
     </Novels>
   );
 }

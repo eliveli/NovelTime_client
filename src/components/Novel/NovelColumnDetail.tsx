@@ -1,17 +1,16 @@
 /* eslint-disable max-len */
 // /* eslint-disable */
 // 지금은 뷰 구성에 집중할 것임. 린트 무시하는 주석은 나중에 해제하기
-import React, { useLayoutEffect } from "react";
-import { useEffect, useRef, useState } from "react";
+import React, { useLayoutEffect, useRef } from "react";
 import { ThemeProvider } from "styled-components";
 import useComponentWidth from "utils/useComponentWidth";
-import useModal from "../utils/useModal";
+import useModal from "../../utils/useModal";
 // import Icon from "../assets/Icon";
 
 import {
   NovelImg,
   NovelTitle,
-  NovelContainer,
+  NovelLink,
   NovelInfoBox,
   NovelAuthor,
   NovelSubInfoBox,
@@ -27,6 +26,7 @@ import {
 
 type MyComponentProps = React.PropsWithChildren<{
   novel: {
+    novelId: string;
     novelImg: string;
     userImg: string;
   };
@@ -86,14 +86,33 @@ function DescModal({
   }, [isShowOn]);
 
   if (isShowOn) {
-    return <ModalContainerT ref={modalTRef}>{desc}</ModalContainerT>;
+    return (
+      <ModalContainerT
+        ref={modalTRef}
+        onClick={(e: React.MouseEvent) => {
+          e.preventDefault();
+        }}
+      >
+        {desc}
+      </ModalContainerT>
+    );
   }
-  return <ModalContainerF ref={modalFRef}>{desc}</ModalContainerF>;
+  return (
+    <ModalContainerF
+      ref={modalFRef}
+      onClick={(e: React.MouseEvent) => {
+        e.preventDefault();
+      }}
+    >
+      {desc}
+    </ModalContainerF>
+  );
 }
 // <ModalContainer key={Math.random()} isShowOn={isShowOn}>
 export default function NovelColumnDetail({ novel }: MyComponentProps) {
   // props or default props
   const {
+    novelId = "20220225082010201",
     novelImg = "//dn-img-page.kakao.com/download/resource?kid=bpp9n3/hzp2hVb5sA/z46Nq6YOG1GGdQwKvhYMj1",
     userImg = "https://cdn.pixabay.com/photo/2018/08/31/08/35/toys-3644073_960_720.png",
   } = novel;
@@ -140,7 +159,7 @@ export default function NovelColumnDetail({ novel }: MyComponentProps) {
 
   return (
     <ThemeProvider theme={theme}>
-      <NovelContainer>
+      <NovelLink to={`/novel_detail/${novelId}`}>
         <NovelImg />
         <NovelInfoBox ref={infoRef}>
           <NovelTitle infoWidth={infoWidth}>[로판] 헌터와 매드 사이언티스트</NovelTitle>
@@ -150,7 +169,8 @@ export default function NovelColumnDetail({ novel }: MyComponentProps) {
               <NovelDesc>{desc}</NovelDesc>
               {isModal && (
                 <DownIconBox
-                  onClick={() => {
+                  onClick={(e) => {
+                    e.preventDefault();
                     getModalScroll();
                     handleModal();
                   }}
@@ -160,7 +180,12 @@ export default function NovelColumnDetail({ novel }: MyComponentProps) {
               )}
               {!isModal && (
                 <UpIconBox>
-                  <UpIcon onClick={handleModal} />
+                  <UpIcon
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleModal();
+                    }}
+                  />
                 </UpIconBox>
               )}
             </NovelDescBox>
@@ -175,7 +200,7 @@ export default function NovelColumnDetail({ novel }: MyComponentProps) {
             />
           )}
         </NovelInfoBox>
-      </NovelContainer>
+      </NovelLink>
     </ThemeProvider>
   );
 }

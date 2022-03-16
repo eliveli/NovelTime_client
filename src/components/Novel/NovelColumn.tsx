@@ -8,7 +8,7 @@ import useComponentWidth from "utils/useComponentWidth";
 import {
   NovelImg,
   NovelTitle,
-  NovelContainer,
+  NovelLink,
   NovelInfoBox,
   NovelInfo,
   NovelSubInfoBox,
@@ -17,6 +17,7 @@ import {
 
 type MyComponentProps = React.PropsWithChildren<{
   novel: {
+    novelId: string;
     novelImg: string;
     userImg: string;
   };
@@ -25,6 +26,7 @@ type MyComponentProps = React.PropsWithChildren<{
 export default function NovelColumn({ novel }: MyComponentProps) {
   // props or default props
   const {
+    novelId = "20220225082010201",
     novelImg = "https://dn-img-page.kakao.com/download/resource?kid=xsaRM/hzhOfrO85M/k1jHoCWYGpQkLzI11JXbA0&filename=th1",
     userImg = "https://cdn.pixabay.com/photo/2018/08/31/08/35/toys-3644073_960_720.png",
   } = novel;
@@ -36,7 +38,7 @@ export default function NovelColumn({ novel }: MyComponentProps) {
   const infoWidth = useComponentWidth(infoRef); // 인포컨테이너 width 받아와 제목 엘립시스에 적용
   return (
     <ThemeProvider theme={theme}>
-      <NovelContainer>
+      <NovelLink to={`/novel_detail/${novelId}`}>
         <NovelImg />
         <NovelInfoBox ref={infoRef}>
           <NovelTitle infoWidth={infoWidth}>[해리포터]지독한 후플푸프</NovelTitle>
@@ -45,7 +47,7 @@ export default function NovelColumn({ novel }: MyComponentProps) {
             <NovelInfo>패러디 | 미완</NovelInfo>
           </NovelSubInfoBox>
         </NovelInfoBox>
-      </NovelContainer>
+      </NovelLink>
     </ThemeProvider>
   );
 }

@@ -1,12 +1,13 @@
 // /* eslint-disable */
 
 import { styled } from "assets/styles/theme";
+import { Link } from "react-router-dom";
 
 interface Props {
   theme: { novelImg: string; userImg: string };
 }
 
-export const NovelContainer = styled.div`
+export const NovelLink = styled(Link)`
   display: flex;
   width: 100%;
 
@@ -14,6 +15,17 @@ export const NovelContainer = styled.div`
   border-bottom: 1px solid rgba(100, 100, 100, 0.2);
   &:last-child {
     border-bottom: 0;
+  }
+
+  text-decoration: none;
+  color: black;
+
+  @media (hover: hover) {
+    &:hover {
+      cursor: pointer;
+      opacity: 0.7;
+      color: rgba(100, 100, 100, 0.8);
+    }
   }
 
   /* 태블릿 */

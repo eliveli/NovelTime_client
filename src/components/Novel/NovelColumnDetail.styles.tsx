@@ -1,13 +1,12 @@
-// /* eslint-disable */
-
-import { styled } from "assets/styles/theme";
+import theme, { styled } from "assets/styles/theme";
 import { keyframes } from "styled-components";
-import Icon from "../assets/Icon";
+import { Link } from "react-router-dom";
+import Icon from "../../assets/Icon";
 
 interface Props {
   theme: { novelImg: string; userImg: string };
 }
-export const NovelContainer = styled.div`
+export const NovelLink = styled(Link)`
   display: flex;
   width: 100%;
 
@@ -17,9 +16,14 @@ export const NovelContainer = styled.div`
     border-bottom: 0;
   }
 
-  /* 태블릿 */
-  @media screen and (min-width: 768px) {
-  }
+  text-decoration: none;
+  color: black;
+
+  ${theme.media.hover(
+    `cursor: pointer;
+    opacity: 0.7;
+    color: rgba(100, 100, 100, 0.8);`,
+  )}
 `;
 export const NovelInfoBox = styled.div`
   display: flex;
@@ -28,10 +32,6 @@ export const NovelInfoBox = styled.div`
   justify-content: space-evenly;
 
   position: relative;
-
-  /* 태블릿 , PC */
-  @media screen and (min-width: 768px) {
-  }
 `;
 
 export const NovelImg = styled.div<Props>`
@@ -43,13 +43,6 @@ export const NovelImg = styled.div<Props>`
   /* background-position: center; */
   background-repeat: no-repeat;
   background-size: cover;
-
-  /* 태블릿 */
-  @media screen and (min-width: 768px) {
-  }
-  /* PC */
-  @media screen and (min-width: 1024px) {
-  }
 `;
 export const NovelTitle = styled.div<{ infoWidth: number }>`
   font-weight: 600;
@@ -98,18 +91,16 @@ export const DownIconBox = styled.div`
   min-height: 20px;
   max-height: 20px;
 
-  @media screen and (min-width: 768px) {
+  ${theme.media.tablet(`
     margin-top: auto;
     margin-left: 3px;
-  }
+    `)}
 
-  @media (hover: hover) {
-    &:hover {
+  ${theme.media.hover(`
       cursor: pointer;
       opacity: 0.8;
       background-color: rgba(150, 150, 150, 0.3);
-    }
-  }
+  `)}
 `;
 
 export const UpIconBox = styled.div`
@@ -124,35 +115,29 @@ export const UpIconBox = styled.div`
   min-height: 20px;
   max-height: 20px;
 
-  @media screen and (min-width: 768px) {
+  ${theme.media.tablet(`
     margin-top: auto;
     margin-left: 3px;
-  }
-  @media (hover: hover) {
-    &:hover {
+    `)}
+  ${theme.media.hover(`
       cursor: pointer;
       opacity: 0.8;
       background-color: rgba(150, 150, 150, 0.3);
-    }
-  }
+    `)}
 `;
 export const DownIcon = styled(Icon.SmallDown)`
   width: 100%;
   height: 100%;
-  @media (hover: hover) {
-    &:hover {
+  ${theme.media.hover(`
       color: rgba(0, 0, 0, 0.3);
-    }
-  }
+    `)}
 `;
 export const UpIcon = styled(Icon.SmallUp)`
   width: 100%;
   height: 100%;
-  @media (hover: hover) {
-    &:hover {
+  ${theme.media.hover(`
       color: rgba(0, 0, 0, 0.3);
-    }
-  }
+    `)}
 `;
 
 // animation for novel desc modal
@@ -168,6 +153,10 @@ const descShowOn = keyframes`
 `;
 
 export const ModalContainerT = styled.div`
+  ${theme.media.hover(`
+      cursor:default;
+      opacity: 1;
+      background-color: white;`)}
   white-space: pre-line; // line break 적용(with tab, use pre-wrap)
 
   position: absolute;
@@ -194,6 +183,10 @@ export const ModalContainerT = styled.div`
   animation-fill-mode: forwards;
 `;
 export const ModalContainerF = styled.div`
+  ${theme.media.hover(`
+      cursor:default;
+      opacity: 1;
+      background-color: white;`)}
   white-space: pre-line; // line break 적용
 
   position: absolute;

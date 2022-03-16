@@ -5,7 +5,7 @@ import {
   NovelImg,
   NovelImgBox,
   NovelTitle,
-  NovelContainer,
+  NovelLink,
   NovelInfoBox,
   NovelInfo,
   NovelSubInfoBox,
@@ -15,6 +15,7 @@ import {
 
 type MyComponentProps = React.PropsWithChildren<{
   novel: {
+    novelId: string;
     novelImg: string;
     userImg: string;
   };
@@ -22,6 +23,7 @@ type MyComponentProps = React.PropsWithChildren<{
 export default function NovelRow({ novel }: MyComponentProps) {
   // props or default props
   const {
+    novelId = "20220225082010201",
     novelImg = "https://dn-img-page.kakao.com/download/resource?kid=xsaRM/hzhOfrO85M/k1jHoCWYGpQkLzI11JXbA0",
     userImg = "https://cdn.pixabay.com/photo/2018/08/31/08/35/toys-3644073_960_720.png",
   } = novel;
@@ -32,7 +34,7 @@ export default function NovelRow({ novel }: MyComponentProps) {
 
   return (
     <ThemeProvider theme={theme}>
-      <NovelContainer>
+      <NovelLink to={`/novel_detail/${novelId}`}>
         <NovelImgBox>
           <NovelImg />
         </NovelImgBox>
@@ -45,7 +47,7 @@ export default function NovelRow({ novel }: MyComponentProps) {
             <NovelInfo>패러디 | 미완</NovelInfo>
           </NovelSubInfoBox>
         </NovelInfoBox>
-      </NovelContainer>
+      </NovelLink>
     </ThemeProvider>
   );
 }
