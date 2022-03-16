@@ -1,8 +1,6 @@
-/* eslint-disable */
-// 지금은 뷰 구성에 집중할 것임. 린트 무시하는 주석은 나중에 해제하기
 import { useRef } from "react";
 import { ThemeProvider } from "styled-components";
-import useComponentWidth from "utils/useComponentWidth";
+import { useComponentWidth } from "utils";
 import Icon from "../../assets/Icon";
 
 import {

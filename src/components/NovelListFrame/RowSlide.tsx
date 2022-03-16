@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 // import { ThemeProvider } from "styled-components";
-import useComponentWidth from "utils/useComponentWidth";
+import { useComponentWidth } from "utils";
 import { CategoryMark } from "components/NovelCategoryMark";
 import {
   RowSlideContainer,

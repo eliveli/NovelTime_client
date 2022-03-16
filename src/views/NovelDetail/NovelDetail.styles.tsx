@@ -1,4 +1,4 @@
-import { styled } from "assets/styles/theme";
+import theme, { styled } from "assets/styles/theme";
 // import { Link } from "react-router-dom";
 import Icon from "../../assets/Icon";
 
@@ -30,10 +30,6 @@ export const NovelContainer = styled.div`
   width: 100%;
 
   padding: 12px 6px;
-
-  /* 태블릿 */
-  @media screen and (min-width: 768px) {
-  }
 `;
 
 export const NovelMainInfo = styled.div`
@@ -47,6 +43,7 @@ export const NovelMainInfo = styled.div`
   @media screen and (min-width: 768px) {
   }
 `;
+
 export const NovelDescBox = styled.div`
   display: flex;
   align-items: flex-start;
@@ -69,6 +66,22 @@ export const NovelDescPart = styled.div`
   text-align: left;
   word-wrap: break-word;
 `;
+export const NovelDescTablet = styled.div`
+  width: 100%;
+  padding: 5px 3px 5px 7px;
+
+  overflow: scroll;
+  height: 120px; //화면 보며 조정
+
+  white-space: pre-wrap; // line break 적용
+
+  // 모바일 안 보임. only 태블릿, 데스크탑
+  @media screen and (max-width: 767px) {
+    display: none;
+  }
+
+  ${theme.hideScrollBar}
+`;
 export const NovelDescAll = styled.div`
   width: 100%;
   padding: 5px 3px 5px 7px;
@@ -83,10 +96,7 @@ export const NovelDescAll = styled.div`
     white-space: pre-wrap; // line break with tab
   }
 
-  -ms-overflow-style: none;
-  &::-webkit-scrollbar {
-    display: none;
-  }
+  ${theme.hideScrollBar}
 `;
 export const DownIconBox = styled.div`
   margin-top: 8px;
@@ -102,7 +112,6 @@ export const DownIconBox = styled.div`
   max-height: 20px;
 
   @media screen and (min-width: 768px) {
-    margin-top: auto;
     margin-left: 3px;
   }
 
@@ -129,7 +138,6 @@ export const UpIconBox = styled.div`
   max-height: 20px;
 
   @media screen and (min-width: 768px) {
-    margin-top: auto;
     margin-left: 3px;
   }
   @media (hover: hover) {
@@ -167,30 +175,27 @@ export const NovelInfoBox = styled.div`
   flex-direction: column;
   justify-content: space-evenly;
   margin-left: 10px;
-  width: 100%;
-
-  /* 태블릿 , PC */
-  @media screen and (min-width: 768px) {
-  }
+  width: 80%;
 `;
-
-export const NovelImg = styled.div<Props>`
+export const NovelImgBox = styled.div`
+  width: 20%;
+  min-width: 100px;
+`;
+export const NovelImgSmall = styled.div<Props>`
   /* 모바일 */
-  height: 80px;
-  min-width: 70px;
+  padding-top: 135%;
+
   border-radius: 5%;
+
   background-image: url(${(props) => props.theme.novelImg});
   /* background-position: center; */
   background-repeat: no-repeat;
   background-size: cover;
-
-  /* 태블릿 */
-  @media screen and (min-width: 768px) {
-    /* height: 100px; */
-  }
-  /* PC */
-  @media screen and (min-width: 1024px) {
-  }
+  ${theme.media.hover(
+    `cursor: pointer;
+    opacity: 0.7;
+    `,
+  )}
 `;
 export const NovelTitle = styled.div<{ infoWidth: number }>`
   font-weight: 600;

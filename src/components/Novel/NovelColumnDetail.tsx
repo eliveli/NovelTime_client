@@ -3,8 +3,7 @@
 // 지금은 뷰 구성에 집중할 것임. 린트 무시하는 주석은 나중에 해제하기
 import React, { useLayoutEffect, useRef } from "react";
 import { ThemeProvider } from "styled-components";
-import useComponentWidth from "utils/useComponentWidth";
-import useModal from "../../utils/useModal";
+import { useComponentWidth, useModal } from "utils";
 // import Icon from "../assets/Icon";
 
 import {
@@ -83,6 +82,7 @@ function DescModal({
   // 모달F가 화면에 그려지기 전 스크롤Y 설정
   useLayoutEffect(() => {
     modalFRef.current?.scroll(0, modalScrollY.current);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isShowOn]);
 
   if (isShowOn) {

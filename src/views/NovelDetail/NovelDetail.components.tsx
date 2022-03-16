@@ -1,12 +1,14 @@
 import { useRef, useState } from "react";
 import { ThemeProvider } from "styled-components";
-import useComponentWidth from "utils/useComponentWidth";
+import { useComponentWidth } from "utils";
 import { CategoryMark } from "components/NovelCategoryMark";
+import { useAppDispatch } from "../../store/hooks";
+import { showBigImage } from "../../store/clientSlices/modalSlice";
 
 import {
   NovelsBG,
   NovelMainInfo,
-  NovelImg,
+  NovelImgSmall,
   NovelInfoBox,
   NovelTitle,
   NovelSubInfoBox,
@@ -23,6 +25,8 @@ import {
   DownIcon,
   UpIconBox,
   UpIcon,
+  NovelImgBox,
+  // NovelDescTablet,
 } from "./NovelDetail.styles";
 
 type Props = React.PropsWithChildren<{ isShowAll?: boolean; category: string }>;
@@ -54,6 +58,8 @@ Novel.NovelInfo = function NovelDetailInfo({ novel }: NovelProps) {
 
   const [isShowAll, handleShowAll] = useState(false);
 
+  const dispatch = useAppDispatch();
+
   const desc = `[에이번데일 백작의 저택]
 
   “누구세요……?”
@@ -80,13 +86,18 @@ Novel.NovelInfo = function NovelDetailInfo({ novel }: NovelProps) {
     <ThemeProvider theme={theme}>
       <NovelContainer>
         <NovelMainInfo>
-          <NovelImg />
+          <NovelImgBox>
+            <NovelImgSmall onClick={() => dispatch(showBigImage(novelImg))} />
+          </NovelImgBox>
+
           <NovelInfoBox ref={infoRef}>
             <NovelTitle infoWidth={infoWidth}>헌터와 매드 사이언티스트</NovelTitle>
             <NovelSubInfoBox>
               <NovelInfoLineHeight>델마르</NovelInfoLineHeight>
               <NovelInfo>로판 | 완결 | 전체연령가</NovelInfo>
             </NovelSubInfoBox>
+
+            {/* <NovelDescTablet>{desc}</NovelDescTablet> */}
           </NovelInfoBox>
         </NovelMainInfo>
         {isShowAll && (

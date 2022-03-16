@@ -20,6 +20,7 @@ import {
   AfterSearch,
   NovelListByCategory,
 } from "views";
+import Modal from "components/Modal";
 import { ThemeProvider } from "styled-components";
 import theme from "assets/styles/theme";
 import GlobalStyle from "./assets/styles/GlobalStyle";
@@ -39,6 +40,7 @@ function App() {
     <Router>
       <GlobalStyle />
       <ThemeProvider theme={theme}>
+        <Modal />
         <header>
           <Routes>
             <Route path="/" element={<Nav />} />

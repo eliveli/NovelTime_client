@@ -8,6 +8,7 @@ import {
   FaRegComment,
 } from "react-icons/fa";
 import { BiChevronRight, BiChevronLeft, BiChevronDown, BiChevronUp } from "react-icons/bi";
+import { GrClose } from "react-icons/gr";
 
 // Recommend List 에서 글 제목 오른쪽에 쓰일 때
 const BigRight = styled(FaChevronRight)`
@@ -33,6 +34,7 @@ const SmallRight = styled(BiChevronRight)`
 const SmallLeft = styled(BiChevronLeft)`
   color: rgba(100, 100, 100, 0.4);
 `;
+const Close = styled(GrClose)``;
 
 const Icon = {
   BigRight,
@@ -44,5 +46,6 @@ const Icon = {
   SmallLeft,
   SmallDown,
   SmallUp,
+  Close,
 };
 export default Icon;

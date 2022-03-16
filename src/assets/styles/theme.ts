@@ -14,6 +14,12 @@ const hover = (configHover: string) => `@media (hover: hover) {
   }
 }
 `;
+const hideScrollBar = `
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+`;
 
 const media = {
   tablet,
@@ -23,6 +29,7 @@ const media = {
 const theme = {
   color,
   media,
+  hideScrollBar,
 };
 
 export default theme;
