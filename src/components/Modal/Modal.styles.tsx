@@ -6,50 +6,54 @@ export const NovelImgBG = styled.div`
   z-index: 2;
   width: 100%;
   height: 100%;
-  /* overflow: scroll; */
+  overflow: scroll;
   display: flex;
-  /* flex-direction: column; */
   justify-content: center;
   align-items: center;
   background-color: black;
 `;
 export const NovelImgContainer = styled.div`
   width: 100%;
-  /* height: 100%; */
 
   display: flex;
   flex-direction: column-reverse;
   justify-content: center;
+  align-items: center;
 
   position: relative;
+  ${theme.media.tablet(`
+    width: auto;
+    height:100%;
+  `)}/* position: static; */
 `;
 
-export const NovelImgBig = styled.div<{ src: string }>`
-  padding-top: 135%;
+export const NovelImgBig = styled.img`
+  /* div로 가로세로 비율 맞출 때 */
+  /* padding-top: 135%; //카카오페이지 */
+  /* padding-top: 146%; //시리즈, 리디북스 */
 
-  background-image: url(${({ src }) => src});
-  /* background-position: center; */
-  background-repeat: no-repeat;
-  background-size: cover;
   width: 100%;
   ${theme.media.tablet(`
     width: auto;
     height: 100%;
  `)}
 `;
+// export const NovelImgBig = styled.div<{ src: string }>`
+//   /* padding-top: 135%; //카카오페이지 */
+//   /* padding-top: 146%; //시리즈, 리디북스 */
+//   /* padding-top: ${({ src }) => (src.includes("dn-img-page.kakao.com") ? "135%" : "146%")}; */
 
-// export const NovelImgBox = styled.div`
-//   width: 20%;
-//   min-width: 100px;
-// `;
-// export const NovelImgSmall = styled.div<{src:string}>`
-//   padding-top: 135%;
-
-//   background-image: url(${(props) => props.theme.novelImg});
-//   /* background-position: center; */
+//   background-image: url(${({ src }) => src});
+//   background-position-y: top;
 //   background-repeat: no-repeat;
 //   background-size: cover;
+//   width: 100%;
+//   ${theme.media.tablet(`
+//     width: auto;
+//     height: 100%;
+//  `)}
 // `;
+
 export const ClosingBox = styled.div`
   z-index: 1;
 
@@ -58,16 +62,24 @@ export const ClosingBox = styled.div`
   background-color: white;
   border: 3px double rgba(150, 150, 150, 0.3);
   border-radius: 7px;
-  padding: 6px;
+  padding: 4px;
 
   position: absolute;
   top: 0;
   right: 0;
 
-  min-width: 40px;
-  max-width: 40px;
-  min-height: 40px;
-  max-height: 40px;
+  min-width: 30px;
+  max-width: 30px;
+  min-height: 30px;
+  max-height: 30px;
+
+  ${theme.media.tablet(`
+    padding: 6px;
+    min-width: 40px;
+    max-width: 40px;
+    min-height: 40px;
+    max-height: 40px;
+`)}
 
   @media (hover: hover) {
     &:hover {
@@ -80,7 +92,7 @@ export const ClosingBox = styled.div`
 export const ClosingIcon = styled(Icon.Close)`
   width: 100%;
   height: 100%;
-  opacity: 0.4;
+  opacity: 0.3;
   @media (hover: hover) {
     &:hover {
       color: rgba(0, 0, 0, 0.3);

@@ -32,7 +32,8 @@ export default function Modal() {
             return (
               <NovelImgBG>
                 <NovelImgContainer>
-                  <NovelImgBig src={imgSrc} />
+                  {/* <NovelImgBig src={imgSrc} /> */}
+                  <NovelImgBig src={imgSrc} alt="BigSize Image" />
                   <ClosingBox onClick={() => dispatch(closeModal())}>
                     <ClosingIcon />
                   </ClosingBox>
