@@ -11,6 +11,8 @@ export const NovelImgBG = styled.div`
   justify-content: center;
   align-items: center;
   background-color: black;
+
+  ${theme.hideScrollBar}
 `;
 export const NovelImgContainer = styled.div`
   width: 100%;

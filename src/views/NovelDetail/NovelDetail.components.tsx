@@ -1,6 +1,6 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { ThemeProvider } from "styled-components";
-import { useComponentWidth } from "utils";
+// import { useComponentWidth } from "utils";
 import { CategoryMark } from "components/NovelCategoryMark";
 import { useAppDispatch } from "../../store/hooks";
 import { showBigImage } from "../../store/clientSlices/modalSlice";
@@ -12,21 +12,39 @@ import {
   NovelInfoBox,
   NovelTitle,
   NovelSubInfoBox,
-  NovelInfoLineHeight,
-  NovelInfo,
+  NovelInfoAuthor,
+  NovelInfoAuthorBox,
+  NovelInfoMobile,
+  NovelInfoTablet,
   ColumnBG,
   ColumnListContainer,
   NovelContainer,
   NovelDescPart,
   NovelDescAll,
   NovelPlatformBox,
-  NovelDescBox,
+  NovelDescMobile,
   DownIconBox,
   DownIcon,
   UpIconBox,
   UpIcon,
   NovelImgBox,
-  // NovelDescTablet,
+  TextIconBox,
+  TextIcon,
+  LikeIconBox,
+  LikeIcon,
+  InfoIconBox,
+  IconNumber,
+  HandIconBox,
+  HandIcon,
+  PlatformIconBox,
+  RunnerIcon,
+  ReaderIcon,
+  NovelDescTablet,
+  NovelUpDescBox,
+  NovelInfoMobileAge,
+  PlatformText,
+  PlatformTextBox,
+  PlatformBorder,
 } from "./NovelDetail.styles";
 
 type Props = React.PropsWithChildren<{ isShowAll?: boolean; category: string }>;
@@ -53,8 +71,8 @@ Novel.NovelInfo = function NovelDetailInfo({ novel }: NovelProps) {
     novelImg,
     userImg,
   };
-  const infoRef = useRef<HTMLDivElement>(null);
-  const infoWidth = useComponentWidth(infoRef); // 인포컨테이너 width 받아와 제목 엘립시스에 적용
+  // const infoRef = useRef<HTMLDivElement>(null);
+  // const infoWidth = useComponentWidth(infoRef); // 인포컨테이너 width 받아와 제목 엘립시스에 적용
 
   const [isShowAll, handleShowAll] = useState(false);
 
@@ -86,37 +104,84 @@ Novel.NovelInfo = function NovelDetailInfo({ novel }: NovelProps) {
     <ThemeProvider theme={theme}>
       <NovelContainer>
         <NovelMainInfo>
-          <NovelImgBox>
-            <NovelImgSmall onClick={() => dispatch(showBigImage(novelImg))} />
+          <NovelImgBox onClick={() => dispatch(showBigImage(novelImg))}>
+            <NovelImgSmall />
+            <HandIconBox>
+              <HandIcon />
+            </HandIconBox>
           </NovelImgBox>
 
-          <NovelInfoBox ref={infoRef}>
-            <NovelTitle infoWidth={infoWidth}>헌터와 매드 사이언티스트</NovelTitle>
-            <NovelSubInfoBox>
-              <NovelInfoLineHeight>델마르</NovelInfoLineHeight>
-              <NovelInfo>로판 | 완결 | 전체연령가</NovelInfo>
-            </NovelSubInfoBox>
+          <NovelInfoBox>
+            <NovelUpDescBox>
+              <NovelTitle>헌터와 매드 사이언티스트</NovelTitle>
+              <NovelSubInfoBox>
+                <NovelInfoAuthorBox>
+                  <NovelInfoAuthor>델마르</NovelInfoAuthor>
+                  <NovelInfoTablet>로판 | 완결 | 전체연령가</NovelInfoTablet>
 
-            {/* <NovelDescTablet>{desc}</NovelDescTablet> */}
+                  <NovelInfoMobile>로판 | 완결</NovelInfoMobile>
+                  <NovelInfoMobileAge>전체연령가</NovelInfoMobileAge>
+                </NovelInfoAuthorBox>
+                <InfoIconBox>
+                  <TextIconBox>
+                    <TextIcon />
+                    <IconNumber>9</IconNumber>
+                  </TextIconBox>
+                  <LikeIconBox>
+                    <LikeIcon />
+                    <IconNumber>7</IconNumber>
+                  </LikeIconBox>
+                </InfoIconBox>
+              </NovelSubInfoBox>
+            </NovelUpDescBox>
+
+            <NovelDescTablet>{desc}</NovelDescTablet>
           </NovelInfoBox>
         </NovelMainInfo>
         {isShowAll && (
-          <NovelDescBox>
+          <NovelDescMobile>
             <NovelDescAll>{desc}</NovelDescAll>
             <UpIconBox onClick={() => handleShowAll(false)}>
               <UpIcon />
             </UpIconBox>
-          </NovelDescBox>
+          </NovelDescMobile>
         )}
         {!isShowAll && (
-          <NovelDescBox>
+          <NovelDescMobile>
             <NovelDescPart>{desc}</NovelDescPart>
             <DownIconBox>
               <DownIcon onClick={() => handleShowAll(true)} />
             </DownIconBox>
-          </NovelDescBox>
+          </NovelDescMobile>
         )}
-        <NovelPlatformBox>카카페 시리즈 아이콘</NovelPlatformBox>
+        <NovelPlatformBox>
+          <PlatformBorder>
+            <PlatformIconBox>
+              <RunnerIcon />
+            </PlatformIconBox>
+            <PlatformTextBox>
+              <PlatformText
+                platform="카카오페이지"
+                href="https://page.kakao.com/main"
+                target="_blank"
+              >
+                카카페
+              </PlatformText>
+              <PlatformText platform="네이버 시리즈" href="" target="_blank">
+                시리즈
+              </PlatformText>
+              <PlatformText platform="리디북스" href="" target="_blank">
+                리디북스
+              </PlatformText>
+              <PlatformText platform="조아라" href="" target="_blank">
+                조아라
+              </PlatformText>
+            </PlatformTextBox>
+            <PlatformIconBox>
+              <ReaderIcon />
+            </PlatformIconBox>
+          </PlatformBorder>
+        </NovelPlatformBox>
       </NovelContainer>
     </ThemeProvider>
   );
