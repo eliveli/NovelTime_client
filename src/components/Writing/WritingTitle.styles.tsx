@@ -10,7 +10,7 @@ export const TalkBG = styled.article`
   width: 100%;
   margin: 0 auto;
   /* padding: 0 16px; */
-  padding: 0 6px;
+  /* padding: 0 6px; */
   background-color: white;
   border-bottom: 1px solid rgba(150, 150, 150, 0.2);
 
@@ -65,7 +65,6 @@ export const UserImg = styled.div<{ userImg: string }>`
 `;
 export const UserNameBox = styled.div`
   display: flex;
-  /* padding-left: 12px; */
 `;
 
 export const UserName = styled.p`
@@ -86,35 +85,10 @@ export const TalkPreview = styled.div`
 `;
 export const TalkImgBox = styled.div`
   min-width: 40px;
-
-  /* text-align: center; // 자식이미지 width 100% 아닐 때 가운데 정렬 */
-
-  /* position: relative; */
-
-  /* overflow: hidden; */
-
-  /* 모바일 */
-  /* height: 150px; */
-  /* 태블릿 */
-  /* @media screen and (min-width: 768px) { */
-    /* height: 200px; */
-  /* } */
-  /* PC - 모바일,태블릿과 뷰를 다르게 구성 */
-  /* @media screen and (min-width: 1024px) { */
-    /* height: 250px; */
-  }
-
-  /* overflow-x: hidden;  // y스크롤 넣을 경우 */
-  /* scroll-behavior: smooth; */
 `;
 
 export const TalkImg = styled.div<{ img?: string }>`
-  /* position: absolute; */
-  /* left: 0; */
-
   padding-top: 100%;
-  /* width: 100%; */
-  /* display: inline-block; // 자식이미지 width 100% 아닐 때 가운데 정렬 */
 
   background-image: url(${({ img }) => img});
   /* background-position: center; */
@@ -145,8 +119,4 @@ export const TalkTitle = styled.div<{ titleWidth: number }>`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-`;
-export const NovelTitle = styled.div`
-  color: ${(props) => props.theme.color.textGray};
-  font-weight: 600;
 `;

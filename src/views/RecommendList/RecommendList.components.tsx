@@ -8,7 +8,6 @@ import {
   LastLineContainer,
   NovelImg,
   UserName,
-  RecommendBG,
   Text,
   UserNameBox,
   IconBox,
@@ -27,18 +26,12 @@ import {
   RightIconBox,
 } from "./RecommendList.styles";
 
-type MyComponentProps = React.PropsWithChildren<{}>;
-
 interface TextProps {
   novelImg: string;
   userImg: string;
 }
 
-export default function Recommend({ children }: MyComponentProps) {
-  return <RecommendBG>{children}</RecommendBG>;
-}
-
-Recommend.Text = function ({ text }: { text: TextProps }) {
+export default function Recommend({ text }: { text: TextProps }) {
   // props or default props
   const {
     novelImg = "https://dn-img-page.kakao.com/download/resource?kid=xsaRM/hzhOfrO85M/k1jHoCWYGpQkLzI11JXbA0&filename=th1",
@@ -87,4 +80,4 @@ Recommend.Text = function ({ text }: { text: TextProps }) {
       </Text>
     </ThemeProvider>
   );
-};
+}

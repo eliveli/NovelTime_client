@@ -1,7 +1,7 @@
 import React from "react";
+import SectionBG from "components/SectionBG";
 import { ColumnList, ColumnDetailList, RowSlide } from "../../components/NovelListFrame";
 import { NovelColumn, NovelColumnDetail, NovelRow } from "../../components/Novel";
-import Novels from "./NovelList.components";
 
 export default function NovelList() {
   const novelInfo = {
@@ -57,7 +57,7 @@ export default function NovelList() {
   ];
 
   return (
-    <Novels>
+    <SectionBG>
       <ColumnList categoryText="소설계의 박스오피스" categoryId="boxOffice">
         {novels.map((novel) => (
           <NovelColumn novel={novel} />
@@ -75,6 +75,6 @@ export default function NovelList() {
           <NovelRow novel={novel} />
         ))}
       </RowSlide>
-    </Novels>
+    </SectionBG>
   );
 }

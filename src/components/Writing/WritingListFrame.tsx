@@ -23,10 +23,16 @@ export default function WritingListFrame({
   handleTalk,
   children,
   writing,
+  isShowAll,
 }: Props) {
   return (
     <ColumnBG>
-      <CategoryMark writing categoryText={categoryText} novelId={novelId} />
+      <CategoryMark
+        writing={writing}
+        isShowAll={isShowAll}
+        categoryText={categoryText}
+        novelId={novelId}
+      />
       <WritingTabContainer>
         <WritingTab isTalk={isTalk} onClick={() => handleTalk(true)}>
           <WritingTabText>FreeTalking</WritingTabText>

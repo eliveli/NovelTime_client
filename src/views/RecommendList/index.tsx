@@ -1,4 +1,5 @@
 import React from "react";
+import SectionBG from "components/SectionBG";
 import Recommend from "./RecommendList.components";
 
 export default function RecommendList() {
@@ -9,10 +10,10 @@ export default function RecommendList() {
   };
   const arrayInfo = [info, info, info];
   return (
-    <Recommend>
+    <SectionBG>
       {arrayInfo.map((text) => (
-        <Recommend.Text text={text} />
+        <Recommend text={text} />
       ))}
-    </Recommend>
+    </SectionBG>
   );
 }

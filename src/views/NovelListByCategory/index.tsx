@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import Novels from "views/NovelList/NovelList.components";
+import SectionBG from "components/SectionBG";
 import { ColumnDetailList } from "../../components/NovelListFrame";
 import { NovelColumnDetail } from "../../components/Novel";
 
@@ -58,12 +58,12 @@ export default function NovelListByCategory() {
     detailNovelInfo,
   ];
   return (
-    <Novels>
+    <SectionBG>
       <ColumnDetailList isShowAll categoryText={categoryText as string}>
         {detailNovels.map((novel) => (
           <NovelColumnDetail novel={novel} />
         ))}
       </ColumnDetailList>
-    </Novels>
+    </SectionBG>
   );
 }

@@ -5,7 +5,6 @@ import {
   FirstLineContainer,
   UserImg,
   UserName,
-  TalkBG,
   Talk,
   UserNameBox,
   IconsBox,
@@ -20,18 +19,12 @@ import {
   // setImgUrl,
 } from "./FreeTalkList.styles";
 
-type MyComponentProps = React.PropsWithChildren<{}>;
-
 interface TalkProps {
   userImg: string;
   talkImg: string;
 }
 
-export default function FreeTalks({ children }: MyComponentProps) {
-  return <TalkBG>{children}</TalkBG>;
-}
-
-FreeTalks.Talk = function FreeTalk({ talk }: { talk: TalkProps }) {
+export default function FreeTalk({ talk }: { talk: TalkProps }) {
   // props or default props
   const {
     userImg = "https://cdn.pixabay.com/photo/2018/08/31/08/35/toys-3644073_960_720.png",
@@ -75,4 +68,4 @@ FreeTalks.Talk = function FreeTalk({ talk }: { talk: TalkProps }) {
       </Talk>
     </ThemeProvider>
   );
-};
+}

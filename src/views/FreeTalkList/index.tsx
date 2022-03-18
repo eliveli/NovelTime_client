@@ -1,5 +1,6 @@
 import React from "react";
-import FreeTalks from "./FreeTalkList.components";
+import SectionBG from "components/SectionBG";
+import FreeTalk from "./FreeTalkList.components";
 
 export default function FreeTalkList() {
   const info = {
@@ -8,10 +9,10 @@ export default function FreeTalkList() {
   };
   const arrayInfo = [info, info, info];
   return (
-    <FreeTalks>
+    <SectionBG>
       {arrayInfo.map((talk) => (
-        <FreeTalks.Talk talk={talk} />
+        <FreeTalk talk={talk} />
       ))}
-    </FreeTalks>
+    </SectionBG>
   );
 }

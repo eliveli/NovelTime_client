@@ -5,7 +5,6 @@ import { useAppDispatch } from "../../store/hooks";
 import { showBigImage } from "../../store/clientSlices/modalSlice";
 
 import {
-  NovelsBG,
   NovelMainInfo,
   NovelImgSmall,
   NovelInfoBox,
@@ -64,11 +63,8 @@ type NovelProps = React.PropsWithChildren<{
     likeNO: number;
   };
 }>;
-export default function Novel({ children }: { children: React.ReactNode }) {
-  return <NovelsBG>{children}</NovelsBG>;
-}
 
-Novel.NovelInfo = function NovelDetailInfo({ novel }: NovelProps) {
+export default function NovelDetailInfo({ novel }: NovelProps) {
   // props or default props
   const {
     novelImg = "https://comicthumb-phinf.pstatic.net/20220126_148/pocket_16431735084292970r_JPEG/%C5%A9%B8%AE%BD%BA%C5%BB%BE%C6%B0%A1%BE%BE%B4%C2%B3%B2%C0%DA%B4%D9-%C0%CF%B7%AF%BD%BA%C6%AE%C7%A5%C1%F61.jpg?type=m260", // 시리즈
@@ -203,4 +199,4 @@ Novel.NovelInfo = function NovelDetailInfo({ novel }: NovelProps) {
       </NovelContainer>
     </ThemeProvider>
   );
-};
+}

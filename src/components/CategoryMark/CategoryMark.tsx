@@ -23,8 +23,8 @@ export default function CategoryMark({
     return (
       <CategoryContainer>
         <CategoryDesc>{categoryText}</CategoryDesc>
-        {/* 전체보기 페이지일 때 */}
-        {isShowAll === undefined && (
+        {/* when is not show-all-page */}
+        {!isShowAll && (
           <LinkCategory to={`/writing_list/${novelId as string}`}>
             <ShowAllText>전체보기</ShowAllText>
             <ShowAllIcon />
@@ -37,8 +37,8 @@ export default function CategoryMark({
     return (
       <CategoryContainer>
         <CategoryDesc>{categoryText}</CategoryDesc>
-        {/* 전체보기 페이지일 때 */}
-        {isShowAll === undefined && (
+        {/* when is not show-all-page */}
+        {!isShowAll && (
           <LinkCategory to={`/novel_list/${categoryText}/${categoryId as string}/${novelId}`}>
             <ShowAllText>전체보기</ShowAllText>
             <ShowAllIcon />
@@ -51,8 +51,8 @@ export default function CategoryMark({
   return (
     <CategoryContainer>
       <CategoryDesc>{categoryText}</CategoryDesc>
-      {/* 전체보기 페이지일 때 */}
-      {isShowAll === undefined && (
+      {/* when is not show-all-page */}
+      {!isShowAll && (
         <LinkCategory to={`/novel_list/${categoryText}/${categoryId as string}`}>
           <ShowAllText>전체보기</ShowAllText>
           <ShowAllIcon />

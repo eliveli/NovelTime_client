@@ -15,7 +15,6 @@ import {
   IconsBox,
   IconBox,
   TalkTitle,
-  NovelTitle,
   TalkImg,
   IconNO,
   TalkPreview,

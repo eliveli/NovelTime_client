@@ -6,22 +6,6 @@ import { styled } from "assets/styles/theme";
 interface Props {
   theme: { userImg: string; talkImg: string };
 }
-export const TalkBG = styled.section`
-  /* 모바일 */
-  width: 100%;
-  margin: 0 auto;
-  padding: 0 16px 16px;
-  background-color: white;
-  border-top: 2px solid gray;
-
-  /* 태블릿 */
-  @media screen and (min-width: 768px) {
-  }
-  /* PC - 모바일,태블릿과 뷰를 다르게 구성 */
-  @media screen and (min-width: 1024px) {
-    width: 860px;
-  }
-`;
 
 export const Talk = styled.article`
   width: 100%;

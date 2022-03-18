@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
+import SectionBG from "components/SectionBG";
 import { RowSlide } from "../../components/NovelListFrame";
 import { WritingListFrame, WritingTitle } from "../../components/Writing";
 import { NovelRow } from "../../components/Novel";
-
-import Novel from "./NovelDetail.components";
+import NovelDetailInfo from "./NovelDetail.components";
 
 // 컴포넌트에서 api 요청 : novelId 이용 (see under the two lines)
 
@@ -118,8 +118,8 @@ export default function NovelDetail() {
   const [isTalk, handleTalk] = useState(true);
 
   return (
-    <Novel>
-      <Novel.NovelInfo novel={detailNovel} />
+    <SectionBG>
+      <NovelDetailInfo novel={detailNovel} />
 
       <WritingListFrame
         categoryText="for the 소설 - 우리들의 이야기"
@@ -142,6 +142,6 @@ export default function NovelDetail() {
           <NovelRow novel={novel} />
         ))}
       </RowSlide>
-    </Novel>
+    </SectionBG>
   );
 }
