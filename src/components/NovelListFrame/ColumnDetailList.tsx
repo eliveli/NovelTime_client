@@ -1,4 +1,4 @@
-import { CategoryMark } from "components/NovelCategoryMark";
+import { CategoryMark } from "components/CategoryMark";
 import { ColumnBG, ColumnListContainer } from "./ColumnDetailList.styles";
 
 type Props = React.PropsWithChildren<{ isShowAll?: boolean; category: string }>;

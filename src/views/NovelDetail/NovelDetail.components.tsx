@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { ThemeProvider } from "styled-components";
 // import { useComponentWidth } from "utils";
-import { CategoryMark } from "components/NovelCategoryMark";
 import { useAppDispatch } from "../../store/hooks";
 import { showBigImage } from "../../store/clientSlices/modalSlice";
 
@@ -16,8 +15,6 @@ import {
   NovelInfoAuthorBox,
   NovelInfoMobile,
   NovelInfoTablet,
-  ColumnBG,
-  ColumnListContainer,
   NovelContainer,
   NovelDescPart,
   NovelDescAll,
@@ -46,8 +43,6 @@ import {
   PlatformTextBox,
   PlatformBorder,
 } from "./NovelDetail.styles";
-
-type Props = React.PropsWithChildren<{ isShowAll?: boolean; category: string }>;
 
 type NovelProps = React.PropsWithChildren<{
   novel: {
@@ -85,12 +80,12 @@ Novel.NovelInfo = function NovelDetailInfo({ novel }: NovelProps) {
     novelIsEnd = "완결여부",
     novelAge = "이용가능연령",
     novelDesc = `작품소개`,
-    novelPlatform = "",
-    novelPlatform2 = "",
-    novelPlatform3 = "", // 없을 경우 백엔드에서 제외해 가져오기
-    novelUrl = "",
-    novelUrl2 = "",
-    novelUrl3 = "", // 없을 경우 백엔드에서 제외해 가져오기
+    novelPlatform,
+    novelPlatform2,
+    novelPlatform3, // 없을 경우 백엔드에서 제외해 가져오기
+    novelUrl,
+    novelUrl2,
+    novelUrl3, // 없을 경우 백엔드에서 제외해 가져오기
 
     writingNO = 0, // 백엔드 - talk, recommend 테이블에서 가져오기
     likeNO = 0, // 백엔드 - talk, recommend 테이블에서 가져오기
@@ -172,7 +167,7 @@ Novel.NovelInfo = function NovelDetailInfo({ novel }: NovelProps) {
                 { platform: novelPlatform2, url: novelUrl2 },
                 { platform: novelPlatform3, url: novelUrl3 },
               ].map((_) => {
-                if (_.platform !== "") {
+                if (_.platform !== undefined) {
                   return (
                     <PlatformText
                       platform={
@@ -207,13 +202,5 @@ Novel.NovelInfo = function NovelDetailInfo({ novel }: NovelProps) {
         </NovelPlatformBox>
       </NovelContainer>
     </ThemeProvider>
-  );
-};
-Novel.Column = function Column({ category, children }: Props) {
-  return (
-    <ColumnBG>
-      <CategoryMark category={category} />
-      <ColumnListContainer>{children}</ColumnListContainer>
-    </ColumnBG>
   );
 };

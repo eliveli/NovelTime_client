@@ -1,7 +1,7 @@
-import React from "react";
-import { ColumnList, ColumnDetailList, RowSlide } from "../../components/ListFrame";
+import React, { useState } from "react";
+import { RowSlide } from "../../components/NovelListFrame";
+import { WritingListFrame, WritingTitle } from "../../components/Writing";
 import { NovelRow } from "../../components/Novel";
-import { WritingTitle } from "../../components/WritingTitle";
 
 import Novel from "./NovelDetail.components";
 
@@ -84,7 +84,9 @@ export default function NovelDetail() {
     likeNO: 5,
     commentNO: 7,
 
-    isTalkImg: true, // 글에 사진이 있을 때 true
+    // 사진 가져오기
+    talkPhoto:
+      "https://comicthumb-phinf.pstatic.net/20220126_148/pocket_16431735084292970r_JPEG/%C5%A9%B8%AE%BD%BA%C5%BB%BE%C6%B0%A1%BE%BE%B4%C2%B3%B2%C0%DA%B4%D9-%C0%CF%B7%AF%BD%BA%C6%AE%C7%A5%C1%F61.jpg?type=m260",
   };
   const arrayInfoTalk = [infoTalk, infoTalk, infoTalk, infoTalk, infoTalk]; // 5개 씩?
 
@@ -93,12 +95,13 @@ export default function NovelDetail() {
     userId: "20220225082010201", // 필요성: 클릭 시 유저페이지 정보 요청
 
     userName: "Nana",
-    userImg: "https://cdn.pixabay.com/photo/2018/08/31/08/35/toys-3644073_960_720.png",
+    userImg: "", // 없을 때 컴포넌트에서 디폴트 이미지 적용
     createDate: "22.01.01",
     recommendTitle: "추천추천추천",
     likeNO: 5,
 
-    isRecommendImg: true, // 글에 사진이 있을 때 true
+    // 사진 가져오기
+    recommendPhoto: "https://cdn.pixabay.com/photo/2018/08/31/08/35/toys-3644073_960_720.png",
   };
   const arrayInfoRecommend = [
     infoRecommend,
@@ -108,19 +111,20 @@ export default function NovelDetail() {
     infoRecommend,
   ];
 
+  const [isTalk, handleTalk] = useState(true);
+
   return (
     <Novel>
       <Novel.NovelInfo novel={detailNovel} />
 
-      <Novel.Column category="talk / recommend">
-        {arrayInfoTalk.map((talk) => (
-          <WritingTitle writing={talk} />
-        ))}
-        구분선. required TAB
-        {arrayInfoRecommend.map((recommend) => (
-          <WritingTitle writing={recommend} />
-        ))}
-      </Novel.Column>
+      <WritingListFrame
+        category="for the 소설 - 우리들의 이야기"
+        isTalk={isTalk}
+        handleTalk={handleTalk}
+      >
+        {isTalk && arrayInfoTalk.map((talk) => <WritingTitle writing={talk} />)}
+        {!isTalk && arrayInfoRecommend.map((recommend) => <WritingTitle writing={recommend} />)}
+      </WritingListFrame>
 
       <RowSlide category="추천 작품" novelNO={anotherNovels.length}>
         {anotherNovels.map((novel) => (

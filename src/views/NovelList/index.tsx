@@ -1,5 +1,5 @@
 import React from "react";
-import { ColumnList, ColumnDetailList, RowSlide } from "../../components/ListFrame";
+import { ColumnList, ColumnDetailList, RowSlide } from "../../components/NovelListFrame";
 import { NovelColumn, NovelColumnDetail, NovelRow } from "../../components/Novel";
 import Novels from "./NovelList.components";
 

@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import Novels from "views/NovelList/NovelList.components";
-import { ColumnDetailList } from "../../components/ListFrame";
+import { ColumnDetailList } from "../../components/NovelListFrame";
 import { NovelColumnDetail } from "../../components/Novel";
 
 // api 호출, 서버 스테이트 받아오기
