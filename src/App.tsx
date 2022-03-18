@@ -11,7 +11,6 @@ import {
   NovelList,
   RecommendList,
   RecommendDetail,
-  NovelMark,
   UserPage,
   NotFound,
   Nav,
@@ -19,6 +18,7 @@ import {
   BeforeSearch,
   AfterSearch,
   NovelListByCategory,
+  WritingList,
 } from "views";
 import Modal from "components/Modal";
 import { ThemeProvider } from "styled-components";
@@ -56,15 +56,19 @@ function App() {
               <Route path="recommend_list" element={<RecommendList />} />
 
               <Route path="/novel_list" element={<NovelList />} />
-              <Route path="/novel_list/:category" element={<NovelListByCategory />} />
+              <Route
+                path="/novel_list/:categoryText/:categoryId"
+                element={<NovelListByCategory />}
+              />
+              <Route
+                path="/novel_list/:categoryText/:categoryId/:novelId"
+                element={<NovelListByCategory />}
+              />
               {/*  NovelList 컴포넌트 안에서 :  let { category } = useParams(); */}
 
-              <Route path="/novel_detail/:novel_id" element={<NovelDetail />} />
+              <Route path="/novel_detail/:novelId" element={<NovelDetail />} />
 
-              <Route path="/novel/:novel_id" element={<NovelMark />}>
-                <Route path="talk_list" element={<FreeTalkList />} />
-                <Route path="recommend_list" element={<RecommendList />} />
-              </Route>
+              <Route path="/writing_list/:novelId" element={<WritingList />} />
 
               <Route path="/talk_detail/:talk_id" element={<FreeTalkDetail />} />
               <Route path="/recommend_detail/:recommend_id" element={<RecommendDetail />} />

@@ -8,7 +8,7 @@ export const novelTimeApi = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:8082" }),
   endpoints: (builder) => ({
     getNovelById: builder.query<NovelInfo, string>({
-      query: (novel_id) => `/novels/detail/${novel_id}`,
+      query: (novelId) => `/novels/detail/${novelId}`,
     }),
   }),
 });

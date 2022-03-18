@@ -11,13 +11,22 @@ type Props = React.PropsWithChildren<{
   isTalk: boolean;
   handleTalk: React.Dispatch<React.SetStateAction<boolean>>;
   isShowAll?: boolean;
-  category: string;
+  categoryText: string;
+  novelId: string;
+  writing: boolean;
 }>;
 
-export default function WritingListFrame({ category, isTalk, handleTalk, children }: Props) {
+export default function WritingListFrame({
+  novelId,
+  categoryText,
+  isTalk,
+  handleTalk,
+  children,
+  writing,
+}: Props) {
   return (
     <ColumnBG>
-      <CategoryMark category={category} />
+      <CategoryMark writing categoryText={categoryText} novelId={novelId} />
       <WritingTabContainer>
         <WritingTab isTalk={isTalk} onClick={() => handleTalk(true)}>
           <WritingTabText>FreeTalking</WritingTabText>

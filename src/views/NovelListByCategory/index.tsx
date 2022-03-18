@@ -4,10 +4,21 @@ import { ColumnDetailList } from "../../components/NovelListFrame";
 import { NovelColumnDetail } from "../../components/Novel";
 
 // api 호출, 서버 스테이트 받아오기
+// api가 카테고리별 나누어져야 함 : required params for categoryId
+// from NovelList : 모든 사용자용 - 종류별 카테고리
+//                : 로그인 사용자 - userId 이용, 종류별 카테고리
+//                : 비로그인 사용자 - 랜덤. 로그인 사용자와 같은 종류별 카테고리
+// from NovelDetail : 소설 상세페이지 추천작품 - novelId도 이용
+
+// + 번외. writing list page for novel - novelId 이용
+//       . writing list page for user - userId 이용(다른 사용자의 페이지 열람 가능)
+//         => in this case, another page required?
+
 // 네비게이션 바 - 상단 - 뒤로가기 버튼(모바일용) + ...
 
 export default function NovelListByCategory() {
-  const { category } = useParams();
+  const { categoryText, categoryId, novelId } = useParams(); // server request required
+
   const detailNovelInfo = {
     novelId: "20220225082010201",
     novelImg:
@@ -48,7 +59,7 @@ export default function NovelListByCategory() {
   ];
   return (
     <Novels>
-      <ColumnDetailList isShowAll category={category as string}>
+      <ColumnDetailList isShowAll categoryText={categoryText as string}>
         {detailNovels.map((novel) => (
           <NovelColumnDetail novel={novel} />
         ))}

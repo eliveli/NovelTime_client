@@ -4,7 +4,7 @@ import FreeTalkList from "./FreeTalkList";
 import FreeTalkDetail from "./FreeTalkDetail";
 import NovelDetail from "./NovelDetail";
 import NovelList from "./NovelList";
-import NovelMark from "./NovelMark";
+import WritingList from "./WritingList";
 import RecommendList from "./RecommendList";
 import RecommendDetail from "./RecommendDetail";
 import UserPage from "./UserPage";
@@ -18,7 +18,7 @@ import NovelListByCategory from "./NovelListByCategory";
 export {
   ChatRoom,
   ChatList,
-  NovelMark,
+  WritingList,
   RecommendDetail,
   RecommendList,
   NotFound,

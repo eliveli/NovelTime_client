@@ -58,19 +58,19 @@ export default function NovelList() {
 
   return (
     <Novels>
-      <ColumnList category="소설계의 박스오피스">
+      <ColumnList categoryText="소설계의 박스오피스" categoryId="boxOffice">
         {novels.map((novel) => (
           <NovelColumn novel={novel} />
         ))}
       </ColumnList>
 
-      <ColumnDetailList category="맞춤 추천은 여기에(상세)">
+      <ColumnDetailList categoryText="맞춤 추천은 여기에(상세)" categoryId="onlyForYou">
         {detailNovels.map((novel) => (
           <NovelColumnDetail novel={novel} />
         ))}
       </ColumnDetailList>
 
-      <RowSlide category="요즘 인기 있는" novelNO={novels.length}>
+      <RowSlide categoryText="요즘 인기 있는" novelNO={novels.length} categoryId="popular">
         {novels.map((novel) => (
           <NovelRow novel={novel} />
         ))}

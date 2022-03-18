@@ -1,13 +1,17 @@
 import React, { useState } from "react";
+import { useParams } from "react-router-dom";
 import { RowSlide } from "../../components/NovelListFrame";
 import { WritingListFrame, WritingTitle } from "../../components/Writing";
 import { NovelRow } from "../../components/Novel";
 
 import Novel from "./NovelDetail.components";
 
-// 컴포넌트에서 api 요청 : novelId 이용
+// 컴포넌트에서 api 요청 : novelId 이용 (see under the two lines)
 
 export default function NovelDetail() {
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  const { novelId } = useParams(); // for server request
+
   const detailNovel = {
     novelImg:
       // "//dn-img-page.kakao.com/download/resource?kid=1Opki/hzmU0W8saq/pEkrur7BcK1FgYESJqDyXK", // 카카페
@@ -118,15 +122,22 @@ export default function NovelDetail() {
       <Novel.NovelInfo novel={detailNovel} />
 
       <WritingListFrame
-        category="for the 소설 - 우리들의 이야기"
+        categoryText="for the 소설 - 우리들의 이야기"
         isTalk={isTalk}
         handleTalk={handleTalk}
+        novelId={novelId as string}
+        writing
       >
         {isTalk && arrayInfoTalk.map((talk) => <WritingTitle writing={talk} />)}
         {!isTalk && arrayInfoRecommend.map((recommend) => <WritingTitle writing={recommend} />)}
       </WritingListFrame>
 
-      <RowSlide category="추천 작품" novelNO={anotherNovels.length}>
+      <RowSlide
+        novelId={novelId as string}
+        categoryId="anotherNovels"
+        categoryText="추천 작품"
+        novelNO={anotherNovels.length}
+      >
         {anotherNovels.map((novel) => (
           <NovelRow novel={novel} />
         ))}
