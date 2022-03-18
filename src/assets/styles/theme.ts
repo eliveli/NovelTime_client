@@ -6,6 +6,7 @@ const color = {
   lightGray100_2: "rgba(100,100,100,0.2)",
   lightGray0_1: "rgba(0,0,0,0.1)",
 };
+const mobile = (styling: string) => `@media (max-width: 767px){${styling}}`;
 const tablet = (styling: string) => `@media (min-width: 768px){${styling}}`;
 const desktop = (styling: string) => `@media (min-width: 1024px){${styling}}`;
 const hover = (configHover: string) => `@media (hover: hover) {
@@ -22,6 +23,7 @@ const hideScrollBar = `
 `;
 
 const media = {
+  mobile,
   tablet,
   desktop,
   hover,

@@ -3,10 +3,6 @@
 import { styled } from "assets/styles/theme";
 import { Link } from "react-router-dom";
 
-interface Props {
-  theme: { novelImg: string; userImg: string };
-}
-
 export const NovelLink = styled(Link)`
   display: flex;
   width: 100%;
@@ -44,12 +40,12 @@ export const NovelInfoBox = styled.div`
   }
 `;
 
-export const NovelImg = styled.div<Props>`
+export const NovelImg = styled.div<{ novelImg: string }>`
   /* 모바일 */
   height: 80px;
   min-width: 70px;
   border-radius: 5%;
-  background-image: url(${(props) => props.theme.novelImg});
+  background-image: url(${({ novelImg }) => novelImg});
   /* background-position: center; */
   background-repeat: no-repeat;
   background-size: cover;

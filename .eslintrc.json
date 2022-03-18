@@ -54,6 +54,7 @@
         "no-confusing-arrow": "off",
         "implicit-arrow-linebreak": "off",
         "no-nested-ternary": "warn",
-        "@typescript-eslint/indent": "warn"
+        "@typescript-eslint/indent": "warn",
+        "max-len":"warn"
     }
 }

@@ -216,9 +216,9 @@ export const NovelDescTablet = styled.div`
   white-space: pre-wrap; // line break 적용
 
   // 모바일 안 보임. only 태블릿, 데스크탑
-  @media screen and (max-width: 767px) {
+  ${theme.media.mobile(`
     display: none;
-  }
+  `)}
 
   ${theme.media.tablet(`
     border: 1px solid rgba(100, 100, 100, 0.2);
@@ -401,13 +401,6 @@ export const NovelImgSmall = styled.div<Props>`
 `;
 export const NovelTitle = styled.div`
   font-weight: 600;
-
-  // 줄 넘어가면 ... 표시
-  /* display: inline-block;
-  width: ${(props) => props.infoWidth || 248}px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis; */
   font-size: 17px;
 
   ${theme.media.tablet(`
@@ -432,9 +425,9 @@ export const NovelSubInfoBox = styled.div`
 export const NovelInfoAuthorBox = styled.div``;
 export const NovelInfoAuthor = styled.div`
   line-height: 1.9;
-  @media screen and (max-width: 767px) {
+  ${theme.media.mobile(`
     margin-top: 19px;
-  }
+  `)}
 `;
 export const NovelInfoMobile = styled.div`
   line-height: 1.2;
@@ -454,9 +447,9 @@ export const NovelInfoMobileAge = styled.div`
 `;
 export const NovelInfoTablet = styled.div`
   // 모바일 안 보임
-  @media screen and (max-width: 767px) {
+  ${theme.media.mobile(`
     display: none;
-  }
+  `)}
 `;
 export const NovelUpDescBox = styled.div`
   ${theme.media.tablet(`

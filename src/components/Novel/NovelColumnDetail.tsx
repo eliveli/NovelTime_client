@@ -27,7 +27,10 @@ type MyComponentProps = React.PropsWithChildren<{
   novel: {
     novelId: string;
     novelImg: string;
-    userImg: string;
+    novelTitle: string;
+    novelAuthor: string;
+    novelGenre: string;
+    novelDesc: string;
   };
 }>;
 
@@ -112,40 +115,20 @@ function DescModal({
 export default function NovelColumnDetail({ novel }: MyComponentProps) {
   // props or default props
   const {
-    novelId = "20220225082010201",
-    novelImg = "//dn-img-page.kakao.com/download/resource?kid=bpp9n3/hzp2hVb5sA/z46Nq6YOG1GGdQwKvhYMj1",
-    userImg = "https://cdn.pixabay.com/photo/2018/08/31/08/35/toys-3644073_960_720.png",
+    novelId = "",
+    novelImg = "https://comicthumb-phinf.pstatic.net/20220126_148/pocket_16431735084292970r_JPEG/%C5%A9%B8%AE%BD%BA%C5%BB%BE%C6%B0%A1%BE%BE%B4%C2%B3%B2%C0%DA%B4%D9-%C0%CF%B7%AF%BD%BA%C6%AE%C7%A5%C1%F61.jpg?type=m260", // 시리즈
+    // "//dn-img-page.kakao.com/download/resource?kid=1Opki/hzmU0W8saq/pEkrur7BcK1FgYESJqDyXK", // 카카페
+    // "https://img.ridicdn.net/cover/372009713/xxlarge#1", // 리디북스
+    novelTitle = "제목",
+    novelAuthor = "작가",
+    novelGenre = "장르",
+    novelDesc = "작품소개",
   } = novel;
-  const theme = {
-    novelImg,
-    userImg,
-  };
+  const theme = {};
   const infoRef = useRef<HTMLDivElement>(null);
   const infoWidth = useComponentWidth(infoRef); // 인포컨테이너 width 받아와 제목 엘립시스에 적용
 
   const { isModal, handleModal, isShowModal } = useModal();
-
-  const desc = `[에이번데일 백작의 저택]
-
-  “누구세요……?”
-  “그건 내가 할 말인 것 같은데.”
-  
-  히든 에피소드를 열고 들어간 폐가에서 만난 금발의 미남자.
-  알고 보니 그는 이미 죽었어야 할 천재 마도 공학자였다.
-  
-  가상 현실 게임 ‘황금 발톱’의 배경으로부터 13년 전에 떨어진 에스페란사.
-  졸지에 몬스터도 없는 세상에서 세계 최강이 되고 말았다.
-  원래 세상으로 돌아가기 위해선 '황금 발톱'을 찾아 퀘스트를 클리어해야 하는데…!
-  
-  “당신을 왜 해부하겠어요? 살아 있는 채로 연구할 수 있는 게 훨씬 많은데.”
-  
-  유일한 조력자는 이런 소름 돋는 소리를 아무렇지 않게 하질 않나,
-  
-  “그럼 피 한 방울만 주지 않을래요? 딱 한 방울만.”
-  
-  피까지 뽑아 가려고 한다.
-  
-  이 퀘스트… 성공할 수 있을까?`;
 
   // (문제)모달 스크롤을 내린 후 모달을 닫으면 모달 탑 영역이 보이고 사라짐
   // (대처)닫기 버튼을 누른 직후 모달T의 스크롤y 값을 가져와 모달F에 적용
@@ -160,13 +143,13 @@ export default function NovelColumnDetail({ novel }: MyComponentProps) {
   return (
     <ThemeProvider theme={theme}>
       <NovelLink to={`/novel_detail/${novelId}`}>
-        <NovelImg />
+        <NovelImg novelImg={novelImg} />
         <NovelInfoBox ref={infoRef}>
-          <NovelTitle infoWidth={infoWidth}>[로판] 헌터와 매드 사이언티스트</NovelTitle>
+          <NovelTitle infoWidth={infoWidth}>{`[${novelGenre}] ${novelTitle}`}</NovelTitle>
           <NovelSubInfoBox>
-            <NovelAuthor>델마르</NovelAuthor>
+            <NovelAuthor>{novelAuthor}</NovelAuthor>
             <NovelDescBox>
-              <NovelDesc>{desc}</NovelDesc>
+              <NovelDesc>{novelDesc}</NovelDesc>
               {isModal && (
                 <DownIconBox
                   onClick={(e) => {
@@ -196,7 +179,7 @@ export default function NovelColumnDetail({ novel }: MyComponentProps) {
               modalTRef={modalTRef}
               modalFRef={modalFRef}
               isShowOn={isShowModal}
-              desc={desc}
+              desc={novelDesc}
             />
           )}
         </NovelInfoBox>
