@@ -9,11 +9,12 @@ import RecommendList from "./RecommendList";
 import RecommendDetail from "./RecommendDetail";
 import UserPage from "./UserPage";
 import NotFound from "./NotFound";
-import Nav from "./Nav";
+import { MainListNav, DetailNav } from "./Nav";
 import SearchPage from "./SearchPage";
 import BeforeSearch from "./BeforeSearch";
 import AfterSearch from "./AfterSearch";
 import NovelListByCategory from "./NovelListByCategory";
+import NovelDetailMark from "./NovelDetailMark";
 
 export {
   ChatRoom,
@@ -27,9 +28,11 @@ export {
   NovelDetail,
   NovelList,
   UserPage,
-  Nav,
+  MainListNav,
+  DetailNav,
   SearchPage,
   BeforeSearch,
   AfterSearch,
   NovelListByCategory,
+  NovelDetailMark,
 };
