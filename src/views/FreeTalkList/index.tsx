@@ -1,5 +1,6 @@
 import React from "react";
 import SectionBG from "components/SectionBG";
+import Filter from "components/Filter";
 import FreeTalk from "./FreeTalkList.components";
 
 export default function FreeTalkList() {
@@ -10,6 +11,7 @@ export default function FreeTalkList() {
   const arrayInfo = [info, info, info];
   return (
     <SectionBG>
+      <Filter />
       {arrayInfo.map((talk) => (
         <FreeTalk talk={talk} />
       ))}

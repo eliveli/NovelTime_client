@@ -4,9 +4,13 @@ import {
   ClosingIcon,
   ClosingBox,
   NovelImgContainer,
+  SortMobileBG,
+  SortBox,
+  SortText,
+  ClosingSpace,
 } from "./Modal.styles";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { closeModal } from "../../store/clientSlices/modalSlice";
+import { closeModal, sortWriting } from "../../store/clientSlices/modalSlice";
 import { usePreventScroll } from "../../utils";
 
 export default function Modal() {
@@ -39,6 +43,30 @@ export default function Modal() {
                   </ClosingBox>
                 </NovelImgContainer>
               </NovelImgBG>
+            );
+          case "sortMobile":
+            return (
+              <SortMobileBG>
+                <SortBox>
+                  {["작성일New", "작성일Old", "댓글Up", "댓글Down", "좋아요Up", "좋아요Down"].map(
+                    (_) => (
+                      <SortText
+                        onClick={() => {
+                          dispatch(sortWriting(_));
+                          dispatch(closeModal());
+                        }}
+                      >
+                        {_}
+                      </SortText>
+                    ),
+                  )}
+                </SortBox>
+                <ClosingSpace
+                  onClick={() => {
+                    dispatch(closeModal());
+                  }}
+                />
+              </SortMobileBG>
             );
           case "login":
             // eslint-disable-next-line react/jsx-no-useless-fragment

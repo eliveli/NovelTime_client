@@ -101,3 +101,31 @@ export const ClosingIcon = styled(Icon.Close)`
     }
   }
 `;
+
+export const SortMobileBG = styled.div`
+  background-color: rgba(0, 0, 0, 0.5);
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  z-index: 2;
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: flex-end;
+
+  ${theme.media.tablet(`
+    display: none;
+  `)}
+`;
+export const ClosingSpace = styled.div`
+  width: 100%;
+  height: 100%;
+`;
+export const SortBox = styled.div`
+  bottom: 0;
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 10px;
+`;
+export const SortText = styled.p`
+  padding: 10px 0;
+`;

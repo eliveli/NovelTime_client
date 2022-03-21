@@ -1,5 +1,7 @@
 import React from "react";
 import SectionBG from "components/SectionBG";
+import Filter from "components/Filter";
+
 import Recommend from "./RecommendList.components";
 
 export default function RecommendList() {
@@ -11,6 +13,7 @@ export default function RecommendList() {
   const arrayInfo = [info, info, info];
   return (
     <SectionBG>
+      <Filter />
       {arrayInfo.map((text) => (
         <Recommend text={text} />
       ))}
