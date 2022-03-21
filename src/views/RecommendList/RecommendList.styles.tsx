@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 import { styled } from "assets/styles/theme";
 import Icon from "../../assets/Icon";
 

@@ -25,16 +25,24 @@ export function MainListNav() {
 }
 
 export function DetailNav() {
+  // if novelId exists, pageTitle is novelTitle //
+  // "/novel_detail/:novelId/:talkId",
+  // "/novel_detail/:novelId/:recommendId",
   // "/novel_detail/:novelId",
-  // "/writing_list/:novelId",
-
-  // "/talk_detail/:talk_id",
-  // "/recommend_detail/:recommend_id",
-  // "/novel_list/:categoryText/:categoryId",
+  // "/novel_detail/:novelId/writing_list",
   // "/novel_list/:categoryText/:categoryId/:novelId",
 
+  // if not, pageTitle is empty : it can be changed //
+  // "/novel_list/:categoryText/:categoryId",
+
+  // from MainList to Detail, get board name - talk or recommend //
+  // "/talk_detail/:talkId",
+  // "/recommend_detail/:recommendId",
+
   const { pathname } = window.location;
-  const {} = useParams();
+  // const { novelId } = useParams();
+  const { novelId, talkId, recommendId } = useParams();
+  const parameter = { novelId, talkId, recommendId };
 
   // 내가 지금 어느 페이지에 있는지 확인,
   //  선택한 버튼 활성화 & 페이지 별 Nav 구성 다르게
@@ -43,7 +51,7 @@ export function DetailNav() {
   return (
     <NavTopBG>
       <NavPC pathname={pathname} />
-      <NavMobileDetail pathname={pathname} />
+      <NavMobileDetail pathname={pathname} parameter={parameter} />
     </NavTopBG>
   );
 }

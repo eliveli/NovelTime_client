@@ -1,6 +1,9 @@
-import React, { useState } from "react";
+import React, { useLayoutEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import SectionBG from "components/SectionBG";
+import { useAppDispatch } from "../../store/hooks";
+import { getNovelTitle } from "../../store/clientSlices/modalSlice";
+
 import { WritingListFrame, WritingTitle } from "../../components/Writing";
 
 // 컴포넌트에서 api 요청 : novelId 이용 (see under the two lines)
@@ -8,7 +11,7 @@ import { WritingListFrame, WritingTitle } from "../../components/Writing";
 export default function WritingList() {
   const { novelId } = useParams(); // for server request
 
-  const novelTitle = "헌터와 매드 사이언티스트"; // get title. required for page refresh
+  const novelTitle = "헌터와 매드 사이언티스트"; // get title. required when page refresh
 
   const infoTalk = {
     talkId: "20220225082010201", // 필요성: 클릭 시 상세페이지 정보 요청
@@ -48,12 +51,21 @@ export default function WritingList() {
     infoRecommend,
   ];
 
+  const dispatch = useAppDispatch();
+  useLayoutEffect(() => {
+    dispatch(getNovelTitle(novelTitle));
+  });
+
   const [isTalk, handleTalk] = useState(true);
 
   return (
     <SectionBG>
+      <p>
+        여기는 소설 공간!
+        {novelTitle}
+      </p>
       <WritingListFrame
-        categoryText={`${novelTitle}'s playground - 아래에 검색창 넣기. 제목도 나중엔 카테고리 파트에서 분리하거나`}
+        categoryText={`Let's talk and play!`}
         isTalk={isTalk}
         handleTalk={handleTalk}
         novelId={novelId as string}

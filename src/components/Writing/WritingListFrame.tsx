@@ -14,6 +14,7 @@ type Props = React.PropsWithChildren<{
   categoryText: string;
   novelId: string;
   writing: boolean;
+  novelTitle?: string;
 }>;
 
 export default function WritingListFrame({

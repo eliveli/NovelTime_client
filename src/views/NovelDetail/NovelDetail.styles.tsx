@@ -153,7 +153,7 @@ export const NovelMainInfo = styled.div`
   width: 100%;
 
   padding: 3px 0;
-  border-bottom: 1px solid rgba(100, 100, 100, 0.2);
+  border-bottom: 1px dotted rgba(100, 100, 100, 0.2);
   ${theme.media.tablet(`
     border-bottom: 0;
   `)}
@@ -337,12 +337,14 @@ export const NovelInfoBox = styled.div`
   margin-left: 10px;
   width: 80%;
 
+  border: 1px solid rgba(100, 100, 100, 0.2);
+  padding: 10px;
+  border-radius: 10px;
+
   ${theme.media.tablet(`
-    width: 76%;
-    border: 1px solid rgba(100, 100, 100, 0.2);
-    padding: 8px 10px 10px 10px;
-    border-radius: 10px;
-    justify-content: space-between;
+  width: 76%;
+  padding: 8px 10px 10px 10px;
+  justify-content: space-between;
   `)}
 `;
 export const NovelImgBox = styled.div`

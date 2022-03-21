@@ -15,8 +15,12 @@ import BeforeSearch from "./BeforeSearch";
 import AfterSearch from "./AfterSearch";
 import NovelListByCategory from "./NovelListByCategory";
 import NovelDetailMark from "./NovelDetailMark";
+import NovelDetailTalk from "./NovelDetailTalk";
+import NovelDetailRecommend from "./NovelDetailRecommend";
 
 export {
+  NovelDetailTalk,
+  NovelDetailRecommend,
   ChatRoom,
   ChatList,
   WritingList,

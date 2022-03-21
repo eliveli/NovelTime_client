@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ThemeProvider } from "styled-components";
 // import { useComponentWidth } from "utils";
-import { useAppDispatch } from "../../store/hooks";
-import { showBigImage } from "../../store/clientSlices/modalSlice";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+// import { setLikeNovel } from "../../store/clientSlices/modalSlice";
+import { showBigImage, setLikeNovel } from "../../store/clientSlices/modalSlice";
 
 import {
   NovelMainInfo,
@@ -45,6 +46,7 @@ import {
 
 type NovelProps = React.PropsWithChildren<{
   novel: {
+    novelId: string;
     novelImg: string;
     novelTitle: string;
     novelAuthor: string;
@@ -61,12 +63,15 @@ type NovelProps = React.PropsWithChildren<{
 
     writingNO: number;
     likeNO: number;
+
+    isLike: boolean;
   };
 }>;
 
 export default function NovelDetailInfo({ novel }: NovelProps) {
   // props or default props
   const {
+    novelId,
     novelImg = "https://comicthumb-phinf.pstatic.net/20220126_148/pocket_16431735084292970r_JPEG/%C5%A9%B8%AE%BD%BA%C5%BB%BE%C6%B0%A1%BE%BE%B4%C2%B3%B2%C0%DA%B4%D9-%C0%CF%B7%AF%BD%BA%C6%AE%C7%A5%C1%F61.jpg?type=m260", // 시리즈
     // "//dn-img-page.kakao.com/download/resource?kid=1Opki/hzmU0W8saq/pEkrur7BcK1FgYESJqDyXK", // 카카페
     // "https://img.ridicdn.net/cover/372009713/xxlarge#1", // 리디북스
@@ -85,6 +90,8 @@ export default function NovelDetailInfo({ novel }: NovelProps) {
 
     writingNO = 0, // 백엔드 - talk, recommend 테이블에서 가져오기
     likeNO = 0, // 백엔드 - talk, recommend 테이블에서 가져오기
+
+    isLike,
   } = novel;
   const theme = {
     novelImg,
@@ -95,7 +102,27 @@ export default function NovelDetailInfo({ novel }: NovelProps) {
   const [isShowAll, handleShowAll] = useState(false);
 
   const dispatch = useAppDispatch();
+  // const { isLikeNovel } = useAppSelector((state) => state.modal.novelLike);
+  // useEffect(() => {
+  // 최초 서버스테이트 받아올 때 글로벌 하트여부 설정
+  // if (isLikeNovel === undefined) {
+  // setLikeNovel({ novelId, isLike });
+  // }
+  // 아래 [] 안에 넣어야 되나?
+  // }, []);
 
+  // 좋아요 수 설정 : 최초 받아온 값 저장 & 이후 버튼 클릭 시
+  const [likeNumber, setLikeNumber] = useState(novel.likeNO);
+
+  const requestHeart = () => {
+    // 하트 클릭 시
+    // 1. server api request 서버에 요청, 하트 수 받아오기
+    //  --좋아요 토글 후 해당 시점의 좋아요 수 받아오는 쿼리
+    // const { data, error, isLoading } = useSetLikelByNovelIdQuery("20220227200633023");
+    // setLikeNumber(data.likeNO);
+    // 2. global state 하트 여부 변경
+    // dispatch(setLikeNovel({ novelId, isLike: !isLikeNovel }));
+  };
   return (
     <ThemeProvider theme={theme}>
       <NovelContainer>
@@ -123,9 +150,15 @@ export default function NovelDetailInfo({ novel }: NovelProps) {
                     <TextIcon />
                     <IconNumber>{writingNO}</IconNumber>
                   </TextIconBox>
-                  <LikeIconBox>
+                  <LikeIconBox onClick={requestHeart}>
                     <LikeIcon />
-                    <IconNumber>{likeNO}</IconNumber>
+                    {/* {isLikeNovel && (
+                        <LikeIcon />
+                    )}
+                    {!isLikeNovel && (
+                        <LikeIcon />
+                    )} */}
+                    <IconNumber>{likeNumber}</IconNumber>
                   </LikeIconBox>
                 </InfoIconBox>
               </NovelSubInfoBox>

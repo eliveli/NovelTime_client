@@ -1,41 +1,32 @@
-import { useRef } from "react";
 import { ThemeProvider } from "styled-components";
-import { Link } from "react-router-dom";
-import { useComponentWidth } from "utils";
-import Icon from "../../assets/Icon";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { setLikeNovel } from "../../store/clientSlices/modalSlice";
+import { useAppSelector, useAppDispatch } from "../../store/hooks";
 
 import {
-  CreateDate,
-  LastLineContainer,
-  NovelImg,
-  UserName,
-  Text,
-  UserNameBox,
-  IconBox,
-  TalkTitle,
-  NovelTitle,
-  IconNO,
-  TalkPreview,
-  UserContainer,
-  NovelContainer,
-  NovelInfoBox,
-  UserImg,
-  NovelInfo,
-  NovelSubInfoBox,
-  NovelInfoLineHeight,
-  RightIcon,
-  RightIconBox,
+  LeftIcon,
+  HeartIcon,
+  ShareIcon,
+  LeftIconBox,
+  HeartIconBox,
+  ShareIconBox,
   NavContentBoxPC,
   NavContentBoxMobile,
   Logo,
   NavContentPC,
   MyPageBtn,
   NavContent,
+  HomeIcon,
+  HomeIconBox,
+  IconsBox,
+  FillHeartIcon,
 } from "./Nav.styles";
 
 interface Props {
   pathname: string;
 }
+
 export function NavPC({ pathname }: Props) {
   const theme = {};
 
@@ -51,13 +42,13 @@ export function NavPC({ pathname }: Props) {
             ["FreeTalk", "/talk_list"],
             ["Recommend", "/recommend_list"],
             ["Novel", "/novel_list"],
-            ["Chat", "/chat_list/:user_id"],
+            ["Chat", "/chat_list/:userId"],
           ].map((_, idx) => {
             // when path is from novel detail to anywhere, mark Novel in the NavBar
             // but for other path, path is the same name in the Nav
             let isPath;
             if (idx === 2) {
-              isPath = ["novel", "writing"].filter((__) => pathname.includes(__)).length === 1;
+              isPath = ["novel_detail", _[1]].filter((__) => pathname.includes(__)).length === 1;
             } else {
               isPath = pathname.includes(_[1]);
             }
@@ -69,7 +60,7 @@ export function NavPC({ pathname }: Props) {
           })}
         </NavContentPC>
 
-        {isLogin && <MyPageBtn to="/user_page/:user_id">보관함</MyPageBtn>}
+        {isLogin && <MyPageBtn to="/user_page/:userId">보관함</MyPageBtn>}
         {!isLogin && <MyPageBtn to="">로그인</MyPageBtn>}
       </NavContentBoxPC>
     </ThemeProvider>
@@ -89,7 +80,7 @@ export function NavMobileMainTop() {
         <Logo>kitty walks to center leaving footprint</Logo>
         <Logo>It's Novel Time!</Logo>
 
-        {isLogin && <MyPageBtn to="/user_page/:user_id">보관함</MyPageBtn>}
+        {isLogin && <MyPageBtn to="/user_page/:userId">보관함</MyPageBtn>}
         {!isLogin && <MyPageBtn to="">로그인</MyPageBtn>}
       </NavContentBoxMobile>
     </ThemeProvider>
@@ -103,14 +94,14 @@ export function NavMobileMainBottom({ pathname }: Props) {
   return (
     <ThemeProvider theme={theme}>
       {/* bottom place */}
-      <NavContentBoxMobile>
+      <NavContentBoxMobile isNotPadding>
         {/* [category name, route path] */}
         {[
           ["FreeTalk", "/talk_list"],
           ["Recommend", "/recommend_list"],
           ["AddWriting", "Add"], // 추후 라우팅 필요
           ["Novel", "/novel_list"],
-          ["Chat", "/chat_list/:user_id"],
+          ["Chat", "/chat_list/:userId"],
         ].map((_) => (
           <NavContent to={_[1]} isBorderTop isCurrentPath={pathname.includes(_[1])}>
             {_[0]}
@@ -127,25 +118,83 @@ export function NavMobileMainBottom({ pathname }: Props) {
 // from MainList to Detail : FreeTalkDetail, RecommendDetail
 // via useParams: boardTitle is in the center of NavBar
 // share icon, heart icon are in all
-export function NavMobileDetail({ pathname }: Props) {
+interface DetailProps {
+  pathname: string;
+  //   novelId: string;
+  parameter: {
+    novelId: string | undefined;
+    talkId: string | undefined;
+    recommendId: string | undefined;
+  };
+}
+
+export function NavMobileDetail({ parameter, pathname }: DetailProps) {
   // one nav component: top
+
+  const { novelTitle } = useAppSelector((state) => state.modal);
+
+  const navigate = useNavigate();
+
+  //   const dispatch = useAppDispatch();
+  //   const { novelLike } = useAppSelector((state) => state.modal);
+
+  //   novelLike.
+  //   novelLike.novelId === parameter.novelId
+
+  // server request in two component when clicking heart
+  // in this, Nav :  get user's isHeart
+  // in NovelDetail : user's isHeart, heart number
+
+  //   const [isLike, handleLike] = useState(isLikeNovel);
+
+  // this useState is not required for server request.
+  // just click heart, request sever state, use it.
   const theme = {};
   return (
     <ThemeProvider theme={theme}>
       {/* top place */}
       <NavContentBoxMobile>
-        <Logo>Back Icon (+Home)</Logo>
-        <Logo>Page Title</Logo>
-        <Logo>heart, sharing icons</Logo>
+        <IconsBox>
+          <LeftIconBox onClick={() => navigate(-1)}>
+            <LeftIcon />
+          </LeftIconBox>
+          {/* from novelDetail to ... : show Home Icon */}
+          {parameter.novelId && (
+            <HomeIconBox onClick={() => navigate("/")}>
+              <HomeIcon />
+            </HomeIconBox>
+          )}
+        </IconsBox>
+        {/* what page title is :
+            1.메인리스트->게시글 이동 : 프리톡/리코멘드 게시판 이름
+            2.노블디테일-> ...: 노블 타이틀
+            3.노블메인리스트 전체보기 페이지 : 페이지타이틀 없음(일단은)
+        */}
+        {pathname.includes("talk_detail") && <Logo>여기는 프리톡!</Logo>}
+        {pathname.includes("recommend_detail") && <Logo>여기는 리코멘드!</Logo>}
+        {parameter.novelId && <Logo>{novelTitle}</Logo>}
+        <IconsBox>
+          {(pathname === `/novel_detail/${parameter.novelId}` ||
+            parameter.recommendId ||
+            parameter.talkId) && (
+            <HeartIconBox
+              onClick={() => {
+                // handleLike(!isLikeNovel);
+                // dispatch(setLikeNovel(!isLikeNovel));
+              }}
+            >
+              <HeartIcon />
+              {/* {isLikeNovel && <FillHeartIcon />} */}
+              {/* {!isLikeNovel && <HeartIcon />} */}
+            </HeartIconBox>
+          )}
+          {(parameter.recommendId || parameter.talkId) && (
+            <ShareIconBox>
+              <ShareIcon />
+            </ShareIconBox>
+          )}
+        </IconsBox>
       </NavContentBoxMobile>
     </ThemeProvider>
   );
-}
-
-// all from novelDetail to other : novelDetail, writingList, writingDetail
-// via useParams: novelTitle is in the center of NavBar
-// share icon, heart icon are in the Writing Detail
-
-export function NavNovelDetail() {
-  return <div />;
 }

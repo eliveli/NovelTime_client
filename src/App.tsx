@@ -3,6 +3,8 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route, Outlet } from "react-router-dom";
 import {
+  NovelDetailRecommend,
+  NovelDetailTalk,
   ChatList,
   ChatRoom,
   FreeTalkDetail,
@@ -50,8 +52,10 @@ function App() {
           {[
             "/novel_detail/:novelId",
             "/novel_detail/:novelId/writing_list",
-            "/talk_detail/:talk_id",
-            "/recommend_detail/:recommend_id",
+            "/novel_detail/:novelId/:talkId",
+            "/novel_detail/:novelId/:recommendId",
+            "/talk_detail/:talkId",
+            "/recommend_detail/:recommendId",
             "/novel_list/:categoryText/:categoryId",
             "/novel_list/:categoryText/:categoryId/:novelId",
           ].map((path) => (
@@ -75,13 +79,14 @@ function App() {
             />
             {/*  NovelList 컴포넌트 안에서 :  let { category } = useParams(); */}
 
-            <Route path="/novel_detail" element={<NovelDetailMark />}>
-              <Route path=":novelId/:novelTitle" element={<NovelDetail />} />
-
-              <Route path=":novelId/:novelTitle/writing_list" element={<WritingList />} />
-            </Route>
-            <Route path="/talk_detail/:talk_id" element={<FreeTalkDetail />} />
-            <Route path="/recommend_detail/:recommend_id" element={<RecommendDetail />} />
+            {/* <Route path="/novel_detail" element={<NovelDetailMark />}> */}
+            <Route path="/novel_detail/:novelId" element={<NovelDetail />} />
+            <Route path="/novel_detail/:novelId/writing_list" element={<WritingList />} />
+            <Route path="/novel_detail/:novelId/:talkId" element={<NovelDetailTalk />} />
+            <Route path="/novel_detail/:novelId/:recommendId" element={<NovelDetailRecommend />} />
+            {/* </Route> */}
+            <Route path="/talk_detail/:talkId" element={<FreeTalkDetail />} />
+            <Route path="/recommend_detail/:recommendId" element={<RecommendDetail />} />
 
             {/* <Route path="/search" element={<SearchPage />}> */}
             {/* 검색 전 보여줄 예시 작품 */}
@@ -90,10 +95,10 @@ function App() {
             {/* <Route path="/" element={<AfterSearch />} /> */}
             {/* </Route> */}
 
-            <Route path="/chat_list/:user_id" element={<ChatList />} />
-            <Route path="/chat_room/:room_id" element={<ChatRoom />} />
+            <Route path="/chat_list/:userId" element={<ChatList />} />
+            <Route path="/chat_room/:roomId" element={<ChatRoom />} />
 
-            <Route path="/user_page/:user_id" element={<UserPage />} />
+            <Route path="/user_page/:userId" element={<UserPage />} />
 
             <Route path="*" element={<NotFound />} />
           </Route>

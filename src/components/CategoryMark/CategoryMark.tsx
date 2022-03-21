@@ -25,7 +25,7 @@ export default function CategoryMark({
         <CategoryDesc>{categoryText}</CategoryDesc>
         {/* when is not show-all-page */}
         {!isShowAll && (
-          <LinkCategory to={`/writing_list/${novelId as string}`}>
+          <LinkCategory to={`/novel_detail/${novelId as string}/writing_list`}>
             <ShowAllText>전체보기</ShowAllText>
             <ShowAllIcon />
           </LinkCategory>
