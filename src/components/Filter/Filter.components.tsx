@@ -66,7 +66,7 @@ export function SearchBtn({
     </SearchIconBox>
   );
 }
-export function SortMobile() {
+export function SortMobile({ borderOpacity }: { borderOpacity?: number | undefined }) {
   const dispatch = useAppDispatch();
   const { sortingText } = useAppSelector((state) => state.modal);
   // when clicking, in Modal component,
@@ -75,6 +75,7 @@ export function SortMobile() {
   return (
     <SortMobileContainer>
       <ContainerWithBtn
+        borderOpacity={borderOpacity}
         onClick={() => {
           dispatch(openModal("sortWriting"));
         }}
@@ -87,7 +88,13 @@ export function SortMobile() {
     </SortMobileContainer>
   );
 }
-export function SortTablet({ isSearch }: { isSearch: boolean }) {
+export function SortTablet({
+  isSearch,
+  borderOpacity,
+}: {
+  isSearch: boolean;
+  borderOpacity?: number | undefined;
+}) {
   // open or close all list
   const [isCategoryList, handleCategoryList] = useState(false);
 
@@ -104,6 +111,7 @@ export function SortTablet({ isSearch }: { isSearch: boolean }) {
       {/* before clicking category */}
       {!isCategoryList && (
         <ContainerWithBtn
+          borderOpacity={borderOpacity}
           onClick={() => {
             handleCategoryList(true);
           }}

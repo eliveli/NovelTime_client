@@ -15,6 +15,7 @@ type Props = React.PropsWithChildren<{
   novelId: string;
   writing: boolean;
   novelTitle?: string;
+  fontSize?: number;
 }>;
 
 export default function WritingListFrame({
@@ -25,6 +26,7 @@ export default function WritingListFrame({
   children,
   writing,
   isShowAll,
+  fontSize,
 }: Props) {
   return (
     <ColumnBG>
@@ -33,6 +35,7 @@ export default function WritingListFrame({
         isShowAll={isShowAll}
         categoryText={categoryText}
         novelId={novelId}
+        fontSize={fontSize}
       />
       <WritingTabContainer>
         <WritingTab isTalk={isTalk} onClick={() => handleTalk(true)}>

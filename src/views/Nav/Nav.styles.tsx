@@ -137,7 +137,6 @@ export const MyPageBtn = styled(Link)`
 export const LeftIcon = styled(Icon.BigLeft)`
   width: 100%;
   height: 100%;
-  color: rgba(100, 100, 100, 0.5);
 
   /* 태블릿, PC */
   @media screen and (min-width: 768px) {
@@ -155,6 +154,8 @@ export const LeftIconBox = styled.div`
   align-items: center;
   justify-content: center;
   margin-right: 2px;
+
+  color: rgba(100, 100, 100, 0.5);
 
   ${theme.media.hover(
     `cursor: pointer;

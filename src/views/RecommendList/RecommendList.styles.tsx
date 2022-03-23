@@ -6,7 +6,6 @@ interface Props {
 }
 
 export const RightIcon = styled(Icon.BigRight)`
-  color: rgba(100, 100, 100, 0.5);
   margin: auto 0 auto 6px;
 
   /* 태블릿, PC */
@@ -18,6 +17,7 @@ export const RightIconBox = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  color: rgba(100, 100, 100, 0.5);
 
   border-left: 1px solid ${(props) => props.theme.color.lightGray0_1};
 `;

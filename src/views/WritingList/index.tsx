@@ -67,9 +67,10 @@ export default function WritingList() {
       </p>
 
       {/* server request */}
-      <SortOnly marginBottom={-57} />
+      <SortOnly height={35} marginBottom={-52} borderOpacity={0.1} />
 
       <WritingListFrame
+        fontSize={20}
         categoryText={`Let's talk and play!`}
         isTalk={isTalk}
         handleTalk={handleTalk}

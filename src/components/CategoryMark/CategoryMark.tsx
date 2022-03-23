@@ -12,17 +12,19 @@ export default function CategoryMark({
   categoryText,
   isShowAll,
   novelId,
+  fontSize,
 }: {
   writing?: boolean;
   categoryId?: string;
   categoryText: string; // category list request
   isShowAll?: boolean;
   novelId?: string; // writing list request by novelId
+  fontSize?: number;
 }) {
   if (writing) {
     return (
       <CategoryContainer>
-        <CategoryDesc>{categoryText}</CategoryDesc>
+        <CategoryDesc fontSize={fontSize}>{categoryText}</CategoryDesc>
         {/* when is not show-all-page */}
         {!isShowAll && (
           <LinkCategory to={`/novel_detail/${novelId as string}/writing_list`}>

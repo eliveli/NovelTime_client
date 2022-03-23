@@ -235,6 +235,8 @@ export const DownIconBox = styled.div`
   min-height: 20px;
   max-height: 20px;
 
+  color: rgba(0, 0, 0, 0.3);
+
   @media screen and (min-width: 768px) {
     margin-left: 3px;
   }
@@ -261,6 +263,8 @@ export const UpIconBox = styled.div`
   min-height: 20px;
   max-height: 20px;
 
+  color: rgba(0, 0, 0, 0.3);
+
   @media screen and (min-width: 768px) {
     margin-left: 3px;
   }
@@ -277,7 +281,7 @@ export const DownIcon = styled(Icon.SmallDown)`
   height: 100%;
   @media (hover: hover) {
     &:hover {
-      color: rgba(0, 0, 0, 0.3);
+      color: rgba(100, 100, 100, 0.3);
     }
   }
 `;
@@ -286,7 +290,7 @@ export const UpIcon = styled(Icon.SmallUp)`
   height: 100%;
   @media (hover: hover) {
     &:hover {
-      color: rgba(0, 0, 0, 0.3);
+      color: rgba(100, 100, 100, 0.3);
     }
   }
 `;

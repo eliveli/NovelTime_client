@@ -49,11 +49,19 @@ export default function Filter() {
     </FilterBG>
   );
 }
-export function SortOnly({ marginBottom }: { marginBottom?: number }) {
+export function SortOnly({
+  marginBottom,
+  height,
+  borderOpacity,
+}: {
+  marginBottom?: number;
+  height?: number;
+  borderOpacity?: number;
+}) {
   return (
-    <CantainerOnlySort marginBottom={marginBottom}>
-      <SortMobile />
-      <SortTablet isSearch={false} />
+    <CantainerOnlySort marginBottom={marginBottom} height={height}>
+      <SortMobile borderOpacity={borderOpacity} />
+      <SortTablet isSearch={false} borderOpacity={borderOpacity} />
     </CantainerOnlySort>
   );
 }

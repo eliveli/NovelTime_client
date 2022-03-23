@@ -88,6 +88,8 @@ export const DownIconBox = styled.div`
   min-height: 20px;
   max-height: 20px;
 
+  color: rgba(0, 0, 0, 0.3);
+
   ${theme.media.tablet(`
     margin-top: auto;
     margin-left: 3px;
@@ -112,6 +114,8 @@ export const UpIconBox = styled.div`
   min-height: 20px;
   max-height: 20px;
 
+  color: rgba(0, 0, 0, 0.3);
+
   ${theme.media.tablet(`
     margin-top: auto;
     margin-left: 3px;
@@ -126,14 +130,14 @@ export const DownIcon = styled(Icon.SmallDown)`
   width: 100%;
   height: 100%;
   ${theme.media.hover(`
-      color: rgba(0, 0, 0, 0.3);
+      color: rgba(100, 100, 100, 0.3);
     `)}
 `;
 export const UpIcon = styled(Icon.SmallUp)`
   width: 100%;
   height: 100%;
   ${theme.media.hover(`
-      color: rgba(0, 0, 0, 0.3);
+      color: rgba(100, 100, 100, 0.3);
     `)}
 `;
 

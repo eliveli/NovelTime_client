@@ -27,10 +27,10 @@ export const LinkCategory = styled(Link)`
   }
 `;
 
-export const CategoryDesc = styled.p`
+export const CategoryDesc = styled.p<{ fontSize?: number }>`
   margin-bottom: 0;
   border-bottom: 1px dotted #0000004f;
-  font-size: 20px;
+  font-size: ${({ fontSize }) => fontSize || 16}px;
 `;
 
 export const ShowAllText = styled.span`
@@ -39,4 +39,5 @@ export const ShowAllText = styled.span`
 export const ShowAllIcon = styled(Icon.BigRight)`
   /* margin: auto 0 0 6px; */
   margin-left: 6px;
+  color: rgba(100, 100, 100, 0.5);
 `;

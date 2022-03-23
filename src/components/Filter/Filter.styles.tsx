@@ -25,6 +25,7 @@ export const Genre = styled.p<{ genreName: string; selectedGenre: string }>`
 export const SortMobileContainer = styled.div`
   display: inline-block;
   text-align: right;
+  height: 100%;
   ${theme.media.tablet(`
         display: none;
     `)}
@@ -41,7 +42,7 @@ export const SortCategorySelected = styled.p`
 `;
 export const SortTabletContainer = styled.div`
   position: relative;
-  height: 40px;
+  height: 100%;
 
   ${theme.media.mobile(`
         display: none;
@@ -76,20 +77,21 @@ export const SortCategoryLi = styled.li`
     border-bottom: 0;
   }
 `;
-export const ContainerWithBtn = styled.div`
+export const ContainerWithBtn = styled.div<{ borderOpacity: number | undefined }>`
   /* ${theme.media.mobile(`
   display: none;
 `)} */
 
   width: 135px;
-  height: 40px;
+  height: 100%;
   display: inline-flex;
   //   margin: 0;
   justify-content: center;
   align-items: center;
 
   border-radius: 11px;
-  border: 1px solid rgba(0, 0, 0, 0.2);
+
+  border: 1px solid rgba(0, 0, 0, ${({ borderOpacity }) => borderOpacity || "0.2"});
 
   ${theme.media.hover(`
       cursor: pointer;
@@ -174,11 +176,16 @@ export const SearchAlarm = styled.p`
 `;
 export const CantainerWithSrchBtn = styled.div`
   display: flex;
+  height: 40px;
 `;
-export const CantainerOnlySort = styled.div<{ marginBottom: number | undefined }>`
+export const CantainerOnlySort = styled.div<{
+  marginBottom: number | undefined;
+  height: number | undefined;
+}>`
   display: flex;
   justify-content: flex-end;
   margin-bottom: ${({ marginBottom }) => marginBottom || "-39"}px;
+  height: ${({ height }) => height || "40"}px;
 `;
 
 // below is now not used

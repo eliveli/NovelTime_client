@@ -145,6 +145,7 @@ export default function NovelDetail() {
       <NovelDetailInfo novel={detailNovel} />
 
       <WritingListFrame
+        fontSize={20}
         categoryText="Let's talk and play!"
         isTalk={isTalk}
         handleTalk={handleTalk}
