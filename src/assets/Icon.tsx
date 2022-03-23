@@ -28,6 +28,7 @@ import {
 } from "react-icons/hi";
 import { RiRunLine } from "react-icons/ri";
 import { MdOutlineShare } from "react-icons/md";
+import { IoIosSearch } from "react-icons/io";
 
 // Recommend List 에서 글 제목 오른쪽에 쓰일 때
 const BigRight = styled(FaChevronRight)`
@@ -66,6 +67,7 @@ const Reader = styled(BiBookReader)``;
 const Runner = styled(RiRunLine)``;
 const Share = styled(MdOutlineShare)``;
 const Home = styled(HiOutlineHome)``;
+const Search = styled(IoIosSearch)``;
 
 const Icon = {
   BigRight,
@@ -88,5 +90,6 @@ const Icon = {
   Home,
   NavHeart,
   NavFillHeart,
+  Search,
 };
 export default Icon;

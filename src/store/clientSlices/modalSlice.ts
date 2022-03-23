@@ -7,9 +7,10 @@ interface NovelLike {
 }
 
 export interface IsModalState {
-  modalCategory: "novelImage" | "sortMobile" | "login" | "none";
+  modalCategory: "novelImage" | "sortWriting" | "filterContent" | "login" | "none";
   novelImage: string;
   sortingText: string;
+  filteringContent: string;
 
   // 아래는 나중에 모듈 분리
   novelTitle: string;
@@ -20,6 +21,7 @@ const initialState: IsModalState = {
   modalCategory: "none",
   novelImage: "",
   sortingText: "작성일New",
+  filteringContent: "Novel",
 
   //
   novelTitle: "",
@@ -30,7 +32,10 @@ export const modalSlice = createSlice({
   name: "modal",
   initialState,
   reducers: {
-    openModal: (state, action: PayloadAction<"novelImage" | "sortMobile" | "login" | "none">) => {
+    openModal: (
+      state,
+      action: PayloadAction<"novelImage" | "sortWriting" | "filterContent" | "login" | "none">,
+    ) => {
       state.modalCategory = action.payload;
     },
     showBigImage: (state, action: PayloadAction<string>) => {
@@ -42,6 +47,9 @@ export const modalSlice = createSlice({
     },
     sortWriting: (state, action: PayloadAction<string>) => {
       state.sortingText = action.payload;
+    },
+    filterContent: (state, action: PayloadAction<string>) => {
+      state.filteringContent = action.payload;
     },
     // 아래 리듀서 모듈 분리
     getNovelTitle: (state, action: PayloadAction<string>) => {
@@ -65,7 +73,14 @@ export const modalSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { openModal, showBigImage, closeModal, sortWriting, getNovelTitle, setLikeNovel } =
-  modalSlice.actions;
+export const {
+  filterContent,
+  openModal,
+  showBigImage,
+  closeModal,
+  sortWriting,
+  getNovelTitle,
+  setLikeNovel,
+} = modalSlice.actions;
 
 export default modalSlice.reducer;

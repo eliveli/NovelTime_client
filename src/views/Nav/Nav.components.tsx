@@ -1,7 +1,7 @@
 import { ThemeProvider } from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { setLikeNovel } from "../../store/clientSlices/modalSlice";
+import { sortWriting, filterContent, setLikeNovel } from "../../store/clientSlices/modalSlice";
 import { useAppSelector, useAppDispatch } from "../../store/hooks";
 
 import {
@@ -89,6 +89,8 @@ export function NavMobileMainTop() {
 export function NavMobileMainBottom({ pathname }: Props) {
   const theme = {};
 
+  const dispatch = useAppDispatch();
+
   const isLogin = false; // is necessary when clicking add writing button
 
   return (
@@ -103,7 +105,15 @@ export function NavMobileMainBottom({ pathname }: Props) {
           ["Novel", "/novel_list"],
           ["Chat", "/chat_list/:userId"],
         ].map((_) => (
-          <NavContent to={_[1]} isBorderTop isCurrentPath={pathname.includes(_[1])}>
+          <NavContent
+            to={_[1]}
+            isBorderTop
+            isCurrentPath={pathname.includes(_[1])}
+            onClick={() => {
+              dispatch(sortWriting("작성일New")); // reset category for sorting writings
+              dispatch(filterContent("Novel")); // reset category for filtering content
+            }}
+          >
             {_[0]}
           </NavContent>
         ))}
@@ -130,6 +140,8 @@ interface DetailProps {
 
 export function NavMobileDetail({ parameter, pathname }: DetailProps) {
   // one nav component: top
+
+  const dispatch = useAppDispatch();
 
   const { novelTitle } = useAppSelector((state) => state.modal);
 
@@ -160,7 +172,13 @@ export function NavMobileDetail({ parameter, pathname }: DetailProps) {
           </LeftIconBox>
           {/* from novelDetail to ... : show Home Icon */}
           {parameter.novelId && (
-            <HomeIconBox onClick={() => navigate("/")}>
+            <HomeIconBox
+              onClick={() => {
+                navigate("/talk_list");
+                dispatch(sortWriting("작성일New")); // reset category for sorting writings
+                dispatch(filterContent("Novel")); // reset category for filtering content
+              }}
+            >
               <HomeIcon />
             </HomeIconBox>
           )}

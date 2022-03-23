@@ -1,18 +1,24 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { openModal, sortWriting } from "../../store/clientSlices/modalSlice";
+import { openModal } from "../../store/clientSlices/modalSlice";
 
 import {
   SortMobileContainer,
   SortTabletContainer,
-  SortText,
+  SortTabletContainer2,
   SortTab,
   Genre,
   GenreBox,
   DownIconBox,
   DownIcon,
-  SortMobileContent,
   CustomArrowBox,
+  OpenSearchIcon,
+  CloseSearchIcon,
+  SearchIconBox,
+  SortCategorySelected,
+  SortCategoryAll,
+  SortCategoryLi,
+  ContainerWithBtn,
 } from "./Filter.styles";
 
 export function Genres() {
@@ -46,6 +52,20 @@ export function Genres() {
     </GenreBox>
   );
 }
+export function SearchBtn({
+  isSearch,
+  handleSearch,
+}: {
+  isSearch: boolean;
+  handleSearch: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
+  return (
+    <SearchIconBox onClick={() => handleSearch(!isSearch)}>
+      {!isSearch && <OpenSearchIcon />}
+      {isSearch && <CloseSearchIcon />}
+    </SearchIconBox>
+  );
+}
 export function SortMobile() {
   const dispatch = useAppDispatch();
   const { sortingText } = useAppSelector((state) => state.modal);
@@ -54,23 +74,71 @@ export function SortMobile() {
 
   return (
     <SortMobileContainer>
-      <SortMobileContent
+      <ContainerWithBtn
         onClick={() => {
-          dispatch(openModal("sortMobile"));
+          dispatch(openModal("sortWriting"));
         }}
       >
-        <SortText>{sortingText}</SortText>
+        <SortCategorySelected>{sortingText}</SortCategorySelected>
         <DownIconBox>
           <DownIcon />
         </DownIconBox>
-      </SortMobileContent>
+      </ContainerWithBtn>
     </SortMobileContainer>
   );
 }
-export function SortTablet() {
+export function SortTablet({ isSearch }: { isSearch: boolean }) {
+  // open or close all list
+  const [isCategoryList, handleCategoryList] = useState(false);
+
+  // which category will be shown
+  const [selectedCategory, handleCategory] = useState("작성일New");
+
+  // when opening or closing search bar, close all list if it is open
+  useEffect(() => {
+    handleCategoryList(false);
+  }, [isSearch]);
+
+  return (
+    <SortTabletContainer>
+      {/* before clicking category */}
+      {!isCategoryList && (
+        <ContainerWithBtn
+          onClick={() => {
+            handleCategoryList(true);
+          }}
+        >
+          <SortCategorySelected>{selectedCategory}</SortCategorySelected>
+          {/* down arrow icon */}
+          <DownIconBox>
+            <DownIcon />
+          </DownIconBox>
+        </ContainerWithBtn>
+      )}
+      {/* after clicking category */}
+      {isCategoryList && (
+        <SortCategoryAll>
+          {["작성일New", "작성일Old", "댓글Up", "댓글Down", "좋아요Up", "좋아요Down"].map((_) => (
+            <SortCategoryLi
+              onClick={() => {
+                handleCategory(_);
+                handleCategoryList(false);
+                // require server request //
+              }}
+            >
+              {_}
+            </SortCategoryLi>
+          ))}
+        </SortCategoryAll>
+      )}
+    </SortTabletContainer>
+  );
+}
+// now below is not used
+export function SortTablet2() {
   return (
     <CustomArrowBox>
-      <SortTabletContainer>
+      <SortTabletContainer2>
         {["작성일New", "작성일Old", "댓글Up", "댓글Down", "좋아요Up", "좋아요Down"].map((_) => (
           <SortTab
             onClick={() => {
@@ -80,13 +148,7 @@ export function SortTablet() {
             {_}
           </SortTab>
         ))}
-      </SortTabletContainer>
+      </SortTabletContainer2>
     </CustomArrowBox>
-    // <select name="cars" id="cars">
-    //   <option value="volvo">Volvo</option>
-    //   <option value="saab">Saab</option>
-    //   <option value="opel">Opel</option>
-    //   <option value="audi">Audi</option>
-    // </select>
   );
 }

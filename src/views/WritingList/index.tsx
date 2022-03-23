@@ -1,6 +1,7 @@
 import React, { useLayoutEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import SectionBG from "components/SectionBG";
+import { SortOnly } from "components/Filter";
 import { useAppDispatch } from "../../store/hooks";
 import { getNovelTitle } from "../../store/clientSlices/modalSlice";
 
@@ -64,6 +65,10 @@ export default function WritingList() {
         여기는 소설 공간!
         {novelTitle}
       </p>
+
+      {/* server request */}
+      <SortOnly marginBottom={-57} />
+
       <WritingListFrame
         categoryText={`Let's talk and play!`}
         isTalk={isTalk}

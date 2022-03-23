@@ -10,7 +10,7 @@ import {
   ClosingSpace,
 } from "./Modal.styles";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { closeModal, sortWriting } from "../../store/clientSlices/modalSlice";
+import { closeModal, sortWriting, filterContent } from "../../store/clientSlices/modalSlice";
 import { usePreventScroll } from "../../utils";
 
 export default function Modal() {
@@ -25,6 +25,10 @@ export default function Modal() {
   } else {
     imgSrc = novelImage;
   }
+
+  // get writing name for ContentFilter Modal
+  const { pathname } = window.location;
+  const writing = pathname.includes("talk") ? "FreeTalk" : "Recommend";
 
   usePreventScroll(modalCategory); // 모달 띄운 동안 body 영역 스크롤 막기
 
@@ -44,7 +48,7 @@ export default function Modal() {
                 </NovelImgContainer>
               </NovelImgBG>
             );
-          case "sortMobile":
+          case "sortWriting":
             return (
               <SortMobileBG>
                 <SortBox>
@@ -60,6 +64,28 @@ export default function Modal() {
                       </SortText>
                     ),
                   )}
+                </SortBox>
+                <ClosingSpace
+                  onClick={() => {
+                    dispatch(closeModal());
+                  }}
+                />
+              </SortMobileBG>
+            );
+          case "filterContent":
+            return (
+              <SortMobileBG>
+                <SortBox>
+                  {["Novel", writing].map((_) => (
+                    <SortText
+                      onClick={() => {
+                        dispatch(filterContent(_));
+                        dispatch(closeModal());
+                      }}
+                    >
+                      {_}
+                    </SortText>
+                  ))}
                 </SortBox>
                 <ClosingSpace
                   onClick={() => {

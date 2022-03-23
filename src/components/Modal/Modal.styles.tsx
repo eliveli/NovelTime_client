@@ -3,7 +3,7 @@ import Icon from "assets/Icon";
 
 export const NovelImgBG = styled.div`
   position: fixed;
-  z-index: 2;
+  z-index: 3;
   width: 100%;
   height: 100%;
   overflow: scroll;
@@ -107,7 +107,7 @@ export const SortMobileBG = styled.div`
   width: 100vw;
   height: 100vh;
   position: fixed;
-  z-index: 2;
+  z-index: 3;
   display: flex;
   flex-direction: column-reverse;
   align-items: flex-end;

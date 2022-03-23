@@ -11,7 +11,7 @@ interface Props {
 export const NavTopBG = styled.header`
   border-bottom: 2px solid gray;
 
-  z-index: 1;
+  z-index: 2;
 
   background-color: rgba(255, 255, 255, 0.9);
 
@@ -21,7 +21,7 @@ export const NavTopBG = styled.header`
 `;
 // 패딩 없애고 화면 가로 전체에 늘어나게 해야 함
 export const NavBottomBG = styled.header`
-  z-index: 1;
+  z-index: 2;
 
   background-color: rgba(255, 255, 255, 0.9);
   width: 100%;

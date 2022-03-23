@@ -29,6 +29,8 @@ export const LinkCategory = styled(Link)`
 
 export const CategoryDesc = styled.p`
   margin-bottom: 0;
+  border-bottom: 1px dotted #0000004f;
+  font-size: 20px;
 `;
 
 export const ShowAllText = styled.span`
