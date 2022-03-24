@@ -87,30 +87,18 @@ export const SearchFilterText = styled.p<{ contentName: string; selectedContent:
   ${({ contentName, selectedContent }) =>
     contentName === selectedContent && "border-bottom: 2px solid rgba(100,100,100,0.5);"}
 `;
-export const SearchIconBox = styled.div`
-  z-index: 1;
-
-  background-color: white;
-
+export const SearchIconBox = styled(Icon.IconBox)`
   border-radius: 11px;
   border: 1px solid rgba(0, 0, 0, 0.2);
   padding: 5px;
-  color: rgba(0, 0, 0, 0.3);
 
   min-width: 38px;
   max-width: 38px;
   min-height: 38px;
   max-height: 38px;
   margin-left: 2px;
-
-  ${theme.media.hover(`
-      cursor: pointer;
-      opacity: 0.8;
-    `)}
 `;
 export const SearchIcon = styled(Icon.Search)`
-  width: 100%;
-  height: 100%;
   ${theme.media.hover(`
       color: rgba(0, 0, 0, 0.3);
     `)}
@@ -158,24 +146,7 @@ export const ContainerWithBtn = styled.div`
     `)}
 `;
 
-export const DownIconBox = styled.div`
-  z-index: 1;
-
-  background-color: white;
-
-  min-width: 25px;
-  max-width: 25px;
-  min-height: 25px;
-  max-height: 25px;
-
-  color: rgba(0, 0, 0, 0.3);
-
+export const DownIconBox = styled(Icon.IconBox)`
   pointer-events: none;
 `;
-export const DownIcon = styled(Icon.SmallDown)`
-  width: 100%;
-  height: 100%;
-  ${theme.media.hover(`
-      color: rgba(0, 0, 0, 0.2);
-    `)}
-`;
+export const DownIcon = Icon.SmallDown;

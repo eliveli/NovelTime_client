@@ -61,7 +61,7 @@ export const ClosingBox = styled.div`
 
   align-self: flex-end;
   /* border-radius: 50%; */
-  background-color: white;
+  background-color: rgba(255, 255, 255, 0.9);
   border: 3px double rgba(150, 150, 150, 0.3);
   border-radius: 7px;
   padding: 4px;

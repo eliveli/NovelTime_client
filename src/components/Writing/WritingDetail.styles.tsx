@@ -1,0 +1,92 @@
+import theme, { styled } from "assets/styles/theme";
+import Icon from "assets/Icon";
+
+export const WritingDetailContainer = styled.div`
+  border-radius: 20px;
+  border: 1px solid lightgray;
+  margin-top: 10px;
+  padding: 10px 20px 20px 20px;
+`;
+export const Writing = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  /* border-bottom: 1px solid ${(props) => props.theme.color.lightGray100_2}; */
+`;
+export const NextToImgContainer = styled.div`
+  margin-left: 12px;
+`;
+export const UserContainer = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px dotted rgba(0, 0, 0, 0.1);
+  /* padding-bottom: 9px; */
+  padding-bottom: 16px;
+`;
+
+export const UserImg = styled.div<{ userImg: string }>`
+  border-radius: 50%;
+  min-width: 50px;
+  height: 50px;
+  background-image: url(${({ userImg }) =>
+    userImg || "https://cdn.pixabay.com/photo/2017/02/01/09/52/animal-2029245_960_720.png"});
+
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+`;
+
+export const UserNameBox = styled.div`
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+
+  margin-left: 0;
+  padding: 0;
+
+  /* border-bottom: 1px solid ${(props) => props.theme.color.lightGray100_1}; */
+`;
+
+export const UserName = styled.p`
+  margin: 0;
+`;
+export const CreateDate = styled.p`
+  margin: 0;
+  padding-left: 12px;
+`;
+
+export const WritingImgBox = styled.div`
+  min-width: 40px;
+`;
+
+export const WritingImg = styled.div<{ img?: string }>`
+  padding-top: 100%;
+
+  background-image: url(${({ img }) => img});
+  /* background-position: center; */
+  background-repeat: no-repeat;
+  background-size: cover;
+
+  border-radius: 10%;
+`;
+export const IconsBox = styled.div`
+  display: flex;
+  gap: 18px;
+  align-items: center;
+`;
+export const IconBox = styled.div`
+  display: flex;
+  gap: 6px;
+  align-items: center;
+`;
+export const IconNO = styled.span``;
+
+export const WritingTitle = styled.h3`
+  font-size: 19px;
+  margin: 0;
+  font-weight: 600;
+`;
+export const WritingDesc = styled.p`
+  margin-bottom: 20px;
+`;

@@ -121,50 +121,20 @@ export const DownIconBox = styled.div`
       opacity: 0.8;
     `)} */
 `;
-export const DownIcon = styled(Icon.SmallDown)`
-  width: 100%;
-  height: 100%;
-  ${theme.media.hover(`
-      color: rgba(0, 0, 0, 0.2);
-    `)}
-`;
-export const SearchIconBox = styled.div`
-  z-index: 1;
-
-  background-color: white;
-
+export const DownIcon = Icon.SmallDown;
+export const SearchIconBox = styled(Icon.IconBox)`
   border-radius: 11px;
   border: 1px solid rgba(0, 0, 0, 0.2);
   padding: 5px;
-  color: rgba(0, 0, 0, 0.3);
 
   min-width: 38px;
   max-width: 38px;
   min-height: 38px;
   max-height: 38px;
   margin-left: 2px;
-
-  ${theme.media.hover(`
-      cursor: pointer;
-      opacity: 0.8;
-    `)}
 `;
-export const OpenSearchIcon = styled(Icon.Search)`
-  width: 100%;
-  height: 100%;
-  color: rgba(0, 0, 0, 0.3);
-  ${theme.media.hover(`
-      color: rgba(0, 0, 0, 0.2);
-    `)};
-`;
-export const CloseSearchIcon = styled(Icon.SmallUp)`
-  width: 100%;
-  height: 100%;
-  color: rgba(0, 0, 0, 0.3);
-  ${theme.media.hover(`
-      color: rgba(0, 0, 0, 0.2);
-    `)};
-`;
+export const OpenSearchIcon = styled(Icon.Search)``;
+export const CloseSearchIcon = Icon.SmallUp;
 
 export const ContainerWithSearch = styled.div<{ isSearch: boolean }>`
   display: flex;

@@ -127,15 +127,11 @@ export const UpIconBox = styled.div`
     `)}
 `;
 export const DownIcon = styled(Icon.SmallDown)`
-  width: 100%;
-  height: 100%;
   ${theme.media.hover(`
       color: rgba(100, 100, 100, 0.3);
     `)}
 `;
 export const UpIcon = styled(Icon.SmallUp)`
-  width: 100%;
-  height: 100%;
   ${theme.media.hover(`
       color: rgba(100, 100, 100, 0.3);
     `)}

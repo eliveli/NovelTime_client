@@ -5,6 +5,7 @@ import FreeTalk from "./FreeTalkList.components";
 
 export default function FreeTalkList() {
   const info = {
+    talkId: "abcd",
     userImg: "https://cdn.pixabay.com/photo/2018/08/31/08/35/toys-3644073_960_720.png",
     talkImg: "https://cdn.pixabay.com/photo/2018/08/31/08/35/toys-3644073_960_720.png",
   };

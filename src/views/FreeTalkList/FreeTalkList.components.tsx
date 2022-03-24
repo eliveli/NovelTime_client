@@ -1,4 +1,6 @@
 import { ThemeProvider } from "styled-components";
+import { useNavigate } from "react-router-dom";
+
 import Icon from "../../assets/Icon";
 import {
   CreateDate,
@@ -20,6 +22,7 @@ import {
 } from "./FreeTalkList.styles";
 
 interface TalkProps {
+  talkId: string;
   userImg: string;
   talkImg: string;
 }
@@ -29,15 +32,23 @@ export default function FreeTalk({ talk }: { talk: TalkProps }) {
   const {
     userImg = "https://cdn.pixabay.com/photo/2018/08/31/08/35/toys-3644073_960_720.png",
     talkImg = "https://cdn.pixabay.com/photo/2018/08/31/08/35/toys-3644073_960_720.png",
+    talkId,
   } = talk;
   const theme = {
     userImg,
     talkImg,
   };
+
+  const navigate = useNavigate();
+
   // setImgUrl(talkProps.img);
   return (
     <ThemeProvider theme={theme}>
-      <Talk>
+      <Talk
+        onClick={() => {
+          navigate(`/talk_detail/${talkId}`);
+        }}
+      >
         <UserImg />
         <BesideImgContainer>
           <FirstLineContainer>

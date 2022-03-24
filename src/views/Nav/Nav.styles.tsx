@@ -164,26 +164,10 @@ export const LeftIconBox = styled.div`
   )}
 `;
 export const HeartIcon = styled(Icon.NavHeart)`
-  width: 100%;
-  height: 100%;
   color: rgba(100, 100, 100, 0.5);
-  /* margin: auto 0 auto 6px; */
-
-  /* 태블릿, PC */
-  @media screen and (min-width: 768px) {
-    /* margin-left: 8px; */
-  }
 `;
 export const FillHeartIcon = styled(Icon.NavFillHeart)`
-  width: 100%;
-  height: 100%;
   color: rgba(100, 100, 100, 0.5);
-  /* margin: auto 0 auto 6px; */
-
-  /* 태블릿, PC */
-  @media screen and (min-width: 768px) {
-    /* margin-left: 8px; */
-  }
 `;
 export const HeartIconBox = styled.div`
   width: 32px;
@@ -206,15 +190,7 @@ export const HeartIconBox = styled.div`
 `;
 export const ShareIcon = styled(Icon.Share)`
   padding-top: 2px;
-  width: 100%;
-  height: 100%;
   color: rgba(100, 100, 100, 0.5);
-  /* margin: auto 0 auto 6px; */
-
-  /* 태블릿, PC */
-  @media screen and (min-width: 768px) {
-    /* margin-left: 8px; */
-  }
 `;
 export const ShareIconBox = styled.div`
   width: 32px;
@@ -236,15 +212,7 @@ export const ShareIconBox = styled.div`
 export const HomeIcon = styled(Icon.Home)`
   padding-bottom: 2px;
   padding-top: 1px;
-  width: 100%;
-  height: 100%;
   color: rgba(100, 100, 100, 0.5);
-  /* margin: auto 0 auto 6px; */
-
-  /* 태블릿, PC */
-  @media screen and (min-width: 768px) {
-    /* margin-left: 8px; */
-  }
 `;
 export const HomeIconBox = styled.div`
   width: 32px;

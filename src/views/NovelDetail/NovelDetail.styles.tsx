@@ -98,10 +98,7 @@ export const HandIconBox = styled.div`
     max-height: 27px;
   `)}
 `;
-export const HandIcon = styled(Icon.Hand)`
-  width: 100%;
-  height: 100%;
-`;
+export const HandIcon = styled(Icon.Hand)``;
 export const PlatformIconBox = styled.div`
   display: flex;
   align-items: center;
@@ -125,14 +122,8 @@ export const PlatformIconBox = styled.div`
     max-height: 27px;
   `)}
 `;
-export const RunnerIcon = styled(Icon.Runner)`
-  width: 100%;
-  height: 100%;
-`;
-export const ReaderIcon = styled(Icon.Reader)`
-  width: 100%;
-  height: 100%;
-`;
+export const RunnerIcon = styled(Icon.Runner)``;
+export const ReaderIcon = styled(Icon.Reader)``;
 
 export const InfoIconBox = styled.div`
   display: flex;
@@ -277,8 +268,6 @@ export const UpIconBox = styled.div`
   }
 `;
 export const DownIcon = styled(Icon.SmallDown)`
-  width: 100%;
-  height: 100%;
   @media (hover: hover) {
     &:hover {
       color: rgba(100, 100, 100, 0.3);
@@ -286,8 +275,6 @@ export const DownIcon = styled(Icon.SmallDown)`
   }
 `;
 export const UpIcon = styled(Icon.SmallUp)`
-  width: 100%;
-  height: 100%;
   @media (hover: hover) {
     &:hover {
       color: rgba(100, 100, 100, 0.3);
