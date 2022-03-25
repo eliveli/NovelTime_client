@@ -5,7 +5,8 @@ export const WritingDetailContainer = styled.div`
   border-radius: 20px;
   border: 1px solid lightgray;
   margin-top: 10px;
-  padding: 10px 20px 20px 20px;
+  padding: 10px 0;
+  /* padding: 10px 20px 20px 20px; */
 `;
 export const Writing = styled.div`
   width: 100%;
@@ -23,6 +24,8 @@ export const UserContainer = styled.div`
   border-bottom: 1px dotted rgba(0, 0, 0, 0.1);
   /* padding-bottom: 9px; */
   padding-bottom: 16px;
+  padding-left: 20px;
+  padding-right: 20px;
 `;
 
 export const UserImg = styled.div<{ userImg: string }>`
@@ -55,11 +58,9 @@ export const CreateDate = styled.p`
   margin: 0;
   padding-left: 12px;
 `;
-
 export const WritingImgBox = styled.div`
   min-width: 40px;
 `;
-
 export const WritingImg = styled.div<{ img?: string }>`
   padding-top: 100%;
 
@@ -70,17 +71,6 @@ export const WritingImg = styled.div<{ img?: string }>`
 
   border-radius: 10%;
 `;
-export const IconsBox = styled.div`
-  display: flex;
-  gap: 18px;
-  align-items: center;
-`;
-export const IconBox = styled.div`
-  display: flex;
-  gap: 6px;
-  align-items: center;
-`;
-export const IconNO = styled.span``;
 
 export const WritingTitle = styled.h3`
   font-size: 19px;
@@ -88,5 +78,7 @@ export const WritingTitle = styled.h3`
   font-weight: 600;
 `;
 export const WritingDesc = styled.p`
-  margin-bottom: 20px;
+  margin-bottom: 12px;
+  padding-left: 20px;
+  padding-right: 20px;
 `;

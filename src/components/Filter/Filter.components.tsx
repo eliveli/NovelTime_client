@@ -39,6 +39,7 @@ export function Genres() {
         "그리고",
       ].map((_) => (
         <Genre
+          key={_}
           genreName={_}
           selectedGenre={genre}
           onClick={() => {

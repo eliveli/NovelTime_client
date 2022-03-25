@@ -1,10 +1,15 @@
 import theme, { styled } from "assets/styles/theme";
 import Icon from "assets/Icon";
 
+export const NovelSpace = styled.div`
+  width: 100%;
+  padding: 0 20px;
+`;
 export const NovelContainer = styled.div<{ isNovelDetail: boolean }>`
   /* border: 1px solid rgba(0, 0, 0, 0.2); */
   margin: 0 auto;
   width: 100%;
+
   border-radius: 15px;
 
   /* clip-path: inset(0px -4px 0px 0px); */

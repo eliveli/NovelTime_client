@@ -125,6 +125,7 @@ export function ContentFilterTablet({ filterContentProps }: FilterContentProps) 
     <SearchCategoryAll>
       {["Novel", writing].map((_) => (
         <SearchCategoryLi
+          key={_}
           onClick={() => {
             handleCategory(_);
             handleCategoryList(false);
@@ -170,6 +171,7 @@ export function SearchFilter({ searchProps }: SearchProps) {
       {selectedCategory === "Novel" &&
         ["Title", "Desc", "Author"].map((_) => (
           <SearchFilterText
+            key={_}
             contentName={_}
             selectedContent={content}
             onClick={() => {
@@ -183,6 +185,7 @@ export function SearchFilter({ searchProps }: SearchProps) {
       {selectedCategory === writing &&
         ["Title", "Text", "Writer"].map((_) => (
           <SearchFilterText
+            key={_}
             contentName={_}
             selectedContent={content}
             onClick={() => {

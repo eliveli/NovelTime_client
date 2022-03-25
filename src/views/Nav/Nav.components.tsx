@@ -53,7 +53,7 @@ export function NavPC({ pathname }: Props) {
               isPath = pathname.includes(_[1]);
             }
             return (
-              <NavContent to={_[1]} isCurrentPath={isPath}>
+              <NavContent key={_[0]} to={_[1]} isCurrentPath={isPath}>
                 {_[0]}
               </NavContent>
             );
@@ -106,6 +106,7 @@ export function NavMobileMainBottom({ pathname }: Props) {
           ["Chat", "/chat_list/:userId"],
         ].map((_) => (
           <NavContent
+            key={_[0]}
             to={_[1]}
             isBorderTop
             isCurrentPath={pathname.includes(_[1])}

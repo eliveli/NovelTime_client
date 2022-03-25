@@ -61,7 +61,7 @@ export default function NovelListByCategory() {
     <SectionBG>
       <ColumnDetailList isShowAll categoryText={categoryText as string}>
         {detailNovels.map((novel) => (
-          <NovelColumnDetail novel={novel} />
+          <NovelColumnDetail key={novel.novelId} novel={novel} />
         ))}
       </ColumnDetailList>
     </SectionBG>

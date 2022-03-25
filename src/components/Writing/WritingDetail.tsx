@@ -6,11 +6,8 @@ import {
   UserName,
   Writing,
   UserNameBox,
-  IconsBox,
-  IconBox,
   WritingTitle,
   WritingImg,
-  IconNO,
   UserContainer,
   WritingImgBox,
   WritingDesc,
@@ -72,19 +69,6 @@ export default function WritingDetail({ detailTalk }: TalkProps) {
       {/* <WritingImgBox>
               <WritingImg img={talkPhoto ?? recommendPhoto} />
             </WritingImgBox> */}
-
-      {/* <IconsBox>
-            <IconBox>
-              <Icon.Heart />
-              <IconNO>{likeNO}</IconNO>
-            </IconBox>
-            {commentNO && (
-              <IconBox>
-                <Icon.Comment />
-                <IconNO>{commentNO}</IconNO>
-              </IconBox>
-            )}
-          </IconsBox> */}
     </Writing>
   );
 }

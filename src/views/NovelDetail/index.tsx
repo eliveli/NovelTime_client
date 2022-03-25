@@ -152,8 +152,11 @@ export default function NovelDetail() {
         novelId={novelId as string}
         writing
       >
-        {isTalk && arrayInfoTalk.map((talk) => <WritingTitle writing={talk} />)}
-        {!isTalk && arrayInfoRecommend.map((recommend) => <WritingTitle writing={recommend} />)}
+        {isTalk && arrayInfoTalk.map((talk) => <WritingTitle key={talk.talkId} writing={talk} />)}
+        {!isTalk &&
+          arrayInfoRecommend.map((recommend) => (
+            <WritingTitle key={recommend.recommendId} writing={recommend} />
+          ))}
       </WritingListFrame>
 
       <RowSlide
@@ -163,7 +166,7 @@ export default function NovelDetail() {
         novelNO={anotherNovels.length}
       >
         {anotherNovels.map((novel) => (
-          <NovelRow novel={novel} />
+          <NovelRow key={novel.novelId} novel={novel} />
         ))}
       </RowSlide>
     </SectionBG>

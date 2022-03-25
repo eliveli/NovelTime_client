@@ -11,33 +11,13 @@ export const TextIconBox = styled.div`
   display: flex;
   align-items: center;
   background-color: white;
-  /* box-shadow: 0 0 2px rgb(0 0 0 / 60%); */
 
   min-width: 35px;
   max-width: 35px;
   min-height: 35px;
   max-height: 35px;
-
-  /* @media screen and (min-width: 768px) {
-    margin-left: 3px;
-  }
-  @media (hover: hover) {
-    &:hover {
-      cursor: pointer;
-      opacity: 0.8;
-      background-color: rgba(150, 150, 150, 0.3);
-    }
-  } */
 `;
-export const TextIcon = styled(Icon.Text)`
-  width: 100%;
-  height: 100%;
-  /* @media (hover: hover) {
-    &:hover {
-      color: rgba(0, 0, 0, 0.3);
-    }
-  } */
-`;
+export const TextIcon = styled(Icon.Text)``;
 export const LikeIconBox = styled.div`
   display: flex;
   align-items: center;

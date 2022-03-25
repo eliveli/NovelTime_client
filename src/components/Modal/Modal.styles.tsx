@@ -56,7 +56,7 @@ export const NovelImgBig = styled.img`
 //  `)}
 // `;
 
-export const ClosingBox = styled.div`
+export const ClosingBox = styled(Icon.IconBox)`
   z-index: 1;
 
   align-self: flex-end;
@@ -92,8 +92,6 @@ export const ClosingBox = styled.div`
   }
 `;
 export const ClosingIcon = styled(Icon.Close)`
-  width: 100%;
-  height: 100%;
   opacity: 0.3;
   @media (hover: hover) {
     &:hover {

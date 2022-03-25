@@ -10,7 +10,6 @@ import {
   Talk,
   UserNameBox,
   IconsBox,
-  IconBox,
   TalkTitle,
   NovelTitle,
   TalkImg,
@@ -18,6 +17,7 @@ import {
   TalkPreview,
   BesideImgContainer,
   TalkImgBox,
+  IconContainer,
   // setImgUrl,
 } from "./FreeTalkList.styles";
 
@@ -57,14 +57,18 @@ export default function FreeTalk({ talk }: { talk: TalkProps }) {
               <CreateDate>22.01.01</CreateDate>
             </UserNameBox>
             <IconsBox>
-              <IconBox>
-                <Icon.Heart />
+              <IconContainer>
+                <Icon.IconBox noPointer size={20}>
+                  <Icon.Heart />
+                </Icon.IconBox>
                 <IconNO>7</IconNO>
-              </IconBox>
-              <IconBox>
-                <Icon.Comment />
+              </IconContainer>
+              <IconContainer>
+                <Icon.IconBox noPointer size={20}>
+                  <Icon.Comment />
+                </Icon.IconBox>
                 <IconNO>5</IconNO>
-              </IconBox>
+              </IconContainer>
             </IconsBox>
           </FirstLineContainer>
 

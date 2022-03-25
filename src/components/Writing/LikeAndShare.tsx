@@ -13,6 +13,13 @@ const Container = styled.div`
 `;
 const IconContainer = styled.div`
   display: flex;
+  align-items: flex-end;
+  /* margin-top: 20px; */
+
+  padding-top: 8px;
+  border-top: 1px dotted rgba(0, 0, 0, 0.1);
+  padding-left: 20px;
+  padding-right: 20px;
   margin-top: 20px;
 `;
 const IconBox = styled(Icon.IconBox)``;
@@ -20,7 +27,8 @@ const HeartIcon = styled(Icon.NavHeart)``;
 const FillHeartIcon = styled(Icon.NavFillHeart)``;
 const ShareIcon = styled(Icon.Share)``;
 const LikeNumber = styled.span`
-  margin-right: 10px;
+  /* margin-right: 10px; */
+  margin-right: 20px;
   margin-left: 5px;
 `;
 export default function LikeAndShare({ isLike, likeNO }: Props) {
@@ -31,7 +39,7 @@ export default function LikeAndShare({ isLike, likeNO }: Props) {
         {!isLike && <HeartIcon />}
       </IconBox>
       <LikeNumber>{likeNO}</LikeNumber>
-      <IconBox>
+      <IconBox size={23}>
         <ShareIcon />
       </IconBox>
     </IconContainer>

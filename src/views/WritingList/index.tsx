@@ -78,8 +78,11 @@ export default function WritingList() {
         writing
         isShowAll
       >
-        {isTalk && arrayInfoTalk.map((talk) => <WritingTitle writing={talk} />)}
-        {!isTalk && arrayInfoRecommend.map((recommend) => <WritingTitle writing={recommend} />)}
+        {isTalk && arrayInfoTalk.map((talk) => <WritingTitle key={talk.talkId} writing={talk} />)}
+        {!isTalk &&
+          arrayInfoRecommend.map((recommend) => (
+            <WritingTitle key={recommend.recommendId} writing={recommend} />
+          ))}
       </WritingListFrame>
     </SectionBG>
   );

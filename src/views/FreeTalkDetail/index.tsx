@@ -8,6 +8,7 @@ import {
   BoardMark,
   LikeAndShare,
   CommentList,
+  WriteComment,
 } from "components/Writing";
 
 // server request by talkID
@@ -67,31 +68,43 @@ export default function FreeTalkDetail() {
 
   // 백엔드에서 comment 테이블에서 talkID로 코멘트 찾기.
   // 코멘트 작성자는 userID로 구분, user 테이블에서 현재 user Name을 가져오기
-  const commentList = [
-    {
-      userName: "리리리",
-      userImg: "",
-      commentContent: "",
-      createDate: "22.01.05",
-      reComment: [
-        {
-          userName: "리리리",
-          userImg: "",
-          commentContent: "",
-          createDate: "22.01.05",
-        },
-      ],
-      // 답글은 어떻게?
-      // - comment : comment 테이블에서 같은 talkID의 코멘트 리스트 가져오기
-      // - reCommentID : if it is not "", it is reComment for it - commentID
-      // - re-re-comment : reCommentID is not "", reReCommentUserID is not ""
-      // in comment table : talkID, commentID, reCommentID, reReCommentUserID
-      //                    - reCommentID, reReCommentUserID can be ""
 
-      // 댓글은 프리톡만. 리코멘드는 댓글 없고 좋아요만 있음.
-      //                - 대신 유저 그레이드 점수 반영은 리코멘드가 더 높음
-    },
-  ];
+  const comment = {
+    commentId: "abcd",
+    userName: "리리리",
+    userImg: "https://cdn.pixabay.com/photo/2018/08/31/08/35/toys-3644073_960_720.png",
+    commentContent: "코멘트 작성 중",
+    createDate: "22.01.05",
+    reComment: [
+      {
+        commentId: "abcde",
+        reCommentUserName: "lala",
+        userName: "리리리",
+        userImg: "https://cdn.pixabay.com/photo/2018/08/31/08/35/toys-3644073_960_720.png",
+        commentContent: "그러하오",
+        createDate: "22.01.05",
+      },
+      {
+        commentId: "abcdef",
+        reCommentUserName: "lala",
+        userName: "리리리",
+        userImg: "https://cdn.pixabay.com/photo/2018/08/31/08/35/toys-3644073_960_720.png",
+        commentContent: "그러하오",
+        createDate: "22.01.05",
+      },
+    ],
+  };
+  const commentList = [comment, comment];
+  // 답글은 어떻게?
+  // - comment : comment 테이블에서 같은 talkID의 코멘트 리스트 가져오기
+  // - reCommentID : if it is not "", it is reComment for it - commentID
+  // - re-re-comment : reCommentID is not "", reReCommentUserID is not ""
+  // in comment table : talkID, commentID, reCommentID, reReCommentUserID
+  //                    - reCommentID, reReCommentUserID can be ""
+
+  // 댓글은 프리톡만. 리코멘드는 댓글 없고 좋아요만 있음.
+  //                - 대신 유저 그레이드 점수 반영은 리코멘드가 더 높음
+
   return (
     <SectionBG>
       <WritingDetailContainer>
@@ -99,8 +112,9 @@ export default function FreeTalkDetail() {
         <WritingDetail detailTalk={dataFromServer.talk} />
         <NovelInWriting novel={dataFromServer.novel} />
         <LikeAndShare isLike={dataFromServer.talk.isLike} likeNO={dataFromServer.talk.likeNO} />
-        <CommentList commentList={commentList} />
       </WritingDetailContainer>
+      <CommentList commentList={commentList} />
+      <WriteComment />
     </SectionBG>
   );
 }

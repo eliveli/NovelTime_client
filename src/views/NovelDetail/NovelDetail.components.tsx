@@ -199,6 +199,7 @@ export default function NovelDetailInfo({ novel }: NovelProps) {
                 if (_.platform !== undefined) {
                   return (
                     <PlatformText
+                      key={_.platform}
                       platform={
                         _.platform as "카카오페이지" | "네이버 시리즈" | "리디북스" | "조아라"
                       }

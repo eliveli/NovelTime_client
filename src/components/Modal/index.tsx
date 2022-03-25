@@ -78,6 +78,7 @@ export default function Modal() {
                 <SortBox>
                   {["Novel", writing].map((_) => (
                     <SortText
+                      key={_}
                       onClick={() => {
                         dispatch(filterContent(_));
                         dispatch(closeModal());

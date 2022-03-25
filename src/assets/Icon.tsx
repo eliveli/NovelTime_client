@@ -14,7 +14,7 @@ import {
   BiChevronUp,
 } from "react-icons/bi";
 import { GrClose } from "react-icons/gr";
-import { BsJournalRichtext } from "react-icons/bs";
+import { BsJournalRichtext, BsEmojiSunglasses } from "react-icons/bs";
 import {
   HiHeart,
   HiOutlineHeart,
@@ -70,25 +70,42 @@ const iconStyleHover = () => `
 const Icon = {
   IconBox,
   BigRight: FaChevronRight,
+  BigLeft: HiOutlineChevronLeft,
   BigDown: FaChevronDown,
   BigUp: FaChevronUp,
-  Heart: FaRegHeart,
-  Comment: FaRegComment,
-  SmallRight: BiChevronRight,
-  SmallLeft: BiChevronLeft,
-  BigLeft: HiOutlineChevronLeft,
+  Emoji: styled(BsEmojiSunglasses)`
+    ${iconStyleHover()};
+  `,
+  Close: styled(GrClose)`
+    ${iconStyle()};
+  `,
+  Text: styled(BsJournalRichtext)`
+    ${iconStyle()};
+  `,
+  Plus: styled(HiPlus)`
+    ${iconStyle()};
+  `,
+  Heart: styled(FaRegHeart)`
+    ${iconStyle()};
+  `,
+  Comment: styled(FaRegComment)`
+    ${iconStyle()};
+  `,
+  SmallRight: styled(BiChevronRight)`
+    ${iconStyle()};
+  `,
+  SmallLeft: styled(BiChevronLeft)`
+    ${iconStyle()};
+  `,
   SmallDown: styled(BiChevronDown)`
     ${iconStyleHover()};
   `,
   SmallUp: styled(BiChevronUp)`
     ${iconStyleHover()};
   `,
-  Close: GrClose,
-  Text: BsJournalRichtext,
   Hand: styled(FaRegHandPointer)`
     ${iconStyleHover()};
   `,
-  Plus: HiPlus,
   Reader: styled(BiBookReader)`
     ${iconStyle()};
   `,

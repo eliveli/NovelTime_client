@@ -2,6 +2,7 @@
 
 import { keyframes } from "styled-components";
 import { styled } from "assets/styles/theme";
+import Icon from "assets/Icon";
 
 interface Props {
   theme: { userImg: string; talkImg: string };
@@ -165,7 +166,7 @@ export const IconsBox = styled.div`
   gap: 18px;
   align-items: center;
 `;
-export const IconBox = styled.div`
+export const IconContainer = styled.div`
   display: flex;
   gap: 6px;
   align-items: center;

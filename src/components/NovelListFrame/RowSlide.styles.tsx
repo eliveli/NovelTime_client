@@ -52,8 +52,6 @@ export const RightIcon = styled.div`
   }
 `;
 export const SlideLeft = styled(Icon.SmallLeft)`
-  width: 100%;
-  height: 100%;
   color: rgba(100, 100, 100, 0.4);
 
   @media (hover: hover) {
@@ -63,8 +61,6 @@ export const SlideLeft = styled(Icon.SmallLeft)`
   }
 `;
 export const SlideRight = styled(Icon.SmallRight)`
-  width: 100%;
-  height: 100%;
   color: rgba(100, 100, 100, 0.4);
 
   @media (hover: hover) {

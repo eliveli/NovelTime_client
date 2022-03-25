@@ -79,12 +79,16 @@ export default function WritingTitle({ writing }: { writing: WritingProps }) {
               </UserNameBox>
               <IconsBox>
                 <IconBox>
-                  <Icon.Heart />
+                  <Icon.IconBox noPointer size={20}>
+                    <Icon.Heart />
+                  </Icon.IconBox>
                   <IconNO>{likeNO}</IconNO>
                 </IconBox>
                 {commentNO && (
                   <IconBox>
-                    <Icon.Comment />
+                    <Icon.IconBox noPointer size={20}>
+                      <Icon.Comment />
+                    </Icon.IconBox>
                     <IconNO>{commentNO}</IconNO>
                   </IconBox>
                 )}

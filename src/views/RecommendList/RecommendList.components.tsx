@@ -72,7 +72,9 @@ export default function Recommend({ text }: { text: TextProps }) {
               <CreateDate>22.01.01</CreateDate>
             </UserNameBox>
             <IconBox>
-              <Icon.Heart />
+              <Icon.IconBox noPointer size={20}>
+                <Icon.Heart />
+              </Icon.IconBox>
               <IconNO>7</IconNO>
             </IconBox>
           </LastLineContainer>
