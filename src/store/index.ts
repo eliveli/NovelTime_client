@@ -3,6 +3,7 @@
 import { configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
 import { setupListeners } from "@reduxjs/toolkit/query";
 import modalReducer from "./clientSlices/modalSlice";
+import writingReducer from "./clientSlices/writingSlice";
 
 import { novelTimeApi } from "./serverAPIs/novelTime";
 
@@ -10,6 +11,7 @@ const store = configureStore({
   reducer: {
     [novelTimeApi.reducerPath]: novelTimeApi.reducer,
     modal: modalReducer,
+    writing: writingReducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(novelTimeApi.middleware),
 });
