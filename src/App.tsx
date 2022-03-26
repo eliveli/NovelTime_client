@@ -95,7 +95,11 @@ function App() {
             {/* <Route path="/" element={<AfterSearch />} /> */}
             {/* </Route> */}
 
-            <Route path="/chat_list/:userId" element={<ChatList />} />
+            <Route path="/chat_list" element={<ChatList />} />
+            {/* (X) chat_list/:userId  */}
+            {/* userId는 주소창에 넣지 말자 */}
+            {/* 클라이언트 스토어 등에 저장하자 */}
+            {/* 그럼 새로고침 해도 로그인 유지되니 유저정보 알 수 있던가 */}
             <Route path="/chat_room/:roomId" element={<ChatRoom />} />
 
             <Route path="/user_page/:userId" element={<UserPage />} />

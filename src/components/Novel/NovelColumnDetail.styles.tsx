@@ -31,10 +31,10 @@ export const NovelInfoBox = styled.div`
   position: relative;
 `;
 
-export const NovelImg = styled.div<{ novelImg: string }>`
+export const NovelImg = styled.div<{ screenWidth: number; novelImg: string }>`
   /* 모바일 */
   height: auto;
-  min-width: 70px;
+  min-width: ${({ screenWidth }) => (screenWidth < 500 ? 59 : 70)}px;
   border-radius: 5%;
   background-image: url(${({ novelImg }) => novelImg});
   /* background-position: center; */
@@ -46,7 +46,7 @@ export const NovelTitle = styled.div<{ infoWidth: number }>`
 
   // 줄 넘어가면 ... 표시
   display: inline-block;
-  width: ${(props) => props.infoWidth || 248}px;
+  width: ${(props) => props.infoWidth}px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -150,6 +150,8 @@ const descShowOn = keyframes`
 `;
 
 export const ModalContainerT = styled.div`
+  font-size: 14px;
+
   ${theme.media.hover(`
       cursor:default;
       opacity: 1;
@@ -180,6 +182,8 @@ export const ModalContainerT = styled.div`
   animation-fill-mode: forwards;
 `;
 export const ModalContainerF = styled.div`
+  font-size: 14px;
+
   ${theme.media.hover(`
       cursor:default;
       opacity: 1;

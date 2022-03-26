@@ -11,9 +11,9 @@ export const ColumnBG = styled.article`
   }
 `;
 export const ColumnListContainer = styled.div`
-  padding-left: 6px;
-  padding-right: 6px;
-  // 좌우 6px 추가해 부모 컨테이너(NovelsBG) 내부 padding 최종적으로 16px 적용
+  padding: 0;
+  /* padding-left: 6px; */
+  /* padding-right: 6px; */
   // 부모컨테이너에서 6px 뺐기 때문에
   // (: NovelRow 컴포넌트의 NovelContainer 좌우 양끝 6px 고려한 것)
   // 하위 컴포넌트인 ColumnBG에 좌우 6px padding 추가
@@ -22,7 +22,8 @@ export const ColumnListContainer = styled.div`
 export const WritingTabContainer = styled.div`
   display: flex;
   justify-content: space-between;
-  margin: 12px 6px 6px; // bottom 6px, WritingTab's box-shadow 6px
+  margin: 12px 0 6px; // bottom 6px, WritingTab's box-shadow 6px
+  /* margin: 12px 6px 6px; // bottom 6px, WritingTab's box-shadow 6px */
 `;
 export const WritingTab = styled.div<{ isTalk: boolean }>`
   width: 50%;

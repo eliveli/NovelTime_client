@@ -128,6 +128,8 @@ export default function NovelColumnDetail({ novel }: MyComponentProps) {
   const infoRef = useRef<HTMLDivElement>(null);
   const infoWidth = useComponentWidth(infoRef); // 인포컨테이너 width 받아와 제목 엘립시스에 적용
 
+  const screenWidth = window.screen.width;
+
   const { isModal, handleModal, isShowModal } = useModal();
 
   // (문제)모달 스크롤을 내린 후 모달을 닫으면 모달 탑 영역이 보이고 사라짐
@@ -143,10 +145,10 @@ export default function NovelColumnDetail({ novel }: MyComponentProps) {
   return (
     <ThemeProvider theme={theme}>
       <NovelLink to={`/novel_detail/${novelId}`}>
-        <NovelImg novelImg={novelImg} />
-        <NovelInfoBox ref={infoRef}>
+        <NovelImg screenWidth={screenWidth} novelImg={novelImg} />
+        <NovelInfoBox>
           <NovelTitle infoWidth={infoWidth}>{`[${novelGenre}] ${novelTitle}`}</NovelTitle>
-          <NovelSubInfoBox>
+          <NovelSubInfoBox ref={infoRef}>
             <NovelAuthor>{novelAuthor}</NovelAuthor>
             <NovelDescBox>
               <NovelDesc>{novelDesc}</NovelDesc>

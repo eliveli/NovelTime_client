@@ -25,7 +25,8 @@ export const RightIconBox = styled.div`
 export const Text = styled.article`
   /* 모바일 */
   width: 100%;
-  padding: 12px 6px 6px;
+  padding: 12px 0 6px;
+  /* padding: 12px 6px 6px; */
   border-bottom: 1px solid rgba(100, 100, 100, 0.2);
   &:last-child {
     border-bottom: 0;

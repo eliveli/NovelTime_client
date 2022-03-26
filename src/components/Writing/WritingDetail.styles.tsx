@@ -4,7 +4,7 @@ import Icon from "assets/Icon";
 export const WritingDetailContainer = styled.div`
   border-radius: 20px;
   border: 1px solid lightgray;
-  margin-top: 10px;
+  /* margin-top: 10px; */
   padding: 10px 0;
   /* padding: 10px 20px 20px 20px; */
 `;
@@ -26,6 +26,9 @@ export const UserContainer = styled.div`
   padding-bottom: 16px;
   padding-left: 20px;
   padding-right: 20px;
+  ${theme.media.mobile(`
+    padding: 0 12px 14px;
+  `)}
 `;
 
 export const UserImg = styled.div<{ userImg: string }>`
@@ -81,4 +84,9 @@ export const WritingDesc = styled.p`
   margin-bottom: 12px;
   padding-left: 20px;
   padding-right: 20px;
+  ${theme.media.mobile(`
+    margin-top: 14px;
+    padding: 0 12px;
+    margin-bottom: 14px;
+  `)}
 `;

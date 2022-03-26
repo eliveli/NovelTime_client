@@ -4,6 +4,9 @@ import Icon from "assets/Icon";
 export const NovelSpace = styled.div`
   width: 100%;
   padding: 0 20px;
+  ${theme.media.mobile(`
+      padding: 0 12px;
+  `)}
 `;
 export const NovelContainer = styled.div<{ isNovelDetail: boolean }>`
   /* border: 1px solid rgba(0, 0, 0, 0.2); */

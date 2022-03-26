@@ -10,7 +10,7 @@ export const NovelLink = styled(Link)`
   display: flex;
   flex-direction: column;
 
-  padding: 12px 6px;
+  padding: 12px 6px 0;
   /* 슬라이드 양끝 좌우 6px 만큼 다른 컨테이너에 적용 */
 
   &:last-child {

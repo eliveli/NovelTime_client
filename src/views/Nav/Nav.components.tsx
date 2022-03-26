@@ -42,7 +42,7 @@ export function NavPC({ pathname }: Props) {
             ["FreeTalk", "/talk_list"],
             ["Recommend", "/recommend_list"],
             ["Novel", "/novel_list"],
-            ["Chat", "/chat_list/:userId"],
+            ["Chat", "/chat_list"],
           ].map((_, idx) => {
             // when path is from novel detail to anywhere, mark Novel in the NavBar
             // but for other path, path is the same name in the Nav
@@ -103,7 +103,7 @@ export function NavMobileMainBottom({ pathname }: Props) {
           ["Recommend", "/recommend_list"],
           ["AddWriting", "Add"], // 추후 라우팅 필요
           ["Novel", "/novel_list"],
-          ["Chat", "/chat_list/:userId"],
+          ["Chat", "/chat_list"],
         ].map((_) => (
           <NavContent
             key={_[0]}
@@ -167,7 +167,7 @@ export function NavMobileDetail({ parameter, pathname }: DetailProps) {
     <ThemeProvider theme={theme}>
       {/* top place */}
       <NavContentBoxMobile>
-        <IconsBox>
+        <IconsBox isLeft>
           <LeftIconBox onClick={() => navigate(-1)}>
             <LeftIcon />
           </LeftIconBox>
@@ -192,7 +192,7 @@ export function NavMobileDetail({ parameter, pathname }: DetailProps) {
         {pathname.includes("talk_detail") && <Logo>여기는 프리톡!</Logo>}
         {pathname.includes("recommend_detail") && <Logo>여기는 리코멘드!</Logo>}
         {parameter.novelId && <Logo>{novelTitle}</Logo>}
-        <IconsBox>
+        <IconsBox isRight>
           {(pathname === `/novel_detail/${parameter.novelId}` ||
             parameter.recommendId ||
             parameter.talkId) && (

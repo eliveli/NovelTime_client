@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import Icon from "../../assets/Icon";
 
 export const CategoryContainer = styled.div`
-  padding: 0 6px;
+  /* padding: 0 6px; */
   margin-bottom: -2px;
   display: flex;
   align-items: flex-end;

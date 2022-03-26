@@ -1,19 +1,32 @@
 import { styled } from "assets/styles/theme";
 
-export const SectionBG = styled.main`
+const { pathname } = window.location;
+export const SectionBG = styled.main<{ isWritingDetail?: true }>`
   /* 모바일 */
   width: 100%;
   margin: 0 auto;
-  padding: 0 ${16 - 6}px 16px;
-  //하위 컴포넌트인 NovelRow 컴포넌트의 NovelContainer 좌우 양끝 6px 있음. 감안해서 계산
+  padding: 0 ${16}px 16px;
 
   background-color: white;
   border-top: 2px solid gray;
 
   /* 태블릿 */
   @media screen and (min-width: 768px) {
-    padding: 0 20px 26px;
-    // 내부 컨테이너와 합해 좌우 26px 설정 : row 이미지 슬라이드 시 양끝 화살표 버튼 공간 필요
+    padding: 0 20px 20px;
+  }
+
+  ${({ isWritingDetail }) =>
+    isWritingDetail &&
+    ` padding: 10px;
+      @media screen and (min-width: 768px) {
+        padding: 20px;
+      }
+   `}
+
+  @media screen and (max-width: 1023px) {
+    // 데스크탑 제외, 메인리스트 페이지에서 하단 내비게이션 만큼 margin-bottom 설정
+    ${["/talk_list", "/recommend_list", "/novel_list", "/chat_list"].includes(pathname) &&
+    "margin-bottom: 50px;"}
   }
   /* PC - 모바일,태블릿과 뷰를 다르게 구성 */
   max-width: 860px;

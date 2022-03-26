@@ -96,6 +96,9 @@ export const RowAlbum = styled.div<{ moveX: number }>`
   /* 모바일 */
   display: flex; // children 요소인 작품을 가로 방향으로 나열
 
+  margin-left: -6px;
+  margin-right: -6px;
+
   /* 태블릿 */
   @media screen and (min-width: 768px) {
   }

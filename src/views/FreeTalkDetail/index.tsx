@@ -79,7 +79,7 @@ export default function FreeTalkDetail() {
       {
         commentId: "abcde",
         reCommentUserName: "lala",
-        userName: "리리리",
+        userName: "fff",
         userImg: "https://cdn.pixabay.com/photo/2018/08/31/08/35/toys-3644073_960_720.png",
         commentContent: "그러하오",
         createDate: "22.01.05",
@@ -87,7 +87,7 @@ export default function FreeTalkDetail() {
       {
         commentId: "abcdef",
         reCommentUserName: "lala",
-        userName: "리리리",
+        userName: "zxcv",
         userImg: "https://cdn.pixabay.com/photo/2018/08/31/08/35/toys-3644073_960_720.png",
         commentContent: "그러하오",
         createDate: "22.01.05",
@@ -106,7 +106,7 @@ export default function FreeTalkDetail() {
   //                - 대신 유저 그레이드 점수 반영은 리코멘드가 더 높음
 
   return (
-    <SectionBG>
+    <SectionBG isWritingDetail>
       <WritingDetailContainer>
         <BoardMark>Let's Free Talk about Novel!</BoardMark>
         <WritingDetail detailTalk={dataFromServer.talk} />

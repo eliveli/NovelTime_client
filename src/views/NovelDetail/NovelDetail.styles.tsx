@@ -116,7 +116,7 @@ export const InfoIconBox = styled.div`
 export const NovelContainer = styled.article`
   width: 100%;
 
-  padding: 12px 6px;
+  padding: 12px 0;
 `;
 
 export const NovelMainInfo = styled.div`
@@ -142,7 +142,8 @@ export const NovelDescMobile = styled.div`
   `)}
 `;
 export const NovelDescPart = styled.div`
-  padding: 5px 3px 5px 7px;
+  padding: 5px 3px 5px 0;
+  /* padding: 5px 3px 5px 7px; */
 
   //2줄 넘어가는 텍스트 ...표시
   overflow: hidden;
@@ -158,7 +159,8 @@ export const NovelDescPart = styled.div`
 `;
 export const NovelDescTablet = styled.div`
   width: 100%;
-  padding: 5px 3px 5px 7px;
+  /* padding: 5px 3px 5px 7px; */
+  padding: 5px 3px 5px 0;
 
   overflow: scroll;
   height: 130px; //화면 보며 조정
@@ -179,7 +181,8 @@ export const NovelDescTablet = styled.div`
 `;
 export const NovelDescAll = styled.div`
   width: 100%;
-  padding: 5px 3px 5px 7px;
+  /* padding: 5px 3px 5px 7px; */
+  padding: 5px 3px 5px 0;
 
   overflow: scroll;
   height: 120px; //화면 보며 조정

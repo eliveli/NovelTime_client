@@ -40,7 +40,7 @@ export const NavContentBoxPC = styled.nav`
   margin: auto;
   height: 50px;
 
-  padding: 0 26px;
+  padding: 0 20px;
 
   display: flex;
   align-items: center;
@@ -67,9 +67,8 @@ export const NavContentBoxMobile = styled.nav<{ isNotPadding?: boolean }>`
   margin: auto;
   height: 50px;
   padding: 0 16px;
-  //하위 컴포넌트인 NovelRow 컴포넌트의 NovelContainer 좌우 양끝 6px 있음. 감안해서 계산
   ${theme.media.tablet(`
-    padding: 0 26px; 
+    padding: 0 20px; 
   `)}
 
   // 모바일용 하단 내비게이션 바는 패딩 없음
@@ -231,6 +230,9 @@ export const HomeIconBox = styled.div`
     color: rgba(100, 100, 100, 0.8);`,
   )}
 `;
-export const IconsBox = styled.div`
+export const IconsBox = styled.div<{ isLeft?: true; isRight?: true }>`
   display: flex;
+
+  ${({ isLeft }) => isLeft && `margin-left: -6px;`}
+  ${({ isRight }) => isRight && `margin-right: -3px;`}
 `;

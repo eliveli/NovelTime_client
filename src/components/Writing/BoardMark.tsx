@@ -4,6 +4,9 @@ import Icon from "assets/Icon";
 const BoardTitleContainer = styled.div`
   padding-left: 20px;
   padding-right: 20px;
+  ${theme.media.mobile(`
+    padding: 0 12px;
+  `)}
 `;
 const BoardTitle = styled.p`
   border-radius: 6px;
@@ -16,6 +19,9 @@ const BoardTitle = styled.p`
   color: rgba(0, 0, 0, 0.6);
   font-weight: 600;
   font-size: 15px;
+  ${theme.media.mobile(`
+      margin: 0 0 12px;
+  `)}
 `;
 
 export default function BoardMark({ children }: { children: React.ReactNode }) {
