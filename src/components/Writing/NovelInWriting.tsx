@@ -20,14 +20,15 @@ interface NovelProps {
     novelGenre: string;
     novelDesc: string;
   };
-  recommend?: true;
+  recommendDetail?: { recomDtlImgWidth: string; recomDtlTextHeight: string };
 }
 
-export default function NovelInfo({ recommend, novel }: NovelProps) {
-  const [isNovelDetail, handleNovelDetail] = useState(false);
+export default function NovelInfo({ recommendDetail, novel }: NovelProps) {
+  const isRecommend = !!recommendDetail;
+  const [isNovelDetail, handleNovelDetail] = useState(isRecommend);
   return (
-    <NovelSpace recommend={recommend}>
-      <NovelContainer recommend={recommend} isNovelDetail={isNovelDetail}>
+    <NovelSpace recommend={isRecommend}>
+      <NovelContainer recommend={isRecommend}>
         <NovelTitleContainer onClick={() => handleNovelDetail(!isNovelDetail)}>
           <NovelTitle>{novel.novelTitle}</NovelTitle>
           <DownIconBox>
@@ -37,7 +38,7 @@ export default function NovelInfo({ recommend, novel }: NovelProps) {
         </NovelTitleContainer>
         {isNovelDetail && (
           <NovelDetailContainer>
-            <NovelColumnDetail novel={novel} />
+            <NovelColumnDetail novel={novel} recommendDetail={recommendDetail} />
           </NovelDetailContainer>
         )}
       </NovelContainer>

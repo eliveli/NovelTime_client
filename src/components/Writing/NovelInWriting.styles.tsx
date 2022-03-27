@@ -1,7 +1,7 @@
 import theme, { styled } from "assets/styles/theme";
 import Icon from "assets/Icon";
 
-export const NovelSpace = styled.div<{ recommend: true | undefined }>`
+export const NovelSpace = styled.div<{ recommend: boolean }>`
   width: 100%;
   padding: 0 20px;
   ${theme.media.mobile(`
@@ -15,7 +15,7 @@ export const NovelSpace = styled.div<{ recommend: true | undefined }>`
       padding: 0 0 12px 0;
   `)}
 `;
-export const NovelContainer = styled.div<{ recommend: true | undefined; isNovelDetail: boolean }>`
+export const NovelContainer = styled.div<{ recommend: boolean }>`
   /* border: 1px solid rgba(0, 0, 0, 0.2); */
   margin: 0 auto;
   width: 100%;
@@ -26,15 +26,17 @@ export const NovelContainer = styled.div<{ recommend: true | undefined; isNovelD
 
   box-shadow: 0 0 3px rgb(0 0 0 / 20%);
 
-  /* border-radius: 30px;
-  ${({ isNovelDetail }) =>
-    isNovelDetail &&
-    `border-bottom-right-radius: 10px;
-    border-bottom-left-radius: 10px;`} */
   @media screen and (min-width: 500px) {
     ${({ recommend }) => !recommend && "max-width: 500px;"}
   }
 `;
+// deleted from upside element
+/* border-radius: 30px;
+    ${({ isNovelDetail }) =>
+      isNovelDetail &&
+      `border-bottom-right-radius: 10px;
+      border-bottom-left-radius: 10px;`} */
+
 export const NovelDetailContainer = styled.div`
   padding: 0 12px;
   /* border-top: 1px solid rgba(0, 0, 0, 0.2); */

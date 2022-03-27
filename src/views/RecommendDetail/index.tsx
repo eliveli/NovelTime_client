@@ -8,6 +8,7 @@ import {
   BoardMark,
   LikeAndShare,
 } from "components/Writing";
+import { DotLine, DotAnimation, WritingAnimation } from "./RecommendDetail.styles";
 
 // server request by recommendId
 export default function NovelDetailRecommend() {
@@ -62,17 +63,26 @@ export default function NovelDetailRecommend() {
     },
   };
 
+  const recommendDetail = {
+    recomDtlImgWidth: "min-width: 92px;",
+    recomDtlTextHeight: "height: 64px;",
+  };
   return (
     <SectionBG isWritingDetail>
-      <NovelInWriting recommend novel={dataFromServer.novel} />
-      <WritingDetailContainer>
-        <BoardMark>Let's Recommend Novel!</BoardMark>
-        <RecommendDetail detailRecommend={dataFromServer.recommend} />
-        <LikeAndShare
-          isLike={dataFromServer.recommend.isLike}
-          likeNO={dataFromServer.recommend.likeNO}
-        />
-      </WritingDetailContainer>
+      <NovelInWriting recommendDetail={recommendDetail} novel={dataFromServer.novel} />
+      <DotAnimation>
+        <DotLine />
+      </DotAnimation>
+      <WritingAnimation>
+        <WritingDetailContainer>
+          <BoardMark>Let's Recommend Novel!</BoardMark>
+          <RecommendDetail detailRecommend={dataFromServer.recommend} />
+          <LikeAndShare
+            isLike={dataFromServer.recommend.isLike}
+            likeNO={dataFromServer.recommend.likeNO}
+          />
+        </WritingDetailContainer>
+      </WritingAnimation>
     </SectionBG>
   );
 }

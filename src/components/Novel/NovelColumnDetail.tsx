@@ -32,6 +32,7 @@ type MyComponentProps = React.PropsWithChildren<{
     novelGenre: string;
     novelDesc: string;
   };
+  recommendDetail?: { recomDtlImgWidth?: string; recomDtlTextHeight?: string };
 }>;
 
 // <Trouble shooting>
@@ -112,7 +113,7 @@ function DescModal({
   );
 }
 // <ModalContainer key={Math.random()} isShowOn={isShowOn}>
-export default function NovelColumnDetail({ novel }: MyComponentProps) {
+export default function NovelColumnDetail({ recommendDetail, novel }: MyComponentProps) {
   // props or default props
   const {
     novelId = "",
@@ -141,17 +142,22 @@ export default function NovelColumnDetail({ novel }: MyComponentProps) {
   const getModalScroll = () => {
     modalScrollY.current = modalTRef.current?.scrollTop as number;
   };
-
   return (
     <ThemeProvider theme={theme}>
       <NovelLink to={`/novel_detail/${novelId}`}>
-        <NovelImg screenWidth={screenWidth} novelImg={novelImg} />
+        <NovelImg
+          screenWidth={screenWidth}
+          novelImg={novelImg}
+          recomDtlImgWidth={recommendDetail?.recomDtlImgWidth as string}
+        />
         <NovelInfoBox>
           <NovelTitle infoWidth={infoWidth}>{`[${novelGenre}] ${novelTitle}`}</NovelTitle>
           <NovelSubInfoBox ref={infoRef}>
             <NovelAuthor>{novelAuthor}</NovelAuthor>
             <NovelDescBox>
-              <NovelDesc>{novelDesc}</NovelDesc>
+              <NovelDesc recomDtlTextHeight={recommendDetail?.recomDtlTextHeight as string}>
+                {novelDesc}
+              </NovelDesc>
               {isModal && (
                 <DownIconBox
                   onClick={(e) => {

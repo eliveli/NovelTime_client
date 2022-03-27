@@ -18,9 +18,8 @@ export const NovelLink = styled(Link)`
 
   ${theme.media.hover(
     `cursor: pointer;
-    opacity: 0.7;
     color: rgba(100, 100, 100, 0.8);`,
-  )}
+  )}/* opacity: 0.7; */ //from hover
 `;
 export const NovelInfoBox = styled.div`
   display: flex;
@@ -31,7 +30,11 @@ export const NovelInfoBox = styled.div`
   position: relative;
 `;
 
-export const NovelImg = styled.div<{ screenWidth: number; novelImg: string }>`
+export const NovelImg = styled.div<{
+  screenWidth: number;
+  novelImg: string;
+  recomDtlImgWidth: string;
+}>`
   /* 모바일 */
   height: auto;
   min-width: ${({ screenWidth }) => (screenWidth < 500 ? 59 : 70)}px;
@@ -40,6 +43,8 @@ export const NovelImg = styled.div<{ screenWidth: number; novelImg: string }>`
   /* background-position: center; */
   background-repeat: no-repeat;
   background-size: cover;
+
+  ${({ recomDtlImgWidth }) => recomDtlImgWidth && recomDtlImgWidth}
 `;
 export const NovelTitle = styled.div<{ infoWidth: number }>`
   font-weight: 600;
@@ -63,7 +68,7 @@ export const NovelDescBox = styled.div`
   display: flex;
   align-items: flex-end;
 `;
-export const NovelDesc = styled.div`
+export const NovelDesc = styled.div<{ recomDtlTextHeight: string }>`
   //2줄 넘어가는 텍스트 ...표시
   overflow: hidden;
   text-overflow: ellipsis;
@@ -75,6 +80,8 @@ export const NovelDesc = styled.div`
   height: 39px; // 화면 표시되는 것 보며 맞춰야 함
   text-align: left;
   word-wrap: break-word;
+
+  ${({ recomDtlTextHeight }) => recomDtlTextHeight && recomDtlTextHeight}
 `;
 export const DownIconBox = styled.div`
   z-index: 1;
