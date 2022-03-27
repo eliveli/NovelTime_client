@@ -8,9 +8,9 @@ export const NovelSpace = styled.div<{ recommend: true | undefined }>`
       padding: 0 12px;
   `)}
 
+  ${({ recommend }) => recommend && "padding:0 0 20px 0;"}
   ${({ recommend }) =>
     recommend &&
-    "padding:0 0 20px 0;" &&
     theme.media.mobile(`
       padding: 0 0 12px 0;
   `)}
