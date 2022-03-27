@@ -33,9 +33,25 @@ interface TalkProps {
     talkImg: string;
   };
 }
+interface RecommendProps {
+  detailRecommend: {
+    recommendId: string;
+
+    userName: string;
+    userImg: string;
+    createDate: string;
+
+    likeNO: number;
+    isLike: boolean;
+
+    recommendTitle: string;
+    recommendDesc: string;
+    recommendImg: string;
+  };
+}
 function Comment() {}
 
-export default function WritingDetail({ detailTalk }: TalkProps) {
+export function TalkDetail({ detailTalk }: TalkProps) {
   const {
     talkId,
 
@@ -51,13 +67,13 @@ export default function WritingDetail({ detailTalk }: TalkProps) {
     talkDesc,
     talkImg,
   } = detailTalk;
-  const recommendTitle = "";
+
   return (
     <Writing>
       <UserContainer>
         <UserImg userImg={userImg} />
         <NextToImgContainer>
-          <WritingTitle>{talkTitle || recommendTitle}</WritingTitle>
+          <WritingTitle>{talkTitle}</WritingTitle>
           <UserNameBox>
             <UserName>{userName}</UserName>
             <CreateDate>{createDate}</CreateDate>
@@ -65,6 +81,42 @@ export default function WritingDetail({ detailTalk }: TalkProps) {
         </NextToImgContainer>
       </UserContainer>
       <WritingDesc>{talkDesc}</WritingDesc>
+      {/* 유저 글 작성 시 넣은 사진 위치를 그대로 글 사이에 넣을 수 있나? */}
+      {/* <WritingImgBox>
+              <WritingImg img={talkPhoto ?? recommendPhoto} />
+            </WritingImgBox> */}
+    </Writing>
+  );
+}
+export function RecommendDetail({ detailRecommend }: RecommendProps) {
+  const {
+    recommendId,
+
+    userName,
+    userImg,
+    createDate,
+
+    likeNO,
+    isLike,
+
+    recommendTitle,
+    recommendDesc,
+    recommendImg,
+  } = detailRecommend;
+
+  return (
+    <Writing>
+      <UserContainer>
+        <UserImg userImg={userImg} />
+        <NextToImgContainer>
+          <WritingTitle>{recommendTitle}</WritingTitle>
+          <UserNameBox>
+            <UserName>{userName}</UserName>
+            <CreateDate>{createDate}</CreateDate>
+          </UserNameBox>
+        </NextToImgContainer>
+      </UserContainer>
+      <WritingDesc>{recommendDesc}</WritingDesc>
       {/* 유저 글 작성 시 넣은 사진 위치를 그대로 글 사이에 넣을 수 있나? */}
       {/* <WritingImgBox>
               <WritingImg img={talkPhoto ?? recommendPhoto} />

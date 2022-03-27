@@ -1,5 +1,6 @@
 import { useRef } from "react";
 import { ThemeProvider } from "styled-components";
+import { useNavigate } from "react-router-dom";
 import { useComponentWidth } from "utils";
 import Icon from "../../assets/Icon";
 
@@ -27,6 +28,7 @@ import {
 } from "./RecommendList.styles";
 
 interface TextProps {
+  recommendId: string;
   novelImg: string;
   userImg: string;
 }
@@ -36,16 +38,24 @@ export default function Recommend({ text }: { text: TextProps }) {
   const {
     novelImg = "https://dn-img-page.kakao.com/download/resource?kid=xsaRM/hzhOfrO85M/k1jHoCWYGpQkLzI11JXbA0&filename=th1",
     userImg = "https://cdn.pixabay.com/photo/2018/08/31/08/35/toys-3644073_960_720.png",
+    recommendId,
   } = text;
   const theme = {
     novelImg,
     userImg,
   };
+
   const infoRef = useRef<HTMLDivElement>(null);
   const infoWidth = useComponentWidth(infoRef); // 인포컨테이너 width 받아와 제목 엘립시스에 적용
+
+  const navigate = useNavigate();
   return (
     <ThemeProvider theme={theme}>
-      <Text>
+      <Text
+        onClick={() => {
+          navigate(`/recommend_detail/${recommendId}`);
+        }}
+      >
         <NovelContainer>
           <NovelImg />
           <NovelInfoBox ref={infoRef}>

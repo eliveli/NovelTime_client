@@ -1,14 +1,21 @@
 import theme, { styled } from "assets/styles/theme";
 import Icon from "assets/Icon";
 
-export const NovelSpace = styled.div`
+export const NovelSpace = styled.div<{ recommend: true | undefined }>`
   width: 100%;
   padding: 0 20px;
   ${theme.media.mobile(`
       padding: 0 12px;
   `)}
+
+  ${({ recommend }) =>
+    recommend &&
+    "padding:0 0 20px 0;" &&
+    theme.media.mobile(`
+      padding: 0 0 12px 0;
+  `)}
 `;
-export const NovelContainer = styled.div<{ isNovelDetail: boolean }>`
+export const NovelContainer = styled.div<{ recommend: true | undefined; isNovelDetail: boolean }>`
   /* border: 1px solid rgba(0, 0, 0, 0.2); */
   margin: 0 auto;
   width: 100%;
@@ -25,7 +32,7 @@ export const NovelContainer = styled.div<{ isNovelDetail: boolean }>`
     `border-bottom-right-radius: 10px;
     border-bottom-left-radius: 10px;`} */
   @media screen and (min-width: 500px) {
-    max-width: 500px;
+    ${({ recommend }) => !recommend && "max-width: 500px;"}
   }
 `;
 export const NovelDetailContainer = styled.div`

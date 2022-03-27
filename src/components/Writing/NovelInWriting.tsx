@@ -20,13 +20,14 @@ interface NovelProps {
     novelGenre: string;
     novelDesc: string;
   };
+  recommend?: true;
 }
 
-export default function NovelInfo({ novel }: NovelProps) {
+export default function NovelInfo({ recommend, novel }: NovelProps) {
   const [isNovelDetail, handleNovelDetail] = useState(false);
   return (
-    <NovelSpace>
-      <NovelContainer isNovelDetail={isNovelDetail}>
+    <NovelSpace recommend={recommend}>
+      <NovelContainer recommend={recommend} isNovelDetail={isNovelDetail}>
         <NovelTitleContainer onClick={() => handleNovelDetail(!isNovelDetail)}>
           <NovelTitle>{novel.novelTitle}</NovelTitle>
           <DownIconBox>

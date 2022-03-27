@@ -285,10 +285,10 @@ function TalkComment({ isReComment, comment }: CommentProps) {
     handleWriteReComnt(!isWriteReComnt);
 
     if (reCommentId) {
-      alert(
-        `작성 중인 답글이 존재해요! 이전 답글을 삭제할까요?
-         - how do I know that? At least previous comment is empty? when and how do I get the state? do not add this feature? If yes, maybe many things necessary`,
-      );
+      //   alert(
+      //     `작성 중인 답글이 존재해요! 이전 답글을 삭제할까요?
+      //      - how do I know that? At least previous comment is empty? when and how do I get the state? do not add this feature? If yes, maybe many things necessary`,
+      //   );
     }
 
     // for mobile & tablet, get userName for marking in textarea
@@ -319,7 +319,7 @@ function TalkComment({ isReComment, comment }: CommentProps) {
           {!isWriteReComnt && <ReCommentMark onClick={handleReComment}>답글</ReCommentMark>}
           {isWriteReComnt && <ReCommentMark onClick={handleReComment}>답글 취소</ReCommentMark>}
         </ReCommentMarkContainer>
-        {/* 답글 작성 컴포넌트 : 댓글의 답글일 경우 isReComment true -> 댓글의 답글에 모두 같은 레이아웃 설정 */}
+        {/* write re-comment component : comment(X) re-comment(O) : isReComment true -> set the same layout */}
         {isPC && isWriteReComnt && <WriteComment isReComment={isReComment} />}
 
         {reComment?.length &&
@@ -328,6 +328,23 @@ function TalkComment({ isReComment, comment }: CommentProps) {
     </CommentContainer>
   );
 }
+
+// trouble shooting //
+// 1. goal : prevent multiple comment components open
+// 2. tried but failed :
+//    from parent component, pass useRef or useState to children.
+//    they will store functions that close comment in its component.
+//    but type(it means type-script) for them is very difficult,
+//    when clicked the "답글", first set false all the comment component, but it didn't work,
+//    and in the process, things work unexpectedly
+//     - in useEffect, ref.current, the idea itself - and it occured - multiple useState in one ref or state, so on...
+// 3. solved : to use global client state.
+//    first clicked "답글", get the function to close comment and set global state
+//    second clicked other "답글", use the function to close comment.
+//    that's it! // I got this over half day long struggled....
+// 4. ps : well, although there is better UI design, something important is go to next step - making next page..
+//    detail will be set later. (and from now, I have changed various things that I had worked hard...)
+//    many things is best at that time, but time is gone, it is not...
 export function CommentList({ commentList }: CommentListProps) {
   // when write-comment component is fixed to screen bottom, give comment-list-component margin-bottom
 

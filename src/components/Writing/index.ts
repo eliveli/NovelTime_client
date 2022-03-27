@@ -1,6 +1,6 @@
 import WritingListFrame from "./WritingListFrame";
 import WritingTitle from "./WritingTitle";
-import WritingDetail from "./WritingDetail";
+import { TalkDetail, RecommendDetail } from "./WritingDetail";
 import NovelInWriting from "./NovelInWriting";
 import BoardMark from "./BoardMark";
 import { WritingDetailContainer } from "./WritingDetail.styles";
@@ -11,7 +11,8 @@ export {
   WritingDetailContainer,
   WritingListFrame,
   WritingTitle,
-  WritingDetail,
+  TalkDetail,
+  RecommendDetail,
   NovelInWriting,
   BoardMark,
   LikeAndShare,

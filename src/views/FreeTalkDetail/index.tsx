@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import SectionBG from "components/SectionBG";
 import {
   WritingDetailContainer,
-  WritingDetail,
+  TalkDetail,
   NovelInWriting,
   BoardMark,
   LikeAndShare,
@@ -109,7 +109,7 @@ export default function FreeTalkDetail() {
     <SectionBG isWritingDetail>
       <WritingDetailContainer>
         <BoardMark>Let's Free Talk about Novel!</BoardMark>
-        <WritingDetail detailTalk={dataFromServer.talk} />
+        <TalkDetail detailTalk={dataFromServer.talk} />
         <NovelInWriting novel={dataFromServer.novel} />
         <LikeAndShare isLike={dataFromServer.talk.isLike} likeNO={dataFromServer.talk.likeNO} />
       </WritingDetailContainer>
