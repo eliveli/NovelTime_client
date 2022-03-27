@@ -30,6 +30,9 @@ export default function Modal() {
   const { pathname } = window.location;
   const writing = pathname.includes("talk") ? "FreeTalk" : "Recommend";
 
+  // get selected category text to mark in the list
+  const { sortingText, filteringContent } = useAppSelector((state) => state.modal);
+
   usePreventScroll(modalCategory); // 모달 띄운 동안 body 영역 스크롤 막기
 
   return (
@@ -55,6 +58,9 @@ export default function Modal() {
                   {["작성일New", "작성일Old", "댓글Up", "댓글Down", "좋아요Up", "좋아요Down"].map(
                     (_) => (
                       <SortText
+                        key={_}
+                        selectedCategory={sortingText}
+                        category={_}
                         onClick={() => {
                           dispatch(sortWriting(_));
                           dispatch(closeModal());
@@ -79,6 +85,8 @@ export default function Modal() {
                   {["Novel", writing].map((_) => (
                     <SortText
                       key={_}
+                      selectedCategory={filteringContent}
+                      category={_}
                       onClick={() => {
                         dispatch(filterContent(_));
                         dispatch(closeModal());

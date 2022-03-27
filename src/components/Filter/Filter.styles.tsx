@@ -43,6 +43,7 @@ export const SortCategorySelected = styled.p`
 export const SortTabletContainer = styled.div`
   position: relative;
   height: 100%;
+  z-index: 2;
 
   ${theme.media.mobile(`
         display: none;
@@ -65,7 +66,7 @@ export const SortCategoryAll = styled.ul`
 
   z-index: 1;
 `;
-export const SortCategoryLi = styled.li`
+export const SortCategoryLi = styled.li<{ selectedCategory: string; category: string }>`
   width: 100%;
   height: 40px;
   display: flex;
@@ -76,6 +77,8 @@ export const SortCategoryLi = styled.li`
   &:last-child {
     border-bottom: 0;
   }
+  ${({ selectedCategory, category }) =>
+    selectedCategory === category && "border: 3px double rgba(0,0,0,0.2);"}
 `;
 export const ContainerWithBtn = styled.div<{ borderOpacity: number | undefined }>`
   /* ${theme.media.mobile(`

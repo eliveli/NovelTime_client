@@ -34,14 +34,14 @@ const writingShowOn = keyframes`
 export const DotAnimation = styled.div`
   animation-name: ${dotShowOn};
   animation-direction: normal;
-  animation-duration: 1.4s;
+  animation-duration: 1.3s;
   animation-fill-mode: forwards;
   animation-delay: ${1}s; // later, delete it
 `;
 export const WritingAnimation = styled.div`
   animation-name: ${writingHidden}, ${writingShowOn};
   animation-direction: normal;
-  animation-duration: ${1 + 0.7}s, 1.4s; // later, subtract 1 second from ${1 + 0.7}
+  animation-duration: ${1 + 0.5}s, 1.3s; // later, subtract 1 second from ${1 + 0.7}
   animation-fill-mode: forwards;
-  animation-delay: 0s, ${1 + 0.7}s; // later, subtract 1 second from ${1 + 0.7}
+  animation-delay: 0s, ${1 + 0.5}s; // later, subtract 1 second from ${1 + 0.7}
 `;

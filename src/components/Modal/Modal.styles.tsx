@@ -124,6 +124,8 @@ export const SortBox = styled.div`
   background-color: rgba(255, 255, 255, 0.9);
   padding: 10px;
 `;
-export const SortText = styled.p`
+export const SortText = styled.p<{ selectedCategory: string; category: string }>`
   padding: 10px 0;
+  ${({ selectedCategory, category }) =>
+    selectedCategory === category && "border: 2px solid rgba(0,0,0,0.2);"}
 `;
