@@ -1,6 +1,7 @@
 import baseStyled, { ThemedStyledInterface } from "styled-components";
 
 const color = {
+  main: "#F29F05",
   textGray: "#606060c2",
   lightGray100_1: "rgba(100,100,100,0.1)",
   lightGray100_2: "rgba(100,100,100,0.2)",

@@ -23,6 +23,8 @@ export const NavTopBG = styled.header`
 export const NavBottomBG = styled.header`
   z-index: 2;
 
+  box-shadow: 0 0 2px rgb(100 100 100 / 40%);
+
   background-color: rgba(255, 255, 255, 0.9);
   width: 100%;
   position: fixed;
@@ -38,7 +40,7 @@ export const NavContentBoxPC = styled.nav`
   width: 100%;
   max-width: 860px;
   margin: auto;
-  height: 50px;
+  height: 60px;
 
   padding: 0 20px;
 
@@ -57,7 +59,7 @@ export const NavContentBoxPC = styled.nav`
 `;
 // 층별 내비게이션에 배경 입히려면 추가 컴포넌트 필요
 // 아래는 컨텐트 정렬용(화면 중앙 또는 전체(모바일,태블릿))
-export const NavContentBoxMobile = styled.nav<{ isNotPadding?: boolean }>`
+export const NavContentBoxMobile = styled.nav<{ isMainBottom?: true }>`
   @media screen and (min-width: 1024px) {
     display: none;
   }
@@ -65,7 +67,8 @@ export const NavContentBoxMobile = styled.nav<{ isNotPadding?: boolean }>`
   width: 100%;
   max-width: 860px;
   margin: auto;
-  height: 50px;
+  height: 70px;
+  /* height: 50px;/ */
   padding: 0 16px;
   ${theme.media.tablet(`
     padding: 0 20px; 
@@ -73,10 +76,11 @@ export const NavContentBoxMobile = styled.nav<{ isNotPadding?: boolean }>`
 
   // 모바일용 하단 내비게이션 바는 패딩 없음
 
-  ${({ isNotPadding }) =>
-    isNotPadding &&
-    `padding: 0;
-      @media screen and (min-width:768px) {padding: 0;}
+  ${({ isMainBottom }) =>
+    isMainBottom &&
+    ` padding: 0 0 2px 0;
+      @media screen and (min-width:768px) {padding: 0 0 2px 0;}
+      height: 60px;
    `}
   display: flex;
   align-items: center;
@@ -91,7 +95,46 @@ export const NavContentBoxMobile = styled.nav<{ isNotPadding?: boolean }>`
   /* } */
 `;
 
-export const Logo = styled.div``;
+export const CatWalkingContainer = styled.div`
+  @media screen and (max-width: 1023px) {
+    width: 100%;
+  }
+  display: flex;
+  overflow: hidden;
+  justify-content: flex-end;
+  align-items: center;
+  ${document.body.offsetWidth > 512 && "justify-content: flex-start;"}
+`;
+export const CatWalking = styled.img`
+  height: 150px;
+`;
+// export const Logo = styled.div`
+//   @media screen and (max-width: 1023px) {
+//     width: 100%;
+//     display: flex;
+//     justify-content: center;
+//   }
+// `;
+export const PageTitle = styled.span``;
+export const LogoContainer = styled.div`
+  @media screen and (max-width: 1023px) {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+`;
+export const Logo = styled.img`
+  height: 205px;
+
+  padding-top: 17px;
+  padding-bottom: 8px;
+  margin-left: -30px;
+  @media screen and (max-width: 1023px) {
+    padding-top: 11px;
+    padding-bottom: 8px;
+    margin-left: 0;
+  }
+`;
 export const NavContentPC = styled.div`
   display: flex;
   /* list-style: none; */
@@ -100,21 +143,25 @@ export const NavContentPC = styled.div`
   height: 100%;
   /* margin: 0; */
 `;
-export const NavContent = styled(Link)<{ isBorderTop?: boolean; isCurrentPath: boolean }>`
+export const NavContent = styled(Link)<{ isCurrentPath?: boolean }>`
   width: 100%;
   /* text-align: center; */
   display: inline-flex;
   height: 100%;
 
-  ${({ isCurrentPath, isBorderTop }) =>
-    isCurrentPath && !isBorderTop && "border-bottom: 2px solid gray;"}
-  ${({ isCurrentPath, isBorderTop }) =>
-    isCurrentPath && isBorderTop && "border-top: 2px solid gray;"}
+  /* for PC Nav */
+  ${({ isCurrentPath }) => isCurrentPath && `border-bottom: 2px solid ${theme.color.main};`}
 
+  gap: 2px;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
   text-decoration: none;
   color: black;
+  justify-content: flex-end;
+
+  @media screen and (min-width: 1024px) {
+    justify-content: center;
+  }
 
   ${theme.media.hover(
     `cursor: pointer;
@@ -123,10 +170,26 @@ export const NavContent = styled(Link)<{ isBorderTop?: boolean; isCurrentPath: b
   )}
 `;
 
+export const NavImg = styled.img`
+  width: 23px;
+  height: 23px;
+`;
+export const NavText = styled.span<{ isActive: boolean }>`
+  display: block;
+  font-size: 13px;
+  padding-bottom: 4px;
+  ${({ isActive }) => isActive && `color:${theme.color.main};`}
+`;
+
 export const MyPageBtn = styled(Link)`
   text-decoration: none;
   color: black;
 
+  @media screen and (max-width: 1023px) {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+  }
   ${theme.media.hover(
     `cursor: pointer;
     opacity: 0.7;

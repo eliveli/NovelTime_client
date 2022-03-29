@@ -1,6 +1,21 @@
 import { ThemeProvider } from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import {
+  freeTalk,
+  freeTalkActive,
+  recommend,
+  recommendActive,
+  addWriting,
+  addWritingActive,
+  novel,
+  novelActive,
+  chat,
+  chatActive,
+  catWalking,
+  logoMobile,
+  logoPC,
+} from "assets/images";
 import { sortWriting, filterContent, setLikeNovel } from "../../store/clientSlices/modalSlice";
 import { useAppSelector, useAppDispatch } from "../../store/hooks";
 
@@ -13,7 +28,6 @@ import {
   ShareIconBox,
   NavContentBoxPC,
   NavContentBoxMobile,
-  Logo,
   NavContentPC,
   MyPageBtn,
   NavContent,
@@ -21,6 +35,13 @@ import {
   HomeIconBox,
   IconsBox,
   FillHeartIcon,
+  NavImg,
+  NavText,
+  CatWalking,
+  CatWalkingContainer,
+  LogoContainer,
+  Logo,
+  PageTitle,
 } from "./Nav.styles";
 
 interface Props {
@@ -35,7 +56,9 @@ export function NavPC({ pathname }: Props) {
   return (
     <ThemeProvider theme={theme}>
       <NavContentBoxPC>
-        <Logo>It's Novel Time!</Logo>
+        <LogoContainer>
+          <Logo src={logoPC} />
+        </LogoContainer>
         <NavContentPC>
           {/* [category name, route path] */}
           {[
@@ -77,8 +100,12 @@ export function NavMobileMainTop() {
     <ThemeProvider theme={theme}>
       {/* top place */}
       <NavContentBoxMobile>
-        <Logo>kitty walks to center leaving footprint</Logo>
-        <Logo>It's Novel Time!</Logo>
+        <CatWalkingContainer>
+          <CatWalking src={catWalking} alt="catWalking" />
+        </CatWalkingContainer>
+        <LogoContainer>
+          <Logo src={logoMobile} />
+        </LogoContainer>
 
         {isLogin && <MyPageBtn to="/user_page/:userId">보관함</MyPageBtn>}
         {!isLogin && <MyPageBtn to="">로그인</MyPageBtn>}
@@ -96,26 +123,28 @@ export function NavMobileMainBottom({ pathname }: Props) {
   return (
     <ThemeProvider theme={theme}>
       {/* bottom place */}
-      <NavContentBoxMobile isNotPadding>
+      <NavContentBoxMobile isMainBottom>
         {/* [category name, route path] */}
         {[
-          ["FreeTalk", "/talk_list"],
-          ["Recommend", "/recommend_list"],
-          ["AddWriting", "Add"], // 추후 라우팅 필요
-          ["Novel", "/novel_list"],
-          ["Chat", "/chat_list"],
+          ["FreeTalk", "/talk_list", freeTalk, freeTalkActive],
+          ["Recommend", "/recommend_list", recommend, recommendActive],
+          ["AddWriting", "Add", addWriting, addWritingActive], // 추후 라우팅 필요
+          ["Novel", "/novel_list", novel, novelActive],
+          ["Chat", "/chat_list", chat, chatActive],
         ].map((_) => (
           <NavContent
             key={_[0]}
-            to={_[1]}
-            isBorderTop
-            isCurrentPath={pathname.includes(_[1])}
+            to={_[1]} // it means <Link to="">
             onClick={() => {
               dispatch(sortWriting("작성일New")); // reset category for sorting writings
               dispatch(filterContent("Novel")); // reset category for filtering content
             }}
           >
-            {_[0]}
+            {/* not clicked or clicked element */}
+            {pathname.includes(_[1]) === false && <NavImg src={_[2]} alt={_[0]} />}
+            {pathname.includes(_[1]) && <NavImg src={_[3]} alt={_[0]} />}
+
+            <NavText isActive={pathname.includes(_[1])}>{_[0]}</NavText>
           </NavContent>
         ))}
       </NavContentBoxMobile>
@@ -189,9 +218,9 @@ export function NavMobileDetail({ parameter, pathname }: DetailProps) {
             2.노블디테일-> ...: 노블 타이틀
             3.노블메인리스트 전체보기 페이지 : 페이지타이틀 없음(일단은)
         */}
-        {pathname.includes("talk_detail") && <Logo>여기는 프리톡!</Logo>}
-        {pathname.includes("recommend_detail") && <Logo>여기는 리코멘드!</Logo>}
-        {parameter.novelId && <Logo>{novelTitle}</Logo>}
+        {pathname.includes("talk_detail") && <PageTitle>여기는 프리톡!</PageTitle>}
+        {pathname.includes("recommend_detail") && <PageTitle>여기는 리코멘드!</PageTitle>}
+        {parameter.novelId && <PageTitle>{novelTitle}</PageTitle>}
         <IconsBox isRight>
           {(pathname === `/novel_detail/${parameter.novelId}` ||
             parameter.recommendId ||

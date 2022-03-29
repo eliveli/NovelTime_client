@@ -60,7 +60,7 @@ export const SearchCategoryAll = styled.ul`
     display: none;
   `)}
 `;
-export const SearchCategoryLi = styled.li`
+export const SearchCategoryLi = styled.li<{ selectedCategory: string; category: string }>`
   width: 100%;
   height: 100%;
   display: flex;
@@ -71,6 +71,8 @@ export const SearchCategoryLi = styled.li`
   &:last-child {
     border-bottom: 0;
   }
+  ${({ selectedCategory, category }) =>
+    selectedCategory === category && `color: ${theme.color.main};`}
 `;
 export const SearchFilterText = styled.p<{ contentName: string; selectedContent: string }>`
   width: 100%;
@@ -85,7 +87,7 @@ export const SearchFilterText = styled.p<{ contentName: string; selectedContent:
   }
 
   ${({ contentName, selectedContent }) =>
-    contentName === selectedContent && "border-bottom: 2px solid rgba(100,100,100,0.5);"}
+    contentName === selectedContent && `border-bottom: 2px solid ${theme.color.main};`}
 `;
 export const SearchIconBox = styled(Icon.IconBox)`
   border-radius: 11px;

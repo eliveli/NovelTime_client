@@ -19,7 +19,7 @@ export const Genre = styled.p<{ genreName: string; selectedGenre: string }>`
   white-space: nowrap;
 
   ${({ genreName, selectedGenre }) =>
-    genreName === selectedGenre && "border-bottom: 2px solid rgba(100,100,100,0.5);"}
+    genreName === selectedGenre && `border-bottom: 2px solid  ${theme.color.main};`}
 `;
 
 export const SortMobileContainer = styled.div`
@@ -78,7 +78,7 @@ export const SortCategoryLi = styled.li<{ selectedCategory: string; category: st
     border-bottom: 0;
   }
   ${({ selectedCategory, category }) =>
-    selectedCategory === category && "border: 3px double rgba(0,0,0,0.2);"}
+    selectedCategory === category && `color:${theme.color.main};`}
 `;
 export const ContainerWithBtn = styled.div<{ borderOpacity: number | undefined }>`
   /* ${theme.media.mobile(`

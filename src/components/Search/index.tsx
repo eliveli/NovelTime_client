@@ -126,6 +126,8 @@ export function ContentFilterTablet({ filterContentProps }: FilterContentProps) 
       {["Novel", writing].map((_) => (
         <SearchCategoryLi
           key={_}
+          selectedCategory={selectedCategory}
+          category={_}
           onClick={() => {
             handleCategory(_);
             handleCategoryList(false);
