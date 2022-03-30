@@ -4,6 +4,7 @@ import recommend from "./recommend.jpg";
 import recommendActive from "./recommendActive.jpg";
 import addWriting from "./addWriting.jpg";
 import addWritingActive from "./addWritingActive.jpg";
+import addWritingInPage from "./addWritingInPage.jpg";
 import novel from "./novel.jpg";
 import novelActive from "./novelActive.jpg";
 import chat from "./chat.jpg";
@@ -26,4 +27,5 @@ export {
   catWalking,
   logoMobile,
   logoPC,
+  addWritingInPage,
 };

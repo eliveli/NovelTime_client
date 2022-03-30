@@ -299,3 +299,14 @@ export const IconsBox = styled.div<{ isLeft?: true; isRight?: true }>`
   ${({ isLeft }) => isLeft && `margin-left: -6px;`}
   ${({ isRight }) => isRight && `margin-right: -3px;`}
 `;
+export const SubmitBtn = styled.button`
+  padding: 7px 10px;
+  font-size: 16px;
+  font-weight: 600;
+  margin-right: 1px;
+
+  border-radius: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  background-color: white;
+  color: rgba(0, 0, 0, 0.6);
+`;

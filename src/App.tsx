@@ -23,6 +23,7 @@ import {
   NovelListByCategory,
   WritingList,
   NovelDetailMark,
+  AddWriting,
 } from "views";
 import Modal from "components/Modal";
 import { ThemeProvider } from "styled-components";
@@ -58,6 +59,7 @@ function App() {
             "/recommend_detail/:recommendId",
             "/novel_list/:categoryText/:categoryId",
             "/novel_list/:categoryText/:categoryId/:novelId",
+            "/add_writing",
           ].map((path) => (
             <Route path={path} element={<DetailNav />} />
           ))}
@@ -87,6 +89,8 @@ function App() {
             {/* </Route> */}
             <Route path="/talk_detail/:talkId" element={<FreeTalkDetail />} />
             <Route path="/recommend_detail/:recommendId" element={<RecommendDetail />} />
+
+            <Route path="/add_writing" element={<AddWriting />} />
 
             {/* <Route path="/search" element={<SearchPage />}> */}
             {/* 검색 전 보여줄 예시 작품 */}

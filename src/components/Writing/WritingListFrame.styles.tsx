@@ -3,6 +3,8 @@ import theme, { styled } from "assets/styles/theme";
 export const ColumnBG = styled.article`
   margin-bottom: 14px; // 나중에 페이지 전체적으로 파트 별 간격 맞추기
 
+  position: relative;
+
   /* 태블릿 */
   @media screen and (min-width: 768px) {
   }
@@ -18,7 +20,15 @@ export const ColumnListContainer = styled.div`
   // (: NovelRow 컴포넌트의 NovelContainer 좌우 양끝 6px 고려한 것)
   // 하위 컴포넌트인 ColumnBG에 좌우 6px padding 추가
 `;
-
+export const AddWritingContainer = styled.div`
+  position: absolute;
+  top: 14px;
+  left: 162px;
+`;
+export const AddWriting = styled.img`
+  width: 35px;
+  height: 35px;
+`;
 export const WritingTabContainer = styled.div`
   display: flex;
   justify-content: space-between;

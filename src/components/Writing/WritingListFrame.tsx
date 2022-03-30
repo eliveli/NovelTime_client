@@ -1,10 +1,13 @@
 import { CategoryMark } from "components/CategoryMark";
+import { addWritingInPage } from "assets/images";
 import {
   ColumnBG,
   ColumnListContainer,
   WritingTabContainer,
   WritingTab,
   WritingTabText,
+  AddWritingContainer,
+  AddWriting,
 } from "./WritingListFrame.styles";
 
 type Props = React.PropsWithChildren<{
@@ -37,6 +40,9 @@ export default function WritingListFrame({
         novelId={novelId}
         fontSize={fontSize}
       />
+      <AddWritingContainer>
+        <AddWriting src={addWritingInPage} alt="addWriting" />
+      </AddWritingContainer>
       <WritingTabContainer>
         <WritingTab isTalk={isTalk} onClick={() => handleTalk(true)}>
           <WritingTabText>FreeTalking</WritingTabText>

@@ -17,6 +17,7 @@ import NovelListByCategory from "./NovelListByCategory";
 import NovelDetailMark from "./NovelDetailMark";
 import NovelDetailTalk from "./NovelDetailTalk";
 import NovelDetailRecommend from "./NovelDetailRecommend";
+import AddWriting from "./AddWriting";
 
 export {
   NovelDetailTalk,
@@ -39,4 +40,5 @@ export {
   AfterSearch,
   NovelListByCategory,
   NovelDetailMark,
+  AddWriting,
 };

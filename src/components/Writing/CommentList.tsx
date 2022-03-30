@@ -141,7 +141,6 @@ export const WriteTextCntnr = styled.div`
 
 export const WriteText = styled.textarea`
   width: 100%;
-  height: 100%;
   border: 0;
   resize: none;
   ${theme.hideScrollBar}

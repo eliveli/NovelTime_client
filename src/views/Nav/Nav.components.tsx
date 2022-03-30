@@ -42,6 +42,7 @@ import {
   LogoContainer,
   Logo,
   PageTitle,
+  SubmitBtn,
 } from "./Nav.styles";
 
 interface Props {
@@ -128,7 +129,7 @@ export function NavMobileMainBottom({ pathname }: Props) {
         {[
           ["FreeTalk", "/talk_list", freeTalk, freeTalkActive],
           ["Recommend", "/recommend_list", recommend, recommendActive],
-          ["AddWriting", "Add", addWriting, addWritingActive], // 추후 라우팅 필요
+          ["AddWriting", "/add_writing", addWriting, addWritingActive], // 추후 라우팅 필요
           ["Novel", "/novel_list", novel, novelActive],
           ["Chat", "/chat_list", chat, chatActive],
         ].map((_) => (
@@ -220,7 +221,9 @@ export function NavMobileDetail({ parameter, pathname }: DetailProps) {
         */}
         {pathname.includes("talk_detail") && <PageTitle>여기는 프리톡!</PageTitle>}
         {pathname.includes("recommend_detail") && <PageTitle>여기는 리코멘드!</PageTitle>}
+        {pathname.includes("add_writing") && <PageTitle>add writing</PageTitle>}
         {parameter.novelId && <PageTitle>{novelTitle}</PageTitle>}
+
         <IconsBox isRight>
           {(pathname === `/novel_detail/${parameter.novelId}` ||
             parameter.recommendId ||
@@ -241,6 +244,7 @@ export function NavMobileDetail({ parameter, pathname }: DetailProps) {
               <ShareIcon />
             </ShareIconBox>
           )}
+          {pathname.includes("add_writing") && <SubmitBtn>작성</SubmitBtn>}
         </IconsBox>
       </NavContentBoxMobile>
     </ThemeProvider>
