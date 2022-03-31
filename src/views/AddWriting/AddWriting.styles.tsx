@@ -1,9 +1,12 @@
 import theme, { styled } from "assets/styles/theme";
 
-export const NovelTitleContainer = styled.p`
-  margin: 0;
+export const NovelTitleContainer = styled.div`
   border-bottom: 1px solid rgba(100, 100, 100, 0.1);
   padding: 10px 0;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
 `;
 export const NovelTitle = styled.button`
   border-radius: 20px;
@@ -76,7 +79,9 @@ export const WritingContent = styled.textarea`
   font-size: 16px;
   line-height: 1.5;
 
-  height: ${screenHeight < 700 ? 325 : 420}px;
+  height: 420px;
+  ${screenHeight < 700 && "height: 325px;"}
+  ${screenHeight > 1000 && "height: 640px;"}
 
   @media screen and (min-width: 1024px) {
     height: 400px;

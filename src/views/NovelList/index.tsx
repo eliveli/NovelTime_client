@@ -1,9 +1,14 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import SectionBG from "components/SectionBG";
+import Icon from "assets/Icon";
+import { SearchIconBox, IconContainer } from "./NovelList.styles";
 import { ColumnList, ColumnDetailList, RowSlide } from "../../components/NovelListFrame";
 import { NovelColumn, NovelColumnDetail, NovelRow } from "../../components/Novel";
 
 export default function NovelList() {
+  const navigate = useNavigate();
+
   const novelInfo = {
     novelId: "20220225082010201",
     novelImg:
@@ -58,6 +63,15 @@ export default function NovelList() {
 
   return (
     <SectionBG>
+      <IconContainer>
+        <SearchIconBox
+          onClick={() => {
+            navigate("/search/novel");
+          }}
+        >
+          <Icon.Search />
+        </SearchIconBox>
+      </IconContainer>
       <ColumnList categoryText="소설계의 박스오피스" categoryId="boxOffice">
         {novels.map((novel) => (
           <NovelColumn key={novel.novelId} novel={novel} />

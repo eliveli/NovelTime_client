@@ -7,11 +7,13 @@ export type IsWritingState = {
     reCommentUserName: string;
   };
   handlePrevReComnt: React.Dispatch<React.SetStateAction<boolean>>;
+  isWritingSubmit: boolean;
 };
 
 const initialState: IsWritingState = {
   reCommentUser: { reCommentId: "", reCommentUserName: "" },
   handlePrevReComnt: () => {},
+  isWritingSubmit: false,
 };
 
 export const writingSlice = createSlice({
@@ -35,6 +37,9 @@ export const writingSlice = createSlice({
     ) => {
       state.handlePrevReComnt = action.payload.handleWriteReComnt;
     },
+    handleWritingSubmit: (state, action: PayloadAction<boolean>) => {
+      state.isWritingSubmit = action.payload;
+    },
     // Redux Toolkit allows us to write "mutating" logic in reducers. It
     // doesn't actually mutate the state because it uses the Immer library,
     // which detects changes to a "draft state" and produces a brand new
@@ -43,6 +48,6 @@ export const writingSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { setReComment, getClosingReComnt } = writingSlice.actions;
+export const { setReComment, getClosingReComnt, handleWritingSubmit } = writingSlice.actions;
 
 export default writingSlice.reducer;

@@ -75,6 +75,7 @@ export default function WritingList() {
         isTalk={isTalk}
         handleTalk={handleTalk}
         novelId={novelId as string}
+        novelTitle={novelTitle}
         writing
         isShowAll
       >

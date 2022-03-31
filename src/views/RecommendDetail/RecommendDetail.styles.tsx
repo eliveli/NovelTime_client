@@ -36,7 +36,7 @@ export const DotAnimation = styled.div`
   animation-direction: normal;
   animation-duration: 1.3s;
   animation-fill-mode: forwards;
-  /* animation-delay: ${1}s; // later, delete it */
+  /* animation-delay: ${1}s; //// later, delete it */
 `;
 export const WritingAnimation = styled.div`
   animation-name: ${writingHidden}, ${writingShowOn};

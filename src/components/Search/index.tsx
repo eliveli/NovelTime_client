@@ -1,6 +1,12 @@
 // import {} from "./Search.components";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useCloseOutsideClick } from "utils";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import {
+  setSearchWord,
+  setSearchTextCtgr,
+  setSearchContentCtgr,
+} from "../../store/clientSlices/filterSlice";
 import { openModal } from "../../store/clientSlices/modalSlice";
 import {
   SearchBarContainer,
@@ -19,20 +25,22 @@ import {
   MobileContainer,
 } from "./Search.styles";
 
-interface SearchProps {
-  searchProps: {
-    writing: string;
-    selectedCategory: string;
-    handleCategory: React.Dispatch<React.SetStateAction<string>>;
-    content: string;
-    selectContent: React.Dispatch<React.SetStateAction<string>>;
-  };
-}
+// interface SearchProps {
+//   searchProps: {
+//     writing: string;
+//     selectedCategory: string;
+//     handleCategory: React.Dispatch<React.SetStateAction<string>>;
+//     content: string;
+//     selectContent: React.Dispatch<React.SetStateAction<string>>;
+//   };
+// }
 export function SearchBar({
   handleSearchFilter,
 }: {
   handleSearchFilter: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
+  const dispatch = useAppDispatch();
+
   // server request by srchWord
   const [srchWord, handleSrchWord] = useState("");
 
@@ -43,8 +51,9 @@ export function SearchBar({
     e: React.MouseEvent<HTMLDivElement, MouseEvent> | React.KeyboardEvent<HTMLInputElement>,
   ) => {
     e.preventDefault();
-    // server request : search //
-    // and show search filter component
+    // set client state for server request //
+    dispatch(setSearchWord(srchWord));
+    // and show search-filter-component
     handleSearchFilter(true);
   };
 
@@ -88,21 +97,20 @@ interface FilterContentProps {
   filterContentProps: {
     isCategoryList: boolean;
     selectedCategory: string;
-    writing: string;
     handleCategory: React.Dispatch<React.SetStateAction<string>>;
     handleCategoryList: React.Dispatch<React.SetStateAction<boolean>>;
     selectContent: React.Dispatch<React.SetStateAction<string>>;
   };
 }
 export function ContentFilterTablet({ filterContentProps }: FilterContentProps) {
-  const {
-    isCategoryList,
-    selectedCategory,
-    writing,
-    handleCategory,
-    handleCategoryList,
-    selectContent,
-  } = filterContentProps;
+  const dispatch = useAppDispatch();
+
+  const { isCategoryList, selectedCategory, handleCategory, handleCategoryList, selectContent } =
+    filterContentProps;
+
+  // close list when clicking outside
+  const listRef = useRef<HTMLUListElement>(null);
+  useCloseOutsideClick(listRef, isCategoryList, handleCategoryList);
 
   /* before clicking category : novel or writing */
   if (!isCategoryList) {
@@ -120,10 +128,10 @@ export function ContentFilterTablet({ filterContentProps }: FilterContentProps) 
       </ContainerWithBtn>
     );
   }
-  /* after clicking category : novel or writing */
+  /* after clicking category : show list - novel or free talk or recommend */
   return (
-    <SearchCategoryAll>
-      {["Novel", writing].map((_) => (
+    <SearchCategoryAll ref={listRef} isSearchPage>
+      {["Novel", "FreeTalk", "Recommend"].map((_) => (
         <SearchCategoryLi
           key={_}
           selectedCategory={selectedCategory}
@@ -132,6 +140,9 @@ export function ContentFilterTablet({ filterContentProps }: FilterContentProps) 
             handleCategory(_);
             handleCategoryList(false);
             selectContent("Title");
+
+            dispatch(setSearchTextCtgr(_));
+
             // require server request //
           }}
         >
@@ -141,11 +152,25 @@ export function ContentFilterTablet({ filterContentProps }: FilterContentProps) 
     </SearchCategoryAll>
   );
 }
-export function SearchFilter({ searchProps }: SearchProps) {
-  // props from Filter component
-  const { writing, selectedCategory, handleCategory, content, selectContent } = searchProps;
+export function SearchFilter() {
+  const dispatch = useAppDispatch();
 
-  // --- for tablet ----------- //
+  // // props from Filter component
+  // const { writing, selectedCategory, handleCategory, content, selectContent } = searchProps;
+
+  // at search page , content filter is necessary
+  const { pathname } = window.location;
+  const isSearchPage = pathname.includes("search");
+  // at the novel-search
+  const isNovelSearch = pathname.includes("search/novel");
+
+  // which category will be shown : novel or writing
+  const [selectedCategory, handleCategory] = useState("Novel");
+
+  // in category, which type of content will be shown : title or desc or author
+  const [content, selectContent] = useState("Title");
+
+  // --- for tablet ---------------------------------------------- //
   // open or close all list
   const [isCategoryList, handleCategoryList] = useState(false);
   // when selecting content, close all list if it is open
@@ -156,20 +181,66 @@ export function SearchFilter({ searchProps }: SearchProps) {
   const filterContentProps = {
     isCategoryList,
     selectedCategory,
-    writing,
     handleCategory,
     handleCategoryList,
     selectContent,
   };
-  // ------------------------- //
+  // ------------------------------------------------------------- //
 
+  /* in writing page, filter list */
+  if (!isSearchPage) {
+    return (
+      <SearchFilterContainer isCategoryList={isCategoryList}>
+        {["Title", "Desc", "Author", "Novel"].map((_) => (
+          <SearchFilterText
+            key={_}
+            contentName={_}
+            selectedContent={content}
+            onClick={() => {
+              selectContent(_);
+              dispatch(setSearchContentCtgr(_));
+
+              // require server request //
+            }}
+          >
+            {_}
+          </SearchFilterText>
+        ))}
+      </SearchFilterContainer>
+    );
+  }
+
+  /* with novel-search, filter list */
+  if (isNovelSearch) {
+    return (
+      <SearchFilterContainer isCategoryList={isCategoryList}>
+        {["Title", "Desc", "Author"].map((_) => (
+          <SearchFilterText
+            key={_}
+            contentName={_}
+            selectedContent={content}
+            onClick={() => {
+              selectContent(_);
+              dispatch(setSearchContentCtgr(_));
+
+              // require server request //
+            }}
+          >
+            {_}
+          </SearchFilterText>
+        ))}
+      </SearchFilterContainer>
+    );
+  }
+
+  /* in search page */
   return (
     <SearchFilterContainer isCategoryList={isCategoryList}>
       {/* filter content : novel or writing */}
       <ContentFilterMobile />
       <ContentFilterTablet filterContentProps={filterContentProps} />
 
-      {/* in the category, filter list */}
+      {/* filter list - novel */}
       {selectedCategory === "Novel" &&
         ["Title", "Desc", "Author"].map((_) => (
           <SearchFilterText
@@ -178,13 +249,17 @@ export function SearchFilter({ searchProps }: SearchProps) {
             selectedContent={content}
             onClick={() => {
               selectContent(_);
+              dispatch(setSearchContentCtgr(_));
+
               // require server request //
             }}
           >
             {_}
           </SearchFilterText>
         ))}
-      {selectedCategory === writing &&
+
+      {/* filter list - writing */}
+      {["FreeTalk", "Recommend"].includes(selectedCategory) &&
         ["Title", "Text", "Writer"].map((_) => (
           <SearchFilterText
             key={_}
@@ -192,6 +267,8 @@ export function SearchFilter({ searchProps }: SearchProps) {
             selectedContent={content}
             onClick={() => {
               selectContent(_);
+              dispatch(setSearchContentCtgr(_));
+
               // require server request //
             }}
           >
@@ -201,13 +278,13 @@ export function SearchFilter({ searchProps }: SearchProps) {
     </SearchFilterContainer>
   );
 }
-export default function Search({ searchProps }: SearchProps) {
+export default function Search() {
   const [isSearchFilter, handleSearchFilter] = useState(false);
 
   return (
     <SearchContainer>
       <SearchBar handleSearchFilter={handleSearchFilter} />
-      {isSearchFilter && <SearchFilter searchProps={searchProps} />}
+      {isSearchFilter && <SearchFilter />}
     </SearchContainer>
   );
 }

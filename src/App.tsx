@@ -60,6 +60,9 @@ function App() {
             "/novel_list/:categoryText/:categoryId",
             "/novel_list/:categoryText/:categoryId/:novelId",
             "/add_writing",
+            "/add_writing/:novelId/:novelTitle",
+            "/search",
+            "/search/novel",
           ].map((path) => (
             <Route path={path} element={<DetailNav />} />
           ))}
@@ -79,25 +82,21 @@ function App() {
               path="/novel_list/:categoryText/:categoryId/:novelId"
               element={<NovelListByCategory />}
             />
-            {/*  NovelList 컴포넌트 안에서 :  let { category } = useParams(); */}
 
-            {/* <Route path="/novel_detail" element={<NovelDetailMark />}> */}
             <Route path="/novel_detail/:novelId" element={<NovelDetail />} />
             <Route path="/novel_detail/:novelId/writing_list" element={<WritingList />} />
             <Route path="/novel_detail/:novelId/:talkId" element={<NovelDetailTalk />} />
             <Route path="/novel_detail/:novelId/:recommendId" element={<NovelDetailRecommend />} />
-            {/* </Route> */}
+
             <Route path="/talk_detail/:talkId" element={<FreeTalkDetail />} />
             <Route path="/recommend_detail/:recommendId" element={<RecommendDetail />} />
 
             <Route path="/add_writing" element={<AddWriting />} />
+            <Route path="/add_writing/:novelId/:novelTitle" element={<AddWriting />} />
 
-            {/* <Route path="/search" element={<SearchPage />}> */}
-            {/* 검색 전 보여줄 예시 작품 */}
-            {/* <Route path="/" element={<BeforeSearch />} /> */}
-            {/* 검색 후 보여줄 작품 : 검색 필터 구분 - 최초 검색 시 제목 필터 디폴트 */}
-            {/* <Route path="/" element={<AfterSearch />} /> */}
-            {/* </Route> */}
+            <Route path="/search" element={<SearchPage />} />
+            <Route path="/search/novel" element={<SearchPage />} />
+            {/* 검색 전 예시 작품 보여주기 */}
 
             <Route path="/chat_list" element={<ChatList />} />
             {/* (X) chat_list/:userId  */}

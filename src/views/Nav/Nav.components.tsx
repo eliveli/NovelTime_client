@@ -16,7 +16,9 @@ import {
   logoMobile,
   logoPC,
 } from "assets/images";
+import Icon from "assets/Icon";
 import { sortWriting, filterContent, setLikeNovel } from "../../store/clientSlices/modalSlice";
+import { handleWritingSubmit } from "../../store/clientSlices/writingSlice";
 import { useAppSelector, useAppDispatch } from "../../store/hooks";
 
 import {
@@ -43,6 +45,10 @@ import {
   Logo,
   PageTitle,
   SubmitBtn,
+  RightSideContnr,
+  SearchIconBox,
+  LoginIconBox,
+  LoginText,
 } from "./Nav.styles";
 
 interface Props {
@@ -51,6 +57,8 @@ interface Props {
 
 export function NavPC({ pathname }: Props) {
   const theme = {};
+
+  const navigate = useNavigate();
 
   const isLogin = false;
 
@@ -84,8 +92,34 @@ export function NavPC({ pathname }: Props) {
           })}
         </NavContentPC>
 
-        {isLogin && <MyPageBtn to="/user_page/:userId">보관함</MyPageBtn>}
-        {!isLogin && <MyPageBtn to="">로그인</MyPageBtn>}
+        <RightSideContnr>
+          <SearchIconBox
+            onClick={() => {
+              navigate(`/search`);
+            }}
+          >
+            <Icon.Search />
+          </SearchIconBox>
+
+          {isLogin && (
+            <MyPageBtn
+              onClick={() => {
+                navigate(`/user_page/:userId`);
+              }}
+            >
+              보관함
+            </MyPageBtn>
+          )}
+          {!isLogin && (
+            <LoginText
+              onClick={() => {
+                navigate(``);
+              }}
+            >
+              로그인
+            </LoginText>
+          )}
+        </RightSideContnr>
       </NavContentBoxPC>
     </ThemeProvider>
   );
@@ -94,6 +128,7 @@ export function NavPC({ pathname }: Props) {
 // all below is only for Mobile, Tablet, not PC //
 export function NavMobileMainTop() {
   const theme = {};
+  const navigate = useNavigate();
 
   const isLogin = false;
 
@@ -108,8 +143,38 @@ export function NavMobileMainTop() {
           <Logo src={logoMobile} />
         </LogoContainer>
 
-        {isLogin && <MyPageBtn to="/user_page/:userId">보관함</MyPageBtn>}
-        {!isLogin && <MyPageBtn to="">로그인</MyPageBtn>}
+        <RightSideContnr>
+          <SearchIconBox
+            onClick={() => {
+              navigate(`/search`);
+            }}
+          >
+            <Icon.Search />
+          </SearchIconBox>
+          {isLogin && (
+            <MyPageBtn
+              onClick={() => {
+                navigate(`/user_page/:userId`);
+              }}
+            >
+              보관함
+            </MyPageBtn>
+          )}
+          {!isLogin && (
+            <LoginText
+              onClick={() => {
+                navigate(``);
+              }}
+            >
+              로그인
+            </LoginText>
+          )}
+          {!isLogin && (
+            <LoginIconBox>
+              <Icon.Login />
+            </LoginIconBox>
+          )}
+        </RightSideContnr>
       </NavContentBoxMobile>
     </ThemeProvider>
   );
@@ -119,7 +184,7 @@ export function NavMobileMainBottom({ pathname }: Props) {
 
   const dispatch = useAppDispatch();
 
-  const isLogin = false; // is necessary when clicking add writing button
+  const isLogin = false; // is necessary when clicking add-writing button
 
   return (
     <ThemeProvider theme={theme}>
@@ -222,7 +287,9 @@ export function NavMobileDetail({ parameter, pathname }: DetailProps) {
         {pathname.includes("talk_detail") && <PageTitle>여기는 프리톡!</PageTitle>}
         {pathname.includes("recommend_detail") && <PageTitle>여기는 리코멘드!</PageTitle>}
         {pathname.includes("add_writing") && <PageTitle>add writing</PageTitle>}
-        {parameter.novelId && <PageTitle>{novelTitle}</PageTitle>}
+        {!pathname.includes("add_writing") && parameter.novelId && (
+          <PageTitle>{novelTitle}</PageTitle>
+        )}
 
         <IconsBox isRight>
           {(pathname === `/novel_detail/${parameter.novelId}` ||
@@ -244,7 +311,10 @@ export function NavMobileDetail({ parameter, pathname }: DetailProps) {
               <ShareIcon />
             </ShareIconBox>
           )}
-          {pathname.includes("add_writing") && <SubmitBtn>작성</SubmitBtn>}
+          {/* submit writing */}
+          {pathname.includes("add_writing") && (
+            <SubmitBtn onClick={() => dispatch(handleWritingSubmit(true))}>작성</SubmitBtn>
+          )}
         </IconsBox>
       </NavContentBoxMobile>
     </ThemeProvider>

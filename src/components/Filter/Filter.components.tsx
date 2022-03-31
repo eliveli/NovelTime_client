@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
+import { useCloseOutsideClick } from "utils";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { openModal } from "../../store/clientSlices/modalSlice";
-
 import {
   SortMobileContainer,
   SortTabletContainer,
@@ -107,27 +107,10 @@ export function SortTablet({
     handleCategoryList(false);
   }, [isSearch]);
 
-  // close the sorting list when clicked outside it
+  // close the sorting list when clicking outside it
   const sortRef = useRef<HTMLUListElement>(null);
-  useEffect(() => {
-    const closeSortingList = (e: MouseEvent) => {
-      const clickedElement = e.currentTarget;
-      if (!isCategoryList) return;
-      if (
-        !(
-          clickedElement &&
-          clickedElement instanceof Node &&
-          sortRef.current?.contains(clickedElement)
-        )
-      ) {
-        handleCategoryList(false);
-      }
-    };
-    window.addEventListener("click", closeSortingList);
-    return () => {
-      window.removeEventListener("click", closeSortingList);
-    };
-  }, [isCategoryList]);
+  useCloseOutsideClick(sortRef, isCategoryList, handleCategoryList);
+
   // deps list is required. if it is empty, click event don't work...
   // maybe because in useEffect, state is read only once at first render, if deps list is empty
   // but it is mouse event, why didn't it work..?

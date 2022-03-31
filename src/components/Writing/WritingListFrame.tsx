@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { CategoryMark } from "components/CategoryMark";
 import { addWritingInPage } from "assets/images";
 import {
@@ -17,12 +18,13 @@ type Props = React.PropsWithChildren<{
   categoryText: string;
   novelId: string;
   writing: boolean;
-  novelTitle?: string;
+  novelTitle: string;
   fontSize?: number;
 }>;
 
 export default function WritingListFrame({
   novelId,
+  novelTitle,
   categoryText,
   isTalk,
   handleTalk,
@@ -31,6 +33,8 @@ export default function WritingListFrame({
   isShowAll,
   fontSize,
 }: Props) {
+  const navigate = useNavigate();
+
   return (
     <ColumnBG>
       <CategoryMark
@@ -40,7 +44,11 @@ export default function WritingListFrame({
         novelId={novelId}
         fontSize={fontSize}
       />
-      <AddWritingContainer>
+      <AddWritingContainer
+        onClick={() => {
+          navigate(`/add_writing/${novelId}/${novelTitle}`);
+        }}
+      >
         <AddWriting src={addWritingInPage} alt="addWriting" />
       </AddWritingContainer>
       <WritingTabContainer>

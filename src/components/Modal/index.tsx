@@ -25,11 +25,6 @@ export default function Modal() {
   } else {
     imgSrc = novelImage;
   }
-
-  // get writing name for ContentFilter Modal
-  const { pathname } = window.location;
-  const writing = pathname.includes("talk") ? "FreeTalk" : "Recommend";
-
   // get selected category text to mark in the list
   const { sortingText, filteringContent } = useAppSelector((state) => state.modal);
 
@@ -82,7 +77,7 @@ export default function Modal() {
             return (
               <SortMobileBG>
                 <SortBox>
-                  {["Novel", writing].map((_) => (
+                  {["Novel", "FreeTalk", "Recommend"].map((_) => (
                     <SortText
                       key={_}
                       selectedCategory={filteringContent}

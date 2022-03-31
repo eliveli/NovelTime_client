@@ -97,7 +97,8 @@ export const NavContentBoxMobile = styled.nav<{ isMainBottom?: true }>`
 
 export const CatWalkingContainer = styled.div`
   @media screen and (max-width: 1023px) {
-    width: 100%;
+    width: 30%;
+    padding-right: 32px;
   }
   display: flex;
   overflow: hidden;
@@ -106,7 +107,8 @@ export const CatWalkingContainer = styled.div`
   ${document.body.offsetWidth > 512 && "justify-content: flex-start;"}
 `;
 export const CatWalking = styled.img`
-  height: 150px;
+  /* height: 150px; */
+  height: 135px;
 `;
 // export const Logo = styled.div`
 //   @media screen and (max-width: 1023px) {
@@ -118,21 +120,29 @@ export const CatWalking = styled.img`
 export const PageTitle = styled.span``;
 export const LogoContainer = styled.div`
   @media screen and (max-width: 1023px) {
-    width: 100%;
+    width: 40%;
     display: flex;
     justify-content: center;
+
+    margin-right: 0;
+    /* margin-right: -15px; */
   }
 `;
 export const Logo = styled.img`
   height: 205px;
 
-  padding-top: 17px;
-  padding-bottom: 8px;
+  /* padding-top: 17px; */
+  /* padding-bottom: 8px; */
   margin-left: -30px;
+
+  padding-top: 8px;
+  padding-bottom: 10px;
   @media screen and (max-width: 1023px) {
     padding-top: 11px;
     padding-bottom: 8px;
     margin-left: 0;
+
+    height: 200px;
   }
 `;
 export const NavContentPC = styled.div`
@@ -181,20 +191,70 @@ export const NavText = styled.span<{ isActive: boolean }>`
   ${({ isActive }) => isActive && `color:${theme.color.main};`}
 `;
 
-export const MyPageBtn = styled(Link)`
+export const MyPageBtn = styled.button`
   text-decoration: none;
   color: black;
 
-  @media screen and (max-width: 1023px) {
-    width: 100%;
-    display: flex;
-    justify-content: flex-end;
+  padding: 3px 6px;
+  /* padding: 7px 10px; */
+  white-space: nowrap;
+  font-size: 15px;
+  font-weight: 600;
+
+  margin-left: 5px;
+
+  border-radius: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  background-color: white;
+  color: rgba(0, 0, 0, 0.6);
+
+  @media screen and (min-width: 768px) {
+    padding: 6px 8px;
   }
+
   ${theme.media.hover(
     `cursor: pointer;
     opacity: 0.7;
     color: rgba(100, 100, 100, 0.8);`,
   )}
+`;
+export const LoginText = styled.button`
+  text-decoration: none;
+  color: black;
+
+  margin-left: 8px;
+
+  /* padding: 7px 10px; */
+  padding: 6px 8px;
+
+  font-size: 15px;
+  font-weight: 600;
+
+  border-radius: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  background-color: white;
+  color: rgba(0, 0, 0, 0.6);
+
+  ${theme.media.hover(
+    `cursor: pointer;
+    opacity: 0.7;
+    color: rgba(100, 100, 100, 0.8);`,
+  )}
+  @media screen and (max-width: 767px) {
+    display: none;
+  }
+`;
+export const LoginIconBox = styled(Icon.IconBox)`
+  min-width: 27px;
+  max-width: 27px;
+  min-height: 27px;
+  max-height: 27px;
+
+  margin-left: 7px;
+
+  @media screen and (min-width: 768px) {
+    display: none;
+  }
 `;
 export const LeftIcon = styled(Icon.BigLeft)`
   width: 100%;
@@ -309,4 +369,20 @@ export const SubmitBtn = styled.button`
   border: 1px solid rgba(0, 0, 0, 0.2);
   background-color: white;
   color: rgba(0, 0, 0, 0.6);
+`;
+export const RightSideContnr = styled.div`
+  display: flex;
+  align-items: center;
+
+  @media screen and (max-width: 1023px) {
+    width: 30%;
+    display: flex;
+    justify-content: flex-end;
+  }
+`;
+export const SearchIconBox = styled(Icon.IconBox)`
+  min-width: 27px;
+  max-width: 27px;
+  min-height: 27px;
+  max-height: 27px;
 `;

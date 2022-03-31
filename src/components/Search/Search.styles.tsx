@@ -38,7 +38,7 @@ export const SearchCategorySelected = styled.p`
 
   border-right: 1px solid rgba(0, 0, 0, 0.1);
 `;
-export const SearchCategoryAll = styled.ul`
+export const SearchCategoryAll = styled.ul<{ isSearchPage?: true }>`
   width: 100%;
   display: flex;
   margin: 0;
@@ -47,10 +47,12 @@ export const SearchCategoryAll = styled.ul`
 
   flex-direction: column;
   padding-left: 0;
-  height: 72px;
   border-radius: 11px;
   border: 1px solid rgba(0, 0, 0, 0.2);
   background-color: white;
+  height: 72px;
+
+  ${({ isSearchPage }) => isSearchPage && "height: 108px;"}
 
   border-top-width: 0px;
 

@@ -12,6 +12,7 @@ import {
   BiChevronLeft,
   BiChevronDown,
   BiChevronUp,
+  BiUser,
 } from "react-icons/bi";
 import { GrClose } from "react-icons/gr";
 import { BsJournalRichtext, BsEmojiSunglasses } from "react-icons/bs";
@@ -25,6 +26,7 @@ import {
 import { RiRunLine } from "react-icons/ri";
 import { MdOutlineShare } from "react-icons/md";
 import { IoIosSearch } from "react-icons/io";
+import { AiOutlineUser } from "react-icons/ai";
 import theme, { styled } from "./styles/theme";
 
 const IconBox = styled.div<{
@@ -77,6 +79,9 @@ const Icon = {
     ${iconStyleHover()};
   `,
   Close: styled(GrClose)`
+    ${iconStyle()};
+  `,
+  Login: styled(AiOutlineUser)`
     ${iconStyle()};
   `,
   Text: styled(BsJournalRichtext)`
