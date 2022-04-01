@@ -96,6 +96,7 @@ function App() {
 
             <Route path="/search" element={<SearchPage />} />
             <Route path="/search/novel" element={<SearchPage />} />
+            <Route path="/search/novel/iframe" element={<SearchPage />} />
             {/* 검색 전 예시 작품 보여주기 */}
 
             <Route path="/chat_list" element={<ChatList />} />

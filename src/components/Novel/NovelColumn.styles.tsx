@@ -1,9 +1,9 @@
 // /* eslint-disable */
 
 import { styled } from "assets/styles/theme";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 
-export const NovelLink = styled(Link)`
+export const NovelLink = styled.div`
   display: flex;
   width: 100%;
 
@@ -13,8 +13,8 @@ export const NovelLink = styled(Link)`
     border-bottom: 0;
   }
 
-  text-decoration: none;
-  color: black;
+  /* text-decoration: none; */
+  /* color: black; */
 
   @media (hover: hover) {
     &:hover {

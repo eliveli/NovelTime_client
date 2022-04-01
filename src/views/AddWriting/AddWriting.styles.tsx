@@ -17,6 +17,10 @@ export const NovelTitle = styled.button`
   color: ${theme.color.main};
   border: 1px solid ${theme.color.mainLight};
 `;
+export const Iframe = styled.iframe`
+  width: 100%;
+  height: 500px;
+`;
 export const BoardContainer = styled.div`
   margin: 0;
   border-bottom: 1px solid rgba(100, 100, 100, 0.1);

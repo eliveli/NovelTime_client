@@ -19,6 +19,7 @@ import {
   WritingTitleContanr,
   SubmitBtnPC,
   SubmitBtnContnr,
+  Iframe,
 } from "./AddWriting.styles";
 
 export default function AddWriting() {
@@ -73,16 +74,50 @@ export default function AddWriting() {
   type Board = "FreeTalk" | "Recommend";
   const [board, setBoard] = useState("FreeTalk");
   // ----------------------------------------------------//
+
+  // search novel : when entering this page with clicking add-writing -----//
+
+  const iframeRef = useRef<HTMLIFrameElement>(null);
+  const [iframeUrl, getIframeUrl] = useState(""); // get novelUrl from iframe of novel platform
+  const [isSrchNovel, handleSrchNovel] = useState(true); // show or not iframe of search
+
+  // get novel info from iframe // Called sometime after postMessage is called
+  window.addEventListener(
+    "message",
+    (event) => {
+      if (event.origin !== "http://localhost:3000") {
+        return;
+      }
+
+      if (iframeRef.current && (event.data.novelId as string)) {
+        console.log("outside iframe: ", event.data);
+        setNovel({ novelId: event.data.novelId, novelTitle: event.data.novelTitle });
+        handleSrchNovel(false); // close iframe element
+        // iframeRef.current.style.display = "none"; // don't show iframe element
+      }
+    },
+    false,
+  );
   return (
     <SectionBG>
       <NovelTitleContainer>
         <NovelTitle>{novel.novelTitle ? novel.novelTitle : "소설제목"}</NovelTitle>
         {!novelTitle && (
           <Icon.IconBox>
-            <Icon.Search />
+            <Icon.Search onClick={() => handleSrchNovel(!isSrchNovel)} />
           </Icon.IconBox>
         )}
       </NovelTitleContainer>
+      <div>{iframeUrl}</div>
+      <span
+        onClick={() => {
+          getIframeUrl(iframeRef.current?.src as string);
+        }}
+      >
+        get iframe url
+      </span>
+      {isSrchNovel && <Iframe ref={iframeRef} src="/search/novel/iframe" />}
+
       <BoardContainer>
         <Board category="FreeTalk" selected={board as Board} onClick={() => setBoard("FreeTalk")}>
           FreeTalk

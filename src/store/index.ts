@@ -15,7 +15,10 @@ const store = configureStore({
     writing: writingReducer,
     filter: filterReducer,
   },
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(novelTimeApi.middleware),
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }).concat(novelTimeApi.middleware),
 });
 
 // optional, but required for refetchOnFocus/refetchOnReconnect behaviors
