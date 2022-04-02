@@ -1,6 +1,5 @@
 import { ThemeProvider } from "styled-components";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
 import {
   freeTalk,
   freeTalkActive,
@@ -85,7 +84,7 @@ export function NavPC({ pathname }: Props) {
               isPath = pathname.includes(_[1]);
             }
             return (
-              <NavContent key={_[0]} to={_[1]} isCurrentPath={isPath}>
+              <NavContent key={_[0]} onClick={() => navigate(_[1])} isCurrentPath={isPath}>
                 {_[0]}
               </NavContent>
             );
@@ -184,6 +183,8 @@ export function NavMobileMainBottom({ pathname }: Props) {
 
   const dispatch = useAppDispatch();
 
+  const navigate = useNavigate();
+
   const isLogin = false; // is necessary when clicking add-writing button
 
   return (
@@ -200,8 +201,8 @@ export function NavMobileMainBottom({ pathname }: Props) {
         ].map((_) => (
           <NavContent
             key={_[0]}
-            to={_[1]} // it means <Link to="">
             onClick={() => {
+              navigate(_[1]);
               dispatch(sortWriting("작성일New")); // reset category for sorting writings
               dispatch(filterContent("Novel")); // reset category for filtering content
             }}
@@ -263,9 +264,16 @@ export function NavMobileDetail({ parameter, pathname }: DetailProps) {
       {/* top place */}
       <NavContentBoxMobile>
         <IconsBox isLeft>
-          <LeftIconBox onClick={() => navigate(-1)}>
-            <LeftIcon />
-          </LeftIconBox>
+          {!pathname.includes("add_writing") && (
+            <LeftIconBox onClick={() => navigate(-1)}>
+              <LeftIcon />
+            </LeftIconBox>
+          )}
+          {pathname.includes("add_writing") && (
+            <LeftIconBox onClick={() => navigate("/")}>
+              <Icon.CloseWriting />
+            </LeftIconBox>
+          )}
           {/* from novelDetail to ... : show Home Icon */}
           {parameter.novelId && (
             <HomeIconBox
@@ -292,7 +300,7 @@ export function NavMobileDetail({ parameter, pathname }: DetailProps) {
         )}
 
         <IconsBox isRight>
-          {(pathname === `/novel_detail/${parameter.novelId}` ||
+          {(pathname === `/novel_detail/${parameter.novelId as string}` ||
             parameter.recommendId ||
             parameter.talkId) && (
             <HeartIconBox

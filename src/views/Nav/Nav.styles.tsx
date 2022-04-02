@@ -153,7 +153,7 @@ export const NavContentPC = styled.div`
   height: 100%;
   /* margin: 0; */
 `;
-export const NavContent = styled(Link)<{ isCurrentPath?: boolean }>`
+export const NavContent = styled.span<{ isCurrentPath?: boolean }>`
   width: 100%;
   /* text-align: center; */
   display: inline-flex;

@@ -24,9 +24,10 @@ import {
   HiOutlineHome,
 } from "react-icons/hi";
 import { RiRunLine } from "react-icons/ri";
-import { MdOutlineShare } from "react-icons/md";
-import { IoIosSearch } from "react-icons/io";
+import { MdOutlineShare, MdOutlineMoreHoriz } from "react-icons/md";
+import { IoIosSearch, IoMdClose } from "react-icons/io";
 import { AiOutlineUser } from "react-icons/ai";
+
 import theme, { styled } from "./styles/theme";
 
 const IconBox = styled.div<{
@@ -81,6 +82,9 @@ const Icon = {
   Close: styled(GrClose)`
     ${iconStyle()};
   `,
+  CloseWriting: styled(IoMdClose)`
+    ${iconStyleHover()};
+  `,
   Login: styled(AiOutlineUser)`
     ${iconStyle()};
   `,
@@ -130,6 +134,9 @@ const Icon = {
     ${iconStyleHover()};
   `,
   Search: styled(IoIosSearch)`
+    ${iconStyleHover()};
+  `,
+  More: styled(MdOutlineMoreHoriz)`
     ${iconStyleHover()};
   `,
 };

@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import SectionBG from "components/SectionBG";
 import { NovelColumn, NovelColumnDetail, NovelRow } from "../../components/Novel";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { GoToBtn, GoToText } from "./SearchPage.styles";
 
 import Search from "../../components/Search";
 
@@ -50,13 +51,21 @@ export default function SearchPage() {
     novelIsEnd: "완결",
   };
   const novels = [novelInfo, novelInfo2];
+
+  // when this is iframe
+  const isIframe = window.location.pathname.includes("iframe");
+  //  pass novel info to parent
+  const goToPlatform = () => {
+    window.parent.postMessage({ sign: "goToPlatform" }, "*");
+  };
   return (
     <SectionBG>
       <Search />
       {/* at all-search page: novel, writing */}
       {/* at novel-search page: novel */}
       {/* if there is no novel for search-keyword */}
-      찾으시는 소설이 없나요? 소설 플랫폼에서 찾아올 수 있어요! (찾으러가기 클릭 - 페이지이동)
+      <GoToText>찾으시는 소설이 없나요? 소설 플랫폼에서 찾아보세요!</GoToText>
+      <GoToBtn onClick={goToPlatform}>찾으러가기</GoToBtn>
       {/* before search, show some examples for novel */}
       {novels.map((novel) => (
         <NovelColumn key={novel.novelId} novel={novel} />
