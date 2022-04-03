@@ -67,11 +67,12 @@ export function SearchBtn({
     </SearchIconBox>
   );
 }
-export function SortMobile({ borderOpacity }: { borderOpacity?: number | undefined }) {
+export function SortMobile({ borderOpacity }: { borderOpacity?: number }) {
   const dispatch = useAppDispatch();
   const { sortingText } = useAppSelector((state) => state.modal);
   // when clicking, in Modal component,
   // require server request in this component!
+  console.log("in sort only");
 
   return (
     <SortMobileContainer>
@@ -79,6 +80,7 @@ export function SortMobile({ borderOpacity }: { borderOpacity?: number | undefin
         borderOpacity={borderOpacity}
         onClick={() => {
           dispatch(openModal("sortWriting"));
+          console.log("clicked in sort only");
         }}
       >
         <SortCategorySelected>{sortingText}</SortCategorySelected>

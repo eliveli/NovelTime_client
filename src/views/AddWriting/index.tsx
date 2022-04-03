@@ -266,7 +266,8 @@ export default function AddWriting() {
       {!novelId && isIframeSrch && <Iframe ref={iframeRef} src="/search/novel/iframe" />}
 
       {/* show this after setting false of isIframeSrch */}
-      {!isIframeSrch && (
+      {/* or when entering here from novel detail page */}
+      {(!isIframeSrch || novelTitle) && (
         <>
           <BoardContainer>
             <Board

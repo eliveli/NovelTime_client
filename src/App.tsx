@@ -5,8 +5,8 @@ import { BrowserRouter as Router, Routes, Route, Outlet } from "react-router-dom
 import {
   NovelDetailRecommend,
   NovelDetailTalk,
-  ChatList,
-  ChatRoom,
+  MessageList,
+  MessageRoom,
   FreeTalkDetail,
   FreeTalkList,
   NovelDetail,
@@ -47,7 +47,7 @@ function App() {
       <ThemeProvider theme={theme}>
         <Modal />
         <Routes>
-          {["/", "/talk_list", "/recommend_list", "/novel_list"].map((path) => (
+          {["/", "/talk_list", "/recommend_list", "/novel_list", "/message_list"].map((path) => (
             <Route path={path} element={<MainListNav />} />
           ))}
           {[
@@ -63,6 +63,8 @@ function App() {
             "/add_writing/:novelId/:novelTitle",
             "/search",
             "/search/novel",
+            "/message_room/:roomId",
+            "/user_page/:userId",
           ].map((path) => (
             <Route path={path} element={<DetailNav />} />
           ))}
@@ -99,12 +101,12 @@ function App() {
             <Route path="/search/novel/iframe" element={<SearchPage />} />
             {/* 검색 전 예시 작품 보여주기 */}
 
-            <Route path="/chat_list" element={<ChatList />} />
-            {/* (X) chat_list/:userId  */}
+            <Route path="/message_list" element={<MessageList />} />
+            {/* (X) message_list/:userId  */}
             {/* userId는 주소창에 넣지 말자 */}
             {/* 클라이언트 스토어 등에 저장하자 */}
             {/* 그럼 새로고침 해도 로그인 유지되니 유저정보 알 수 있던가 */}
-            <Route path="/chat_room/:roomId" element={<ChatRoom />} />
+            <Route path="/message_room/:roomId" element={<MessageRoom />} />
 
             <Route path="/user_page/:userId" element={<UserPage />} />
 

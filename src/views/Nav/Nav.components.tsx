@@ -1,5 +1,5 @@
 import { ThemeProvider } from "styled-components";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   freeTalk,
   freeTalkActive,
@@ -48,6 +48,8 @@ import {
   SearchIconBox,
   LoginIconBox,
   LoginText,
+  UserImg,
+  UserName,
 } from "./Nav.styles";
 
 interface Props {
@@ -73,7 +75,7 @@ export function NavPC({ pathname }: Props) {
             ["FreeTalk", "/talk_list"],
             ["Recommend", "/recommend_list"],
             ["Novel", "/novel_list"],
-            ["Chat", "/chat_list"],
+            ["Message", "/message_list"],
           ].map((_, idx) => {
             // when path is from novel detail to anywhere, mark Novel in the NavBar
             // but for other path, path is the same name in the Nav
@@ -197,7 +199,7 @@ export function NavMobileMainBottom({ pathname }: Props) {
           ["Recommend", "/recommend_list", recommend, recommendActive],
           ["AddWriting", "/add_writing", addWriting, addWritingActive], // 추후 라우팅 필요
           ["Novel", "/novel_list", novel, novelActive],
-          ["Chat", "/chat_list", chat, chatActive],
+          ["Message", "/message_list", chat, chatActive],
         ].map((_) => (
           <NavContent
             key={_[0]}
@@ -238,11 +240,11 @@ interface DetailProps {
 export function NavMobileDetail({ parameter, pathname }: DetailProps) {
   // one nav component: top
 
-  const dispatch = useAppDispatch();
-
-  const { novelTitle } = useAppSelector((state) => state.modal);
-
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const { novelTitle } = useAppSelector((state) => state.modal);
+  const { otherUser } = useAppSelector((state) => state.message);
+  const { novelId } = useParams(); // when entering add-writing page from novel detail page
 
   //   const dispatch = useAppDispatch();
   //   const { novelLike } = useAppSelector((state) => state.modal);
@@ -264,12 +266,13 @@ export function NavMobileDetail({ parameter, pathname }: DetailProps) {
       {/* top place */}
       <NavContentBoxMobile>
         <IconsBox isLeft>
-          {!pathname.includes("add_writing") && (
+          {!(pathname.includes("add_writing") && !novelId) && (
             <LeftIconBox onClick={() => navigate(-1)}>
               <LeftIcon />
             </LeftIconBox>
           )}
-          {pathname.includes("add_writing") && (
+          {/* at add-writing page without novelId from useParams */}
+          {pathname.includes("add_writing") && !novelId && (
             <LeftIconBox onClick={() => navigate("/")}>
               <Icon.CloseWriting />
             </LeftIconBox>
@@ -297,6 +300,12 @@ export function NavMobileDetail({ parameter, pathname }: DetailProps) {
         {pathname.includes("add_writing") && <PageTitle>add writing</PageTitle>}
         {!pathname.includes("add_writing") && parameter.novelId && (
           <PageTitle>{novelTitle}</PageTitle>
+        )}
+        {pathname.includes("message") && (
+          <PageTitle>
+            <UserImg userImg={otherUser.userImg} />
+            <UserName>{otherUser.userName}</UserName>
+          </PageTitle>
         )}
 
         <IconsBox isRight>

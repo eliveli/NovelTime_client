@@ -117,7 +117,10 @@ export const CatWalking = styled.img`
 //     justify-content: center;
 //   }
 // `;
-export const PageTitle = styled.span``;
+export const PageTitle = styled.div`
+  display: flex;
+  align-items: center;
+`;
 export const LogoContainer = styled.div`
   @media screen and (max-width: 1023px) {
     width: 40%;
@@ -385,4 +388,18 @@ export const SearchIconBox = styled(Icon.IconBox)`
   max-width: 27px;
   min-height: 27px;
   max-height: 27px;
+`;
+export const UserImg = styled.div<{ userImg: string }>`
+  border-radius: 50%;
+  min-width: 35px;
+  height: 35px;
+  background-image: url(${({ userImg }) =>
+    userImg || "https://cdn.pixabay.com/photo/2017/02/01/09/52/animal-2029245_960_720.png"});
+
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+`;
+export const UserName = styled.span`
+  padding-left: 12px;
 `;

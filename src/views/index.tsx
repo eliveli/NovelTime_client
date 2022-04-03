@@ -1,5 +1,5 @@
-import ChatRoom from "./ChatRoom";
-import ChatList from "./ChatList";
+import MessageRoom from "./MessageRoom";
+import MessageList from "./MessageList";
 import FreeTalkList from "./FreeTalkList";
 import FreeTalkDetail from "./FreeTalkDetail";
 import NovelDetail from "./NovelDetail";
@@ -22,8 +22,8 @@ import AddWriting from "./AddWriting";
 export {
   NovelDetailTalk,
   NovelDetailRecommend,
-  ChatRoom,
-  ChatList,
+  MessageRoom,
+  MessageList,
   WritingList,
   RecommendDetail,
   RecommendList,

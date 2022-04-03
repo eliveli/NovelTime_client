@@ -25,7 +25,7 @@ export const SectionBG = styled.main<{ isWritingDetail?: true }>`
 
   @media screen and (max-width: 1023px) {
     // 데스크탑 제외, 메인리스트 페이지에서 하단 내비게이션 만큼 margin-bottom 설정
-    ${["/talk_list", "/recommend_list", "/novel_list", "/chat_list"].includes(pathname) &&
+    ${["/talk_list", "/recommend_list", "/novel_list", "/message_list"].includes(pathname) &&
     "margin-bottom: 50px;"}
   }
   /* PC - 모바일,태블릿과 뷰를 다르게 구성 */
