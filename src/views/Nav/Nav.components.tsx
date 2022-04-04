@@ -264,7 +264,7 @@ export function NavMobileDetail({ parameter, pathname }: DetailProps) {
   return (
     <ThemeProvider theme={theme}>
       {/* top place */}
-      <NavContentBoxMobile>
+      <NavContentBoxMobile isDetail>
         <IconsBox isLeft>
           {!(pathname.includes("add_writing") && !novelId) && (
             <LeftIconBox onClick={() => navigate(-1)}>
@@ -290,23 +290,29 @@ export function NavMobileDetail({ parameter, pathname }: DetailProps) {
             </HomeIconBox>
           )}
         </IconsBox>
-        {/* what page title is :
-            1.메인리스트->게시글 이동 : 프리톡/리코멘드 게시판 이름
-            2.노블디테일-> ...: 노블 타이틀
-            3.노블메인리스트 전체보기 페이지 : 페이지타이틀 없음(일단은)
-        */}
-        {pathname.includes("talk_detail") && <PageTitle>여기는 프리톡!</PageTitle>}
-        {pathname.includes("recommend_detail") && <PageTitle>여기는 리코멘드!</PageTitle>}
-        {pathname.includes("add_writing") && <PageTitle>add writing</PageTitle>}
-        {!pathname.includes("add_writing") && parameter.novelId && (
-          <PageTitle>{novelTitle}</PageTitle>
-        )}
-        {pathname.includes("message") && (
-          <PageTitle>
-            <UserImg userImg={otherUser.userImg} />
-            <UserName>{otherUser.userName}</UserName>
-          </PageTitle>
-        )}
+        {/* what page title is */}
+        {[
+          ["talk_detail", "여기는 프리톡!"],
+          ["recommend_detail", "여기는 리코멘드!"],
+          ["add_writing", "add writing"],
+          ["message", otherUser.userImg, otherUser.userName],
+        ].map((_, idx) => {
+          if (idx === 2 && !pathname.includes(_[0]) && parameter.novelId) {
+            return <PageTitle>{novelTitle}</PageTitle>;
+          }
+          if (idx === 2 && pathname.includes(_[0])) {
+            return <PageTitle>{_[1]}</PageTitle>;
+          }
+          if (idx === 3 && pathname.includes(_[0])) {
+            return (
+              <PageTitle>
+                <UserImg userImg={_[1]} />
+                <UserName>{_[2]}</UserName>
+              </PageTitle>
+            );
+          }
+          if (pathname.includes(_[0])) return <PageTitle>{_[1]}</PageTitle>;
+        })}
 
         <IconsBox isRight>
           {(pathname === `/novel_detail/${parameter.novelId as string}` ||

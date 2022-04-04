@@ -59,7 +59,7 @@ export const NavContentBoxPC = styled.nav`
 `;
 // 층별 내비게이션에 배경 입히려면 추가 컴포넌트 필요
 // 아래는 컨텐트 정렬용(화면 중앙 또는 전체(모바일,태블릿))
-export const NavContentBoxMobile = styled.nav<{ isMainBottom?: true }>`
+export const NavContentBoxMobile = styled.nav<{ isMainBottom?: true; isDetail?: true }>`
   @media screen and (min-width: 1024px) {
     display: none;
   }
@@ -68,7 +68,9 @@ export const NavContentBoxMobile = styled.nav<{ isMainBottom?: true }>`
   max-width: 860px;
   margin: auto;
   height: 70px;
-  /* height: 50px;/ */
+
+  ${({ isDetail }) => isDetail && `height: 50px;`}
+
   padding: 0 16px;
   ${theme.media.tablet(`
     padding: 0 20px; 
@@ -359,19 +361,23 @@ export const HomeIconBox = styled.div`
 export const IconsBox = styled.div<{ isLeft?: true; isRight?: true }>`
   display: flex;
 
-  ${({ isLeft }) => isLeft && `margin-left: -6px;`}
-  ${({ isRight }) => isRight && `margin-right: -3px;`}
+  ${({ isLeft }) => isLeft && `margin-left: -6px; margin-top: -1px;`}
+  ${({ isRight }) => isRight && `margin-right: -3px; margin-top: -2px;`}
 `;
 export const SubmitBtn = styled.button`
   padding: 7px 10px;
   font-size: 16px;
   font-weight: 600;
-  margin-right: 1px;
+  /* margin-right: 1px; */
 
   border-radius: 10px;
   border: 1px solid rgba(0, 0, 0, 0.2);
   background-color: white;
   color: rgba(0, 0, 0, 0.6);
+
+  /* reset margin - from parent container of IconBox as isRight- */
+  margin-right: 3px;
+  margin-top: 2px;
 `;
 export const RightSideContnr = styled.div`
   display: flex;
