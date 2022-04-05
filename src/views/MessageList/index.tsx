@@ -1,12 +1,14 @@
 import SectionBG from "components/SectionBG";
+import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import { useComponentWidth } from "utils";
 import {
   CreateDate,
   UserImg,
   UserName,
   MessageContainer,
   UserNameBox,
-  MessageDesc,
+  MessageContent,
   NextToImgContainer,
   FirstLineInfoContnr,
   UnreadTalkNoContnr,
@@ -28,10 +30,15 @@ function Message({ message }: MessageProps) {
   const { roomId, otherUserImg, otherUserName, recentTalkContent, recentTalkTime, unreadTalkNO } =
     message;
   const navigate = useNavigate();
+
+  // configure ellipsis of contentWidth
+  const contentWidthRef = useRef<HTMLDivElement>(null);
+  const contentWidth = useComponentWidth(contentWidthRef);
+
   return (
     <MessageContainer onClick={() => navigate(`/message_room/${roomId}`)}>
       <UserImg userImg={otherUserImg} />
-      <NextToImgContainer>
+      <NextToImgContainer ref={contentWidthRef}>
         <FirstLineInfoContnr>
           <UserNameBox>
             <UserName>{otherUserName}</UserName>
@@ -41,7 +48,7 @@ function Message({ message }: MessageProps) {
             <UnreadTalkNO>{unreadTalkNO}</UnreadTalkNO>
           </UnreadTalkNoContnr>
         </FirstLineInfoContnr>
-        <MessageDesc>{recentTalkContent}</MessageDesc>
+        <MessageContent contentWidth={contentWidth}>{recentTalkContent}</MessageContent>
       </NextToImgContainer>
     </MessageContainer>
   );

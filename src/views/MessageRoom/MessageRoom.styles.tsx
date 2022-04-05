@@ -14,8 +14,9 @@ export const MessageContainer = styled.div<{ isMe?: true }>`
 `;
 export const MessageContentContnr = styled.div<{ isMe?: true }>`
   display: flex;
-  align-items: flex-end;
-  ${({ isMe }) => (isMe ? "" : `margin-left: 12px;`)}
+  flex-direction: column;
+  gap: 4px;
+  ${({ isMe }) => (isMe ? ` align-items: flex-end;` : ` align-items: flex-start;`)}
 `;
 export const UserImg = styled.div<{ userImg: string }>`
   border-radius: 50%;
@@ -27,6 +28,8 @@ export const UserImg = styled.div<{ userImg: string }>`
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
+
+  margin-right: 6px;
 `;
 
 export const MessageDesc = styled.div<{ isMe?: true }>`
@@ -51,12 +54,13 @@ export const MessageDesc = styled.div<{ isMe?: true }>`
       font-weight: 600;
       `}
 `;
-export const CreateDate = styled.span`
+export const CreateDate = styled.span<{ isMe?: true }>`
   color: rgba(0, 0, 0, 0.5);
   font-size: 14px;
   font-weight: 600;
-  padding-left: 8px;
   white-space: nowrap;
+
+  ${({ isMe }) => (isMe ? `padding-right: 11px;` : `padding-left: 11px;`)}
 `;
 export const MarkContnr = styled.div`
   display: flex;

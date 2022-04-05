@@ -18,8 +18,8 @@ export const NextToImgContainer = styled.div`
 
 export const UserImg = styled.div<{ userImg: string }>`
   border-radius: 50%;
-  min-width: 50px;
-  height: 50px;
+  min-width: 45px;
+  height: 45px;
   background-image: url(${({ userImg }) =>
     userImg || "https://cdn.pixabay.com/photo/2017/02/01/09/52/animal-2029245_960_720.png"});
 
@@ -46,6 +46,7 @@ export const UserNameBox = styled.div`
 
 export const UserName = styled.p`
   margin: 0;
+  font-size: 15px;
 `;
 export const CreateDate = styled.span`
   color: rgba(0, 0, 0, 0.5);
@@ -90,6 +91,15 @@ export const MessageTitle = styled.h3`
   margin: 0;
   font-weight: 600;
 `;
-export const MessageDesc = styled.p`
+export const MessageContent = styled.p<{ contentWidth: number }>`
   margin: 0;
+  color: rgba(0, 0, 0, 0.7);
+  font-size: 15px;
+
+  // 1줄 엘립시스 ...
+  display: inline-block;
+  width: ${({ contentWidth }) => contentWidth}px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;

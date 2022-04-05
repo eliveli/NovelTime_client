@@ -109,7 +109,7 @@ export const WriteCommentContainer = styled.div<{ isReComment?: true; isFixedCom
   display: flex;
   align-items: center;
   border-radius: 20px;
-  border: 1px solid lightgray;
+  border: 1px solid rgba(0, 0, 0, 0.1);
   margin-top: 10px;
 
   /* padding: 14px 20px; */
