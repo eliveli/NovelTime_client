@@ -107,28 +107,28 @@ const messageRecord = {
       userName: "a",
       talkContent: "hello my name is...",
       talkTime: "22.03.04.12:22",
+      lastWatch: false,
+    },
+    {
+      userImg: "",
+      userName: "a",
+      talkContent: "hello my name is...",
+      talkTime: "22.03.04.12:22",
+      lastWatch: false,
+    },
+    {
+      userImg: "",
+      userName: "a",
+      talkContent: "hello my name is...",
+      talkTime: "22.03.04.12:22",
+      lastWatch: false,
+    },
+    {
+      userImg: "",
+      userName: "a",
+      talkContent: "hello my name is...",
+      talkTime: "22.03.04.12:22",
       lastWatch: true,
-    },
-    {
-      userImg: "",
-      userName: "a",
-      talkContent: "hello my name is...",
-      talkTime: "22.03.04.12:22",
-      lastWatch: false,
-    },
-    {
-      userImg: "",
-      userName: "a",
-      talkContent: "hello my name is...",
-      talkTime: "22.03.04.12:22",
-      lastWatch: false,
-    },
-    {
-      userImg: "",
-      userName: "a",
-      talkContent: "hello my name is...",
-      talkTime: "22.03.04.12:22",
-      lastWatch: false,
     },
     {
       userImg: "",
@@ -139,7 +139,7 @@ const messageRecord = {
     },
   ],
 };
-
+type DateRecord = { date: string; isNewDate: boolean };
 interface MessageProps {
   message: {
     userImg: string;
@@ -149,7 +149,7 @@ interface MessageProps {
     lastWatch: boolean;
   };
   lastMessage: boolean;
-  dateRecord: { date: string; isNewDate: boolean };
+  dateRecord: DateRecord;
 }
 interface ReceiveMessageProps {
   message: {
@@ -160,14 +160,14 @@ interface ReceiveMessageProps {
     lastWatch: boolean;
   };
   lastMessage: boolean;
-  dateRecord: { date: string; isNewDate: boolean };
+  dateRecord: DateRecord;
 }
 interface SendMessageProps {
   content: string;
   time: string;
   lastWatch: boolean;
   lastMessage: boolean;
-  dateRecord: { date: string; isNewDate: boolean };
+  dateRecord: DateRecord;
 }
 
 function ReceiveMessage({ lastMessage, message, dateRecord }: ReceiveMessageProps) {
@@ -192,7 +192,7 @@ function ReceiveMessage({ lastMessage, message, dateRecord }: ReceiveMessageProp
           <CreateDate>{message.talkTime}</CreateDate>
         </MessageContentContnr>
       </MessageContainer>
-      {message.lastWatch && (
+      {message.lastWatch && !lastMessage && (
         <LastWatchContnr ref={LastWatchRef}>
           <MarkContnr>
             <LastWatchMark>마지막으로 읽은 메시지입니다</LastWatchMark>
@@ -224,7 +224,7 @@ function SendMessage({ lastMessage, lastWatch, content, time, dateRecord }: Send
           <CreateDate>{time}</CreateDate>
         </MessageContentContnr>
       </MessageContainer>
-      {lastWatch && (
+      {lastWatch && !lastMessage && (
         <LastWatchContnr ref={LastWatchRef}>
           <MarkContnr>
             <LastWatchMark>마지막으로 읽은 메시지입니다</LastWatchMark>
