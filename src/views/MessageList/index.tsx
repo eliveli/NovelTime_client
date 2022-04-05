@@ -8,6 +8,9 @@ import {
   UserNameBox,
   MessageDesc,
   NextToImgContainer,
+  FirstLineInfoContnr,
+  UnreadTalkNoContnr,
+  UnreadTalkNO,
 } from "./MessageList.styles";
 
 interface MessageProps {
@@ -29,10 +32,15 @@ function Message({ message }: MessageProps) {
     <MessageContainer onClick={() => navigate(`/message_room/${roomId}`)}>
       <UserImg userImg={otherUserImg} />
       <NextToImgContainer>
-        <UserNameBox>
-          <UserName>{otherUserName}</UserName>
-          <CreateDate>{recentTalkTime}</CreateDate>
-        </UserNameBox>
+        <FirstLineInfoContnr>
+          <UserNameBox>
+            <UserName>{otherUserName}</UserName>
+            <CreateDate>{recentTalkTime}</CreateDate>
+          </UserNameBox>
+          <UnreadTalkNoContnr>
+            <UnreadTalkNO>{unreadTalkNO}</UnreadTalkNO>
+          </UnreadTalkNoContnr>
+        </FirstLineInfoContnr>
         <MessageDesc>{recentTalkContent}</MessageDesc>
       </NextToImgContainer>
     </MessageContainer>

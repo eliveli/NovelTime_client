@@ -28,10 +28,17 @@ export const UserImg = styled.div<{ userImg: string }>`
   background-size: cover;
 `;
 
-export const UserNameBox = styled.div`
+export const FirstLineInfoContnr = styled.div`
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
+
+  margin-left: 0;
+  padding: 0;
+`;
+export const UserNameBox = styled.div`
+  display: flex;
+  align-items: flex-end;
 
   margin-left: 0;
   padding: 0;
@@ -40,9 +47,29 @@ export const UserNameBox = styled.div`
 export const UserName = styled.p`
   margin: 0;
 `;
-export const CreateDate = styled.p`
-  margin: 0;
-  padding-left: 12px;
+export const CreateDate = styled.span`
+  color: rgba(0, 0, 0, 0.5);
+  font-size: 14px;
+  font-weight: 600;
+  padding-left: 8px;
+  white-space: nowrap;
+`;
+export const UnreadTalkNoContnr = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background-color: white;
+  box-shadow: 0 0 2px orange;
+  color: ${theme.color.main};
+  font-weight: 600;
+
+  border-radius: 5px;
+  padding: 2px 5px 0px;
+  height: 18px;
+`;
+export const UnreadTalkNO = styled.span`
+  font-size: 15px;
 `;
 export const MessageImgBox = styled.div`
   min-width: 40px;

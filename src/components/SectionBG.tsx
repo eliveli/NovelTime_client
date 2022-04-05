@@ -1,7 +1,7 @@
 import { styled } from "assets/styles/theme";
 
 const { pathname } = window.location;
-export const SectionBG = styled.main<{ isWritingDetail?: true }>`
+export const SectionBG = styled.main<{ isWritingDetail?: true; isMessageRoom?: true }>`
   /* 모바일 */
   width: 100%;
   margin: 0 auto;
@@ -22,6 +22,10 @@ export const SectionBG = styled.main<{ isWritingDetail?: true }>`
         padding: 20px;
       }
    `}
+  ${({ isMessageRoom }) =>
+    isMessageRoom &&
+    `  margin-bottom: 88px; 
+   `}// it is for the space of textarea of message
 
   @media screen and (max-width: 1023px) {
     // 데스크탑 제외, 메인리스트 페이지에서 하단 내비게이션 만큼 margin-bottom 설정

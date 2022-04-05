@@ -149,6 +149,10 @@ export const WriteText = styled.textarea`
   font-size: 16px;
   height: 28px;
   line-height: 1.5;
+
+  color: rgba(0, 0, 0, 0.6);
+  font-weight: 600;
+
   font-family: "Californian FB", D2Coding, Arial, sans-serif;
 `;
 export const EmojiCntnr = styled(Icon.IconBox)`
@@ -170,6 +174,9 @@ export const WriteCommentSubmit = styled.button`
   border: 1px solid rgba(0, 0, 0, 0.1);
   align-items: center;
   justify-content: center;
+
+  color: rgba(0, 0, 0, 0.6);
+  font-weight: 600;
 `;
 type ReComment = {
   commentId: string;
@@ -214,7 +221,7 @@ const isTablet = screenWidth >= 768;
 const isPC = window.screen.width >= 1024;
 const isFixedComment = screenWidth <= 820;
 
-export function WriteComment({ isReComment }: { isReComment?: true }) {
+export function WriteComment({ isReComment, isMessage }: { isReComment?: true; isMessage?: true }) {
   const textRef = useRef<HTMLTextAreaElement>(null);
 
   const [comment, setComment] = useState("");
@@ -246,10 +253,11 @@ export function WriteComment({ isReComment }: { isReComment?: true }) {
     }
   }, [reCommentUserName]);
   const handleSubmit = () => {
-    // server request : provide comment to server
+    // server request 1 : provide comment to server
+    // server request 2 : provide message to server : use variable of isMessage
   };
   return (
-    <WriteCommentContainer isFixedComment={isFixedComment} isReComment={isReComment}>
+    <WriteCommentContainer isFixedComment={isFixedComment || isMessage} isReComment={isReComment}>
       <WriteTextCntnr>
         <WriteText ref={textRef} onChange={writeComment} placeholder="Write your comment!" />
         <EmojiCntnr size={20}>
