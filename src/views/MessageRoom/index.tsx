@@ -262,6 +262,8 @@ export default function MessageRoom() {
   // mark new date
   const dateRecord = useRef({ date: "", isNewDate: false });
 
+  const contnrRef = useRef<HTMLElement>(null);
+
   // for realtime communication
   const socket = io("http://localhost:8082", {
     withCredentials: true,
@@ -292,7 +294,7 @@ export default function MessageRoom() {
     talkTime: string;
     isContinuous: boolean;
   };
-  const [newMessages, addMessage] = useState([
+  const newMessages = useRef([
     {
       userImg: "",
       userName: "",
@@ -301,6 +303,8 @@ export default function MessageRoom() {
       isContinuous: false,
     },
   ]);
+
+  const [newMsgNO, countNewMsg] = useState(0);
 
   const testReceiveM = {
     userImg: "",
@@ -318,26 +322,34 @@ export default function MessageRoom() {
   };
   const testMessage = () => {
     socket.emit("send message", { roomId, msg: testReceiveM });
+    // countNewMsg(newMsgNO + 1);
   };
-  socket.emit("join room", roomId);
-  socket.on("new message", (currentMsg: NewMessage) => {
-    const prevMessage = newMessages[newMessages.length - 1];
-    if (newMessages.length === 1 && !newMessages[0].userName) {
-      addMessage([currentMsg]);
-    }
-    // set true of isContinuous : in this message, do not show time
-    else if (
-      prevMessage.userName === currentMsg.userName &&
-      prevMessage.talkTime === currentMsg.talkTime
-    ) {
-      prevMessage.isContinuous = true;
-      addMessage([...newMessages, currentMsg]);
-    } else {
-      addMessage([...newMessages, currentMsg]);
-    }
-  });
+  useEffect(() => {
+    socket.emit("join room", roomId);
+  }, []);
+  useEffect(() => {
+    socket.on("new message", (currentMsg: NewMessage) => {
+      const prevMessage = newMessages.current[newMessages.current.length - 1];
+      if (newMessages.current.length === 1 && !newMessages.current[0].userName) {
+        newMessages.current = [currentMsg];
+      } else if (
+        // set true of isContinuous : in this message, do not show time
+        prevMessage.userName === currentMsg.userName &&
+        prevMessage.talkTime === currentMsg.talkTime
+      ) {
+        prevMessage.isContinuous = true;
+        newMessages.current.push(currentMsg);
+      } else {
+        newMessages.current.push(currentMsg);
+      }
+      // contnrRef.current?.append(<MessageRecord message={currentMsg} />);
+      countNewMsg((prev) => prev + 1);
+      console.log("newMsgNO: ", newMsgNO);
+      console.log("newMessages.current: ", newMessages.current);
+    });
+  }, []);
   return (
-    <SectionBG isMessageRoom>
+    <SectionBG isMessageRoom ref={contnrRef}>
       {messageRecord.message.map((_, idx) => (
         <MessageRecord
           key={_.userName + idx.toString}
@@ -350,8 +362,12 @@ export default function MessageRoom() {
           // prevTimeReceive={prevTimeReceive.current}
         />
       ))}
-      {newMessages[0].userName &&
-        newMessages.map((_, idx) => <MessageRecord key={_.userName + idx.toString} message={_} />)}
+
+      {newMsgNO > 0 &&
+        newMessages.current.map((_, idx) => (
+          <MessageRecord key={_.userName + idx.toString} message={_} />
+        ))}
+
       <button onClick={testMessage}>testMessage</button>
       <WriteComment isMessage />
     </SectionBG>
