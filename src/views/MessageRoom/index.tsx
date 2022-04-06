@@ -35,6 +35,8 @@ const messageRecord = {
       talkTime: "22.03.03.12:22",
       lastWatch: false,
       isContinuous: false,
+      isContinuousFirst: false,
+      isContinuousLast: false,
     },
     {
       userImg: "",
@@ -43,33 +45,42 @@ const messageRecord = {
       talkTime: "22.03.03.12:22",
       lastWatch: false,
       isContinuous: false,
+      isContinuousFirst: false,
+      isContinuousLast: false,
     },
     {
       userImg: "",
-      userName: "a",
+      userName: "ab",
       talkContent: "hello my name is...",
       talkTime: "22.03.04.12:22",
       lastWatch: false,
       isContinuous: true,
+      isContinuousFirst: true,
+      isContinuousLast: false,
     },
     {
       userImg: "",
-      userName: "a",
+      userName: "ab",
       talkContent: "hello my name is...",
       talkTime: "22.03.04.12:22",
       lastWatch: true,
       isContinuous: true,
+      isContinuousFirst: false,
+      isContinuousLast: false,
     },
     {
       userImg: "",
-      userName: "a",
+      userName: "ab",
       talkContent: "hello my name is...",
       talkTime: "22.03.04.12:22",
       lastWatch: false,
-      isContinuous: false,
+      isContinuous: true,
+      isContinuousFirst: false,
+      isContinuousLast: true,
     },
   ],
 };
+
 type DateRecord = { date: string; isNewDate: boolean };
 interface MessageProps {
   message: {
@@ -79,6 +90,8 @@ interface MessageProps {
     talkTime: string;
     lastWatch?: boolean;
     isContinuous: boolean;
+    isContinuousFirst: boolean;
+    isContinuousLast: boolean;
   };
   lastMessage?: boolean;
   dateRecord?: DateRecord;
@@ -92,7 +105,9 @@ interface ReceiveMessageProps {
     talkContent: string;
     talkTime: string;
     lastWatch?: boolean;
-    isContinuous: boolean;
+    isContinuous: boolean; // when it is true and isContinuousLast is false, do not show createTime
+    isContinuousFirst: boolean; // when it is true, do not show userImg
+    isContinuousLast: boolean; // when it is true, show createTime
   };
   lastMessage?: boolean;
   dateRecord?: DateRecord;
@@ -104,6 +119,7 @@ interface SendMessageProps {
   lastWatch?: boolean;
   lastMessage?: boolean;
   isContinuous: boolean;
+  isContinuousLast: boolean;
   dateRecord?: DateRecord;
   // prevTime: { time: string; isNewTime: boolean; user: string };
 }
@@ -141,12 +157,17 @@ function ReceiveMessage({
         </MarkContnr>
       )}
       <MessageContainer>
-        <UserImg userImg={message.userImg} />
+        <UserImg
+          userImg={message.userImg}
+          isShow={!message.isContinuous || (message.isContinuous && message.isContinuousFirst)}
+        />
         <MessageContentContnr>
           <MessageDesc>{message.talkContent}</MessageDesc>
           {/*  */}
           {/* remove date from time and put it later */}
-          {!message.isContinuous && <CreateDate>{message.talkTime}</CreateDate>}
+          {((message.isContinuous && message.isContinuousLast) || !message.isContinuous) && (
+            <CreateDate>{message.talkTime}</CreateDate>
+          )}
         </MessageContentContnr>
       </MessageContainer>
       {message.lastWatch && !lastMessage && (
@@ -164,6 +185,7 @@ function SendMessage({
   // prevTime,
   lastWatch,
   isContinuous,
+  isContinuousLast,
   content,
   time,
   dateRecord,
@@ -201,7 +223,9 @@ function SendMessage({
           <MessageDesc isMe>{content}</MessageDesc>
           {/*  */}
           {/* remove date from time and put it later */}
-          {!isContinuous && <CreateDate isMe>{time}</CreateDate>}
+          {((isContinuous && isContinuousLast) || !isContinuous) && (
+            <CreateDate isMe>{time}</CreateDate>
+          )}
         </MessageContentContnr>
       </MessageContainer>
       {lastWatch && !lastMessage && (
@@ -239,6 +263,7 @@ function MessageRecord({
         dateRecord={dateRecord}
         lastWatch={message.lastWatch}
         isContinuous={message.isContinuous}
+        isContinuousLast={message.isContinuousLast}
         content={message.talkContent}
         time={message.talkTime}
       />
@@ -277,8 +302,14 @@ export default function MessageRoom() {
   // when user send a message,
   // get one just before the message from database
   // if two are same in userName, createTime,
-  // set "isContinuous" of previous message "true"
-  // and set "isContinuous" of current message "false"
+  //
+  // look at the socket event handler
+  // the process of setting states about continuous messages
+  //                   (states of isContinuous, isContinuousFirst, isContinuousLast of two messages)
+  //         might should be done in backend when receiving the socket message
+  //
+  //
+
   // ------------------------------------------------------------------//
 
   // below might be deleted   //// to compare message to one which is put just before  by time
@@ -293,6 +324,8 @@ export default function MessageRoom() {
     talkContent: string;
     talkTime: string;
     isContinuous: boolean;
+    isContinuousFirst: boolean;
+    isContinuousLast: boolean;
   };
   const newMessages = useRef([
     {
@@ -300,7 +333,9 @@ export default function MessageRoom() {
       userName: "",
       talkContent: "",
       talkTime: "",
-      isContinuous: false,
+      isContinuous: false, // when it is true, do not show createTime
+      isContinuousFirst: false, // when it is true, do not show userImg
+      isContinuousLast: false, // when it is true, show createTime
     },
   ]);
 
@@ -312,6 +347,8 @@ export default function MessageRoom() {
     talkContent: "hello my name is...",
     talkTime: "22.03.04.12:22",
     isContinuous: false,
+    isContinuousFirst: false,
+    isContinuousLast: false,
   };
   const testSendM = {
     userImg: "",
@@ -319,6 +356,8 @@ export default function MessageRoom() {
     talkContent: "hello my name is...",
     talkTime: "22.03.04.12:22",
     isContinuous: false,
+    isContinuousFirst: false,
+    isContinuousLast: false,
   };
   const testMessage = () => {
     socket.emit("send message", { roomId, msg: testReceiveM });
@@ -333,11 +372,30 @@ export default function MessageRoom() {
       if (newMessages.current.length === 1 && !newMessages.current[0].userName) {
         newMessages.current = [currentMsg];
       } else if (
-        // set true of isContinuous : in this message, do not show time
         prevMessage.userName === currentMsg.userName &&
-        prevMessage.talkTime === currentMsg.talkTime
+        prevMessage.talkTime === currentMsg.talkTime &&
+        prevMessage.isContinuous === false
       ) {
+        // previous message is the first of continuous messages
+        prevMessage.isContinuousFirst = true;
         prevMessage.isContinuous = true;
+
+        currentMsg.isContinuous = true;
+        currentMsg.isContinuousLast = true;
+
+        newMessages.current.push(currentMsg);
+      } else if (
+        prevMessage.userName === currentMsg.userName &&
+        prevMessage.talkTime === currentMsg.talkTime &&
+        prevMessage.isContinuous === true &&
+        prevMessage.isContinuousLast === true
+      ) {
+        // previous message is between first and last continuous messages
+        prevMessage.isContinuousLast = false;
+
+        currentMsg.isContinuous = true;
+        currentMsg.isContinuousLast = true;
+
         newMessages.current.push(currentMsg);
       } else {
         newMessages.current.push(currentMsg);

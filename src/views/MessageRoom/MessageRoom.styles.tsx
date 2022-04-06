@@ -18,7 +18,7 @@ export const MessageContentContnr = styled.div<{ isMe?: true }>`
   gap: 4px;
   ${({ isMe }) => (isMe ? ` align-items: flex-end;` : ` align-items: flex-start;`)}
 `;
-export const UserImg = styled.div<{ userImg: string }>`
+export const UserImg = styled.div<{ userImg: string; isShow?: boolean }>`
   border-radius: 50%;
   min-width: 35px;
   height: 35px;
@@ -30,6 +30,8 @@ export const UserImg = styled.div<{ userImg: string }>`
   background-size: cover;
 
   margin-right: 6px;
+
+  ${({ isShow }) => isShow === false && `background-image: url("");`}
 `;
 
 export const MessageDesc = styled.div<{ isMe?: true }>`
