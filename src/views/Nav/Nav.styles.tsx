@@ -59,9 +59,13 @@ export const NavContentBoxPC = styled.nav`
 `;
 // 층별 내비게이션에 배경 입히려면 추가 컴포넌트 필요
 // 아래는 컨텐트 정렬용(화면 중앙 또는 전체(모바일,태블릿))
-export const NavContentBoxMobile = styled.nav<{ isMainBottom?: true; isDetail?: true }>`
+export const NavContentBoxMobile = styled.nav<{
+  isMainBottom?: true;
+  isDetail?: true;
+  isMsgList?: true;
+}>`
   @media screen and (min-width: 1024px) {
-    display: none;
+    ${({ isMsgList }) => !isMsgList && `display: none;`}
   }
 
   width: 100%;
@@ -109,16 +113,9 @@ export const CatWalkingContainer = styled.div`
   ${document.body.offsetWidth > 512 && "justify-content: flex-start;"}
 `;
 export const CatWalking = styled.img`
-  /* height: 150px; */
-  height: 135px;
+  height: 50px;
 `;
-// export const Logo = styled.div`
-//   @media screen and (max-width: 1023px) {
-//     width: 100%;
-//     display: flex;
-//     justify-content: center;
-//   }
-// `;
+
 export const PageTitle = styled.div`
   display: flex;
   align-items: center;
@@ -134,20 +131,10 @@ export const LogoContainer = styled.div`
   }
 `;
 export const Logo = styled.img`
-  height: 205px;
-
-  /* padding-top: 17px; */
-  /* padding-bottom: 8px; */
-  margin-left: -30px;
-
-  padding-top: 8px;
-  padding-bottom: 10px;
+  padding-top: 3px;
   @media screen and (max-width: 1023px) {
-    padding-top: 11px;
-    padding-bottom: 8px;
-    margin-left: 0;
-
-    height: 200px;
+    padding-bottom: 3px;
+    height: 60px;
   }
 `;
 export const NavContentPC = styled.div`
@@ -261,14 +248,8 @@ export const LoginIconBox = styled(Icon.IconBox)`
     display: none;
   }
 `;
-export const LeftIcon = styled(Icon.BigLeft)`
-  width: 100%;
-  height: 100%;
-
-  /* 태블릿, PC */
-  @media screen and (min-width: 768px) {
-  }
-`;
+export const BackIcon = styled(Icon.BigLeft)``;
+export const ForwardIcon = styled(Icon.BigRight)``;
 export const LeftIconBox = styled.div`
   width: 32px;
   height: 32px;
