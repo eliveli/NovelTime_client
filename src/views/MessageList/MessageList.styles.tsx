@@ -1,15 +1,42 @@
 import theme, { styled } from "assets/styles/theme";
 import Icon from "assets/Icon";
 
-export const MessageContainer = styled.div`
+export const MsgListCntnrDevice = styled.div<{ isTablet: boolean }>`
+  ${({ isTablet }) => (isTablet ? `display: flex;` : ``)}
+`;
+export const MsgListCntnr = styled.div<{
+  isShowRoomTablet: boolean;
+  isListOpen: boolean;
+  isBeforeClickList: boolean;
+}>`
+  // for dividing the space
+  ${({ isShowRoomTablet }) => !isShowRoomTablet && `width:100%;`}
+  ${({ isShowRoomTablet, isBeforeClickList }) =>
+    isShowRoomTablet && isBeforeClickList && `width:100%;`}
+  ${({ isShowRoomTablet, isBeforeClickList, isListOpen }) =>
+    isShowRoomTablet && !isBeforeClickList && isListOpen && `width:50%;`}
+  ${({ isShowRoomTablet, isBeforeClickList, isListOpen }) =>
+    isShowRoomTablet && !isBeforeClickList && !isListOpen && `width: 46px;`}
+`;
+export const MessageContainer = styled.div<{ isCrntMsg: boolean }>`
   width: 100%;
   display: flex;
   align-items: center;
   border-bottom: 1px dotted rgba(0, 0, 0, 0.1);
+  white-space: nowrap;
   padding: 16px 0;
   ${theme.media.mobile(`
     padding:12px 0;
   `)}
+
+  ${({ isCrntMsg }) => isCrntMsg && `border:1px solid rgba(0, 0, 0, 0.1);`}
+`;
+export const MsgRoomCntnr = styled.div<{
+  isListOpen: boolean;
+}>`
+  position: relative;
+  // for dividing the space
+  ${({ isListOpen }) => (isListOpen ? `width:50%;` : `width: 100%;`)}
 `;
 export const NextToImgContainer = styled.div`
   width: 100%;

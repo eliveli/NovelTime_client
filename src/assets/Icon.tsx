@@ -20,6 +20,7 @@ import {
   HiHeart,
   HiOutlineHeart,
   HiOutlineChevronLeft,
+  HiOutlineChevronRight,
   HiPlus,
   HiOutlineHome,
 } from "react-icons/hi";
@@ -72,10 +73,14 @@ const iconStyleHover = () => `
 
 const Icon = {
   IconBox,
-  BigRight: FaChevronRight,
-  BigLeft: HiOutlineChevronLeft,
   BigDown: FaChevronDown,
   BigUp: FaChevronUp,
+  BigRight: styled(HiOutlineChevronRight)`
+    ${iconStyle()};
+  `,
+  BigLeft: styled(HiOutlineChevronLeft)`
+    ${iconStyle()};
+  `,
   Emoji: styled(BsEmojiSunglasses)`
     ${iconStyleHover()};
   `,

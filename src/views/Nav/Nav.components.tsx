@@ -21,7 +21,8 @@ import { handleWritingSubmit } from "../../store/clientSlices/writingSlice";
 import { useAppSelector, useAppDispatch } from "../../store/hooks";
 
 import {
-  LeftIcon,
+  BackIcon,
+  ForwardIcon,
   HeartIcon,
   ShareIcon,
   LeftIconBox,
@@ -230,14 +231,18 @@ export function NavMobileMainBottom({ pathname }: Props) {
 interface DetailProps {
   pathname: string;
   //   novelId: string;
-  parameter: {
-    novelId: string | undefined;
-    talkId: string | undefined;
-    recommendId: string | undefined;
+  parameter?: {
+    novelId?: string;
+    talkId?: string;
+    recommendId?: string;
+  };
+  handleMsgList?: {
+    isListOpen: boolean;
+    handleMsgOpen: () => void;
   };
 }
 
-export function NavMobileDetail({ parameter, pathname }: DetailProps) {
+export function NavMobileDetail({ parameter, pathname, handleMsgList }: DetailProps) {
   // one nav component: top
 
   const navigate = useNavigate();
@@ -264,11 +269,12 @@ export function NavMobileDetail({ parameter, pathname }: DetailProps) {
   return (
     <ThemeProvider theme={theme}>
       {/* top place */}
-      <NavContentBoxMobile isDetail>
+      <NavContentBoxMobile isDetail isMsgList={handleMsgList ? true : undefined}>
         <IconsBox isLeft>
-          {!(pathname.includes("add_writing") && !novelId) && (
+          {/* nav icon for normal case  */}
+          {!(pathname.includes("add_writing") && !novelId) && !handleMsgList && (
             <LeftIconBox onClick={() => navigate(-1)}>
-              <LeftIcon />
+              <BackIcon />
             </LeftIconBox>
           )}
           {/* at add-writing page without novelId from useParams */}
@@ -277,8 +283,15 @@ export function NavMobileDetail({ parameter, pathname }: DetailProps) {
               <Icon.CloseWriting />
             </LeftIconBox>
           )}
+          {/* at message list page with message room for tablet */}
+          {handleMsgList && (
+            <LeftIconBox onClick={handleMsgList.handleMsgOpen}>
+              {handleMsgList.isListOpen && <BackIcon />}
+              {!handleMsgList.isListOpen && <ForwardIcon />}
+            </LeftIconBox>
+          )}
           {/* from novelDetail to ... : show Home Icon */}
-          {parameter.novelId && (
+          {parameter?.novelId && (
             <HomeIconBox
               onClick={() => {
                 navigate("/talk_list");
@@ -297,7 +310,7 @@ export function NavMobileDetail({ parameter, pathname }: DetailProps) {
           ["add_writing", "add writing"],
           ["message", otherUser.userImg, otherUser.userName],
         ].map((_, idx) => {
-          if (idx === 2 && !pathname.includes(_[0]) && parameter.novelId) {
+          if (idx === 2 && !pathname.includes(_[0]) && parameter?.novelId) {
             return <PageTitle>{novelTitle}</PageTitle>;
           }
           if (idx === 2 && pathname.includes(_[0])) {
@@ -315,9 +328,9 @@ export function NavMobileDetail({ parameter, pathname }: DetailProps) {
         })}
 
         <IconsBox isRight>
-          {(pathname === `/novel_detail/${parameter.novelId as string}` ||
-            parameter.recommendId ||
-            parameter.talkId) && (
+          {(pathname === `/novel_detail/${parameter?.novelId as string}` ||
+            parameter?.recommendId ||
+            parameter?.talkId) && (
             <HeartIconBox
               onClick={() => {
                 // handleLike(!isLikeNovel);
@@ -329,13 +342,13 @@ export function NavMobileDetail({ parameter, pathname }: DetailProps) {
               {/* {!isLikeNovel && <HeartIcon />} */}
             </HeartIconBox>
           )}
-          {(parameter.recommendId || parameter.talkId) && (
+          {(parameter?.recommendId || parameter?.talkId) && (
             <ShareIconBox>
               <ShareIcon />
             </ShareIconBox>
           )}
           {/* submit writing */}
-          {pathname.includes("add_writing") && (
+          {pathname?.includes("add_writing") && (
             <SubmitBtn onClick={() => dispatch(handleWritingSubmit(true))}>작성</SubmitBtn>
           )}
         </IconsBox>

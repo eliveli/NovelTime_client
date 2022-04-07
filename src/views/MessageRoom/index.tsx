@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { io } from "socket.io-client";
 import SectionBG from "components/SectionBG";
@@ -20,7 +20,7 @@ import {
   LastWatchMark,
 } from "./MessageRoom.styles";
 
-// server request with roomId //
+// server request with (roomIdMobile || roomIdTablet) //
 
 const messageRecord = {
   user: {
@@ -95,8 +95,6 @@ interface MessageProps {
   };
   lastMessage?: boolean;
   dateRecord?: DateRecord;
-  // prevTimeSend: { time: string; isNewTime: boolean; user: string };
-  // prevTimeReceive: { time: string; isNewTime: boolean; user: string };
 }
 interface ReceiveMessageProps {
   message: {
@@ -111,7 +109,6 @@ interface ReceiveMessageProps {
   };
   lastMessage?: boolean;
   dateRecord?: DateRecord;
-  // prevTime: { time: string; isNewTime: boolean; user: string };
 }
 interface SendMessageProps {
   content: string;
@@ -121,32 +118,14 @@ interface SendMessageProps {
   isContinuous: boolean;
   isContinuousLast: boolean;
   dateRecord?: DateRecord;
-  // prevTime: { time: string; isNewTime: boolean; user: string };
 }
 
-function ReceiveMessage({
-  //  prevTime,
-  message,
-  dateRecord,
-  lastMessage,
-}: ReceiveMessageProps) {
+function ReceiveMessage({ message, dateRecord, lastMessage }: ReceiveMessageProps) {
   // show the message which was read last when entering page
   const LastWatchRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     LastWatchRef.current?.scrollIntoView();
   }, []);
-
-  // don't show time if time of previous message is same with current one
-  // if (prevTime.time !== message.talkTime) {
-  //   prevTime.user = message.userName;
-  //   prevTime.time = message.talkTime;
-  //   prevTime.isNewTime = true;
-  // } else if (prevTime.user !== message.userName) {
-  //   prevTime.user = message.userName;
-  //   prevTime.isNewTime = true;
-  // } else if (prevTime.time === message.talkTime) {
-  //   prevTime.isNewTime = false;
-  // }
 
   return (
     <>
@@ -182,7 +161,6 @@ function ReceiveMessage({
 }
 function SendMessage({
   lastMessage,
-  // prevTime,
   lastWatch,
   isContinuous,
   isContinuousLast,
@@ -197,18 +175,6 @@ function SendMessage({
   }, []);
 
   const loginUserName = "a"; // change later to real login user's name
-
-  // don't show time if time of previous message is same with current one
-  // if (prevTime.time !== time) {
-  //   prevTime.user = loginUserName;
-  //   prevTime.time = time;
-  //   prevTime.isNewTime = true;
-  // } else if (prevTime.user !== loginUserName) {
-  //   prevTime.user = loginUserName;
-  //   prevTime.isNewTime = true;
-  // } else {
-  //   prevTime.isNewTime = false;
-  // }
 
   return (
     <>
@@ -238,13 +204,7 @@ function SendMessage({
     </>
   );
 }
-function MessageRecord({
-  // prevTimeSend,
-  // prevTimeReceive,
-  lastMessage,
-  message,
-  dateRecord,
-}: MessageProps) {
+function MessageRecord({ lastMessage, message, dateRecord }: MessageProps) {
   const loginUserName = "a"; // change later to real login user's name
 
   // mark new date : later, compare to date from talkTime with dateRecord.date
@@ -259,7 +219,6 @@ function MessageRecord({
     return (
       <SendMessage
         lastMessage={lastMessage}
-        // prevTime={prevTimeSend}
         dateRecord={dateRecord}
         lastWatch={message.lastWatch}
         isContinuous={message.isContinuous}
@@ -269,18 +228,12 @@ function MessageRecord({
       />
     );
   }
-  return (
-    <ReceiveMessage
-      lastMessage={lastMessage}
-      // prevTime={prevTimeReceive}
-      dateRecord={dateRecord}
-      message={message}
-    />
-  );
+  return <ReceiveMessage lastMessage={lastMessage} dateRecord={dateRecord} message={message} />;
 }
-export default function MessageRoom() {
-  // server request with roomId //
+export default function MessageRoom({ roomIdTablet }: { roomIdTablet?: string }) {
+  // server request with (roomIdMobile || roomIdTablet) //
   const { roomId } = useParams();
+  const roomIdMobile = roomId;
   const dispatch = useAppDispatch();
   dispatch(setOtherUser(messageRecord.user));
 
@@ -308,16 +261,10 @@ export default function MessageRoom() {
   //                   (states of isContinuous, isContinuousFirst, isContinuousLast of two messages)
   //         might should be done in backend when receiving the socket message
   //
-  //
-
   // ------------------------------------------------------------------//
 
-  // below might be deleted   //// to compare message to one which is put just before  by time
-  // const prevTimeSend = useRef({ time: "", isNewTime: false, user: "" });
-  // const prevTimeReceive = useRef({ time: "", isNewTime: false, user: "" });
-
   //
-  // below is test for setting realtime
+  // below is for setting realtime
   type NewMessage = {
     userImg: string;
     userName: string;
@@ -360,11 +307,10 @@ export default function MessageRoom() {
     isContinuousLast: false,
   };
   const testMessage = () => {
-    socket.emit("send message", { roomId, msg: testReceiveM });
-    // countNewMsg(newMsgNO + 1);
+    socket.emit("send message", { roomId: roomIdMobile || roomIdTablet, msg: testReceiveM });
   };
   useEffect(() => {
-    socket.emit("join room", roomId);
+    socket.emit("join room", roomIdMobile || roomIdTablet);
   }, []);
   useEffect(() => {
     socket.on("new message", (currentMsg: NewMessage) => {
@@ -400,7 +346,6 @@ export default function MessageRoom() {
       } else {
         newMessages.current.push(currentMsg);
       }
-      // contnrRef.current?.append(<MessageRecord message={currentMsg} />);
       countNewMsg((prev) => prev + 1);
       console.log("newMsgNO: ", newMsgNO);
       console.log("newMessages.current: ", newMessages.current);
@@ -415,9 +360,6 @@ export default function MessageRoom() {
           // below is previous data not realtime
           dateRecord={dateRecord.current}
           lastMessage={idx === messageRecord.message.length - 1}
-          // below may be deleted //
-          // prevTimeSend={prevTimeSend.current}
-          // prevTimeReceive={prevTimeReceive.current}
         />
       ))}
 
