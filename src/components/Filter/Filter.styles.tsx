@@ -23,6 +23,8 @@ export const Genre = styled.p<{ genreName: string; selectedGenre: string }>`
 `;
 
 export const SortMobileContainer = styled.div`
+  z-index: 1;
+
   display: inline-block;
   text-align: right;
   height: 100%;
