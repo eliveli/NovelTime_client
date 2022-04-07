@@ -125,7 +125,7 @@ export default function MessageList() {
     handleBeforeClickList(false);
   };
   return (
-    <SectionBG>
+    <SectionBG isMessageList>
       <MsgListCntnrDevice isTablet={isTablet}>
         <MsgListCntnr
           isShowRoomTablet={isShowRoomTablet}

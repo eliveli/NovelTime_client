@@ -9,6 +9,7 @@ import { setOtherUser } from "store/clientSlices/messageSlice";
 import { useParams } from "react-router-dom";
 import { WriteComment } from "components/Writing";
 import {
+  MsgRoomContnr,
   MessageContainer,
   UserImg,
   MessageDesc,
@@ -351,25 +352,28 @@ export default function MessageRoom({ roomIdTablet }: { roomIdTablet?: string })
       console.log("newMessages.current: ", newMessages.current);
     });
   }, []);
-  return (
-    <SectionBG isMessageRoom ref={contnrRef}>
-      {messageRecord.message.map((_, idx) => (
-        <MessageRecord
-          key={_.userName + idx.toString}
-          message={_}
-          // below is previous data not realtime
-          dateRecord={dateRecord.current}
-          lastMessage={idx === messageRecord.message.length - 1}
-        />
-      ))}
 
-      {newMsgNO > 0 &&
-        newMessages.current.map((_, idx) => (
-          <MessageRecord key={_.userName + idx.toString} message={_} />
+  return (
+    <>
+      <MsgRoomContnr>
+        {messageRecord.message.map((_, idx) => (
+          <MessageRecord
+            key={_.userName + idx.toString}
+            message={_}
+            // below is previous data not realtime
+            dateRecord={dateRecord.current}
+            lastMessage={idx === messageRecord.message.length - 1}
+          />
         ))}
 
-      <button onClick={testMessage}>testMessage</button>
+        {newMsgNO > 0 &&
+          newMessages.current.map((_, idx) => (
+            <MessageRecord key={_.userName + idx.toString} message={_} />
+          ))}
+
+        <button onClick={testMessage}>testMessage</button>
+      </MsgRoomContnr>
       <WriteComment isMessage />
-    </SectionBG>
+    </>
   );
 }

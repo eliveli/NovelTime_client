@@ -105,7 +105,11 @@ export const ReCommentUser = styled.span`
 //   margin-left: -20px;
 //   margin-bottom: -12px;
 // `;
-export const WriteCommentContainer = styled.div<{ isReComment?: true; isFixedComment?: boolean }>`
+export const WriteCommentContainer = styled.div<{
+  isReComment?: true;
+  isFixedComment?: boolean;
+  isMessage?: true;
+}>`
   display: flex;
   align-items: center;
   border-radius: 20px;
@@ -127,6 +131,17 @@ export const WriteCommentContainer = styled.div<{ isReComment?: true; isFixedCom
     border-radius: 0;
     background-color: rgba(255,255,255,1);
     z-index: 1;`}
+    ${({ isMessage }) =>
+    isMessage &&
+    `
+    position: relative;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    border-radius: 0;
+    background-color: rgba(255,255,255,1);
+    z-index: 1;
+  `}
 `;
 export const WriteTextCntnr = styled.div`
   width: 100%;
@@ -216,10 +231,10 @@ function CommentPageMobile() {
   return <div />;
 }
 
-const screenWidth = window.screen.width;
-const isTablet = screenWidth >= 768;
-const isPC = window.screen.width >= 1024;
-const isFixedComment = screenWidth <= 820;
+const htmlWidth = document.documentElement.offsetWidth;
+const isTablet = htmlWidth >= 768;
+const isPC = htmlWidth >= 1024;
+const isFixedComment = htmlWidth <= 820;
 
 export function WriteComment({ isReComment, isMessage }: { isReComment?: true; isMessage?: true }) {
   const textRef = useRef<HTMLTextAreaElement>(null);
@@ -257,7 +272,11 @@ export function WriteComment({ isReComment, isMessage }: { isReComment?: true; i
     // server request 2 : provide message to server : use variable of isMessage
   };
   return (
-    <WriteCommentContainer isFixedComment={isFixedComment || isMessage} isReComment={isReComment}>
+    <WriteCommentContainer
+      isFixedComment={isFixedComment}
+      isMessage={isMessage}
+      isReComment={isReComment}
+    >
       <WriteTextCntnr>
         <WriteText ref={textRef} onChange={writeComment} placeholder="Write your comment!" />
         <EmojiCntnr size={20}>

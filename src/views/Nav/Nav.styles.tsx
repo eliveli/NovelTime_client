@@ -9,7 +9,7 @@ interface Props {
 
 // 패딩 없애고 화면 가로 전체에 늘어나게 해야 함
 export const NavTopBG = styled.header`
-  border-bottom: 2px solid gray;
+  border-bottom: 1px solid lightgray;
 
   z-index: 2;
 

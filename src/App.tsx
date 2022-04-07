@@ -30,16 +30,6 @@ import { ThemeProvider } from "styled-components";
 import theme from "assets/styles/theme";
 import GlobalStyle from "./assets/styles/GlobalStyle";
 
-function Home() {
-  return (
-    <>
-      aaa
-      <Outlet />
-    </>
-  );
-  // for nested child element
-}
-
 function App() {
   return (
     <Router>
@@ -73,45 +63,43 @@ function App() {
           {/* 페이지 별 다른 내비게이션 바가 필요할 경우 추가 & 아래 Routes에도 parent component path 추가 */}
         </Routes>
         <Routes>
-          <Route path="/" element={<Home />}>
-            <Route index element={<FreeTalkList />} />
-            <Route path="/talk_list" element={<FreeTalkList />} />
-            <Route path="/recommend_list" element={<RecommendList />} />
+          <Route path="/" element={<FreeTalkList />} />
+          <Route path="/talk_list" element={<FreeTalkList />} />
+          <Route path="/recommend_list" element={<RecommendList />} />
 
-            <Route path="/novel_list" element={<NovelList />} />
-            <Route path="/novel_list/:categoryText/:categoryId" element={<NovelListByCategory />} />
-            <Route
-              path="/novel_list/:categoryText/:categoryId/:novelId"
-              element={<NovelListByCategory />}
-            />
+          <Route path="/novel_list" element={<NovelList />} />
+          <Route path="/novel_list/:categoryText/:categoryId" element={<NovelListByCategory />} />
+          <Route
+            path="/novel_list/:categoryText/:categoryId/:novelId"
+            element={<NovelListByCategory />}
+          />
 
-            <Route path="/novel_detail/:novelId" element={<NovelDetail />} />
-            <Route path="/novel_detail/:novelId/writing_list" element={<WritingList />} />
-            <Route path="/novel_detail/:novelId/:talkId" element={<NovelDetailTalk />} />
-            <Route path="/novel_detail/:novelId/:recommendId" element={<NovelDetailRecommend />} />
+          <Route path="/novel_detail/:novelId" element={<NovelDetail />} />
+          <Route path="/novel_detail/:novelId/writing_list" element={<WritingList />} />
+          <Route path="/novel_detail/:novelId/:talkId" element={<NovelDetailTalk />} />
+          <Route path="/novel_detail/:novelId/:recommendId" element={<NovelDetailRecommend />} />
 
-            <Route path="/talk_detail/:talkId" element={<FreeTalkDetail />} />
-            <Route path="/recommend_detail/:recommendId" element={<RecommendDetail />} />
+          <Route path="/talk_detail/:talkId" element={<FreeTalkDetail />} />
+          <Route path="/recommend_detail/:recommendId" element={<RecommendDetail />} />
 
-            <Route path="/add_writing" element={<AddWriting />} />
-            <Route path="/add_writing/:novelId/:novelTitle" element={<AddWriting />} />
+          <Route path="/add_writing" element={<AddWriting />} />
+          <Route path="/add_writing/:novelId/:novelTitle" element={<AddWriting />} />
 
-            <Route path="/search" element={<SearchPage />} />
-            <Route path="/search/novel" element={<SearchPage />} />
-            <Route path="/search/novel/iframe" element={<SearchPage />} />
-            {/* 검색 전 예시 작품 보여주기 */}
+          <Route path="/search" element={<SearchPage />} />
+          <Route path="/search/novel" element={<SearchPage />} />
+          <Route path="/search/novel/iframe" element={<SearchPage />} />
+          {/* 검색 전 예시 작품 보여주기 */}
 
-            <Route path="/message_list" element={<MessageList />} />
-            {/* (X) message_list/:userId  */}
-            {/* userId는 주소창에 넣지 말자 */}
-            {/* 클라이언트 스토어 등에 저장하자 */}
-            {/* 그럼 새로고침 해도 로그인 유지되니 유저정보 알 수 있던가 */}
-            <Route path="/message_room/:roomId" element={<MessageRoom />} />
+          <Route path="/message_list" element={<MessageList />} />
+          {/* (X) message_list/:userId  */}
+          {/* userId는 주소창에 넣지 말자 */}
+          {/* 클라이언트 스토어 등에 저장하자 */}
+          {/* 그럼 새로고침 해도 로그인 유지되니 유저정보 알 수 있던가 */}
+          <Route path="/message_room/:roomId" element={<MessageRoom />} />
 
-            <Route path="/user_page/:userId" element={<UserPage />} />
+          <Route path="/user_page/:userId" element={<UserPage />} />
 
-            <Route path="*" element={<NotFound />} />
-          </Route>
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </ThemeProvider>
     </Router>

@@ -1,6 +1,25 @@
 import theme, { styled } from "assets/styles/theme";
 import Icon from "assets/Icon";
 
+export const MsgRoomContnr = styled.div`
+  // for mobile
+  height: calc(100vh - 51px - 88px);
+  // 100vh - top nav - message write component
+  ${theme.media.mobile(`
+    padding: 0 16px;
+  `)}
+
+  ${theme.media.tablet(`
+    padding:0 20px;
+    height: calc(100vh - (71px + 60px) - 50px - 88px);
+    `)} // 100vh - (top + bottom nav) - top nav of message room - message write component
+  ${theme.media.desktop(`
+    height: calc(100vh - (61px) - 50px - 88px);
+  `)}
+
+  overflow-y: scroll;
+  ${theme.hideScrollBar}
+`;
 export const MessageContainer = styled.div<{ isMe?: true }>`
   width: 100%;
   display: flex;
