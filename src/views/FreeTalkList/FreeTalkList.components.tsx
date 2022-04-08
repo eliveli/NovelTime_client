@@ -1,3 +1,4 @@
+import React from "react";
 import { ThemeProvider } from "styled-components";
 import { useNavigate } from "react-router-dom";
 
@@ -23,16 +24,36 @@ import {
 
 interface TalkProps {
   talkId: string;
+
+  userName: string;
   userImg: string;
+  createDate: string;
+
+  likeNO: number;
+  commentNO: number;
+
+  talkTitle: string;
   talkImg: string;
+
+  novelTitle: string;
 }
 
 export default function FreeTalk({ talk }: { talk: TalkProps }) {
   // props or default props
   const {
-    userImg = "https://cdn.pixabay.com/photo/2018/08/31/08/35/toys-3644073_960_720.png",
-    talkImg = "https://cdn.pixabay.com/photo/2018/08/31/08/35/toys-3644073_960_720.png",
     talkId,
+
+    userName,
+    userImg,
+    createDate,
+
+    likeNO,
+    commentNO,
+
+    talkTitle,
+    talkImg,
+
+    novelTitle,
   } = talk;
   const theme = {
     userImg,
@@ -49,35 +70,40 @@ export default function FreeTalk({ talk }: { talk: TalkProps }) {
           navigate(`/talk_detail/${talkId}`);
         }}
       >
-        <UserImg />
+        <UserImg
+          onClick={(event: React.MouseEvent<HTMLElement>) => {
+            event.stopPropagation();
+            navigate(`/user_page/${userName}`);
+          }}
+        />
         <BesideImgContainer>
           <FirstLineContainer>
             <UserNameBox>
-              <UserName>Nana</UserName>
-              <CreateDate>22.01.01</CreateDate>
+              <UserName>{userName}</UserName>
+              <CreateDate>{createDate}</CreateDate>
             </UserNameBox>
             <IconsBox>
               <IconContainer>
                 <Icon.IconBox noPointer size={20}>
                   <Icon.Heart />
                 </Icon.IconBox>
-                <IconNO>7</IconNO>
+                <IconNO>{likeNO}</IconNO>
               </IconContainer>
               <IconContainer>
                 <Icon.IconBox noPointer size={20}>
                   <Icon.Comment />
                 </Icon.IconBox>
-                <IconNO>5</IconNO>
+                <IconNO>{commentNO}</IconNO>
               </IconContainer>
             </IconsBox>
           </FirstLineContainer>
 
           <TalkPreview>
-            <TalkTitle>꾸준히 인기 많은 해포 패러디 계의 탑 작품</TalkTitle>
+            <TalkTitle>{talkTitle}</TalkTitle>
             <TalkImgBox>
               <TalkImg />
             </TalkImgBox>
-            <NovelTitle>[해리포터]지독한 후플푸프 - 곽정언</NovelTitle>
+            <NovelTitle>{novelTitle}</NovelTitle>
           </TalkPreview>
         </BesideImgContainer>
       </Talk>

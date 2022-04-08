@@ -5,7 +5,7 @@ interface Props {
   theme: { novelImg: string; userImg: string };
 }
 
-export const RightIcon = styled(Icon.BigRight)`
+export const RightIcon = styled(Icon.ListRight)`
   margin: auto 0 auto 6px;
 
   /* 태블릿, PC */

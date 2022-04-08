@@ -39,7 +39,9 @@ export const UserImg = styled.div<Props>`
   border-radius: 50%;
   min-width: 50px;
   height: 50px;
-  background-image: url(${(props) => props.theme.userImg});
+  background-image: url(${(props) =>
+    props.theme.userImg ||
+    "https://cdn.pixabay.com/photo/2018/08/31/08/35/toys-3644073_960_720.png"});
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;

@@ -36,7 +36,7 @@ export const CategoryDesc = styled.p<{ fontSize?: number }>`
 export const ShowAllText = styled.span`
   /* margin: auto 0 0 auto; */
 `;
-export const ShowAllIcon = styled(Icon.BigRight)`
+export const ShowAllIcon = styled(Icon.ListRight)`
   /* margin: auto 0 0 6px; */
   margin-left: 6px;
   color: rgba(100, 100, 100, 0.5);

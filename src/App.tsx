@@ -54,7 +54,7 @@ function App() {
             "/search",
             "/search/novel",
             "/message_room/:roomId",
-            "/user_page/:userId",
+            "/user_page/:userName",
           ].map((path) => (
             <Route path={path} element={<DetailNav />} />
           ))}
@@ -91,13 +91,11 @@ function App() {
           {/* 검색 전 예시 작품 보여주기 */}
 
           <Route path="/message_list" element={<MessageList />} />
-          {/* (X) message_list/:userId  */}
-          {/* userId는 주소창에 넣지 말자 */}
-          {/* 클라이언트 스토어 등에 저장하자 */}
-          {/* 그럼 새로고침 해도 로그인 유지되니 유저정보 알 수 있던가 */}
+
           <Route path="/message_room/:roomId" element={<MessageRoom />} />
 
-          <Route path="/user_page/:userId" element={<UserPage />} />
+          {/* 새로고침 등 상황에 로그인 유지 위해 클라이언트 스토어 이용*/}
+          <Route path="/user_page/:userName" element={<UserPage />} />
 
           <Route path="*" element={<NotFound />} />
         </Routes>

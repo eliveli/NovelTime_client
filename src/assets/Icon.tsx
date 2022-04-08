@@ -73,6 +73,7 @@ const iconStyleHover = () => `
 
 const Icon = {
   IconBox,
+  ListRight: styled(FaChevronRight)``,
   BigDown: FaChevronDown,
   BigUp: FaChevronUp,
   BigRight: styled(HiOutlineChevronRight)`

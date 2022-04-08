@@ -27,19 +27,44 @@ import {
   RightIconBox,
 } from "./RecommendList.styles";
 
-interface TextProps {
-  recommendId: string;
-  novelImg: string;
-  userImg: string;
+interface RecommendProps {
+  recommendInfo: {
+    recommend: {
+      recommendId: string;
+
+      userName: string;
+      userImg: string;
+      createDate: string;
+
+      likeNO: number;
+
+      recommendTitle: string;
+    };
+    novel: {
+      novelImg: string;
+      novelTitle: string;
+      novelAuthor: string;
+      novelGenre: string;
+      isEnd: boolean;
+    };
+  };
 }
 
-export default function Recommend({ text }: { text: TextProps }) {
+export default function Recommend({ recommendInfo }: RecommendProps) {
   // props or default props
+  const { recommend, novel } = recommendInfo;
   const {
-    novelImg = "https://dn-img-page.kakao.com/download/resource?kid=xsaRM/hzhOfrO85M/k1jHoCWYGpQkLzI11JXbA0&filename=th1",
-    userImg = "https://cdn.pixabay.com/photo/2018/08/31/08/35/toys-3644073_960_720.png",
     recommendId,
-  } = text;
+
+    userName,
+    userImg,
+    createDate,
+
+    likeNO,
+
+    recommendTitle,
+  } = recommend;
+  const { novelImg, novelTitle, novelAuthor, novelGenre, isEnd } = novel;
   const theme = {
     novelImg,
     userImg,
@@ -59,17 +84,17 @@ export default function Recommend({ text }: { text: TextProps }) {
         <NovelContainer>
           <NovelImg />
           <NovelInfoBox ref={infoRef}>
-            <NovelTitle infoWidth={infoWidth}>[해리포터]지독한 후플푸프</NovelTitle>
+            <NovelTitle infoWidth={infoWidth}>{novelTitle}</NovelTitle>
             <NovelSubInfoBox>
-              <NovelInfoLineHeight>곽정언</NovelInfoLineHeight>
-              <NovelInfo>패러디 | 미완</NovelInfo>
+              <NovelInfoLineHeight>{novelAuthor}</NovelInfoLineHeight>
+              <NovelInfo>{`${novelGenre} | ${isEnd ? "완결" : "미완"}`}</NovelInfo>
             </NovelSubInfoBox>
           </NovelInfoBox>
         </NovelContainer>
 
         <UserContainer>
           <TalkPreview>
-            <TalkTitle>꾸준히 인기 많은 해포 패러디 계의 탑 작품이야 한 번 봐 봐</TalkTitle>
+            <TalkTitle>{recommendTitle}</TalkTitle>
             <RightIconBox>
               <RightIcon />
             </RightIconBox>
@@ -78,14 +103,14 @@ export default function Recommend({ text }: { text: TextProps }) {
           <LastLineContainer>
             <UserNameBox>
               <UserImg />
-              <UserName>Nana</UserName>
-              <CreateDate>22.01.01</CreateDate>
+              <UserName>{userName}</UserName>
+              <CreateDate>{createDate}</CreateDate>
             </UserNameBox>
             <IconBox>
               <Icon.IconBox noPointer size={20}>
                 <Icon.Heart />
               </Icon.IconBox>
-              <IconNO>7</IconNO>
+              <IconNO>{likeNO}</IconNO>
             </IconBox>
           </LastLineContainer>
         </UserContainer>
