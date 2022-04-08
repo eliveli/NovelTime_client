@@ -31,26 +31,28 @@ interface MessageProps {
   };
   showRoom: (msgRoomId: string) => void;
   crntMsg: string;
-  state: { state1: boolean; state2: boolean };
+  // state: { state1: boolean; state2: boolean };
+  stateChanged: boolean;
 }
 
-function Message({ message, showRoom, crntMsg, state }: MessageProps) {
+function Message({ message, showRoom, crntMsg, stateChanged }: MessageProps) {
   const { roomId, otherUserImg, otherUserName, recentTalkContent, recentTalkTime, unreadTalkNO } =
     message;
 
   // configure ellipsis of contentWidth
-  const contentWidthRef = useRef<HTMLDivElement>(null);
-  const contentWidth = useComponentWidth(contentWidthRef, state.state1, state.state2);
+  const contnrRef = useRef<HTMLDivElement>(null);
+  const contnrWidth = useComponentWidth(contnrRef, stateChanged);
 
   return (
     <MessageContainer
+      ref={contnrRef}
       onClick={() => {
         showRoom(roomId);
       }}
       isCrntMsg={crntMsg === roomId}
     >
       <UserImg userImg={otherUserImg} />
-      <NextToImgContainer ref={contentWidthRef}>
+      <NextToImgContainer>
         <FirstLineInfoContnr>
           <UserNameBox>
             <UserName>{otherUserName}</UserName>
@@ -60,7 +62,7 @@ function Message({ message, showRoom, crntMsg, state }: MessageProps) {
             <UnreadTalkNO>{unreadTalkNO}</UnreadTalkNO>
           </UnreadTalkNoContnr>
         </FirstLineInfoContnr>
-        <MessageContent contentWidth={contentWidth}>{recentTalkContent}</MessageContent>
+        <MessageContent contnrWidth={contnrWidth}>{recentTalkContent}</MessageContent>
       </NextToImgContainer>
     </MessageContainer>
   );
@@ -138,7 +140,7 @@ export default function MessageList() {
               message={_}
               showRoom={showRoom}
               crntMsg={crntMsg}
-              state={{ state1: isListOpen, state2: isBeforeClickList }}
+              stateChanged={isListOpen}
               // to change width of component used ellipsis
             />
           ))}

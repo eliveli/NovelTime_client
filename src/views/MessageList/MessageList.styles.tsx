@@ -16,7 +16,7 @@ export const MsgListCntnr = styled.div<{
   ${({ isShowRoomTablet, isBeforeClickList, isListOpen }) =>
     isShowRoomTablet && !isBeforeClickList && isListOpen && `width:50%;`}
   ${({ isShowRoomTablet, isBeforeClickList, isListOpen }) =>
-    isShowRoomTablet && !isBeforeClickList && !isListOpen && `width: 46px;`}
+    isShowRoomTablet && !isBeforeClickList && !isListOpen && `width: 56px;`}
 `;
 export const MessageContainer = styled.div<{ isCrntMsg: boolean }>`
   width: 100%;
@@ -24,9 +24,9 @@ export const MessageContainer = styled.div<{ isCrntMsg: boolean }>`
   align-items: center;
   border-bottom: 1px dotted rgba(0, 0, 0, 0.1);
   white-space: nowrap;
-  padding: 16px 0;
+  padding: 16px 5px;
   ${theme.media.mobile(`
-    padding:12px 0;
+    padding:12px 5px;
   `)}
 
   ${({ isCrntMsg }) => isCrntMsg && `border:1px solid rgba(0, 0, 0, 0.1);`}
@@ -118,14 +118,15 @@ export const MessageTitle = styled.h3`
   margin: 0;
   font-weight: 600;
 `;
-export const MessageContent = styled.p<{ contentWidth: number }>`
+export const MessageContent = styled.p<{ contnrWidth: number }>`
   margin: 0;
   color: rgba(0, 0, 0, 0.7);
   font-size: 15px;
 
   // 1줄 엘립시스 ...
   display: inline-block;
-  width: ${({ contentWidth }) => contentWidth}px;
+  width: ${({ contnrWidth }) => contnrWidth - (45 + 12 + 10) - 2}px;
+  // container width - (img width + margin left + padding) - amount necessary
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
