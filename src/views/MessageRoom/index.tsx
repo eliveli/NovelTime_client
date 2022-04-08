@@ -19,6 +19,7 @@ import {
   DateMark,
   LastWatchContnr,
   LastWatchMark,
+  ResizingFromMobile,
 } from "./MessageRoom.styles";
 
 // server request with (roomIdMobile || roomIdTablet) //
@@ -354,7 +355,7 @@ export default function MessageRoom({ roomIdTablet }: { roomIdTablet?: string })
   }, []);
 
   return (
-    <>
+    <ResizingFromMobile roomIdMobile={roomIdMobile}>
       <MsgRoomContnr roomIdMobile={roomIdMobile}>
         {messageRecord.message.map((_, idx) => (
           <MessageRecord
@@ -374,6 +375,6 @@ export default function MessageRoom({ roomIdTablet }: { roomIdTablet?: string })
         <button onClick={testMessage}>testMessage</button>
       </MsgRoomContnr>
       <WriteComment isMessage />
-    </>
+    </ResizingFromMobile>
   );
 }

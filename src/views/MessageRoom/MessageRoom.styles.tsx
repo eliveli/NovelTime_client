@@ -26,22 +26,29 @@ export const MsgRoomContnr = styled.div<{ roomIdMobile?: string }>`
     border-top: 0;
     height: calc(100vh - 51px - 88px);
 
-    width: 100%;
-    max-width: 860px;
-    margin: auto;
+
+
     `)}
   ${({ roomIdMobile }) =>
     roomIdMobile &&
     theme.media.desktop(`
     height: calc(100vh - 61px - 88px);
 
-    width: 100%;
-    max-width: 860px;
-    margin: auto;
+
   `)}
 
   overflow-y: scroll;
   ${theme.hideScrollBar}
+`;
+export const ResizingFromMobile = styled.div<{ roomIdMobile?: string }>`
+  ${({ roomIdMobile }) =>
+    roomIdMobile &&
+    `width: 100%;
+    max-width: 860px;
+    margin: auto;
+    border-left: 1px solid rgba(0,0,0,0.1);
+    border-right: 1px solid rgba(0,0,0,0.1);
+    `}
 `;
 export const MessageContainer = styled.div<{ isMe?: true }>`
   width: 100%;
