@@ -33,9 +33,10 @@ interface MessageProps {
   crntMsg: string;
   // state: { state1: boolean; state2: boolean };
   stateChanged: boolean;
+  isBeforeClickList: boolean;
 }
 
-function Message({ message, showRoom, crntMsg, stateChanged }: MessageProps) {
+function Message({ message, showRoom, crntMsg, stateChanged, isBeforeClickList }: MessageProps) {
   const { roomId, otherUserImg, otherUserName, recentTalkContent, recentTalkTime, unreadTalkNO } =
     message;
 
@@ -50,6 +51,7 @@ function Message({ message, showRoom, crntMsg, stateChanged }: MessageProps) {
         showRoom(roomId);
       }}
       isCrntMsg={crntMsg === roomId}
+      isBeforeClickList={isBeforeClickList}
     >
       <UserImg userImg={otherUserImg} />
       <NextToImgContainer>
@@ -116,15 +118,21 @@ export default function MessageList() {
   // - for mobile go to the message room page
   const isTablet = document.documentElement.offsetWidth >= 768;
   const showRoom = (msgRoomId: string) => {
-    if (isTablet) {
+    // when clicking the list at first
+    if (isTablet && isBeforeClickList) {
+      handleBeforeClickList(false);
       handleShowRoomTablet(true);
       handleListOpen(true);
       getRoomId(msgRoomId);
       handleCrntMsg(msgRoomId);
+    } else if (isTablet && !isBeforeClickList) {
+      // when clicking the list since second
+      getRoomId(msgRoomId);
+      handleCrntMsg(msgRoomId);
     } else {
+      // at mobile
       navigate(`/message_room/${msgRoomId}`);
     }
-    handleBeforeClickList(false);
   };
   return (
     <SectionBG isMessageList>
@@ -141,6 +149,7 @@ export default function MessageList() {
               showRoom={showRoom}
               crntMsg={crntMsg}
               stateChanged={isListOpen}
+              isBeforeClickList={isBeforeClickList}
               // to change width of component used ellipsis
             />
           ))}

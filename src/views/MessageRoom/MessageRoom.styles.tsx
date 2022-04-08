@@ -11,6 +11,7 @@ export const MsgRoomContnr = styled.div`
 
   ${theme.media.tablet(`
     padding:0 20px;
+    border-top: 1px solid rgba(0,0,0,0.1);
     height: calc(100vh - (71px + 60px) - 50px - 88px);
     `)} // 100vh - (top + bottom nav) - top nav of message room - message write component
   ${theme.media.desktop(`

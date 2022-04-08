@@ -18,23 +18,33 @@ export const MsgListCntnr = styled.div<{
   ${({ isShowRoomTablet, isBeforeClickList, isListOpen }) =>
     isShowRoomTablet && !isBeforeClickList && !isListOpen && `width: 56px;`}
 `;
-export const MessageContainer = styled.div<{ isCrntMsg: boolean }>`
+export const MessageContainer = styled.div<{ isCrntMsg: boolean; isBeforeClickList: boolean }>`
   width: 100%;
   display: flex;
   align-items: center;
-  border-bottom: 1px dotted rgba(0, 0, 0, 0.1);
+
+  /* border-bottom: 1px dotted rgba(0, 0, 0, 0.1); */
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  border-left: 1px solid rgba(0, 0, 0, 0.1);
+  ${({ isBeforeClickList }) => isBeforeClickList && `border-left:0;`}
+
   white-space: nowrap;
   padding: 16px 5px;
   ${theme.media.mobile(`
     padding:12px 5px;
   `)}
 
-  ${({ isCrntMsg }) => isCrntMsg && `border:1px solid rgba(0, 0, 0, 0.1);`}
+  ${({ isCrntMsg }) => isCrntMsg && `border: 2px solid ${theme.color.mainLight};`}
 `;
 export const MsgRoomCntnr = styled.div<{
   isListOpen: boolean;
 }>`
   position: relative;
+  border-left: 1px solid rgba(0, 0, 0, 0.1);
+  border-right: 1px solid rgba(0, 0, 0, 0.1);
+
+  background-color: white;
+
   // for dividing the space
   ${({ isListOpen }) => (isListOpen ? `width:50%;` : `width: 100%;`)}
 `;

@@ -121,7 +121,7 @@ export const WriteCommentContainer = styled.div<{
   padding-right: 13px;
   ${({ isReComment }) => isReComment && "margin-left:-40px;"}
 
-  // screen size <= 820px,   fix comment component to bottom
+  // html width <= 820px,   fix comment component to bottom
   ${({ isFixedComment }) =>
     isFixedComment &&
     `position: fixed;
@@ -131,16 +131,18 @@ export const WriteCommentContainer = styled.div<{
     border-radius: 0;
     background-color: rgba(255,255,255,1);
     z-index: 1;`}
-    ${({ isMessage }) =>
+
+// for message room component
+  ${({ isMessage }) =>
     isMessage &&
     `
     position: relative;
-    bottom: 0;
-    left: 0;
-    width: 100%;
+    
     border-radius: 0;
     background-color: rgba(255,255,255,1);
     z-index: 1;
+    
+    border-left: 0; border-right: 0; border-bottom: 0;
   `}
 `;
 export const WriteTextCntnr = styled.div`
@@ -226,10 +228,6 @@ type CommentProps = {
   // when re-comment is props for TalkComment
   isReComment?: true;
 };
-
-function CommentPageMobile() {
-  return <div />;
-}
 
 const htmlWidth = document.documentElement.offsetWidth;
 const isTablet = htmlWidth >= 768;

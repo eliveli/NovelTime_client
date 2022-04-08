@@ -76,9 +76,12 @@ export const NavContentBoxMobile = styled.nav<{
   ${({ isDetail }) => isDetail && `height: 50px;`}
 
   padding: 0 16px;
-  ${theme.media.tablet(`
-    padding: 0 20px; 
-  `)}
+
+  // at tablet
+  @media (min-width: 768px) {
+    padding: 0 20px;
+    ${({ isMsgList }) => isMsgList && `padding: 0 8px;`}
+  }
 
   // 모바일용 하단 내비게이션 바는 패딩 없음
 
