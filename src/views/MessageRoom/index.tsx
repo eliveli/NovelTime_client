@@ -355,7 +355,7 @@ export default function MessageRoom({ roomIdTablet }: { roomIdTablet?: string })
 
   return (
     <>
-      <MsgRoomContnr>
+      <MsgRoomContnr roomIdMobile={roomIdMobile}>
         {messageRecord.message.map((_, idx) => (
           <MessageRecord
             key={_.userName + idx.toString}

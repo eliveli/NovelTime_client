@@ -1,7 +1,7 @@
 import theme, { styled } from "assets/styles/theme";
 import Icon from "assets/Icon";
 
-export const MsgRoomContnr = styled.div`
+export const MsgRoomContnr = styled.div<{ roomIdMobile?: string }>`
   // for mobile
   height: calc(100vh - 51px - 88px);
   // 100vh - top nav - message write component
@@ -15,7 +15,29 @@ export const MsgRoomContnr = styled.div`
     height: calc(100vh - (71px + 60px) - 50px - 88px);
     `)} // 100vh - (top + bottom nav) - top nav of message room - message write component
   ${theme.media.desktop(`
-    height: calc(100vh - (61px) - 50px - 88px);
+    height: calc(100vh - 61px - 50px - 88px);
+  `)}
+
+  // when only message room exists without message list because of resizing browser
+  ${({ roomIdMobile }) =>
+    roomIdMobile &&
+    theme.media.tablet(`
+    padding:0 20px;
+    border-top: 0;
+    height: calc(100vh - 51px - 88px);
+
+    width: 100%;
+    max-width: 860px;
+    margin: auto;
+    `)}
+  ${({ roomIdMobile }) =>
+    roomIdMobile &&
+    theme.media.desktop(`
+    height: calc(100vh - 61px - 88px);
+
+    width: 100%;
+    max-width: 860px;
+    margin: auto;
   `)}
 
   overflow-y: scroll;
