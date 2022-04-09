@@ -140,7 +140,7 @@ export const CreateDate = styled.p`
   margin: 0;
   padding-left: 12px;
 `;
-export const TalkPreview = styled.div`
+export const RecommendPreview = styled.div`
   border-radius: 5px;
   box-shadow: 0 0 2px rgb(0 0 0 / 60%);
 
@@ -150,6 +150,8 @@ export const TalkPreview = styled.div`
 
   display: flex;
   justify-content: space-between;
+
+  height: 43px;
 
   /* 태블릿 */
   @media screen and (min-width: 768px) {
@@ -163,15 +165,28 @@ export const TalkPreview = styled.div`
   @media screen and (min-width: 1024px) {
   }
 `;
-export const TalkTitle = styled.div`
-  padding: 3px 1px 3px 0;
+export const RecommendTitle = styled.div<{ contnrWidth: number }>`
+  /* padding: 3px 1px 3px 0; */
 
   font-weight: 600;
+
+  margin-top: 9px;
+  margin-left: 5px;
+
+  // ... 1줄 엘립시스
+  width: ${(props) => props.contnrWidth - 11 - 28 - 11}px;
+  // (container width) - (left space) - (right icon space) - (extra space)
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 
   /* font-size: 17px; */
 
   /* 태블릿 */
   @media screen and (min-width: 768px) {
+    margin: 0;
+    width: auto;
     padding: 7px 10px 7px 2px;
 
     //텍스트 가운데정렬 : 2줄 엘립시스 적용으로 인해 설정 무시됨
@@ -179,7 +194,7 @@ export const TalkTitle = styled.div`
     // align-content: center;
     // align-items: center;
 
-    //2줄 넘어가는 텍스트 ...표시
+    // ... 2줄 엘립시스
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
@@ -205,8 +220,9 @@ export const IconNO = styled.span``;
 export const NovelTitle = styled.div<{ contnrWidth: number }>`
   font-weight: 600;
 
-  // 줄 넘어가면 ... 표시
   display: inline-block;
+
+  // ... 1줄 엘립시스
 
   // at mobile
   width: ${(props) => props.contnrWidth - 70 - 6}px;

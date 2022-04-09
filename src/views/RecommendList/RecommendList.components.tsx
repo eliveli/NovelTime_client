@@ -12,10 +12,10 @@ import {
   Text,
   UserNameBox,
   IconBox,
-  TalkTitle,
+  RecommendTitle,
   NovelTitle,
   IconNO,
-  TalkPreview,
+  RecommendPreview,
   UserContainer,
   NovelContainer,
   NovelInfoBox,
@@ -94,12 +94,12 @@ export default function Recommend({ recommendInfo }: RecommendProps) {
         </NovelContainer>
 
         <UserContainer>
-          <TalkPreview>
-            <TalkTitle>{recommendTitle}</TalkTitle>
+          <RecommendPreview>
+            <RecommendTitle contnrWidth={contnrWidth}>{recommendTitle}</RecommendTitle>
             <RightIconBox>
               <RightIcon />
             </RightIconBox>
-          </TalkPreview>
+          </RecommendPreview>
 
           <LastLineContainer>
             <UserNameBox>
