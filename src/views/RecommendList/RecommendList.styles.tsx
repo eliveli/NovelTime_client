@@ -202,12 +202,19 @@ export const IconBox = styled.div`
   align-items: center;
 `;
 export const IconNO = styled.span``;
-export const NovelTitle = styled.div<{ infoWidth: number }>`
+export const NovelTitle = styled.div<{ contnrWidth: number }>`
   font-weight: 600;
 
   // 줄 넘어가면 ... 표시
   display: inline-block;
-  width: ${(props) => props.infoWidth || 248}px;
+
+  // at mobile
+  width: ${(props) => props.contnrWidth - 70 - 6}px;
+  // at tablet, desktop
+  @media screen and (min-width: 768px) {
+    width: ${({ contnrWidth }) => contnrWidth / 2 - 12 - (70 + 10) - 10}px;
+  }
+
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

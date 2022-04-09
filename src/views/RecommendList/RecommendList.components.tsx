@@ -70,21 +70,22 @@ export default function Recommend({ recommendInfo }: RecommendProps) {
     userImg,
   };
 
-  const infoRef = useRef<HTMLDivElement>(null);
-  const infoWidth = useComponentWidth(infoRef); // 인포컨테이너 width 받아와 제목 엘립시스에 적용
+  const contnrRef = useRef<HTMLElement>(null);
+  const contnrWidth = useComponentWidth(contnrRef); // 인포컨테이너 width 받아와 제목 엘립시스에 적용
 
   const navigate = useNavigate();
   return (
     <ThemeProvider theme={theme}>
       <Text
+        ref={contnrRef}
         onClick={() => {
           navigate(`/recommend_detail/${recommendId}`);
         }}
       >
         <NovelContainer>
           <NovelImg />
-          <NovelInfoBox ref={infoRef}>
-            <NovelTitle infoWidth={infoWidth}>{novelTitle}</NovelTitle>
+          <NovelInfoBox>
+            <NovelTitle contnrWidth={contnrWidth}>{novelTitle}</NovelTitle>
             <NovelSubInfoBox>
               <NovelInfoLineHeight>{novelAuthor}</NovelInfoLineHeight>
               <NovelInfo>{`${novelGenre} | ${isEnd ? "완결" : "미완"}`}</NovelInfo>
