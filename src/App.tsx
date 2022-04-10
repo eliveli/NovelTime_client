@@ -26,6 +26,7 @@ import {
   AddWriting,
 } from "views";
 import Modal from "components/Modal";
+import ScrollToTop from "utils/ScrollToTop";
 import { ThemeProvider } from "styled-components";
 import theme from "assets/styles/theme";
 import GlobalStyle from "./assets/styles/GlobalStyle";
@@ -36,69 +37,75 @@ function App() {
       <GlobalStyle />
       <ThemeProvider theme={theme}>
         <Modal />
-        <Routes>
-          {["/", "/talk_list", "/recommend_list", "/novel_list", "/message_list"].map((path) => (
-            <Route path={path} element={<MainListNav />} />
-          ))}
-          {[
-            "/novel_detail/:novelId",
-            "/novel_detail/:novelId/writing_list",
-            "/novel_detail/:novelId/:talkId",
-            "/novel_detail/:novelId/:recommendId",
-            "/talk_detail/:talkId",
-            "/recommend_detail/:recommendId",
-            "/novel_list/:categoryText/:categoryId",
-            "/novel_list/:categoryText/:categoryId/:novelId",
-            "/add_writing",
-            "/add_writing/:novelId/:novelTitle",
-            "/search",
-            "/search/novel",
-            "/message_room/:roomId",
-            "/user_page/:userName",
-          ].map((path) => (
-            <Route path={path} element={<DetailNav />} />
-          ))}
+        <ScrollToTop>
+          <Routes>
+            {["/", "/talk_list", "/recommend_list", "/novel_list", "/message_list"].map((path) => (
+              <Route path={path} element={<MainListNav />} />
+            ))}
+            {[
+              "/novel_detail/:novelId",
+              "/novel_detail/:novelId/writing_list",
+              "/novel_detail/:novelId/:talkId",
+              "/novel_detail/:novelId/:recommendId",
+              "/talk_detail/:talkId",
+              "/talk_detail/:talkId/:commentId",
+              "/recommend_detail/:recommendId",
+              "/novel_list/:categoryText/:categoryId",
+              "/novel_list/:categoryText/:categoryId/:novelId",
+              "/add_writing",
+              "/add_writing/:novelId/:novelTitle",
+              "/search",
+              "/search/novel",
+              "/message_room/:roomId",
+              "/user_page/:userName",
+            ].map((path) => (
+              <Route path={path} element={<DetailNav />} />
+            ))}
 
-          {/* 모바일 버전은 화면 최하단에 고정, PC 버전은 최상단에 스크롤 따라 보이기/감추기 */}
-          {/* 페이지 별 다른 내비게이션 바가 필요할 경우 추가 & 아래 Routes에도 parent component path 추가 */}
-        </Routes>
-        <Routes>
-          <Route path="/" element={<FreeTalkList />} />
-          <Route path="/talk_list" element={<FreeTalkList />} />
-          <Route path="/recommend_list" element={<RecommendList />} />
+            {/* 모바일 버전은 화면 최하단에 고정, PC 버전은 최상단에 스크롤 따라 보이기/감추기 */}
+            {/* 페이지 별 다른 내비게이션 바가 필요할 경우 추가 & 아래 Routes에도 parent component path 추가 */}
+          </Routes>
+        </ScrollToTop>
+        <ScrollToTop>
+          <Routes>
+            <Route path="/" element={<FreeTalkList />} />
+            <Route path="/talk_list" element={<FreeTalkList />} />
+            <Route path="/recommend_list" element={<RecommendList />} />
 
-          <Route path="/novel_list" element={<NovelList />} />
-          <Route path="/novel_list/:categoryText/:categoryId" element={<NovelListByCategory />} />
-          <Route
-            path="/novel_list/:categoryText/:categoryId/:novelId"
-            element={<NovelListByCategory />}
-          />
+            <Route path="/novel_list" element={<NovelList />} />
+            <Route path="/novel_list/:categoryText/:categoryId" element={<NovelListByCategory />} />
+            <Route
+              path="/novel_list/:categoryText/:categoryId/:novelId"
+              element={<NovelListByCategory />}
+            />
 
-          <Route path="/novel_detail/:novelId" element={<NovelDetail />} />
-          <Route path="/novel_detail/:novelId/writing_list" element={<WritingList />} />
-          <Route path="/novel_detail/:novelId/:talkId" element={<NovelDetailTalk />} />
-          <Route path="/novel_detail/:novelId/:recommendId" element={<NovelDetailRecommend />} />
+            <Route path="/novel_detail/:novelId" element={<NovelDetail />} />
+            <Route path="/novel_detail/:novelId/writing_list" element={<WritingList />} />
+            <Route path="/novel_detail/:novelId/:talkId" element={<NovelDetailTalk />} />
+            <Route path="/novel_detail/:novelId/:recommendId" element={<NovelDetailRecommend />} />
 
-          <Route path="/talk_detail/:talkId" element={<FreeTalkDetail />} />
-          <Route path="/recommend_detail/:recommendId" element={<RecommendDetail />} />
+            <Route path="/talk_detail/:talkId" element={<FreeTalkDetail />} />
+            <Route path="/talk_detail/:talkId/:commentId" element={<FreeTalkDetail />} />
+            <Route path="/recommend_detail/:recommendId" element={<RecommendDetail />} />
 
-          <Route path="/add_writing" element={<AddWriting />} />
-          <Route path="/add_writing/:novelId/:novelTitle" element={<AddWriting />} />
+            <Route path="/add_writing" element={<AddWriting />} />
+            <Route path="/add_writing/:novelId/:novelTitle" element={<AddWriting />} />
 
-          <Route path="/search" element={<SearchPage />} />
-          <Route path="/search/novel" element={<SearchPage />} />
-          <Route path="/search/novel/iframe" element={<SearchPage />} />
-          {/* 검색 전 예시 작품 보여주기 */}
+            <Route path="/search" element={<SearchPage />} />
+            <Route path="/search/novel" element={<SearchPage />} />
+            <Route path="/search/novel/iframe" element={<SearchPage />} />
+            {/* 검색 전 예시 작품 보여주기 */}
 
-          <Route path="/message_list" element={<MessageList />} />
+            <Route path="/message_list" element={<MessageList />} />
 
-          <Route path="/message_room/:roomId" element={<MessageRoom />} />
+            <Route path="/message_room/:roomId" element={<MessageRoom />} />
 
-          {/* 새로고침 등 상황에 로그인 유지 위해 클라이언트 스토어 이용*/}
-          <Route path="/user_page/:userName" element={<UserPage />} />
+            {/* 새로고침 등 상황에 로그인 유지 위해 클라이언트 스토어 이용*/}
+            <Route path="/user_page/:userName" element={<UserPage />} />
 
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </ScrollToTop>
       </ThemeProvider>
     </Router>
   );
