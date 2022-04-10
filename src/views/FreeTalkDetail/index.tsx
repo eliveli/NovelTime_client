@@ -14,7 +14,7 @@ import {
 // server request by talkID
 
 export default function FreeTalkDetail() {
-  const { talkId } = useParams();
+  const { talkId, commentId } = useParams();
 
   // 서버에서 데이터 받아올 때 구성 // dataFromServer = { talk, novel }
   const dataFromServer = {
@@ -69,32 +69,58 @@ export default function FreeTalkDetail() {
   // 백엔드에서 comment 테이블에서 talkID로 코멘트 찾기.
   // 코멘트 작성자는 userID로 구분, user 테이블에서 현재 user Name을 가져오기
 
-  const comment = {
-    commentId: "abcd",
-    userName: "리리리",
-    userImg: "https://cdn.pixabay.com/photo/2018/08/31/08/35/toys-3644073_960_720.png",
-    commentContent: "코멘트 작성 중",
-    createDate: "22.01.05",
-    reComment: [
-      {
-        commentId: "abcde",
-        reCommentUserName: "lala",
-        userName: "fff",
-        userImg: "https://cdn.pixabay.com/photo/2018/08/31/08/35/toys-3644073_960_720.png",
-        commentContent: "그러하오",
-        createDate: "22.01.05",
-      },
-      {
-        commentId: "abcdef",
-        reCommentUserName: "lala",
-        userName: "zxcv",
-        userImg: "https://cdn.pixabay.com/photo/2018/08/31/08/35/toys-3644073_960_720.png",
-        commentContent: "그러하오",
-        createDate: "22.01.05",
-      },
-    ],
-  };
-  const commentList = [comment, comment];
+  const commentList = [
+    {
+      commentId: "abc",
+      userName: "리리리",
+      userImg: "https://cdn.pixabay.com/photo/2018/08/31/08/35/toys-3644073_960_720.png",
+      commentContent: "코멘트 작성 중",
+      createDate: "22.01.05",
+      reComment: [
+        {
+          commentId: "abcde",
+          reCommentUserName: "lala",
+          userName: "fff",
+          userImg: "https://cdn.pixabay.com/photo/2018/08/31/08/35/toys-3644073_960_720.png",
+          commentContent: "그러하오",
+          createDate: "22.01.05",
+        },
+        {
+          commentId: "abcdef",
+          reCommentUserName: "lala",
+          userName: "zxcv",
+          userImg: "https://cdn.pixabay.com/photo/2018/08/31/08/35/toys-3644073_960_720.png",
+          commentContent: "그러하오",
+          createDate: "22.01.05",
+        },
+      ],
+    },
+    {
+      commentId: "abcaaad",
+      userName: "리리리",
+      userImg: "https://cdn.pixabay.com/photo/2018/08/31/08/35/toys-3644073_960_720.png",
+      commentContent: "코멘트 작성 중",
+      createDate: "22.01.05",
+      reComment: [
+        {
+          commentId: "assssbcde",
+          reCommentUserName: "lala",
+          userName: "fff",
+          userImg: "https://cdn.pixabay.com/photo/2018/08/31/08/35/toys-3644073_960_720.png",
+          commentContent: "그러하오",
+          createDate: "22.01.05",
+        },
+        {
+          commentId: "abdfdfcdef",
+          reCommentUserName: "lala",
+          userName: "zxcv",
+          userImg: "https://cdn.pixabay.com/photo/2018/08/31/08/35/toys-3644073_960_720.png",
+          commentContent: "그러하오",
+          createDate: "22.01.05",
+        },
+      ],
+    },
+  ];
   // 답글은 어떻게?
   // - comment : comment 테이블에서 같은 talkID의 코멘트 리스트 가져오기
   // - reCommentID : if it is not "", it is reComment for it - commentID
@@ -113,7 +139,7 @@ export default function FreeTalkDetail() {
         <NovelInWriting novel={dataFromServer.novel} />
         <LikeAndShare isLike={dataFromServer.talk.isLike} likeNO={dataFromServer.talk.likeNO} />
       </WritingDetailContainer>
-      <CommentList commentList={commentList} />
+      <CommentList commentList={commentList} commentIdForScroll={commentId} />
       <WriteComment />
     </SectionBG>
   );

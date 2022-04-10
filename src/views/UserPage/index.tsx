@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 import SectionBG from "components/SectionBG";
 import { messageUserPage } from "assets/images";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useAppDispatch } from "store/hooks";
 import { setUserInfo } from "store/clientSlices/userInfoSlice";
 
@@ -38,6 +38,8 @@ import {
   CommentTalkTitle,
   CommentContentContnr,
   WritingMark,
+  ProfileAlign,
+  ExtraSpace,
 } from "./UserPage.styles";
 
 // server request with userName
@@ -47,15 +49,19 @@ interface CommentInfo {
     commentId: string;
     commentContent: string;
     createDate: string;
+
+    talkId: string;
     talkTitle: string;
     novelTitle: string;
   };
 }
 
 function Comment({ commentInfo }: CommentInfo) {
-  const { commentId, commentContent, createDate, talkTitle, novelTitle } = commentInfo;
+  const { commentId, commentContent, createDate, talkId, talkTitle, novelTitle } = commentInfo;
+  const navigate = useNavigate();
+
   return (
-    <WiringContnr isComment>
+    <WiringContnr isComment onClick={() => navigate(`/talk_detail/${talkId}/${commentId}`)}>
       <CommentContentContnr>
         <CommentContent>{commentContent}</CommentContent>
         <CreateDate>{createDate}</CreateDate>
@@ -98,10 +104,12 @@ function Writing({ writingInfo }: WritingInfo) {
   const imgRef = useRef<HTMLDivElement>(null);
   const imgHeight = useComponentHeight(imgRef);
 
+  const navigate = useNavigate();
+
   // talk
   if (talkId) {
     return (
-      <WiringContnr>
+      <WiringContnr onClick={() => navigate(`/talk_detail/${talkId}`)}>
         <ContnrNearImg isTalk>
           <WritingTitle talkId={talkId}>{talkTitle}</WritingTitle>
           <UserContnr talkId={talkId}>
@@ -133,7 +141,13 @@ function Writing({ writingInfo }: WritingInfo) {
   }
   // recommend
   return (
-    <WiringContnr>
+    <WiringContnr
+      onClick={() => {
+        if (recommendId) {
+          navigate(`/recommend_detail/${recommendId}`);
+        }
+      }}
+    >
       <NovelImg ref={imgRef} novelImg={novelImg} imgHeight={imgHeight} />
       <ContnrNearImg>
         <NovelTitle>{novelTitle}</NovelTitle>
@@ -193,16 +207,17 @@ const dataFromServer = {
   ],
   myComment: [
     {
-      commentId: "abcd",
+      commentId: "abdfdfcdef",
       commentContent: "코멘트 작성 중",
       createDate: "22.01.05",
+      talkId: "as",
       talkTitle: "it is the best novel I've ever read",
       novelTitle: "헌터와 매드 사이언티스트",
     },
   ],
   otherTalk: [
     {
-      talkId: "assss",
+      talkId: "abdfdfcd",
 
       novelImg:
         "https://comicthumb-phinf.pstatic.net/20220126_148/pocket_16431735084292970r_JPEG/%C5%A9%B8%AE%BD%BA%C5%BB%BE%C6%B0%A1%BE%BE%B4%C2%B3%B2%C0%DA%B4%D9-%C0%CF%B7%AF%BD%BA%C6%AE%C7%A5%C1%F61.jpg?type=m260", // 시리즈
@@ -432,88 +447,94 @@ export default function UserPage() {
   const [myFilter, setMyFilter] = useState("프리톡");
   const [otherFilter, setOtherFilter] = useState("프리톡");
   return (
-    <SectionBG>
+    <>
       <ProfileContnr>
-        <ProfileUserCntnr>
-          <UserImg userImg={dataFromServer.userInfo.userImg} />
-          <UserName>{dataFromServer.userInfo.userName}</UserName>
-          <MessageIcon src={messageUserPage} alt="message" />
-        </ProfileUserCntnr>
+        <ProfileAlign>
+          <ProfileUserCntnr>
+            <UserImg userImg={dataFromServer.userInfo.userImg} />
+            <UserName>{dataFromServer.userInfo.userName}</UserName>
+            <MessageIcon src={messageUserPage} alt="message" />
+          </ProfileUserCntnr>
+        </ProfileAlign>
       </ProfileContnr>
-
-      <CategoryMark writing categoryText="My Writing" />
-      <FilterContnr>
-        {["프리톡", "추천", "댓글"].map((_) => (
-          <Filter
-            category={_ as FilterType}
-            selectedCtgr={myFilter as FilterType}
-            onClick={() => setMyFilter(_)}
-          >
-            &nbsp;&nbsp;
-            {_}
-            &nbsp;&nbsp;
-          </Filter>
-        ))}
-      </FilterContnr>
-      <WritingSection>
-        {myFilter === "프리톡" &&
-          dataFromServer.myTalk.map((_) => <Writing key={_.talkId} writingInfo={_} />)}
-        {myFilter === "추천" &&
-          dataFromServer.myRecommend.map((_) => <Writing key={_.recommendId} writingInfo={_} />)}
-        {myFilter === "댓글" &&
-          dataFromServer.myComment.map((_) => <Comment key={_.commentId} commentInfo={_} />)}
-      </WritingSection>
-
-      <CategoryMark writing categoryText="Other's Writing I like" />
-      <FilterContnr>
-        {["프리톡", "추천"].map((_) => (
-          <Filter
-            category={_ as FilterType}
-            selectedCtgr={otherFilter as FilterType}
-            onClick={() => setOtherFilter(_)}
-          >
-            &nbsp;&nbsp;
-            {_}
-            &nbsp;&nbsp;
-          </Filter>
-        ))}
-      </FilterContnr>
-      <WritingSection>
-        {otherFilter === "프리톡" &&
-          dataFromServer.otherTalk.map((_) => <Writing key={_.talkId} writingInfo={_} />)}
-      </WritingSection>
-      <WritingSection>
-        {otherFilter === "추천" &&
-          dataFromServer.otherRecommend.map((_) => <Writing key={_.recommendId} writingInfo={_} />)}
-      </WritingSection>
-
-      <CategoryMark writing categoryText="My Novel List" />
-      {dataFromServer.novelListArray.map((list) => (
-        <RowSlide
-          categoryId={list.listInfo.listId}
-          categoryText={list.listInfo.listTitle}
-          novelNO={list.novel.length}
-          isUserList
-        >
-          {list.novel.map((_) => (
-            <NovelRow key={_.novelId} novel={_} isUserList />
+      <ExtraSpace />
+      <SectionBG>
+        <CategoryMark writing categoryText="My Writing" />
+        <FilterContnr>
+          {["프리톡", "추천", "댓글"].map((_) => (
+            <Filter
+              category={_ as FilterType}
+              selectedCtgr={myFilter as FilterType}
+              onClick={() => setMyFilter(_)}
+            >
+              &nbsp;&nbsp;
+              {_}
+              &nbsp;&nbsp;
+            </Filter>
           ))}
-        </RowSlide>
-      ))}
-      <CategoryMark writing categoryText="Other's Novel List I Like" />
-      {dataFromServer.novelListArray.map((list) => (
-        <RowSlide
-          categoryId={list.listInfo.listId}
-          userInfo={{ userImg: list.listInfo.userImg, userName: list.listInfo.userName }}
-          categoryText={list.listInfo.listTitle}
-          novelNO={list.novel.length}
-          isUserList
-        >
-          {list.novel.map((_) => (
-            <NovelRow key={_.novelId} novel={_} isUserList />
+        </FilterContnr>
+        <WritingSection>
+          {myFilter === "프리톡" &&
+            dataFromServer.myTalk.map((_) => <Writing key={_.talkId} writingInfo={_} />)}
+          {myFilter === "추천" &&
+            dataFromServer.myRecommend.map((_) => <Writing key={_.recommendId} writingInfo={_} />)}
+          {myFilter === "댓글" &&
+            dataFromServer.myComment.map((_) => <Comment key={_.commentId} commentInfo={_} />)}
+        </WritingSection>
+
+        <CategoryMark writing categoryText="Other's Writing I like" />
+        <FilterContnr>
+          {["프리톡", "추천"].map((_) => (
+            <Filter
+              category={_ as FilterType}
+              selectedCtgr={otherFilter as FilterType}
+              onClick={() => setOtherFilter(_)}
+            >
+              &nbsp;&nbsp;
+              {_}
+              &nbsp;&nbsp;
+            </Filter>
           ))}
-        </RowSlide>
-      ))}
-    </SectionBG>
+        </FilterContnr>
+        <WritingSection>
+          {otherFilter === "프리톡" &&
+            dataFromServer.otherTalk.map((_) => <Writing key={_.talkId} writingInfo={_} />)}
+        </WritingSection>
+        <WritingSection>
+          {otherFilter === "추천" &&
+            dataFromServer.otherRecommend.map((_) => (
+              <Writing key={_.recommendId} writingInfo={_} />
+            ))}
+        </WritingSection>
+
+        <CategoryMark writing categoryText="My Novel List" />
+        {dataFromServer.novelListArray.map((list) => (
+          <RowSlide
+            categoryId={list.listInfo.listId}
+            categoryText={list.listInfo.listTitle}
+            novelNO={list.novel.length}
+            isUserList
+          >
+            {list.novel.map((_) => (
+              <NovelRow key={_.novelId} novel={_} isUserList />
+            ))}
+          </RowSlide>
+        ))}
+        <CategoryMark writing categoryText="Other's Novel List I Like" />
+        {dataFromServer.novelListArray.map((list) => (
+          <RowSlide
+            categoryId={list.listInfo.listId}
+            userInfo={{ userImg: list.listInfo.userImg, userName: list.listInfo.userName }}
+            categoryText={list.listInfo.listTitle}
+            novelNO={list.novel.length}
+            isUserList
+          >
+            {list.novel.map((_) => (
+              <NovelRow key={_.novelId} novel={_} isUserList />
+            ))}
+          </RowSlide>
+        ))}
+      </SectionBG>
+    </>
   );
 }

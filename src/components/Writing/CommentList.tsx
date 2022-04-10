@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 // import { CommentListContainer, CommentContainer } from "./FreeTalkDetail.styles";
 
 import theme, { styled } from "assets/styles/theme";
@@ -213,6 +214,7 @@ type Comment = {
 };
 interface CommentListProps {
   commentList: Comment[];
+  commentIdForScroll?: string;
 }
 
 type CommentProps = {
@@ -223,10 +225,11 @@ type CommentProps = {
     commentContent: string;
     createDate: string;
     reComment?: ReComment[];
-    reCommentUserName?: string; // when re-comment is props for TalkComment
+    reCommentUserName?: string; // when re-comment is props for CommentWritten
   };
-  // when re-comment is props for TalkComment
+  // when re-comment is props for CommentWritten
   isReComment?: true;
+  commentIdForScroll?: string;
 };
 
 const htmlWidth = document.documentElement.offsetWidth;
@@ -286,28 +289,26 @@ export function WriteComment({ isReComment, isMessage }: { isReComment?: true; i
   );
 }
 
-function TalkComment({ isReComment, comment }: CommentProps) {
+function CommentWritten({ isReComment, comment, commentIdForScroll }: CommentProps) {
   const { commentId, userName, userImg, commentContent, createDate, reComment, reCommentUserName } =
     comment;
 
-  // reComment one by one : can not set two reComment at once
-
+  // reComment one by one : can not set two reComment at once ---------------- //
+  //
   // go writing reComment
   const [isWriteReComnt, handleWriteReComnt] = useState(false);
-
   const dispatch = useAppDispatch();
-
   const { handlePrevReComnt } = useAppSelector((state) => state.writing);
   const { reCommentId } = useAppSelector((state) => state.writing.reCommentUser);
 
   // clicking "답글", then
   const handleReComment = () => {
-    // set false of previous write-comment component
+    // close the previous component for writing re-comment
     handlePrevReComnt(false);
 
-    // show or not component for writing reComment
+    // open or close the current component for writing reComment
     handleWriteReComnt(!isWriteReComnt);
-
+    // if you click the same "답글" twice, setState do work once, because of 비동기 logic (maybe yes)
     if (reCommentId) {
       //   alert(
       //     `작성 중인 답글이 존재해요! 이전 답글을 삭제할까요?
@@ -315,15 +316,25 @@ function TalkComment({ isReComment, comment }: CommentProps) {
       //   );
     }
 
-    // for mobile & tablet, get userName for marking in textarea
+    // for mobile & tablet, get userName that will be shown in textarea to write re-comment
     // for all devices, store info and after writing comment, send them to the server
     dispatch(setReComment({ reCommentId: commentId, reCommentUserName: userName }));
-    // get function to close reComment next time
+    // get function to close the component to write reComment next time
     dispatch(getClosingReComnt({ handleWriteReComnt }));
   };
 
+  // scroll to exact comment component when clicking the comment in user page
+  const commentRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (commentRef.current && commentIdForScroll === commentId) {
+      commentRef.current.scrollIntoView({
+        behavior: "smooth",
+      });
+    }
+  }, []);
+
   return (
-    <CommentContainer isWriteReComnt={isWriteReComnt} isReComment={isReComment}>
+    <CommentContainer ref={commentRef} isWriteReComnt={isWriteReComnt} isReComment={isReComment}>
       <UserImgBox>
         <UserImg userImg={userImg} />
       </UserImgBox>
@@ -347,7 +358,14 @@ function TalkComment({ isReComment, comment }: CommentProps) {
         {isPC && isWriteReComnt && <WriteComment isReComment={isReComment} />}
 
         {reComment?.length &&
-          reComment.map((_) => <TalkComment key={_.commentId} isReComment comment={_} />)}
+          reComment.map((_) => (
+            <CommentWritten
+              key={_.commentId}
+              isReComment
+              comment={_}
+              commentIdForScroll={commentIdForScroll}
+            />
+          ))}
       </NextToImgContainer>
     </CommentContainer>
   );
@@ -369,7 +387,7 @@ function TalkComment({ isReComment, comment }: CommentProps) {
 // 4. ps : well, although there is better UI design, something important is go to next step - making next page..
 //    detail will be set later. (and from now, I have changed various things that I had worked hard...)
 //    many things is best at that time, but time is gone, it is not...
-export function CommentList({ commentList }: CommentListProps) {
+export function CommentList({ commentList, commentIdForScroll }: CommentListProps) {
   // when write-comment component is fixed to screen bottom, give comment-list-component margin-bottom
 
   return (
@@ -383,7 +401,7 @@ export function CommentList({ commentList }: CommentListProps) {
         </CommentSortContainer>
       </CommentMarkContainer>
       {commentList.map((_) => (
-        <TalkComment key={_.commentId} comment={_} />
+        <CommentWritten key={_.commentId} comment={_} commentIdForScroll={commentIdForScroll} />
       ))}
     </CommentListContainer>
   );

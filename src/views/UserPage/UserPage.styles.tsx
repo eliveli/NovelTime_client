@@ -2,10 +2,18 @@ import theme, { styled } from "assets/styles/theme";
 import Icon from "../../assets/Icon";
 
 export const ProfileContnr = styled.div`
-  display: flex;
-  align-items: flex-end;
   height: 200px;
   background-color: #ff9c3db0;
+  ${theme.media.tablet(`
+    height: 250px;
+  `)}
+`;
+export const ProfileAlign = styled.div`
+  height: 100%;
+  width: 100%;
+  max-width: 860px;
+  margin: auto;
+  display: flex;
 `;
 export const UserImg = styled.div<{ userImg: string }>`
   border-radius: 50%;
@@ -31,15 +39,25 @@ export const MessageIcon = styled.img`
 export const ProfileUserCntnr = styled.div`
   display: flex;
   align-items: flex-end;
-  margin-left: 12px;
   margin-bottom: 12px;
+
+  margin-left: 16px;
+  ${theme.media.tablet(`
+    margin-left: 20px;
+  `)}
 `;
 
+export const ExtraSpace = styled.div`
+  width: 100%;
+  height: 7px;
+`;
 export const WritingSection = styled.section`
   // in mobile
   display: flex;
   flex-direction: column;
   gap: 10px;
+
+  margin-bottom: 7px;
 
   ${theme.media.tablet(`
     display: grid;
@@ -150,11 +168,11 @@ export const FilterContnr = styled.div`
   align-items: flex-end;
   gap: 25px;
 
-  margin-left: 4px;
+  margin: 16px 0 12px 4px;
 `;
 type FilterType = "프리톡" | "추천" | "댓글";
 export const Filter = styled.p<{ category: FilterType; selectedCtgr: FilterType }>`
-  margin: 7px 0;
+  margin: 0;
   font-weight: 600;
   color: rgba(100, 100, 100, 0.6);
   ${({ category, selectedCtgr }) =>
