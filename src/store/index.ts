@@ -6,7 +6,7 @@ import { setupListeners } from "@reduxjs/toolkit/query";
 import modalReducer from "./clientSlices/modalSlice";
 import writingReducer from "./clientSlices/writingSlice";
 import filterReducer from "./clientSlices/filterSlice";
-import messageReducer from "./clientSlices/messageSlice";
+import messageReducer from "./clientSlices/userInfoSlice";
 
 import { novelTimeApi } from "./serverAPIs/novelTime";
 

@@ -79,7 +79,14 @@ export default function FreeTalk({ talk }: { talk: TalkProps }) {
         <BesideImgContainer>
           <FirstLineContainer>
             <UserNameBox>
-              <UserName>{userName}</UserName>
+              <UserName
+                onClick={(event: React.MouseEvent<HTMLElement>) => {
+                  event.stopPropagation();
+                  navigate(`/user_page/${userName}`);
+                }}
+              >
+                {userName}
+              </UserName>
               <CreateDate>{createDate}</CreateDate>
             </UserNameBox>
             <IconsBox>

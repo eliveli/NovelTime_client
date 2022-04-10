@@ -4,6 +4,10 @@ import {
   LinkCategory,
   ShowAllText,
   ShowAllIcon,
+  CategoryDescContnr,
+  CategoryDescUserImg,
+  CategoryDescUserName,
+  CategoryDescUserContnr,
 } from "./CategoryMark.styles";
 
 export default function CategoryMark({
@@ -13,6 +17,9 @@ export default function CategoryMark({
   isShowAll,
   novelId,
   fontSize,
+  userInfo,
+  isUserList,
+  novelNO,
 }: {
   writing?: boolean;
   categoryId?: string;
@@ -20,6 +27,12 @@ export default function CategoryMark({
   isShowAll?: boolean;
   novelId?: string; // writing list request by novelId
   fontSize?: number;
+  userInfo?: {
+    userImg: string;
+    userName: string;
+  };
+  isUserList?: true;
+  novelNO?: number;
 }) {
   if (writing) {
     return (
@@ -43,6 +56,39 @@ export default function CategoryMark({
         {!isShowAll && (
           <LinkCategory to={`/novel_list/${categoryText}/${categoryId as string}/${novelId}`}>
             <ShowAllText>전체보기</ShowAllText>
+            <ShowAllIcon />
+          </LinkCategory>
+        )}
+      </CategoryContainer>
+    );
+  }
+  if (isUserList) {
+    return (
+      <CategoryContainer>
+        {!userInfo && <CategoryDesc isUserList>{`: ${categoryText}`}</CategoryDesc>}
+        {userInfo && (
+          <CategoryDescContnr>
+            <CategoryDescUserContnr>
+              <CategoryDescUserImg userImg={userInfo.userImg} />
+              <CategoryDescUserName>
+                {`${userInfo.userName}의 선호 리스트`}
+                &nbsp;
+              </CategoryDescUserName>
+            </CategoryDescUserContnr>
+            <CategoryDesc isUserList isOtherUser>
+              {`: ${categoryText}`}
+            </CategoryDesc>
+          </CategoryDescContnr>
+        )}
+        {/* when is not show-all-page */}
+        {!isShowAll && (
+          <LinkCategory
+            novelNO={novelNO}
+            isOtherUser
+            // change link later
+            to={`/novel_list/${categoryText}/${categoryId as string}/${novelId}`}
+          >
+            <ShowAllText isUserList>리스트 전체보기</ShowAllText>
             <ShowAllIcon />
           </LinkCategory>
         )}

@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { io } from "socket.io-client";
 import SectionBG from "components/SectionBG";
 import { useAppDispatch } from "store/hooks";
-import { setOtherUser } from "store/clientSlices/messageSlice";
+import { setUserInfo } from "store/clientSlices/userInfoSlice";
 import { useParams } from "react-router-dom";
 import { WriteComment } from "components/Writing";
 import {
@@ -237,7 +237,7 @@ export default function MessageRoom({ roomIdTablet }: { roomIdTablet?: string })
   const { roomId } = useParams();
   const roomIdMobile = roomId;
   const dispatch = useAppDispatch();
-  dispatch(setOtherUser(messageRecord.user));
+  dispatch(setUserInfo(messageRecord.user));
 
   // mark new date
   const dateRecord = useRef({ date: "", isNewDate: false });

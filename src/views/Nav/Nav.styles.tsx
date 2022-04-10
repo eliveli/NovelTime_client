@@ -381,8 +381,8 @@ export const SearchIconBox = styled(Icon.IconBox)`
 `;
 export const UserImg = styled.div<{ userImg: string }>`
   border-radius: 50%;
-  min-width: 35px;
-  height: 35px;
+  min-width: 30px;
+  height: 30px;
   background-image: url(${({ userImg }) =>
     userImg || "https://cdn.pixabay.com/photo/2017/02/01/09/52/animal-2029245_960_720.png"});
 

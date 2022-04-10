@@ -2,19 +2,19 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export type IsMessageState = {
-  otherUser: { userName: string; userImg: string };
+  userInfoNavMobile: { userName: string; userImg: string };
 };
 
 const initialState: IsMessageState = {
-  otherUser: { userName: "", userImg: "" },
+  userInfoNavMobile: { userName: "", userImg: "" },
 };
 
-export const messageSlice = createSlice({
+export const userInfoSlice = createSlice({
   name: "message",
   initialState,
   reducers: {
-    setOtherUser: (state, action: PayloadAction<{ userName: string; userImg: string }>) => {
-      state.otherUser = action.payload;
+    setUserInfo: (state, action: PayloadAction<{ userName: string; userImg: string }>) => {
+      state.userInfoNavMobile = action.payload;
     },
     // Redux Toolkit allows us to write "mutating" logic in reducers. It
     // doesn't actually mutate the state because it uses the Immer library,
@@ -24,6 +24,6 @@ export const messageSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { setOtherUser } = messageSlice.actions;
+export const { setUserInfo } = userInfoSlice.actions;
 
-export default messageSlice.reducer;
+export default userInfoSlice.reducer;

@@ -22,8 +22,9 @@ type MyComponentProps = React.PropsWithChildren<{
     novelGenre: string;
     novelIsEnd: string;
   };
+  isUserList?: true;
 }>;
-export default function NovelRow({ novel }: MyComponentProps) {
+export default function NovelRow({ novel, isUserList }: MyComponentProps) {
   // props or default props
   const {
     novelId = "",
@@ -47,10 +48,12 @@ export default function NovelRow({ novel }: MyComponentProps) {
           <NovelTitleBox>
             <NovelTitle>{novelTitle}</NovelTitle>
           </NovelTitleBox>
-          <NovelSubInfoBox>
-            <NovelInfoLineHeight>{novelAuthor}</NovelInfoLineHeight>
-            <NovelInfo>{`${novelGenre} | ${novelIsEnd}`}</NovelInfo>
-          </NovelSubInfoBox>
+          {!isUserList && (
+            <NovelSubInfoBox>
+              <NovelInfoLineHeight>{novelAuthor}</NovelInfoLineHeight>
+              <NovelInfo>{`${novelGenre} | ${novelIsEnd}`}</NovelInfo>
+            </NovelSubInfoBox>
+          )}
         </NovelInfoBox>
       </NovelLink>
     </ThemeProvider>

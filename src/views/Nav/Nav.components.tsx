@@ -9,8 +9,8 @@ import {
   addWritingActive,
   novel,
   novelActive,
-  chat,
-  chatActive,
+  message,
+  messageActive,
   catWalking,
   logoMobile,
   logoPC,
@@ -200,7 +200,7 @@ export function NavMobileMainBottom({ pathname }: Props) {
           ["Recommend", "/recommend_list", recommend, recommendActive],
           ["AddWriting", "/add_writing", addWriting, addWritingActive], // 추후 라우팅 필요
           ["Novel", "/novel_list", novel, novelActive],
-          ["Message", "/message_list", chat, chatActive],
+          ["Message", "/message_list", message, messageActive],
         ].map((_) => (
           <NavContent
             key={_[0]}
@@ -248,7 +248,7 @@ export function NavMobileDetail({ parameter, pathname, handleMsgList }: DetailPr
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { novelTitle } = useAppSelector((state) => state.modal);
-  const { otherUser } = useAppSelector((state) => state.message);
+  const { userInfoNavMobile } = useAppSelector((state) => state.message);
   const { novelId } = useParams(); // when entering add-writing page from novel detail page
 
   //   const dispatch = useAppDispatch();
@@ -308,7 +308,8 @@ export function NavMobileDetail({ parameter, pathname, handleMsgList }: DetailPr
           ["talk_detail", "여기는 프리톡!"],
           ["recommend_detail", "여기는 리코멘드!"],
           ["add_writing", "add writing"],
-          ["message", otherUser.userImg, otherUser.userName],
+          ["message", userInfoNavMobile.userImg, userInfoNavMobile.userName],
+          ["user_page", userInfoNavMobile.userImg, userInfoNavMobile.userName],
         ].map((_, idx) => {
           if (idx === 2 && !pathname.includes(_[0]) && parameter?.novelId) {
             return <PageTitle>{novelTitle}</PageTitle>;
@@ -316,7 +317,7 @@ export function NavMobileDetail({ parameter, pathname, handleMsgList }: DetailPr
           if (idx === 2 && pathname.includes(_[0])) {
             return <PageTitle>{_[1]}</PageTitle>;
           }
-          if (idx === 3 && pathname.includes(_[0])) {
+          if ([3, 4].includes(idx) && pathname.includes(_[0])) {
             return (
               <PageTitle>
                 <UserImg userImg={_[1]} />
