@@ -327,6 +327,10 @@ function CommentWritten({ isReComment, comment, commentIdForScroll }: CommentPro
   const commentRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (commentRef.current && commentIdForScroll === commentId) {
+      // first useEffect in ScrollToTop executes after rendering nav component : see the App.tsx
+      // and page renders
+      // if you clicked the comment from user page,
+      // after comment rendering the following code will be executed if it is the comment you clicked in user page
       commentRef.current.scrollIntoView({
         behavior: "smooth",
       });

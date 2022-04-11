@@ -10,7 +10,7 @@ const initialState: IsMessageState = {
 };
 
 export const userInfoSlice = createSlice({
-  name: "message",
+  name: "userInfo",
   initialState,
   reducers: {
     setUserInfo: (state, action: PayloadAction<{ userName: string; userImg: string }>) => {

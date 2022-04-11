@@ -248,7 +248,7 @@ export function NavMobileDetail({ parameter, pathname, handleMsgList }: DetailPr
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { novelTitle } = useAppSelector((state) => state.modal);
-  const { userInfoNavMobile } = useAppSelector((state) => state.message);
+  const { userInfoNavMobile } = useAppSelector((state) => state.userInfo);
   const { novelId } = useParams(); // when entering add-writing page from novel detail page
 
   //   const dispatch = useAppDispatch();

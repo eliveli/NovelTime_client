@@ -19,7 +19,7 @@ export default function FreeTalkDetail() {
   // 서버에서 데이터 받아올 때 구성 // dataFromServer = { talk, novel }
   const dataFromServer = {
     talk: {
-      talkId: "", // 좋아요 누르거나 코멘트 작성 시 talkId로 서버 요청
+      talkId: "asdsasdssa", // 좋아요 누르거나 코멘트 작성 시 talkId로 서버 요청
 
       userName: "나나나",
       userImg: "",
@@ -71,14 +71,14 @@ export default function FreeTalkDetail() {
 
   const commentList = [
     {
-      commentId: "abc",
+      commentId: "zzzabc",
       userName: "리리리",
       userImg: "https://cdn.pixabay.com/photo/2018/08/31/08/35/toys-3644073_960_720.png",
       commentContent: "코멘트 작성 중",
       createDate: "22.01.05",
       reComment: [
         {
-          commentId: "abcde",
+          commentId: "zzabssssscde",
           reCommentUserName: "lala",
           userName: "fff",
           userImg: "https://cdn.pixabay.com/photo/2018/08/31/08/35/toys-3644073_960_720.png",
@@ -86,7 +86,7 @@ export default function FreeTalkDetail() {
           createDate: "22.01.05",
         },
         {
-          commentId: "abcdef",
+          commentId: "azzzzbcdef",
           reCommentUserName: "lala",
           userName: "zxcv",
           userImg: "https://cdn.pixabay.com/photo/2018/08/31/08/35/toys-3644073_960_720.png",
@@ -96,14 +96,14 @@ export default function FreeTalkDetail() {
       ],
     },
     {
-      commentId: "abcaaad",
+      commentId: "absdfcaaad",
       userName: "리리리",
       userImg: "https://cdn.pixabay.com/photo/2018/08/31/08/35/toys-3644073_960_720.png",
       commentContent: "코멘트 작성 중",
       createDate: "22.01.05",
       reComment: [
         {
-          commentId: "assssbcde",
+          commentId: "assssbcerede",
           reCommentUserName: "lala",
           userName: "fff",
           userImg: "https://cdn.pixabay.com/photo/2018/08/31/08/35/toys-3644073_960_720.png",
@@ -115,7 +115,7 @@ export default function FreeTalkDetail() {
           reCommentUserName: "lala",
           userName: "zxcv",
           userImg: "https://cdn.pixabay.com/photo/2018/08/31/08/35/toys-3644073_960_720.png",
-          commentContent: "그러하오",
+          commentContent: "유저페이지에서 클릭할 코멘트(테스트)",
           createDate: "22.01.05",
         },
       ],

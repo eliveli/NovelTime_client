@@ -66,46 +66,44 @@ function App() {
             {/* 페이지 별 다른 내비게이션 바가 필요할 경우 추가 & 아래 Routes에도 parent component path 추가 */}
           </Routes>
         </ScrollToTop>
-        <ScrollToTop>
-          <Routes>
-            <Route path="/" element={<FreeTalkList />} />
-            <Route path="/talk_list" element={<FreeTalkList />} />
-            <Route path="/recommend_list" element={<RecommendList />} />
+        <Routes>
+          <Route path="/" element={<FreeTalkList />} />
+          <Route path="/talk_list" element={<FreeTalkList />} />
+          <Route path="/recommend_list" element={<RecommendList />} />
 
-            <Route path="/novel_list" element={<NovelList />} />
-            <Route path="/novel_list/:categoryText/:categoryId" element={<NovelListByCategory />} />
-            <Route
-              path="/novel_list/:categoryText/:categoryId/:novelId"
-              element={<NovelListByCategory />}
-            />
+          <Route path="/novel_list" element={<NovelList />} />
+          <Route path="/novel_list/:categoryText/:categoryId" element={<NovelListByCategory />} />
+          <Route
+            path="/novel_list/:categoryText/:categoryId/:novelId"
+            element={<NovelListByCategory />}
+          />
 
-            <Route path="/novel_detail/:novelId" element={<NovelDetail />} />
-            <Route path="/novel_detail/:novelId/writing_list" element={<WritingList />} />
-            <Route path="/novel_detail/:novelId/:talkId" element={<NovelDetailTalk />} />
-            <Route path="/novel_detail/:novelId/:recommendId" element={<NovelDetailRecommend />} />
+          <Route path="/novel_detail/:novelId" element={<NovelDetail />} />
+          <Route path="/novel_detail/:novelId/writing_list" element={<WritingList />} />
+          <Route path="/novel_detail/:novelId/:talkId" element={<NovelDetailTalk />} />
+          <Route path="/novel_detail/:novelId/:recommendId" element={<NovelDetailRecommend />} />
 
-            <Route path="/talk_detail/:talkId" element={<FreeTalkDetail />} />
-            <Route path="/talk_detail/:talkId/:commentId" element={<FreeTalkDetail />} />
-            <Route path="/recommend_detail/:recommendId" element={<RecommendDetail />} />
+          <Route path="/talk_detail/:talkId" element={<FreeTalkDetail />} />
+          <Route path="/talk_detail/:talkId/:commentId" element={<FreeTalkDetail />} />
+          <Route path="/recommend_detail/:recommendId" element={<RecommendDetail />} />
 
-            <Route path="/add_writing" element={<AddWriting />} />
-            <Route path="/add_writing/:novelId/:novelTitle" element={<AddWriting />} />
+          <Route path="/add_writing" element={<AddWriting />} />
+          <Route path="/add_writing/:novelId/:novelTitle" element={<AddWriting />} />
 
-            <Route path="/search" element={<SearchPage />} />
-            <Route path="/search/novel" element={<SearchPage />} />
-            <Route path="/search/novel/iframe" element={<SearchPage />} />
-            {/* 검색 전 예시 작품 보여주기 */}
+          <Route path="/search" element={<SearchPage />} />
+          <Route path="/search/novel" element={<SearchPage />} />
+          <Route path="/search/novel/iframe" element={<SearchPage />} />
+          {/* 검색 전 예시 작품 보여주기 */}
 
-            <Route path="/message_list" element={<MessageList />} />
+          <Route path="/message_list" element={<MessageList />} />
 
-            <Route path="/message_room/:roomId" element={<MessageRoom />} />
+          <Route path="/message_room/:roomId" element={<MessageRoom />} />
 
-            {/* 새로고침 등 상황에 로그인 유지 위해 클라이언트 스토어 이용*/}
-            <Route path="/user_page/:userName" element={<UserPage />} />
+          {/* 새로고침 등 상황에 로그인 유지 위해 클라이언트 스토어 이용*/}
+          <Route path="/user_page/:userName" element={<UserPage />} />
 
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </ScrollToTop>
+          <Route path="*" element={<NotFound />} />
+        </Routes>
       </ThemeProvider>
     </Router>
   );
