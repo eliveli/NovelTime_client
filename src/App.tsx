@@ -14,9 +14,8 @@ import {
   RecommendList,
   RecommendDetail,
   UserPageHome,
-  UserPageMyList,
   UserPageMyWriting,
-  UserPageOthersList,
+  UserPageNovelList,
   UserPageOthersWriting,
   UserPageParent,
   NotFound,
@@ -115,10 +114,13 @@ function App() {
             <Route index element={<UserPageHome />} />
             <Route path="/user_page/:userName/myWriting" element={<UserPageMyWriting />} />
             <Route path="/user_page/:userName/othersWriting" element={<UserPageOthersWriting />} />
-            <Route path="/user_page/:userName/myList/:listId" element={<UserPageMyList />} />
+            <Route
+              path="/user_page/:userName/myList/:listId"
+              element={<UserPageNovelList isMyList={true} />}
+            />
             <Route
               path="/user_page/:userName/othersList/:listId"
-              element={<UserPageOthersList />}
+              element={<UserPageNovelList isMyList={false} />}
             />
           </Route>
 

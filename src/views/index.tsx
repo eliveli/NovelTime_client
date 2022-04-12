@@ -9,9 +9,8 @@ import RecommendList from "./RecommendList";
 import RecommendDetail from "./RecommendDetail";
 import {
   UserPageHome,
-  UserPageMyList,
+  UserPageNovelList,
   UserPageMyWriting,
-  UserPageOthersList,
   UserPageOthersWriting,
   UserPageParent,
 } from "./UserPage";
@@ -40,9 +39,8 @@ export {
   NovelDetail,
   NovelList,
   UserPageHome,
-  UserPageMyList,
+  UserPageNovelList,
   UserPageMyWriting,
-  UserPageOthersList,
   UserPageOthersWriting,
   UserPageParent,
   MainListNav,

@@ -195,7 +195,6 @@ export default function AddWriting() {
             />
             <SelectPlatform onClick={sendNovelUrl}>선택</SelectPlatform>
           </NovelUrlContnr>
-
           <AllPlatformContnr>
             <PlatformContnrFirst>
               <GuideText>공유링크 찾기</GuideText>
@@ -250,6 +249,8 @@ export default function AddWriting() {
               <Icon.More />
             </MoreIconBox>
           </HowToGetLink>
+          if you want to review the novel of JOARA, you should get the url or shared link for the
+          novel. Because I don't scrape the free novel even if it is only a info not a content
           <SrchGuideText
             onClick={() => {
               changePlatform("/search/novel/iframe");

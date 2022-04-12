@@ -208,11 +208,16 @@ export const WritingMark = styled.span`
   color: rgba(0, 0, 0, 0.5);
   font-size: 14px;
 `;
-export const ListTitleLimitHeight = styled.div<{ isListMore: boolean }>`
+export const ListTitleLimitHeightContnr = styled.div<{
+  isListMore: boolean;
+  limitContnrWidth: number;
+}>`
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
   margin-top: 12px;
+
+  width: ${({ limitContnrWidth }) => limitContnrWidth}px;
 
   ${({ isListMore }) =>
     isListMore
@@ -221,13 +226,14 @@ export const ListTitleLimitHeight = styled.div<{ isListMore: boolean }>`
       `}
   ${theme.hideScrollBar}
 `;
-export const ListTitleContnr = styled.div<{ isListMore: boolean; titleListWidthShown: number }>`
+export const ListTitleContnr = styled.div<{ isListMore: boolean; limitContnrWidth: number }>`
   display: flex;
 
   row-gap: 12px;
   column-gap: 12px;
-  ${({ isListMore }) => (isListMore ? `flex-wrap: wrap;` : `overflow:hidden;`)}
-  width: ${({ titleListWidthShown }) => titleListWidthShown}px;
+  /* ${({ isListMore }) => (isListMore ? `flex-wrap: wrap;` : `overflow:hidden;`)} */
+  ${({ isListMore }) => (isListMore ? `flex-wrap: wrap;` : ``)}
+  width: ${({ limitContnrWidth }) => limitContnrWidth}px;
 `;
 export const ListTitle = styled.span<{ listId: string; selectedListId: string }>`
   white-space: nowrap;
@@ -242,6 +248,10 @@ export const ListTitle = styled.span<{ listId: string; selectedListId: string }>
   ${({ listId, selectedListId }) =>
     listId === selectedListId &&
     `color:${theme.color.main}; border: 1px solid ${theme.color.mainLight}; order: -1;`}
+`;
+export const ListTitleNormalStyle = styled.span`
+  color: rgba(100, 100, 100, 0.6);
+  font-size: 12px;
 `;
 
 export const NovelListContnr = styled.div`
@@ -261,6 +271,24 @@ export const NovelListContnr = styled.div`
   }
 `;
 
+// make the parent of more btn //
+// the title list container is set overflow hidden,
+// so in the container, when title category is scrolled, more btn is scrolled too.
+// I want to more btn fixed to the exact space,
+//  so I made the parent of the more btn positioned relative,
+// and made the btn positioned absolute, and set the detail position value.
+export const MoreBtnParent = styled.div`
+  position: relative;
+  width: 100%;
+`;
+export const MoreBtnBoxBG = styled.div`
+  padding-left: 4px;
+  position: absolute;
+  height: 32px;
+  background-color: white;
+  right: 0;
+  margin-top: 12px;
+`;
 export const MoreBtnBox = styled(Icon.IconBox)`
   border-radius: 50%;
   background-color: white;
@@ -269,4 +297,7 @@ export const MoreBtnBox = styled(Icon.IconBox)`
   margin-right: 1px;
   margin-top: 2px;
   /* position: absolute; */
+`;
+export const ContainerWidth = styled.div`
+  width: 100%;
 `;

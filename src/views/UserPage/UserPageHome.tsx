@@ -476,7 +476,15 @@ const dataFromServer = {
 type FilterType = "프리톡" | "추천" | "댓글";
 export default function UserPageHome() {
   //   const { userName } = useParams();
-  const userName = "나나나"; // later remove this and cancel the comment mark above
+  const userName = "나나나" as string; // later remove this and cancel the comment mark above
+  const loginUserName = "나나" as string; // later change it to real login user name
+
+  // which is the list owner me or other
+  // if it is the login user's list return "my", if not the name of user
+  const myListUserMark = userName === loginUserName ? `My` : `${userName}'s`;
+  const myListMarkText = `${myListUserMark} Novel List`;
+  const othersListUserMark = userName === loginUserName ? `I` : `${userName}`;
+  const othersListMarkText = `Other's Novel List ${othersListUserMark} Like`;
 
   // server request with userName
 
@@ -553,7 +561,7 @@ export default function UserPageHome() {
             listId: dataFromServer.novelList.isMyList[0].listInfo.listId,
           },
         }}
-        categoryText="My Novel List"
+        categoryText={myListMarkText}
       />
       {dataFromServer.novelList.isMyList.map((list) => (
         <RowSlide
@@ -580,7 +588,7 @@ export default function UserPageHome() {
             listId: dataFromServer.novelList.isOthersList[0].listInfo.listId,
           },
         }}
-        categoryText="Other's Novel List I Like"
+        categoryText={othersListMarkText}
       />
       {dataFromServer.novelList.isOthersList.map((list) => (
         <RowSlide
