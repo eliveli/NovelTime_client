@@ -159,15 +159,15 @@ export const NovelDescPart = styled.div`
 `;
 export const NovelDescTablet = styled.div`
   width: 100%;
-  /* padding: 5px 3px 5px 7px; */
-  padding: 5px 3px 5px 0;
+
+  padding: 3px 5px;
 
   overflow: scroll;
   height: 130px; //화면 보며 조정
 
   white-space: pre-wrap; // line break 적용
 
-  // 모바일 안 보임. only 태블릿, 데스크탑
+  // don't show this in mobile
   ${theme.media.mobile(`
     display: none;
   `)}

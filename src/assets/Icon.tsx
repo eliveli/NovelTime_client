@@ -40,7 +40,7 @@ const IconBox = styled.div<{
   hover?: string;
 }>`
   z-index: ${({ zIndex }) => zIndex || 1};
-  background-color: ${({ bgColor }) => bgColor || "white"};
+  background-color: ${({ bgColor }) => bgColor || "transparent"};
   color: ${({ color }) => color || "rgba(0, 0, 0, 0.3)"};
 
   min-width: ${({ size }) => size || 25}px;

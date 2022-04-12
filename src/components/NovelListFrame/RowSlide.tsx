@@ -18,21 +18,30 @@ type Props = React.PropsWithChildren<{
   categoryId: string;
   novelNO: number;
   categoryText: string;
-  isUserList?: true;
-  userInfo?: {
+  otherUser?: {
     userImg: string;
     userName: string;
+  };
+
+  infoFromUserPage?: {
+    userName: string;
+    path: string;
+    list?: {
+      isMainCategory: boolean;
+      listId: string;
+    };
   };
 }>;
 
 export default function RowSlide({
-  isUserList,
-  userInfo,
   novelId,
   categoryId,
   categoryText,
   novelNO,
   children,
+
+  infoFromUserPage,
+  otherUser,
 }: Props) {
   const albumContainerRef = useRef<HTMLDivElement>(null);
   const showAlbumWidth = useComponentWidth(albumContainerRef); // 보이는 앨범 width
@@ -50,12 +59,12 @@ export default function RowSlide({
   return (
     <RowBG>
       <CategoryMark
-        userInfo={userInfo}
+        otherUser={otherUser}
         novelId={novelId}
         categoryId={categoryId}
         categoryText={categoryText}
-        isUserList={isUserList}
         novelNO={novelNO}
+        infoFromUserPage={infoFromUserPage}
       />
       <RowSlideContainer>
         <RowAlbumContainer ref={albumContainerRef}>

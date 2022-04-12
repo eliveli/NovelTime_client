@@ -13,7 +13,12 @@ import {
   NovelList,
   RecommendList,
   RecommendDetail,
-  UserPage,
+  UserPageHome,
+  UserPageMyList,
+  UserPageMyWriting,
+  UserPageOthersList,
+  UserPageOthersWriting,
+  UserPageParent,
   NotFound,
   MainListNav,
   DetailNav,
@@ -57,7 +62,12 @@ function App() {
               "/search",
               "/search/novel",
               "/message_room/:roomId",
+
               "/user_page/:userName",
+              "/user_page/:userName/myWriting",
+              "/user_page/:userName/othersWriting",
+              "/user_page/:userName/myList/:listId",
+              "/user_page/:userName/othersList/:listId",
             ].map((path) => (
               <Route path={path} element={<DetailNav />} />
             ))}
@@ -100,7 +110,17 @@ function App() {
           <Route path="/message_room/:roomId" element={<MessageRoom />} />
 
           {/* 새로고침 등 상황에 로그인 유지 위해 클라이언트 스토어 이용*/}
-          <Route path="/user_page/:userName" element={<UserPage />} />
+
+          <Route path="/user_page/:userName" element={<UserPageParent />}>
+            <Route index element={<UserPageHome />} />
+            <Route path="/user_page/:userName/myWriting" element={<UserPageMyWriting />} />
+            <Route path="/user_page/:userName/othersWriting" element={<UserPageOthersWriting />} />
+            <Route path="/user_page/:userName/myList/:listId" element={<UserPageMyList />} />
+            <Route
+              path="/user_page/:userName/othersList/:listId"
+              element={<UserPageOthersList />}
+            />
+          </Route>
 
           <Route path="*" element={<NotFound />} />
         </Routes>

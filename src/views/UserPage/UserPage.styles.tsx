@@ -4,6 +4,7 @@ import Icon from "../../assets/Icon";
 export const ProfileContnr = styled.div`
   height: 200px;
   background-color: #ff9c3db0;
+  margin-bottom: 7px;
   ${theme.media.tablet(`
     height: 250px;
   `)}
@@ -47,10 +48,6 @@ export const ProfileUserCntnr = styled.div`
   `)}
 `;
 
-export const ExtraSpace = styled.div`
-  width: 100%;
-  height: 7px;
-`;
 export const WritingSection = styled.section`
   // in mobile
   display: flex;

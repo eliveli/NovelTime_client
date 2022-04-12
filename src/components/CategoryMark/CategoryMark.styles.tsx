@@ -9,7 +9,7 @@ export const CategoryContainer = styled.div`
   align-items: flex-end;
 `;
 
-export const LinkCategory = styled(Link)<{ isOtherUser?: true; novelNO?: number }>`
+export const LinkCategory = styled(Link)<{ isOtherUser?: boolean; novelNO?: number }>`
   display: flex;
   align-items: center;
   margin: auto 0 0 auto;
@@ -74,11 +74,16 @@ export const CategoryDescUserName = styled.p<{ fontSize?: number }>`
   /* border-bottom: 1px dotted #0000004f; */
   font-size: ${({ fontSize }) => fontSize || 16}px;
 `;
-export const CategoryDesc = styled.p<{ fontSize?: number; isUserList?: true; isOtherUser?: true }>`
+export const CategoryDesc = styled.p<{
+  fontSize?: number;
+  isUserNovelList?: true;
+  isOtherUser?: boolean;
+}>`
   margin-bottom: 0;
   border-bottom: 1px dotted #0000004f;
   font-size: ${({ fontSize }) => fontSize || 16}px;
-  ${({ isUserList }) => isUserList && `border-bottom: 0; color: rgba(0,0,0,0.5); font-weight:600;`}
+  ${({ isUserNovelList }) =>
+    isUserNovelList && `border-bottom: 0; color: rgba(0,0,0,0.5); font-weight:600;`}
 
   ${({ isOtherUser }) =>
     isOtherUser &&
@@ -88,16 +93,16 @@ export const CategoryDesc = styled.p<{ fontSize?: number; isUserList?: true; isO
   `)}
 `;
 
-export const ShowAllText = styled.span<{ isUserList?: true }>`
+export const ShowAllText = styled.span<{ isUserNovelList?: true }>`
   /* margin: auto 0 0 auto; */
 
-  ${({ isUserList }) =>
-    isUserList &&
+  ${({ isUserNovelList }) =>
+    isUserNovelList &&
     theme.media.mobile(`
     display:none;
   `)}
-  ${({ isUserList }) =>
-    isUserList &&
+  ${({ isUserNovelList }) =>
+    isUserNovelList &&
     `
     color: rgba(0,0,0,0.5);
     font-weight: 600;

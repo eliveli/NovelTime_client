@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import {
   CategoryContainer,
   CategoryDesc,
@@ -17,9 +18,10 @@ export default function CategoryMark({
   isShowAll,
   novelId,
   fontSize,
-  userInfo,
-  isUserList,
+  otherUser,
   novelNO,
+
+  infoFromUserPage,
 }: {
   writing?: boolean;
   categoryId?: string;
@@ -27,18 +29,27 @@ export default function CategoryMark({
   isShowAll?: boolean;
   novelId?: string; // writing list request by novelId
   fontSize?: number;
-  userInfo?: {
+  otherUser?: {
     userImg: string;
     userName: string;
   };
-  isUserList?: true;
+
+  infoFromUserPage?: {
+    userName: string;
+    path: string;
+    list?: {
+      isMainCategory: boolean;
+      listId: string;
+    };
+  };
+
   novelNO?: number;
 }) {
   if (writing) {
     return (
       <CategoryContainer>
         <CategoryDesc fontSize={fontSize}>{categoryText}</CategoryDesc>
-        {/* when is not show-all-page */}
+        {/* the page is not show-all-page */}
         {!isShowAll && (
           <LinkCategory to={`/novel_detail/${novelId as string}/writing_list`}>
             <ShowAllText>전체보기</ShowAllText>
@@ -52,7 +63,7 @@ export default function CategoryMark({
     return (
       <CategoryContainer>
         <CategoryDesc>{categoryText}</CategoryDesc>
-        {/* when is not show-all-page */}
+        {/* the page is not show-all-page */}
         {!isShowAll && (
           <LinkCategory to={`/novel_list/${categoryText}/${categoryId as string}/${novelId}`}>
             <ShowAllText>전체보기</ShowAllText>
@@ -62,33 +73,34 @@ export default function CategoryMark({
       </CategoryContainer>
     );
   }
-  if (isUserList) {
+
+  // category mark for each novel list title on my novel list or other's novel list in user page
+  if (infoFromUserPage?.list?.isMainCategory === false) {
     return (
       <CategoryContainer>
-        {!userInfo && <CategoryDesc isUserList>{`: ${categoryText}`}</CategoryDesc>}
-        {userInfo && (
+        {!otherUser && <CategoryDesc isUserNovelList>{`: ${categoryText}`}</CategoryDesc>}
+        {otherUser && (
           <CategoryDescContnr>
             <CategoryDescUserContnr>
-              <CategoryDescUserImg userImg={userInfo.userImg} />
+              <CategoryDescUserImg userImg={otherUser.userImg} />
               <CategoryDescUserName>
-                {`${userInfo.userName}의 선호 리스트`}
+                {`${otherUser.userName}의 선호 리스트`}
                 &nbsp;
               </CategoryDescUserName>
             </CategoryDescUserContnr>
-            <CategoryDesc isUserList isOtherUser>
+            <CategoryDesc isUserNovelList isOtherUser={infoFromUserPage.path === "othersList"}>
               {`: ${categoryText}`}
             </CategoryDesc>
           </CategoryDescContnr>
         )}
-        {/* when is not show-all-page */}
+        {/* the page is not show-all-page */}
         {!isShowAll && (
           <LinkCategory
             novelNO={novelNO}
-            isOtherUser
-            // change link later
-            to={`/novel_list/${categoryText}/${categoryId as string}/${novelId}`}
+            isOtherUser={infoFromUserPage.path === "othersList"}
+            to={`/user_page/${infoFromUserPage.userName}/${infoFromUserPage.path}/${infoFromUserPage.list.listId}`}
           >
-            <ShowAllText isUserList>리스트 전체보기</ShowAllText>
+            <ShowAllText isUserNovelList>이 리스트 더보기</ShowAllText>
             <ShowAllIcon />
           </LinkCategory>
         )}
@@ -96,10 +108,28 @@ export default function CategoryMark({
     );
   }
 
+  // category mark for all novel list or writings in user page
+  if (infoFromUserPage?.list?.isMainCategory || infoFromUserPage) {
+    const userPagePath = infoFromUserPage.list?.isMainCategory
+      ? `/user_page/${infoFromUserPage.userName}/${infoFromUserPage.path}/${infoFromUserPage.list.listId}`
+      : `/user_page/${infoFromUserPage.userName}/${infoFromUserPage.path}`;
+    return (
+      <CategoryContainer>
+        <CategoryDesc fontSize={fontSize}>{categoryText}</CategoryDesc>
+        {/* the page is not show-all-page */}
+        {!isShowAll && (
+          <LinkCategory to={userPagePath}>
+            <ShowAllText>전체보기</ShowAllText>
+            <ShowAllIcon />
+          </LinkCategory>
+        )}
+      </CategoryContainer>
+    );
+  }
   return (
     <CategoryContainer>
       <CategoryDesc>{categoryText}</CategoryDesc>
-      {/* when is not show-all-page */}
+      {/* the page is not show-all-page */}
       {!isShowAll && (
         <LinkCategory to={`/novel_list/${categoryText}/${categoryId as string}`}>
           <ShowAllText>전체보기</ShowAllText>
