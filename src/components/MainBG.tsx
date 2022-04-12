@@ -1,7 +1,7 @@
 import { styled } from "assets/styles/theme";
 
 const { pathname } = window.location;
-export const SectionBG = styled.main<{
+export const MainBG = styled.main<{
   isWritingDetail?: true;
   isMessageList?: true;
 }>`
@@ -13,12 +13,6 @@ export const SectionBG = styled.main<{
 
   background-color: white;
 
-  /* 태블릿 */
-  @media screen and (min-width: 768px) {
-    padding: 0 20px 20px;
-    ${({ isMessageList }) => isMessageList && `padding-bottom:0;`}
-  }
-
   ${({ isWritingDetail }) =>
     isWritingDetail &&
     ` padding: 10px;
@@ -26,6 +20,12 @@ export const SectionBG = styled.main<{
         padding: 20px;
       }
    `}
+
+  /* 태블릿 */
+  @media screen and (min-width: 768px) {
+    padding: 0 20px 20px;
+    ${({ isMessageList }) => isMessageList && `padding-bottom:0;`}
+  }
 
   @media screen and (max-width: 1023px) {
     // at mobile and tablet, 메인리스트 페이지에서 하단 내비게이션 만큼 margin-bottom 설정
@@ -35,4 +35,4 @@ export const SectionBG = styled.main<{
   /* PC - 모바일,태블릿과 뷰를 다르게 구성 */
   max-width: 860px;
 `;
-export default SectionBG;
+export default MainBG;

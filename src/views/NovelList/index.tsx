@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import SectionBG from "components/SectionBG";
+import MainBG from "components/MainBG";
 import Icon from "assets/Icon";
 import { SearchIconBox, IconContainer } from "./NovelList.styles";
 import { ColumnList, ColumnDetailList, RowSlide } from "../../components/NovelListFrame";
@@ -62,7 +62,7 @@ export default function NovelList() {
   ];
 
   return (
-    <SectionBG>
+    <MainBG>
       <IconContainer>
         <SearchIconBox
           onClick={() => {
@@ -89,6 +89,6 @@ export default function NovelList() {
           <NovelRow key={novel.novelId} novel={novel} />
         ))}
       </RowSlide>
-    </SectionBG>
+    </MainBG>
   );
 }

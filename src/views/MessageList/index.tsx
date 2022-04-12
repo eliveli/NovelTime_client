@@ -1,4 +1,4 @@
-import SectionBG from "components/SectionBG";
+import MainBG from "components/MainBG";
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useComponentWidth } from "utils";
@@ -135,7 +135,7 @@ export default function MessageList() {
     }
   };
   return (
-    <SectionBG isMessageList>
+    <MainBG isMessageList>
       <MsgListCntnrDevice isTablet={isTablet}>
         <MsgListCntnr
           isShowRoomTablet={isShowRoomTablet}
@@ -161,6 +161,6 @@ export default function MessageList() {
           </MsgRoomCntnr>
         )}
       </MsgListCntnrDevice>
-    </SectionBG>
+    </MainBG>
   );
 }

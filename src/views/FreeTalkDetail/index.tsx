@@ -1,6 +1,6 @@
 import React from "react";
 import { useParams } from "react-router-dom";
-import SectionBG from "components/SectionBG";
+import MainBG from "components/MainBG";
 import {
   WritingDetailContainer,
   TalkDetail,
@@ -132,7 +132,7 @@ export default function FreeTalkDetail() {
   //                - 대신 유저 그레이드 점수 반영은 리코멘드가 더 높음
 
   return (
-    <SectionBG isWritingDetail>
+    <MainBG isWritingDetail>
       <WritingDetailContainer>
         <BoardMark>Let's Free Talk about Novel!</BoardMark>
         <TalkDetail detailTalk={dataFromServer.talk} />
@@ -141,6 +141,6 @@ export default function FreeTalkDetail() {
       </WritingDetailContainer>
       <CommentList commentList={commentList} commentIdForScroll={commentId} />
       <WriteComment />
-    </SectionBG>
+    </MainBG>
   );
 }

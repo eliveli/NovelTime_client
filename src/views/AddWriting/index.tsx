@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import SectionBG from "components/SectionBG";
+import MainBG from "components/MainBG";
 import { useCallback, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import Icon from "assets/Icon";
@@ -174,7 +174,7 @@ export default function AddWriting() {
   // -------------------------------------------------------------------------------------------//
 
   return (
-    <SectionBG>
+    <MainBG>
       <NovelTitleContainer>
         <NovelTitle>{novel.novelTitle ? novel.novelTitle : "소설제목"}</NovelTitle>
         {!novelTitle && !isIframeSrch && (
@@ -303,6 +303,6 @@ export default function AddWriting() {
           </ContentPlusContnrMobile>
         </>
       )}
-    </SectionBG>
+    </MainBG>
   );
 }

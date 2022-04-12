@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useLayoutEffect } from "react";
 import { useParams, useOutletContext } from "react-router-dom";
-import SectionBG from "components/SectionBG";
+import MainBG from "components/MainBG";
 import { useAppDispatch } from "../../store/hooks";
 import { getNovelTitle } from "../../store/clientSlices/modalSlice";
 import { RowSlide } from "../../components/NovelListFrame";
@@ -137,7 +137,7 @@ export default function NovelDetail() {
   const [isTalk, handleTalk] = useState(true);
 
   return (
-    <SectionBG>
+    <MainBG>
       <p>
         여기는 소설 공간!(작은 컴포넌트로 분리해 사용하자)
         {detailNovel.novelTitle}
@@ -170,6 +170,6 @@ export default function NovelDetail() {
           <NovelRow key={novel.novelId} novel={novel} />
         ))}
       </RowSlide>
-    </SectionBG>
+    </MainBG>
   );
 }

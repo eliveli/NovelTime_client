@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import SectionBG from "components/SectionBG";
+import MainBG from "components/MainBG";
 import { NovelColumn, NovelColumnDetail, NovelRow } from "../../components/Novel";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { GoToBtn, GoToText } from "./SearchPage.styles";
@@ -59,7 +59,7 @@ export default function SearchPage() {
     window.parent.postMessage({ sign: "goToPlatform" }, "*");
   };
   return (
-    <SectionBG>
+    <MainBG>
       <Search />
       {/* at all-search page: novel, writing */}
       {/* at novel-search page: novel */}
@@ -70,6 +70,6 @@ export default function SearchPage() {
       {novels.map((novel) => (
         <NovelColumn key={novel.novelId} novel={novel} />
       ))}
-    </SectionBG>
+    </MainBG>
   );
 }

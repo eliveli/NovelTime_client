@@ -12,7 +12,7 @@ import messageActive from "./messageActive.jpg";
 import catWalking from "./catWalking.png"; // .png is required for getting transparent background from the image
 import logoMobile from "./logoMobile.png";
 import logoPC from "./logoPC.png";
-import messageUserPage from "./messageUserPage.png";
+import messageIconUserPage from "./messageIconUserPage.png";
 
 export {
   freeTalk,
@@ -29,5 +29,5 @@ export {
   logoMobile,
   logoPC,
   addWritingInPage,
-  messageUserPage,
+  messageIconUserPage,
 };

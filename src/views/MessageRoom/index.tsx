@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 
 import { io } from "socket.io-client";
-import SectionBG from "components/SectionBG";
+import MainBG from "components/MainBG";
 import { useAppDispatch } from "store/hooks";
 import { setUserInfo } from "store/clientSlices/userInfoSlice";
 import { useParams } from "react-router-dom";

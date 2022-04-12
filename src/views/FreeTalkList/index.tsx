@@ -1,5 +1,5 @@
 import React from "react";
-import SectionBG from "components/SectionBG";
+import MainBG from "components/MainBG";
 import Filter from "components/Filter";
 import FreeTalk from "./FreeTalkList.components";
 
@@ -54,11 +54,11 @@ export default function FreeTalkList() {
   ];
 
   return (
-    <SectionBG>
+    <MainBG>
       <Filter />
       {dataFromServer.map((talk) => (
         <FreeTalk talk={talk} />
       ))}
-    </SectionBG>
+    </MainBG>
   );
 }

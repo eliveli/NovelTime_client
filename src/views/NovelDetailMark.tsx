@@ -1,4 +1,4 @@
-import SectionBG from "components/SectionBG";
+import MainBG from "components/MainBG";
 import { useState } from "react";
 import { Outlet } from "react-router-dom";
 
@@ -15,13 +15,13 @@ export default function NovelDetailMark() {
 
   console.log(title, "in parent detail");
   return (
-    <SectionBG>
+    <MainBG>
       <p>
         여기는 소설 공간 - 우리들의 플레이 그라운드.
-        {title}{" "}
+        {title}
       </p>
       <Outlet />
       <Outlet context={{ getTitle }} />
-    </SectionBG>
+    </MainBG>
   );
 }

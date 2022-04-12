@@ -1,6 +1,6 @@
 import React, { useLayoutEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import SectionBG from "components/SectionBG";
+import MainBG from "components/MainBG";
 import { SortOnly } from "components/Filter";
 import { useAppDispatch } from "../../store/hooks";
 import { getNovelTitle } from "../../store/clientSlices/modalSlice";
@@ -60,7 +60,7 @@ export default function WritingList() {
   const [isTalk, handleTalk] = useState(true);
 
   return (
-    <SectionBG>
+    <MainBG>
       <p>
         여기는 소설 공간!
         {novelTitle}
@@ -85,6 +85,6 @@ export default function WritingList() {
             <WritingTitle key={recommend.recommendId} writing={recommend} />
           ))}
       </WritingListFrame>
-    </SectionBG>
+    </MainBG>
   );
 }

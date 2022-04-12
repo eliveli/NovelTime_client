@@ -1,6 +1,6 @@
 import React from "react";
 import { useParams } from "react-router-dom";
-import SectionBG from "components/SectionBG";
+import MainBG from "components/MainBG";
 import {
   WritingDetailContainer,
   RecommendDetail,
@@ -68,7 +68,7 @@ export default function NovelDetailRecommend() {
     recomDtlTextHeight: "height: 64px;",
   };
   return (
-    <SectionBG isWritingDetail>
+    <MainBG isWritingDetail>
       <NovelInWriting recommendDetail={recommendDetail} novel={dataFromServer.novel} />
       <DotAnimation>
         <DotLine />
@@ -83,6 +83,6 @@ export default function NovelDetailRecommend() {
           />
         </WritingDetailContainer>
       </WritingAnimation>
-    </SectionBG>
+    </MainBG>
   );
 }

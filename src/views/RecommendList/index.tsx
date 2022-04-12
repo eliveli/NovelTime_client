@@ -1,5 +1,5 @@
 import React from "react";
-import SectionBG from "components/SectionBG";
+import MainBG from "components/MainBG";
 import Filter from "components/Filter";
 
 import Recommend from "./RecommendList.components";
@@ -72,11 +72,11 @@ export default function RecommendList() {
   ];
 
   return (
-    <SectionBG>
+    <MainBG>
       <Filter />
       {dataFromServer.map((recommendInfo) => (
         <Recommend recommendInfo={recommendInfo} />
       ))}
-    </SectionBG>
+    </MainBG>
   );
 }
