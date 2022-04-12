@@ -1,4 +1,5 @@
 import useComponentHeight from "./useComponentHeight";
+import useComponentScrollWidth from "./useComponentScrollWidth";
 import useComponentWidth from "./useComponentWidth";
 import useModal from "./useModal";
 import usePreventScroll from "./usePreventScroll";
@@ -10,6 +11,7 @@ export {
   useCloseOutsideClick,
   useComponentHeight,
   useComponentWidth,
+  useComponentScrollWidth,
   useModal,
   usePreventScroll,
 };

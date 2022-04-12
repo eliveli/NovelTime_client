@@ -208,3 +208,65 @@ export const WritingMark = styled.span`
   color: rgba(0, 0, 0, 0.5);
   font-size: 14px;
 `;
+export const ListTitleLimitHeight = styled.div<{ isListMore: boolean }>`
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-top: 12px;
+
+  ${({ isListMore }) =>
+    isListMore
+      ? ``
+      : `overflow-x: scroll; overflow-y: hidden; height: 32px;
+      `}
+  ${theme.hideScrollBar}
+`;
+export const ListTitleContnr = styled.div<{ isListMore: boolean; titleListWidthShown: number }>`
+  display: flex;
+
+  row-gap: 12px;
+  column-gap: 12px;
+  ${({ isListMore }) => (isListMore ? `flex-wrap: wrap;` : `overflow:hidden;`)}
+  width: ${({ titleListWidthShown }) => titleListWidthShown}px;
+`;
+export const ListTitle = styled.span<{ listId: string; selectedListId: string }>`
+  white-space: nowrap;
+  color: rgba(100, 100, 100, 0.8);
+  border-radius: 20px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  background-color: white;
+  padding: 5px 10px 4px;
+  font-size: 14px;
+  font-weight: 600;
+
+  ${({ listId, selectedListId }) =>
+    listId === selectedListId &&
+    `color:${theme.color.main}; border: 1px solid ${theme.color.mainLight}; order: -1;`}
+`;
+
+export const NovelListContnr = styled.div`
+  margin: 0 -6px;
+
+  display: grid;
+  justify-content: space-between;
+  column-gap: 10px;
+  grid-template-columns: repeat(2, 1fr);
+
+  @media screen and (min-width: 500px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @media screen and (min-width: 700px) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+`;
+
+export const MoreBtnBox = styled(Icon.IconBox)`
+  border-radius: 50%;
+  background-color: white;
+  box-shadow: 0 0 2px rgb(0 0 0 / 60%);
+  color: rgba(100, 100, 100, 0.4);
+  margin-right: 1px;
+  margin-top: 2px;
+  /* position: absolute; */
+`;

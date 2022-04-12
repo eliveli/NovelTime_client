@@ -3,7 +3,7 @@
 import { styled } from "assets/styles/theme";
 import { Link } from "react-router-dom";
 
-export const NovelLink = styled(Link)`
+export const NovelLink = styled(Link)<{ isUserList?: true }>`
   min-width: 32%;
   max-width: 32%;
 
@@ -13,8 +13,7 @@ export const NovelLink = styled(Link)`
   padding: 12px 6px 0;
   /* 슬라이드 양끝 좌우 6px 만큼 다른 컨테이너에 적용 */
 
-  &:last-child {
-  }
+  ${({ isUserList }) => isUserList && `max-width:100%;`}
 
   text-decoration: none;
   color: black;
@@ -29,18 +28,21 @@ export const NovelLink = styled(Link)`
   @media screen and (min-width: 560px) {
     min-width: 24%;
     max-width: 24%;
+    ${({ isUserList }) => isUserList && `max-width:100%;`}
   }
 
   /* 태블릿 */
   @media screen and (min-width: 768px) {
     min-width: 20%;
     max-width: 20%;
+    ${({ isUserList }) => isUserList && `max-width:100%;`}
   }
 
   /* PC */
   @media screen and (min-width: 1024px) {
     min-width: 16.66%;
     max-width: 16.66%;
+    ${({ isUserList }) => isUserList && `max-width:100%;`}
   }
 `;
 export const NovelInfoBox = styled.div`

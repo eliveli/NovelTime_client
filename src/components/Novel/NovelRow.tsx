@@ -40,7 +40,7 @@ export default function NovelRow({ novel, isUserList }: MyComponentProps) {
 
   return (
     <ThemeProvider theme={theme}>
-      <NovelLink to={`/novel_detail/${novelId}`}>
+      <NovelLink isUserList to={`/novel_detail/${novelId}`}>
         <NovelImgBox>
           <NovelImg novelImg={novelImg} />
         </NovelImgBox>

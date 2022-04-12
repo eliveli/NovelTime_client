@@ -100,7 +100,7 @@ export default function CategoryMark({
             isOtherUser={infoFromUserPage.path === "othersList"}
             to={`/user_page/${infoFromUserPage.userName}/${infoFromUserPage.path}/${infoFromUserPage.list.listId}`}
           >
-            <ShowAllText isUserNovelList>이 리스트 더보기</ShowAllText>
+            <ShowAllText isUserNovelList>이 리스트 전체보기</ShowAllText>
             <ShowAllIcon />
           </LinkCategory>
         )}
@@ -110,16 +110,23 @@ export default function CategoryMark({
 
   // category mark for all novel list or writings in user page
   if (infoFromUserPage?.list?.isMainCategory || infoFromUserPage) {
-    const userPagePath = infoFromUserPage.list?.isMainCategory
-      ? `/user_page/${infoFromUserPage.userName}/${infoFromUserPage.path}/${infoFromUserPage.list.listId}`
-      : `/user_page/${infoFromUserPage.userName}/${infoFromUserPage.path}`;
+    // writing or novel list
+    const userPageInfo = infoFromUserPage.list?.isMainCategory
+      ? {
+          path: `/user_page/${infoFromUserPage.userName}/${infoFromUserPage.path}/${infoFromUserPage.list.listId}`,
+          text: "더보기",
+        }
+      : {
+          path: `/user_page/${infoFromUserPage.userName}/${infoFromUserPage.path}`,
+          text: "전체보기",
+        };
     return (
       <CategoryContainer>
         <CategoryDesc fontSize={fontSize}>{categoryText}</CategoryDesc>
         {/* the page is not show-all-page */}
         {!isShowAll && (
-          <LinkCategory to={userPagePath}>
-            <ShowAllText>전체보기</ShowAllText>
+          <LinkCategory to={userPageInfo.path}>
+            <ShowAllText>{userPageInfo.text}</ShowAllText>
             <ShowAllIcon />
           </LinkCategory>
         )}
