@@ -1,167 +1,14 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import MainBG from "components/MainBG";
-import { useNavigate } from "react-router-dom";
 
 import { CategoryMark } from "components/CategoryMark";
-import Icon from "assets/Icon";
-import { useComponentHeight } from "utils";
 import { RowSlide } from "../../components/NovelListFrame";
 import { NovelRow } from "../../components/Novel";
 
-import {
-  CommntIcon,
-  ContnrNearImg,
-  CreateDate,
-  HeartIcon,
-  IconInfoContnr,
-  IconNoInfo,
-  IconsContnr,
-  NovelImg,
-  NovelTitle,
-  UserContnr,
-  WiringContnr,
-  WritingSection,
-  WritingTitle,
-  WritingUserName,
-  Filter,
-  FilterContnr,
-  CommentContent,
-  CommentNovelTitle,
-  CommentTalkTitle,
-  CommentContentContnr,
-  WritingMark,
-} from "./UserPage.styles";
+import { WritingSection } from "./UserPage.styles";
+import { Writing, Comment, WritingFilter } from "./UserPage.components";
 
 // server request with userName
-
-interface CommentInfo {
-  commentInfo: {
-    commentId: string;
-    commentContent: string;
-    createDate: string;
-
-    talkId: string;
-    talkTitle: string;
-    novelTitle: string;
-  };
-}
-
-function Comment({ commentInfo }: CommentInfo) {
-  const { commentId, commentContent, createDate, talkId, talkTitle, novelTitle } = commentInfo;
-  const navigate = useNavigate();
-
-  return (
-    <WiringContnr isComment onClick={() => navigate(`/talk_detail/${talkId}/${commentId}`)}>
-      <CommentContentContnr>
-        <CommentContent>{commentContent}</CommentContent>
-        <CreateDate>{createDate}</CreateDate>
-      </CommentContentContnr>
-      <CommentTalkTitle>
-        <WritingMark>&nbsp;[글]&nbsp;&nbsp;&nbsp;</WritingMark>
-        {talkTitle}
-      </CommentTalkTitle>
-      <CommentNovelTitle>{novelTitle}</CommentNovelTitle>
-    </WiringContnr>
-  );
-}
-interface WritingInfo {
-  writingInfo: {
-    talkId?: string;
-    recommendId?: string;
-    novelImg: string;
-    talkTitle?: string;
-    recommendTitle?: string;
-    userName?: string;
-    createDate: string;
-    likeNO: number;
-    commentNO?: number;
-    novelTitle: string;
-  };
-}
-function Writing({ writingInfo }: WritingInfo) {
-  const {
-    talkId,
-    recommendId,
-    novelImg,
-    talkTitle,
-    recommendTitle,
-    userName,
-    createDate,
-    likeNO,
-    commentNO,
-    novelTitle,
-  } = writingInfo;
-  const imgRef = useRef<HTMLDivElement>(null);
-  const imgHeight = useComponentHeight(imgRef);
-
-  const navigate = useNavigate();
-
-  // talk
-  if (talkId) {
-    return (
-      <WiringContnr onClick={() => navigate(`/talk_detail/${talkId}`)}>
-        <ContnrNearImg isTalk>
-          <WritingTitle talkId={talkId}>{talkTitle}</WritingTitle>
-          <UserContnr talkId={talkId}>
-            {userName && <WritingUserName talkId={talkId}>{` : ${userName}`}</WritingUserName>}
-            <CreateDate>
-              {!userName && ` : `}
-              {createDate}
-            </CreateDate>
-            <IconsContnr>
-              <IconInfoContnr>
-                <Icon.IconBox size={15}>
-                  <HeartIcon />
-                </Icon.IconBox>
-                <IconNoInfo>{likeNO}</IconNoInfo>
-              </IconInfoContnr>
-              <IconInfoContnr>
-                <Icon.IconBox size={15}>
-                  <CommntIcon />
-                </Icon.IconBox>
-                <IconNoInfo>{commentNO}</IconNoInfo>
-              </IconInfoContnr>
-            </IconsContnr>
-          </UserContnr>
-          <NovelTitle talkId={talkId}>{novelTitle}</NovelTitle>
-        </ContnrNearImg>
-        <NovelImg ref={imgRef} novelImg={novelImg} imgHeight={imgHeight} />
-      </WiringContnr>
-    );
-  }
-  // recommend
-  return (
-    <WiringContnr
-      onClick={() => {
-        if (recommendId) {
-          navigate(`/recommend_detail/${recommendId}`);
-        }
-      }}
-    >
-      <NovelImg ref={imgRef} novelImg={novelImg} imgHeight={imgHeight} />
-      <ContnrNearImg>
-        <NovelTitle>{novelTitle}</NovelTitle>
-        <WritingTitle>{recommendTitle}</WritingTitle>
-        <UserContnr>
-          {userName && <WritingUserName>{` : ${userName}`}</WritingUserName>}
-          <CreateDate>
-            {!userName && ` : `}
-            {createDate}
-          </CreateDate>
-          <IconsContnr>
-            <IconInfoContnr>
-              <Icon.IconBox size={15}>
-                <HeartIcon />
-              </Icon.IconBox>
-              <IconNoInfo>{likeNO}</IconNoInfo>
-            </IconInfoContnr>
-          </IconsContnr>
-        </UserContnr>
-      </ContnrNearImg>
-    </WiringContnr>
-  );
-}
-
 const dataFromServer = {
   myTalk: [
     {
@@ -213,7 +60,7 @@ const dataFromServer = {
 
       talkTitle: "이 소설 강추",
 
-      userName: "나나나",
+      userName: "나나",
       createDate: "22.03.03",
       likeNO: 5,
       commentNO: 7,
@@ -228,7 +75,7 @@ const dataFromServer = {
 
       talkTitle: "이 소설 강추",
 
-      userName: "나나나",
+      userName: "나나a",
       createDate: "22.03.03",
       likeNO: 5,
       commentNO: 7,
@@ -243,7 +90,7 @@ const dataFromServer = {
 
       talkTitle: "이 소설 강추",
 
-      userName: "나나나",
+      userName: "나d나",
       createDate: "22.03.03",
       likeNO: 5,
       commentNO: 7,
@@ -260,7 +107,7 @@ const dataFromServer = {
 
       recommendTitle: "이 소설 강추",
 
-      userName: "나나나",
+      userName: "as나나나",
       createDate: "22.03.03",
       likeNO: 5,
 
@@ -473,7 +320,6 @@ const dataFromServer = {
   },
 };
 
-type FilterType = "프리톡" | "추천" | "댓글";
 export default function UserPageHome() {
   //   const { userName } = useParams();
   const userName = "나나나" as string; // later remove this and cancel the comment mark above
@@ -501,19 +347,11 @@ export default function UserPageHome() {
         }}
         categoryText="My Writing"
       />
-      <FilterContnr>
-        {["프리톡", "추천", "댓글"].map((_) => (
-          <Filter
-            category={_ as FilterType}
-            selectedCtgr={myFilter as FilterType}
-            onClick={() => setMyFilter(_)}
-          >
-            &nbsp;&nbsp;
-            {_}
-            &nbsp;&nbsp;
-          </Filter>
-        ))}
-      </FilterContnr>
+      <WritingFilter
+        writingCategory={["프리톡", "추천", "댓글"]}
+        writingFilter={myFilter}
+        selectWritingFilter={setMyFilter}
+      />
       <WritingSection>
         {myFilter === "프리톡" &&
           dataFromServer.myTalk.map((_) => <Writing key={_.talkId} writingInfo={_} />)}
@@ -530,24 +368,14 @@ export default function UserPageHome() {
         }}
         categoryText="Other's Writing I like"
       />
-      <FilterContnr>
-        {["프리톡", "추천"].map((_) => (
-          <Filter
-            category={_ as FilterType}
-            selectedCtgr={otherFilter as FilterType}
-            onClick={() => setOtherFilter(_)}
-          >
-            &nbsp;&nbsp;
-            {_}
-            &nbsp;&nbsp;
-          </Filter>
-        ))}
-      </FilterContnr>
+      <WritingFilter
+        writingCategory={["프리톡", "추천"]}
+        writingFilter={otherFilter}
+        selectWritingFilter={setOtherFilter}
+      />
       <WritingSection>
         {otherFilter === "프리톡" &&
           dataFromServer.otherTalk.map((_) => <Writing key={_.talkId} writingInfo={_} />)}
-      </WritingSection>
-      <WritingSection>
         {otherFilter === "추천" &&
           dataFromServer.otherRecommend.map((_) => <Writing key={_.recommendId} writingInfo={_} />)}
       </WritingSection>

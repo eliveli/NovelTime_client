@@ -14,9 +14,8 @@ import {
   RecommendList,
   RecommendDetail,
   UserPageHome,
-  UserPageMyWriting,
+  UserPageWriting,
   UserPageNovelList,
-  UserPageOthersWriting,
   UserPageParent,
   NotFound,
   MainListNav,
@@ -112,8 +111,14 @@ function App() {
 
           <Route path="/user_page/:userName" element={<UserPageParent />}>
             <Route index element={<UserPageHome />} />
-            <Route path="/user_page/:userName/myWriting" element={<UserPageMyWriting />} />
-            <Route path="/user_page/:userName/othersWriting" element={<UserPageOthersWriting />} />
+            <Route
+              path="/user_page/:userName/myWriting"
+              element={<UserPageWriting isMyWriting={true} />}
+            />
+            <Route
+              path="/user_page/:userName/othersWriting"
+              element={<UserPageWriting isMyWriting={false} />}
+            />
             <Route
               path="/user_page/:userName/myList/:listId"
               element={<UserPageNovelList isMyList={true} />}

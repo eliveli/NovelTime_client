@@ -97,13 +97,15 @@ export default function UserPageNovelList({ isMyList }: { isMyList: boolean }) {
   const userName = "나나나" as string; // later remove this and cancel the comment mark above
   const loginUserName = "나나" as string; // later change it to real login user name
 
-  // who is the list owner : me or other
-  // if it is the login user's list, set "my", if not set the name of user
+  // divide list page: my list or other's list //
+  // divide list page owner : login user or not //
+  // if this is my list page and login user is the owner, set "my", if not set "name's"
   const myListUserMark = userName === loginUserName ? `My` : `${userName}'s`;
   const myListMarkText = `${myListUserMark} Novel List`;
+  // if this is other's list page and login user is the owner, ...
   const othersListUserMark = userName === loginUserName ? `I` : `${userName}`;
   const othersListMarkText = `Other's Novel List ${othersListUserMark} Like`;
-  // is this page "my list" or "other's list I like"?
+  // mark the page name
   const listPageMark = isMyList ? myListMarkText : othersListMarkText;
 
   // set list title
