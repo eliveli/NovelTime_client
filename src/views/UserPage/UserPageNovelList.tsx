@@ -16,6 +16,7 @@ import {
   MoreBtnBoxBG,
   MoreBtnParent,
 } from "./UserPage.styles";
+import contentMark from "./utils/contentMark";
 // server request with listId
 
 const novelList = {
@@ -97,16 +98,8 @@ export default function UserPageNovelList({ isMyList }: { isMyList: boolean }) {
   const userName = "나나나" as string; // later remove this and cancel the comment mark above
   const loginUserName = "나나" as string; // later change it to real login user name
 
-  // divide list page: my list or other's list //
-  // divide list page owner : login user or not //
-  // if this is my list page and login user is the owner, set "my", if not set "name's"
-  const myListUserMark = userName === loginUserName ? `My` : `${userName}'s`;
-  const myListMarkText = `${myListUserMark} Novel List`;
-  // if this is other's list page and login user is the owner, ...
-  const othersListUserMark = userName === loginUserName ? `I` : `${userName}`;
-  const othersListMarkText = `Other's Novel List ${othersListUserMark} Like`;
-  // mark the page name
-  const listPageMark = isMyList ? myListMarkText : othersListMarkText;
+  // get the content page mark
+  const contentPageMark = contentMark(userName, loginUserName, isMyList, false);
 
   // set list title
   const [currentList, selectList] = useState({
@@ -116,12 +109,12 @@ export default function UserPageNovelList({ isMyList }: { isMyList: boolean }) {
   });
 
   // maintain previous title list : do not rerender every time getting novel list from server
-  // when you click a title that doesn't exist on server,
+  // when a user click a title that doesn't exist on server,
   //      show user alarm modal,
   //      and reset the title list that is new from server
   //     --------  I will do this work later    ---------     //
   //
-  //        note : I get the title list always when click a title,
+  //        note : I get the title list always when clicking a title,
   //               but I don't use it except for case above.
 
   // initial title list getting from server at first
@@ -155,7 +148,7 @@ export default function UserPageNovelList({ isMyList }: { isMyList: boolean }) {
   const limitContainerRef = useRef<HTMLDivElement>(null);
   return (
     <MainBG>
-      <CategoryMark isShowAll categoryText={listPageMark} />
+      <CategoryMark isShowAll categoryText={contentPageMark} />
       {/* more button to show or not all the title list */}
       {/* when isListMore is true, always : limitContnrWidth === titleListWidthScrollable
           so the following should be divided two, not put together in one expression.

@@ -3,6 +3,7 @@ import { CategoryMark } from "components/CategoryMark";
 import { useState } from "react";
 import { Writing, Comment, WritingFilter } from "./UserPage.components";
 import { WritingSection } from "./UserPage.styles";
+import contentMark from "./utils/contentMark";
 
 // server request with userName and writing mark (my writing or other's writing)
 const dataFromServer = {
@@ -65,17 +66,8 @@ export default function UserPageWriting({ isMyWriting }: { isMyWriting: boolean 
   const userName = "나나나" as string; // later remove this and cancel the comment mark above
   const loginUserName = "나나" as string; // later change it to real login user name
 
-  // - divide writing page: my writing or other's writing ------------------- //
-  // - divide writing page owner : login user or not //
-  // if this is my writing page and login user is the owner, set "my", if not set "name's"
-  const myWritingUserMark = userName === loginUserName ? `My` : `${userName}'s`;
-  const myWritingMarkText = `${myWritingUserMark} Writing`;
-  // if this is other's writing page and login user is the owner, ...
-  const othersWritingUserMark = userName === loginUserName ? `I` : `${userName}`;
-  const othersWritingMarkText = `Other's Writing ${othersWritingUserMark} Like`;
-  // mark the page name
-  const writingPageMark = isMyWriting ? myWritingMarkText : othersWritingMarkText;
-  // ----------------------------------------------------------------------- //
+  // get the content page mark
+  const contentPageMark = contentMark(userName, loginUserName, isMyWriting, true);
 
   // writing category array : my writing or other's writing
   const writingCategory = isMyWriting ? ["프리톡", "추천", "댓글"] : ["프리톡", "추천"];
@@ -84,7 +76,7 @@ export default function UserPageWriting({ isMyWriting }: { isMyWriting: boolean 
 
   return (
     <MainBG>
-      <CategoryMark isShowAll categoryText={writingPageMark} />
+      <CategoryMark isShowAll categoryText={contentPageMark} />
 
       <WritingFilter
         writingCategory={writingCategory}
