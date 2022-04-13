@@ -82,13 +82,13 @@ export default function NovelDetail() {
   const anotherNovels = [
     anotherNovel,
     anotherNovel,
-    anotherNovel,
-    anotherNovel,
-    anotherNovel,
-    anotherNovel,
-    anotherNovel,
-    anotherNovel,
-    anotherNovel,
+    // anotherNovel,
+    // anotherNovel,
+    // anotherNovel,
+    // anotherNovel,
+    // anotherNovel,
+    // anotherNovel,
+    // anotherNovel,
   ];
 
   const infoTalk = {

@@ -225,7 +225,7 @@ export default function UserPageNovelList({ isMyList }: { isMyList: boolean }) {
 
       <NovelListContnr>
         {novelList.novel.map((_) => (
-          <NovelRow key={_.novelId} novel={_} isUserList />
+          <NovelRow key={_.novelId} novel={_} isWidth100 isNotSubInfo />
         ))}
       </NovelListContnr>
     </MainBG>

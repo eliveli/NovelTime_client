@@ -403,7 +403,7 @@ export default function UserPageHome() {
           }}
         >
           {list.novel.map((_) => (
-            <NovelRow key={_.novelId} novel={_} isUserList />
+            <NovelRow key={_.novelId} novel={_} isNotSubInfo />
           ))}
         </RowSlide>
       ))}
@@ -431,7 +431,7 @@ export default function UserPageHome() {
           otherUser={{ userImg: list.listInfo.userImg, userName: list.listInfo.userName }}
         >
           {list.novel.map((_) => (
-            <NovelRow key={_.novelId} novel={_} isUserList />
+            <NovelRow key={_.novelId} novel={_} isNotSubInfo />
           ))}
         </RowSlide>
       ))}

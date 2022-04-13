@@ -22,9 +22,10 @@ type MyComponentProps = React.PropsWithChildren<{
     novelGenre: string;
     novelIsEnd: string;
   };
-  isUserList?: true;
+  isWidth100?: true;
+  isNotSubInfo?: true;
 }>;
-export default function NovelRow({ novel, isUserList }: MyComponentProps) {
+export default function NovelRow({ novel, isWidth100, isNotSubInfo }: MyComponentProps) {
   // props or default props
   const {
     novelId = "",
@@ -40,7 +41,7 @@ export default function NovelRow({ novel, isUserList }: MyComponentProps) {
 
   return (
     <ThemeProvider theme={theme}>
-      <NovelLink isUserList to={`/novel_detail/${novelId}`}>
+      <NovelLink isWidth100={isWidth100} to={`/novel_detail/${novelId}`}>
         <NovelImgBox>
           <NovelImg novelImg={novelImg} />
         </NovelImgBox>
@@ -48,7 +49,7 @@ export default function NovelRow({ novel, isUserList }: MyComponentProps) {
           <NovelTitleBox>
             <NovelTitle>{novelTitle}</NovelTitle>
           </NovelTitleBox>
-          {!isUserList && (
+          {!isNotSubInfo && (
             <NovelSubInfoBox>
               <NovelInfoLineHeight>{novelAuthor}</NovelInfoLineHeight>
               <NovelInfo>{`${novelGenre} | ${novelIsEnd}`}</NovelInfo>
