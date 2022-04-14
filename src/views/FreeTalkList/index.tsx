@@ -17,7 +17,7 @@ export default function FreeTalkList() {
       commentNO: 7,
 
       talkTitle: "이 소설 강추",
-      talkImg: "https://cdn.pixabay.com/photo/2018/08/31/08/35/toys-3644073_960_720.png",
+      talkImg: "", // it can be empty string
 
       novelTitle: "헌터와 매드 사이언티스트",
     },

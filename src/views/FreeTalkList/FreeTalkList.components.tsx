@@ -92,7 +92,7 @@ function TalkTablet({ talk }: { talk: TalkProps }) {
           <TalkTitle>{talkTitle}</TalkTitle>
           <NovelTitle>{novelTitle}</NovelTitle>
         </TitleContnr>
-        <TalkImgTablet titleHeight={titleHeight} talkImg={talkImg} />
+        {talkImg && <TalkImgTablet titleHeight={titleHeight} talkImg={talkImg} />}
       </TalkInfoContnrTablet>
       {/* </UserNameBox> */}
       <CreateDate>{createDate}</CreateDate>
@@ -175,10 +175,12 @@ function TalkMobile({ talk }: { talk: TalkProps }) {
         </FirstLineContainer>
 
         <TalkPreview>
-          <TalkTitle>{talkTitle}</TalkTitle>
-          <TalkImgBox ref={imgWidthRef}>
-            <TalkImg imgWidth={imgWidth} talkImg={talkImg} />
-          </TalkImgBox>
+          <TalkTitle talkImg={talkImg}>{talkTitle}</TalkTitle>
+          {talkImg && (
+            <TalkImgBox ref={imgWidthRef}>
+              <TalkImg imgWidth={imgWidth} talkImg={talkImg} />
+            </TalkImgBox>
+          )}
           <NovelTitle>{novelTitle}</NovelTitle>
         </TalkPreview>
       </BesideImgContainer>

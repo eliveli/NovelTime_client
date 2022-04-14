@@ -283,13 +283,26 @@ export const IconContainer = styled.div`
 `;
 export const IconNO = styled.span``;
 
-export const TalkTitle = styled.div`
+export const TalkTitle = styled.div<{ talkImg?: string }>`
   font-weight: 600;
   font-size: 17px;
+
+  @media screen and (max-width: 599px) {
+    /* when talkImg is empty string "", */
+    ${({ talkImg }) =>
+      !talkImg &&
+      `
+      padding-bottom: 6px;
+      border-bottom: 1px dashed rgba(100, 100, 100, 0.1);
+    `}
+  }
 `;
 export const NovelTitle = styled.div`
   color: ${(props) => props.theme.color.textGray};
   font-weight: 600;
+  @media screen and (max-width: 599px) {
+    padding-top: 3px;
+  }
 `;
 
 // (구분) img vs div의 backgorund-image (하기)
