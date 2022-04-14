@@ -273,9 +273,17 @@ export default function UserPageNovelList({ isMyList }: { isMyList: boolean }) {
               selectedListId={currentList.listId}
               onClick={() => {
                 // server request with list id //
+                //
+                // about like :
+                // this data will be the new data from server
+                // later modify data in "toggleLike( this!! )" below
+                //              or make a new function execute when clicking
+                toggleLike(novelList.isLike);
+                //
                 selectList(_);
                 // if the list of title doesn't exist on server,
-                // set the state to first element of the title list
+                // put this list's info and "otherList" data in novelTitleList.current
+                // and execute "selectList" with first element of novelTitleList.current
 
                 limitContainerRef.current?.scroll(0, 0);
                 // scroll to (0,0) to show the selected title arranged first in the title container

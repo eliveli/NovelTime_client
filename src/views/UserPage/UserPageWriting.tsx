@@ -1,8 +1,9 @@
 import MainBG from "components/MainBG";
 import { CategoryMark } from "components/CategoryMark";
 import { useState } from "react";
+import Icon from "assets/Icon";
 import { Writing, Comment, WritingFilter } from "./UserPage.components";
-import { WritingSection } from "./UserPage.styles";
+import { ShareIconBox, WritingSection } from "./UserPage.styles";
 import contentMark from "./utils/contentMark";
 
 // - server request -------------important----------------------------
@@ -83,7 +84,11 @@ export default function UserPageWriting({ isMyWriting }: { isMyWriting: boolean 
 
   return (
     <MainBG>
-      <CategoryMark isShowAll categoryText={contentPageMark} />
+      <CategoryMark isShowAll categoryText={contentPageMark}>
+        <ShareIconBox>
+          <Icon.SharePC />
+        </ShareIconBox>
+      </CategoryMark>
 
       <WritingFilter
         writingCategory={writingCategory}
