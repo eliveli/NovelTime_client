@@ -1,17 +1,30 @@
+import { useRef } from "react";
+import Icon from "assets/Icon";
+import { catWalking } from "assets/images";
 import {
   NovelImgBG,
   NovelImgBig,
   ClosingIcon,
   ClosingBox,
   NovelImgContainer,
-  SortMobileBG,
+  MobileBG,
   SortBox,
   SortText,
   ClosingSpace,
+  TranslucentBG,
+  LoginBox,
+  LoginCategoryContnr,
+  LoginCategory,
+  LoginTitle,
+  ContentContnr,
+  LoginIconBox,
+  Logo,
+  LogoContnr,
 } from "./Modal.styles";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { closeModal, sortWriting, filterContent } from "../../store/clientSlices/modalSlice";
 import { usePreventScroll } from "../../utils";
+import useCloseModalClickOutside from "./utils/useCloseModalClickOutside";
 
 export default function Modal() {
   const dispatch = useAppDispatch();
@@ -28,7 +41,16 @@ export default function Modal() {
   // get selected category text to mark in the list
   const { sortingText, filteringContent } = useAppSelector((state) => state.modal);
 
-  usePreventScroll(modalCategory); // 모달 띄운 동안 body 영역 스크롤 막기
+  // prevent scrolling body when modal displays
+  usePreventScroll(modalCategory);
+
+  // to close login box when clicking outside
+  // of course, login modal will be closed when clicking the close icon. go seeing in "case login:"
+  const loginBoxRef = useRef<HTMLDivElement>(null);
+  useCloseModalClickOutside(loginBoxRef, "login");
+  //  .!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  // warning : this works unexpectedly. It does work even I clicked the inside element...
+  //
 
   return (
     <div>
@@ -48,7 +70,7 @@ export default function Modal() {
             );
           case "sortWriting":
             return (
-              <SortMobileBG>
+              <MobileBG>
                 <SortBox>
                   {["작성일New", "작성일Old", "댓글Up", "댓글Down", "좋아요Up", "좋아요Down"].map(
                     (_) => (
@@ -71,11 +93,11 @@ export default function Modal() {
                     dispatch(closeModal());
                   }}
                 />
-              </SortMobileBG>
+              </MobileBG>
             );
           case "filterContent":
             return (
-              <SortMobileBG>
+              <MobileBG>
                 <SortBox>
                   {["Novel", "FreeTalk", "Recommend"].map((_) => (
                     <SortText
@@ -96,11 +118,38 @@ export default function Modal() {
                     dispatch(closeModal());
                   }}
                 />
-              </SortMobileBG>
+              </MobileBG>
             );
           case "login":
-            // eslint-disable-next-line react/jsx-no-useless-fragment
-            return <></>;
+            return (
+              <TranslucentBG>
+                <LoginBox ref={loginBoxRef}>
+                  <ClosingBox isSmallWidth onClick={() => dispatch(closeModal())}>
+                    <ClosingIcon />
+                  </ClosingBox>
+                  <ContentContnr>
+                    <LoginTitle>로그인</LoginTitle>
+                    <LoginCategoryContnr>
+                      <LoginCategory isKaKao>
+                        <LoginIconBox isKaKao size={20}>
+                          <Icon.Kakao />
+                        </LoginIconBox>
+                        카카오
+                      </LoginCategory>
+                      <LoginCategory>
+                        <LoginIconBox size={20}>
+                          <Icon.Naver />
+                        </LoginIconBox>
+                        네이버
+                      </LoginCategory>
+                    </LoginCategoryContnr>
+                  </ContentContnr>
+                  <LogoContnr>
+                    <Logo src={catWalking} alt="cat walking" />
+                  </LogoContnr>
+                </LoginBox>
+              </TranslucentBG>
+            );
           case "none":
             // eslint-disable-next-line react/jsx-no-useless-fragment
             return <></>;

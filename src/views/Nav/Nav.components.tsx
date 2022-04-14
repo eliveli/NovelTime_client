@@ -16,7 +16,12 @@ import {
   logoPC,
 } from "assets/images";
 import Icon from "assets/Icon";
-import { sortWriting, filterContent, setLikeNovel } from "../../store/clientSlices/modalSlice";
+import {
+  sortWriting,
+  filterContent,
+  openModal,
+  setLikeNovel,
+} from "../../store/clientSlices/modalSlice";
 import { handleWritingSubmit } from "../../store/clientSlices/writingSlice";
 import { useAppSelector, useAppDispatch } from "../../store/hooks";
 
@@ -61,6 +66,7 @@ export function NavPC({ pathname }: Props) {
   const theme = {};
 
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
   const isLogin = false;
 
@@ -115,7 +121,7 @@ export function NavPC({ pathname }: Props) {
           {!isLogin && (
             <LoginText
               onClick={() => {
-                navigate(``);
+                dispatch(openModal("login"));
               }}
             >
               로그인
@@ -131,6 +137,8 @@ export function NavPC({ pathname }: Props) {
 export function NavMobileMainTop() {
   const theme = {};
   const navigate = useNavigate();
+
+  const dispatch = useAppDispatch();
 
   const isLogin = false;
 
@@ -165,14 +173,19 @@ export function NavMobileMainTop() {
           {!isLogin && (
             <LoginText
               onClick={() => {
-                navigate(``);
+                dispatch(openModal("login"));
               }}
             >
               로그인
             </LoginText>
           )}
+          {/* following is for mobile size */}
           {!isLogin && (
-            <LoginIconBox>
+            <LoginIconBox
+              onClick={() => {
+                dispatch(openModal("login"));
+              }}
+            >
               <Icon.Login />
             </LoginIconBox>
           )}

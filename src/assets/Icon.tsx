@@ -24,10 +24,11 @@ import {
   HiPlus,
   HiOutlineHome,
 } from "react-icons/hi";
-import { RiRunLine, RiShareForward2Fill } from "react-icons/ri";
+import { RiRunLine, RiShareForward2Fill, RiKakaoTalkFill } from "react-icons/ri";
 import { MdOutlineShare, MdOutlineMoreHoriz } from "react-icons/md";
 import { IoIosSearch, IoMdClose } from "react-icons/io";
 import { AiOutlineUser } from "react-icons/ai";
+import { SiNaver, SiKakaotalk } from "react-icons/si";
 
 import theme, { styled } from "./styles/theme";
 
@@ -81,6 +82,12 @@ const Icon = {
   `,
   BigLeft: styled(HiOutlineChevronLeft)`
     ${iconStyle()};
+  `,
+  Naver: styled(SiNaver)`
+    ${iconStyleHover()};
+  `,
+  Kakao: styled(RiKakaoTalkFill)`
+    ${iconStyleHover()};
   `,
   Emoji: styled(BsEmojiSunglasses)`
     ${iconStyleHover()};
