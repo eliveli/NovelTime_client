@@ -23,14 +23,16 @@ import {
 import contentMark from "./utils/contentMark";
 // - server request --------------------------------important---------------------------------------
 // 1. when entering this page at first,
-//    request with listId, isMe, isMyList
+//    request with listId, loginUserName, userName, isMyList
 //    : note :
-//      - isMe is whether userName(the owner of this UserPage) is the same as loginUserName or not
-//      - received data isLike
-//         - when isMe is false, type of isLike is true or false
-//         - when isMe is true, isLike is false. in fact, no matter what the value is except type
+//      - received data isLike : it is login user's info
+//         - when userName(the owner of this UserPage) is the different from loginUserName,
+//                 receive isLike as true or false
+//         - when userName is the same as loginUserName
+//                 receive isLike as false. in fact, no matter what the value is except type
 //                                                        because in this case it will be not used
-//      - isMyList is whether the list is my list or other's list that the page's owner like
+//      - isMyList is whether the list is userName's list (it is my list)
+//                                       or other's list that userName(the page's owner)'s like
 //                    send it as true in my list, false in other's list
 //      - received data otherList
 //         - when isMyList is true, it will be the list that the user compose
@@ -256,7 +258,7 @@ export default function UserPageNovelList({ isMyList }: { isMyList: boolean }) {
               isLike={isLike}
               size={28}
               onClick={() => {
-                // server request with loginUserName, listId, isLike
+                // server request with loginUserName, listId
                 // after receiving the data, execute toggleLike with isLike
                 toggleLike(!isLike);
               }}
