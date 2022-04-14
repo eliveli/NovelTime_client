@@ -274,10 +274,10 @@ export const LeftIconBox = styled.div`
     color: rgba(100, 100, 100, 0.8);`,
   )}
 `;
-export const HeartIcon = styled(Icon.NavHeart)`
+export const HeartIcon = styled(Icon.BigEmptyHeart)`
   color: rgba(100, 100, 100, 0.5);
 `;
-export const FillHeartIcon = styled(Icon.NavFillHeart)`
+export const FillHeartIcon = styled(Icon.BigFillHeart)`
   color: rgba(100, 100, 100, 0.5);
 `;
 export const HeartIconBox = styled.div`
@@ -344,6 +344,8 @@ export const HomeIconBox = styled.div`
 `;
 export const IconsBox = styled.div<{ isLeft?: true; isRight?: true }>`
   display: flex;
+
+  min-width: 34px;
 
   ${({ isLeft }) => isLeft && `margin-left: -6px; margin-top: -1px;`}
   ${({ isRight }) => isRight && `margin-right: -3px; margin-top: -2px;`}

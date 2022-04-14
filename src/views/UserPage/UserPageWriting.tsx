@@ -5,7 +5,14 @@ import { Writing, Comment, WritingFilter } from "./UserPage.components";
 import { WritingSection } from "./UserPage.styles";
 import contentMark from "./utils/contentMark";
 
-// server request with userName and writing mark (my writing or other's writing)
+// - server request -------------important----------------------------
+// - when entering this page at first,
+//   - request with userName, isMyWriting
+//            isMyWriting is true, it will be the my writing
+//                        is false, other's writing
+//   - received two userName : in talk and in recommend data from server
+//          in my writing, get the value of "". in fact no matter what it is except type
+//
 const dataFromServer = {
   talk: [
     {

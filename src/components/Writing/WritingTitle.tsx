@@ -80,7 +80,7 @@ export default function WritingTitle({ writing }: { writing: WritingProps }) {
               <IconsBox>
                 <IconBox>
                   <Icon.IconBox noPointer size={20}>
-                    <Icon.Heart />
+                    <Icon.SmallHeart />
                   </Icon.IconBox>
                   <IconNO>{likeNO}</IconNO>
                 </IconBox>

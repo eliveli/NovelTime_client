@@ -24,7 +24,7 @@ import {
   HiPlus,
   HiOutlineHome,
 } from "react-icons/hi";
-import { RiRunLine } from "react-icons/ri";
+import { RiRunLine, RiShareForward2Fill } from "react-icons/ri";
 import { MdOutlineShare, MdOutlineMoreHoriz } from "react-icons/md";
 import { IoIosSearch, IoMdClose } from "react-icons/io";
 import { AiOutlineUser } from "react-icons/ai";
@@ -100,7 +100,7 @@ const Icon = {
   Plus: styled(HiPlus)`
     ${iconStyle()};
   `,
-  Heart: styled(FaRegHeart)`
+  SmallHeart: styled(FaRegHeart)`
     ${iconStyle()};
   `,
   Comment: styled(FaRegComment)`
@@ -130,13 +130,16 @@ const Icon = {
   Share: styled(MdOutlineShare)`
     ${iconStyleHover()};
   `,
+  SharePC: styled(RiShareForward2Fill)`
+    ${iconStyleHover()};
+  `,
   Home: styled(HiOutlineHome)`
     ${iconStyleHover()};
   `,
-  NavHeart: styled(HiOutlineHeart)`
+  BigEmptyHeart: styled(HiOutlineHeart)`
     ${iconStyleHover()};
   `,
-  NavFillHeart: styled(HiHeart)`
+  BigFillHeart: styled(HiHeart)`
     ${iconStyleHover()};
   `,
   Search: styled(IoIosSearch)`

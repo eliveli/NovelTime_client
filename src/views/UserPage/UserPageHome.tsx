@@ -131,12 +131,10 @@ const dataFromServer = {
   novelList: {
     isMyList: [
       {
-        listInfo: {
-          listId: "sssss",
-          listTitle: "list where is romance",
-          userName: "asda",
-          userImg: "",
-        },
+        listId: "sssss",
+        listTitle: "list where is romance",
+        userName: "asda",
+        userImg: "",
         novel: [
           {
             novelId: "20220225082010201",
@@ -182,12 +180,10 @@ const dataFromServer = {
         ],
       },
       {
-        listInfo: {
-          listId: "sddssss",
-          listTitle: "list where is romance",
-          userName: "asda",
-          userImg: "",
-        },
+        listId: "sddssss",
+        listTitle: "list where is romance",
+        userName: "asda",
+        userImg: "",
         novel: [
           {
             novelId: "20220225082010201",
@@ -253,12 +249,10 @@ const dataFromServer = {
     ],
     isOthersList: [
       {
-        listInfo: {
-          listId: "ssaasss",
-          listTitle: "list where is romance",
-          userName: "asda",
-          userImg: "",
-        },
+        listId: "ssaasss",
+        listTitle: "list where is romance",
+        userName: "asda",
+        userImg: "",
         novel: [
           {
             novelId: "20220225082010201",
@@ -289,12 +283,10 @@ const dataFromServer = {
         ],
       },
       {
-        listInfo: {
-          listId: "ssssjgrs",
-          listTitle: "list where is romance",
-          userName: "asda",
-          userImg: "",
-        },
+        listId: "ssssjgrs",
+        listTitle: "list where is romance",
+        userName: "asda",
+        userImg: "",
         novel: [
           {
             novelId: "20220225082010201",
@@ -386,20 +378,20 @@ export default function UserPageHome() {
           path: "myList",
           list: {
             isMainCategory: true,
-            listId: dataFromServer.novelList.isMyList[0].listInfo.listId,
+            listId: dataFromServer.novelList.isMyList[0].listId,
           },
         }}
         categoryText={myListMarkText}
       />
       {dataFromServer.novelList.isMyList.map((list) => (
         <RowSlide
-          categoryId={list.listInfo.listId}
-          categoryText={list.listInfo.listTitle}
+          categoryId={list.listId}
+          categoryText={list.listTitle}
           novelNO={list.novel.length}
           infoFromUserPage={{
             userName,
             path: "myList",
-            list: { isMainCategory: false, listId: list.listInfo.listId },
+            list: { isMainCategory: false, listId: list.listId },
           }}
         >
           {list.novel.map((_) => (
@@ -413,22 +405,22 @@ export default function UserPageHome() {
           path: "othersList",
           list: {
             isMainCategory: true,
-            listId: dataFromServer.novelList.isOthersList[0].listInfo.listId,
+            listId: dataFromServer.novelList.isOthersList[0].listId,
           },
         }}
         categoryText={othersListMarkText}
       />
       {dataFromServer.novelList.isOthersList.map((list) => (
         <RowSlide
-          categoryId={list.listInfo.listId}
-          categoryText={list.listInfo.listTitle}
+          categoryId={list.listId}
+          categoryText={list.listTitle}
           novelNO={list.novel.length}
           infoFromUserPage={{
             userName,
             path: "othersList",
-            list: { isMainCategory: false, listId: list.listInfo.listId },
+            list: { isMainCategory: false, listId: list.listId },
           }}
-          otherUser={{ userImg: list.listInfo.userImg, userName: list.listInfo.userName }}
+          otherUser={{ userImg: list.userImg, userName: list.userName }}
         >
           {list.novel.map((_) => (
             <NovelRow key={_.novelId} novel={_} isNotSubInfo />

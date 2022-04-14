@@ -24,8 +24,8 @@ const IconContainer = styled.div`
   `)}
 `;
 const IconBox = styled(Icon.IconBox)``;
-const HeartIcon = styled(Icon.NavHeart)``;
-const FillHeartIcon = styled(Icon.NavFillHeart)``;
+const HeartIcon = styled(Icon.BigEmptyHeart)``;
+const FillHeartIcon = styled(Icon.BigFillHeart)``;
 const ShareIcon = styled(Icon.Share)``;
 const LikeNumber = styled.span`
   /* margin-right: 10px; */

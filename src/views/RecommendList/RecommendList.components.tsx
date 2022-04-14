@@ -109,7 +109,7 @@ export default function Recommend({ recommendInfo }: RecommendProps) {
             </UserNameBox>
             <IconBox>
               <Icon.IconBox noPointer size={20}>
-                <Icon.Heart />
+                <Icon.SmallHeart />
               </Icon.IconBox>
               <IconNO>{likeNO}</IconNO>
             </IconBox>

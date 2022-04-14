@@ -40,7 +40,7 @@ export const LikeIconBox = styled.div`
     }
   } */
 `;
-export const LikeIcon = styled(Icon.Heart)`
+export const LikeIcon = styled(Icon.SmallHeart)`
   width: 100%;
   height: 100%;
   /* @media (hover: hover) {

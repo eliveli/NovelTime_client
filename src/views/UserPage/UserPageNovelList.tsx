@@ -15,20 +15,68 @@ import {
   MoreBtnBox,
   MoreBtnBoxBG,
   MoreBtnParent,
+  HearIconBox,
+  ShareIconBox,
+  UserImg,
+  OthersTitleContnr,
 } from "./UserPage.styles";
 import contentMark from "./utils/contentMark";
-// server request with listId
+// - server request --------------------------------important---------------------------------------
+// 1. when entering this page at first,
+//    request with listId, isMe, isMyList
+//    : note :
+//      - isMe is whether userName(the owner of this UserPage) is the same as loginUserName or not
+//      - received data isLike
+//         - when isMe is false, type of isLike is true or false
+//         - when isMe is true, isLike is false. in fact, no matter what the value is except type
+//                                                        because in this case it will be not used
+//      - isMyList is whether the list is my list or other's list that the page's owner like
+//                    send it as true in my list, false in other's list
+//      - received data otherList
+//         - when isMyList is true, it will be the list that the user compose
+//         - when isMyList is false, it will be the list that the user like
+//
+//      - received two userName : one in global, the other in the element of the otherList array
+//                 in my list, get the value of "". in fact no matter what it is except type
+//
+//
+// 2. when clicking the other title,
+//    request with listId, isMe, isMyList
+//    receive the novel list, and set it in NovelRow component (is it necessary to modify the code?)
+//
+// 3. when clicking the heart,
+//    request with loginUserName, listId
+//               after receiving the data, execute toggleLike with isLike
+//               (for more detail, go looking at the code below)
 
 const novelList = {
-  listInfo: {
-    listId: "sddssss",
-    listTitle: "0번째 list where is romance",
-    userName: "asda",
-    userImg: "",
-  },
+  listId: "sddssss",
+  listTitle: "0번째 list where is romance",
+  //
+  // who is the user made this list, not the owner of this user page
+  // above is necessary especially in other's list
+  // only in other's list this info is necessary, not in my list
+  userName: "asda",
+  userImg: "https://cdn.pixabay.com/photo/2017/02/01/09/52/animal-2029245_960_720.png",
+  //
+  // it is necessary in both my list and other's list
+  // but login user is the owner of the user page, this info will not be received
+  isLike: true,
+  // otherList is used in two cases, one is when entering this page at first,
+  //                                the other is when the list doesn't exist
   otherList: [
-    { listId: "ssdfsdfsdfdds", listTitle: "첫번째 list where is romance", userName: "asdaaa" },
-    { listId: "sd00dfdssss", listTitle: "두번째 list where is romance", userName: "asdass" },
+    {
+      listId: "ssdfsdfsdfdds",
+      listTitle: "첫번째 list where is romance",
+      userName: "asdaaa",
+      userImg: "",
+    },
+    {
+      listId: "sd00dfdssss",
+      listTitle: "두번째 list where is romance",
+      userName: "asdass",
+      userImg: "",
+    },
   ],
   novel: [
     {
@@ -103,9 +151,9 @@ export default function UserPageNovelList({ isMyList }: { isMyList: boolean }) {
 
   // set list title
   const [currentList, selectList] = useState({
-    listId: novelList.listInfo.listId,
-    listTitle: novelList.listInfo.listTitle,
-    userName: novelList.listInfo.userName,
+    listId: novelList.listId,
+    listTitle: novelList.listTitle,
+    userName: novelList.userName,
   });
 
   // maintain previous title list : do not rerender every time getting novel list from server
@@ -120,16 +168,18 @@ export default function UserPageNovelList({ isMyList }: { isMyList: boolean }) {
   // initial title list getting from server at first
   const novelTitleList = useRef([
     {
-      listId: novelList.listInfo.listId,
-      listTitle: novelList.listInfo.listTitle,
-      userName: novelList.listInfo.userName,
+      listId: novelList.listId,
+      listTitle: novelList.listTitle,
+      userName: novelList.userName,
+      userImg: novelList.userImg,
     },
     ...novelList.otherList,
   ]);
 
-  // show or not all the list title
+  // - list more button : show or not all the list title
   const [isListMore, setListMore] = useState(false);
 
+  // - calculate the size of the title list container -------------------------   //
   // if the list title container is over than title list width, show the MoreBtn. //
   // - get shown width of title container
   const containerWidthRef = useRef<HTMLDivElement>(null);
@@ -138,17 +188,25 @@ export default function UserPageNovelList({ isMyList }: { isMyList: boolean }) {
   // - get scrollable width including overflowed hidden space
   const titleListRef = useRef<HTMLDivElement>(null);
   const titleListWidthScrollable = useComponentScrollWidth(titleListRef, isListMore);
+  // ---------------------------------------------------------------------------------- //
 
-  // get title list height to show or not more button when isListMore is true //
+  // - get title list height to show or not more button when isListMore is true ----------  //
   // - if titleListHeight is not longer than the height 32px that is 1 line of ListTitleContnr,
   // - then don't show the button even if isListMore is true
   const titleListHeight = useComponentHeight(titleListRef, isListMore);
 
-  // to scroll to (0,0) when clicking the title
+  // - to scroll to first title that is clicked
   const limitContainerRef = useRef<HTMLDivElement>(null);
+
+  // - heart
+  const [isLike, toggleLike] = useState(novelList.isLike);
   return (
     <MainBG>
-      <CategoryMark isShowAll categoryText={contentPageMark} />
+      <CategoryMark isShowAll categoryText={contentPageMark}>
+        <ShareIconBox>
+          <Icon.SharePC />
+        </ShareIconBox>
+      </CategoryMark>
       {/* more button to show or not all the title list */}
       {/* when isListMore is true, always : limitContnrWidth === titleListWidthScrollable
           so the following should be divided two, not put together in one expression.
@@ -156,7 +214,7 @@ export default function UserPageNovelList({ isMyList }: { isMyList: boolean }) {
       <ContainerWidth ref={containerWidthRef} />
       {isListMore && titleListHeight > 32 && (
         <MoreBtnParent>
-          <MoreBtnBoxBG>
+          <MoreBtnBoxBG isListMore={isListMore}>
             <MoreBtnBox
               size={28}
               onClick={() => {
@@ -170,7 +228,7 @@ export default function UserPageNovelList({ isMyList }: { isMyList: boolean }) {
       )}
       {!isListMore && limitContnrWidth < titleListWidthScrollable && (
         <MoreBtnParent>
-          <MoreBtnBoxBG>
+          <MoreBtnBoxBG isListMore={isListMore}>
             <MoreBtnBox
               size={28}
               onClick={() => {
@@ -193,6 +251,19 @@ export default function UserPageNovelList({ isMyList }: { isMyList: boolean }) {
           isListMore={isListMore}
           ref={titleListRef}
         >
+          {userName !== loginUserName && (
+            <HearIconBox
+              isLike={isLike}
+              size={28}
+              onClick={() => {
+                // server request with loginUserName, listId, isLike
+                // after receiving the data, execute toggleLike with isLike
+                toggleLike(!isLike);
+              }}
+            >
+              <Icon.BigFillHeart />
+            </HearIconBox>
+          )}
           {novelTitleList.current.map((_) => (
             <ListTitle
               key={_.listId}
@@ -208,16 +279,16 @@ export default function UserPageNovelList({ isMyList }: { isMyList: boolean }) {
                 // scroll to (0,0) to show the selected title arranged first in the title container
               }}
             >
-              &nbsp;&nbsp;
               {isMyList ? (
                 _.listTitle
               ) : (
-                <>
+                <OthersTitleContnr>
+                  <UserImg userImg={_.userImg} isTitle />
                   {_.userName} <ListTitleNormalStyle>의 리스트 : </ListTitleNormalStyle>
+                  &nbsp;
                   {_.listTitle}
-                </>
+                </OthersTitleContnr>
               )}
-              &nbsp;&nbsp;
             </ListTitle>
           ))}
         </ListTitleContnr>

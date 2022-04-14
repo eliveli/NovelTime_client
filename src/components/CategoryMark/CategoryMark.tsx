@@ -22,6 +22,7 @@ export default function CategoryMark({
   novelNO,
 
   infoFromUserPage,
+  children,
 }: {
   writing?: boolean;
   categoryId?: string;
@@ -44,6 +45,7 @@ export default function CategoryMark({
   };
 
   novelNO?: number;
+  children?: React.ReactChild | React.ReactChildren;
 }) {
   if (writing) {
     return (
@@ -143,6 +145,7 @@ export default function CategoryMark({
           <ShowAllIcon />
         </LinkCategory>
       )}
+      {children}
     </CategoryContainer>
   );
 }

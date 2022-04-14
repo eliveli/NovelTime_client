@@ -16,13 +16,22 @@ export const ProfileAlign = styled.div`
   margin: auto;
   display: flex;
 `;
-export const UserImg = styled.div<{ userImg: string }>`
+export const UserImg = styled.div<{ userImg: string; isTitle?: true }>`
   border-radius: 50%;
   min-width: 45px;
   height: 45px;
   background-image: url(${({ userImg }) =>
     userImg || "https://cdn.pixabay.com/photo/2017/02/01/09/52/animal-2029245_960_720.png"});
 
+  ${({ isTitle }) =>
+    isTitle &&
+    `
+      min-width: 20px;
+      max-width: 20px;
+      height: 20px;
+      margin-right: 3px;
+      margin-left: -2px;
+  `}
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -143,7 +152,7 @@ export const IconInfoContnr = styled.div`
   gap: 4px;
 `;
 
-export const HeartIcon = styled(Icon.Heart)``;
+export const HeartIcon = styled(Icon.SmallHeart)``;
 export const CommntIcon = styled(Icon.Comment)``;
 export const IconNoInfo = styled.span`
   color: rgba(0, 0, 0, 0.5);
@@ -228,10 +237,9 @@ export const ListTitleLimitHeightContnr = styled.div<{
 `;
 export const ListTitleContnr = styled.div<{ isListMore: boolean; limitContnrWidth: number }>`
   display: flex;
-
+  align-items: flex-start;
   row-gap: 12px;
   column-gap: 12px;
-  /* ${({ isListMore }) => (isListMore ? `flex-wrap: wrap;` : `overflow:hidden;`)} */
   ${({ isListMore }) => (isListMore ? `flex-wrap: wrap;` : ``)}
   width: ${({ limitContnrWidth }) => limitContnrWidth}px;
 `;
@@ -281,8 +289,8 @@ export const MoreBtnParent = styled.div`
   position: relative;
   width: 100%;
 `;
-export const MoreBtnBoxBG = styled.div`
-  padding-left: 4px;
+export const MoreBtnBoxBG = styled.div<{ isListMore: boolean }>`
+  padding-left: ${({ isListMore }) => (isListMore ? 0 : 4)}px;
   position: absolute;
   height: 32px;
   background-color: white;
@@ -300,4 +308,17 @@ export const MoreBtnBox = styled(Icon.IconBox)`
 `;
 export const ContainerWidth = styled.div`
   width: 100%;
+`;
+export const HearIconBox = styled(Icon.IconBox)<{ isLike: boolean }>`
+  order: -1;
+  margin-right: -7px;
+  color: ${({ isLike }) => (isLike ? theme.color.main : `rgba(150,150,150,0.4)`)};
+`;
+export const ShareIconBox = styled(Icon.IconBox)`
+  color: rgba(100, 100, 100, 0.4);
+  margin-left: 10px;
+`;
+export const OthersTitleContnr = styled.div`
+  display: flex;
+  align-items: center;
 `;
