@@ -35,11 +35,29 @@ export const TalkTabletContnr = styled.div`
     display: none;
   }
 `;
+export const TalkMainInfoContnr = styled.div`
+  display: flex;
+  justify-content: space-between;
+
+  width: 70%;
+
+  @media screen and (max-width: 767px) {
+    width: 75%;
+  }
+`;
 export const TalkInfoContnrTablet = styled.div`
-  width: 55%;
+  position: relative;
+  width: 74%;
+  @media screen and (max-width: 767px) {
+    width: 73%;
+  }
   height: 100%;
   display: flex;
   justify-content: space-between;
+
+  border: 1px dotted lightgray;
+  border-radius: 10px;
+  padding: 6px 10px;
 `;
 export const TitleContnr = styled.div`
   width: 100%;
@@ -52,7 +70,7 @@ export const FirstLineContainer = styled.div`
   margin-left: 12px;
   padding-bottom: 3px;
 
-  border-bottom: 1px dashed rgba(100, 100, 100, 0.1);
+  /* border-bottom: 1px dashed rgba(100, 100, 100, 0.1); */
 `;
 export const BesideImgContainer = styled.div`
   width: 100%;
@@ -76,9 +94,10 @@ export const UserImg = styled.div<{ userImg: string }>`
   }
 `;
 export const UserInfoTablet = styled.div`
-  width: 18%;
+  /* width: 18%; */
+  width: 23%;
   @media screen and (min-width: 768px) {
-    width: 15%;
+    /* width: 23%; */
   }
   display: flex;
   gap: 9px;
@@ -89,8 +108,11 @@ export const UserNameBox = styled.div`
   display: flex;
   white-space: nowrap;
   color: rgba(100, 100, 100, 0.9);
+  margin-left: 11px;
+
   @media screen and (min-width: 600px) {
     flex-direction: column;
+    margin: 0;
   }
 `;
 
@@ -107,13 +129,34 @@ export const CreateDate = styled.p`
     width: 10%;
   }
 `;
+export const CommentLabel = styled.div`
+  position: absolute;
+  /* border: 1px solid rgba(0, 0, 0, 0.1); */
+  /* padding: 1px 1px 2px 2px; */
+  background-color: white;
+  top: -9px;
+  left: -10px;
+  transform: scaleY(-1);
+  border-radius: 50%;
+
+  @media screen and (min-width: 600px) {
+    top: 20px;
+    left: -12px;
+    transform: none;
+  }
+`;
 export const TalkPreview = styled.div`
-  padding-left: 12px;
-  padding-top: 6px;
+  position: relative;
+  border: 1px dotted lightgray;
+  border-radius: 10px;
+  margin: 0 0 0 12px;
+  padding: 6px 10px;
+  /* padding-left: 12px;
+  padding-top: 6px; */
 `;
 export const TalkImgTablet = styled.div<{ titleHeight: number; talkImg: string }>`
   border-radius: 6px;
-  height: 100%;
+  height: auto;
   min-width: ${({ titleHeight }) => titleHeight}px;
 
   background-image: url(${({ talkImg }) => talkImg});
@@ -156,6 +199,7 @@ const slideImgMobile = keyframes`
     top: -110px;
    }
   `;
+// now only this used
 const slideImgMobileRow = keyframes`
   0% {
     top: 0;
@@ -164,10 +208,10 @@ const slideImgMobileRow = keyframes`
     top: 0;
   }
   90%{
-    top: -260px;
+    top: -240px;
    }
   100%{
-    top: -260px;
+    top: -240px;
    }
   `;
 const slideImgTablet = keyframes`

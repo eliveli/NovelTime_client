@@ -6,11 +6,14 @@ interface Props {
 }
 export const IconNumber = styled.span`
   padding-left: 5px;
+  font-size: 19px;
+  color: rgba(100, 100, 100, 0.6);
 `;
 export const TextIconBox = styled.div`
   display: flex;
   align-items: center;
   background-color: white;
+  color: rgba(100, 100, 100, 0.6);
 
   min-width: 35px;
   max-width: 35px;
@@ -23,6 +26,7 @@ export const LikeIconBox = styled.div`
   align-items: center;
   background-color: white;
   /* box-shadow: 0 0 2px rgb(0 0 0 / 60%); */
+  color: rgba(100, 100, 100, 0.5);
 
   min-width: 35px;
   max-width: 35px;

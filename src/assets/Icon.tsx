@@ -27,7 +27,8 @@ import {
 import { RiRunLine, RiShareForward2Fill, RiKakaoTalkFill } from "react-icons/ri";
 import { MdOutlineShare, MdOutlineMoreHoriz } from "react-icons/md";
 import { IoIosSearch, IoMdClose } from "react-icons/io";
-import { AiOutlineUser } from "react-icons/ai";
+import { AiOutlineUser, AiOutlineMessage } from "react-icons/ai";
+import { FiMessageCircle } from "react-icons/fi";
 import { SiNaver, SiKakaotalk } from "react-icons/si";
 
 import theme, { styled } from "./styles/theme";
@@ -113,6 +114,12 @@ const Icon = {
   Comment: styled(FaRegComment)`
     ${iconStyle()};
   `,
+  CommentLabel: styled(AiOutlineMessage)`
+    ${iconStyle()};
+  `,
+  // CommentLabel: styled(FiMessageCircle)`
+  //   ${iconStyle()};
+  // `,
   SmallRight: styled(BiChevronRight)`
     ${iconStyle()};
   `,

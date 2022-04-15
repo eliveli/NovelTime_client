@@ -218,7 +218,9 @@ export const IconBox = styled.div`
   align-items: center;
   color: rgba(100, 100, 100, 0.9);
 `;
-export const IconNO = styled.span``;
+export const IconNO = styled.span`
+  font-size: 17px;
+`;
 export const NovelTitle = styled.div<{ contnrWidth: number }>`
   font-weight: 500;
 

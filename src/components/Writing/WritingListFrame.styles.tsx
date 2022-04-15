@@ -62,6 +62,7 @@ export const WritingTabText = styled.h3`
   font-size: 18px;
   text-align: center;
   border-bottom: 2px dashed rgba(150, 150, 150, 0.3);
+  margin: 18px 0;
 
   ${theme.media.tablet(`
     font-size: 20px;

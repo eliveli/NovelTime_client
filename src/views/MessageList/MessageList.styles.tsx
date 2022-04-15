@@ -51,6 +51,7 @@ export const MsgRoomCntnr = styled.div<{
 export const NextToImgContainer = styled.div`
   width: 100%;
   margin-left: 12px;
+  position: relative;
 `;
 
 export const UserImg = styled.div<{ userImg: string }>`
@@ -98,17 +99,21 @@ export const UnreadTalkNoContnr = styled.div`
   justify-content: center;
   align-items: center;
 
+  height: 23px;
+  padding: 0px 5px 2px;
+  position: absolute;
+  top: -1px;
+  right: 0;
+
   background-color: white;
   box-shadow: 0 0 2px orange;
   color: ${theme.color.main};
   font-weight: 500;
 
   border-radius: 5px;
-  padding: 0 5px;
-  height: 18px;
 `;
 export const UnreadTalkNO = styled.span`
-  font-size: 15px;
+  font-size: 20px;
 `;
 export const MessageImgBox = styled.div`
   min-width: 40px;

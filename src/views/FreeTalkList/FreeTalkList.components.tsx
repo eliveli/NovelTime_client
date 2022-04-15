@@ -25,6 +25,8 @@ import {
   TalkImgTablet,
   TalkInfoContnrTablet,
   UserInfoTablet,
+  CommentLabel,
+  TalkMainInfoContnr,
 } from "./FreeTalkList.styles";
 
 interface TalkProps {
@@ -68,32 +70,39 @@ function TalkTablet({ talk }: { talk: TalkProps }) {
 
   return (
     <TalkTabletContnr>
-      <UserInfoTablet>
-        <UserImg
-          userImg={userImg}
-          onClick={(event: React.MouseEvent<HTMLElement>) => {
-            event.stopPropagation();
-            navigate(`/user_page/${userName}`);
-          }}
-        />
-        {/* <UserNameBox> */}
-        <UserName
-          onClick={(event: React.MouseEvent<HTMLElement>) => {
-            event.stopPropagation();
-            navigate(`/user_page/${userName}`);
-          }}
-        >
-          {userName}
-        </UserName>
-      </UserInfoTablet>
+      <TalkMainInfoContnr>
+        <UserInfoTablet>
+          <UserImg
+            userImg={userImg}
+            onClick={(event: React.MouseEvent<HTMLElement>) => {
+              event.stopPropagation();
+              navigate(`/user_page/${userName}`);
+            }}
+          />
+          {/* <UserNameBox> */}
+          <UserName
+            onClick={(event: React.MouseEvent<HTMLElement>) => {
+              event.stopPropagation();
+              navigate(`/user_page/${userName}`);
+            }}
+          >
+            {userName}
+          </UserName>
+        </UserInfoTablet>
 
-      <TalkInfoContnrTablet>
-        <TitleContnr ref={titleHeightRef}>
-          <TalkTitle>{talkTitle}</TalkTitle>
-          <NovelTitle>{novelTitle}</NovelTitle>
-        </TitleContnr>
-        {talkImg && <TalkImgTablet titleHeight={titleHeight} talkImg={talkImg} />}
-      </TalkInfoContnrTablet>
+        <TalkInfoContnrTablet>
+          <CommentLabel>
+            <Icon.IconBox noPointer size={20} color="rgba(150,150,150,0.4)">
+              <Icon.CommentLabel />
+            </Icon.IconBox>
+          </CommentLabel>
+          <TitleContnr ref={titleHeightRef}>
+            <TalkTitle>{talkTitle}</TalkTitle>
+            <NovelTitle>{novelTitle}</NovelTitle>
+          </TitleContnr>
+          {talkImg && <TalkImgTablet titleHeight={titleHeight} talkImg={talkImg} />}
+        </TalkInfoContnrTablet>
+      </TalkMainInfoContnr>
       {/* </UserNameBox> */}
       <CreateDate>{createDate}</CreateDate>
 
@@ -175,6 +184,11 @@ function TalkMobile({ talk }: { talk: TalkProps }) {
         </FirstLineContainer>
 
         <TalkPreview>
+          <CommentLabel>
+            <Icon.IconBox noPointer size={20} color="rgba(150,150,150,0.4)">
+              <Icon.CommentLabel />
+            </Icon.IconBox>
+          </CommentLabel>
           <TalkTitle talkImg={talkImg}>{talkTitle}</TalkTitle>
           {talkImg && (
             <TalkImgBox ref={imgWidthRef}>

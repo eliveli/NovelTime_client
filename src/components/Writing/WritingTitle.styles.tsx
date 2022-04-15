@@ -107,11 +107,13 @@ export const IconBox = styled.div`
   gap: 6px;
   align-items: center;
 `;
-export const IconNO = styled.span``;
+export const IconNO = styled.span`
+  font-size: 17px;
+`;
 
 export const TalkTitle = styled.div<{ titleWidth: number }>`
   font-weight: 500;
-  font-size: 17px;
+  font-size: 16px;
 
   // 1줄 엘립시스 ...
   display: inline-block;
