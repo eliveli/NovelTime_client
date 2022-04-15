@@ -69,7 +69,7 @@ export function SearchBtn({
 }
 export function SortMobile({ borderOpacity }: { borderOpacity?: number }) {
   const dispatch = useAppDispatch();
-  const { sortingText } = useAppSelector((state) => state.modal);
+  const sortingText = useAppSelector((state) => state.modal.sortingText);
   // when clicking, in Modal component,
   // require server request in this component!
   console.log("in sort only");
@@ -112,6 +112,8 @@ export function SortTablet({
   // close the sorting list when clicking outside it
   const sortRef = useRef<HTMLUListElement>(null);
   useCloseOutsideClick(sortRef, isCategoryList, handleCategoryList);
+
+  console.log("in sort tablet");
 
   // deps list is required. if it is empty, click event don't work...
   // maybe because in useEffect, state is read only once at first render, if deps list is empty

@@ -47,7 +47,7 @@ export default function AddWriting() {
   };
   // for mobile and tablet : when clicked submit button at the top navigation
   const dispatch = useAppDispatch();
-  const { isWritingSubmit } = useAppSelector((state) => state.writing);
+  const isWritingSubmit = useAppSelector((state) => state.writing.isWritingSubmit);
   if (isWritingSubmit) {
     handleSubmit();
     dispatch(handleWritingSubmit(false)); // reset writing-submit state

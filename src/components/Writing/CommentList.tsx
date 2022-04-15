@@ -298,7 +298,7 @@ function CommentWritten({ isReComment, comment, commentIdForScroll }: CommentPro
   // go writing reComment
   const [isWriteReComnt, handleWriteReComnt] = useState(false);
   const dispatch = useAppDispatch();
-  const { handlePrevReComnt } = useAppSelector((state) => state.writing);
+  const handlePrevReComnt = useAppSelector((state) => state.writing.handlePrevReComnt);
   const { reCommentId } = useAppSelector((state) => state.writing.reCommentUser);
 
   // clicking "답글", then

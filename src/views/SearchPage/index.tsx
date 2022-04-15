@@ -7,7 +7,9 @@ import { GoToBtn, GoToText } from "./SearchPage.styles";
 import Search from "../../components/Search";
 
 export default function SearchPage() {
-  const { searchWord, searchTextCtgr, searchContentCtgr } = useAppSelector((state) => state.filter);
+  const searchWord = useAppSelector((state) => state.filter.searchWord);
+  const searchTextCtgr = useAppSelector((state) => state.filter.searchTextCtgr);
+  const searchContentCtgr = useAppSelector((state) => state.filter.searchContentCtgr);
 
   // is it right to use useEffect for RTK query...?
 

@@ -75,7 +75,7 @@ export function SearchBar({
 
 export function ContentFilterMobile() {
   const dispatch = useAppDispatch();
-  const { filteringContent } = useAppSelector((state) => state.modal);
+  const filteringContent = useAppSelector((state) => state.modal.filteringContent);
   // when clicking, in Modal component,
   // require server request in this component!
 
