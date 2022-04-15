@@ -95,7 +95,7 @@ export const ReCommentMarkContainer = styled.div`
 export const ReCommentMark = styled.span`
   margin-left: 5px;
   color: rgba(0, 0, 0, 0.4);
-  font-weight: 600;
+  font-weight: 500;
   font-size: 14px;
 `;
 export const ReCommentUser = styled.span`
@@ -169,7 +169,7 @@ export const WriteText = styled.textarea`
   line-height: 1.5;
 
   color: rgba(0, 0, 0, 0.6);
-  font-weight: 600;
+  font-weight: 500;
 
   font-family: "Californian FB", D2Coding, Arial, sans-serif;
 `;
@@ -194,7 +194,7 @@ export const WriteCommentSubmit = styled.button`
   justify-content: center;
 
   color: rgba(0, 0, 0, 0.6);
-  font-weight: 600;
+  font-weight: 500;
 `;
 type ReComment = {
   commentId: string;

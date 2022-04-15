@@ -59,7 +59,7 @@ export const NovelImg = styled.div<{ novelImg: string }>`
   }
 `;
 export const NovelTitle = styled.div<{ infoWidth: number }>`
-  font-weight: 600;
+  font-weight: 500;
 
   // 줄 넘어가면 ... 표시
   display: inline-block;
@@ -70,7 +70,7 @@ export const NovelTitle = styled.div<{ infoWidth: number }>`
 `;
 export const NovelSubInfoBox = styled.div`
   color: ${(props) => props.theme.color.textGray};
-  font-weight: 600;
+  font-weight: 500;
   font-size: 14px;
 `;
 export const NovelInfoLineHeight = styled.div`

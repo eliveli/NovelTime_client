@@ -4,7 +4,8 @@ const GlobalStyle = createGlobalStyle`
   *, *::before, *::after {
     box-sizing: border-box;
     
-    font-family: "Californian FB","D2Coding", "Arial", sans-serif;
+    font-family: "Crimson Pro","Noto Sans KR","Californian FB","D2Coding", "Arial", sans-serif;
+    font-weight: 300;
   }
 
   html{

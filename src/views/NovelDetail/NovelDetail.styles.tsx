@@ -287,7 +287,7 @@ export const PlatformText = styled.a<{
 
   text-decoration: none;
 
-  font-weight: 600;
+  font-weight: 500;
   color: #606060b0;
 
   :active,
@@ -355,7 +355,7 @@ export const NovelImgSmall = styled.div<Props>`
   `)}
 `;
 export const NovelTitle = styled.div`
-  font-weight: 600;
+  font-weight: 500;
   font-size: 17px;
 
   ${theme.media.tablet(`
@@ -366,7 +366,7 @@ export const NovelTitle = styled.div`
 `;
 export const NovelSubInfoBox = styled.div`
   color: ${(props) => props.theme.color.textGray};
-  font-weight: 600;
+  font-weight: 500;
   font-size: 14px;
 
   display: flex;

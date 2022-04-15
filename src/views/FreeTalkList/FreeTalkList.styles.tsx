@@ -255,7 +255,7 @@ export const IconsBox = styled.div`
   color: rgba(100, 100, 100, 0.9);
 
   justify-content: space-between;
-  width: 89px;
+  width: 93px;
   gap: 9px;
 
   @media screen and (min-width: 600px) {
@@ -281,10 +281,12 @@ export const IconContainer = styled.div`
     gap: 6px;
   }
 `;
-export const IconNO = styled.span``;
+export const IconNO = styled.span`
+  font-size: 17px;
+`;
 
 export const TalkTitle = styled.div<{ talkImg?: string }>`
-  font-weight: 600;
+  font-weight: 500;
   font-size: 17px;
 
   @media screen and (max-width: 599px) {
@@ -299,7 +301,7 @@ export const TalkTitle = styled.div<{ talkImg?: string }>`
 `;
 export const NovelTitle = styled.div`
   color: ${(props) => props.theme.color.textGray};
-  font-weight: 600;
+  font-weight: 500;
   @media screen and (max-width: 599px) {
     padding-top: 3px;
   }

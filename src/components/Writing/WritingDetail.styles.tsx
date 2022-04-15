@@ -78,7 +78,7 @@ export const WritingImg = styled.div<{ img?: string }>`
 export const WritingTitle = styled.h3`
   font-size: 19px;
   margin: 0;
-  font-weight: 600;
+  font-weight: 500;
 `;
 export const WritingDesc = styled.p`
   margin-bottom: 12px;

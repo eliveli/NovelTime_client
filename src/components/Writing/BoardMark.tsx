@@ -17,7 +17,7 @@ const BoardTitle = styled.p`
   margin: 6px 0 16px;
   /* margin: 10px 0 16px; */
   color: rgba(0, 0, 0, 0.6);
-  font-weight: 600;
+  font-weight: 500;
   font-size: 15px;
   ${theme.media.mobile(`
       margin: 0 0 12px;

@@ -88,7 +88,7 @@ export const NovelTitleBox = styled.div`
   }
 `;
 export const NovelTitle = styled.div`
-  font-weight: 600;
+  font-weight: 500;
 
   //2줄 넘어가는 텍스트 ...표시
   overflow: hidden;
@@ -104,7 +104,7 @@ export const NovelTitle = styled.div`
 `;
 export const NovelSubInfoBox = styled.div`
   color: ${(props) => props.theme.color.textGray};
-  font-weight: 600;
+  font-weight: 500;
   font-size: 14px;
 `;
 export const NovelInfoLineHeight = styled.div`

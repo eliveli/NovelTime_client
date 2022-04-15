@@ -107,18 +107,18 @@ export const WritingTitle = styled.p<{ talkId?: string }>`
   ${({ talkId }) =>
     talkId
       ? `color: rgba(0, 0, 0, 0.8);
-         font-weight: 600;
+         font-weight: 500;
          `
       : `color: rgba(0,0,0,0.5);
          font-size: 15px;
-         font-weight: 600;
+         font-weight: 500;
         `}
 `;
 export const UserContnr = styled.div<{ talkId?: string }>`
   display: flex;
   color: rgba(0, 0, 0, 0.6);
 
-  ${({ talkId }) => (talkId ? ` font-weight: 600; ` : ``)}
+  ${({ talkId }) => (talkId ? ` font-weight: 500; ` : ``)}
   font-size: 15px;
   margin-top: -2px;
   margin-bottom: 2px;
@@ -131,13 +131,13 @@ export const WritingUserName = styled.span<{ talkId?: string }>`
     talkId
       ? ``
       : `
-        font-weight: 600;
+        font-weight: 500;
         font-size: 14px;
       `}
 `;
 export const CreateDate = styled.span`
   color: rgba(0, 0, 0, 0.5);
-  font-weight: 600;
+  font-weight: 500;
   font-size: 15px;
 `;
 export const IconsContnr = styled.div`
@@ -164,9 +164,9 @@ export const NovelTitle = styled.p<{ talkId?: string }>`
     talkId
       ? `font-size: 15px;
   color: rgba(0, 0, 0, 0.5);
-  font-weight: 600;`
+  font-weight: 500;`
       : `color: rgba(0,0,0,0.8);
-    font-weight: 600;
+    font-weight: 500;
     font-size: 16px;`}
 `;
 export const FilterContnr = styled.div`
@@ -179,7 +179,7 @@ export const FilterContnr = styled.div`
 type FilterType = "프리톡" | "추천" | "댓글";
 export const Filter = styled.p<{ category: FilterType; selectedCtgr: FilterType }>`
   margin: 0;
-  font-weight: 600;
+  font-weight: 500;
   color: rgba(100, 100, 100, 0.6);
   ${({ category, selectedCtgr }) =>
     category === selectedCtgr &&
@@ -193,7 +193,7 @@ export const CommentContent = styled.p`
   margin: 0;
   margin-right: 10px;
   color: rgba(0, 0, 0, 0.8);
-  font-weight: 600;
+  font-weight: 500;
 `;
 export const CommentTalkTitle = styled.p`
   margin: 0;
@@ -205,13 +205,13 @@ export const CommentTalkTitle = styled.p`
 
   color: rgba(130, 130, 130, 0.9);
   font-size: 15px;
-  /* font-weight: 600; */
+  /* font-weight: 500; */
 `;
 export const CommentNovelTitle = styled.p`
   margin: 0;
   font-size: 15px;
   color: rgba(0, 0, 0, 0.5);
-  font-weight: 600;
+  font-weight: 500;
 `;
 export const WritingMark = styled.span`
   color: rgba(0, 0, 0, 0.5);
@@ -251,7 +251,7 @@ export const ListTitle = styled.span<{ listId: string; selectedListId: string }>
   background-color: white;
   padding: 5px 10px 4px;
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 500;
 
   ${({ listId, selectedListId }) =>
     listId === selectedListId &&

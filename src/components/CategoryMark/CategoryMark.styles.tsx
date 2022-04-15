@@ -39,7 +39,7 @@ export const LinkCategory = styled(Link)<{ isOtherUser?: boolean; novelNO?: numb
     &:hover {
       cursor: pointer;
       opacity: 0.7;
-      font-weight: 600;
+      font-weight: 500;
       color: rgba(100, 100, 100, 0.8);
     }
   }
@@ -105,7 +105,7 @@ export const ShowAllText = styled.span<{ isUserNovelList?: true }>`
     isUserNovelList &&
     `
     color: rgba(0,0,0,0.5);
-    font-weight: 600;
+    font-weight: 500;
     font-size: 15px;
     `}
 `;

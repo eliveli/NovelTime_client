@@ -194,7 +194,7 @@ export const MyPageBtn = styled.button`
   /* padding: 7px 10px; */
   white-space: nowrap;
   font-size: 15px;
-  font-weight: 600;
+  font-weight: 500;
 
   margin-left: 5px;
 
@@ -223,7 +223,7 @@ export const LoginText = styled.button`
   padding: 6px 8px;
 
   font-size: 15px;
-  font-weight: 600;
+  font-weight: 500;
 
   border-radius: 10px;
   border: 1px solid rgba(0, 0, 0, 0.2);
@@ -353,7 +353,7 @@ export const IconsBox = styled.div<{ isLeft?: true; isRight?: true }>`
 export const SubmitBtn = styled.button`
   padding: 7px 10px;
   font-size: 16px;
-  font-weight: 600;
+  font-weight: 500;
   /* margin-right: 1px; */
 
   border-radius: 10px;

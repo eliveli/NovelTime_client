@@ -125,6 +125,7 @@ export const UserImg = styled.div<Props>`
 `;
 export const UserNameBox = styled.div`
   display: flex;
+  color: rgba(100, 100, 100, 0.9);
 
   /* 태블릿, PC */
   @media screen and (min-width: 768px) {
@@ -168,7 +169,7 @@ export const RecommendPreview = styled.div`
 export const RecommendTitle = styled.div<{ contnrWidth: number }>`
   /* padding: 3px 1px 3px 0; */
 
-  font-weight: 600;
+  font-weight: 500;
 
   margin-top: 9px;
   margin-left: 5px;
@@ -215,10 +216,11 @@ export const IconBox = styled.div`
   display: flex;
   gap: 6px;
   align-items: center;
+  color: rgba(100, 100, 100, 0.9);
 `;
 export const IconNO = styled.span``;
 export const NovelTitle = styled.div<{ contnrWidth: number }>`
-  font-weight: 600;
+  font-weight: 500;
 
   display: inline-block;
 
@@ -237,7 +239,7 @@ export const NovelTitle = styled.div<{ contnrWidth: number }>`
 `;
 export const NovelSubInfoBox = styled.div`
   color: ${(props) => props.theme.color.textGray};
-  font-weight: 600;
+  font-weight: 500;
   font-size: 14px;
 `;
 export const NovelInfoLineHeight = styled.div`

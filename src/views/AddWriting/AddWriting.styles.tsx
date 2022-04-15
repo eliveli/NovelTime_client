@@ -14,13 +14,13 @@ export const NovelTitle = styled.button`
   border-radius: 20px;
   padding: 7px 10px;
   font-size: 16px;
-  font-weight: 600;
+  font-weight: 500;
   background-color: white;
   color: ${theme.color.main};
   border: 1px solid ${theme.color.mainLight};
 `;
 export const SrchGuideText = styled.span<{ isHowTo?: true }>`
-  font-weight: 600;
+  font-weight: 500;
   color: rgba(0, 0, 0, 0.4);
   font-size: 13px;
   border-bottom: 1px dotted rgba(0, 0, 0, 0.1);
@@ -62,7 +62,7 @@ export const Board = styled.button<{
   color: rgba(0, 0, 0, 0.6);
   padding: 7px 10px;
   font-size: 16px;
-  font-weight: 600;
+  font-weight: 500;
   &:last-child {
     margin-left: 10px;
   }
@@ -165,7 +165,7 @@ export const SubmitBtnContnr = styled.div`
 export const SubmitBtnPC = styled.button`
   padding: 7px 10px;
   font-size: 16px;
-  font-weight: 600;
+  font-weight: 500;
   margin-right: 1px;
 
   border-radius: 10px;
@@ -234,7 +234,7 @@ export const PlatformBtn = styled.button<{ selectedPlatform: string; platform: s
   color: rgba(0, 0, 0, 0.6);
   padding: 4px 6px;
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 500;
   white-space: nowrap;
   margin-left: 6px;
 
@@ -271,7 +271,7 @@ export const AllPlatformContnr = styled.div`
 `;
 export const PlatformNewTab = styled.a``;
 export const GuideText = styled.span`
-  font-weight: 600;
+  font-weight: 500;
   color: rgba(0, 0, 0, 0.5);
   font-size: 15px;
   @media screen and (max-width: 360px) {
@@ -281,7 +281,7 @@ export const GuideText = styled.span`
 export const SelectPlatform = styled.button`
   padding: 5px 7px;
   font-size: 15px;
-  font-weight: 600;
+  font-weight: 500;
   border-radius: 10px;
   border: 1px solid rgba(0, 0, 0, 0.2);
   background-color: white;

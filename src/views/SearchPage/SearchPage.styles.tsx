@@ -2,7 +2,7 @@ import theme, { styled } from "assets/styles/theme";
 
 export const GoToText = styled.span`
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 500;
   color: rgba(0, 0, 0, 0.6);
 `;
 export const GoToBtn = styled.button`
@@ -12,7 +12,7 @@ export const GoToBtn = styled.button`
   color: rgba(0, 0, 0, 0.6);
   padding: 4px 6px;
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 500;
   white-space: nowrap;
   margin-left: 6px;
 `;

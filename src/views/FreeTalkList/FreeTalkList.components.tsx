@@ -160,13 +160,13 @@ function TalkMobile({ talk }: { talk: TalkProps }) {
           </UserNameBox>
           <IconsBox>
             <IconContainer>
-              <Icon.IconBox noPointer size={20}>
+              <Icon.IconBox noPointer size={17}>
                 <Icon.SmallHeart />
               </Icon.IconBox>
               <IconNO>{likeNO}</IconNO>
             </IconContainer>
             <IconContainer>
-              <Icon.IconBox noPointer size={20}>
+              <Icon.IconBox noPointer size={17}>
                 <Icon.Comment />
               </Icon.IconBox>
               <IconNO>{commentNO}</IconNO>

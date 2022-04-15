@@ -110,7 +110,7 @@ export const IconBox = styled.div`
 export const IconNO = styled.span``;
 
 export const TalkTitle = styled.div<{ titleWidth: number }>`
-  font-weight: 600;
+  font-weight: 500;
   font-size: 17px;
 
   // 1줄 엘립시스 ...

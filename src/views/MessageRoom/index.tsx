@@ -361,7 +361,7 @@ export default function MessageRoom({ roomIdTablet }: { roomIdTablet?: string })
           <MessageRecord
             key={_.userName + idx.toString}
             message={_}
-            // below is previous data not realtime
+            // following is previous data not realtime
             dateRecord={dateRecord.current}
             lastMessage={idx === messageRecord.message.length - 1}
           />

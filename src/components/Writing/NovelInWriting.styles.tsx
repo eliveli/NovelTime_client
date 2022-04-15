@@ -45,7 +45,7 @@ export const NovelDetailContainer = styled.div`
 export const NovelTitle = styled.p`
   margin: 0 1px 0 0;
   color: rgba(100, 100, 100, 0.8);
-  font-weight: 600;
+  font-weight: 500;
 `;
 export const NovelTitleContainer = styled.div`
   display: flex;

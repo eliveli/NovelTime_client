@@ -163,7 +163,7 @@ export const LoginCategory = styled.button<{ isKaKao?: true }>`
 
   border-radius: 20px;
   font-size: 17px;
-  font-weight: 600;
+  font-weight: 500;
   background-color: white;
   /* color: ${theme.color.main}; */
   /* border: 1px solid ${theme.color.mainLight}; */
@@ -174,14 +174,15 @@ export const LoginCategory = styled.button<{ isKaKao?: true }>`
 
   ${({ isKaKao }) =>
     isKaKao
-      ? `color: rgb(211 185 0 / 76%); box-shadow: 0 0 4px rgb(250 225 0 / 80%);`
-      : `    color: rgba(3,199,90,0.7); box-shadow: 0 0 4px rgba(3, 199, 90, 0.3); `};
+      ? `color: rgb(211 185 0 / 76%); box-shadow: 0 0 4px rgb(250 225 0 / 90%);`
+      : `    color: rgba(3,199,90,0.7); box-shadow: 0 0 4px rgba(3, 199, 90, 0.5); `};
 `;
 export const LoginTitle = styled.h3`
   margin: 0;
   text-align: center;
   margin-bottom: 30px;
   color: rgba(100, 100, 100, 0.8);
+  font-weight: 500;
 `;
 export const ContentContnr = styled.div``;
 export const LoginIconBox = styled(Icon.IconBox)<{ isKaKao?: true }>`

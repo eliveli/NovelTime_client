@@ -77,18 +77,19 @@ export const UserNameBox = styled.div`
   display: flex;
   align-items: flex-end;
 
+  color: rgba(100, 100, 100, 0.9);
+
   margin-left: 0;
   padding: 0;
 `;
 
 export const UserName = styled.p`
   margin: 0;
-  font-size: 15px;
+  /* font-size: 15px; */
 `;
 export const CreateDate = styled.span`
-  color: rgba(0, 0, 0, 0.5);
-  font-size: 14px;
-  font-weight: 600;
+  /* font-size: 14px; */
+  /* font-weight: 500; */
   padding-left: 8px;
   white-space: nowrap;
 `;
@@ -100,10 +101,10 @@ export const UnreadTalkNoContnr = styled.div`
   background-color: white;
   box-shadow: 0 0 2px orange;
   color: ${theme.color.main};
-  font-weight: 600;
+  font-weight: 500;
 
   border-radius: 5px;
-  padding: 2px 5px 0px;
+  padding: 0 5px;
   height: 18px;
 `;
 export const UnreadTalkNO = styled.span`
@@ -126,7 +127,7 @@ export const MessageImg = styled.div<{ img?: string }>`
 export const MessageTitle = styled.h3`
   font-size: 19px;
   margin: 0;
-  font-weight: 600;
+  font-weight: 500;
 `;
 export const MessageContent = styled.p<{ contnrWidth: number }>`
   margin: 0;

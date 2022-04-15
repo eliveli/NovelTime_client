@@ -102,13 +102,13 @@ export const MessageDesc = styled.div<{ isMe?: true }>`
       background-color: white;
       box-shadow: 0 0 2px orange;
       color: rgba(0, 0, 0, 0.6);
-      font-weight: 600;
+      font-weight: 500;
       `}
 `;
 export const CreateDate = styled.span<{ isMe?: true }>`
-  color: rgba(0, 0, 0, 0.5);
+  color: rgba(0, 0, 0, 0.8);
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 500;
   white-space: nowrap;
 
   ${({ isMe }) => (isMe ? `padding-right: 11px;` : `padding-left: 11px;`)}
@@ -128,8 +128,8 @@ export const DateMark = styled.span`
   padding: 0 10px;
   background-color: white;
 
-  color: rgba(0, 0, 0, 0.5);
-  font-weight: 600;
+  color: rgba(0, 0, 0, 0.8);
+  font-weight: 500;
 `;
 export const LastWatchContnr = styled.div`
   /* margin-bottom: 31px; */
@@ -138,7 +138,7 @@ export const LastWatchMark = styled.span`
   padding: 0 10px;
   background-color: white;
 
-  color: rgba(0, 0, 0, 0.5);
-  font-weight: 600;
+  color: rgba(0, 0, 0, 0.6);
+  font-weight: 500;
   font-size: 15px;
 `;

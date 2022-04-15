@@ -47,7 +47,7 @@ export const NovelImg = styled.div<{
   ${({ recomDtlImgWidth }) => recomDtlImgWidth && recomDtlImgWidth}
 `;
 export const NovelTitle = styled.div<{ infoWidth: number }>`
-  font-weight: 600;
+  font-weight: 500;
 
   // 줄 넘어가면 ... 표시
   display: inline-block;
@@ -58,7 +58,7 @@ export const NovelTitle = styled.div<{ infoWidth: number }>`
 `;
 export const NovelSubInfoBox = styled.div`
   color: ${(props) => props.theme.color.textGray};
-  font-weight: 600;
+  font-weight: 500;
   font-size: 14px;
 `;
 export const NovelAuthor = styled.div`
@@ -177,7 +177,7 @@ export const ModalContainerT = styled.div`
 
   background-color: rgba(255, 255, 255, 0.9);
   color: black;
-  font-weight: 600;
+  font-weight: 500;
 
   border: 1px solid rgb(100 100 100 / 20%);
   border-radius: 5px;
@@ -209,7 +209,7 @@ export const ModalContainerF = styled.div`
 
   background-color: rgba(255, 255, 255, 0.9);
   color: black;
-  font-weight: 600;
+  font-weight: 500;
 
   border: 1px solid rgb(100 100 100 / 20%);
   border-radius: 5px;
