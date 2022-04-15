@@ -39,18 +39,11 @@ export default function Modal() {
     imgSrc = novelImage;
   }
   // get selected category text to mark in the list
-  const { sortingText, filteringContent } = useAppSelector((state) => state.modal);
+  const sortingText = useAppSelector((state) => state.modal.sortingText);
+  const filteringContent = useAppSelector((state) => state.modal.filteringContent);
 
   // prevent scrolling body when modal displays
   usePreventScroll(modalCategory);
-
-  // to close login box when clicking outside
-  // of course, login modal will be closed when clicking the close icon. go seeing in "case login:"
-  const loginBoxRef = useRef<HTMLDivElement>(null);
-  useCloseModalClickOutside(loginBoxRef, "login");
-  //  .!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  // warning : this works unexpectedly. It does work even I clicked the inside element...
-  //
 
   return (
     <div>
@@ -122,8 +115,12 @@ export default function Modal() {
             );
           case "login":
             return (
-              <TranslucentBG>
-                <LoginBox ref={loginBoxRef}>
+              <TranslucentBG onClick={() => dispatch(closeModal())}>
+                <LoginBox
+                  onClick={(event: React.MouseEvent<HTMLElement>) => {
+                    event.stopPropagation();
+                  }}
+                >
                   <ClosingBox isSmallWidth onClick={() => dispatch(closeModal())}>
                     <ClosingIcon />
                   </ClosingBox>
