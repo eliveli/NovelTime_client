@@ -116,7 +116,6 @@ export const WritingTitle = styled.p<{ talkId?: string }>`
 `;
 export const UserContnr = styled.div<{ talkId?: string }>`
   display: flex;
-  color: rgba(0, 0, 0, 0.6);
 
   ${({ talkId }) => (talkId ? ` font-weight: 500; ` : ``)}
   font-size: 15px;
@@ -126,6 +125,7 @@ export const UserContnr = styled.div<{ talkId?: string }>`
 `;
 export const WritingUserName = styled.span<{ talkId?: string }>`
   margin-right: 10px;
+  color: rgba(0, 0, 0, 0.8);
 
   ${({ talkId }) =>
     talkId
@@ -136,7 +136,8 @@ export const WritingUserName = styled.span<{ talkId?: string }>`
       `}
 `;
 export const CreateDate = styled.span`
-  color: rgba(0, 0, 0, 0.5);
+  /* color: rgba(0, 0, 0, 0.5); */
+  color: rgba(0, 0, 0, 0.8);
   font-weight: 500;
   font-size: 15px;
 `;
@@ -155,7 +156,9 @@ export const IconInfoContnr = styled.div`
 export const HeartIcon = styled(Icon.SmallHeart)``;
 export const CommntIcon = styled(Icon.Comment)``;
 export const IconNoInfo = styled.span`
-  color: rgba(0, 0, 0, 0.5);
+  /* color: rgba(0, 0, 0, 0.5); */
+  color: rgba(0, 0, 0, 0.8);
+
   margin-bottom: -1px;
 `;
 export const NovelTitle = styled.p<{ talkId?: string }>`

@@ -129,7 +129,7 @@ export const UserNameBox = styled.div`
 
   /* 태블릿, PC */
   @media screen and (min-width: 768px) {
-    border-bottom: 1px dotted #80808085;
+    border-bottom: 1px dotted lightgray;
   }
 `;
 

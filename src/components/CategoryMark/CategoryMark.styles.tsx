@@ -15,7 +15,6 @@ export const LinkCategory = styled(Link)<{ isOtherUser?: boolean; novelNO?: numb
   margin: auto 0 0 auto;
 
   text-decoration: none;
-  color: black;
 
   ${({ isOtherUser }) =>
     isOtherUser &&
@@ -80,7 +79,7 @@ export const CategoryDesc = styled.p<{
   isOtherUser?: boolean;
 }>`
   margin-bottom: 0;
-  border-bottom: 1px dotted #0000004f;
+  border-bottom: 1px dotted lightgray;
   font-size: ${({ fontSize }) => fontSize || 16}px;
   ${({ isUserNovelList }) =>
     isUserNovelList && `border-bottom: 0; color: rgba(0,0,0,0.5); font-weight:600;`}
