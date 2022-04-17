@@ -160,8 +160,6 @@ export const NavContent = styled.span<{ isCurrentPath?: boolean }>`
   gap: 2px;
   flex-direction: column;
   align-items: center;
-  text-decoration: none;
-  color: black;
   justify-content: flex-end;
 
   @media screen and (min-width: 1024px) {
@@ -187,9 +185,6 @@ export const NavText = styled.span<{ isActive: boolean }>`
 `;
 
 export const MyPageBtn = styled.button`
-  text-decoration: none;
-  color: black;
-
   padding: 3px 6px;
   /* padding: 7px 10px; */
   white-space: nowrap;
@@ -214,9 +209,6 @@ export const MyPageBtn = styled.button`
   )}
 `;
 export const LoginText = styled.button`
-  text-decoration: none;
-  color: black;
-
   margin-left: 8px;
 
   /* padding: 7px 10px; */

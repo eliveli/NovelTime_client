@@ -289,10 +289,7 @@ export const PlatformText = styled.a<{
   font-size: 14px;
   margin-right: 5px;
 
-  text-decoration: none;
-
   font-weight: 500;
-  color: #606060b0;
 
   :active,
   :hover {

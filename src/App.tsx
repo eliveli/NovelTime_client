@@ -27,6 +27,7 @@ import {
   WritingList,
   NovelDetailMark,
   AddWriting,
+  Home,
 } from "views";
 import Modal from "components/Modal";
 import ScrollToTop from "utils/ScrollToTop";
@@ -75,7 +76,7 @@ function App() {
           </Routes>
         </ScrollToTop>
         <Routes>
-          <Route path="/" element={<FreeTalkList />} />
+          <Route path="/" element={<Home />} />
           <Route path="/talk_list" element={<FreeTalkList />} />
           <Route path="/recommend_list" element={<RecommendList />} />
 

@@ -13,9 +13,6 @@ export const NovelLink = styled.div`
     border-bottom: 0;
   }
 
-  /* text-decoration: none; */
-  /* color: black; */
-
   @media (hover: hover) {
     &:hover {
       cursor: pointer;

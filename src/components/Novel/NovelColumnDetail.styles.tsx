@@ -13,9 +13,6 @@ export const NovelLink = styled(Link)`
     border-bottom: 0;
   }
 
-  text-decoration: none;
-  color: black;
-
   ${theme.media.hover(
     `cursor: pointer;
     color: rgba(100, 100, 100, 0.8);`,

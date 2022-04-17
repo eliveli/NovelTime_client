@@ -74,7 +74,7 @@ export function NavPC({ pathname }: Props) {
     <ThemeProvider theme={theme}>
       <NavContentBoxPC>
         <LogoContainer>
-          <Logo src={logoPC} />
+          <Logo src={logoPC} onClick={() => navigate(`/`)} />
         </LogoContainer>
         <NavContentPC>
           {/* [category name, route path] */}
@@ -150,7 +150,7 @@ export function NavMobileMainTop() {
           <CatWalking src={catWalking} alt="catWalking" />
         </CatWalkingContainer>
         <LogoContainer>
-          <Logo src={logoMobile} />
+          <Logo src={logoMobile} onClick={() => navigate(`/`)} />
         </LogoContainer>
 
         <RightSideContnr>
@@ -307,7 +307,7 @@ export function NavMobileDetail({ parameter, pathname, handleMsgList }: DetailPr
           {parameter?.novelId && (
             <HomeIconBox
               onClick={() => {
-                navigate("/talk_list");
+                navigate("/");
                 dispatch(sortWriting("작성일New")); // reset category for sorting writings
                 dispatch(filterContent("Novel")); // reset category for filtering content
               }}

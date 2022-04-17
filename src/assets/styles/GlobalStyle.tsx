@@ -26,6 +26,11 @@ const GlobalStyle = createGlobalStyle`
   h1, h2, h3, h4, h5, h6 {
     margin : 0;
   }
+  a {
+    text-decoration: none;
+    color: rgba(0,0,0,0.7);
+
+  }
   // in next project, give p tag "margin:0;"
   // it looks better to give "margin:0" to all tag "*" than the above
 `;

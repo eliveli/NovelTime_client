@@ -18,6 +18,7 @@ import NovelDetailMark from "./NovelDetailMark";
 import NovelDetailTalk from "./NovelDetailTalk";
 import NovelDetailRecommend from "./NovelDetailRecommend";
 import AddWriting from "./AddWriting";
+import Home from "./Home";
 
 export {
   NovelDetailTalk,
@@ -44,4 +45,5 @@ export {
   NovelListByCategory,
   NovelDetailMark,
   AddWriting,
+  Home,
 };

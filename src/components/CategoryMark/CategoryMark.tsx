@@ -22,6 +22,8 @@ export default function CategoryMark({
   novelNO,
 
   infoFromUserPage,
+  linkPath,
+
   children,
 }: {
   writing?: boolean;
@@ -44,9 +46,25 @@ export default function CategoryMark({
     };
   };
 
+  linkPath?: string;
+
   novelNO?: number;
   children?: React.ReactChild | React.ReactChildren;
 }) {
+  if (linkPath) {
+    return (
+      <CategoryContainer>
+        <CategoryDesc fontSize={fontSize}>{categoryText}</CategoryDesc>
+        {/* the page is not show-all-page */}
+        {!isShowAll && (
+          <LinkCategory to={linkPath}>
+            <ShowAllText>전체보기</ShowAllText>
+            <ShowAllIcon />
+          </LinkCategory>
+        )}
+      </CategoryContainer>
+    );
+  }
   if (writing) {
     return (
       <CategoryContainer>

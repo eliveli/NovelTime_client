@@ -15,9 +15,6 @@ export const NovelLink = styled(Link)<{ isWidth100?: true }>`
 
   ${({ isWidth100 }) => isWidth100 && `max-width:100%;`}
 
-  text-decoration: none;
-  color: black;
-
   @media (hover: hover) {
     &:hover {
       cursor: pointer;

@@ -14,8 +14,6 @@ export const LinkCategory = styled(Link)<{ isOtherUser?: boolean; novelNO?: numb
   align-items: center;
   margin: auto 0 0 auto;
 
-  text-decoration: none;
-
   ${({ isOtherUser }) =>
     isOtherUser &&
     theme.media.mobile(`
