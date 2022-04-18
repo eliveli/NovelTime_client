@@ -1,14 +1,14 @@
 import theme, { styled } from "assets/styles/theme";
 import Icon from "assets/Icon";
 
-export const UserRankCntnr = styled.div<{ contnrWidth: number }>`
+export const UserRankCntnr = styled.div<{ rankContnrWidth: number }>`
   /* display: flex;
   flex-direction: column; */
 
   gap: 10px;
   display: inline-flex;
 
-  width: ${({ contnrWidth }) => contnrWidth - 32}px;
+  width: ${({ rankContnrWidth }) => rankContnrWidth}px;
   overflow-x: scroll;
   ${theme.hideScrollBar}
 
@@ -66,15 +66,24 @@ export const UserInfo = styled.div`
 export const UserRankNO = styled.span`
   margin-bottom: auto;
   margin-left: auto;
-  width: 24px;
   text-align: center;
-  font-size: 22px;
-  line-height: 22px;
-  /* border: 3px double lightgray; */
+
+  white-space: nowrap;
+
+  width: 24px;
+  padding: 0 4px 2px;
+  font-size: 20px;
+  line-height: 20px;
+
+  &:last-child {
+    width: 26px;
+    padding-left: 3px;
+    font-size: 19px;
+    line-height: 19px;
+  }
 
   border: 3px double rgba(200, 200, 200, 0.4);
   color: rgba(100, 100, 100, 0.8);
-  padding: 0 4px 2px;
   border-radius: 5px;
   position: absolute;
   top: 0px;
@@ -94,10 +103,6 @@ export const IconContainer = styled.div`
   align-items: center;
   justify-content: flex-start;
   width: 100%;
-
-  @media screen and (min-width: 600px) {
-    gap: 6px;
-  }
 `;
 export const IconNO = styled.span`
   font-size: 17px;
@@ -132,4 +137,33 @@ export const Filter = styled.p<{ category: string; selectedCtgr: string }>`
   ${({ category, selectedCtgr }) =>
     category === selectedCtgr &&
     `color:${theme.color.main}; border-bottom: 3px solid ${theme.color.mainLight};`}
+`;
+export const ArrowContnr = styled(Icon.IconBox)`
+  // 모바일은 아이콘 없음
+  @media screen and (max-width: 767px) {
+    display: none;
+  }
+
+  border-radius: 50%;
+  background-color: white;
+  box-shadow: 0 0 2px rgb(0 0 0 / 60%);
+  color: rgba(100, 100, 100, 0.4);
+  /* position: absolute; */
+  /* width: 30px; */
+  /* height: 30px; */
+  /* left: -${30 / 2 - 6}px; */
+  /* top: ${168.22 / 2 - 30 / 2 + 12}px; // + 12px 은 이미지 위쪽 패딩임 */
+
+  @media (hover: hover) {
+    &:hover {
+      cursor: pointer;
+      opacity: 0.8;
+      background-color: rgba(150, 150, 150, 0.3);
+    }
+  }
+`;
+export const AllArrowContnr = styled.div`
+  margin-left: auto;
+  display: flex;
+  gap: 10px;
 `;

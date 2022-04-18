@@ -4,6 +4,7 @@ import MainBG from "components/MainBG";
 import { NovelColumn, NovelColumnDetail, NovelRow } from "components/Novel";
 import { ColumnDetailList, ColumnList, RowSlide } from "components/NovelListFrame";
 import React, { useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useComponentWidth } from "utils";
 import FreeTalk from "views/FreeTalkList/FreeTalkList.components";
 import Recommend from "views/RecommendList/RecommendList.components";
@@ -22,6 +23,8 @@ import {
   RankSectionContnr,
   IconContainer,
   IconNO,
+  AllArrowContnr,
+  ArrowContnr,
 } from "./Home.styles";
 
 const dataFromServer = {
@@ -72,6 +75,7 @@ const dataFromServer = {
       novelTitle: "헌터와 매드 사이언티스트",
     },
   ],
+  // 각 10순위 씩
   talkUserRank: {
     content: [
       { userImg: "", userName: "lala", userAct: { writing: 6, comment: 6 } },
@@ -82,6 +86,8 @@ const dataFromServer = {
       { userImg: "", userName: "lalfa", userAct: { writing: 6, comment: 6 } },
       { userImg: "", userName: "lalae", userAct: { writing: 6, comment: 6 } },
       { userImg: "", userName: "lalwa", userAct: { writing: 6, comment: 6 } },
+      { userImg: "", userName: "lalwa", userAct: { writing: 6, comment: 6 } },
+      { userImg: "", userName: "lalwa", userAct: { writing: 6, comment: 6 } },
     ],
     like: [
       { userImg: "", userName: "lala", likeReceived: 7 },
@@ -91,6 +97,8 @@ const dataFromServer = {
       { userImg: "", userName: "lalda", likeReceived: 7 },
       { userImg: "", userName: "lalfa", likeReceived: 7 },
       { userImg: "", userName: "lalae", likeReceived: 7 },
+      { userImg: "", userName: "lalwa", likeReceived: 7 },
+      { userImg: "", userName: "lalwa", likeReceived: 7 },
       { userImg: "", userName: "lalwa", likeReceived: 7 },
     ],
   },
@@ -169,6 +177,8 @@ const dataFromServer = {
       { userImg: "", userName: "lalfa", userAct: { writing: 7 } },
       { userImg: "", userName: "lalae", userAct: { writing: 7 } },
       { userImg: "", userName: "lalwa", userAct: { writing: 7 } },
+      { userImg: "", userName: "lalwa", userAct: { writing: 7 } },
+      { userImg: "", userName: "lalwa", userAct: { writing: 7 } },
     ],
     like: [
       { userImg: "", userName: "lala", likeReceived: 7 },
@@ -178,6 +188,8 @@ const dataFromServer = {
       { userImg: "", userName: "lalda", likeReceived: 7 },
       { userImg: "", userName: "lalfa", likeReceived: 7 },
       { userImg: "", userName: "lalae", likeReceived: 7 },
+      { userImg: "", userName: "lalwa", likeReceived: 7 },
+      { userImg: "", userName: "lalwa", likeReceived: 7 },
       { userImg: "", userName: "lalwa", likeReceived: 7 },
     ],
   },
@@ -360,6 +372,8 @@ const dataFromServer = {
       { userImg: "", userName: "lalfa", userAct: { list: 6 } },
       { userImg: "", userName: "lalae", userAct: { list: 6 } },
       { userImg: "", userName: "lalwa", userAct: { list: 6 } },
+      { userImg: "", userName: "lalwa", userAct: { list: 6 } },
+      { userImg: "", userName: "lalwa", userAct: { list: 6 } },
     ],
     like: [
       { userImg: "", userName: "lala", likeReceived: 7 },
@@ -369,6 +383,8 @@ const dataFromServer = {
       { userImg: "", userName: "lalda", likeReceived: 7 },
       { userImg: "", userName: "lalfa", likeReceived: 7 },
       { userImg: "", userName: "lalae", likeReceived: 7 },
+      { userImg: "", userName: "lalwa", likeReceived: 7 },
+      { userImg: "", userName: "lalwa", likeReceived: 7 },
       { userImg: "", userName: "lalwa", likeReceived: 7 },
     ],
   },
@@ -389,8 +405,10 @@ interface RankUserProps {
 }
 function RankUser({ info, idx }: RankUserProps) {
   const { userImg, userName, userAct, likeReceived } = info;
+
+  const navigate = useNavigate();
   return (
-    <UserContnr>
+    <UserContnr onClick={() => navigate(`/user_page/${userName}`)}>
       <UserImg userImg={userImg} />
       <UserInfo>
         {userAct?.writing && (
@@ -460,12 +478,25 @@ interface UserRankSectionProps {
 }
 function UserRankSection({ category, rankList }: UserRankSectionProps) {
   const categoryArray = ["프리톡", "추천"].includes(category)
-    ? ["작성글 수", "받은 좋아요"]
-    : ["작성리스트 수", "받은 좋아요"];
+    ? ["작성글 수", "받은 좋아요 수"] // 카테고리 : 프리톡, 추천
+    : ["작성리스트 수", "받은 좋아요 수"]; // 카테고리 : 소설리스트
   const [rankFilter, setRankFilter] = useState(categoryArray[0]);
 
   const contnrRef = useRef<HTMLDivElement>(null);
   const contnrWidth = useComponentWidth(contnrRef);
+  const rankContnrWidth = contnrWidth - 32;
+
+  const rankContnrRef = useRef<HTMLDivElement>(null);
+
+  // when clicking arrow, scroll user ranks
+  const scrollRank = (isLeft: boolean) => {
+    if (rankContnrRef.current && isLeft) {
+      rankContnrRef.current.scrollTo(rankContnrRef.current.scrollLeft - rankContnrWidth, 0);
+    }
+    if (rankContnrRef.current && !isLeft) {
+      rankContnrRef.current.scrollTo(rankContnrRef.current.scrollLeft + rankContnrWidth, 0);
+    }
+  };
 
   return (
     <RankSectionContnr ref={contnrRef}>
@@ -479,9 +510,17 @@ function UserRankSection({ category, rankList }: UserRankSectionProps) {
               &nbsp;&nbsp;
             </Filter>
           ))}
+          <AllArrowContnr>
+            <ArrowContnr size={24} onClick={() => scrollRank(true)}>
+              <Icon.SmallLeft />
+            </ArrowContnr>
+            <ArrowContnr size={24} onClick={() => scrollRank(false)}>
+              <Icon.SmallRight />
+            </ArrowContnr>
+          </AllArrowContnr>
         </FilterContnr>
       </SectionTitleContnr>
-      <UserRankCntnr contnrWidth={contnrWidth}>
+      <UserRankCntnr rankContnrWidth={rankContnrWidth} ref={rankContnrRef}>
         {rankFilter.includes("작성") &&
           rankList.content.map((_, idx) => <RankUser info={_} idx={idx} key={_.userName} />)}
         {rankFilter === "받은 좋아요" &&
