@@ -512,7 +512,14 @@ function UserRankSection({ category, rankList }: UserRankSectionProps) {
         <SectionTitle>유저 활동</SectionTitle>
         <FilterContnr>
           {categoryArray.map((_) => (
-            <Filter category={_} selectedCtgr={rankFilter} onClick={() => setRankFilter(_)}>
+            <Filter
+              category={_}
+              selectedCtgr={rankFilter}
+              onClick={() => {
+                setRankFilter(_);
+                rankContnrRef.current?.scrollTo(0, 0); // reset scroll value
+              }}
+            >
               &nbsp;&nbsp;
               {_}
               &nbsp;&nbsp;
@@ -529,9 +536,9 @@ function UserRankSection({ category, rankList }: UserRankSectionProps) {
         </FilterContnr>
       </SectionTitleContnr>
       <UserRankCntnr rankContnrWidth={rankContnrWidth} ref={rankContnrRef}>
-        {rankFilter.includes("작성") &&
+        {rankFilter === categoryArray[0] &&
           rankList.content.map((_, idx) => <RankUser info={_} idx={idx} key={_.userName} />)}
-        {rankFilter === "받은 좋아요" &&
+        {rankFilter === categoryArray[1] &&
           rankList.like.map((_, idx) => <RankUser info={_} idx={idx} key={_.userName} />)}
       </UserRankCntnr>
     </RankSectionContnr>
