@@ -31,6 +31,8 @@ type Props = React.PropsWithChildren<{
       listId: string;
     };
   };
+
+  isShowAllMark?: boolean;
 }>;
 
 export default function RowSlide({
@@ -42,6 +44,8 @@ export default function RowSlide({
 
   infoFromUserPage,
   userMark,
+
+  isShowAllMark,
 }: Props) {
   const albumContainerRef = useRef<HTMLDivElement>(null);
   const showAlbumWidth = useComponentWidth(albumContainerRef); // 보이는 앨범 width
@@ -65,6 +69,7 @@ export default function RowSlide({
         categoryText={categoryText}
         novelNO={novelNO}
         infoFromUserPage={infoFromUserPage}
+        isShowAllMark={isShowAllMark}
       />
       <RowSlideContainer>
         <RowAlbumContainer ref={albumContainerRef}>

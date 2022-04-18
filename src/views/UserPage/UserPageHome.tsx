@@ -382,6 +382,7 @@ export default function UserPageHome() {
           },
         }}
         categoryText={myListMarkText}
+        isShowAllMark
       />
       {dataFromServer.novelList.isMyList.map((list) => (
         <RowSlide
@@ -393,6 +394,7 @@ export default function UserPageHome() {
             path: "myList",
             list: { isMainCategory: false, listId: list.listId },
           }}
+          isShowAllMark
         >
           {list.novel.map((_) => (
             <NovelRow key={_.novelId} novel={_} isNotSubInfo />
@@ -409,6 +411,7 @@ export default function UserPageHome() {
           },
         }}
         categoryText={othersListMarkText}
+        isShowAllMark
       />
       {dataFromServer.novelList.isOthersList.map((list) => (
         <RowSlide
@@ -421,6 +424,7 @@ export default function UserPageHome() {
             list: { isMainCategory: false, listId: list.listId },
           }}
           userMark={{ userImg: list.userImg, userName: list.userName }}
+          isShowAllMark
         >
           {list.novel.map((_) => (
             <NovelRow key={_.novelId} novel={_} isNotSubInfo />

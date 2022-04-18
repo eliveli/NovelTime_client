@@ -388,6 +388,30 @@ const dataFromServer = {
           novelGenre: "로판",
           novelIsEnd: "완결",
         },
+        {
+          novelId: "20220225082010201",
+          novelImg: "https://img.ridicdn.net/cover/372009713/xxlarge#1", // 리디북스
+          novelTitle: "헌터와 매드 사이언티스트",
+          novelAuthor: "델마르",
+          novelGenre: "로판",
+          novelIsEnd: "완결",
+        },
+        {
+          novelId: "20220225082010201",
+          novelImg: "https://img.ridicdn.net/cover/372009713/xxlarge#1", // 리디북스
+          novelTitle: "헌터와 매드 사이언티스트",
+          novelAuthor: "델마르",
+          novelGenre: "로판",
+          novelIsEnd: "완결",
+        },
+        {
+          novelId: "20220225082010201",
+          novelImg: "https://img.ridicdn.net/cover/372009713/xxlarge#1", // 리디북스
+          novelTitle: "헌터와 매드 사이언티스트",
+          novelAuthor: "델마르",
+          novelGenre: "로판",
+          novelIsEnd: "완결",
+        },
       ],
     },
   ],
@@ -609,6 +633,7 @@ export default function Home() {
             list: { isMainCategory: false, listId: list.listId },
           }}
           userMark={{ userImg: list.userImg, userName: list.userName }}
+          isShowAllMark
         >
           {list.novel.map((_) => (
             <NovelRow key={_.novelId} novel={_} isNotSubInfo />
