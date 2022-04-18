@@ -4,7 +4,7 @@ import { keyframes } from "styled-components";
 import theme, { styled } from "assets/styles/theme";
 import Icon from "assets/Icon";
 
-export const Talk = styled.article`
+export const Talk = styled.article<{ isLast?: boolean }>`
   width: 100%;
   display: flex;
 
@@ -14,9 +14,13 @@ export const Talk = styled.article`
 
   padding: 12px 0;
   border-bottom: 1px solid ${(props) => props.theme.color.lightGray100_2};
-  &:last-child {
+
+  // it does not work when element is article
+  &:last-of-type {
     border-bottom: 0;
   }
+  // this is used in home page
+  ${({ isLast }) => isLast && `border-bottom: 0;`}
 `;
 export const TalkMobileContnr = styled.div`
   display: flex;

@@ -48,9 +48,10 @@ interface RecommendProps {
       isEnd: boolean;
     };
   };
+  isLast?: boolean;
 }
 
-export default function Recommend({ recommendInfo }: RecommendProps) {
+export default function Recommend({ recommendInfo, isLast }: RecommendProps) {
   // props or default props
   const { recommend, novel } = recommendInfo;
   const {
@@ -77,6 +78,7 @@ export default function Recommend({ recommendInfo }: RecommendProps) {
   return (
     <ThemeProvider theme={theme}>
       <Text
+        isLast={isLast}
         ref={contnrRef}
         onClick={() => {
           navigate(`/recommend_detail/${recommendId}`);

@@ -201,10 +201,11 @@ function TalkMobile({ talk }: { talk: TalkProps }) {
     </TalkMobileContnr>
   );
 }
-export default function FreeTalk({ talk }: { talk: TalkProps }) {
+export default function FreeTalk({ talk, isLast }: { talk: TalkProps; isLast?: boolean }) {
   const navigate = useNavigate();
   return (
     <Talk
+      isLast={isLast}
       onClick={() => {
         navigate(`/talk_detail/${talk.talkId}`);
       }}

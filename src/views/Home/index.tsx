@@ -1,8 +1,10 @@
+import Icon from "assets/Icon";
 import { CategoryMark } from "components/CategoryMark";
 import MainBG from "components/MainBG";
 import { NovelColumn, NovelColumnDetail, NovelRow } from "components/Novel";
 import { ColumnDetailList, ColumnList, RowSlide } from "components/NovelListFrame";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
+import { useComponentWidth } from "utils";
 import FreeTalk from "views/FreeTalkList/FreeTalkList.components";
 import Recommend from "views/RecommendList/RecommendList.components";
 import {
@@ -14,6 +16,12 @@ import {
   UserRankCntnr,
   Filter,
   FilterContnr,
+  UserRankNO,
+  SectionTitle,
+  SectionTitleContnr,
+  RankSectionContnr,
+  IconContainer,
+  IconNO,
 } from "./Home.styles";
 
 const dataFromServer = {
@@ -377,34 +385,60 @@ interface RankUserProps {
     };
     likeReceived?: number;
   };
+  idx: number;
 }
-function RankUser({ info }: RankUserProps) {
+function RankUser({ info, idx }: RankUserProps) {
   const { userImg, userName, userAct, likeReceived } = info;
   return (
     <UserContnr>
       <UserImg userImg={userImg} />
       <UserInfo>
-        <UserName>{userName}</UserName>
-        {userAct?.writing && <UserAct>글{userAct.writing}</UserAct>}
+        {userAct?.writing && (
+          <UserAct>
+            <IconContainer>
+              <Icon.IconBox noPointer size={17}>
+                <Icon.Write />
+              </Icon.IconBox>
+              <IconNO>{userAct.writing}</IconNO>
+            </IconContainer>
+          </UserAct>
+        )}
         {userAct?.comment && (
           <UserAct>
-            댓글
-            {userAct.comment}
+            <IconContainer>
+              <Icon.IconBox noPointer size={17}>
+                <Icon.Comment />
+              </Icon.IconBox>
+              <IconNO>{userAct.comment}</IconNO>
+            </IconContainer>
           </UserAct>
         )}
         {userAct?.list && (
           <UserAct>
-            리스트
-            {userAct.list}
+            <IconContainer>
+              <Icon.IconBox noPointer size={17}>
+                <Icon.NovelList />
+              </Icon.IconBox>
+              <IconNO>{userAct.list}</IconNO>
+            </IconContainer>
           </UserAct>
         )}
+
         {likeReceived !== undefined && (
           <UserAct>
-            좋아요
-            {likeReceived}
+            <IconContainer>
+              <Icon.IconBox noPointer size={17}>
+                <Icon.SmallHeart />
+              </Icon.IconBox>
+              <IconNO>{likeReceived}</IconNO>
+            </IconContainer>
           </UserAct>
         )}
+
+        <UserName>{userName}</UserName>
       </UserInfo>
+
+      <UserRankNO>{idx + 1}</UserRankNO>
     </UserContnr>
   );
 }
@@ -430,39 +464,48 @@ function UserRankSection({ category, rankList }: UserRankSectionProps) {
     : ["작성리스트 수", "받은 좋아요"];
   const [rankFilter, setRankFilter] = useState(categoryArray[0]);
 
+  const contnrRef = useRef<HTMLDivElement>(null);
+  const contnrWidth = useComponentWidth(contnrRef);
+
   return (
-    <>
-      <FilterContnr>
-        {categoryArray.map((_) => (
-          <Filter category={_} selectedCtgr={rankFilter} onClick={() => setRankFilter(_)}>
-            &nbsp;&nbsp;
-            {_}
-            &nbsp;&nbsp;
-          </Filter>
-        ))}
-      </FilterContnr>
-      <UserRankCntnr>
+    <RankSectionContnr ref={contnrRef}>
+      <SectionTitleContnr>
+        <SectionTitle>유저 활동</SectionTitle>
+        <FilterContnr>
+          {categoryArray.map((_) => (
+            <Filter category={_} selectedCtgr={rankFilter} onClick={() => setRankFilter(_)}>
+              &nbsp;&nbsp;
+              {_}
+              &nbsp;&nbsp;
+            </Filter>
+          ))}
+        </FilterContnr>
+      </SectionTitleContnr>
+      <UserRankCntnr contnrWidth={contnrWidth}>
         {rankFilter.includes("작성") &&
-          rankList.content.map((_) => <RankUser info={_} key={_.userName} />)}
+          rankList.content.map((_, idx) => <RankUser info={_} idx={idx} key={_.userName} />)}
         {rankFilter === "받은 좋아요" &&
-          rankList.like.map((_) => <RankUser info={_} key={_.userName} />)}
+          rankList.like.map((_, idx) => <RankUser info={_} idx={idx} key={_.userName} />)}
       </UserRankCntnr>
-    </>
+    </RankSectionContnr>
   );
 }
 export default function Home() {
   return (
     <MainBG>
       <CategoryMark categoryText="소설 한담 new" linkPath="talk_list" />
-      {dataFromServer.talkList.map((talk) => (
-        <FreeTalk talk={talk} />
+      {dataFromServer.talkList.map((talk, idx) => (
+        <FreeTalk talk={talk} isLast={idx + 1 === dataFromServer.talkList.length} />
       ))}
 
       <UserRankSection category="프리톡" rankList={dataFromServer.talkUserRank} />
 
       <CategoryMark categoryText="소설 추천 new" linkPath="recommend_list" />
-      {dataFromServer.recommendList.map((recommendInfo) => (
-        <Recommend recommendInfo={recommendInfo} />
+      {dataFromServer.recommendList.map((recommendInfo, idx) => (
+        <Recommend
+          recommendInfo={recommendInfo}
+          isLast={idx + 1 === dataFromServer.recommendList.length}
+        />
       ))}
 
       <UserRankSection category="추천" rankList={dataFromServer.recommendUserRank} />

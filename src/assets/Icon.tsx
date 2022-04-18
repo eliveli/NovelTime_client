@@ -15,7 +15,7 @@ import {
   BiUser,
 } from "react-icons/bi";
 import { GrClose } from "react-icons/gr";
-import { BsJournalRichtext, BsEmojiSunglasses } from "react-icons/bs";
+import { BsJournalRichtext, BsEmojiSunglasses, BsPencilSquare } from "react-icons/bs";
 import {
   HiHeart,
   HiOutlineHeart,
@@ -29,6 +29,8 @@ import { MdOutlineShare, MdOutlineMoreHoriz } from "react-icons/md";
 import { IoIosSearch, IoMdClose } from "react-icons/io";
 import { AiOutlineUser, AiOutlineMessage } from "react-icons/ai";
 import { FiMessageCircle } from "react-icons/fi";
+import { ImBooks } from "react-icons/im";
+import { GiBookshelf } from "react-icons/gi";
 import { SiNaver, SiKakaotalk } from "react-icons/si";
 
 import theme, { styled } from "./styles/theme";
@@ -75,6 +77,15 @@ const iconStyleHover = () => `
 
 const Icon = {
   IconBox,
+  Write: styled(BsPencilSquare)`
+    ${iconStyle()};
+  `,
+  NovelList: styled(ImBooks)`
+    ${iconStyle()};
+  `,
+  // NovelList: styled(GiBookshelf)`
+  //   ${iconStyle()};
+  // `,
   ListRight: styled(FaChevronRight)``,
   BigDown: FaChevronDown,
   BigUp: FaChevronUp,
