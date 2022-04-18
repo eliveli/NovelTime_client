@@ -478,8 +478,8 @@ interface UserRankSectionProps {
 }
 function UserRankSection({ category, rankList }: UserRankSectionProps) {
   const categoryArray = ["프리톡", "추천"].includes(category)
-    ? ["작성글 수", "받은 좋아요 수"] // 카테고리 : 프리톡, 추천
-    : ["작성리스트 수", "받은 좋아요 수"]; // 카테고리 : 소설리스트
+    ? ["작성글 수", "받은 좋아요 수"] // 카테고리가 프리톡, 추천일 때
+    : ["작성리스트 수", "받은 좋아요 수"]; // 카테고리가 소설리스트일 때
   const [rankFilter, setRankFilter] = useState(categoryArray[0]);
 
   const contnrRef = useRef<HTMLDivElement>(null);
@@ -491,10 +491,18 @@ function UserRankSection({ category, rankList }: UserRankSectionProps) {
   // when clicking arrow, scroll user ranks
   const scrollRank = (isLeft: boolean) => {
     if (rankContnrRef.current && isLeft) {
-      rankContnrRef.current.scrollTo(rankContnrRef.current.scrollLeft - rankContnrWidth, 0);
+      rankContnrRef.current.scrollTo({
+        top: 0,
+        left: rankContnrRef.current.scrollLeft - rankContnrWidth,
+        behavior: "smooth",
+      });
     }
     if (rankContnrRef.current && !isLeft) {
-      rankContnrRef.current.scrollTo(rankContnrRef.current.scrollLeft + rankContnrWidth, 0);
+      rankContnrRef.current.scrollTo({
+        top: 0,
+        left: rankContnrRef.current.scrollLeft + rankContnrWidth,
+        behavior: "smooth",
+      });
     }
   };
 
