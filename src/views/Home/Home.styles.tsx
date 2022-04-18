@@ -115,13 +115,21 @@ export const RankSectionContnr = styled.section`
   padding: 0 16px 16px;
 `;
 
-export const SectionTitleContnr = styled.div``;
+export const SectionMark = styled.div``;
 
 export const SectionTitle = styled.p`
   margin: 0;
   margin-top: 16px;
+  font-size: 15px;
+  line-height: 15px; // font-size === line-height
+`;
+export const TitleNormalStyle = styled.span`
+  font-weight: 300;
   color: rgba(0, 0, 0, 0.5);
-  line-height: 16px; // font-size === line-height
+`;
+export const TitleEmphasis = styled.span`
+  font-weight: 300;
+  color: rgba(0, 0, 0, 0.7);
 `;
 export const FilterContnr = styled.div`
   display: flex;

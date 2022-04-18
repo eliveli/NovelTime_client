@@ -110,7 +110,7 @@ export default function Recommend({ recommendInfo, isLast }: RecommendProps) {
               <CreateDate>{createDate}</CreateDate>
             </UserNameBox>
             <IconBox>
-              <Icon.IconBox noPointer size={17}>
+              <Icon.IconBox noPointer size={20}>
                 <Icon.SmallHeart />
               </Icon.IconBox>
               <IconNO>{likeNO}</IconNO>
