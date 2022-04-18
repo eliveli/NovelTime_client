@@ -14,7 +14,7 @@ import {
 type Props = React.PropsWithChildren<{
   isTalk: boolean;
   handleTalk: React.Dispatch<React.SetStateAction<boolean>>;
-  isShowAll?: boolean;
+  isShowAllMark?: boolean;
   categoryText: string;
   novelId: string;
   writing: boolean;
@@ -30,7 +30,7 @@ export default function WritingListFrame({
   handleTalk,
   children,
   writing,
-  isShowAll,
+  isShowAllMark,
   fontSize,
 }: Props) {
   const navigate = useNavigate();
@@ -39,7 +39,7 @@ export default function WritingListFrame({
     <ColumnBG>
       <CategoryMark
         writing={writing}
-        isShowAll={isShowAll}
+        isShowAllMark={isShowAllMark}
         categoryText={categoryText}
         novelId={novelId}
         fontSize={fontSize}

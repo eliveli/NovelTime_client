@@ -77,7 +77,6 @@ export default function WritingList() {
         novelId={novelId as string}
         novelTitle={novelTitle}
         writing
-        isShowAll
       >
         {isTalk && arrayInfoTalk.map((talk) => <WritingTitle key={talk.talkId} writing={talk} />)}
         {!isTalk &&

@@ -84,7 +84,7 @@ export default function UserPageWriting({ isMyWriting }: { isMyWriting: boolean 
 
   return (
     <MainBG>
-      <CategoryMark isShowAll categoryText={contentPageMark}>
+      <CategoryMark categoryText={contentPageMark}>
         <ShareIconBox>
           <Icon.SharePC />
         </ShareIconBox>

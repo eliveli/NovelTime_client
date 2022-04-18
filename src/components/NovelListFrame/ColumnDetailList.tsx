@@ -3,14 +3,18 @@ import { ColumnBG, ColumnListContainer } from "./ColumnDetailList.styles";
 
 type Props = React.PropsWithChildren<{
   categoryId?: string;
-  isShowAll?: boolean;
+  isShowAllMark?: boolean;
   categoryText: string;
 }>;
 
-export default function ColumnDetail({ categoryId, isShowAll, categoryText, children }: Props) {
+export default function ColumnDetail({ categoryId, isShowAllMark, categoryText, children }: Props) {
   return (
     <ColumnBG>
-      <CategoryMark isShowAll={isShowAll} categoryId={categoryId} categoryText={categoryText} />
+      <CategoryMark
+        isShowAllMark={isShowAllMark}
+        categoryId={categoryId}
+        categoryText={categoryText}
+      />
       <ColumnListContainer>{children}</ColumnListContainer>
     </ColumnBG>
   );

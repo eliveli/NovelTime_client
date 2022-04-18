@@ -204,7 +204,7 @@ export default function UserPageNovelList({ isMyList }: { isMyList: boolean }) {
   const [isLike, toggleLike] = useState(novelList.isLike);
   return (
     <MainBG>
-      <CategoryMark isShowAll categoryText={contentPageMark}>
+      <CategoryMark categoryText={contentPageMark}>
         <ShareIconBox>
           <Icon.SharePC />
         </ShareIconBox>
