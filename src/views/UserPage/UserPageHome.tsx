@@ -420,7 +420,7 @@ export default function UserPageHome() {
             path: "othersList",
             list: { isMainCategory: false, listId: list.listId },
           }}
-          otherUser={{ userImg: list.userImg, userName: list.userName }}
+          userMark={{ userImg: list.userImg, userName: list.userName }}
         >
           {list.novel.map((_) => (
             <NovelRow key={_.novelId} novel={_} isNotSubInfo />

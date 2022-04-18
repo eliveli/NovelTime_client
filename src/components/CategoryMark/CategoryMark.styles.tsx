@@ -9,13 +9,13 @@ export const CategoryContainer = styled.div`
   align-items: flex-end;
 `;
 
-export const LinkCategory = styled(Link)<{ isOtherUser?: boolean; novelNO?: number }>`
+export const LinkCategory = styled(Link)<{ isUserMark?: boolean; novelNO?: number }>`
   display: flex;
   align-items: center;
   margin: auto 0 0 auto;
 
-  ${({ isOtherUser }) =>
-    isOtherUser &&
+  ${({ isUserMark }) =>
+    isUserMark &&
     theme.media.mobile(`
     margin-bottom: 5px;
   `)}
@@ -74,7 +74,7 @@ export const CategoryDescUserName = styled.p<{ fontSize?: number }>`
 export const CategoryDesc = styled.p<{
   fontSize?: number;
   isUserNovelList?: true;
-  isOtherUser?: boolean;
+  isUserMark?: boolean;
 }>`
   margin-bottom: 0;
   border-bottom: 1px dotted lightgray;
@@ -82,8 +82,8 @@ export const CategoryDesc = styled.p<{
   ${({ isUserNovelList }) =>
     isUserNovelList && `border-bottom: 0; color: rgba(0,0,0,0.5); font-weight:600;`}
 
-  ${({ isOtherUser }) =>
-    isOtherUser &&
+  ${({ isUserMark }) =>
+    isUserMark &&
     theme.media.mobile(`
       margin: 0;
       margin-left: 32px;
