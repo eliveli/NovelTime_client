@@ -1,5 +1,8 @@
+/* eslint-disable react/jsx-wrap-multilines */
 import { useParams } from "react-router-dom";
 import MainBG from "components/MainBG";
+import { useState } from "react";
+import { PlatformNovelList } from "views/Home";
 import { ColumnDetailList } from "../../components/NovelListFrame";
 import { NovelColumnDetail } from "../../components/Novel";
 
@@ -9,6 +12,8 @@ import { NovelColumnDetail } from "../../components/Novel";
 //                : 로그인 사용자 - userId 이용, 종류별 카테고리
 //                : 비로그인 사용자 - 랜덤. 로그인 사용자와 같은 종류별 카테고리
 // from NovelDetail : 소설 상세페이지 추천작품 - novelId도 이용
+
+// platform novel list from Home : request with categoryId, platform
 
 // + 번외. writing list page for novel - novelId 이용
 //       . writing list page for user - userId 이용(다른 사용자의 페이지 열람 가능)
@@ -57,6 +62,44 @@ export default function NovelListByCategory() {
     detailNovelInfo,
     detailNovelInfo,
   ];
+
+  // request with category id, platform, isDetailInfo(boolean) to receive platform novel list
+  // - categoryId : "popularPlatform", platform : "카카페", isDetailInfo : true
+
+  // request will be executed after entering this page and clicking the platform filter
+
+  // following is just an example
+  // const { platformNovelList } = api.useGetPostsQuery(undefined, {
+  //   selectFromResult: ({ data }) => ({
+  //     posts: data ?? emptyArray,
+  //   }),
+  // })
+
+  // platformNovelList is composed like this
+  //  [ {novelId, novelImg, novelTitle, novelAuthor, novelGenre, novelDesc }]
+  const platformNovelList = [
+    detailNovelInfo,
+    detailNovelInfo,
+    detailNovelInfo,
+    detailNovelInfo,
+    detailNovelInfo,
+  ];
+  // categoryId can be changed later
+  if (categoryId === "popularPlatform") {
+    return (
+      <MainBG>
+        <ColumnDetailList
+          categoryText={categoryText as string}
+          categoryFilter={<PlatformNovelList isDetailInfo />}
+        >
+          {platformNovelList.map((novel) => (
+            <NovelColumnDetail key={novel.novelId} novel={novel} />
+          ))}
+        </ColumnDetailList>
+      </MainBG>
+    );
+  }
+
   return (
     <MainBG>
       <ColumnDetailList categoryText={categoryText as string}>

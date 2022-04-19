@@ -373,199 +373,79 @@ const dataFromServer = {
       { userImg: "", userName: "lalwa", likeReceived: 7 },
     ],
   },
-  platformNovel: {
-    kakape: [
-      {
-        novelId: "20220225082010201",
-        novelImg: "https://img.ridicdn.net/cover/372009713/xxlarge#1", // 리디북스
-        novelTitle: "카카페헌터와 매드 사이언티스트",
-        novelAuthor: "델마르",
-        novelGenre: "로판",
-        novelIsEnd: "완결",
-      },
-      {
-        novelId: "20220225082010201",
-        novelImg:
-          "https://comicthumb-phinf.pstatic.net/20220126_148/pocket_16431735084292970r_JPEG/%C5%A9%B8%AE%BD%BA%C5%BB%BE%C6%B0%A1%BE%BE%B4%C2%B3%B2%C0%DA%B4%D9-%C0%CF%B7%AF%BD%BA%C6%AE%C7%A5%C1%F61.jpg?type=m260", // 시리즈
-        novelTitle: "헌터와 매드 사이언티스트",
-        novelAuthor: "델마르",
-        novelGenre: "로판",
-        novelIsEnd: "완결",
-      },
-      {
-        novelId: "20220225082010201",
-        novelImg: "https://img.ridicdn.net/cover/372009713/xxlarge#1", // 리디북스
-        novelTitle: "헌터와 매드 사이언티스트",
-        novelAuthor: "델마르",
-        novelGenre: "로판",
-        novelIsEnd: "완결",
-      },
-      {
-        novelId: "20220225082010201",
-        novelImg: "https://img.ridicdn.net/cover/372009713/xxlarge#1", // 리디북스
-        novelTitle: "헌터와 매드 사이언티스트",
-        novelAuthor: "델마르",
-        novelGenre: "로판",
-        novelIsEnd: "완결",
-      },
-      {
-        novelId: "20220225082010201",
-        novelImg: "https://img.ridicdn.net/cover/372009713/xxlarge#1", // 리디북스
-        novelTitle: "헌터와 매드 사이언티스트",
-        novelAuthor: "델마르",
-        novelGenre: "로판",
-        novelIsEnd: "완결",
-      },
-    ],
-    series: [
-      {
-        novelId: "20220225082010201",
-        novelImg: "https://img.ridicdn.net/cover/372009713/xxlarge#1", // 리디북스
-        novelTitle: "시리즈헌터와 매드 사이언티스트",
-        novelAuthor: "델마르",
-        novelGenre: "로판",
-        novelIsEnd: "완결",
-      },
-      {
-        novelId: "20220225082010201",
-        novelImg:
-          "https://comicthumb-phinf.pstatic.net/20220126_148/pocket_16431735084292970r_JPEG/%C5%A9%B8%AE%BD%BA%C5%BB%BE%C6%B0%A1%BE%BE%B4%C2%B3%B2%C0%DA%B4%D9-%C0%CF%B7%AF%BD%BA%C6%AE%C7%A5%C1%F61.jpg?type=m260", // 시리즈
-        novelTitle: "헌터와 매드 사이언티스트",
-        novelAuthor: "델마르",
-        novelGenre: "로판",
-        novelIsEnd: "완결",
-      },
-      {
-        novelId: "20220225082010201",
-        novelImg: "https://img.ridicdn.net/cover/372009713/xxlarge#1", // 리디북스
-        novelTitle: "헌터와 매드 사이언티스트",
-        novelAuthor: "델마르",
-        novelGenre: "로판",
-        novelIsEnd: "완결",
-      },
-      {
-        novelId: "20220225082010201",
-        novelImg: "https://img.ridicdn.net/cover/372009713/xxlarge#1", // 리디북스
-        novelTitle: "헌터와 매드 사이언티스트",
-        novelAuthor: "델마르",
-        novelGenre: "로판",
-        novelIsEnd: "완결",
-      },
-      {
-        novelId: "20220225082010201",
-        novelImg: "https://img.ridicdn.net/cover/372009713/xxlarge#1", // 리디북스
-        novelTitle: "헌터와 매드 사이언티스트",
-        novelAuthor: "델마르",
-        novelGenre: "로판",
-        novelIsEnd: "완결",
-      },
-    ],
-    ridi: [
-      {
-        novelId: "20220225082010201",
-        novelImg: "https://img.ridicdn.net/cover/372009713/xxlarge#1", // 리디북스
-        novelTitle: "리디헌터와 매드 사이언티스트",
-        novelAuthor: "델마르",
-        novelGenre: "로판",
-        novelIsEnd: "완결",
-      },
-      {
-        novelId: "20220225082010201",
-        novelImg:
-          "https://comicthumb-phinf.pstatic.net/20220126_148/pocket_16431735084292970r_JPEG/%C5%A9%B8%AE%BD%BA%C5%BB%BE%C6%B0%A1%BE%BE%B4%C2%B3%B2%C0%DA%B4%D9-%C0%CF%B7%AF%BD%BA%C6%AE%C7%A5%C1%F61.jpg?type=m260", // 시리즈
-        novelTitle: "헌터와 매드 사이언티스트",
-        novelAuthor: "델마르",
-        novelGenre: "로판",
-        novelIsEnd: "완결",
-      },
-      {
-        novelId: "20220225082010201",
-        novelImg: "https://img.ridicdn.net/cover/372009713/xxlarge#1", // 리디북스
-        novelTitle: "헌터와 매드 사이언티스트",
-        novelAuthor: "델마르",
-        novelGenre: "로판",
-        novelIsEnd: "완결",
-      },
-      {
-        novelId: "20220225082010201",
-        novelImg: "https://img.ridicdn.net/cover/372009713/xxlarge#1", // 리디북스
-        novelTitle: "헌터와 매드 사이언티스트",
-        novelAuthor: "델마르",
-        novelGenre: "로판",
-        novelIsEnd: "완결",
-      },
-      {
-        novelId: "20220225082010201",
-        novelImg: "https://img.ridicdn.net/cover/372009713/xxlarge#1", // 리디북스
-        novelTitle: "헌터와 매드 사이언티스트",
-        novelAuthor: "델마르",
-        novelGenre: "로판",
-        novelIsEnd: "완결",
-      },
-    ],
-    joara: [
-      {
-        novelId: "20220225082010201",
-        novelImg: "https://img.ridicdn.net/cover/372009713/xxlarge#1", // 리디북스
-        novelTitle: "헌터와 매드 사이언티스트",
-        novelAuthor: "델마르",
-        novelGenre: "로판",
-        novelIsEnd: "완결",
-      },
-      {
-        novelId: "20220225082010201",
-        novelImg:
-          "https://comicthumb-phinf.pstatic.net/20220126_148/pocket_16431735084292970r_JPEG/%C5%A9%B8%AE%BD%BA%C5%BB%BE%C6%B0%A1%BE%BE%B4%C2%B3%B2%C0%DA%B4%D9-%C0%CF%B7%AF%BD%BA%C6%AE%C7%A5%C1%F61.jpg?type=m260", // 시리즈
-        novelTitle: "헌터와 매드 사이언티스트",
-        novelAuthor: "델마르",
-        novelGenre: "로판",
-        novelIsEnd: "완결",
-      },
-      {
-        novelId: "20220225082010201",
-        novelImg: "https://img.ridicdn.net/cover/372009713/xxlarge#1", // 리디북스
-        novelTitle: "헌터와 매드 사이언티스트",
-        novelAuthor: "델마르",
-        novelGenre: "로판",
-        novelIsEnd: "완결",
-      },
-      {
-        novelId: "20220225082010201",
-        novelImg: "https://img.ridicdn.net/cover/372009713/xxlarge#1", // 리디북스
-        novelTitle: "헌터와 매드 사이언티스트",
-        novelAuthor: "델마르",
-        novelGenre: "로판",
-        novelIsEnd: "완결",
-      },
-      {
-        novelId: "20220225082010201",
-        novelImg: "https://img.ridicdn.net/cover/372009713/xxlarge#1", // 리디북스
-        novelTitle: "헌터와 매드 사이언티스트",
-        novelAuthor: "델마르",
-        novelGenre: "로판",
-        novelIsEnd: "완결",
-      },
-    ],
-  },
 };
 
-function PlatformNovelList({
-  rankFilter,
-  setRankFilter,
-  categoryArray,
-}: {
-  rankFilter: string;
-  setRankFilter: React.Dispatch<React.SetStateAction<string>>;
-  categoryArray: string[];
-}) {
+// request with category id, platform, isDetailInfo(boolean) to receive platform novel list
+// - categoryId : "popularPlatform", platform : "카카페", isDetailInfo : false
+
+// request will be executed after entering this page and clicking the platform filter
+// following is just an example
+// const { platformNovelList } = api.useGetPostsQuery(undefined, {
+//   selectFromResult: ({ data }) => ({
+//     posts: data ?? emptyArray,
+//   }),
+// })
+// platformNovelList is composed like this
+const platformNovelList = [
+  {
+    novelId: "20220225082010201",
+    novelImg: "https://img.ridicdn.net/cover/372009713/xxlarge#1", // 리디북스
+    novelTitle: "카카페헌터와 매드 사이언티스트",
+    novelAuthor: "델마르",
+    novelGenre: "로판",
+    novelIsEnd: "완결",
+  },
+  {
+    novelId: "20220225082010201",
+    novelImg:
+      "https://comicthumb-phinf.pstatic.net/20220126_148/pocket_16431735084292970r_JPEG/%C5%A9%B8%AE%BD%BA%C5%BB%BE%C6%B0%A1%BE%BE%B4%C2%B3%B2%C0%DA%B4%D9-%C0%CF%B7%AF%BD%BA%C6%AE%C7%A5%C1%F61.jpg?type=m260", // 시리즈
+    novelTitle: "헌터와 매드 사이언티스트",
+    novelAuthor: "델마르",
+    novelGenre: "로판",
+    novelIsEnd: "완결",
+  },
+  {
+    novelId: "20220225082010201",
+    novelImg: "https://img.ridicdn.net/cover/372009713/xxlarge#1", // 리디북스
+    novelTitle: "헌터와 매드 사이언티스트",
+    novelAuthor: "델마르",
+    novelGenre: "로판",
+    novelIsEnd: "완결",
+  },
+  {
+    novelId: "20220225082010201",
+    novelImg: "https://img.ridicdn.net/cover/372009713/xxlarge#1", // 리디북스
+    novelTitle: "헌터와 매드 사이언티스트",
+    novelAuthor: "델마르",
+    novelGenre: "로판",
+    novelIsEnd: "완결",
+  },
+  {
+    novelId: "20220225082010201",
+    novelImg: "https://img.ridicdn.net/cover/372009713/xxlarge#1", // 리디북스
+    novelTitle: "헌터와 매드 사이언티스트",
+    novelAuthor: "델마르",
+    novelGenre: "로판",
+    novelIsEnd: "완결",
+  },
+];
+
+export function PlatformNovelList({ isDetailInfo }: { isDetailInfo: boolean }) {
+  // category for platform novel list
+  const categoryArray = ["카카페", "시리즈", "리디북스", "조아라"];
+  const [platformFilter, setPlatformFilter] = useState(categoryArray[0]);
+
   return (
     <FilterContnr isPlatformNovel>
       {categoryArray.map((_) => (
         <Filter
           category={_}
-          selectedCtgr={rankFilter}
+          selectedCtgr={platformFilter}
           onClick={() => {
-            setRankFilter(_);
+            setPlatformFilter(_);
+            // request server with categoryId ("popularPlatform"),
+            //                     platform (it is _ ), isDetailInfo(boolean)
+            // if isDetailInfo is false, receive simple info, if true, receive detail info
           }}
         >
           &nbsp;&nbsp;
@@ -734,10 +614,6 @@ function UserRankSection({ category, rankList }: UserRankSectionProps) {
   );
 }
 export default function Home() {
-  // category for platform novel list
-  const categoryArray = ["카카페", "시리즈", "리디북스", "조아라"];
-  const [rankFilter, setRankFilter] = useState(categoryArray[0]);
-
   return (
     <MainBG>
       <CategoryMark categoryText="소설 한담 new" linkPath="talk_list" />
@@ -803,32 +679,13 @@ export default function Home() {
       <RowSlide
         categoryText="플랫폼 별 인기 소설"
         novelNO={dataFromServer.simpleNovelInfo.length}
-        categoryId="popularPlatform"
-        categoryFilter={
-          <PlatformNovelList
-            rankFilter={rankFilter}
-            setRankFilter={setRankFilter}
-            categoryArray={categoryArray}
-          />
-        }
+        categoryId="popularPlatform" // it can be changed later
+        categoryFilter={<PlatformNovelList isDetailInfo={false} />}
         isShowAllMark
       >
-        {rankFilter === "조아라" &&
-          dataFromServer.platformNovel.joara.map((novel) => (
-            <NovelRow key={novel.novelId} novel={novel} />
-          ))}
-        {rankFilter === "카카페" &&
-          dataFromServer.platformNovel.kakape.map((novel) => (
-            <NovelRow key={novel.novelId} novel={novel} />
-          ))}
-        {rankFilter === "리디북스" &&
-          dataFromServer.platformNovel.ridi.map((novel) => (
-            <NovelRow key={novel.novelId} novel={novel} />
-          ))}
-        {rankFilter === "시리즈" &&
-          dataFromServer.platformNovel.series.map((novel) => (
-            <NovelRow key={novel.novelId} novel={novel} />
-          ))}
+        {platformNovelList.map((novel) => (
+          <NovelRow key={novel.novelId} novel={novel} />
+        ))}
       </RowSlide>
     </MainBG>
   );
