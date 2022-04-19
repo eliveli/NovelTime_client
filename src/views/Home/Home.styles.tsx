@@ -175,3 +175,17 @@ export const AllArrowContnr = styled.div`
   display: flex;
   gap: 10px;
 `;
+
+export const LoadNovelListBtn = styled.button`
+  white-space: nowrap;
+
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 20px;
+  background-color: white;
+  padding: 2px 9px 2px 7px;
+  margin-left: 12px;
+
+  color: rgba(100, 100, 100, 0.7);
+  font-size: 13px;
+  font-weight: 500;
+`;

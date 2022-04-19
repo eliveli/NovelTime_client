@@ -27,6 +27,7 @@ import {
   ArrowContnr,
   TitleNormalStyle,
   TitleEmphasis,
+  LoadNovelListBtn,
 } from "./Home.styles";
 
 const dataFromServer = {
@@ -242,6 +243,7 @@ const dataFromServer = {
     },
   ],
 
+  // 2개씩 받아오기
   userNovelList: [
     {
       listId: "ssseefss",
@@ -310,79 +312,6 @@ const dataFromServer = {
           novelId: "20220225082010201",
           novelImg:
             "https://comicthumb-phinf.pstatic.net/20220126_148/pocket_16431735084292970r_JPEG/%C5%A9%B8%AE%BD%BA%C5%BB%BE%C6%B0%A1%BE%BE%B4%C2%B3%B2%C0%DA%B4%D9-%C0%CF%B7%AF%BD%BA%C6%AE%C7%A5%C1%F61.jpg?type=m260", // 시리즈
-          novelTitle: "헌터와 매드 사이언티스트",
-          novelAuthor: "델마르",
-          novelGenre: "로판",
-          novelIsEnd: "완결",
-        },
-        {
-          novelId: "20220225082010201",
-          novelImg: "https://img.ridicdn.net/cover/372009713/xxlarge#1", // 리디북스
-          novelTitle: "헌터와 매드 사이언티스트",
-          novelAuthor: "델마르",
-          novelGenre: "로판",
-          novelIsEnd: "완결",
-        },
-        {
-          novelId: "20220225082010201",
-          novelImg: "https://img.ridicdn.net/cover/372009713/xxlarge#1", // 리디북스
-          novelTitle: "헌터와 매드 사이언티스트",
-          novelAuthor: "델마르",
-          novelGenre: "로판",
-          novelIsEnd: "완결",
-        },
-        {
-          novelId: "20220225082010201",
-          novelImg: "https://img.ridicdn.net/cover/372009713/xxlarge#1", // 리디북스
-          novelTitle: "헌터와 매드 사이언티스트",
-          novelAuthor: "델마르",
-          novelGenre: "로판",
-          novelIsEnd: "완결",
-        },
-      ],
-    },
-    {
-      listId: "sssss",
-      listTitle: "list where is romance",
-      userName: "asda",
-      userImg: "",
-      novel: [
-        {
-          novelId: "20220225082010201",
-          novelImg: "https://img.ridicdn.net/cover/372009713/xxlarge#1", // 리디북스
-          novelTitle: "헌터와 매드 사이언티스트",
-          novelAuthor: "델마르",
-          novelGenre: "로판",
-          novelIsEnd: "완결",
-        },
-        {
-          novelId: "20220225082010201",
-          novelImg:
-            "https://comicthumb-phinf.pstatic.net/20220126_148/pocket_16431735084292970r_JPEG/%C5%A9%B8%AE%BD%BA%C5%BB%BE%C6%B0%A1%BE%BE%B4%C2%B3%B2%C0%DA%B4%D9-%C0%CF%B7%AF%BD%BA%C6%AE%C7%A5%C1%F61.jpg?type=m260", // 시리즈
-          novelTitle: "헌터와 매드 사이언티스트",
-          novelAuthor: "델마르",
-          novelGenre: "로판",
-          novelIsEnd: "완결",
-        },
-        {
-          novelId: "20220225082010201",
-          novelImg: "https://img.ridicdn.net/cover/372009713/xxlarge#1", // 리디북스
-          novelTitle: "헌터와 매드 사이언티스트",
-          novelAuthor: "델마르",
-          novelGenre: "로판",
-          novelIsEnd: "완결",
-        },
-        {
-          novelId: "20220225082010201",
-          novelImg: "https://img.ridicdn.net/cover/372009713/xxlarge#1", // 리디북스
-          novelTitle: "헌터와 매드 사이언티스트",
-          novelAuthor: "델마르",
-          novelGenre: "로판",
-          novelIsEnd: "완결",
-        },
-        {
-          novelId: "20220225082010201",
-          novelImg: "https://img.ridicdn.net/cover/372009713/xxlarge#1", // 리디북스
           novelTitle: "헌터와 매드 사이언티스트",
           novelAuthor: "델마르",
           novelGenre: "로판",
@@ -621,7 +550,15 @@ export default function Home() {
 
       <UserRankSection category="소설 추천" rankList={dataFromServer.recommendUserRank} />
 
-      <CategoryMark categoryText="유저들의 소설 리스트" />
+      <CategoryMark categoryText="유저들의 소설 리스트">
+        <LoadNovelListBtn
+          onClick={() => {
+            // server request
+          }}
+        >
+          다른 유저의 리스트 보기
+        </LoadNovelListBtn>
+      </CategoryMark>
       {dataFromServer.userNovelList.map((list) => (
         <RowSlide
           categoryId={list.listId}
