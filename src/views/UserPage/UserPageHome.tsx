@@ -337,6 +337,7 @@ export default function UserPageHome() {
           userName,
           path: "myWriting",
         }}
+        isShowAllButton="모두 보기"
         categoryText="My Writing"
       />
       <WritingFilter
@@ -358,8 +359,10 @@ export default function UserPageHome() {
           userName,
           path: "othersWriting",
         }}
+        isShowAllButton="모두 보기"
         categoryText="Other's Writing I like"
       />
+
       <WritingFilter
         writingCategory={["프리톡", "추천"]}
         writingFilter={otherFilter}
@@ -382,7 +385,7 @@ export default function UserPageHome() {
           },
         }}
         categoryText={myListMarkText}
-        isShowAllMark
+        isShowAllButton="모두 보기"
       />
       {dataFromServer.novelList.isMyList.map((list) => (
         <RowSlide
@@ -411,7 +414,7 @@ export default function UserPageHome() {
           },
         }}
         categoryText={othersListMarkText}
-        isShowAllMark
+        isShowAllButton="모두 보기"
       />
       {dataFromServer.novelList.isOthersList.map((list) => (
         <RowSlide

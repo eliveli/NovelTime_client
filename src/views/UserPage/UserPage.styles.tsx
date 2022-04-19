@@ -177,7 +177,7 @@ export const FilterContnr = styled.div`
   align-items: flex-end;
   gap: 25px;
 
-  margin: 16px 0 12px 4px;
+  margin: 12px 0 12px 4px;
 `;
 type FilterType = "프리톡" | "추천" | "댓글";
 export const Filter = styled.p<{ category: FilterType; selectedCtgr: FilterType }>`

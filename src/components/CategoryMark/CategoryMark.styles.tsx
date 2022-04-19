@@ -67,6 +67,7 @@ export const CategoryDescUserImg = styled.div<{ userImg: string }>`
   `)}
 `;
 export const CategoryDescUserName = styled.p<{ fontSize?: number }>`
+  margin-top: 12px;
   margin-bottom: 0;
   /* border-bottom: 1px dotted #0000004f; */
   font-size: ${({ fontSize }) => fontSize || 16}px;
@@ -80,7 +81,8 @@ export const CategoryDesc = styled.p<{
   border-bottom: 1px dotted lightgray;
   font-size: ${({ fontSize }) => fontSize || 16}px;
   ${({ isUserNovelList }) =>
-    isUserNovelList && `border-bottom: 0; color: rgba(0,0,0,0.5); font-weight:600;`}
+    isUserNovelList &&
+    `margin-top: 12px; border-bottom: 0; color: rgba(0,0,0,0.5); font-weight:600;`}
 
   ${({ isUserMark }) =>
     isUserMark &&
@@ -114,4 +116,18 @@ export const ShowAllIcon = styled(Icon.ListRight)`
 export const CategoryDescUserContnr = styled.div`
   display: flex;
   align-items: flex-end;
+`;
+
+export const GoToAllContentBtn = styled.button`
+  white-space: nowrap;
+
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 20px;
+  background-color: white;
+  padding: 2px 9px 2px 7px;
+  margin-left: 12px;
+
+  color: rgba(100, 100, 100, 0.7);
+  font-size: 13px;
+  font-weight: 500;
 `;
