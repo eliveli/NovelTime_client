@@ -225,13 +225,17 @@ export default function NovelList() {
           <Icon.Search />
         </SearchIconBox>
       </IconContainer>
-      <ColumnList categoryText="소설계의 박스오피스" categoryId="boxOffice">
+      <ColumnList isShowAllMark categoryText="소설계의 박스오피스" categoryId="boxOffice">
         {dataFromServer.simpleNovelInfo.map((novel) => (
           <NovelColumn key={novel.novelId} novel={novel} />
         ))}
       </ColumnList>
 
-      <ColumnDetailList categoryText="맞춤 추천은 여기에(상세)" categoryId="onlyForYou">
+      <ColumnDetailList
+        isShowAllMark
+        categoryText="맞춤 추천은 여기에(상세)"
+        categoryId="onlyForYou"
+      >
         {dataFromServer.detailNovelInfo.map((novel) => (
           <NovelColumnDetail key={novel.novelId} novel={novel} />
         ))}
@@ -241,6 +245,7 @@ export default function NovelList() {
         categoryText="요즘 인기 있는"
         novelNO={dataFromServer.simpleNovelInfo.length}
         categoryId="popular"
+        isShowAllMark
       >
         {dataFromServer.simpleNovelInfo.map((novel) => (
           <NovelRow key={novel.novelId} novel={novel} />

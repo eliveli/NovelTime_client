@@ -131,12 +131,14 @@ export const TitleEmphasis = styled.span`
   font-weight: 300;
   color: rgba(0, 0, 0, 0.7);
 `;
-export const FilterContnr = styled.div`
+export const FilterContnr = styled.div<{ isPlatformNovel?: true }>`
   display: flex;
   align-items: flex-end;
   gap: 25px;
 
   margin: 4px 0 12px 4px;
+
+  ${({ isPlatformNovel }) => isPlatformNovel && `margin: 9px 0 0 4px;`}
 `;
 export const Filter = styled.p<{ category: string; selectedCtgr: string }>`
   margin: 0;
@@ -188,4 +190,8 @@ export const LoadNovelListBtn = styled.button`
   color: rgba(100, 100, 100, 0.7);
   font-size: 13px;
   font-weight: 500;
+`;
+
+export const AddSpace = styled.div<{ height: number }>`
+  height: ${({ height }) => height}px;
 `;

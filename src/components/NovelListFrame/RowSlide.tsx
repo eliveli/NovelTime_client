@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { ReactNode, useRef, useState } from "react";
 // import { ThemeProvider } from "styled-components";
 import { useComponentWidth } from "utils";
 import { CategoryMark } from "components/CategoryMark";
@@ -33,6 +33,8 @@ type Props = React.PropsWithChildren<{
   };
 
   isShowAllMark?: boolean;
+
+  categoryFilter?: ReactNode;
 }>;
 
 export default function RowSlide({
@@ -46,6 +48,8 @@ export default function RowSlide({
   userMark,
 
   isShowAllMark,
+
+  categoryFilter,
 }: Props) {
   const albumContainerRef = useRef<HTMLDivElement>(null);
   const showAlbumWidth = useComponentWidth(albumContainerRef); // 보이는 앨범 width
@@ -71,6 +75,7 @@ export default function RowSlide({
         infoFromUserPage={infoFromUserPage}
         isShowAllMark={isShowAllMark}
       />
+      {categoryFilter}
       <RowSlideContainer>
         <RowAlbumContainer ref={albumContainerRef}>
           <RowAlbum moveX={albumX}>{children}</RowAlbum>
