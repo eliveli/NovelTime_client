@@ -330,9 +330,17 @@ export function NavMobileDetail({ parameter, pathname, handleMsgList }: DetailPr
           if (idx === 2 && pathname.includes(_[0])) {
             return <PageTitle>{_[1]}</PageTitle>;
           }
-          if ([3, 4].includes(idx) && pathname.includes(_[0])) {
+          if (idx === 3 && pathname.includes(_[0])) {
             return (
               <PageTitle>
+                <UserImg userImg={_[1]} />
+                <UserName>{_[2]}</UserName>
+              </PageTitle>
+            );
+          }
+          if (idx === 4 && pathname.includes(_[0])) {
+            return (
+              <PageTitle onClick={() => navigate(`user_page/${_[2]}`)}>
                 <UserImg userImg={_[1]} />
                 <UserName>{_[2]}</UserName>
               </PageTitle>

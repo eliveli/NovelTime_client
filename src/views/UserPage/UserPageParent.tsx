@@ -1,7 +1,7 @@
 import { useAppDispatch } from "store/hooks";
 import { setUserInfo } from "store/clientSlices/userInfoSlice";
 import { messageIconUserPage } from "assets/images";
-import { Outlet, useParams } from "react-router-dom";
+import { Outlet, useNavigate, useParams } from "react-router-dom";
 import {
   ProfileContnr,
   ProfileAlign,
@@ -22,12 +22,13 @@ interface ProfileProps {
 }
 
 function Profile({ userImg, userName }: ProfileProps) {
+  const navigate = useNavigate();
   return (
     <ProfileContnr>
       <ProfileAlign>
         <ProfileUserCntnr>
           <UserImg userImg={userImg} />
-          <UserName>{userName}</UserName>
+          <UserName onClick={() => navigate(`user_page/${userName}`)}>{userName}</UserName>
           <MessageIcon src={messageIconUserPage} alt="message" />
         </ProfileUserCntnr>
       </ProfileAlign>

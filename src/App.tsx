@@ -67,6 +67,7 @@ function App() {
               "/user_page/:userName/othersWriting",
               "/user_page/:userName/myList/:listId",
               "/user_page/:userName/othersList/:listId",
+              "*",
             ].map((path) => (
               <Route path={path} element={<DetailNav />} />
             ))}
