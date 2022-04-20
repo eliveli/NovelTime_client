@@ -20,11 +20,12 @@ import {
   LoginIconBox,
   Logo,
   LogoContnr,
+  LoginLink,
 } from "./Modal.styles";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { closeModal, sortWriting, filterContent } from "../../store/clientSlices/modalSlice";
 import { usePreventScroll } from "../../utils";
-import useCloseModalClickOutside from "./utils/useCloseModalClickOutside";
+import { KAKAO_AUTH_URL } from "./utils/OAuth";
 
 export default function Modal() {
   const dispatch = useAppDispatch();
@@ -127,18 +128,22 @@ export default function Modal() {
                   <ContentContnr>
                     <LoginTitle>로그인</LoginTitle>
                     <LoginCategoryContnr>
-                      <LoginCategory isKaKao>
-                        <LoginIconBox isKaKao size={20}>
-                          <Icon.Kakao />
-                        </LoginIconBox>
-                        카카오
-                      </LoginCategory>
-                      <LoginCategory>
-                        <LoginIconBox size={20}>
-                          <Icon.Naver />
-                        </LoginIconBox>
-                        네이버
-                      </LoginCategory>
+                      <LoginLink href={KAKAO_AUTH_URL}>
+                        <LoginCategory isKaKao>
+                          <LoginIconBox isKaKao size={20}>
+                            <Icon.Kakao />
+                          </LoginIconBox>
+                          카카오
+                        </LoginCategory>
+                      </LoginLink>
+                      <LoginLink>
+                        <LoginCategory>
+                          <LoginIconBox size={20}>
+                            <Icon.Naver />
+                          </LoginIconBox>
+                          네이버
+                        </LoginCategory>
+                      </LoginLink>
                     </LoginCategoryContnr>
                   </ContentContnr>
                   <LogoContnr>

@@ -155,7 +155,10 @@ export const LoginCategoryContnr = styled.div`
   flex-direction: column;
   gap: 20px;
 `;
+export const LoginLink = styled.a``;
 export const LoginCategory = styled.button<{ isKaKao?: true }>`
+  width: 100%;
+
   padding: 13px 15px;
   display: flex;
   align-items: center;

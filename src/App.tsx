@@ -28,6 +28,7 @@ import {
   NovelDetailMark,
   AddWriting,
   Home,
+  OAuthRedirectHandler,
 } from "views";
 import Modal from "components/Modal";
 import ScrollToTop from "utils/ScrollToTop";
@@ -78,6 +79,9 @@ function App() {
         </ScrollToTop>
         <Routes>
           <Route path="/" element={<Home />} />
+
+          <Route path="/oauth/callback/kakao" element={<OAuthRedirectHandler />} />
+
           <Route path="/talk_list" element={<FreeTalkList />} />
           <Route path="/recommend_list" element={<RecommendList />} />
 

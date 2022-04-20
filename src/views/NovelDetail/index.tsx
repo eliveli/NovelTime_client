@@ -152,6 +152,7 @@ export default function NovelDetail() {
         novelId={novelId as string}
         novelTitle={detailNovel.novelTitle}
         writing
+        isShowAllMark
       >
         {isTalk && arrayInfoTalk.map((talk) => <WritingTitle key={talk.talkId} writing={talk} />)}
         {!isTalk &&
