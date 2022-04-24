@@ -261,7 +261,8 @@ export function NavMobileDetail({ parameter, pathname, handleMsgList }: DetailPr
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const novelTitle = useAppSelector((state) => state.modal.novelTitle);
-  const userInfoNavMobile = useAppSelector((state) => state.userInfo.userInfoNavMobile);
+  const loginUserInfo = useAppSelector((state) => state.user.loginUserInfo);
+  const userInfoInUserPage = useAppSelector((state) => state.user.userInfoInUserPage);
   const { novelId } = useParams(); // when entering add-writing page from novel detail page
 
   //   const dispatch = useAppDispatch();
@@ -321,8 +322,8 @@ export function NavMobileDetail({ parameter, pathname, handleMsgList }: DetailPr
           ["talk_detail", "여기는 프리톡!"],
           ["recommend_detail", "여기는 리코멘드!"],
           ["add_writing", "add writing"],
-          ["message", userInfoNavMobile.userImg, userInfoNavMobile.userName],
-          ["user_page", userInfoNavMobile.userImg, userInfoNavMobile.userName],
+          ["message", loginUserInfo.userImg, loginUserInfo.userName],
+          ["user_page", userInfoInUserPage.userImg, userInfoInUserPage.userName],
         ].map((_, idx) => {
           if (idx === 2 && !pathname.includes(_[0]) && parameter?.novelId) {
             return <PageTitle>{novelTitle}</PageTitle>;

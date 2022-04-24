@@ -6,7 +6,7 @@ import { setupListeners } from "@reduxjs/toolkit/query";
 import modalReducer from "./clientSlices/modalSlice";
 import writingReducer from "./clientSlices/writingSlice";
 import filterReducer from "./clientSlices/filterSlice";
-import userInfoReducer from "./clientSlices/userInfoSlice";
+import userReducer from "./clientSlices/userSlice";
 
 import { novelTimeApi } from "./serverAPIs/novelTime";
 
@@ -16,7 +16,7 @@ const store = configureStore({
     modal: modalReducer,
     writing: writingReducer,
     filter: filterReducer,
-    userInfo: userInfoReducer,
+    user: userReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

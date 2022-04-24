@@ -1,5 +1,5 @@
 import { useAppDispatch } from "store/hooks";
-import { setUserInfo } from "store/clientSlices/userInfoSlice";
+import { setUserInfoForUserPage } from "store/clientSlices/userSlice";
 import { messageIconUserPage } from "assets/images";
 import { Outlet, useNavigate, useParams } from "react-router-dom";
 import {
@@ -42,7 +42,7 @@ export default function UserPageParent() {
 
   // set user info to show in nav
   const dispatch = useAppDispatch();
-  dispatch(setUserInfo(dataFromServer.userInfo));
+  dispatch(setUserInfoForUserPage(dataFromServer.userInfo));
 
   return (
     <>

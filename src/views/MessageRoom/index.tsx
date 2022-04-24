@@ -4,8 +4,6 @@ import { useEffect, useRef, useState } from "react";
 
 import { io } from "socket.io-client";
 import MainBG from "components/MainBG";
-import { useAppDispatch } from "store/hooks";
-import { setUserInfo } from "store/clientSlices/userInfoSlice";
 import { useParams } from "react-router-dom";
 import { WriteComment } from "components/Writing";
 import {
@@ -25,10 +23,6 @@ import {
 // server request with (roomIdMobile || roomIdTablet) //
 
 const messageRecord = {
-  user: {
-    userName: "ab",
-    userImg: "https://cdn.pixabay.com/photo/2017/02/01/09/52/animal-2029245_960_720.png",
-  },
   message: [
     {
       userImg: "",
@@ -236,8 +230,6 @@ export default function MessageRoom({ roomIdTablet }: { roomIdTablet?: string })
   // server request with (roomIdMobile || roomIdTablet) //
   const { roomId } = useParams();
   const roomIdMobile = roomId;
-  const dispatch = useAppDispatch();
-  dispatch(setUserInfo(messageRecord.user));
 
   // mark new date
   const dateRecord = useRef({ date: "", isNewDate: false });
