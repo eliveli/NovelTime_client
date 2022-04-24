@@ -16,3 +16,11 @@ export interface NovelInfo {
   isRecommendation: boolean;
   isFreeTalk: boolean;
 }
+export interface UserAndToken {
+  accessToken: string;
+  userInfo: {
+    userId: string;
+    userName: string;
+    userImg: string;
+  };
+}

@@ -3,11 +3,13 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export type IsUserState = {
   loginUserInfo: { userId: string; userName: string; userImg: string };
+  accessToken: string;
   userInfoInUserPage: { userName: string; userImg: string };
 };
 
 const initialState: IsUserState = {
   loginUserInfo: { userId: "", userName: "", userImg: "" },
+  accessToken: "",
   userInfoInUserPage: { userName: "", userImg: "" },
 };
 
@@ -21,7 +23,9 @@ export const userSlice = createSlice({
     ) => {
       state.loginUserInfo = action.payload;
     },
-
+    setAccessToken: (state, action: PayloadAction<string>) => {
+      state.accessToken = action.payload;
+    },
     setUserInfoForUserPage: (
       state,
       action: PayloadAction<{ userName: string; userImg: string }>,
@@ -36,6 +40,6 @@ export const userSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { setUserInfoForUserPage, setLoginUserInfo } = userSlice.actions;
+export const { setUserInfoForUserPage, setLoginUserInfo, setAccessToken } = userSlice.actions;
 
 export default userSlice.reducer;
