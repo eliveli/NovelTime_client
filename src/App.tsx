@@ -33,16 +33,26 @@ import {
 import Modal from "components/Modal";
 import ScrollToTop from "utils/ScrollToTop";
 import { useGetAccessTokenQuery } from "store/serverAPIs/novelTime";
+import { setLoginUserInfo, setAccessToken } from "store/clientSlices/userSlice";
+import { useDispatch } from "react-redux";
 import { ThemeProvider } from "styled-components";
 import theme from "assets/styles/theme";
 import GlobalStyle from "./assets/styles/GlobalStyle";
 
 function App() {
+  const dispatch = useDispatch();
+
   // 로그인 직후에는 요청 안 하게 해야 하는데
   // get access token and user info when browser refresh and token is expired
   const { data, error, isLoading } = useGetAccessTokenQuery(undefined, {
     pollingInterval: 1800000 - 10000, // millisecond
   });
+
+  // store access token and user info
+  if (data) {
+    dispatch(setLoginUserInfo(data.userInfo));
+    dispatch(setAccessToken(data.accessToken));
+  }
 
   if (error) {
     console.log("refresh token error : ", error);

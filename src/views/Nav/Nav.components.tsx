@@ -68,7 +68,7 @@ export function NavPC({ pathname }: Props) {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  const isLogin = false;
+  const loginUserInfo = useAppSelector((state) => state.user.loginUserInfo);
 
   return (
     <ThemeProvider theme={theme}>
@@ -109,7 +109,7 @@ export function NavPC({ pathname }: Props) {
             <Icon.Search />
           </SearchIconBox>
 
-          {isLogin && (
+          {loginUserInfo.userName && (
             <MyPageBtn
               onClick={() => {
                 navigate(`/user_page/:userId`);
@@ -118,7 +118,7 @@ export function NavPC({ pathname }: Props) {
               보관함
             </MyPageBtn>
           )}
-          {!isLogin && (
+          {!loginUserInfo.userName && (
             <LoginText
               onClick={() => {
                 dispatch(openModal("login"));
@@ -139,8 +139,7 @@ export function NavMobileMainTop() {
   const navigate = useNavigate();
 
   const dispatch = useAppDispatch();
-
-  const isLogin = false;
+  const loginUserInfo = useAppSelector((state) => state.user.loginUserInfo);
 
   return (
     <ThemeProvider theme={theme}>
@@ -161,7 +160,7 @@ export function NavMobileMainTop() {
           >
             <Icon.Search />
           </SearchIconBox>
-          {isLogin && (
+          {loginUserInfo.userName && (
             <MyPageBtn
               onClick={() => {
                 navigate(`/user_page/:userId`);
@@ -170,7 +169,7 @@ export function NavMobileMainTop() {
               보관함
             </MyPageBtn>
           )}
-          {!isLogin && (
+          {!loginUserInfo.userName && (
             <LoginText
               onClick={() => {
                 dispatch(openModal("login"));
@@ -180,7 +179,7 @@ export function NavMobileMainTop() {
             </LoginText>
           )}
           {/* following is for mobile size */}
-          {!isLogin && (
+          {!loginUserInfo.userName && (
             <LoginIconBox
               onClick={() => {
                 dispatch(openModal("login"));
@@ -200,8 +199,6 @@ export function NavMobileMainBottom({ pathname }: Props) {
   const dispatch = useAppDispatch();
 
   const navigate = useNavigate();
-
-  const isLogin = false; // is necessary when clicking add-writing button
 
   return (
     <ThemeProvider theme={theme}>

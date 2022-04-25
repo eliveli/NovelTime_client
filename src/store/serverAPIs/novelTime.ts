@@ -30,7 +30,7 @@ export const novelTimeApi = createApi({
       query: (AUTHORIZE_CODE) => `/user/login/kakao?code=${AUTHORIZE_CODE}`,
     }),
     getAccessToken: builder.query<UserAndToken, undefined>({
-      query: (undefined) => `/user/refreshToken`,
+      query: () => `/user/refreshToken`,
     }),
   }),
 });
