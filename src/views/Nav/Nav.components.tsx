@@ -112,7 +112,7 @@ export function NavPC({ pathname }: Props) {
           {loginUserInfo.userName && (
             <MyPageBtn
               onClick={() => {
-                navigate(`/user_page/:userId`);
+                navigate(`/user_page/${loginUserInfo.userName}`);
               }}
             >
               보관함
@@ -163,7 +163,7 @@ export function NavMobileMainTop() {
           {loginUserInfo.userName && (
             <MyPageBtn
               onClick={() => {
-                navigate(`/user_page/:userId`);
+                navigate(`/user_page/${loginUserInfo.userName}`);
               }}
             >
               보관함

@@ -28,7 +28,7 @@ function Profile({ userImg, userName }: ProfileProps) {
       <ProfileAlign>
         <ProfileUserCntnr>
           <UserImg userImg={userImg} />
-          <UserName onClick={() => navigate(`user_page/${userName}`)}>{userName}</UserName>
+          <UserName onClick={() => navigate(`/user_page/${userName}`)}>{userName}</UserName>
           <MessageIcon src={messageIconUserPage} alt="message" />
         </ProfileUserCntnr>
       </ProfileAlign>
