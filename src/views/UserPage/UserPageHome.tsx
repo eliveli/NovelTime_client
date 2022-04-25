@@ -2,11 +2,14 @@ import React, { useState } from "react";
 import MainBG from "components/MainBG";
 
 import { CategoryMark } from "components/CategoryMark";
+import { useAppSelector } from "store/hooks";
+import { useParams } from "react-router-dom";
 import { RowSlide } from "../../components/NovelListFrame";
 import { NovelRow } from "../../components/Novel";
 
 import { WritingSection } from "./UserPage.styles";
 import { Writing, Comment, WritingFilter } from "./UserPage.components";
+import contentMark from "./utils/contentMark";
 
 // server request with userName
 const dataFromServer = {
@@ -313,19 +316,36 @@ const dataFromServer = {
 };
 
 export default function UserPageHome() {
-  //   const { userName } = useParams();
-  const userName = "나나나" as string; // later remove this and cancel the comment mark above
-  const loginUserName = "나나" as string; // later change it to real login user name
-
-  // which is the list owner me or other
-  // if it is the login user's list return "my", if not the name of user
-  const myListUserMark = userName === loginUserName ? `My` : `${userName}'s`;
-  const myListMarkText = `${myListUserMark} Novel List`;
-  const othersListUserMark = userName === loginUserName ? `I` : `${userName}`;
-  const othersListMarkText = `Other's Novel List ${othersListUserMark} Like`;
+  const loginUserInfo = useAppSelector((state) => state.user.loginUserInfo);
+  const { userName } = useParams();
 
   // server request with userName
 
+  // get the content mark
+  const myWritingMark = contentMark(
+    userName as string,
+    loginUserInfo.userName,
+    true, // isMyContent
+    true, // isWriting
+  );
+  const othersWritingMark = contentMark(
+    userName as string,
+    loginUserInfo.userName,
+    false, // isMyContent
+    true, // isWriting
+  );
+  const myListMark = contentMark(
+    userName as string,
+    loginUserInfo.userName,
+    true, // isMyContent
+    false, // isWriting
+  );
+  const othersListMark = contentMark(
+    userName as string,
+    loginUserInfo.userName,
+    false, // isMyContent
+    false, // isWriting
+  );
   // set filter category
   const [myFilter, setMyFilter] = useState("프리톡");
   const [otherFilter, setOtherFilter] = useState("프리톡");
@@ -334,11 +354,11 @@ export default function UserPageHome() {
     <MainBG>
       <CategoryMark
         infoFromUserPage={{
-          userName,
+          userName: userName as string,
           path: "myWriting",
         }}
         isShowAllButton="모두 보기"
-        categoryText="My Writing"
+        categoryText={myWritingMark}
       />
       <WritingFilter
         writingCategory={["프리톡", "추천", "댓글"]}
@@ -356,11 +376,11 @@ export default function UserPageHome() {
 
       <CategoryMark
         infoFromUserPage={{
-          userName,
+          userName: userName as string,
           path: "othersWriting",
         }}
         isShowAllButton="모두 보기"
-        categoryText="Other's Writing I like"
+        categoryText={othersWritingMark}
       />
 
       <WritingFilter
@@ -377,14 +397,14 @@ export default function UserPageHome() {
 
       <CategoryMark
         infoFromUserPage={{
-          userName,
+          userName: userName as string,
           path: "myList",
           list: {
             isMainCategory: true,
             listId: dataFromServer.novelList.isMyList[0].listId,
           },
         }}
-        categoryText={myListMarkText}
+        categoryText={myListMark}
         isShowAllButton="모두 보기"
       />
       {dataFromServer.novelList.isMyList.map((list) => (
@@ -393,7 +413,7 @@ export default function UserPageHome() {
           categoryText={list.listTitle}
           novelNO={list.novel.length}
           infoFromUserPage={{
-            userName,
+            userName: userName as string,
             path: "myList",
             list: { isMainCategory: false, listId: list.listId },
           }}
@@ -406,14 +426,14 @@ export default function UserPageHome() {
       ))}
       <CategoryMark
         infoFromUserPage={{
-          userName,
+          userName: userName as string,
           path: "othersList",
           list: {
             isMainCategory: true,
             listId: dataFromServer.novelList.isOthersList[0].listId,
           },
         }}
-        categoryText={othersListMarkText}
+        categoryText={othersListMark}
         isShowAllButton="모두 보기"
       />
       {dataFromServer.novelList.isOthersList.map((list) => (
@@ -422,7 +442,7 @@ export default function UserPageHome() {
           categoryText={list.listTitle}
           novelNO={list.novel.length}
           infoFromUserPage={{
-            userName,
+            userName: userName as string,
             path: "othersList",
             list: { isMainCategory: false, listId: list.listId },
           }}

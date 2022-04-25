@@ -2,6 +2,8 @@ import MainBG from "components/MainBG";
 import { CategoryMark } from "components/CategoryMark";
 import { useState } from "react";
 import Icon from "assets/Icon";
+import { useAppSelector } from "store/hooks";
+import { useParams } from "react-router-dom";
 import { Writing, Comment, WritingFilter } from "./UserPage.components";
 import { ShareIconBox, WritingSection } from "./UserPage.styles";
 import contentMark from "./utils/contentMark";
@@ -70,12 +72,17 @@ const dataFromServer = {
 export default function UserPageWriting({ isMyWriting }: { isMyWriting: boolean }) {
   // server request with userName //
 
-  //   const { userName } = useParams();
-  const userName = "나나나" as string; // later remove this and cancel the comment mark above
-  const loginUserName = "나나" as string; // later change it to real login user name
+  const loginUserInfo = useAppSelector((state) => state.user.loginUserInfo);
+
+  const { userName } = useParams();
 
   // get the content page mark
-  const contentPageMark = contentMark(userName, loginUserName, isMyWriting, true);
+  const contentPageMark = contentMark(
+    userName as string,
+    loginUserInfo.userName,
+    isMyWriting,
+    true,
+  );
 
   // writing category array : my writing or other's writing
   const writingCategory = isMyWriting ? ["프리톡", "추천", "댓글"] : ["프리톡", "추천"];

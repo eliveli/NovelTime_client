@@ -4,6 +4,7 @@ import MainBG from "components/MainBG";
 import { NovelRow } from "components/Novel";
 import { useRef, useState } from "react";
 import { useParams } from "react-router-dom";
+import { useAppSelector } from "store/hooks";
 import { useComponentWidth, useComponentScrollWidth, useComponentHeight } from "utils";
 import {
   ContainerWidth,
@@ -144,12 +145,12 @@ const novelList = {
 };
 
 export default function UserPageNovelList({ isMyList }: { isMyList: boolean }) {
-  //   const { userName } = useParams();
-  const userName = "나나나" as string; // later remove this and cancel the comment mark above
-  const loginUserName = "나나" as string; // later change it to real login user name
+  const loginUserInfo = useAppSelector((state) => state.user.loginUserInfo);
+
+  const { userName } = useParams();
 
   // get the content page mark
-  const contentPageMark = contentMark(userName, loginUserName, isMyList, false);
+  const contentPageMark = contentMark(userName as string, loginUserInfo.userName, isMyList, false);
 
   // set list title
   const [currentList, selectList] = useState({
@@ -253,7 +254,7 @@ export default function UserPageNovelList({ isMyList }: { isMyList: boolean }) {
           isListMore={isListMore}
           ref={titleListRef}
         >
-          {userName !== loginUserName && (
+          {userName !== loginUserInfo.userName && (
             <HearIconBox
               isLike={isLike}
               size={28}
