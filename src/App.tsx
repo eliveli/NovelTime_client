@@ -41,7 +41,6 @@ import GlobalStyle from "./assets/styles/GlobalStyle";
 
 function App() {
   const dispatch = useAppDispatch();
-  const loginUserInfo = useAppSelector((state) => state.user.loginUserInfo);
 
   // now I request when refreshing website and polling interval to get access token
   // but it is also the same with non-login user and a user who login at the last second when they don't need to do so
