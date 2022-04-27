@@ -27,7 +27,7 @@ import {
 import { RiRunLine, RiShareForward2Fill, RiKakaoTalkFill } from "react-icons/ri";
 import { MdOutlineShare, MdOutlineMoreHoriz } from "react-icons/md";
 import { IoIosSearch, IoMdClose } from "react-icons/io";
-import { AiOutlineUser, AiOutlineMessage } from "react-icons/ai";
+import { AiOutlineUser, AiOutlineMessage, AiOutlineLogout } from "react-icons/ai";
 import { FiMessageCircle } from "react-icons/fi";
 import { ImBooks } from "react-icons/im";
 import { GiBookshelf } from "react-icons/gi";
@@ -111,6 +111,9 @@ const Icon = {
     ${iconStyleHover()};
   `,
   Login: styled(AiOutlineUser)`
+    ${iconStyle()};
+  `,
+  Logout: styled(AiOutlineLogout)`
     ${iconStyle()};
   `,
   Text: styled(BsJournalRichtext)`

@@ -1,5 +1,7 @@
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+
+import { useAppDispatch } from "store/hooks";
+
 import { setLoginUserInfo, setAccessToken } from "store/clientSlices/userSlice";
 import { useGetLoginKakaoQuery } from "store/serverAPIs/novelTime";
 import {} from "./OAuthRedirectHandler.styles";
@@ -13,20 +15,20 @@ export default function OAuthRedirectHandler() {
   console.log(data || error || isLoading);
 
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   // login success : store login info and access token in memory
   if (data) {
     dispatch(setLoginUserInfo(data.userInfo));
     dispatch(setAccessToken(data.accessToken));
-    navigate(-2);
+    navigate("/", { replace: true });
   }
 
   // login failed
   if (error) {
     console.log("소셜로그인 에러", error);
     window.alert("로그인에 실패하였습니다.");
-    navigate(-2);
+    navigate("/", { replace: true });
   }
 
   //   페이지 새로고침 시, 또는 액세스 토큰 만료 기간마다 인터벌로 리프레시 요청 보내기

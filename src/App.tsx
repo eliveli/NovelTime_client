@@ -34,19 +34,25 @@ import Modal from "components/Modal";
 import ScrollToTop from "utils/ScrollToTop";
 import { useGetAccessTokenQuery } from "store/serverAPIs/novelTime";
 import { setLoginUserInfo, setAccessToken } from "store/clientSlices/userSlice";
-import { useDispatch } from "react-redux";
+import { useAppDispatch, useAppSelector } from "store/hooks";
 import { ThemeProvider } from "styled-components";
 import theme from "assets/styles/theme";
 import GlobalStyle from "./assets/styles/GlobalStyle";
 
 function App() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
+  const loginUserInfo = useAppSelector((state) => state.user.loginUserInfo);
 
-  // 로그인 직후에는 요청 안 하게 해야 하는데
-  // get access token and user info when browser refresh and token is expired
+  // now I request when refreshing website and polling interval to get access token
+  // but it is also the same with non-login user and a user who login at the last second when they don't need to do so
+  // in this case is there any way I don't request?
+
+  // get access token and user info automatically when browser refresh and token is expired
   const { data, error, isLoading } = useGetAccessTokenQuery(undefined, {
     pollingInterval: 1800000 - 10000, // millisecond
   });
+
+  console.log("in app component");
 
   // store access token and user info
   if (data) {
@@ -54,8 +60,12 @@ function App() {
     dispatch(setAccessToken(data.accessToken));
   }
 
+  // user didn't login(token doesn't exist) or refresh token is invalid
   if (error) {
     console.log("refresh token error : ", error);
+    //
+    // what I want is : if there is an error as user didn't login, don't request with pollingInterval
+    // how can I do this? is it not possible?
   }
 
   return (

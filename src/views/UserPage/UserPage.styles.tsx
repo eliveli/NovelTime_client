@@ -46,6 +46,9 @@ export const MessageIcon = styled.img`
   width: 37px;
   height: 37px;
 `;
+export const LogOutIconBox = styled(Icon.IconBox)`
+  margin-left: 15px;
+`;
 export const ProfileUserCntnr = styled.div`
   display: flex;
   align-items: flex-end;

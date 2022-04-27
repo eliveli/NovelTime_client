@@ -1,7 +1,14 @@
-import { useAppDispatch } from "store/hooks";
-import { setUserInfoForUserPage } from "store/clientSlices/userSlice";
+import { useAppDispatch, useAppSelector } from "store/hooks";
+import {
+  setLoginUserInfo,
+  setAccessToken,
+  setUserInfoForUserPage,
+} from "store/clientSlices/userSlice";
 import { messageIconUserPage } from "assets/images";
 import { Outlet, useNavigate, useParams } from "react-router-dom";
+import Icon from "assets/Icon";
+import { useGetLogoutQuery } from "store/serverAPIs/novelTime";
+import { useState } from "react";
 import {
   ProfileContnr,
   ProfileAlign,
@@ -9,6 +16,7 @@ import {
   UserImg,
   UserName,
   MessageIcon,
+  LogOutIconBox,
 } from "./UserPage.styles";
 
 // server request with userName
@@ -23,13 +31,46 @@ interface ProfileProps {
 
 function Profile({ userImg, userName }: ProfileProps) {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const loginUserInfo = useAppSelector((state) => state.user.loginUserInfo);
+  const accessToken = useAppSelector((state) => state.user.accessToken);
+
+  const [isLogout, setLogout] = useState(false);
+
+  // after logout remove access token and user info in store
+  const { data, error, isLoading, isUninitialized } = useGetLogoutQuery(undefined, {
+    skip: !isLogout,
+  });
+  console.log("error: ", error);
+  console.log("data:", data);
+  console.log("accessToken:", accessToken);
+  console.log("isLogout:", isLogout);
+  console.log("isLoading:", isLoading);
+
+  if (data && loginUserInfo.userId) {
+    console.log("in logout handler");
+    dispatch(setAccessToken(""));
+    dispatch(setLoginUserInfo({ userId: "", userName: "", userImg: "" }));
+  }
+  const handleLogout = () => {
+    alert("로그아웃 하시겠습니까?");
+    setLogout(true);
+  };
   return (
     <ProfileContnr>
       <ProfileAlign>
         <ProfileUserCntnr>
           <UserImg userImg={userImg} />
           <UserName onClick={() => navigate(`/user_page/${userName}`)}>{userName}</UserName>
-          <MessageIcon src={messageIconUserPage} alt="message" />
+          {/* message icon for other's page, logout icon for login user's page */}
+          {loginUserInfo.userName === dataFromServer.userInfo.userName ? (
+            // {loginUserInfo.userName !== dataFromServer.userInfo.userName ? ( // use this not above
+            <MessageIcon src={messageIconUserPage} alt="message" />
+          ) : (
+            <LogOutIconBox size={33} onClick={handleLogout}>
+              <Icon.Logout />
+            </LogOutIconBox>
+          )}
         </ProfileUserCntnr>
       </ProfileAlign>
     </ProfileContnr>

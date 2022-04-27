@@ -32,9 +32,17 @@ export const novelTimeApi = createApi({
     getAccessToken: builder.query<UserAndToken, undefined>({
       query: () => `/user/refreshToken`,
     }),
+    getLogout: builder.query<undefined, undefined>({
+      query: () => `/user/logout`,
+    }),
   }),
 });
 
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
-export const { useGetNovelByIdQuery, useGetLoginKakaoQuery, useGetAccessTokenQuery } = novelTimeApi;
+export const {
+  useGetNovelByIdQuery,
+  useGetLoginKakaoQuery,
+  useGetLogoutQuery,
+  useGetAccessTokenQuery,
+} = novelTimeApi;
