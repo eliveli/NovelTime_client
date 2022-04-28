@@ -21,7 +21,7 @@ import {
 
 // server request with userName
 const dataFromServer = {
-  userInfo: { userName: "나나나", userImg: "" },
+  userInfo: { userName: "신은혜 eunhye", userImg: "" },
 };
 
 interface ProfileProps {
@@ -41,11 +41,6 @@ function Profile({ userImg, userName }: ProfileProps) {
   const { data, error, isLoading, isUninitialized } = useGetLogoutQuery(undefined, {
     skip: !isLogout,
   });
-  console.log("error: ", error);
-  console.log("data:", data);
-  console.log("accessToken:", accessToken);
-  console.log("isLogout:", isLogout);
-  console.log("isLoading:", isLoading);
 
   if (data && loginUserInfo.userId) {
     console.log("in logout handler");
@@ -63,8 +58,7 @@ function Profile({ userImg, userName }: ProfileProps) {
           <UserImg userImg={userImg} />
           <UserName onClick={() => navigate(`/user_page/${userName}`)}>{userName}</UserName>
           {/* message icon for other's page, logout icon for login user's page */}
-          {loginUserInfo.userName === dataFromServer.userInfo.userName ? (
-            // {loginUserInfo.userName !== dataFromServer.userInfo.userName ? ( // use this not above
+          {loginUserInfo.userName !== dataFromServer.userInfo.userName ? (
             <MessageIcon src={messageIconUserPage} alt="message" />
           ) : (
             <LogOutIconBox size={33} onClick={handleLogout}>

@@ -1,7 +1,8 @@
 /* eslint-disable */
 // 지금은 뷰 구성에 집중할 것임. 린트 무시하는 주석은 나중에 해제하기
-import React from "react";
+import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route, Outlet } from "react-router-dom";
+
 import {
   NovelDetailRecommend,
   NovelDetailTalk,
@@ -43,12 +44,14 @@ function App() {
   const dispatch = useAppDispatch();
 
   // now I request when refreshing website and polling interval to get access token
-  // but it is also the same with non-login user and a user who login at the last second when they don't need to do so
-  // in this case is there any way I don't request?
+  // but is there any way I don't request right after login?
+
+  const [isNonLogin, handleNoneLogin] = useState(false);
 
   // get access token and user info automatically when browser refresh and token is expired
   const { data, error, isLoading } = useGetAccessTokenQuery(undefined, {
     pollingInterval: 1800000 - 10000, // millisecond
+    skip: isNonLogin,
   });
 
   console.log("in app component");
@@ -59,12 +62,13 @@ function App() {
     dispatch(setAccessToken(data.accessToken));
   }
 
-  // user didn't login(token doesn't exist) or refresh token is invalid
+  // as user didn't login(token doesn't exist) or refresh token is invalid
   if (error) {
     console.log("refresh token error : ", error);
-    //
-    // what I want is : if there is an error as user didn't login, don't request with pollingInterval
-    // how can I do this? is it not possible?
+  }
+  // prevent non login user from "pollingInterval"
+  if (error && "data" in error && error.data.message === "non login user") {
+    handleNoneLogin(true);
   }
 
   return (

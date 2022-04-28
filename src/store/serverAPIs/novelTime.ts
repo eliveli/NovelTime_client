@@ -1,7 +1,22 @@
 // Need to use the React-specific entry point to import createApi
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { createApi, fetchBaseQuery, BaseQueryFn } from "@reduxjs/toolkit/query/react";
 import { NovelInfo, UserAndToken } from "./types";
 import type { RootState } from "../index";
+
+interface FetchArgs extends RequestInit {
+  url: string;
+  params?: Record<string, any>;
+  body?: any;
+  responseHandler?: "json" | "text" | ((response: Response) => Promise<any>);
+  validateStatus?: (response: Response, body: any) => boolean;
+}
+interface CustomError {
+  data: {
+    message: string;
+  };
+  status: number;
+}
+
 // Define a service using a base URL and expected endpoints
 export const novelTimeApi = createApi({
   reducerPath: "novelTimeApi",
@@ -21,7 +36,7 @@ export const novelTimeApi = createApi({
 
       return headers;
     },
-  }),
+  }) as BaseQueryFn<string | FetchArgs, unknown, CustomError, {}>,
   endpoints: (builder) => ({
     getNovelById: builder.query<NovelInfo, string>({
       query: (novelId) => `/novels/detail/${novelId}`,
