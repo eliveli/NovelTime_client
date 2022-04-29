@@ -2,6 +2,7 @@ import { useAppDispatch, useAppSelector } from "store/hooks";
 import {
   setLoginUserInfo,
   setAccessToken,
+  setLogout,
   setUserInfoForUserPage,
 } from "store/clientSlices/userSlice";
 import { messageIconUserPage } from "assets/images";
@@ -33,9 +34,7 @@ function Profile({ userImg, userName }: ProfileProps) {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const loginUserInfo = useAppSelector((state) => state.user.loginUserInfo);
-  const accessToken = useAppSelector((state) => state.user.accessToken);
-
-  const [isLogout, setLogout] = useState(false);
+  const isLogout = useAppSelector((state) => state.user.isLogout);
 
   // after logout remove access token and user info in store
   const { data, error, isLoading, isUninitialized } = useGetLogoutQuery(undefined, {
@@ -49,7 +48,9 @@ function Profile({ userImg, userName }: ProfileProps) {
   }
   const handleLogout = () => {
     alert("로그아웃 하시겠습니까?");
-    setLogout(true);
+    dispatch(setLogout(true));
+    // it is not required to set logout with undefined again
+    // because when user login, page will be refreshed then isLogout state will be undefined
   };
   return (
     <ProfileContnr>

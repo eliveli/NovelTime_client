@@ -4,12 +4,14 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 export type IsUserState = {
   loginUserInfo: { userId: string; userName: string; userImg: string };
   accessToken: string;
+  isLogout: true | undefined; // this state will be reset as undefined when user login and refresh page
   userInfoInUserPage: { userName: string; userImg: string };
 };
 
 const initialState: IsUserState = {
   loginUserInfo: { userId: "", userName: "", userImg: "" },
   accessToken: "",
+  isLogout: undefined,
   userInfoInUserPage: { userName: "", userImg: "" },
 };
 
@@ -26,6 +28,9 @@ export const userSlice = createSlice({
     setAccessToken: (state, action: PayloadAction<string>) => {
       state.accessToken = action.payload;
     },
+    setLogout: (state, action: PayloadAction<true | undefined>) => {
+      state.isLogout = action.payload;
+    },
     setUserInfoForUserPage: (
       state,
       action: PayloadAction<{ userName: string; userImg: string }>,
@@ -40,6 +45,7 @@ export const userSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { setUserInfoForUserPage, setLoginUserInfo, setAccessToken } = userSlice.actions;
+export const { setUserInfoForUserPage, setLoginUserInfo, setLogout, setAccessToken } =
+  userSlice.actions;
 
 export default userSlice.reducer;

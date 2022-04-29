@@ -12,8 +12,13 @@ export default function OAuthRedirectHandler() {
 
   const { data, error, isLoading } = useGetLoginKakaoQuery(code);
 
-  console.log(data || error || isLoading);
-
+  console.log("in RedirectHandler");
+  if (isLoading) {
+    console.log("isLoading in RedirectHandler:", isLoading);
+  }
+  if (data) {
+    console.log("data in RedirectHandler:", data);
+  }
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 

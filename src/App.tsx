@@ -43,33 +43,79 @@ import GlobalStyle from "./assets/styles/GlobalStyle";
 function App() {
   const dispatch = useAppDispatch();
 
-  // now I request when refreshing website and polling interval to get access token
-  // but is there any way I don't request right after login?
+  const accessToken = useAppSelector((state) => state.user.accessToken);
+  const isLogout = useAppSelector((state) => state.user.isLogout);
 
   const [isNonLogin, handleNoneLogin] = useState(false);
 
   // get access token and user info automatically when browser refresh and token is expired
   const { data, error, isLoading } = useGetAccessTokenQuery(undefined, {
+    // pollingInterval: 10000, // millisecond
     pollingInterval: 1800000 - 10000, // millisecond
     skip: isNonLogin,
   });
 
   console.log("in app component");
-
-  // store access token and user info
+  console.log("accessToken in app component : ", accessToken);
+  if (isLoading) {
+    console.log("isLoading in App:", isLoading);
+  }
   if (data) {
-    dispatch(setLoginUserInfo(data.userInfo));
+    console.log("data in App:", data);
+  }
+
+  // don't dispatch when access token in cached data is the same with one in store
+  // to prevent "too many rerender" right after login
+  // to avoid that : dispatch - change state in store - component render - dispatch - change state ...
+  // store access token and user info
+  if (data && data.accessToken !== accessToken && isLogout === undefined) {
     dispatch(setAccessToken(data.accessToken));
+
+    handleNoneLogin(false);
+  }
+  if (data && !accessToken && isLogout === undefined) {
+    dispatch(setLoginUserInfo(data.userInfo));
   }
 
   // as user didn't login(token doesn't exist) or refresh token is invalid
   if (error) {
     console.log("refresh token error : ", error);
   }
+  // for non login user
   // prevent non login user from "pollingInterval"
-  if (error && "data" in error && error.data.message === "non login user") {
+  if (!accessToken && error && "data" in error && error.data.message === "non login user") {
     handleNoneLogin(true);
   }
+  // after user login immediately refresh browser
+  // this is required because user receive error message above immediately after login
+  if (!!accessToken && error && "data" in error && error.data.message === "non login user") {
+    // cookie from server is set on next page loading
+    // so do refresh page
+    window.location.href = window.location.href;
+  }
+
+  // 로그인 유저 인증
+  // - OAuth 이용, 인가코드 받고 서버에 넘겨 줌.
+  // - 서버에서는 인가코드를 카카오 서버에 주고 토큰을 받고
+  //   다시 토큰을 주고 유저 정보를 받아 옴.
+  //   받은 유저 정보로 jwt 만들어 클라이언트에 넘겨 줌
+  // - silent refresh 설계
+  // 1. 로그인 시
+  //   - 리프레시 토큰 in 쿠키 & 액세스 토큰 in 스토어 저장 : OAuth 핸들러 컴포넌트
+  //  -> 스토어에 토큰 존재 확인 후 페이지 새로고침 : App 컴포넌트
+  //      - 서버에서 받아 온 쿠키는 다음 페이지 로딩 후 사용가능하기 때문
+  //  -> 리프레시 토큰 in 쿠키 존재 -> 액세스 토큰 및 유저 정보 받아옴 -> 로그인 성공
+  // 2. 이전 로그인한 상태에서 페이지 새로고침 시
+  //   - 리프레시 토큰 주고 액세스 토큰 받아 와 로그인
+  // 3. 로그인 후 액세스 토큰 만료 기간마다 액세스 토큰 받아 와 로그인 상태 유지
+  //   - polling interval 이용
+  // 3. 로그아웃 시
+  //   - 액세스 토큰 및 유저 정보 스토어에서 지우기 : UserPageParent 컴포넌트
+  //   - 스토어의 로그아웃 상태 또한 true로 변경 : UserPageParent 컴포넌트
+  //  -> 액세스 토큰 상태를 구독하는 앱 컴포넌트의 무한 리렌더링 막기 : App 컴포넌트
+  //      - dispatch 작동 조건을 다음과 같이 설정했기에 가능 : isLogout === undefined
+  // 4. 비로그인일 경우
+  //   최초 페이지 진입 시 리프레시 요청 감. 이 때 non login user 에러 받고 polling interval 막기
 
   return (
     <Router>
