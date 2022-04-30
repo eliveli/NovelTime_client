@@ -8,7 +8,7 @@ import {
   BoardMark,
   LikeAndShare,
 } from "components/Writing";
-import { DotLine, DotAnimation, WritingAnimation } from "./RecommendDetail.styles";
+import { DotLine, DotAnimation, ContentAnimation } from "./RecommendDetail.styles";
 
 // server request by recommendId
 export default function NovelDetailRecommend() {
@@ -73,7 +73,7 @@ export default function NovelDetailRecommend() {
       <DotAnimation>
         <DotLine />
       </DotAnimation>
-      <WritingAnimation>
+      <ContentAnimation>
         <WritingDetailContainer>
           <BoardMark>Let's Recommend Novel!</BoardMark>
           <RecommendDetail detailRecommend={dataFromServer.recommend} />
@@ -82,7 +82,7 @@ export default function NovelDetailRecommend() {
             likeNO={dataFromServer.recommend.likeNO}
           />
         </WritingDetailContainer>
-      </WritingAnimation>
+      </ContentAnimation>
     </MainBG>
   );
 }

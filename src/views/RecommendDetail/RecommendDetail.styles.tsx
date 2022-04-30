@@ -17,11 +17,11 @@ to{
     opacity: 1;
   }
 `;
-const writingHidden = keyframes`
+const contentHidden = keyframes`
     from{opacity:0;}
     to{opacity:0;}
 `;
-const writingShowOn = keyframes`
+const contentShowOn = keyframes`
   from{
     clip-path:inset(0 0 100% 0);
     opacity: 0.1;
@@ -36,12 +36,13 @@ export const DotAnimation = styled.div`
   animation-direction: normal;
   animation-duration: 1.3s;
   animation-fill-mode: forwards;
-  /* animation-delay: ${1}s; //// later, delete it */
+  /* animation-delay: ${1}s; */
 `;
-export const WritingAnimation = styled.div`
-  animation-name: ${writingHidden}, ${writingShowOn};
+export const ContentAnimation = styled.div<{ isTalkComnt?: true }>`
+  animation-name: ${contentHidden}, ${contentShowOn};
   animation-direction: normal;
-  animation-duration: ${0.5}s, 1.3s; //// later, subtract 1 second from ${1 + 0.7}
   animation-fill-mode: forwards;
-  animation-delay: 0s, ${0.5}s; //// later, subtract 1 second from ${1 + 0.7}
+
+  animation-duration: ${({ isTalkComnt }) => (isTalkComnt ? `0.15s, 1.3s ` : `0.5s, 1.3s`)};
+  animation-delay: ${({ isTalkComnt }) => (isTalkComnt ? `0s, 0.15s ` : `0s, 0.5s`)};
 `;

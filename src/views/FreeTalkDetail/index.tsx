@@ -10,6 +10,7 @@ import {
   CommentList,
   WriteComment,
 } from "components/Writing";
+import { ContentAnimation } from "views/RecommendDetail/RecommendDetail.styles";
 
 // server request by talkID
 
@@ -139,8 +140,10 @@ export default function FreeTalkDetail() {
         <NovelInWriting novel={dataFromServer.novel} />
         <LikeAndShare isLike={dataFromServer.talk.isLike} likeNO={dataFromServer.talk.likeNO} />
       </WritingDetailContainer>
-      <CommentList commentList={commentList} commentIdForScroll={commentId} />
-      <WriteComment />
+      <ContentAnimation isTalkComnt>
+        <CommentList commentList={commentList} commentIdForScroll={commentId} />
+        <WriteComment />
+      </ContentAnimation>
     </MainBG>
   );
 }
