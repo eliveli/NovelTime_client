@@ -5,6 +5,7 @@ import {
   setLogout,
   setUserInfoForUserPage,
 } from "store/clientSlices/userSlice";
+import { openModal } from "store/clientSlices/modalSlice";
 import { messageIconUserPage } from "assets/images";
 import { Outlet, useNavigate, useParams } from "react-router-dom";
 import Icon from "assets/Icon";
@@ -18,6 +19,7 @@ import {
   UserName,
   MessageIcon,
   LogOutIconBox,
+  EditProfileBtn,
 } from "./UserPage.styles";
 
 // server request with userName
@@ -62,9 +64,14 @@ function Profile({ userImg, userName }: ProfileProps) {
           {loginUserInfo.userName !== dataFromServer.userInfo.userName ? (
             <MessageIcon src={messageIconUserPage} alt="message" />
           ) : (
-            <LogOutIconBox size={33} onClick={handleLogout}>
-              <Icon.Logout />
-            </LogOutIconBox>
+            <>
+              <EditProfileBtn onClick={() => dispatch(openModal("editProfile"))}>
+                수정
+              </EditProfileBtn>
+              <LogOutIconBox size={33} onClick={handleLogout}>
+                <Icon.Logout />
+              </LogOutIconBox>
+            </>
           )}
         </ProfileUserCntnr>
       </ProfileAlign>

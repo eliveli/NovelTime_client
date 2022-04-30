@@ -8,6 +8,7 @@ const GlobalStyle = createGlobalStyle`
     font-family: "Crimson Pro","Noto Sans KR","Californian FB","D2Coding", "Arial", sans-serif;
     font-weight: 300; // it can be 100 to 500 from font I received
     
+    
   }
   
   html{
@@ -16,9 +17,10 @@ const GlobalStyle = createGlobalStyle`
   body {
     margin: 0;
     line-height: 1.5;
-
+    
     font-size: 16px;
-    color: rgba(0,0,0,0.7);
+   
+    color: rgba(0,0,0,0.7); // do not set this in * . if so, svg img color is also set
     
     word-break: break-all; //줄바꿈 시 문자 단위로 설정(not 단어 단위)
     /* white-space: pre-line; // line break (with tab, use pre-wrap) */
@@ -29,7 +31,6 @@ const GlobalStyle = createGlobalStyle`
   a {
     text-decoration: none;
     color: rgba(0,0,0,0.7);
-
   }
   // in next project, give p tag "margin:0;"
   // it looks better to give "margin:0" to all tag "*" than the above

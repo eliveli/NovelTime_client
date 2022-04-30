@@ -60,6 +60,23 @@ export const ProfileUserCntnr = styled.div`
   `)}
 `;
 
+export const EditProfileBtn = styled.button`
+  white-space: nowrap;
+
+  margin-left: 15px;
+
+  border-radius: 20px;
+  padding: 2px 9px 2px 7px;
+  margin-left: 12px;
+
+  color: #ffffffbf;
+  background-color: transparent;
+  border: 1px solid #ffffff5c;
+
+  font-size: 13px;
+  font-weight: 300;
+`;
+
 export const WritingSection = styled.section`
   // in mobile
   display: flex;

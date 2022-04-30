@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import Icon from "assets/Icon";
 import { catWalking } from "assets/images";
 import {
@@ -12,7 +12,7 @@ import {
   SortText,
   ClosingSpace,
   TranslucentBG,
-  LoginBox,
+  ModalBox,
   LoginCategoryContnr,
   LoginCategory,
   LoginTitle,
@@ -21,6 +21,11 @@ import {
   Logo,
   LogoContnr,
   LoginLink,
+  ProfileImg,
+  ProfileImgBox,
+  ProfileName,
+  ProfileNameBox,
+  SelectBtn,
 } from "./Modal.styles";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { closeModal, sortWriting, filterContent } from "../../store/clientSlices/modalSlice";
@@ -42,6 +47,19 @@ export default function Modal() {
   // get selected category text to mark in the list
   const sortingText = useAppSelector((state) => state.modal.sortingText);
   const filteringContent = useAppSelector((state) => state.modal.filteringContent);
+
+  // get login user info
+  const loginUserInfo = useAppSelector((state) => state.user.loginUserInfo);
+  const userNameRef = useRef<HTMLInputElement>(null);
+
+  const confirmUserName = () => {
+    if (!userNameRef.current?.value) {
+      alert("유저 네임을 입력해 주세요");
+    }
+    // 서버에 보내서 동일 유저 네임 여부 확인
+    // 유저 네임 길이 제한(얼만큼?) 알림 문구도 미리 넣자.
+    // 성공하면 변경된 유저 네임 스토어에 저장
+  };
 
   // prevent scrolling body when modal displays
   usePreventScroll(modalCategory);
@@ -117,7 +135,7 @@ export default function Modal() {
           case "login":
             return (
               <TranslucentBG onClick={() => dispatch(closeModal())}>
-                <LoginBox
+                <ModalBox
                   onClick={(event: React.MouseEvent<HTMLElement>) => {
                     event.stopPropagation();
                   }}
@@ -149,9 +167,45 @@ export default function Modal() {
                   <LogoContnr>
                     <Logo src={catWalking} alt="cat walking" />
                   </LogoContnr>
-                </LoginBox>
+                </ModalBox>
               </TranslucentBG>
             );
+          case "editProfile":
+            return (
+              <TranslucentBG onClick={() => dispatch(closeModal())}>
+                <ModalBox
+                  padding="54px 40px"
+                  onClick={(event: React.MouseEvent<HTMLElement>) => {
+                    event.stopPropagation();
+                  }}
+                >
+                  <ClosingBox isSmallWidth onClick={() => dispatch(closeModal())}>
+                    <ClosingIcon />
+                  </ClosingBox>
+                  <ContentContnr>
+                    <ProfileImgBox>
+                      <ProfileImg userImg={loginUserInfo.userImg} />
+                      <SelectBtn isPhoto onClick={() => {}}>
+                        수정
+                      </SelectBtn>
+                    </ProfileImgBox>
+                    <ProfileNameBox>
+                      <ProfileName
+                        type="text"
+                        ref={userNameRef}
+                        defaultValue={loginUserInfo.userName}
+                      />
+                      <SelectBtn onClick={confirmUserName}>선택</SelectBtn>
+                    </ProfileNameBox>
+                    <SelectBtn isBG onClick={() => {}}>
+                      배경 수정
+                      {/* 배경 이미지도 요청 시 받아와야 하는군... */}
+                    </SelectBtn>
+                  </ContentContnr>
+                </ModalBox>
+              </TranslucentBG>
+            );
+
           case "none":
             // eslint-disable-next-line react/jsx-no-useless-fragment
             return <></>;

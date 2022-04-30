@@ -7,7 +7,7 @@ interface NovelLike {
 }
 
 export interface IsModalState {
-  modalCategory: "novelImage" | "sortWriting" | "filterContent" | "login" | "none";
+  modalCategory: "novelImage" | "sortWriting" | "filterContent" | "login" | "editProfile" | "none";
   novelImage: string;
   sortingText: string;
   filteringContent: string;
@@ -34,7 +34,9 @@ export const modalSlice = createSlice({
   reducers: {
     openModal: (
       state,
-      action: PayloadAction<"novelImage" | "sortWriting" | "filterContent" | "login" | "none">,
+      action: PayloadAction<
+        "novelImage" | "sortWriting" | "filterContent" | "login" | "editProfile" | "none"
+      >,
     ) => {
       state.modalCategory = action.payload;
     },
