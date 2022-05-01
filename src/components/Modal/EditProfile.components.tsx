@@ -1,5 +1,6 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { closeModal } from "store/clientSlices/modalSlice";
+import { useComponentHeight, useComponentWidth } from "utils";
 
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 
@@ -16,6 +17,7 @@ import {
   SelectBtn,
   SelectBtnBox,
   UploadImg,
+  CropImageCanvas,
 } from "./Modal.styles";
 
 export default function EditProfile() {
@@ -36,61 +38,95 @@ export default function EditProfile() {
   };
 
   // set image
-  const [selectedProfileImage, setSelectedProfileImage] = useState<null | File | Blob>(null);
+  const [selectedProfileImage, setSelectedProfileImage] = useState<string>("");
   const [selectedProfileBGImage, setSelectedProfileBGImage] = useState<null | File | Blob>(null);
-  return (
-    <TranslucentBG onClick={() => dispatch(closeModal())}>
-      <ModalBox
-        padding="54px 40px"
-        onClick={(event: React.MouseEvent<HTMLElement>) => {
-          event.stopPropagation();
-        }}
-      >
-        <ClosingBox isSmallWidth onClick={() => dispatch(closeModal())}>
-          <ClosingIcon />
-        </ClosingBox>
-        <ContentContnr>
-          <ProfileImgBox>
-            <ProfileImg userImg={loginUserInfo.userImg} />
-            <SelectBtnBox isPhoto>
-              <SelectBtn isPhoto onClick={() => {}}>
-                수정
-              </SelectBtn>
 
+  // convert file to DataURL
+  const handleProfileImage = (event: React.ChangeEvent<HTMLInputElement>) => {
+    event.preventDefault();
+    if (event && event.target && event.target.files) {
+      const reader = new FileReader();
+      const file = event.target.files[0];
+      reader.onloadend = () => {
+        setSelectedProfileImage(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+  // canvas
+  const cropImgCanvasRef = useRef<HTMLCanvasElement>(null);
+  // set canvas width and height as 100%
+  const BGRef = useRef<HTMLDivElement>(null);
+  const BGWidth = useComponentWidth(BGRef);
+  const BGHeight = useComponentHeight(BGRef);
+  // set canvas and draw image
+  useEffect(() => {
+    if (!cropImgCanvasRef.current) return;
+    const canvas = cropImgCanvasRef.current;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+    ctx.canvas.width = BGWidth;
+    ctx.canvas.height = BGHeight;
+
+    const image = new Image();
+    image.src = selectedProfileImage;
+
+    image.onload = () => {
+      ctx.drawImage(image, 150, 200, 500, 300, 60, 60, 500, 300);
+    };
+  }, [cropImgCanvasRef, selectedProfileImage, BGWidth, BGHeight]);
+  return (
+    <TranslucentBG onClick={() => dispatch(closeModal())} ref={BGRef}>
+      {selectedProfileImage && (
+        <CropImageCanvas width="100%" height="100%" ref={cropImgCanvasRef} />
+      )}
+      {!selectedProfileImage && (
+        <ModalBox
+          padding="54px 40px"
+          onClick={(event: React.MouseEvent<HTMLElement>) => {
+            event.stopPropagation();
+          }}
+        >
+          <ClosingBox isSmallWidth onClick={() => dispatch(closeModal())}>
+            <ClosingIcon />
+          </ClosingBox>
+          <ContentContnr>
+            <ProfileImgBox>
+              <ProfileImg userImg={selectedProfileImage || loginUserInfo.userImg} />
+              <SelectBtnBox isPhoto>
+                <SelectBtn isPhoto>수정</SelectBtn>
+
+                <UploadImg
+                  type="file"
+                  name="myImage"
+                  onChange={(event) => {
+                    handleProfileImage(event);
+                  }}
+                />
+              </SelectBtnBox>
+            </ProfileImgBox>
+            <ProfileNameBox>
+              <ProfileName type="text" ref={userNameRef} defaultValue={loginUserInfo.userName} />
+              <SelectBtn onClick={confirmUserName}>선택</SelectBtn>
+            </ProfileNameBox>
+            <SelectBtnBox isBG>
+              <SelectBtn isBG>
+                배경 수정
+                {/* 배경 이미지도 요청 시 받아와야 하는군... */}
+              </SelectBtn>
               <UploadImg
                 type="file"
-                name="myImage"
+                name="BGImage"
                 onChange={(event) => {
                   if (event && event.target && event.target.files) {
-                    console.log(event.target.files[0]);
-                    setSelectedProfileImage(event.target.files[0]);
+                    setSelectedProfileBGImage(event.target.files[0]);
                   }
                 }}
               />
             </SelectBtnBox>
-          </ProfileImgBox>
-          <ProfileNameBox>
-            <ProfileName type="text" ref={userNameRef} defaultValue={loginUserInfo.userName} />
-            <SelectBtn onClick={confirmUserName}>선택</SelectBtn>
-          </ProfileNameBox>
-          <SelectBtnBox isBG>
-            <SelectBtn isBG onClick={() => {}}>
-              배경 수정
-              {/* 배경 이미지도 요청 시 받아와야 하는군... */}
-            </SelectBtn>
-            <UploadImg
-              type="file"
-              name="myImage"
-              onChange={(event) => {
-                if (event && event.target && event.target.files) {
-                  console.log(event.target.files[0]);
-                  setSelectedProfileBGImage(event.target.files[0]);
-                }
-              }}
-            />
-          </SelectBtnBox>
-        </ContentContnr>
-      </ModalBox>
+          </ContentContnr>
+        </ModalBox>
+      )}
     </TranslucentBG>
   );
 }

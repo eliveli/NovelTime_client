@@ -142,6 +142,10 @@ export const TranslucentBG = styled.div`
   justify-content: center;
   align-items: center;
 `;
+export const CropImageCanvas = styled.canvas`
+  /* object-fit: contain; */
+`;
+
 export const ModalBox = styled.div<{ padding?: string }>`
   display: flex;
   flex-direction: column;
