@@ -229,29 +229,41 @@ export const ProfileName = styled.input`
   color: rgba(0, 0, 0, 0.7);
   width: 100%;
 `;
+export const UploadImg = styled.input`
+  position: absolute;
+
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0; // to not show but work
+`;
+export const SelectBtnBox = styled.div<{ isPhoto?: true; isBG?: true }>`
+  margin-left: 12px;
+
+  ${({ isPhoto }) =>
+    isPhoto &&
+    `position: absolute; bottom: 0;
+    right: 15px; margin:0;`}
+  ${({ isBG }) => isBG && ` margin: 0; margin-top: 40px; position: relative;`}
+`;
 export const SelectBtn = styled.button<{ isPhoto?: true; isBG?: true }>`
   border: 1px dotted rgba(0, 0, 0, 0.2);
   color: rgba(100, 100, 100, 0.7);
   font-size: 13px;
   font-weight: 500;
 
+  /* width: 100%; */
   white-space: nowrap;
-
-  margin-left: 15px;
 
   border-radius: 20px;
   padding: 2px 9px 2px 7px;
-  margin-left: 12px;
 
   background-color: transparent;
 
-  ${({ isPhoto }) =>
-    isPhoto &&
-    `position: absolute; bottom: 0;
-    right: 15px; margin:0;`}
   ${({ isBG }) =>
     isBG &&
-    ` margin: 0; margin-top: 40px; padding: 6px 18px 6px 18px;
+    `padding: 6px 18px 6px 18px;
     font-size: 14px;     border: 1px solid rgba(0,0,0,0.16);`}
 `;
 export const LoginIconBox = styled(Icon.IconBox)<{ isKaKao?: true }>`

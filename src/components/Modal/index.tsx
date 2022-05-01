@@ -26,6 +26,8 @@ import {
   ProfileName,
   ProfileNameBox,
   SelectBtn,
+  SelectBtnBox,
+  UploadImg,
 } from "./Modal.styles";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { closeModal, sortWriting, filterContent } from "../../store/clientSlices/modalSlice";
@@ -60,6 +62,10 @@ export default function Modal() {
     // 유저 네임 길이 제한(얼만큼?) 알림 문구도 미리 넣자.
     // 성공하면 변경된 유저 네임 스토어에 저장
   };
+
+  // set image
+  const [selectedProfileImage, setSelectedProfileImage] = useState<null | File | Blob>(null);
+  const [selectedProfileBGImage, setSelectedProfileBGImage] = useState<null | File | Blob>(null);
 
   // prevent scrolling body when modal displays
   usePreventScroll(modalCategory);
@@ -185,9 +191,22 @@ export default function Modal() {
                   <ContentContnr>
                     <ProfileImgBox>
                       <ProfileImg userImg={loginUserInfo.userImg} />
-                      <SelectBtn isPhoto onClick={() => {}}>
-                        수정
-                      </SelectBtn>
+                      <SelectBtnBox isPhoto>
+                        <SelectBtn isPhoto onClick={() => {}}>
+                          수정
+                        </SelectBtn>
+
+                        <UploadImg
+                          type="file"
+                          name="myImage"
+                          onChange={(event) => {
+                            if (event && event.target && event.target.files) {
+                              console.log(event.target.files[0]);
+                              setSelectedProfileImage(event.target.files[0]);
+                            }
+                          }}
+                        />
+                      </SelectBtnBox>
                     </ProfileImgBox>
                     <ProfileNameBox>
                       <ProfileName
@@ -197,10 +216,22 @@ export default function Modal() {
                       />
                       <SelectBtn onClick={confirmUserName}>선택</SelectBtn>
                     </ProfileNameBox>
-                    <SelectBtn isBG onClick={() => {}}>
-                      배경 수정
-                      {/* 배경 이미지도 요청 시 받아와야 하는군... */}
-                    </SelectBtn>
+                    <SelectBtnBox isBG>
+                      <SelectBtn isBG onClick={() => {}}>
+                        배경 수정
+                        {/* 배경 이미지도 요청 시 받아와야 하는군... */}
+                      </SelectBtn>
+                      <UploadImg
+                        type="file"
+                        name="myImage"
+                        onChange={(event) => {
+                          if (event && event.target && event.target.files) {
+                            console.log(event.target.files[0]);
+                            setSelectedProfileBGImage(event.target.files[0]);
+                          }
+                        }}
+                      />
+                    </SelectBtnBox>
                   </ContentContnr>
                 </ModalBox>
               </TranslucentBG>
