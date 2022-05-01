@@ -40,7 +40,6 @@ export default function EditProfile() {
   // set image
   const [selectedProfileImage, setSelectedProfileImage] = useState<string>("");
   const [selectedProfileBGImage, setSelectedProfileBGImage] = useState<null | File | Blob>(null);
-
   // convert file to DataURL
   const handleProfileImage = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();
@@ -55,7 +54,7 @@ export default function EditProfile() {
   };
   // canvas
   const cropImgCanvasRef = useRef<HTMLCanvasElement>(null);
-  // set canvas width and height as 100%
+  // get BG width and height to size canvas
   const BGRef = useRef<HTMLDivElement>(null);
   const BGWidth = useComponentWidth(BGRef);
   const BGHeight = useComponentHeight(BGRef);
@@ -65,21 +64,43 @@ export default function EditProfile() {
     const canvas = cropImgCanvasRef.current;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
-    ctx.canvas.width = BGWidth;
-    ctx.canvas.height = BGHeight;
 
     const image = new Image();
     image.src = selectedProfileImage;
 
     image.onload = () => {
-      ctx.drawImage(image, 150, 200, 500, 300, 60, 60, 500, 300);
+      // fit image as background in canvas
+      // set canvas width, height, x, y to show full size image and center it in screen
+      const canvasRatio = image.width / image.height;
+      let newCanvasWidth = BGWidth;
+      let newCanvasHeight = newCanvasWidth / canvasRatio;
+      if (newCanvasHeight > BGHeight) {
+        newCanvasHeight = BGHeight;
+        newCanvasWidth = newCanvasHeight * canvasRatio;
+      }
+      const xOffset = newCanvasWidth < BGWidth ? (BGWidth - newCanvasWidth) / 2 : 0;
+      const yOffset = newCanvasHeight < BGHeight ? (BGHeight - newCanvasHeight) / 2 : 0;
+
+      canvas.style.top = `${yOffset}px`;
+      canvas.style.left = `${xOffset}px`;
+      canvas.style.width = `${newCanvasWidth}px`;
+      canvas.style.height = `${newCanvasHeight}px`;
+      canvas.style.backgroundImage = `url(${selectedProfileImage})`; // set image as background
+
+      //   ctx.drawImage(image, xOffset, yOffset, newWidth, newHeight);
+
+      //   이미지를 캔버스의 백그라운드 이미지로 넣고
+      //   캔버스의 크기와 위치를 조정하자
+
+      //   그러고 나서 캔버스 위에서 정사각형을 그리자
+      //   ctx.beginPath();
+      //   ctx.rect(20, 20, 150, 100);
+      //   ctx.stroke();
     };
   }, [cropImgCanvasRef, selectedProfileImage, BGWidth, BGHeight]);
   return (
     <TranslucentBG onClick={() => dispatch(closeModal())} ref={BGRef}>
-      {selectedProfileImage && (
-        <CropImageCanvas width="100%" height="100%" ref={cropImgCanvasRef} />
-      )}
+      {selectedProfileImage && <CropImageCanvas ref={cropImgCanvasRef} />}
       {!selectedProfileImage && (
         <ModalBox
           padding="54px 40px"

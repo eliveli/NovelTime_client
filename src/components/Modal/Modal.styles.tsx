@@ -143,7 +143,7 @@ export const TranslucentBG = styled.div`
   align-items: center;
 `;
 export const CropImageCanvas = styled.canvas`
-  /* object-fit: contain; */
+  background-size: contain; // to show full image
 `;
 
 export const ModalBox = styled.div<{ padding?: string }>`
