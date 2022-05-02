@@ -83,24 +83,25 @@ export default function EditProfile() {
 
       canvas.style.top = `${yOffset}px`;
       canvas.style.left = `${xOffset}px`;
-      canvas.style.width = `${newCanvasWidth}px`;
-      canvas.style.height = `${newCanvasHeight}px`;
+      // set canvas width and height
+      // : do not use property "style.width" and "style.height"
+      //   that mismatch with display pixel size
+      canvas.width = newCanvasWidth;
+      canvas.height = newCanvasHeight;
       canvas.style.backgroundImage = `url(${selectedProfileImage})`; // set image as background
 
-      //   ctx.drawImage(image, xOffset, yOffset, newWidth, newHeight);
-
-      //   이미지를 캔버스의 백그라운드 이미지로 넣고
-      //   캔버스의 크기와 위치를 조정하자
-
-      //   그러고 나서 캔버스 위에서 정사각형을 그리자
-      //   ctx.beginPath();
-      //   ctx.rect(20, 20, 150, 100);
-      //   ctx.stroke();
+      // draw square
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = "blue";
+      const rectSize = canvas.width > canvas.height ? canvas.height : canvas.width;
+      ctx.strokeRect(0, 0, rectSize, rectSize);
     };
   }, [cropImgCanvasRef, selectedProfileImage, BGWidth, BGHeight]);
   return (
     <TranslucentBG onClick={() => dispatch(closeModal())} ref={BGRef}>
-      {selectedProfileImage && <CropImageCanvas ref={cropImgCanvasRef} />}
+      {selectedProfileImage && (
+        <CropImageCanvas ref={cropImgCanvasRef} aria-label="cut your profile image" role="img" />
+      )}
       {!selectedProfileImage && (
         <ModalBox
           padding="54px 40px"
