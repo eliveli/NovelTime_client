@@ -52,12 +52,39 @@ export default function EditProfile() {
       reader.readAsDataURL(file);
     }
   };
+
   // canvas
   const cropImgCanvasRef = useRef<HTMLCanvasElement>(null);
+
   // get BG width and height to size canvas
   const BGRef = useRef<HTMLDivElement>(null);
   const BGWidth = useComponentWidth(BGRef);
   const BGHeight = useComponentHeight(BGRef);
+
+  const lineWidth = 2;
+
+  // ref for square size and start point to store previous value
+  const sXRef = useRef(0);
+  const sYRef = useRef(0);
+  const squareSizeRef = useRef(0);
+
+  // calculate square size and start point
+  const selectSquareSize = (canvasWidth: number, canvasHeight: number) =>
+    canvasWidth > canvasHeight ? canvasHeight : canvasWidth;
+  const startPoint = (
+    canvasWidth: number,
+    canvasHeight: number,
+    selectWidthOrHeight: "w" | "h",
+  ) => {
+    const SquareSizeWithLine = selectSquareSize(canvasWidth, canvasHeight);
+    const widthOrHeight = selectWidthOrHeight === "w" ? canvasWidth : canvasHeight;
+    return SquareSizeWithLine === widthOrHeight
+      ? lineWidth
+      : (widthOrHeight - SquareSizeWithLine) / 2 + lineWidth;
+  };
+  const calcSquareSize = (canvasWidth: number, canvasHeight: number) =>
+    selectSquareSize(canvasWidth, canvasHeight) - 2 * lineWidth;
+
   // set canvas and draw image
   useEffect(() => {
     if (!cropImgCanvasRef.current) return;
@@ -69,7 +96,6 @@ export default function EditProfile() {
     image.src = selectedProfileImage;
 
     image.onload = () => {
-      // fit image as background in canvas
       // set canvas width, height, x, y to show full size image and center it in screen
       const canvasRatio = image.width / image.height;
       let newCanvasWidth = BGWidth;
@@ -83,30 +109,35 @@ export default function EditProfile() {
 
       canvas.style.top = `${yOffset}px`;
       canvas.style.left = `${xOffset}px`;
+
       // set canvas width and height
       // : do not use property "style.width" and "style.height"
       //   that mismatch with display pixel size
       canvas.width = newCanvasWidth;
       canvas.height = newCanvasHeight;
       canvas.style.backgroundImage = `url(${selectedProfileImage})`; // set image as background
+      //   ctx.drawImage(image, xOffset, yOffset, newWidth, newHeight);
 
       // initiate square centered in canvas
-      const lineWidth = 2;
       ctx.lineWidth = lineWidth;
       ctx.strokeStyle = "blue";
+      sXRef.current = startPoint(canvas.width, canvas.height, "w");
+      sYRef.current = startPoint(canvas.width, canvas.height, "h");
+      squareSizeRef.current = calcSquareSize(canvas.width, canvas.height);
 
-      const squareSize = canvas.width > canvas.height ? canvas.height : canvas.width;
-      const startPoint = (widthOrHeight: number) =>
-        squareSize === widthOrHeight ? lineWidth : (widthOrHeight - squareSize) / 2 + lineWidth;
+      ctx.strokeRect(sXRef.current, sYRef.current, squareSizeRef.current, squareSizeRef.current);
 
-      ctx.strokeRect(
-        startPoint(canvas.width),
-        startPoint(canvas.height),
-        squareSize - 2 * lineWidth,
-        squareSize - 2 * lineWidth,
-      );
+      //   ctx.clearRect(0, 0, canvas.width, canvas.height);
     };
-  }, [cropImgCanvasRef, selectedProfileImage, BGWidth, BGHeight]);
+  }, [
+    cropImgCanvasRef,
+    selectedProfileImage,
+    BGWidth,
+    BGHeight,
+    sXRef.current,
+    sYRef.current,
+    squareSizeRef.current,
+  ]);
   return (
     <TranslucentBG onClick={() => dispatch(closeModal())} ref={BGRef}>
       {selectedProfileImage && (
