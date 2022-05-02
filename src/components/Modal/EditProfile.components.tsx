@@ -90,11 +90,21 @@ export default function EditProfile() {
       canvas.height = newCanvasHeight;
       canvas.style.backgroundImage = `url(${selectedProfileImage})`; // set image as background
 
-      // draw square
-      ctx.lineWidth = 2;
+      // initiate square centered in canvas
+      const lineWidth = 2;
+      ctx.lineWidth = lineWidth;
       ctx.strokeStyle = "blue";
-      const rectSize = canvas.width > canvas.height ? canvas.height : canvas.width;
-      ctx.strokeRect(0, 0, rectSize, rectSize);
+
+      const squareSize = canvas.width > canvas.height ? canvas.height : canvas.width;
+      const startPoint = (widthOrHeight: number) =>
+        squareSize === widthOrHeight ? lineWidth : (widthOrHeight - squareSize) / 2 + lineWidth;
+
+      ctx.strokeRect(
+        startPoint(canvas.width),
+        startPoint(canvas.height),
+        squareSize - 2 * lineWidth,
+        squareSize - 2 * lineWidth,
+      );
     };
   }, [cropImgCanvasRef, selectedProfileImage, BGWidth, BGHeight]);
   return (
