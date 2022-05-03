@@ -1,3 +1,4 @@
+import theme from "assets/styles/theme";
 import { useEffect, useRef, useState } from "react";
 import { closeModal } from "store/clientSlices/modalSlice";
 import { useComponentHeight, useComponentWidth } from "utils";
@@ -63,12 +64,12 @@ export default function EditProfile() {
 
   const lineWidth = 2;
 
-  // ref for square size and start point to store previous value
+  // refs for square size and starting point to store previous value
   const sXRef = useRef(0);
   const sYRef = useRef(0);
-  const squareSizeRef = useRef(0);
+  const squareSizeRef = useRef(-1);
 
-  // calculate square size and start point
+  // calculate square size and starting point
   const selectSquareSize = (canvasWidth: number, canvasHeight: number) =>
     canvasWidth > canvasHeight ? canvasHeight : canvasWidth;
   const startPoint = (
@@ -116,16 +117,21 @@ export default function EditProfile() {
       canvas.width = newCanvasWidth;
       canvas.height = newCanvasHeight;
       canvas.style.backgroundImage = `url(${selectedProfileImage})`; // set image as background
+
+      // crop image
       //   ctx.drawImage(image, xOffset, yOffset, newWidth, newHeight);
 
       // initiate square centered in canvas
       ctx.lineWidth = lineWidth;
-      ctx.strokeStyle = "blue";
-      sXRef.current = startPoint(canvas.width, canvas.height, "w");
-      sYRef.current = startPoint(canvas.width, canvas.height, "h");
-      squareSizeRef.current = calcSquareSize(canvas.width, canvas.height);
+      ctx.strokeStyle = theme.color.mainLight;
+      if (squareSizeRef.current === -1) {
+        sXRef.current = startPoint(canvas.width, canvas.height, "w");
+        sYRef.current = startPoint(canvas.width, canvas.height, "h");
+        squareSizeRef.current = calcSquareSize(canvas.width, canvas.height);
+      }
 
       ctx.strokeRect(sXRef.current, sYRef.current, squareSizeRef.current, squareSizeRef.current);
+      //
 
       //   ctx.clearRect(0, 0, canvas.width, canvas.height);
     };
@@ -138,10 +144,74 @@ export default function EditProfile() {
     sYRef.current,
     squareSizeRef.current,
   ]);
+
+  //  following is my plan :
+  // - create mouse event handler. there will be these events : mouse down, mouse move, mouse up
+  // - in event handler, act differently as where user clicked. these are the actions : move square, resize square, do not any action
+  // - in event handler, after changing square's values which are x, y, size, useEffect will act automatically since I set the uesEffect deps array as square's values.
+  // - after mouse events finish and user click the "finish" button, crop image as the square's values which user change
+
+  const prevStartPointInBG = (BGWidthOrHeight: number) =>
+    (BGWidthOrHeight - squareSizeRef.current - 2 * lineWidth) / 2;
+  const handleMouseDown = (event: React.MouseEvent) => {
+    const prevXinBG = prevStartPointInBG(BGWidth); // x point except lineWidth
+    const prevYinBG = prevStartPointInBG(BGHeight); // y point except lineWidth
+    const clickedX = event.clientX;
+    const clickedY = event.clientY;
+
+    // x is a point of inside or outside line space of square
+    // and lines are two of left and right
+    const xOutsideLeftLine = prevXinBG - lineWidth - 1;
+    const xInsideLeftLine = prevXinBG;
+    const xOutsideRightLine = prevXinBG + squareSizeRef.current + lineWidth;
+    const xInsideRightLine = prevXinBG + squareSizeRef.current - 1;
+
+    // y is a point of inside or outside line space of square
+    // and lines are two of top and bottom
+    const yOutsideTopLine = prevYinBG - lineWidth - 1;
+    const yInsideTopLine = prevYinBG;
+    const yOutsideBottomLine = prevYinBG + squareSizeRef.current + lineWidth;
+    const yInsideBottomLine = prevYinBG + squareSizeRef.current - 1;
+
+    //
+    // the line space is a bit different from display pixel space
+    // I will fix it later !!!
+    //
+
+    // variables for whether clicked space matches each line spaces or not
+    // don't compare three values with "<". if so it is always set with true.
+    const isLeftLineForX = xOutsideLeftLine < clickedX && clickedX < xInsideLeftLine;
+    const isLeftLineForY = yOutsideTopLine < clickedY && clickedY < yOutsideBottomLine;
+    const isLeftLine = isLeftLineForX && isLeftLineForY;
+
+    const isRightLineForX = xInsideRightLine < clickedX && clickedX < xOutsideRightLine;
+    const isRightLineForY = yOutsideTopLine < clickedY && clickedY < yOutsideBottomLine;
+    const isRightLine = isRightLineForX && isRightLineForY;
+
+    const isTopLineForX = xOutsideLeftLine < clickedX && clickedX < xOutsideRightLine;
+    const isTopLineForY = yOutsideTopLine < clickedY && clickedY < yInsideTopLine;
+    const isTopLine = isTopLineForX && isTopLineForY;
+
+    const isBottomLineForX = xOutsideLeftLine < clickedX && clickedX < xOutsideRightLine;
+    const isBottomLineForY = yInsideBottomLine < clickedY && clickedY < yOutsideBottomLine;
+    const isBottomLine = isBottomLineForX && isBottomLineForY;
+  };
   return (
-    <TranslucentBG onClick={() => dispatch(closeModal())} ref={BGRef}>
+    <TranslucentBG
+      onClick={() => {
+        if (!selectedProfileImage) dispatch(closeModal());
+      }}
+      ref={BGRef}
+    >
       {selectedProfileImage && (
-        <CropImageCanvas ref={cropImgCanvasRef} aria-label="cut your profile image" role="img" />
+        <CropImageCanvas
+          onMouseDown={(event) => handleMouseDown(event)}
+          onMouseMove={() => {}}
+          onMouseUp={() => {}}
+          ref={cropImgCanvasRef}
+          aria-label="cut your profile image"
+          role="img"
+        />
       )}
       {!selectedProfileImage && (
         <ModalBox
