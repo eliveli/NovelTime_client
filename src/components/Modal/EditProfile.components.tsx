@@ -72,7 +72,7 @@ export default function EditProfile() {
   // calculate square size and starting point
   const selectSquareSize = (canvasWidth: number, canvasHeight: number) =>
     canvasWidth > canvasHeight ? canvasHeight : canvasWidth;
-  const startPoint = (
+  const startPointInCanvas = (
     canvasWidth: number,
     canvasHeight: number,
     selectWidthOrHeight: "w" | "h",
@@ -83,6 +83,9 @@ export default function EditProfile() {
       ? lineWidth
       : (widthOrHeight - SquareSizeWithLine) / 2 + lineWidth;
   };
+  const startPointInBG = (BGWidthOrHeight: number) =>
+    (BGWidthOrHeight - squareSizeRef.current - 2 * lineWidth) / 2;
+
   const calcSquareSize = (canvasWidth: number, canvasHeight: number) =>
     selectSquareSize(canvasWidth, canvasHeight) - 2 * lineWidth;
 
@@ -125,14 +128,18 @@ export default function EditProfile() {
       ctx.lineWidth = lineWidth;
       ctx.strokeStyle = theme.color.mainLight;
       if (squareSizeRef.current === -1) {
-        sXRef.current = startPoint(canvas.width, canvas.height, "w");
-        sYRef.current = startPoint(canvas.width, canvas.height, "h");
         squareSizeRef.current = calcSquareSize(canvas.width, canvas.height);
+        sXRef.current = startPointInBG(canvas.width);
+        sYRef.current = startPointInBG(canvas.height);
       }
 
-      ctx.strokeRect(sXRef.current, sYRef.current, squareSizeRef.current, squareSizeRef.current);
-      //
-
+      // draw square
+      ctx.strokeRect(
+        sXRef.current + 1,
+        sYRef.current + 1,
+        squareSizeRef.current,
+        squareSizeRef.current,
+      );
       //   ctx.clearRect(0, 0, canvas.width, canvas.height);
     };
   }, [
@@ -151,27 +158,23 @@ export default function EditProfile() {
   // - in event handler, after changing square's values which are x, y, size, useEffect will act automatically since I set the uesEffect deps array as square's values.
   // - after mouse events finish and user click the "finish" button, crop image as the square's values which user change
 
-  const prevStartPointInBG = (BGWidthOrHeight: number) =>
-    (BGWidthOrHeight - squareSizeRef.current - 2 * lineWidth) / 2;
   const handleMouseDown = (event: React.MouseEvent) => {
-    const prevXinBG = prevStartPointInBG(BGWidth); // x point except lineWidth
-    const prevYinBG = prevStartPointInBG(BGHeight); // y point except lineWidth
     const clickedX = event.clientX;
     const clickedY = event.clientY;
 
     // x is a point of inside or outside line space of square
     // and lines are two of left and right
-    const xOutsideLeftLine = prevXinBG - lineWidth - 1;
-    const xInsideLeftLine = prevXinBG;
-    const xOutsideRightLine = prevXinBG + squareSizeRef.current + lineWidth;
-    const xInsideRightLine = prevXinBG + squareSizeRef.current - 1;
+    const xOutsideLeftLine = sXRef.current - lineWidth - 1;
+    const xInsideLeftLine = sXRef.current;
+    const xOutsideRightLine = sXRef.current + squareSizeRef.current + lineWidth;
+    const xInsideRightLine = sXRef.current + squareSizeRef.current - 1;
 
     // y is a point of inside or outside line space of square
     // and lines are two of top and bottom
-    const yOutsideTopLine = prevYinBG - lineWidth - 1;
-    const yInsideTopLine = prevYinBG;
-    const yOutsideBottomLine = prevYinBG + squareSizeRef.current + lineWidth;
-    const yInsideBottomLine = prevYinBG + squareSizeRef.current - 1;
+    const yOutsideTopLine = sYRef.current - lineWidth - 1;
+    const yInsideTopLine = sYRef.current;
+    const yOutsideBottomLine = sYRef.current + squareSizeRef.current + lineWidth;
+    const yInsideBottomLine = sYRef.current + squareSizeRef.current - 1;
 
     //
     // the line space is a bit different from display pixel space
@@ -179,7 +182,7 @@ export default function EditProfile() {
     //
 
     // variables for whether clicked space matches each line spaces or not
-    // don't compare three values with "<". if so it is always set with true.
+    // don't compare three values with "<". if so it is always set of true.
     const isLeftLineForX = xOutsideLeftLine < clickedX && clickedX < xInsideLeftLine;
     const isLeftLineForY = yOutsideTopLine < clickedY && clickedY < yOutsideBottomLine;
     const isLeftLine = isLeftLineForX && isLeftLineForY;
