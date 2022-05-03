@@ -69,6 +69,12 @@ export default function EditProfile() {
   const sYRef = useRef(0);
   const squareSizeRef = useRef(-1);
 
+  // refs for four vertexes of square
+  const topLeftCorner = useRef({ x: 0, y: 0 });
+  const topRightCorner = useRef({ x: 0, y: 0 });
+  const bottomLeftCorner = useRef({ x: 0, y: 0 });
+  const bottomRightCorner = useRef({ x: 0, y: 0 });
+
   // calculate square size and starting point
   const selectSquareSize = (canvasWidth: number, canvasHeight: number) =>
     canvasWidth > canvasHeight ? canvasHeight : canvasWidth;
@@ -88,6 +94,24 @@ export default function EditProfile() {
 
   const calcSquareSize = (canvasWidth: number, canvasHeight: number) =>
     selectSquareSize(canvasWidth, canvasHeight) - 2 * lineWidth;
+
+  // calculate four corners of square not in canvas but in BG //
+  //   the value is not exact cause as I see
+  //   it is not exactly divided into square line and inside-square...
+  //   I need more information about this, but I'm not sure whether it can be or not...
+  const calcTopLeftCorner = () => ({ x: sXRef.current - 1, y: sYRef.current - 1 });
+  const calcTopRightCorner = () => ({
+    x: sXRef.current + squareSizeRef.current,
+    y: sYRef.current - 1,
+  });
+  const calcBottomLeftCorner = () => ({
+    x: sXRef.current - 1,
+    y: sYRef.current + squareSizeRef.current,
+  });
+  const calcBottomRightCorner = () => ({
+    x: sXRef.current + squareSizeRef.current,
+    y: sYRef.current + squareSizeRef.current,
+  });
 
   // set canvas and draw image
   useEffect(() => {
@@ -140,6 +164,28 @@ export default function EditProfile() {
         squareSizeRef.current,
         squareSizeRef.current,
       );
+
+      // set four circles on corners of the square in canvas
+      topLeftCorner.current = calcTopLeftCorner();
+      topRightCorner.current = calcTopRightCorner();
+      bottomLeftCorner.current = calcBottomLeftCorner();
+      bottomRightCorner.current = calcBottomRightCorner();
+
+      const fourCorners = [
+        topLeftCorner.current,
+        topRightCorner.current,
+        bottomLeftCorner.current,
+        bottomRightCorner.current,
+      ];
+
+      // draw circles on corners of square
+      fourCorners.map((corner) => {
+        ctx.beginPath();
+        ctx.arc(corner.x, corner.y, 10, 0, 2 * Math.PI);
+        ctx.stroke(); // later remove
+        // ctx.fill(); // later uncomment
+      });
+
       //   ctx.clearRect(0, 0, canvas.width, canvas.height);
     };
   }, [
