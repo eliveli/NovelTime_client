@@ -169,6 +169,26 @@ export default function EditProfile() {
 
   const circleRadius = 10;
 
+  // check whether the point user clicked is inside circle on corner of square
+  function checkPoint(clickedX: number, clickedY: number) {
+    const fourCorners = Object.values(fourCornersInBGRef.current);
+    let selectedCorner;
+    for (let i = 0; i < fourCorners.length; i += 1) {
+      const centerOfCircle = fourCorners[i];
+      const distPoints =
+        (clickedX - centerOfCircle.x) * (clickedX - centerOfCircle.x) +
+        (clickedY - centerOfCircle.y) * (clickedY - centerOfCircle.y);
+      const radiusSquared = circleRadius * circleRadius;
+
+      if (distPoints < radiusSquared) {
+        selectedCorner = centerOfCircle;
+        break;
+      }
+      console.log("fourCorners:", fourCorners);
+    }
+    return selectedCorner;
+  }
+
   // set canvas and draw image
   useEffect(() => {
     if (!cropImgCanvasRef.current) return;
