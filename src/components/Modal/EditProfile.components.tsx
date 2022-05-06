@@ -356,20 +356,24 @@ export default function EditProfile() {
     // resize square
     const { cornerName, cornerXY } = selectedCornerForResizingRef.current;
 
+    const movedX = event.clientX;
+    const movedY = event.clientY;
+
+    const distanceX = movedX - cornerXY.x;
+    const distanceY = movedY - cornerXY.y;
+
+    //  absolute value
+    const absOfDistanceX = Math.abs(distanceX);
+    const absOfDistanceY = Math.abs(distanceY);
+
+    // greater number between absolute value of distanceX and absolute value of distanceY
+    const selectedDistance = absOfDistanceX > absOfDistanceY ? absOfDistanceX : absOfDistanceY;
+
+    //
+    // except for other cases that seems to trying to make rectangle not square
+    //
     // case 1. topLeftCorner is clicked
     if (cornerName && cornerName === "topLeftCorner") {
-      const movedX = event.clientX;
-      const movedY = event.clientY;
-
-      const distanceX = movedX - cornerXY.x;
-      const distanceY = movedY - cornerXY.y;
-
-      //  absolute value
-      const absOfDistanceX = Math.abs(distanceX);
-      const absOfDistanceY = Math.abs(distanceY);
-
-      // greater number between absolute value of distanceX and absolute value of distanceY
-      const selectedDistance = absOfDistanceX > absOfDistanceY ? absOfDistanceX : absOfDistanceY;
       // case 1-1. mouse moves to right and down and square shrinks
       if (distanceX > 0 && distanceY >= 0) {
         setSXYinBG({ x: sXYinBG.x + selectedDistance, y: sXYinBG.y + selectedDistance });
@@ -380,7 +384,7 @@ export default function EditProfile() {
         //
         squareSizeRef.current -= selectedDistance;
 
-        // add distance to corner x, y
+        // add distance to top left corner x, y
         // to get corner x, y that has changed right before when keeping mouse move event on
         selectedCornerForResizingRef.current.cornerXY = {
           x: cornerXY.x + selectedDistance,
@@ -397,7 +401,130 @@ export default function EditProfile() {
         //
         squareSizeRef.current += selectedDistance;
 
-        // remove distance to corner x, y
+        // remove distance from top left corner x, y
+        // to get corner x, y that has changed right before when keeping mouse move event on
+        selectedCornerForResizingRef.current.cornerXY = {
+          x: cornerXY.x - selectedDistance,
+          y: cornerXY.y - selectedDistance,
+        };
+      }
+    }
+
+    // case 2. topRightCorner is clicked
+    if (cornerName && cornerName === "topRightCorner") {
+      // case 2-1. mouse moves to right and up and square expands
+      if (distanceX > 0 && distanceY < 0) {
+        // set x, y of square starting point not top right corner
+        setSXYinBG({ x: sXYinBG.x, y: sXYinBG.y - selectedDistance });
+        setSXYinCanvas({
+          x: sXYinCanvas.x,
+          y: sXYinCanvas.y - selectedDistance,
+        });
+        //
+        squareSizeRef.current += selectedDistance;
+
+        // add or remove distance to or from top right corner x, y
+        // to get corner x, y that has changed right before when keeping mouse move event on
+        selectedCornerForResizingRef.current.cornerXY = {
+          x: cornerXY.x + selectedDistance,
+          y: cornerXY.y - selectedDistance,
+        };
+      }
+      // case 2-2. mouse moves to left and down and square shrinks
+      if (distanceX < 0 && distanceY > 0) {
+        // set x, y of square starting point not top right corner
+        // (and this is the same as others below)
+        setSXYinBG({ x: sXYinBG.x, y: sXYinBG.y + selectedDistance });
+        setSXYinCanvas({
+          x: sXYinCanvas.x,
+          y: sXYinCanvas.y + selectedDistance,
+        });
+        //
+        squareSizeRef.current -= selectedDistance;
+
+        // add or remove distance to or from top right corner x, y
+        // to get corner x, y that has changed right before when keeping mouse move event on
+        selectedCornerForResizingRef.current.cornerXY = {
+          x: cornerXY.x - selectedDistance,
+          y: cornerXY.y + selectedDistance,
+        };
+      }
+    }
+
+    // case 3. bottomLeftCorner is clicked
+    if (cornerName && cornerName === "bottomLeftCorner") {
+      // case 2-1. mouse moves to right and up and square shrinks
+      if (distanceX > 0 && distanceY < 0) {
+        // set x, y of square starting point not bottom left corner
+        setSXYinBG({ x: sXYinBG.x + selectedDistance, y: sXYinBG.y });
+        setSXYinCanvas({
+          x: sXYinCanvas.x + selectedDistance,
+          y: sXYinCanvas.y,
+        });
+        //
+        squareSizeRef.current -= selectedDistance;
+
+        // add or remove distance to or from bottom left corner x, y
+        // to get corner x, y that has changed right before when keeping mouse move event on
+        selectedCornerForResizingRef.current.cornerXY = {
+          x: cornerXY.x + selectedDistance,
+          y: cornerXY.y - selectedDistance,
+        };
+      }
+      // case 2-2. mouse moves to left and down and square expands
+      if (distanceX < 0 && distanceY > 0) {
+        // set x, y of square starting point not bottom left corner
+        setSXYinBG({ x: sXYinBG.x - selectedDistance, y: sXYinBG.y });
+        setSXYinCanvas({
+          x: sXYinCanvas.x - selectedDistance,
+          y: sXYinCanvas.y,
+        });
+        //
+        squareSizeRef.current += selectedDistance;
+
+        // add or remove distance to or from bottom left corner x, y
+        // to get corner x, y that has changed right before when keeping mouse move event on
+        selectedCornerForResizingRef.current.cornerXY = {
+          x: cornerXY.x - selectedDistance,
+          y: cornerXY.y + selectedDistance,
+        };
+      }
+    }
+
+    // case 4. bottomRightCorner is clicked
+    if (cornerName && cornerName === "bottomRightCorner") {
+      // case 2-1. mouse moves to right and down and square expands
+      if (distanceX > 0 && distanceY > 0) {
+        // set x, y of square starting point not bottom right corner
+        // it is the same as before but must be set to execute useEffect
+        setSXYinBG({ x: sXYinBG.x, y: sXYinBG.y });
+        setSXYinCanvas({
+          x: sXYinCanvas.x,
+          y: sXYinCanvas.y,
+        });
+        //
+        squareSizeRef.current += selectedDistance;
+
+        // add or remove distance to or from bottom right corner x, y
+        // to get corner x, y that has changed right before when keeping mouse move event on
+        selectedCornerForResizingRef.current.cornerXY = {
+          x: cornerXY.x + selectedDistance,
+          y: cornerXY.y + selectedDistance,
+        };
+      }
+      // case 2-2. mouse moves to left and up and square shrinks
+      if (distanceX < 0 && distanceY < 0) {
+        // set x, y of square starting point not bottom right corner
+        // it is the same as before but must be set to execute useEffect
+        setSXYinBG({ x: sXYinBG.x, y: sXYinBG.y });
+        setSXYinCanvas({
+          x: sXYinCanvas.x,
+          y: sXYinCanvas.y,
+        });
+        //
+        squareSizeRef.current -= selectedDistance;
+
+        // add or remove distance to or from bottom right corner x, y
         // to get corner x, y that has changed right before when keeping mouse move event on
         selectedCornerForResizingRef.current.cornerXY = {
           x: cornerXY.x - selectedDistance,
