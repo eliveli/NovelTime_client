@@ -272,7 +272,6 @@ export default function EditProfile() {
 
       // draw square
       ctx.strokeRect(sXYinCanvas.x, sXYinCanvas.y, squareSizeRef.current, squareSizeRef.current);
-
       // set four circles' location in BG
       calcFourCornersInBG();
 
@@ -347,6 +346,7 @@ export default function EditProfile() {
 
     // resize square
     // get the circle spaces on four corners of square
+
     checkPoint(clickedX, clickedY);
   };
   const handleMouseMove = (event: React.MouseEvent) => {
@@ -374,6 +374,13 @@ export default function EditProfile() {
         });
         //
         squareSizeRef.current -= selectedDistance;
+
+        // add distance to corner x, y
+        // to get corner x, y that has changed right before when keeping mouse move event on
+        selectedCornerForResizingRef.current.cornerXY = {
+          x: cornerXY.x + selectedDistance,
+          y: cornerXY.y + selectedDistance,
+        };
       }
     }
   };
