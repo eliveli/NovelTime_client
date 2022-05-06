@@ -194,7 +194,6 @@ export default function EditProfile() {
         };
         break;
       }
-      console.log("fourCornerXY:", fourCornerXY);
     }
   }
 
@@ -272,6 +271,7 @@ export default function EditProfile() {
 
       // draw square
       ctx.strokeRect(sXYinCanvas.x, sXYinCanvas.y, squareSizeRef.current, squareSizeRef.current);
+
       // set four circles' location in BG
       calcFourCornersInBG();
 
@@ -346,8 +346,11 @@ export default function EditProfile() {
 
     // resize square
     // get the circle spaces on four corners of square
-
     checkPoint(clickedX, clickedY);
+    //
+    // move square
+    // if (isLeftLine && isTopLine) {
+    // }
   };
   const handleMouseMove = (event: React.MouseEvent) => {
     // resize square
@@ -361,13 +364,15 @@ export default function EditProfile() {
       const distanceX = movedX - cornerXY.x;
       const distanceY = movedY - cornerXY.y;
 
-      // greater number between distanceX and distanceY
-      const selectedDistance = distanceX > distanceY ? distanceX : distanceY;
-      // case 1-1. mouse is moved to right and down and square shrinks
-      if (distanceX > 0 && distanceY > 0) {
+      //  absolute value
+      const absOfDistanceX = Math.abs(distanceX);
+      const absOfDistanceY = Math.abs(distanceY);
+
+      // greater number between absolute value of distanceX and absolute value of distanceY
+      const selectedDistance = absOfDistanceX > absOfDistanceY ? absOfDistanceX : absOfDistanceY;
+      // case 1-1. mouse moves to right and down and square shrinks
+      if (distanceX > 0 && distanceY >= 0) {
         setSXYinBG({ x: sXYinBG.x + selectedDistance, y: sXYinBG.y + selectedDistance });
-        // setSXinCanvas(sXYinCanvas.x + selectedDistance);
-        // setSYinCanvas(sXYinCanvas.y + selectedDistance);
         setSXYinCanvas({
           x: sXYinCanvas.x + selectedDistance,
           y: sXYinCanvas.y + selectedDistance,
@@ -380,6 +385,23 @@ export default function EditProfile() {
         selectedCornerForResizingRef.current.cornerXY = {
           x: cornerXY.x + selectedDistance,
           y: cornerXY.y + selectedDistance,
+        };
+      }
+      // case 1-2. mouse moves to left and up and square expands
+      if (distanceX <= 0 && distanceY < 0) {
+        setSXYinBG({ x: sXYinBG.x - selectedDistance, y: sXYinBG.y - selectedDistance });
+        setSXYinCanvas({
+          x: sXYinCanvas.x - selectedDistance,
+          y: sXYinCanvas.y - selectedDistance,
+        });
+        //
+        squareSizeRef.current += selectedDistance;
+
+        // remove distance to corner x, y
+        // to get corner x, y that has changed right before when keeping mouse move event on
+        selectedCornerForResizingRef.current.cornerXY = {
+          x: cornerXY.x - selectedDistance,
+          y: cornerXY.y - selectedDistance,
         };
       }
     }
