@@ -71,11 +71,10 @@ export default function EditProfile() {
   // so I changed as below by using useState                           //
   //
   // starting point x, y in BG and in Canvas
-  const [sXinBG, setSXinBG] = useState(0); // except for line width
-  const [sYinBG, setSYinBG] = useState(0); // except for line width
+  const [sXYinBG, setSXYinBG] = useState({ x: 0, y: 0 }); // except for line width
+
   //
-  const [sXinCanvas, setSXinCanvas] = useState(0); // except for line width
-  const [sYinCanvas, setSYinCanvas] = useState(0); // except for line width
+  const [sXYinCanvas, setSXYinCanvas] = useState({ x: 0, y: 0 }); // except for line width
   //
   // square size.
   // it needs to be created by useRef                                   //
@@ -133,18 +132,18 @@ export default function EditProfile() {
   //   the value is not exact cause as I see
   //   it is not exactly divided into square line and inside-square...
   //   I need more information about this, but I'm not sure whether it can be or not...
-  const calcTopLeftCornerInBG = () => ({ x: sXinBG - 1, y: sYinBG - 1 });
+  const calcTopLeftCornerInBG = () => ({ x: sXYinBG.x - 1, y: sXYinBG.y - 1 });
   const calcTopRightCornerInBG = () => ({
-    x: sXinBG + squareSizeRef.current,
-    y: sYinBG - 1,
+    x: sXYinBG.x + squareSizeRef.current,
+    y: sXYinBG.y - 1,
   });
   const calcBottomLeftCornerInBG = () => ({
-    x: sXinBG - 1,
-    y: sYinBG + squareSizeRef.current,
+    x: sXYinBG.x - 1,
+    y: sXYinBG.y + squareSizeRef.current,
   });
   const calcBottomRightCornerInBG = () => ({
-    x: sXinBG + squareSizeRef.current,
-    y: sYinBG + squareSizeRef.current,
+    x: sXYinBG.x + squareSizeRef.current,
+    y: sXYinBG.y + squareSizeRef.current,
   });
 
   const calcFourCornersInBG = () => {
@@ -159,15 +158,15 @@ export default function EditProfile() {
   // store them in BG and return them in Canvas
   const calcFourCornersInCanvas = () => {
     const fourCornersInCanvas = [
-      { x: sXinCanvas - 1, y: sYinCanvas - 1 },
+      { x: sXYinCanvas.x - 1, y: sXYinCanvas.y - 1 },
       {
-        x: sXinCanvas + squareSizeRef.current,
-        y: sYinCanvas - 1,
+        x: sXYinCanvas.x + squareSizeRef.current,
+        y: sXYinCanvas.y - 1,
       },
-      { x: sXinCanvas - 1, y: sYinCanvas + squareSizeRef.current },
+      { x: sXYinCanvas.x - 1, y: sXYinCanvas.y + squareSizeRef.current },
       {
-        x: sXinCanvas + squareSizeRef.current,
-        y: sYinCanvas + squareSizeRef.current,
+        x: sXYinCanvas.x + squareSizeRef.current,
+        y: sXYinCanvas.y + squareSizeRef.current,
       },
     ];
 
@@ -238,6 +237,9 @@ export default function EditProfile() {
       // initiate square centered in canvas
       ctx.lineWidth = lineWidth;
       ctx.strokeStyle = theme.color.mainLight;
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
       if (squareSizeRef.current === -1) {
         // squareSize will be changed synchronously
         // so that other setStates like sXinBG and sYinBG read the changed squareSize value
@@ -246,10 +248,12 @@ export default function EditProfile() {
         // other setStates read squareSize as its previous value that didn't be changed yet
         squareSizeRef.current = calcSquareSize(canvas.width, canvas.height);
 
-        setSXinBG(startPointInBG(BGWidth));
-        setSYinBG(startPointInBG(BGHeight));
-        setSXinCanvas(startPointInCanvas(canvasWidthRef.current, canvasHeightRef.current, "w"));
-        setSYinCanvas(startPointInCanvas(canvasWidthRef.current, canvasHeightRef.current, "h"));
+        setSXYinBG({ x: startPointInBG(BGWidth), y: startPointInBG(BGHeight) });
+
+        setSXYinCanvas({
+          x: startPointInCanvas(canvasWidthRef.current, canvasHeightRef.current, "w"),
+          y: startPointInCanvas(canvasWidthRef.current, canvasHeightRef.current, "h"),
+        });
 
         // store initial x, y as them in BG and them in Canvas
         initialSXinBGRef.current = startPointInBG(BGWidth);
@@ -267,33 +271,31 @@ export default function EditProfile() {
       }
 
       // draw square
-      ctx.strokeRect(sXinCanvas, sYinCanvas, squareSizeRef.current, squareSizeRef.current);
+      ctx.strokeRect(sXYinCanvas.x, sXYinCanvas.y, squareSizeRef.current, squareSizeRef.current);
 
-      // set four circles location in BG
+      // set four circles' location in BG
       calcFourCornersInBG();
 
       // set four circles on square corners in canvas
       const fourCornersInCanvas = calcFourCornersInCanvas();
 
-      // draw circles on corners of square
+      // draw circles on square corners
       fourCornersInCanvas.map((corner) => {
         ctx.beginPath();
         ctx.arc(corner.x, corner.y, circleRadius, 0, 2 * Math.PI);
         ctx.stroke(); // later remove
         // ctx.fill(); // later uncomment
       });
-
-      //   ctx.clearRect(0, 0, canvas.width, canvas.height);
     };
   }, [
     cropImgCanvasRef,
     selectedProfileImage,
     BGWidth,
     BGHeight,
-    sXinBG,
-    sYinBG,
-    sXinCanvas,
-    sYinCanvas,
+    sXYinBG,
+
+    sXYinCanvas.x,
+    sXYinCanvas.y,
     squareSizeRef.current,
   ]);
 
@@ -308,17 +310,17 @@ export default function EditProfile() {
 
     // x is a point of inside or outside line space of square
     // and lines are two of left and right
-    const xOutsideLeftLine = sXinBG - lineWidth - 1;
-    const xInsideLeftLine = sXinBG;
-    const xOutsideRightLine = sXinBG + squareSizeRef.current + lineWidth;
-    const xInsideRightLine = sXinBG + squareSizeRef.current - 1;
+    const xOutsideLeftLine = sXYinBG.x - lineWidth - 1;
+    const xInsideLeftLine = sXYinBG.x;
+    const xOutsideRightLine = sXYinBG.x + squareSizeRef.current + lineWidth;
+    const xInsideRightLine = sXYinBG.x + squareSizeRef.current - 1;
 
     // y is a point of inside or outside line space of square
     // and lines are two of top and bottom
-    const yOutsideTopLine = sYinBG - lineWidth - 1;
-    const yInsideTopLine = sYinBG;
-    const yOutsideBottomLine = sYinBG + squareSizeRef.current + lineWidth;
-    const yInsideBottomLine = sYinBG + squareSizeRef.current - 1;
+    const yOutsideTopLine = sXYinBG.y - lineWidth - 1;
+    const yInsideTopLine = sXYinBG.y;
+    const yOutsideBottomLine = sXYinBG.y + squareSizeRef.current + lineWidth;
+    const yInsideBottomLine = sXYinBG.y + squareSizeRef.current - 1;
 
     //
     // the line space is a bit different from display pixel space
@@ -363,12 +365,13 @@ export default function EditProfile() {
       const selectedDistance = distanceX > distanceY ? distanceX : distanceY;
       // case 1-1. mouse is moved to right and down and square shrinks
       if (distanceX > 0 && distanceY > 0) {
-        setSXinBG((prev) => prev + selectedDistance);
-        setSYinBG((prev) => prev + selectedDistance);
-        // setSXinCanvas(sXinCanvas + selectedDistance);
-        // setSYinCanvas(sYinCanvas + selectedDistance);
-        setSXinCanvas((prev) => prev + selectedDistance);
-        setSYinCanvas((prev) => prev + selectedDistance);
+        setSXYinBG({ x: sXYinBG.x + selectedDistance, y: sXYinBG.y + selectedDistance });
+        // setSXinCanvas(sXYinCanvas.x + selectedDistance);
+        // setSYinCanvas(sXYinCanvas.y + selectedDistance);
+        setSXYinCanvas({
+          x: sXYinCanvas.x + selectedDistance,
+          y: sXYinCanvas.y + selectedDistance,
+        });
         //
         squareSizeRef.current -= selectedDistance;
       }
