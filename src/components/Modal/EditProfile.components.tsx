@@ -68,9 +68,19 @@ export default function EditProfile() {
   const canvasWidthRef = useRef(0);
   const canvasHeightRef = useRef(0);
 
-  // refs for square size and starting point in BG to store previous value
-  const sXinBGRef = useRef(0); // x point in BG not in canvas
-  const sYinBGRef = useRef(0); // y point in BG not in canvas
+  // useState is required for putting values in useEffect deps array
+  // when I created the vars by useRef and put them in deps array,
+  // useEffect didn't work again as the values changed
+  // so I changed as below by using useState
+  //
+  // starting point x, y in BG and in Canvas
+  const [sXinBG, setSXinBG] = useState(0); // except for line width
+  const [sYinBG, setSYinBG] = useState(0); // except for line width
+  //
+  const [sXinCanvas, setSXinCanvas] = useState(0); // except for line width
+  const [sYinCanvas, setSYinCanvas] = useState(0); // except for line width
+  // square size. it needs to be created by useRef
+  // so that other setStates read the synchronous square size value
   const squareSizeRef = useRef(-1);
 
   // refs for initial x, y in BG and in Canvas
@@ -79,7 +89,7 @@ export default function EditProfile() {
   const initialSXinCanvasRef = useRef(0);
   const initialSYinCanvasRef = useRef(0);
 
-  // ref for four vertexes of square
+  // ref for four vertexes of square   // it is expected to be on line not inside line
   const fourCornersInBGRef = useRef({
     topLeftCorner: { x: 0, y: 0 },
     topRightCorner: { x: 0, y: 0 },
@@ -87,7 +97,19 @@ export default function EditProfile() {
     bottomRightCorner: { x: 0, y: 0 },
   });
 
-  // calculate square size and starting point(at first)
+  // refs for handling mouse event
+  type CornerName =
+    | "topLeftCorner"
+    | "topRightCorner"
+    | "bottomLeftCorner"
+    | "bottomRightCorner"
+    | undefined;
+  const selectedCornerForResizingRef = useRef({
+    cornerName: undefined as CornerName,
+    cornerXY: { x: 0, y: 0 },
+  });
+
+  // calculate initial square size and initial square starting point(topLeft point)
   const selectSquareSize = (canvasWidthParam: number, canvasHeightParam: number) =>
     canvasWidthParam > canvasHeightParam ? canvasHeightParam : canvasWidthParam;
   const startPointInCanvas = (
@@ -100,6 +122,8 @@ export default function EditProfile() {
     return SquareSizeWithLine === widthOrHeight
       ? lineWidth
       : (widthOrHeight - SquareSizeWithLine) / 2 + lineWidth;
+    // squareSize will be changed synchronously
+    // and other setState will read the changed value directly
   };
   const startPointInBG = (BGWidthOrHeight: number) =>
     (BGWidthOrHeight - squareSizeRef.current - 2 * lineWidth) / 2;
@@ -107,62 +131,47 @@ export default function EditProfile() {
   const calcSquareSize = (canvasWidthParam: number, canvasHeightParam: number) =>
     selectSquareSize(canvasWidthParam, canvasHeightParam) - 2 * lineWidth;
 
-  // calculate four corners of square in BG and in Canvas //
-  // store them in BG and return them in Canvas
+  // calculate four corners of square in BG //
   //   the value is not exact cause as I see
   //   it is not exactly divided into square line and inside-square...
   //   I need more information about this, but I'm not sure whether it can be or not...
-  const calcTopLeftCornerInBG = () => ({ x: sXinBGRef.current - 1, y: sYinBGRef.current - 1 });
+  const calcTopLeftCornerInBG = () => ({ x: sXinBG - 1, y: sYinBG - 1 });
   const calcTopRightCornerInBG = () => ({
-    x: sXinBGRef.current + squareSizeRef.current,
-    y: sYinBGRef.current - 1,
+    x: sXinBG + squareSizeRef.current,
+    y: sYinBG - 1,
   });
   const calcBottomLeftCornerInBG = () => ({
-    x: sXinBGRef.current - 1,
-    y: sYinBGRef.current + squareSizeRef.current,
+    x: sXinBG - 1,
+    y: sYinBG + squareSizeRef.current,
   });
   const calcBottomRightCornerInBG = () => ({
-    x: sXinBGRef.current + squareSizeRef.current,
-    y: sYinBGRef.current + squareSizeRef.current,
+    x: sXinBG + squareSizeRef.current,
+    y: sYinBG + squareSizeRef.current,
   });
 
-  // calculate four corners of square in canvas
+  const calcFourCornersInBG = () => {
+    const fourCornersInBG = fourCornersInBGRef.current;
+    fourCornersInBG.topLeftCorner = calcTopLeftCornerInBG();
+    fourCornersInBG.topRightCorner = calcTopRightCornerInBG();
+    fourCornersInBG.bottomLeftCorner = calcBottomLeftCornerInBG();
+    fourCornersInBG.bottomRightCorner = calcBottomRightCornerInBG();
+  };
+
+  // calculate four corners of square
+  // store them in BG and return them in Canvas
   const calcFourCornersInCanvas = () => {
-    let calcX: number;
-    let calcY: number;
-
-    const arrayForCalcFourCornersInBG = [
-      calcTopLeftCornerInBG,
-      calcTopRightCornerInBG,
-      calcBottomLeftCornerInBG,
-      calcBottomRightCornerInBG,
+    const fourCornersInCanvas = [
+      { x: sXinCanvas - 1, y: sYinCanvas - 1 },
+      {
+        x: sXinCanvas + squareSizeRef.current,
+        y: sYinCanvas - 1,
+      },
+      { x: sXinCanvas - 1, y: sYinCanvas + squareSizeRef.current },
+      {
+        x: sXinCanvas + squareSizeRef.current,
+        y: sYinCanvas + squareSizeRef.current,
+      },
     ];
-    const keyNamesOfFourCornersInBGRef = Object.keys(fourCornersInBGRef.current);
-
-    const fourCornersInCanvas = arrayForCalcFourCornersInBG.map((calcCornerInBG, idx) => {
-      const { x, y } = calcCornerInBG();
-
-      // store x, y in each corner of fourCornersInBGRef.current
-      fourCornersInBGRef.current[
-        keyNamesOfFourCornersInBGRef[idx] as keyof typeof fourCornersInBGRef.current
-      ] = { x, y };
-
-      // initialX in BG and initialX in canvas
-      // I expect these two values are the same but actually they are different
-      // I can't catch the way how to make them the same exactly so I allow a bit margin of error
-      // Math.abs returns the absolute value
-      if (Math.abs(initialSXinBGRef.current - initialSXinCanvasRef.current) <= 2) {
-        calcX = x;
-      } else {
-        calcX = x - initialSXinBGRef.current;
-      }
-      if (Math.abs(initialSYinBGRef.current - initialSYinCanvasRef.current) <= 2) {
-        calcY = y;
-      } else {
-        calcY = y - initialSYinBGRef.current;
-      }
-      return { x: calcX, y: calcY };
-    });
 
     return fourCornersInCanvas;
   };
@@ -171,22 +180,25 @@ export default function EditProfile() {
 
   // check whether the point user clicked is inside circle on corner of square
   function checkPoint(clickedX: number, clickedY: number) {
-    const fourCorners = Object.values(fourCornersInBGRef.current);
-    let selectedCorner;
-    for (let i = 0; i < fourCorners.length; i += 1) {
-      const centerOfCircle = fourCorners[i];
+    const fourCornerXY = Object.values(fourCornersInBGRef.current);
+    const fourCornerName = Object.keys(fourCornersInBGRef.current);
+
+    for (let i = 0; i < fourCornerXY.length; i += 1) {
+      const centerOfCircle = fourCornerXY[i];
       const distPoints =
         (clickedX - centerOfCircle.x) * (clickedX - centerOfCircle.x) +
         (clickedY - centerOfCircle.y) * (clickedY - centerOfCircle.y);
       const radiusSquared = circleRadius * circleRadius;
 
       if (distPoints < radiusSquared) {
-        selectedCorner = centerOfCircle;
+        selectedCornerForResizingRef.current = {
+          cornerName: fourCornerName[i] as CornerName,
+          cornerXY: centerOfCircle,
+        };
         break;
       }
-      console.log("fourCorners:", fourCorners);
+      console.log("fourCornerXY:", fourCornerXY);
     }
-    return selectedCorner;
   }
 
   // set canvas and draw image
@@ -229,11 +241,19 @@ export default function EditProfile() {
       ctx.lineWidth = lineWidth;
       ctx.strokeStyle = theme.color.mainLight;
       if (squareSizeRef.current === -1) {
+        // squareSize will be changed synchronously
+        // so that other setStates like sXinBG and sYinBG read the changed squareSize value
+        // for this reason I created squareSize by useRef
+        // if squareSize is created by useState
+        // other setStates read squareSize as its previous value that didn't be changed yet
         squareSizeRef.current = calcSquareSize(canvas.width, canvas.height);
-        sXinBGRef.current = startPointInBG(BGWidth);
-        sYinBGRef.current = startPointInBG(BGHeight);
 
-        // store initial x, y in BG and in Canvas
+        setSXinBG(startPointInBG(BGWidth));
+        setSYinBG(startPointInBG(BGHeight));
+        setSXinCanvas(startPointInCanvas(canvasWidthRef.current, canvasHeightRef.current, "w"));
+        setSYinCanvas(startPointInCanvas(canvasWidthRef.current, canvasHeightRef.current, "h"));
+
+        // store initial x, y as them in BG and them in Canvas
         initialSXinBGRef.current = startPointInBG(BGWidth);
         initialSYinBGRef.current = startPointInBG(BGHeight);
         initialSXinCanvasRef.current = startPointInCanvas(
@@ -249,12 +269,9 @@ export default function EditProfile() {
       }
 
       // draw square
-      ctx.strokeRect(
-        startPointInCanvas(canvas.width, canvas.height, "w"),
-        startPointInCanvas(canvas.width, canvas.height, "h"),
-        squareSizeRef.current,
-        squareSizeRef.current,
-      );
+      ctx.strokeRect(sXinCanvas, sYinCanvas, squareSizeRef.current, squareSizeRef.current);
+      // set four circles location in BG
+      calcFourCornersInBG();
 
       // set four circles on square corners in canvas
       const fourCornersInCanvas = calcFourCornersInCanvas();
@@ -274,8 +291,10 @@ export default function EditProfile() {
     selectedProfileImage,
     BGWidth,
     BGHeight,
-    sXinBGRef.current,
-    sYinBGRef.current,
+    sXinBG,
+    sYinBG,
+    sXinCanvas,
+    sYinCanvas,
     squareSizeRef.current,
   ]);
 
@@ -290,17 +309,17 @@ export default function EditProfile() {
 
     // x is a point of inside or outside line space of square
     // and lines are two of left and right
-    const xOutsideLeftLine = sXinBGRef.current - lineWidth - 1;
-    const xInsideLeftLine = sXinBGRef.current;
-    const xOutsideRightLine = sXinBGRef.current + squareSizeRef.current + lineWidth;
-    const xInsideRightLine = sXinBGRef.current + squareSizeRef.current - 1;
+    const xOutsideLeftLine = sXinBG - lineWidth - 1;
+    const xInsideLeftLine = sXinBG;
+    const xOutsideRightLine = sXinBG + squareSizeRef.current + lineWidth;
+    const xInsideRightLine = sXinBG + squareSizeRef.current - 1;
 
     // y is a point of inside or outside line space of square
     // and lines are two of top and bottom
-    const yOutsideTopLine = sYinBGRef.current - lineWidth - 1;
-    const yInsideTopLine = sYinBGRef.current;
-    const yOutsideBottomLine = sYinBGRef.current + squareSizeRef.current + lineWidth;
-    const yInsideBottomLine = sYinBGRef.current + squareSizeRef.current - 1;
+    const yOutsideTopLine = sYinBG - lineWidth - 1;
+    const yInsideTopLine = sYinBG;
+    const yOutsideBottomLine = sYinBG + squareSizeRef.current + lineWidth;
+    const yInsideBottomLine = sYinBG + squareSizeRef.current - 1;
 
     //
     // the line space is a bit different from display pixel space
@@ -325,6 +344,9 @@ export default function EditProfile() {
     const isBottomLineForY = yInsideBottomLine < clickedY && clickedY < yOutsideBottomLine;
     const isBottomLine = isBottomLineForX && isBottomLineForY;
   };
+  const handleMouseMove = (event: React.MouseEvent) => {};
+
+  const handleMouseUp = (event: React.MouseEvent) => {};
   return (
     <TranslucentBG
       onClick={() => {
@@ -335,8 +357,8 @@ export default function EditProfile() {
       {selectedProfileImage && (
         <CropImageCanvas
           onMouseDown={(event) => handleMouseDown(event)}
-          onMouseMove={() => {}}
-          onMouseUp={() => {}}
+          onMouseMove={(event) => handleMouseMove(event)}
+          onMouseUp={(event) => handleMouseUp(event)}
           ref={cropImgCanvasRef}
           aria-label="cut your profile image"
           role="img"
