@@ -53,25 +53,22 @@ export default function EditProfile() {
       reader.readAsDataURL(file);
     }
   };
-
-  // canvas
-  const cropImgCanvasRef = useRef<HTMLCanvasElement>(null);
-
   // get BG width and height to size canvas
   const BGRef = useRef<HTMLDivElement>(null);
   const BGWidth = useComponentWidth(BGRef);
   const BGHeight = useComponentHeight(BGRef);
 
-  const lineWidth = 2;
-
-  // refs for canvas width and height
+  // canvas
+  const cropImgCanvasRef = useRef<HTMLCanvasElement>(null);
   const canvasWidthRef = useRef(0);
   const canvasHeightRef = useRef(0);
+  //
+  const lineWidth = 2;
 
-  // useState is required for putting values in useEffect deps array
-  // when I created the vars by useRef and put them in deps array,
-  // useEffect didn't work again as the values changed
-  // so I changed as below by using useState
+  // useState is required for putting values in useEffect deps array   //
+  // when I created the vars by useRef and put them in deps array,     //
+  // useEffect didn't work again as the values changed                 //
+  // so I changed as below by using useState                           //
   //
   // starting point x, y in BG and in Canvas
   const [sXinBG, setSXinBG] = useState(0); // except for line width
@@ -79,8 +76,10 @@ export default function EditProfile() {
   //
   const [sXinCanvas, setSXinCanvas] = useState(0); // except for line width
   const [sYinCanvas, setSYinCanvas] = useState(0); // except for line width
-  // square size. it needs to be created by useRef
-  // so that other setStates read the synchronous square size value
+  //
+  // square size.
+  // it needs to be created by useRef                                   //
+  // so that other setStates read the synchronous square size value     //
   const squareSizeRef = useRef(-1);
 
   // refs for initial x, y in BG and in Canvas
@@ -97,7 +96,7 @@ export default function EditProfile() {
     bottomRightCorner: { x: 0, y: 0 },
   });
 
-  // refs for handling mouse event
+  // ref for handling mouse event
   type CornerName =
     | "topLeftCorner"
     | "topRightCorner"
@@ -108,8 +107,7 @@ export default function EditProfile() {
     cornerName: undefined as CornerName,
     cornerXY: { x: 0, y: 0 },
   });
-
-  // calculate initial square size and initial square starting point(topLeft point)
+  // initialize square size and x, y that are square starting point(topLeft point)
   const selectSquareSize = (canvasWidthParam: number, canvasHeightParam: number) =>
     canvasWidthParam > canvasHeightParam ? canvasHeightParam : canvasWidthParam;
   const startPointInCanvas = (
@@ -201,7 +199,7 @@ export default function EditProfile() {
     }
   }
 
-  // set canvas and draw image
+  // set canvas and draw square and circles
   useEffect(() => {
     if (!cropImgCanvasRef.current) return;
     const canvas = cropImgCanvasRef.current;
@@ -270,6 +268,7 @@ export default function EditProfile() {
 
       // draw square
       ctx.strokeRect(sXinCanvas, sYinCanvas, squareSizeRef.current, squareSizeRef.current);
+
       // set four circles location in BG
       calcFourCornersInBG();
 
@@ -343,10 +342,43 @@ export default function EditProfile() {
     const isBottomLineForX = xOutsideLeftLine < clickedX && clickedX < xOutsideRightLine;
     const isBottomLineForY = yInsideBottomLine < clickedY && clickedY < yOutsideBottomLine;
     const isBottomLine = isBottomLineForX && isBottomLineForY;
-  };
-  const handleMouseMove = (event: React.MouseEvent) => {};
 
-  const handleMouseUp = (event: React.MouseEvent) => {};
+    // resize square
+    // get the circle spaces on four corners of square
+    checkPoint(clickedX, clickedY);
+  };
+  const handleMouseMove = (event: React.MouseEvent) => {
+    // resize square
+    const { cornerName, cornerXY } = selectedCornerForResizingRef.current;
+
+    // case 1. topLeftCorner is clicked
+    if (cornerName && cornerName === "topLeftCorner") {
+      const movedX = event.clientX;
+      const movedY = event.clientY;
+
+      const distanceX = movedX - cornerXY.x;
+      const distanceY = movedY - cornerXY.y;
+
+      // greater number between distanceX and distanceY
+      const selectedDistance = distanceX > distanceY ? distanceX : distanceY;
+      // case 1-1. mouse is moved to right and down and square shrinks
+      if (distanceX > 0 && distanceY > 0) {
+        setSXinBG((prev) => prev + selectedDistance);
+        setSYinBG((prev) => prev + selectedDistance);
+        // setSXinCanvas(sXinCanvas + selectedDistance);
+        // setSYinCanvas(sYinCanvas + selectedDistance);
+        setSXinCanvas((prev) => prev + selectedDistance);
+        setSYinCanvas((prev) => prev + selectedDistance);
+        //
+        squareSizeRef.current -= selectedDistance;
+      }
+    }
+  };
+
+  const handleMouseUp = (event: React.MouseEvent) => {
+    // stop resizing
+    selectedCornerForResizingRef.current.cornerName = undefined;
+  };
   return (
     <TranslucentBG
       onClick={() => {
