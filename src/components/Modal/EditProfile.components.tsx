@@ -72,7 +72,6 @@ export default function EditProfile() {
   //
   // starting point x, y in BG and in Canvas
   const [sXYinBG, setSXYinBG] = useState({ x: 0, y: 0 }); // except for line width
-
   //
   const [sXYinCanvas, setSXYinCanvas] = useState({ x: 0, y: 0 }); // except for line width
   //
@@ -80,12 +79,6 @@ export default function EditProfile() {
   // it needs to be created by useRef                                   //
   // so that other setStates read the synchronous square size value     //
   const squareSizeRef = useRef(-1);
-
-  // refs for initial x, y in BG and in Canvas
-  const initialSXinBGRef = useRef(0);
-  const initialSYinBGRef = useRef(0);
-  const initialSXinCanvasRef = useRef(0);
-  const initialSYinCanvasRef = useRef(0);
 
   // ref for four vertexes of square   // it is expected to be on line not inside line
   const fourCornersInBGRef = useRef({
@@ -274,20 +267,6 @@ export default function EditProfile() {
           x: startPointInCanvas(canvasWidthRef.current, canvasHeightRef.current, "w"),
           y: startPointInCanvas(canvasWidthRef.current, canvasHeightRef.current, "h"),
         });
-
-        // store initial x, y as them in BG and them in Canvas
-        initialSXinBGRef.current = startPointInBG(BGWidth);
-        initialSYinBGRef.current = startPointInBG(BGHeight);
-        initialSXinCanvasRef.current = startPointInCanvas(
-          canvasWidthRef.current,
-          canvasHeightRef.current,
-          "w",
-        );
-        initialSYinCanvasRef.current = startPointInCanvas(
-          canvasWidthRef.current,
-          canvasHeightRef.current,
-          "h",
-        );
       }
 
       // draw square
@@ -313,57 +292,14 @@ export default function EditProfile() {
     BGWidth,
     BGHeight,
     sXYinBG,
-
-    sXYinCanvas.x,
-    sXYinCanvas.y,
+    sXYinCanvas,
     squareSizeRef.current,
   ]);
 
-  //  following is my plan :
-  // - create mouse event handler. there will be these events : mouse down, mouse move, mouse up
-  // - in event handler, act differently as where user clicked. these are the actions : move square, resize square, do not any action
-  // - in event handler, after changing square's values which are x, y, size, useEffect will act automatically since I set the uesEffect deps array as square's values.
-  // - after mouse events finish and user click the "finish" button, crop image as the square's values which user change
   const handleMouseDown = (event: React.MouseEvent) => {
     const clickedX = event.clientX;
     const clickedY = event.clientY;
 
-    // x is a point of inside or outside line space of square
-    // and lines are two of left and right
-    const xOutsideLeftLine = sXYinBG.x - lineWidth - 1;
-    const xInsideLeftLine = sXYinBG.x;
-    const xOutsideRightLine = sXYinBG.x + squareSizeRef.current + lineWidth;
-    const xInsideRightLine = sXYinBG.x + squareSizeRef.current - 1;
-
-    // y is a point of inside or outside line space of square
-    // and lines are two of top and bottom
-    const yOutsideTopLine = sXYinBG.y - lineWidth - 1;
-    const yInsideTopLine = sXYinBG.y;
-    const yOutsideBottomLine = sXYinBG.y + squareSizeRef.current + lineWidth;
-    const yInsideBottomLine = sXYinBG.y + squareSizeRef.current - 1;
-
-    //
-    // the line space is a bit different from display pixel space
-    // I will fix it later !!!
-    //
-
-    // variables for whether clicked space matches each line spaces or not
-    // don't compare three values with "<". if so it is always set of true.
-    const isLeftLineForX = xOutsideLeftLine < clickedX && clickedX < xInsideLeftLine;
-    const isLeftLineForY = yOutsideTopLine < clickedY && clickedY < yOutsideBottomLine;
-    const isLeftLine = isLeftLineForX && isLeftLineForY;
-
-    const isRightLineForX = xInsideRightLine < clickedX && clickedX < xOutsideRightLine;
-    const isRightLineForY = yOutsideTopLine < clickedY && clickedY < yOutsideBottomLine;
-    const isRightLine = isRightLineForX && isRightLineForY;
-
-    const isTopLineForX = xOutsideLeftLine < clickedX && clickedX < xOutsideRightLine;
-    const isTopLineForY = yOutsideTopLine < clickedY && clickedY < yInsideTopLine;
-    const isTopLine = isTopLineForX && isTopLineForY;
-
-    const isBottomLineForX = xOutsideLeftLine < clickedX && clickedX < xOutsideRightLine;
-    const isBottomLineForY = yInsideBottomLine < clickedY && clickedY < yOutsideBottomLine;
-    const isBottomLine = isBottomLineForX && isBottomLineForY;
     // to resize square  get the circle spaces on four corners of square
     // to move square  set the boolean value
     checkPoint(clickedX, clickedY);
@@ -484,7 +420,7 @@ export default function EditProfile() {
 
     // case 3. bottomLeftCorner is clicked
     if (cornerName && cornerName === "bottomLeftCorner") {
-      // case 2-1. mouse moves to right and up and square shrinks
+      // case 3-1. mouse moves to right and up and square shrinks
       if (distanceX > 0 && distanceY < 0) {
         // set x, y of square starting point not bottom left corner
         setSXYinBG({ x: sXYinBG.x + selectedDistance, y: sXYinBG.y });
@@ -502,7 +438,7 @@ export default function EditProfile() {
           y: cornerXY.y - selectedDistance,
         };
       }
-      // case 2-2. mouse moves to left and down and square expands
+      // case 3-2. mouse moves to left and down and square expands
       if (distanceX < 0 && distanceY > 0) {
         // set x, y of square starting point not bottom left corner
         setSXYinBG({ x: sXYinBG.x - selectedDistance, y: sXYinBG.y });
@@ -524,7 +460,7 @@ export default function EditProfile() {
 
     // case 4. bottomRightCorner is clicked
     if (cornerName && cornerName === "bottomRightCorner") {
-      // case 2-1. mouse moves to right and down and square expands
+      // case 4-1. mouse moves to right and down and square expands
       if (distanceX > 0 && distanceY > 0) {
         // set x, y of square starting point not bottom right corner
         // it is the same as before but must be set to execute useEffect
@@ -543,7 +479,7 @@ export default function EditProfile() {
           y: cornerXY.y + selectedDistance,
         };
       }
-      // case 2-2. mouse moves to left and up and square shrinks
+      // case 4-2. mouse moves to left and up and square shrinks
       if (distanceX < 0 && distanceY < 0) {
         // set x, y of square starting point not bottom right corner
         // it is the same as before but must be set to execute useEffect
@@ -565,7 +501,7 @@ export default function EditProfile() {
     }
   };
 
-  const handleMouseUp = (event: React.MouseEvent) => {
+  const handleMouseUp = () => {
     // stop resizing or moving
     selectedCornerForResizingRef.current.cornerName = undefined;
     isMovingRef.current = undefined;
@@ -581,7 +517,7 @@ export default function EditProfile() {
         <CropImageCanvas
           onMouseDown={(event) => handleMouseDown(event)}
           onMouseMove={(event) => handleMouseMove(event)}
-          onMouseUp={(event) => handleMouseUp(event)}
+          onMouseUp={() => handleMouseUp()}
           ref={cropImgCanvasRef}
           aria-label="cut your profile image"
           role="img"
