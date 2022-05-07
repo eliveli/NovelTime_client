@@ -95,7 +95,8 @@ export default function EditProfile() {
     bottomRightCorner: { x: 0, y: 0 },
   });
 
-  // ref for handling mouse event
+  // refs for resizing or moving square
+  //   as user first clicks and executes mouse down event
   type CornerName =
     | "topLeftCorner"
     | "topRightCorner"
@@ -106,6 +107,9 @@ export default function EditProfile() {
     cornerName: undefined as CornerName,
     cornerXY: { x: 0, y: 0 },
   });
+  type IsMoving = { x: number; y: number } | undefined;
+  const isMovingRef = useRef(undefined as IsMoving);
+
   // initialize square size and x, y that are square starting point(topLeft point)
   const selectSquareSize = (canvasWidthParam: number, canvasHeightParam: number) =>
     canvasWidthParam > canvasHeightParam ? canvasHeightParam : canvasWidthParam;
@@ -177,9 +181,10 @@ export default function EditProfile() {
 
   // check whether the point user clicked is inside circle on corner of square
   function checkPoint(clickedX: number, clickedY: number) {
+    // arrays for confirming to resizing square
     const fourCornerXY = Object.values(fourCornersInBGRef.current);
     const fourCornerName = Object.keys(fourCornersInBGRef.current);
-
+    // check for resizing square
     for (let i = 0; i < fourCornerXY.length; i += 1) {
       const centerOfCircle = fourCornerXY[i];
       const distPoints =
@@ -193,6 +198,22 @@ export default function EditProfile() {
           cornerXY: centerOfCircle,
         };
         break;
+      }
+    }
+
+    // array for confirming to moving square
+    const { topLeftCorner, topRightCorner, bottomLeftCorner } = fourCornersInBGRef.current;
+
+    // check for moving square //
+    // it must be located after code lines for checking for resizing square
+    // to except for space in square that is included in circle on corner
+    //                                  and to resize square in that area
+    if (!selectedCornerForResizingRef.current.cornerName) {
+      const isBetweenBothX = topLeftCorner.x < clickedX && clickedX < topRightCorner.x;
+      const isBetweenBothY = topLeftCorner.y < clickedY && clickedY < bottomLeftCorner.y;
+
+      if (isBetweenBothX && isBetweenBothY) {
+        isMovingRef.current = { x: clickedX, y: clickedY };
       }
     }
   }
@@ -343,21 +364,31 @@ export default function EditProfile() {
     const isBottomLineForX = xOutsideLeftLine < clickedX && clickedX < xOutsideRightLine;
     const isBottomLineForY = yInsideBottomLine < clickedY && clickedY < yOutsideBottomLine;
     const isBottomLine = isBottomLineForX && isBottomLineForY;
-
-    // resize square
-    // get the circle spaces on four corners of square
+    // to resize square  get the circle spaces on four corners of square
+    // to move square  set the boolean value
     checkPoint(clickedX, clickedY);
-    //
-    // move square
-    // if (isLeftLine && isTopLine) {
-    // }
   };
   const handleMouseMove = (event: React.MouseEvent) => {
-    // resize square
-    const { cornerName, cornerXY } = selectedCornerForResizingRef.current;
-
     const movedX = event.clientX;
     const movedY = event.clientY;
+
+    // move square
+    if (isMovingRef.current) {
+      const { x, y } = isMovingRef.current;
+      const distanceXMoving = movedX - x;
+      const distanceYMoving = movedY - y;
+      setSXYinBG({ x: sXYinBG.x + distanceXMoving, y: sXYinBG.y + distanceYMoving });
+      setSXYinCanvas({
+        x: sXYinCanvas.x + distanceXMoving,
+        y: sXYinCanvas.y + distanceYMoving,
+      });
+      isMovingRef.current.x += distanceXMoving;
+      isMovingRef.current.y += distanceYMoving;
+      return;
+    }
+
+    // resize square
+    const { cornerName, cornerXY } = selectedCornerForResizingRef.current;
 
     const distanceX = movedX - cornerXY.x;
     const distanceY = movedY - cornerXY.y;
@@ -535,8 +566,9 @@ export default function EditProfile() {
   };
 
   const handleMouseUp = (event: React.MouseEvent) => {
-    // stop resizing
+    // stop resizing or moving
     selectedCornerForResizingRef.current.cornerName = undefined;
+    isMovingRef.current = undefined;
   };
   return (
     <TranslucentBG
