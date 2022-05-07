@@ -142,8 +142,48 @@ export const TranslucentBG = styled.div`
   justify-content: center;
   align-items: center;
 `;
+export const CanvasContnr = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  position: relative;
+  border-radius: 7px;
+`;
+export const BtnUponCanvasContnr = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  width: 100%;
+
+  padding: 10px;
+`;
+export const TextForCropImg = styled.span`
+  font-size: 15px;
+  padding-top: 3px;
+`;
+export const BtnUponCanvas = styled.button`
+  font-size: 13px;
+  font-weight: 500;
+
+  background-color: white;
+  color: rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(0, 0, 0, 0.2);
+
+  white-space: nowrap;
+
+  border-radius: 20px;
+  padding: 2px 9px 2px 7px;
+`;
+
 export const CropImageCanvas = styled.canvas`
   background-size: contain; // to show full image
+  margin: 0 10px 10px;
+
+  background-repeat: no-repeat;
+  background-position: center;
 `;
 
 export const ModalBox = styled.div<{ padding?: string }>`

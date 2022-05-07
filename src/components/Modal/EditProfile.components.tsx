@@ -19,6 +19,10 @@ import {
   SelectBtnBox,
   UploadImg,
   CropImageCanvas,
+  BtnUponCanvasContnr,
+  BtnUponCanvas,
+  CanvasContnr,
+  TextForCropImg,
 } from "./Modal.styles";
 
 export default function EditProfile() {
@@ -119,8 +123,17 @@ export default function EditProfile() {
     // squareSize will be changed synchronously
     // and other setState will read the changed value directly
   };
-  const startPointInBG = (BGWidthOrHeight: number) =>
-    (BGWidthOrHeight - squareSizeRef.current - 2 * lineWidth) / 2;
+  const startPointInBG = (BGWidthOrHeight: number, widthOrHeight: "w" | "h") => {
+    if (widthOrHeight === "w") {
+      return (
+        (BGWidthOrHeight - squareSizeRef.current - 2 * lineWidth - 2 * 10) / 2 + 10 + lineWidth + 1
+      ); // add left margin as 10px // starting point is except line width
+    }
+
+    return (
+      (BGWidthOrHeight - squareSizeRef.current - 2 * lineWidth - 45 - 10) / 2 + 45 + lineWidth + 1
+    ); // add top line height as 45px
+  };
 
   const calcSquareSize = (canvasWidthParam: number, canvasHeightParam: number) =>
     selectSquareSize(canvasWidthParam, canvasHeightParam) - 2 * lineWidth;
@@ -224,18 +237,19 @@ export default function EditProfile() {
     image.onload = () => {
       // set canvas width, height, x, y to show full size image and center it in screen
       const canvasRatio = image.width / image.height;
-      canvasWidthRef.current = BGWidth;
+      // canvasWidthRef.current = BGWidth;
+      canvasWidthRef.current = 500;
       canvasHeightRef.current = canvasWidthRef.current / canvasRatio;
-      if (canvasHeightRef.current > BGHeight) {
-        canvasHeightRef.current = BGHeight;
-        canvasWidthRef.current = canvasHeightRef.current * canvasRatio;
-      }
-      const xOffset = canvasWidthRef.current < BGWidth ? (BGWidth - canvasWidthRef.current) / 2 : 0;
-      const yOffset =
-        canvasHeightRef.current < BGHeight ? (BGHeight - canvasHeightRef.current) / 2 : 0;
+      //   if (canvasHeightRef.current > BGHeight) {
+      //     canvasHeightRef.current = BGHeight;
+      //     canvasWidthRef.current = canvasHeightRef.current * canvasRatio;
+      //   }
+      //   const xOffset = canvasWidthRef.current < BGWidth ? (BGWidth - canvasWidthRef.current) / 2 : 0;
+      //   const yOffset =
+      //     canvasHeightRef.current < BGHeight ? (BGHeight - canvasHeightRef.current) / 2 : 0;
 
-      canvas.style.top = `${yOffset}px`;
-      canvas.style.left = `${xOffset}px`;
+      //   canvas.style.top = `${yOffset}px`;
+      //   canvas.style.left = `${xOffset}px`;
 
       // set canvas width and height
       // : do not use property "style.width" and "style.height"
@@ -261,7 +275,7 @@ export default function EditProfile() {
         // other setStates read squareSize as its previous value that didn't be changed yet
         squareSizeRef.current = calcSquareSize(canvas.width, canvas.height);
 
-        setSXYinBG({ x: startPointInBG(BGWidth), y: startPointInBG(BGHeight) });
+        setSXYinBG({ x: startPointInBG(BGWidth, "w"), y: startPointInBG(BGHeight, "h") });
 
         setSXYinCanvas({
           x: startPointInCanvas(canvasWidthRef.current, canvasHeightRef.current, "w"),
@@ -506,6 +520,7 @@ export default function EditProfile() {
     selectedCornerForResizingRef.current.cornerName = undefined;
     isMovingRef.current = undefined;
   };
+
   return (
     <TranslucentBG
       onClick={() => {
@@ -514,14 +529,21 @@ export default function EditProfile() {
       ref={BGRef}
     >
       {selectedProfileImage && (
-        <CropImageCanvas
-          onMouseDown={(event) => handleMouseDown(event)}
-          onMouseMove={(event) => handleMouseMove(event)}
-          onMouseUp={() => handleMouseUp()}
-          ref={cropImgCanvasRef}
-          aria-label="cut your profile image"
-          role="img"
-        />
+        <CanvasContnr>
+          <BtnUponCanvasContnr>
+            <BtnUponCanvas onClick={() => dispatch(closeModal())}>취소</BtnUponCanvas>
+            <TextForCropImg>이미지를 잘라 주세요</TextForCropImg>
+            <BtnUponCanvas>선택</BtnUponCanvas>
+          </BtnUponCanvasContnr>
+          <CropImageCanvas
+            onMouseDown={(event) => handleMouseDown(event)}
+            onMouseMove={(event) => handleMouseMove(event)}
+            onMouseUp={() => handleMouseUp()}
+            ref={cropImgCanvasRef}
+            aria-label="cut your profile image"
+            role="img"
+          />
+        </CanvasContnr>
       )}
       {!selectedProfileImage && (
         <ModalBox
