@@ -131,7 +131,10 @@ export default function EditProfile() {
     }
 
     return (
-      (BGWidthOrHeight - squareSizeRef.current - 2 * lineWidth - 45 - 10) / 2 + 45 + lineWidth + 1
+      (BGWidthOrHeight - squareSizeRef.current - 2 * lineWidth - 45.5 - 10) / 2 +
+      45.5 +
+      lineWidth +
+      1
     ); // add top line height as 45px
   };
 
@@ -237,19 +240,16 @@ export default function EditProfile() {
     image.onload = () => {
       // set canvas width, height, x, y to show full size image and center it in screen
       const canvasRatio = image.width / image.height;
-      // canvasWidthRef.current = BGWidth;
-      canvasWidthRef.current = 500;
-      canvasHeightRef.current = canvasWidthRef.current / canvasRatio;
-      //   if (canvasHeightRef.current > BGHeight) {
-      //     canvasHeightRef.current = BGHeight;
-      //     canvasWidthRef.current = canvasHeightRef.current * canvasRatio;
-      //   }
-      //   const xOffset = canvasWidthRef.current < BGWidth ? (BGWidth - canvasWidthRef.current) / 2 : 0;
-      //   const yOffset =
-      //     canvasHeightRef.current < BGHeight ? (BGHeight - canvasHeightRef.current) / 2 : 0;
 
-      //   canvas.style.top = `${yOffset}px`;
-      //   canvas.style.left = `${xOffset}px`;
+      canvasWidthRef.current = 500;
+
+      let canvasWidthForMobile: number | undefined; // it is used in mobile screen sizes
+      // canvas width + left and right margin of canvas + extra space > BG width
+      if (canvasWidthRef.current + 20 + 10 > BGWidth) {
+        canvasWidthForMobile = BGWidth - 20 - 10;
+        canvasWidthRef.current = canvasWidthForMobile;
+      }
+      canvasHeightRef.current = canvasWidthRef.current / canvasRatio;
 
       // set canvas width and height
       // : do not use property "style.width" and "style.height"
@@ -276,10 +276,13 @@ export default function EditProfile() {
         squareSizeRef.current = calcSquareSize(canvas.width, canvas.height);
 
         setSXYinBG({ x: startPointInBG(BGWidth, "w"), y: startPointInBG(BGHeight, "h") });
+        if (canvasWidthForMobile !== undefined) {
+          setSXYinBG({ x: startPointInBG(BGWidth, "w"), y: startPointInBG(BGHeight, "h") });
+        }
 
         setSXYinCanvas({
-          x: startPointInCanvas(canvasWidthRef.current, canvasHeightRef.current, "w"),
-          y: startPointInCanvas(canvasWidthRef.current, canvasHeightRef.current, "h"),
+          x: lineWidth,
+          y: lineWidth,
         });
       }
 
@@ -292,12 +295,14 @@ export default function EditProfile() {
       // set four circles on square corners in canvas
       const fourCornersInCanvas = calcFourCornersInCanvas();
 
+      ctx.fillStyle = theme.color.main;
+
       // draw circles on square corners
       fourCornersInCanvas.map((corner) => {
         ctx.beginPath();
         ctx.arc(corner.x, corner.y, circleRadius, 0, 2 * Math.PI);
-        ctx.stroke(); // later remove
-        // ctx.fill(); // later uncomment
+        // ctx.stroke();
+        ctx.fill();
       });
     };
   }, [
@@ -524,12 +529,17 @@ export default function EditProfile() {
   return (
     <TranslucentBG
       onClick={() => {
-        if (!selectedProfileImage) dispatch(closeModal());
+        dispatch(closeModal());
       }}
       ref={BGRef}
     >
       {selectedProfileImage && (
-        <CanvasContnr>
+        <CanvasContnr
+          // prevent modal from being closed as clicking
+          onClick={(event: React.MouseEvent<HTMLElement>) => {
+            event.stopPropagation();
+          }}
+        >
           <BtnUponCanvasContnr>
             <BtnUponCanvas onClick={() => dispatch(closeModal())}>취소</BtnUponCanvas>
             <TextForCropImg>이미지를 잘라 주세요</TextForCropImg>
