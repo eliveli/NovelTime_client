@@ -1,7 +1,7 @@
 import theme from "assets/styles/theme";
 import { useEffect, useRef, useState } from "react";
 import { closeModal } from "store/clientSlices/modalSlice";
-import { useComponentHeight, useComponentWidth } from "utils";
+import { CheckDeviceType, useComponentHeight, useComponentWidth } from "utils";
 
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 
@@ -533,7 +533,8 @@ export default function EditProfile() {
       }}
       ref={BGRef}
     >
-      {selectedProfileImage && (
+      {/* edit image on desktop not on mobile or tablet where canvas can't work */}
+      {selectedProfileImage && CheckDeviceType() === "desktop" && (
         <CanvasContnr
           // prevent modal from being closed as clicking
           onClick={(event: React.MouseEvent<HTMLElement>) => {
