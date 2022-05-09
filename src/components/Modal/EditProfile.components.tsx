@@ -110,19 +110,6 @@ export default function EditProfile() {
   // initialize square size and x, y that are square starting point(topLeft point)
   const selectSquareSize = (canvasWidthParam: number, canvasHeightParam: number) =>
     canvasWidthParam > canvasHeightParam ? canvasHeightParam : canvasWidthParam;
-  const startPointInCanvas = (
-    canvasWidthParam: number,
-    canvasHeightParam: number,
-    selectWidthOrHeight: "w" | "h",
-  ) => {
-    const SquareSizeWithLine = selectSquareSize(canvasWidthParam, canvasHeightParam);
-    const widthOrHeight = selectWidthOrHeight === "w" ? canvasWidthParam : canvasHeightParam;
-    return SquareSizeWithLine === widthOrHeight
-      ? lineWidth
-      : (widthOrHeight - SquareSizeWithLine) / 2 + lineWidth;
-    // squareSize will be changed synchronously
-    // and other setState will read the changed value directly
-  };
   const startPointInBG = (BGWidthOrHeight: number, widthOrHeight: "w" | "h") => {
     if (widthOrHeight === "w") {
       return (
@@ -227,6 +214,9 @@ export default function EditProfile() {
     }
   }
 
+  // it will be true as clicking the button for selecting image edited
+  const [isImageSelected, setImageSelected] = useState(false);
+
   // set canvas and draw square and circles
   useEffect(() => {
     if (!cropImgCanvasRef.current) return;
@@ -237,7 +227,47 @@ export default function EditProfile() {
     const image = new Image();
     image.src = selectedProfileImage;
 
+    // crop image
+    if (isImageSelected) {
+      // create a hidden canvas to draw the image user edited
+      const hiddenCanvas = document.createElement("canvas");
+      hiddenCanvas.style.display = "none";
+      document.body.appendChild(hiddenCanvas);
+      hiddenCanvas.width = squareSizeRef.current;
+      hiddenCanvas.height = squareSizeRef.current;
+      if (hiddenCanvas) {
+        // draw full image in main canvas(just named as "canvas")
+        //      because image exists as background not as drawn image
+        ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+
+        // draw the image user edited in hidden canvas
+        hiddenCanvas
+          ?.getContext("2d")
+          ?.drawImage(
+            canvas,
+            sXYinCanvas.x,
+            sXYinCanvas.y,
+            squareSizeRef.current,
+            squareSizeRef.current,
+            0,
+            0,
+            squareSizeRef.current,
+            squareSizeRef.current,
+          );
+      }
+
+      // get data url of image edited
+      const imgUrl = hiddenCanvas.toDataURL("image/jpeg", 1.0);
+      //   const tempLink = document.createElement("a");
+      //   tempLink.download = "downloadName";
+      //   //   setSelectedProfileImage(hiddenCanvas.toDataURL("image/jpeg", 1.0));
+      //   tempLink.href = hiddenCanvas.toDataURL("image/jpeg", 1.0);
+      //   tempLink.click();
+    }
+
     image.onload = () => {
+      if (isImageSelected) return;
+
       // set canvas width, height, x, y to show full size image and center it in screen
       const canvasRatio = image.width / image.height;
 
@@ -257,10 +287,6 @@ export default function EditProfile() {
       canvas.width = canvasWidthRef.current;
       canvas.height = canvasHeightRef.current;
       canvas.style.backgroundImage = `url(${selectedProfileImage})`; // set image as background
-
-      // crop image
-      //   ctx.drawImage(image, xOffset, yOffset, newWidth, newHeight);
-
       // initiate square centered in canvas
       ctx.lineWidth = lineWidth;
       ctx.strokeStyle = theme.color.mainLight;
@@ -313,6 +339,7 @@ export default function EditProfile() {
     sXYinBG,
     sXYinCanvas,
     squareSizeRef.current,
+    isImageSelected,
   ]);
 
   const handleMouseDown = (event: React.MouseEvent) => {
@@ -544,7 +571,7 @@ export default function EditProfile() {
           <BtnUponCanvasContnr>
             <BtnUponCanvas onClick={() => dispatch(closeModal())}>취소</BtnUponCanvas>
             <TextForCropImg>이미지를 잘라 주세요</TextForCropImg>
-            <BtnUponCanvas>선택</BtnUponCanvas>
+            <BtnUponCanvas onClick={() => setImageSelected(true)}>선택</BtnUponCanvas>
           </BtnUponCanvasContnr>
           <CropImageCanvas
             onMouseDown={(event) => handleMouseDown(event)}
