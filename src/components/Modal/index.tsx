@@ -4,7 +4,7 @@ import NovelImage from "./NovelImage";
 import SortWriting from "./SortWriting";
 import FilterContent from "./FilterContent";
 import Login from "./Login";
-import EditProfile from "./EditProfile.components";
+import EditProfile from "./EditProfile";
 
 export default function Modal() {
   const modalCategory = useAppSelector((state) => state.modal.modalCategory);
