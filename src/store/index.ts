@@ -9,10 +9,12 @@ import filterReducer from "./clientSlices/filterSlice";
 import userReducer from "./clientSlices/userSlice";
 
 import { novelTimeApi } from "./serverAPIs/novelTime";
+import { imageHostingApi } from "./serverAPIs/imageHosting";
 
 const store = configureStore({
   reducer: {
     [novelTimeApi.reducerPath]: novelTimeApi.reducer,
+    [imageHostingApi.reducerPath]: imageHostingApi.reducer,
     modal: modalReducer,
     writing: writingReducer,
     filter: filterReducer,
@@ -21,7 +23,9 @@ const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: false,
-    }).concat(novelTimeApi.middleware),
+    })
+      .concat(novelTimeApi.middleware)
+      .concat(imageHostingApi.middleware),
 });
 
 // optional, but required for refetchOnFocus/refetchOnReconnect behaviors
