@@ -1,9 +1,9 @@
 import { useAppSelector } from "../../store/hooks";
 import { usePreventScroll } from "../../utils";
-import NovelImage from "./NovelImage.components";
-import SortWriting from "./SortWriting.components";
-import FilterContent from "./FilterContent.components";
-import Login from "./Login.components";
+import NovelImage from "./NovelImage";
+import SortWriting from "./SortWriting";
+import FilterContent from "./FilterContent";
+import Login from "./Login";
 import EditProfile from "./EditProfile.components";
 
 export default function Modal() {
