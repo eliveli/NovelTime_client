@@ -74,3 +74,10 @@ export type TypeHandleMoving = React.Dispatch<
     | undefined
   >
 >;
+export type TypeSetSXY = React.Dispatch<
+  React.SetStateAction<{
+    x: number;
+    y: number;
+  }>
+>;
+export type TypeSXY = { x: number; y: number };

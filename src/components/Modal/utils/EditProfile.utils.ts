@@ -7,10 +7,12 @@ import {
   TypeHandleSelectedCornerForResizing,
   TypeIsMoving,
   TypeSelectedCornerForResizing,
+  TypeSXY,
+  TypeSetSXY,
 } from "./EditProfile.utils.types";
 
 // use useState like synchronous
-// don't import the same function from [src/util] to name the value as I want
+// don't import the same function from [src/util] just create and use to name the value as I want
 export function useAsyncState(initialValue: number) {
   const [squareSize, setSquareSizeReal] = useState(initialValue);
   const setSquareSize = (x: number) =>
@@ -21,7 +23,7 @@ export function useAsyncState(initialValue: number) {
   return { squareSize, setSquareSize };
 }
 
-// check whether the point user clicked is inside circle on corner of square
+// check whether the point user clicked is inside circle on square corners
 export function checkPoint(
   clickedX: number,
   clickedY: number,
@@ -51,11 +53,11 @@ export function checkPoint(
     }
   }
 
-  // array for confirming to moving square
+  // array for confirming to move square
   const { topLeftCorner, topRightCorner, bottomLeftCorner } = fourCornersInBG;
 
   // check for moving square //
-  // it must be located after code lines for checking for resizing square
+  // it must be located after code lines checking for resizing square
   // to except for space in square that is included in circle on corner
   //                                  and to resize square in that area
   if (!selectedCornerForResizing.cornerName) {
@@ -83,7 +85,7 @@ export const startPointInBG = (
   }
 
   return (BGWidthOrHeight - squareSize - 2 * lineWidth - 45.5 - 10) / 2 + 45.5 + lineWidth + 1;
-  // add top line height as 45px
+  // add top line height as 45.5px
 };
 
 export const calcSquareSize = (
@@ -91,18 +93,10 @@ export const calcSquareSize = (
   canvasHeightParam: number,
   lineWidth: number,
 ) => selectSquareSize(canvasWidthParam, canvasHeightParam) - 2 * lineWidth;
-type TypeSetSXY = React.Dispatch<
-  React.SetStateAction<{
-    x: number;
-    y: number;
-  }>
->;
-type TypeSXY = { x: number; y: number };
-
 // calculate four corners of square in BG //
-//   the value is not exact cause as I see
-//   it is not exactly divided into square line and inside-square...
-//   I need more information about this, but I'm not sure whether it can be or not...
+//   the value is not exact
+//   it seems not to be exactly divided into square line and inside-square
+//   so there might be a bit margin error when calculating the points but it's not a big issue
 export const calcFourCornersInBG = (
   sXYinBG: TypeSXY,
   squareSize: number,
@@ -131,13 +125,7 @@ export const calcFourCornersInBG = (
 
 // calculate four corners of square
 // store them in BG and return them in Canvas
-export const calcFourCornersInCanvas = ({
-  sXYinCanvas,
-  squareSize,
-}: {
-  sXYinCanvas: TypeSXY;
-  squareSize: number;
-}) => {
+export const calcFourCornersInCanvas = (sXYinCanvas: TypeSXY, squareSize: number) => {
   const fourCornersInCanvas = [
     { x: sXYinCanvas.x - 1, y: sXYinCanvas.y - 1 },
     {
@@ -177,14 +165,14 @@ export const handleMouseDown = (
   );
 };
 
-export const handleMouseMove = async (
+export const handleMouseMove = (
   event: React.MouseEvent,
   setSXYinBG: TypeSetSXY,
   setSXYinCanvas: TypeSetSXY,
   sXYinBG: TypeSXY,
   sXYinCanvas: TypeSXY,
   squareSize: number,
-  setSquareSize: (number: number) => Promise<unknown>,
+  changeSquareSize: (size: number) => void,
   selectedCornerForResizing: TypeSelectedCornerForResizing,
   handleSelectedCornerForResizing: TypeHandleSelectedCornerForResizing,
   isMoving: TypeIsMoving,
@@ -233,7 +221,7 @@ export const handleMouseMove = async (
         y: sXYinCanvas.y + selectedDistance,
       });
       //
-      await setSquareSize(squareSize - selectedDistance);
+      changeSquareSize(squareSize - selectedDistance);
 
       // add distance to top left corner x, y
       // to get corner x, y that has changed right before when keeping mouse move event on
@@ -253,7 +241,7 @@ export const handleMouseMove = async (
         y: sXYinCanvas.y - selectedDistance,
       });
       //
-      await setSquareSize(squareSize + selectedDistance);
+      changeSquareSize(squareSize + selectedDistance);
 
       // remove distance from top left corner x, y
       // to get corner x, y that has changed right before when keeping mouse move event on
@@ -278,7 +266,7 @@ export const handleMouseMove = async (
         y: sXYinCanvas.y - selectedDistance,
       });
       //
-      await setSquareSize(squareSize + selectedDistance);
+      changeSquareSize(squareSize + selectedDistance);
 
       // add or remove distance to or from top right corner x, y
       // to get corner x, y that has changed right before when keeping mouse move event on
@@ -300,7 +288,7 @@ export const handleMouseMove = async (
         y: sXYinCanvas.y + selectedDistance,
       });
       //
-      await setSquareSize(squareSize - selectedDistance);
+      changeSquareSize(squareSize - selectedDistance);
 
       // add or remove distance to or from top right corner x, y
       // to get corner x, y that has changed right before when keeping mouse move event on
@@ -325,7 +313,7 @@ export const handleMouseMove = async (
         y: sXYinCanvas.y,
       });
       //
-      await setSquareSize(squareSize - selectedDistance);
+      changeSquareSize(squareSize - selectedDistance);
 
       // add or remove distance to or from bottom left corner x, y
       // to get corner x, y that has changed right before when keeping mouse move event on
@@ -346,7 +334,7 @@ export const handleMouseMove = async (
         y: sXYinCanvas.y,
       });
       //
-      await setSquareSize(squareSize + selectedDistance);
+      changeSquareSize(squareSize + selectedDistance);
 
       // add or remove distance to or from bottom left corner x, y
       // to get corner x, y that has changed right before when keeping mouse move event on
@@ -372,7 +360,7 @@ export const handleMouseMove = async (
         y: sXYinCanvas.y,
       });
       //
-      await setSquareSize(squareSize + selectedDistance);
+      changeSquareSize(squareSize + selectedDistance);
 
       // add or remove distance to or from bottom right corner x, y
       // to get corner x, y that has changed right before when keeping mouse move event on
@@ -394,7 +382,7 @@ export const handleMouseMove = async (
         y: sXYinCanvas.y,
       });
       //
-      await setSquareSize(squareSize - selectedDistance);
+      changeSquareSize(squareSize - selectedDistance);
 
       // add or remove distance to or from bottom right corner x, y
       // to get corner x, y that has changed right before when keeping mouse move event on

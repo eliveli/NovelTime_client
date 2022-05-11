@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useComponentHeight, useComponentWidth } from "utils";
 import theme from "assets/styles/theme";
 import { closeModal } from "store/clientSlices/modalSlice";
+import { useImageHostingMutation } from "store/serverAPIs/imageHosting";
 import { useAppDispatch } from "../../store/hooks";
 
 import {
@@ -20,7 +21,6 @@ import {
   handleMouseDown,
   handleMouseMove,
   handleMouseUp,
-  useAsyncState,
 } from "./utils/EditProfile.utils";
 
 interface EditProfileImgProps {
@@ -47,17 +47,23 @@ export default function EditProfileImg({
   const lineWidth = 2;
   // starting point x, y in BG and in Canvas
   // useState is required for putting values in useEffect deps array //
-  const [sXYinBG, setSXYinBG] = useState({ x: 0, y: 0 }); // except for line width;
+  const [sXYinBG, setSXYinBG] = useState({ x: 0, y: 0 }); // except for line width
   const [sXYinCanvas, setSXYinCanvas] = useState({ x: 0, y: 0 }); // except for line width
   //
   // square size.
   // it needs to work like synchronous
   // so that other setStates read the synchronous square size value     //
-  const { squareSize, setSquareSize } = useAsyncState(-1);
+  const squareSizeRef = useRef(-1);
+
+  // create function to save value in useRef.current and pass this to event handler
+  // because useRef can't be passed to function parameter directly
+  const changeSquareSize = (size: number) => {
+    squareSizeRef.current = size;
+  };
 
   const circleRadius = 10;
 
-  // state for resizing or moving square
+  // value for resizing or moving square
   //   as user first clicks and executes mouse down event
   type CornerName =
     | "topLeftCorner"
@@ -100,8 +106,8 @@ export default function EditProfileImg({
       const hiddenCanvas = document.createElement("canvas");
       hiddenCanvas.style.display = "none";
       document.body.appendChild(hiddenCanvas);
-      hiddenCanvas.width = squareSize;
-      hiddenCanvas.height = squareSize;
+      hiddenCanvas.width = squareSizeRef.current;
+      hiddenCanvas.height = squareSizeRef.current;
       if (hiddenCanvas) {
         // draw full image in main canvas(just named as "canvas")
         //      because image exists as background not as drawn image
@@ -114,12 +120,12 @@ export default function EditProfileImg({
             canvas,
             sXYinCanvas.x,
             sXYinCanvas.y,
-            squareSize,
-            squareSize,
+            squareSizeRef.current,
+            squareSizeRef.current,
             0,
             0,
-            squareSize,
-            squareSize,
+            squareSizeRef.current,
+            squareSizeRef.current,
           );
       }
 
@@ -127,10 +133,9 @@ export default function EditProfileImg({
       setSelectedProfileImage(hiddenCanvas.toDataURL("image/jpeg", 1.0));
     }
 
-    image.onload = async () => {
+    image.onload = () => {
       if (isImageSelected) return;
 
-      // set canvas width, height, x, y to show full size image and center it in screen
       const canvasRatio = image.width / image.height;
 
       canvasWidthRef.current = 500;
@@ -155,18 +160,21 @@ export default function EditProfileImg({
 
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      if (squareSize === -1) {
+      // initiate square on canvas //
+      //  --following code line " canvasWidthRef.current > 0 " is required
+      //  --because the code " canvasWidthRef.current = 500 " above doesn't execute at first
+      if (canvasWidthRef.current > 0 && squareSizeRef.current === -1) {
         // squareSize have to be changed synchronously
         // so that other setStates like sXinBG and sYinBG read the changed squareSize value
-        await setSquareSize(calcSquareSize(canvas.width, canvas.height, lineWidth));
+        squareSizeRef.current = calcSquareSize(canvas.width, canvas.height, lineWidth);
         setSXYinBG({
-          x: startPointInBG(BGWidth, "w", squareSize, lineWidth),
-          y: startPointInBG(BGHeight, "h", squareSize, lineWidth),
+          x: startPointInBG(BGWidth, "w", squareSizeRef.current, lineWidth),
+          y: startPointInBG(BGHeight, "h", squareSizeRef.current, lineWidth),
         });
         if (canvasWidthForSmallBrowser !== undefined) {
           setSXYinBG({
-            x: startPointInBG(BGWidth, "w", squareSize, lineWidth),
-            y: startPointInBG(BGHeight, "h", squareSize, lineWidth),
+            x: startPointInBG(BGWidth, "w", squareSizeRef.current, lineWidth),
+            y: startPointInBG(BGHeight, "h", squareSizeRef.current, lineWidth),
           });
         }
 
@@ -177,16 +185,13 @@ export default function EditProfileImg({
       }
 
       // draw square
-      ctx.strokeRect(sXYinCanvas.x, sXYinCanvas.y, squareSize, squareSize);
+      ctx.strokeRect(sXYinCanvas.x, sXYinCanvas.y, squareSizeRef.current, squareSizeRef.current);
 
       // set four circles' location in BG
-      calcFourCornersInBG(sXYinBG, squareSize, handleFourCornersInBG);
+      calcFourCornersInBG(sXYinBG, squareSizeRef.current, handleFourCornersInBG);
 
       // set four circles on square corners in canvas
-      const fourCornersInCanvas = calcFourCornersInCanvas({
-        sXYinCanvas,
-        squareSize,
-      });
+      const fourCornersInCanvas = calcFourCornersInCanvas(sXYinCanvas, squareSizeRef.current);
 
       ctx.fillStyle = theme.color.main;
 
@@ -204,7 +209,7 @@ export default function EditProfileImg({
     BGHeight,
     sXYinBG,
     sXYinCanvas,
-    squareSize,
+    squareSizeRef.current,
     isImageSelected,
   ]);
 
@@ -231,15 +236,15 @@ export default function EditProfileImg({
             handleMoving,
           )
         }
-        onMouseMove={async (event) =>
+        onMouseMove={(event) =>
           handleMouseMove(
             event,
             setSXYinBG,
             setSXYinCanvas,
             sXYinBG,
             sXYinCanvas,
-            squareSize,
-            setSquareSize,
+            squareSizeRef.current,
+            changeSquareSize,
             selectedCornerForResizing,
             handleSelectedCornerForResizing,
             isMoving,
