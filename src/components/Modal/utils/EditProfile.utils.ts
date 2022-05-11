@@ -1,41 +1,32 @@
-import { useState } from "react";
 import {
   CornerName,
   TypeFourCornersInBG,
   TypeHandleFourCornersInBG,
   TypeHandleMoving,
-  TypeHandleSelectedCornerForResizing,
+  TypeForChangeSelectedCornerForResizing,
   TypeIsMoving,
-  TypeSelectedCornerForResizing,
   TypeSXY,
   TypeSetSXY,
 } from "./EditProfile.utils.types";
-
-// use useState like synchronous
-// don't import the same function from [src/util] just create and use to name the value as I want
-export function useAsyncState(initialValue: number) {
-  const [squareSize, setSquareSizeReal] = useState(initialValue);
-  const setSquareSize = (x: number) =>
-    new Promise((resolve) => {
-      setSquareSizeReal(x);
-      resolve(x);
-    });
-  return { squareSize, setSquareSize };
-}
-
 // check whether the point user clicked is inside circle on square corners
 export function checkPoint(
   clickedX: number,
   clickedY: number,
   circleRadius: number,
   fourCornersInBG: TypeFourCornersInBG,
-  selectedCornerForResizing: TypeSelectedCornerForResizing,
-  handleSelectedCornerForResizing: TypeHandleSelectedCornerForResizing,
+  changeSelectedCornerForResizing: ({
+    cornerName,
+    cornerXY,
+  }: TypeForChangeSelectedCornerForResizing) => void,
   handleMoving: TypeHandleMoving,
 ) {
   // arrays for confirming to resizing square
   const fourCornerXY = Object.values(fourCornersInBG);
   const fourCornerName = Object.keys(fourCornersInBG);
+
+  // if it will be true the code moving square below will be skipped
+  let isResizing = false;
+
   // check for resizing square
   for (let i = 0; i < fourCornerXY.length; i += 1) {
     const centerOfCircle = fourCornerXY[i];
@@ -45,10 +36,11 @@ export function checkPoint(
     const radiusSquared = circleRadius * circleRadius;
 
     if (distPoints < radiusSquared) {
-      handleSelectedCornerForResizing({
+      changeSelectedCornerForResizing({
         cornerName: fourCornerName[i] as CornerName,
         cornerXY: centerOfCircle,
       });
+      isResizing = true;
       break;
     }
   }
@@ -60,7 +52,7 @@ export function checkPoint(
   // it must be located after code lines checking for resizing square
   // to except for space in square that is included in circle on corner
   //                                  and to resize square in that area
-  if (!selectedCornerForResizing.cornerName) {
+  if (!isResizing) {
     const isBetweenBothX = topLeftCorner.x < clickedX && clickedX < topRightCorner.x;
     const isBetweenBothY = topLeftCorner.y < clickedY && clickedY < bottomLeftCorner.y;
 
@@ -145,8 +137,10 @@ export const handleMouseDown = (
   event: React.MouseEvent,
   circleRadius: number,
   fourCornersInBG: TypeFourCornersInBG,
-  selectedCornerForResizing: TypeSelectedCornerForResizing,
-  handleSelectedCornerForResizing: TypeHandleSelectedCornerForResizing,
+  changeSelectedCornerForResizing: ({
+    cornerName,
+    cornerXY,
+  }: TypeForChangeSelectedCornerForResizing) => void,
   handleMoving: TypeHandleMoving,
 ) => {
   const clickedX = event.clientX;
@@ -159,8 +153,7 @@ export const handleMouseDown = (
     clickedY,
     circleRadius,
     fourCornersInBG,
-    selectedCornerForResizing,
-    handleSelectedCornerForResizing,
+    changeSelectedCornerForResizing,
     handleMoving,
   );
 };
@@ -173,8 +166,11 @@ export const handleMouseMove = (
   sXYinCanvas: TypeSXY,
   squareSize: number,
   changeSquareSize: (size: number) => void,
-  selectedCornerForResizing: TypeSelectedCornerForResizing,
-  handleSelectedCornerForResizing: TypeHandleSelectedCornerForResizing,
+  selectedCornerForResizing: TypeForChangeSelectedCornerForResizing,
+  changeSelectedCornerForResizing: ({
+    cornerName,
+    cornerXY,
+  }: TypeForChangeSelectedCornerForResizing) => void,
   isMoving: TypeIsMoving,
   handleMoving: TypeHandleMoving,
 ) => {
@@ -225,7 +221,7 @@ export const handleMouseMove = (
 
       // add distance to top left corner x, y
       // to get corner x, y that has changed right before when keeping mouse move event on
-      handleSelectedCornerForResizing({
+      changeSelectedCornerForResizing({
         ...selectedCornerForResizing,
         cornerXY: {
           x: cornerXY.x + selectedDistance,
@@ -245,7 +241,7 @@ export const handleMouseMove = (
 
       // remove distance from top left corner x, y
       // to get corner x, y that has changed right before when keeping mouse move event on
-      handleSelectedCornerForResizing({
+      changeSelectedCornerForResizing({
         ...selectedCornerForResizing,
         cornerXY: {
           x: cornerXY.x - selectedDistance,
@@ -270,7 +266,7 @@ export const handleMouseMove = (
 
       // add or remove distance to or from top right corner x, y
       // to get corner x, y that has changed right before when keeping mouse move event on
-      handleSelectedCornerForResizing({
+      changeSelectedCornerForResizing({
         ...selectedCornerForResizing,
         cornerXY: {
           x: cornerXY.x + selectedDistance,
@@ -292,7 +288,7 @@ export const handleMouseMove = (
 
       // add or remove distance to or from top right corner x, y
       // to get corner x, y that has changed right before when keeping mouse move event on
-      handleSelectedCornerForResizing({
+      changeSelectedCornerForResizing({
         ...selectedCornerForResizing,
         cornerXY: {
           x: cornerXY.x - selectedDistance,
@@ -317,7 +313,7 @@ export const handleMouseMove = (
 
       // add or remove distance to or from bottom left corner x, y
       // to get corner x, y that has changed right before when keeping mouse move event on
-      handleSelectedCornerForResizing({
+      changeSelectedCornerForResizing({
         ...selectedCornerForResizing,
         cornerXY: {
           x: cornerXY.x + selectedDistance,
@@ -338,7 +334,7 @@ export const handleMouseMove = (
 
       // add or remove distance to or from bottom left corner x, y
       // to get corner x, y that has changed right before when keeping mouse move event on
-      handleSelectedCornerForResizing({
+      changeSelectedCornerForResizing({
         ...selectedCornerForResizing,
         cornerXY: {
           x: cornerXY.x - selectedDistance,
@@ -364,7 +360,7 @@ export const handleMouseMove = (
 
       // add or remove distance to or from bottom right corner x, y
       // to get corner x, y that has changed right before when keeping mouse move event on
-      handleSelectedCornerForResizing({
+      changeSelectedCornerForResizing({
         ...selectedCornerForResizing,
         cornerXY: {
           x: cornerXY.x + selectedDistance,
@@ -387,7 +383,7 @@ export const handleMouseMove = (
       // add or remove distance to or from bottom right corner x, y
       // to get corner x, y that has changed right before when keeping mouse move event on
 
-      handleSelectedCornerForResizing({
+      changeSelectedCornerForResizing({
         ...selectedCornerForResizing,
         cornerXY: {
           x: cornerXY.x - selectedDistance,
@@ -398,12 +394,15 @@ export const handleMouseMove = (
   }
 };
 export const handleMouseUp = (
-  selectedCornerForResizing: TypeSelectedCornerForResizing,
-  handleSelectedCornerForResizing: TypeHandleSelectedCornerForResizing,
+  selectedCornerForResizing: TypeForChangeSelectedCornerForResizing,
+  changeSelectedCornerForResizing: ({
+    cornerName,
+    cornerXY,
+  }: TypeForChangeSelectedCornerForResizing) => void,
   handleMoving: TypeHandleMoving,
 ) => {
   // stop resizing or moving
-  handleSelectedCornerForResizing({
+  changeSelectedCornerForResizing({
     ...selectedCornerForResizing,
     cornerName: undefined,
   });

@@ -71,10 +71,23 @@ export default function EditProfileImg({
     | "bottomLeftCorner"
     | "bottomRightCorner"
     | undefined;
-  const [selectedCornerForResizing, handleSelectedCornerForResizing] = useState({
+  type TypeForChangeSelectedCornerForResizing = {
+    cornerName: CornerName;
+    cornerXY: { x: number; y: number };
+  };
+  const selectedCornerForResizingRef = useRef({
     cornerName: undefined as CornerName,
     cornerXY: { x: 0, y: 0 },
   });
+  const changeSelectedCornerForResizing = ({
+    cornerName,
+    cornerXY,
+  }: TypeForChangeSelectedCornerForResizing) => {
+    selectedCornerForResizingRef.current = {
+      cornerName,
+      cornerXY,
+    };
+  };
 
   type IsMoving = { x: number; y: number } | undefined;
   const [isMoving, handleMoving] = useState(undefined as IsMoving);
@@ -231,8 +244,7 @@ export default function EditProfileImg({
             event,
             circleRadius,
             fourCornersInBG,
-            selectedCornerForResizing,
-            handleSelectedCornerForResizing,
+            changeSelectedCornerForResizing,
             handleMoving,
           )
         }
@@ -245,14 +257,18 @@ export default function EditProfileImg({
             sXYinCanvas,
             squareSizeRef.current,
             changeSquareSize,
-            selectedCornerForResizing,
-            handleSelectedCornerForResizing,
+            selectedCornerForResizingRef.current,
+            changeSelectedCornerForResizing,
             isMoving,
             handleMoving,
           )
         }
         onMouseUp={() =>
-          handleMouseUp(selectedCornerForResizing, handleSelectedCornerForResizing, handleMoving)
+          handleMouseUp(
+            selectedCornerForResizingRef.current,
+            changeSelectedCornerForResizing,
+            handleMoving,
+          )
         }
         ref={cropImgCanvasRef}
         aria-label="cut your profile image"

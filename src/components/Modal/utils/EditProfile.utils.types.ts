@@ -43,6 +43,12 @@ export type CornerName =
   | "bottomLeftCorner"
   | "bottomRightCorner"
   | undefined;
+
+export type TypeForChangeSelectedCornerForResizing = {
+  cornerName: CornerName;
+  cornerXY: { x: number; y: number };
+};
+
 export type TypeHandleSelectedCornerForResizing = React.Dispatch<
   React.SetStateAction<{
     cornerName: CornerName;
