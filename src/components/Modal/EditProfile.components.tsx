@@ -38,7 +38,11 @@ export default function EditProfileImg({
   const [ImageHosting, { isLoading, data, error }] = useImageHostingMutation();
   const handleImageHosting = async () => {
     if (selectedProfileImage) {
-      await ImageHosting(selectedProfileImage);
+      const formData = new FormData();
+      const imageBase64 = selectedProfileImage.split(",")[1];
+      formData.append("image", imageBase64);
+
+      await ImageHosting(formData);
     }
   };
 
