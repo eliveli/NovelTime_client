@@ -34,6 +34,13 @@ export default function EditProfileImg({
   BGRef,
 }: EditProfileImgProps) {
   const dispatch = useAppDispatch();
+  // image hosting on imgur after finishing editing the profile image
+  const [ImageHosting, { isLoading, data, error }] = useImageHostingMutation();
+  const handleImageHosting = async () => {
+    if (selectedProfileImage) {
+      await ImageHosting(selectedProfileImage);
+    }
+  };
 
   // get BG width and height to size canvas
   const BGWidth = useComponentWidth(BGRef);
@@ -144,6 +151,7 @@ export default function EditProfileImg({
 
       // get data url of image edited and set it as profile image
       setSelectedProfileImage(hiddenCanvas.toDataURL("image/jpeg", 1.0));
+      handleImageHosting();
     }
 
     image.onload = () => {
