@@ -5,6 +5,7 @@ import { CheckDeviceType } from "utils";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 
 import EditProfileImg from "./EditProfile.components";
+import HostingProfileImgForMobile from "./EditProfile.HostingProfileImgForMobile";
 import {
   ClosingIcon,
   ClosingBox,
@@ -69,6 +70,9 @@ export default function EditProfile() {
           setSelectedProfileImage={setSelectedProfileImage}
           BGRef={BGRef}
         />
+      )}
+      {selectedProfileImage && CheckDeviceType() !== "desktop" && (
+        <HostingProfileImgForMobile selectedProfileImage={selectedProfileImage} />
       )}
       {!selectedProfileImage && (
         <ModalBox

@@ -107,7 +107,7 @@ export default function AddWriting() {
   window.addEventListener(
     "message",
     (event) => {
-      if (event.origin !== "http://localhost:3000") {
+      if (event.origin !== "http://domainfordev:3000") {
         return;
       }
 

@@ -40,10 +40,33 @@ export default function EditProfileImg({
     if (selectedProfileImage) {
       const formData = new FormData();
       const imageBase64 = selectedProfileImage.split(",")[1];
+
+      // const array = [];
+      // for (let i = 0; i < imageBase64.length; i += 1) {
+      //   array.push(imageBase64.charCodeAt(i));
+      // }
+      // const imageFile = new Blob([new Uint8Array(array)], { type: "image/jpeg" });
+
+      // const imageForHosting = selectedProfileImage.replace("image/jpeg", "image/octet-stream");
+
       formData.append("image", imageBase64);
 
+      console.log("formData:", formData);
+      console.log("imageDataUrl:", selectedProfileImage);
+      // console.log("imageForHosting:", imageForHosting);
+      console.log("imageBase64:", imageBase64);
+      // console.log("imageFile:", imageFile);
+
       await ImageHosting(formData);
+      // .then((data) => data.json())
+      // .then((data) => {
+      //   console.log("image link from imgur : ", data.data.link);
+      // });
     }
+    // 에러 처리도 하자
+    console.log("after requesting image hosting, isLoading:", isLoading);
+    console.log("after requesting image hosting, data:", data);
+    console.log("after requesting image hosting, error:", error);
   };
 
   // get BG width and height to size canvas
