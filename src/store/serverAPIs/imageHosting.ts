@@ -13,13 +13,16 @@ const IMAGE_HOSTING_CLIENT_ID =
     : process.env.REACT_APP_IMAGE_HOSTING_CLIENT_ID_ANONYMOUS;
 // I registered with "anonymous" option on imgur
 
-interface ImgHostingResult {
+// response type for image hosting is inaccurate. I couldn't catch what is the exact yet
+type ImgHostingResult = {
   data: {
-    link: string;
+    data: {
+      link: string;
+    };
+    status: number;
+    success: boolean;
   };
-  status: number;
-  success: boolean;
-}
+};
 
 // Define a service using a base URL and expected endpoints
 export const imageHostingApi = createApi({

@@ -35,26 +35,23 @@ export default function EditProfileImg({
 }: EditProfileImgProps) {
   const dispatch = useAppDispatch();
   // image hosting on imgur after finishing editing the profile image
-  const [ImageHosting, { isLoading, data, error }] = useImageHostingMutation();
+  const [ImageHosting] = useImageHostingMutation();
   const handleImageHosting = async () => {
     if (selectedProfileImage) {
       const formData = new FormData();
       const imageBase64 = selectedProfileImage.split(",")[1];
 
       formData.append("image", imageBase64);
-      try {
-        const response = await ImageHosting(formData);
-        if (!response.success) {
-          throw new Error(`Error! status: ${response.status}`);
-        }
-        const result = await response.json();
-        console.log("image link from imgur : ", result.data.link);
-      } catch (err) {
-        console.log(err);
-      }
+
+      await ImageHosting(formData)
+        .then((result) => {
+          console.log("image result: ", result.data.data.link);
+        })
+        .catch((err) => {
+          console.log("after requesting image hosting, err:", err);
+          alert("10MB까지 저장 가능합니다");
+        });
     }
-    // 에러 처리도 하자
-    console.log("after requesting image hosting, error:", error);
   };
 
   // get BG width and height to size canvas

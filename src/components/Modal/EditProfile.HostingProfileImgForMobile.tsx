@@ -7,7 +7,7 @@ export default function HostingProfileImgForMobile({
   selectedProfileImage: string | Blob | File;
 }) {
   // image hosting on imgur after finishing editing the profile image
-  const [ImageHosting, { isLoading, data, error }] = useImageHostingMutation();
+  const [ImageHosting] = useImageHostingMutation();
   const handleImageHosting = async () => {
     if (selectedProfileImage) {
       const formData = new FormData();
@@ -18,16 +18,18 @@ export default function HostingProfileImgForMobile({
 
       formData.append("image", imageBase64orFile);
 
-      await ImageHosting(formData);
-      // .then((data) => data.json())
-      // .then((data) => {
-      //   console.log("image link from imgur : ", data.data.link);
-      // });
+      await ImageHosting(formData)
+        .then((result) => {
+          console.log("image result: ", result.data.data.link);
+        })
+        .catch((err) => {
+          console.log("after requesting image hosting, err:", err);
+          alert("10MB까지 저장 가능합니다");
+        });
     }
-    // 에러 처리도 하자
-    console.log("after requesting image hosting, error:", error);
   };
 
+  // fix this later!!!! (not complete)
   useEffect(() => {
     handleImageHosting();
   }, []);
