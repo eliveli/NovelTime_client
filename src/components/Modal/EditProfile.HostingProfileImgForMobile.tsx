@@ -16,21 +16,7 @@ export default function HostingProfileImgForMobile({
           ? selectedProfileImage.split(",")[1]
           : selectedProfileImage;
 
-      // const array = [];
-      // for (let i = 0; i < imageBase64.length; i += 1) {
-      //   array.push(imageBase64.charCodeAt(i));
-      // }
-      // const imageFile = new Blob([new Uint8Array(array)], { type: "image/jpeg" });
-
-      // const imageForHosting = selectedProfileImage.replace("image/jpeg", "image/octet-stream");
-
       formData.append("image", imageBase64orFile);
-
-      console.log("formData:", formData);
-      console.log("imageDataUrl:", selectedProfileImage);
-      // console.log("imageForHosting:", imageForHosting);
-      console.log("imageBase64orFile:", imageBase64orFile);
-      // console.log("imageFile:", imageFile);
 
       await ImageHosting(formData);
       // .then((data) => data.json())
@@ -39,8 +25,6 @@ export default function HostingProfileImgForMobile({
       // });
     }
     // 에러 처리도 하자
-    console.log("after requesting image hosting, isLoading:", isLoading);
-    console.log("after requesting image hosting, data:", data);
     console.log("after requesting image hosting, error:", error);
   };
 

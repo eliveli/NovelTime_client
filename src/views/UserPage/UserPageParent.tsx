@@ -24,7 +24,7 @@ import {
 
 // server request with userName
 const dataFromServer = {
-  userInfo: { userName: "신은혜 eunhye", userImg: "" },
+  userInfo: { userName: "eunhye shin", userImg: "" },
 };
 
 interface ProfileProps {

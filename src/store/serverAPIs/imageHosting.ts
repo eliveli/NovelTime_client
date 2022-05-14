@@ -7,16 +7,19 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 // set env variable in advance : process.env.REACT_APP_ENV
 // type " set NODE_ENV=development " in terminal CMD
 // set client id for production in .env file later
-//
-// I'm testing now
-const IMAGE_HOSTING_CLIENT_ID = process.env.REACT_APP_IMAGE_HOSTING_CLIENT_ID_ANONYMOUS;
-//
+const IMAGE_HOSTING_CLIENT_ID =
+  process.env.REACT_APP_ENV === "production"
+    ? process.env.REACT_APP_IMAGE_HOSTING_CLIENT_ID_PROD
+    : process.env.REACT_APP_IMAGE_HOSTING_CLIENT_ID_ANONYMOUS;
+// I registered with "anonymous" option on imgur
 
-// uncomment following code lines and delete upper code line later
-// const IMAGE_HOSTING_CLIENT_ID =
-//   process.env.REACT_APP_ENV === "production"
-//     ? process.env.REACT_APP_IMAGE_HOSTING_CLIENT_ID_PROD
-//     : process.env.REACT_APP_IMAGE_HOSTING_CLIENT_ID_DEV;
+interface ImgHostingResult {
+  data: {
+    link: string;
+  };
+  status: number;
+  success: boolean;
+}
 
 // Define a service using a base URL and expected endpoints
 export const imageHostingApi = createApi({
@@ -31,7 +34,7 @@ export const imageHostingApi = createApi({
     },
   }),
   endpoints: (builder) => ({
-    imageHosting: builder.mutation<any, FormData>({
+    imageHosting: builder.mutation<ImgHostingResult, FormData>({
       query: (imageFormData) => ({
         url: "/3/image",
         method: "POST",
