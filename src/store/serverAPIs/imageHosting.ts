@@ -4,13 +4,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 // in react, I must not install or import dotenv just use it //
 // after changing .env file kill and rerun the process in terminal to read the changed env var
 
-// set env variable in advance : process.env.REACT_APP_ENV
-// type " set NODE_ENV=development " in terminal CMD
-// set client id for production in .env file later
-const IMAGE_HOSTING_CLIENT_ID =
-  process.env.REACT_APP_ENV === "production"
-    ? process.env.REACT_APP_IMAGE_HOSTING_CLIENT_ID_PROD
-    : process.env.REACT_APP_IMAGE_HOSTING_CLIENT_ID_ANONYMOUS;
+const IMAGE_HOSTING_CLIENT_ID = process.env.REACT_APP_IMAGE_HOSTING_CLIENT_ID_ANONYMOUS;
 // I registered with "anonymous" option on imgur
 
 // response type for image hosting is inaccurate. I couldn't catch what is the exact yet

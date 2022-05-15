@@ -40,6 +40,7 @@ export default function EditProfile() {
 
   // set image
   const [selectedProfileImage, setSelectedProfileImage] = useState<string>("");
+  const [isNewProfileImage, handleNewProfileImage] = useState<boolean>(false);
   const [selectedProfileBGImage, setSelectedProfileBGImage] = useState<null | File | Blob>(null);
   // convert file to DataURL
   const handleProfileImage = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -51,6 +52,8 @@ export default function EditProfile() {
         setSelectedProfileImage(reader.result as string);
       };
       reader.readAsDataURL(file);
+
+      handleNewProfileImage(false); // show component to edit image
     }
   };
 
@@ -64,17 +67,24 @@ export default function EditProfile() {
       ref={BGRef}
     >
       {/* edit image on desktop not on mobile or tablet where canvas can't work */}
-      {selectedProfileImage && CheckDeviceType() === "desktop" && (
+      {/* note : it is not about screen size. it is about device type */}
+      {/* after selecting and hosting image close the component */}
+      {selectedProfileImage && !isNewProfileImage && CheckDeviceType() === "desktop" && (
         <EditProfileImg
           selectedProfileImage={selectedProfileImage}
           setSelectedProfileImage={setSelectedProfileImage}
+          handleNewProfileImage={handleNewProfileImage}
           BGRef={BGRef}
         />
       )}
-      {selectedProfileImage && CheckDeviceType() !== "desktop" && (
-        <HostingProfileImgForMobile selectedProfileImage={selectedProfileImage} />
+      {selectedProfileImage && !isNewProfileImage && CheckDeviceType() !== "desktop" && (
+        <HostingProfileImgForMobile
+          selectedProfileImage={selectedProfileImage}
+          handleNewProfileImage={handleNewProfileImage}
+        />
       )}
-      {!selectedProfileImage && (
+      {/* show profile modal at first and after hosting image */}
+      {(!selectedProfileImage || (selectedProfileImage && isNewProfileImage)) && (
         <ModalBox
           padding="54px 40px"
           onClick={(event: React.MouseEvent<HTMLElement>) => {

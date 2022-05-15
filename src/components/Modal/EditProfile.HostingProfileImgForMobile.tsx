@@ -3,8 +3,10 @@ import { useImageHostingMutation } from "store/serverAPIs/imageHosting";
 
 export default function HostingProfileImgForMobile({
   selectedProfileImage,
+  handleNewProfileImage,
 }: {
   selectedProfileImage: string | Blob | File;
+  handleNewProfileImage: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   // image hosting on imgur after finishing editing the profile image
   const [ImageHosting] = useImageHostingMutation();
@@ -20,7 +22,9 @@ export default function HostingProfileImgForMobile({
 
       await ImageHosting(formData)
         .then((result) => {
-          console.log("image result: ", result.data.data.link);
+          const imageLink = result.data.data.link; // get image link from imgur
+          // setSelectedProfileImage(imageLink as string);
+          handleNewProfileImage(true); // show profile modal again
         })
         .catch((err) => {
           console.log("after requesting image hosting, err:", err);

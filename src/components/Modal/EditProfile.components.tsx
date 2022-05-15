@@ -26,11 +26,13 @@ import {
 interface EditProfileImgProps {
   selectedProfileImage: string;
   setSelectedProfileImage: React.Dispatch<React.SetStateAction<string>>;
+  handleNewProfileImage: React.Dispatch<React.SetStateAction<boolean>>;
   BGRef: React.RefObject<HTMLDivElement>;
 }
 export default function EditProfileImg({
   selectedProfileImage,
   setSelectedProfileImage,
+  handleNewProfileImage,
   BGRef,
 }: EditProfileImgProps) {
   const dispatch = useAppDispatch();
@@ -45,7 +47,9 @@ export default function EditProfileImg({
 
       await ImageHosting(formData)
         .then((result) => {
-          console.log("image result: ", result.data.data.link);
+          const imageLink = result.data.data.link; // get image link from imgur
+          setSelectedProfileImage(imageLink as string);
+          handleNewProfileImage(true); // show profile modal again
         })
         .catch((err) => {
           console.log("after requesting image hosting, err:", err);
