@@ -7,6 +7,8 @@ import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import EditProfileImg from "./EditProfile.components";
 import HostingProfileImgForMobile from "./EditProfile.HostingProfileImgForMobile";
 import {
+  CloseOrSave,
+  TextForSave,
   ClosingIcon,
   ClosingBox,
   TranslucentBG,
@@ -91,9 +93,12 @@ export default function EditProfile() {
             event.stopPropagation();
           }}
         >
-          <ClosingBox isSmallWidth onClick={() => dispatch(closeModal())}>
-            <ClosingIcon />
-          </ClosingBox>
+          <CloseOrSave>
+            <ClosingBox isSmallWidth isProfile onClick={() => dispatch(closeModal())}>
+              <ClosingIcon isProfile />
+            </ClosingBox>
+            <TextForSave onClick={() => {}}>저장</TextForSave>
+          </CloseOrSave>
           <ContentContnr>
             <ProfileImgBox>
               <ProfileImg userImg={selectedProfileImage || loginUserInfo.userImg} />

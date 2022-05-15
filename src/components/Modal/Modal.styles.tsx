@@ -56,12 +56,50 @@ export const NovelImgBig = styled.img`
 //  `)}
 // `;
 
-export const ClosingBox = styled(Icon.IconBox)<{ isSmallWidth?: true }>`
+export const CloseOrSave = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  padding: 4px;
+
+  display: flex;
+  justify-content: space-between;
+
+  white-space: nowrap;
+`;
+export const TextForSave = styled.span`
+  padding: 3px 5px 1px;
+  font-size: 14px;
+
+  color: rgba(0, 0, 0, 0.55);
+  font-weight: 400;
+
+  background-color: rgba(255, 255, 255, 0.9);
+  border: 3px double rgba(150, 150, 150, 0.2);
+  border-radius: 7px;
+
+  min-height: 30px;
+  max-height: 30px;
+
+  @media (hover: hover) {
+    &:hover {
+      cursor: pointer;
+      opacity: 0.8;
+      background-color: rgba(150, 150, 150, 0.3);
+    }
+  }
+`;
+export const ClosingBox = styled(Icon.IconBox)<{ isSmallWidth?: true; isProfile?: true }>`
   z-index: 1;
 
-  position: absolute;
-  top: 1px;
-  right: 1px;
+  ${({ isProfile }) =>
+    !isProfile &&
+    `position: absolute;
+    top: 1px;
+    right: 1px;
+  `}
 
   padding: 4px;
   align-self: flex-end;
@@ -99,8 +137,10 @@ export const ClosingBox = styled(Icon.IconBox)<{ isSmallWidth?: true }>`
     }
   }
 `;
-export const ClosingIcon = styled(Icon.Close)`
+export const ClosingIcon = styled(Icon.Close)<{ isProfile?: true }>`
   opacity: 0.24;
+
+  ${({ isProfile }) => isProfile && `opacity: 0.35;`}
 `;
 
 export const MobileBG = styled.div`
