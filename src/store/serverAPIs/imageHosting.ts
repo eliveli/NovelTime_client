@@ -8,7 +8,7 @@ const IMAGE_HOSTING_CLIENT_ID = process.env.REACT_APP_IMAGE_HOSTING_CLIENT_ID_AN
 // I registered with "anonymous" option on imgur
 
 // response type for image hosting is inaccurate. I couldn't catch what is the exact yet
-type ImgHostingResult = {
+interface ImgHostingResult {
   data: {
     data: {
       link: string;
@@ -16,7 +16,7 @@ type ImgHostingResult = {
     status: number;
     success: boolean;
   };
-};
+}
 
 // Define a service using a base URL and expected endpoints
 export const imageHostingApi = createApi({
@@ -37,6 +37,7 @@ export const imageHostingApi = createApi({
         method: "POST",
         body: imageFormData,
       }),
+      transformResponse: (rawResult: { data: ImgHostingResult }) => rawResult.data,
     }),
   }),
 });

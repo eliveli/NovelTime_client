@@ -46,9 +46,10 @@ export default function EditProfileImg({
       formData.append("image", imageBase64);
 
       await ImageHosting(formData)
+        .unwrap()
         .then((result) => {
           const imageLink = result.data.data.link; // get image link from imgur
-          setSelectedProfileImage(imageLink as string);
+          setSelectedProfileImage(imageLink);
           handleNewProfileImage(true); // show profile modal again
         })
         .catch((err) => {
