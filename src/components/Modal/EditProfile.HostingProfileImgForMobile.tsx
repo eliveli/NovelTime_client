@@ -3,33 +3,28 @@ import { useImageHostingMutation } from "store/serverAPIs/imageHosting";
 
 export default function HostingProfileImgForMobile({
   selectedProfileImage,
-  handleNewProfileImage,
+  setNewProfileImage,
 }: {
-  selectedProfileImage: string | Blob | File;
-  handleNewProfileImage: React.Dispatch<React.SetStateAction<boolean>>;
+  selectedProfileImage: string;
+  setNewProfileImage: React.Dispatch<React.SetStateAction<string>>;
 }) {
   // image hosting on imgur after finishing editing the profile image
   const [ImageHosting] = useImageHostingMutation();
   const handleImageHosting = async () => {
     if (selectedProfileImage) {
       const formData = new FormData();
-      const imageBase64orFile =
-        typeof selectedProfileImage === "string"
-          ? selectedProfileImage.split(",")[1]
-          : selectedProfileImage;
+      const imageBase64 = selectedProfileImage.split(",")[1];
 
-      formData.append("image", imageBase64orFile);
+      formData.append("image", imageBase64);
 
-      await ImageHosting(formData)
-        .then((result) => {
-          const imageLink = result.data.data.link; // get image link from imgur
-          // setSelectedProfileImage(imageLink as string);
-          handleNewProfileImage(true); // show profile modal again
-        })
-        .catch((err) => {
-          console.log("after requesting image hosting, err:", err);
-          alert("10MB까지 저장 가능합니다");
-        });
+      try {
+        const result = await ImageHosting(formData).unwrap();
+        const imageLink = result.link; // get image link from imgur
+        setNewProfileImage(imageLink);
+      } catch (err) {
+        console.log("after requesting image hosting, err:", err);
+        alert("10MB까지 저장 가능합니다");
+      }
     }
   };
 

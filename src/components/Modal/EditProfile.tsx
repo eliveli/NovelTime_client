@@ -42,7 +42,7 @@ export default function EditProfile() {
 
   // set image
   const [selectedProfileImage, setSelectedProfileImage] = useState<string>("");
-  const [isNewProfileImage, handleNewProfileImage] = useState<boolean>(false);
+  const [newProfileImage, setNewProfileImage] = useState<string>(""); // image link after hosting image
   const [selectedProfileBGImage, setSelectedProfileBGImage] = useState<null | File | Blob>(null);
   // convert file to DataURL
   const handleProfileImage = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -54,8 +54,6 @@ export default function EditProfile() {
         setSelectedProfileImage(reader.result as string);
       };
       reader.readAsDataURL(file);
-
-      handleNewProfileImage(false); // show component to edit image
     }
   };
 
@@ -71,22 +69,21 @@ export default function EditProfile() {
       {/* edit image on desktop not on mobile or tablet where canvas can't work */}
       {/* note : it is not about screen size. it is about device type */}
       {/* after selecting and hosting image close the component */}
-      {selectedProfileImage && !isNewProfileImage && CheckDeviceType() === "desktop" && (
+      {selectedProfileImage && !newProfileImage && CheckDeviceType() === "desktop" && (
         <EditProfileImg
           selectedProfileImage={selectedProfileImage}
-          setSelectedProfileImage={setSelectedProfileImage}
-          handleNewProfileImage={handleNewProfileImage}
+          setNewProfileImage={setNewProfileImage}
           BGRef={BGRef}
         />
       )}
-      {selectedProfileImage && !isNewProfileImage && CheckDeviceType() !== "desktop" && (
+      {selectedProfileImage && !newProfileImage && CheckDeviceType() !== "desktop" && (
         <HostingProfileImgForMobile
           selectedProfileImage={selectedProfileImage}
-          handleNewProfileImage={handleNewProfileImage}
+          setNewProfileImage={setNewProfileImage}
         />
       )}
       {/* show profile modal at first and after hosting image */}
-      {(!selectedProfileImage || (selectedProfileImage && isNewProfileImage)) && (
+      {(!selectedProfileImage || (selectedProfileImage && newProfileImage)) && (
         <ModalBox
           padding="54px 40px"
           onClick={(event: React.MouseEvent<HTMLElement>) => {

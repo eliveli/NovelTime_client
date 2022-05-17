@@ -25,23 +25,22 @@ import {
 
 interface EditProfileImgProps {
   selectedProfileImage: string;
-  setSelectedProfileImage: React.Dispatch<React.SetStateAction<string>>;
-  handleNewProfileImage: React.Dispatch<React.SetStateAction<boolean>>;
+  setNewProfileImage: React.Dispatch<React.SetStateAction<string>>;
   BGRef: React.RefObject<HTMLDivElement>;
 }
 export default function EditProfileImg({
   selectedProfileImage,
-  setSelectedProfileImage,
-  handleNewProfileImage,
+  setNewProfileImage,
   BGRef,
 }: EditProfileImgProps) {
   const dispatch = useAppDispatch();
+  const editedImgRef = useRef("");
   // image hosting on imgur after finishing editing the profile image
   const [ImageHosting] = useImageHostingMutation();
   const handleImageHosting = async () => {
-    if (selectedProfileImage) {
+    if (editedImgRef.current) {
       const formData = new FormData();
-      const imageBase64 = selectedProfileImage.split(",")[1];
+      const imageBase64 = editedImgRef.current.split(",")[1];
 
       formData.append("image", imageBase64);
 
@@ -49,9 +48,7 @@ export default function EditProfileImg({
         .unwrap()
         .then((result) => {
           const imageLink = result.link; // get image link from imgur
-          console.log("result.link:", result.link);
-          // setSelectedProfileImage(imageLink);
-          handleNewProfileImage(true); // show profile modal again
+          setNewProfileImage(imageLink);
         })
         .catch((err) => {
           console.log("after requesting image hosting, err:", err);
@@ -168,7 +165,7 @@ export default function EditProfileImg({
       }
 
       // get data url of image edited and set it as profile image
-      setSelectedProfileImage(hiddenCanvas.toDataURL("image/jpeg", 1.0));
+      editedImgRef.current = hiddenCanvas.toDataURL("image/jpeg", 1.0);
       handleImageHosting();
     }
 
