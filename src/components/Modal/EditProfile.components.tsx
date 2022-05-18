@@ -21,6 +21,7 @@ import {
   handleMouseDown,
   handleMouseMove,
   handleMouseUp,
+  startPointInCanvas,
 } from "./utils/EditProfile.utils";
 
 interface EditProfileImgProps {
@@ -232,9 +233,10 @@ export default function EditProfileImg({
           });
         }
 
+        // set the starting point of square to be centered on canvas
         setSXYinCanvas({
-          x: lineWidth,
-          y: lineWidth,
+          x: startPointInCanvas(canvas.width, squareSizeRef.current),
+          y: startPointInCanvas(canvas.height, squareSizeRef.current),
         });
       }
 

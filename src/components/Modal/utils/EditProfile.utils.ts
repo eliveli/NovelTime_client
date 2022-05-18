@@ -80,6 +80,10 @@ export const startPointInBG = (
   // add top line height as 45.5px
 };
 
+// center square on canvas : return the starting point x, y of square
+export const startPointInCanvas = (widthOrHeight: number, squareSize: number) =>
+  (widthOrHeight - squareSize) / 2;
+
 export const calcSquareSize = (
   canvasWidthParam: number,
   canvasHeightParam: number,
