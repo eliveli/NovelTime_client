@@ -172,20 +172,35 @@ export default function EditProfileImg({
       handleImageHosting();
     }
 
+    // draw canvas for editing image
     image.onload = () => {
       if (isImageSelected) return;
 
       const canvasRatio = image.width / image.height;
 
+      // canvas width
       canvasWidthRef.current = 500;
 
       let canvasWidthForSmallBrowser: number | undefined;
-      // canvas width + left and right margin of canvas + extra space > BG width
+      // calculate canvas width : for short width browser
+      // (canvas width) + (left and right margin of canvas) + (extra space) > (BG width)
       if (canvasWidthRef.current + 20 + 10 > BGWidth) {
         canvasWidthForSmallBrowser = BGWidth - 20 - 10;
         canvasWidthRef.current = canvasWidthForSmallBrowser;
       }
+      // calculate canvas height
       canvasHeightRef.current = canvasWidthRef.current / canvasRatio;
+
+      // show the full size image not just part
+      //                          without this code below I can't see the full size image //
+      // and make canvas height shorter than BGHeight //
+      //   (canvas height) + (canvas bottom margin)
+      //         + (top line component height) + (extra space) >= (BGHeight)
+      if (canvasHeightRef.current + 10 + 45.5 + 20 > BGHeight) {
+        canvasHeightRef.current = BGHeight - 10 - 45.5 - 20;
+
+        // canvas.style.overflowY = "scroll"; // scroll when image height is too long
+      }
 
       // set canvas width and height
       // : do not use property "style.width" and "style.height"
