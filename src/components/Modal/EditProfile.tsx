@@ -43,6 +43,7 @@ export default function EditProfile() {
   // set image
   const [selectedProfileImage, setSelectedProfileImage] = useState<string>("");
   const [newProfileImage, setNewProfileImage] = useState<string>(""); // image link after hosting image
+  const [isEditedImage, handleEditedImage] = useState(false); // if it is false show the profile modal
   const [selectedProfileBGImage, setSelectedProfileBGImage] = useState<null | File | Blob>(null);
   // convert file to DataURL
   const handleProfileImage = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -54,6 +55,11 @@ export default function EditProfile() {
         setSelectedProfileImage(reader.result as string);
       };
       reader.readAsDataURL(file);
+      //
+      handleEditedImage(false);
+      // if this is the second time that user try to edit image
+      // this setState will make the user do that
+      //     without this user can't edit the second image on canvas
     }
   };
 
@@ -69,21 +75,23 @@ export default function EditProfile() {
       {/* edit image on desktop not on mobile or tablet where canvas can't work */}
       {/* note : it is not about screen size. it is about device type */}
       {/* after selecting and hosting image close the component */}
-      {selectedProfileImage && !newProfileImage && CheckDeviceType() === "desktop" && (
+      {selectedProfileImage && !isEditedImage && CheckDeviceType() === "desktop" && (
         <EditProfileImg
           selectedProfileImage={selectedProfileImage}
           setNewProfileImage={setNewProfileImage}
+          handleEditedImage={handleEditedImage}
           BGRef={BGRef}
         />
       )}
-      {selectedProfileImage && !newProfileImage && CheckDeviceType() !== "desktop" && (
+      {selectedProfileImage && !isEditedImage && CheckDeviceType() !== "desktop" && (
         <HostingProfileImgForMobile
           selectedProfileImage={selectedProfileImage}
           setNewProfileImage={setNewProfileImage}
+          handleEditedImage={handleEditedImage}
         />
       )}
       {/* show profile modal at first and after hosting image */}
-      {(!selectedProfileImage || (selectedProfileImage && newProfileImage)) && (
+      {(!selectedProfileImage || (selectedProfileImage && isEditedImage)) && (
         <ModalBox
           padding="54px 40px"
           onClick={(event: React.MouseEvent<HTMLElement>) => {
@@ -98,7 +106,9 @@ export default function EditProfile() {
           </CloseOrSave>
           <ContentContnr>
             <ProfileImgBox>
-              <ProfileImg userImg={selectedProfileImage || loginUserInfo.userImg} />
+              <ProfileImg
+                userImg={newProfileImage || selectedProfileImage || loginUserInfo.userImg}
+              />
               <SelectBtnBox isPhoto>
                 <SelectBtn isPhoto>수정</SelectBtn>
 

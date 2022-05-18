@@ -4,9 +4,11 @@ import { useImageHostingMutation } from "store/serverAPIs/imageHosting";
 export default function HostingProfileImgForMobile({
   selectedProfileImage,
   setNewProfileImage,
+  handleEditedImage,
 }: {
   selectedProfileImage: string;
   setNewProfileImage: React.Dispatch<React.SetStateAction<string>>;
+  handleEditedImage: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   // image hosting on imgur after finishing editing the profile image
   const [ImageHosting] = useImageHostingMutation();
@@ -17,14 +19,17 @@ export default function HostingProfileImgForMobile({
 
       formData.append("image", imageBase64);
 
-      try {
-        const result = await ImageHosting(formData).unwrap();
-        const imageLink = result.link; // get image link from imgur
-        setNewProfileImage(imageLink);
-      } catch (err) {
-        console.log("after requesting image hosting, err:", err);
-        alert("10MB까지 저장 가능합니다");
-      }
+      await ImageHosting(formData)
+        .unwrap()
+        .then((result) => {
+          const imageLink = result.link; // get image link from imgur
+          setNewProfileImage(imageLink);
+          handleEditedImage(true); // show profile modal
+        })
+        .catch((err) => {
+          console.log("after requesting image hosting, err:", err);
+          alert("10MB까지 저장 가능합니다");
+        });
     }
   };
 
