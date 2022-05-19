@@ -27,16 +27,15 @@ import {
 interface EditProfileImgProps {
   selectedProfileImage: string;
   setNewProfileImage: React.Dispatch<React.SetStateAction<string>>;
-  handleEditedImage: React.Dispatch<React.SetStateAction<boolean>>;
+  handleEditingImage: React.Dispatch<React.SetStateAction<boolean>>;
   BGRef: React.RefObject<HTMLDivElement>;
 }
 export default function EditProfileImg({
   selectedProfileImage,
   setNewProfileImage,
-  handleEditedImage,
+  handleEditingImage,
   BGRef,
 }: EditProfileImgProps) {
-  const dispatch = useAppDispatch();
   const editedImgRef = useRef("");
   // image hosting on imgur after finishing editing the profile image
   const [ImageHosting] = useImageHostingMutation();
@@ -52,7 +51,7 @@ export default function EditProfileImg({
         .then((result) => {
           const imageLink = result.link; // get image link from imgur
           setNewProfileImage(imageLink);
-          handleEditedImage(true); // show profile modal
+          handleEditingImage(false); // show profile modal
         })
         .catch((err) => {
           console.log("after requesting image hosting, err:", err);
@@ -137,8 +136,7 @@ export default function EditProfileImg({
     if (!ctx) return;
 
     const image = new Image();
-    image.src = selectedProfileImage;
-
+    image.src = selectedProfileImage; // it is needed for setting the canvas' width and height
     // crop image
     if (isImageSelected) {
       // create a hidden canvas to draw the image user edited
@@ -265,7 +263,6 @@ export default function EditProfileImg({
     BGHeight,
     sXYinBG,
     sXYinCanvas,
-    squareSizeRef.current,
     isImageSelected,
   ]);
 
@@ -277,7 +274,7 @@ export default function EditProfileImg({
       }}
     >
       <BtnUponCanvasContnr>
-        <BtnUponCanvas onClick={() => handleEditedImage(true)}>취소</BtnUponCanvas>
+        <BtnUponCanvas onClick={() => handleEditingImage(false)}>취소</BtnUponCanvas>
         <TextForCropImg>이미지를 잘라 주세요</TextForCropImg>
         <BtnUponCanvas onClick={() => setImageSelected(true)}>선택</BtnUponCanvas>
       </BtnUponCanvasContnr>

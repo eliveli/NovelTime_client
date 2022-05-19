@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { closeModal } from "store/clientSlices/modalSlice";
 import { CheckDeviceType } from "utils";
 
@@ -43,7 +43,7 @@ export default function EditProfile() {
   // set image
   const [selectedProfileImage, setSelectedProfileImage] = useState<string>("");
   const [newProfileImage, setNewProfileImage] = useState<string>(""); // image link after hosting image
-  const [isEditedImage, handleEditedImage] = useState(false); // if it is false show the profile modal
+  const [isEditingImage, handleEditingImage] = useState(false); // if it is false show the profile modal
   const [selectedProfileBGImage, setSelectedProfileBGImage] = useState<null | File | Blob>(null);
   // convert file to DataURL
   const handleProfileImage = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -56,14 +56,27 @@ export default function EditProfile() {
       };
       reader.readAsDataURL(file);
       //
-      handleEditedImage(false);
+      handleEditingImage(true);
       // if this is the second time that user try to edit image
       // this setState will make the user do that
-      //     without this user can't edit the second image on canvas
+      // without this user can't edit the second image on canvas
     }
   };
 
   const BGRef = useRef<HTMLDivElement>(null);
+
+  // this will set selectedProfileImage as empty string //
+  // thanks to this setting
+  //    in EditProfileImg component especially when user try to edit image twice
+  //    values depending on this state "selectedProfileImage" such as canvas size, sXY, squareSize
+  //    will be set as their initial value
+  // if not the values will be set as them as when the previous image was displayed
+  //    and user will see the untidy square on canvas and the feature for resizing square won't work
+  useEffect(() => {
+    if (isEditingImage) {
+      setSelectedProfileImage("");
+    }
+  }, [isEditingImage]);
 
   return (
     <TranslucentBG
@@ -75,23 +88,24 @@ export default function EditProfile() {
       {/* edit image on desktop not on mobile or tablet where canvas can't work */}
       {/* note : it is not about screen size. it is about device type */}
       {/* after selecting and hosting image close the component */}
-      {selectedProfileImage && !isEditedImage && CheckDeviceType() === "desktop" && (
+      {selectedProfileImage && isEditingImage && CheckDeviceType() === "desktop" && (
         <EditProfileImg
           selectedProfileImage={selectedProfileImage}
           setNewProfileImage={setNewProfileImage}
-          handleEditedImage={handleEditedImage}
+          handleEditingImage={handleEditingImage}
           BGRef={BGRef}
         />
       )}
-      {selectedProfileImage && !isEditedImage && CheckDeviceType() !== "desktop" && (
+      {selectedProfileImage && isEditingImage && CheckDeviceType() !== "desktop" && (
         <HostingProfileImgForMobile
           selectedProfileImage={selectedProfileImage}
           setNewProfileImage={setNewProfileImage}
-          handleEditedImage={handleEditedImage}
+          handleEditingImage={handleEditingImage}
         />
       )}
       {/* show profile modal at first and after hosting image */}
-      {(!selectedProfileImage || (selectedProfileImage && isEditedImage)) && (
+      {/* (at first) || (canceling editing image and back here) || (finishing editing and back) */}
+      {(!selectedProfileImage || !isEditingImage || (newProfileImage && !isEditingImage)) && (
         <ModalBox
           padding="54px 40px"
           onClick={(event: React.MouseEvent<HTMLElement>) => {
