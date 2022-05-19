@@ -106,9 +106,7 @@ export default function EditProfile() {
           </CloseOrSave>
           <ContentContnr>
             <ProfileImgBox>
-              <ProfileImg
-                userImg={newProfileImage || selectedProfileImage || loginUserInfo.userImg}
-              />
+              <ProfileImg userImg={newProfileImage || loginUserInfo.userImg} />
               <SelectBtnBox isPhoto>
                 <SelectBtn isPhoto>수정</SelectBtn>
 

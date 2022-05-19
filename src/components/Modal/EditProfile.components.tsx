@@ -277,7 +277,7 @@ export default function EditProfileImg({
       }}
     >
       <BtnUponCanvasContnr>
-        <BtnUponCanvas onClick={() => dispatch(closeModal())}>취소</BtnUponCanvas>
+        <BtnUponCanvas onClick={() => handleEditedImage(true)}>취소</BtnUponCanvas>
         <TextForCropImg>이미지를 잘라 주세요</TextForCropImg>
         <BtnUponCanvas onClick={() => setImageSelected(true)}>선택</BtnUponCanvas>
       </BtnUponCanvasContnr>
