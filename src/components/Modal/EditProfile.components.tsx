@@ -266,12 +266,7 @@ export default function EditProfileImg({
   ]);
 
   return (
-    <CanvasContnr
-      // prevent modal from being closed as clicking
-      onClick={(event: React.MouseEvent<HTMLElement>) => {
-        event.stopPropagation();
-      }}
-    >
+    <CanvasContnr>
       {isImageSelected && <Spinner />}
 
       <BtnUponCanvasContnr>
