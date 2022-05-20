@@ -13,6 +13,7 @@ import catWalking from "./catWalking.png"; // .png is required for getting trans
 import logoMobile from "./logoMobile.png";
 import logoPC from "./logoPC.png";
 import messageIconUserPage from "./messageIconUserPage.png";
+import { ReactComponent as StaticSpinner } from "./staticSpinner.svg";
 
 export {
   freeTalk,
@@ -30,4 +31,5 @@ export {
   logoPC,
   addWritingInPage,
   messageIconUserPage,
+  StaticSpinner,
 };

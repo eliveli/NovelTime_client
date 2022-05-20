@@ -1,10 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { useComponentHeight, useComponentWidth } from "utils";
 import theme from "assets/styles/theme";
-import { closeModal } from "store/clientSlices/modalSlice";
 import { useImageHostingMutation } from "store/serverAPIs/imageHosting";
-import { useAppDispatch } from "../../store/hooks";
 
+import Spinner from "assets/Spinner";
 import {
   CropImageCanvas,
   BtnUponCanvasContnr,
@@ -273,6 +272,8 @@ export default function EditProfileImg({
         event.stopPropagation();
       }}
     >
+      {isImageSelected && <Spinner />}
+
       <BtnUponCanvasContnr>
         <BtnUponCanvas onClick={() => handleEditingImage(false)}>취소</BtnUponCanvas>
         <TextForCropImg>이미지를 잘라 주세요</TextForCropImg>
