@@ -166,7 +166,8 @@ export default function EditProfileImg({
       }
 
       // get data url of image edited and set it as profile image
-      editedImgRef.current = hiddenCanvas.toDataURL("image/jpeg", 1.0);
+      // - png is required to get transparent background that is the area outside canvas
+      editedImgRef.current = hiddenCanvas.toDataURL("image/png", 1.0);
       handleImageHosting();
     }
 
