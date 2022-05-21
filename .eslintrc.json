@@ -56,6 +56,7 @@
         "no-nested-ternary": "warn",
         "@typescript-eslint/indent": "off",
         "max-len":"warn",
-        "operator-linebreak":"off"
+        "operator-linebreak":"off",
+        "react/jsx-curly-newline": "off"
     }
 }

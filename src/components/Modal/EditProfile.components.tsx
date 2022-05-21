@@ -22,6 +22,8 @@ import {
   handleMouseUp,
   startPointInCanvas,
 } from "./utils/EditProfile.utils";
+import formatBytes from "./utils/formatBytes";
+import dataURLtoBlob from "./utils/dataURLtoBlob";
 
 interface EditProfileImgProps {
   selectedProfileImage: string;
@@ -35,15 +37,14 @@ export default function EditProfileImg({
   handleEditingImage,
   BGRef,
 }: EditProfileImgProps) {
-  const editedImgRef = useRef("");
+  const editedImgRef = useRef<Blob>();
   // image hosting on imgur after finishing editing the profile image
   const [ImageHosting] = useImageHostingMutation();
   const handleImageHosting = async () => {
     if (editedImgRef.current) {
       const formData = new FormData();
-      const imageBase64 = editedImgRef.current.split(",")[1];
 
-      formData.append("image", imageBase64);
+      formData.append("image", editedImgRef.current);
 
       await ImageHosting(formData)
         .unwrap()
@@ -144,31 +145,44 @@ export default function EditProfileImg({
       document.body.appendChild(hiddenCanvas);
       hiddenCanvas.width = squareSizeRef.current;
       hiddenCanvas.height = squareSizeRef.current;
-      if (hiddenCanvas) {
-        // draw full image in main canvas(just named as "canvas")
-        //      because image exists as background not as drawn image
-        ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+      if (!hiddenCanvas) return;
+      // draw full image in main canvas(just named as "canvas")
+      //      because image exists as background not as drawn image
+      ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
 
-        // draw the image user edited in hidden canvas
-        hiddenCanvas
-          ?.getContext("2d")
-          ?.drawImage(
-            canvas,
-            sXYinCanvas.x,
-            sXYinCanvas.y,
-            squareSizeRef.current,
-            squareSizeRef.current,
-            0,
-            0,
-            squareSizeRef.current,
-            squareSizeRef.current,
-          );
-      }
-
+      // draw the image user edited in hidden canvas
+      hiddenCanvas
+        ?.getContext("2d")
+        ?.drawImage(
+          canvas,
+          sXYinCanvas.x,
+          sXYinCanvas.y,
+          squareSizeRef.current,
+          squareSizeRef.current,
+          0,
+          0,
+          squareSizeRef.current,
+          squareSizeRef.current,
+        );
       // get data url of image edited and set it as profile image
-      // - png is required to get transparent background that is the area outside canvas
-      editedImgRef.current = hiddenCanvas.toDataURL("image/png", 1.0);
-      handleImageHosting();
+      // - dataUrl is just representation of base64 not base64
+      // - png image is required to get transparent background that is the area outside canvas
+      const dataUrlImg = hiddenCanvas.toDataURL("image/png", 1.0);
+
+      const blob = dataURLtoBlob(dataUrlImg);
+
+      const dataCapacity = formatBytes(blob.size);
+
+      // if blob size is smaller than 20MB then host image
+      //   but almost images will be smaller than 20MB
+      //   because no matter how the image capacity is big
+      //   the image will shrink to fit in the canvas as its background image
+      if (blob.size <= 2e7) {
+        editedImgRef.current = blob;
+        handleImageHosting();
+      } else {
+        alert(`20MB 이하로 저장 가능해요! 현재 용량: ${dataCapacity}`);
+      }
     }
 
     // draw canvas for editing image
