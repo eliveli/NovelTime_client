@@ -44,9 +44,7 @@ export default function EditProfile() {
   // set image
   const [selectedProfileImage, setSelectedProfileImage] = useState<string>("");
   const [newProfileImage, setNewProfileImage] = useState<Blob>(); // image link after hosting image
-  const [newProfileImageAsString, setNewProfileImageAsString] = useState<
-    string | ArrayBuffer | null
-  >(null);
+  const [newProfileImageAsString, setNewProfileImageAsString] = useState<string>();
   const [isEditingImage, handleEditingImage] = useState(false); // if it is false show the profile modal
   const [selectedProfileBGImage, setSelectedProfileBGImage] = useState<null | File | Blob>(null);
 
@@ -102,11 +100,7 @@ export default function EditProfile() {
     }
     // convert newProfileImage type from blob to string to show it on profile modal
     if (newProfileImage) {
-      const reader = new FileReader();
-      reader.readAsText(newProfileImage);
-      reader.onload = function () {
-        setNewProfileImageAsString(reader.result);
-      };
+      setNewProfileImageAsString(window.URL.createObjectURL(newProfileImage));
     }
   }, [isEditingImage, newProfileImage]);
 
@@ -160,7 +154,7 @@ export default function EditProfile() {
           </CloseOrSave>
           <ContentContnr>
             <ProfileImgBox>
-              <ProfileImg userImg={(newProfileImageAsString as string) || loginUserInfo.userImg} />
+              <ProfileImg userImg={newProfileImageAsString || loginUserInfo.userImg} />
               <SelectBtnBox isPhoto>
                 <SelectBtn isPhoto>수정</SelectBtn>
 
