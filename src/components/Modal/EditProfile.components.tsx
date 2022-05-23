@@ -27,7 +27,7 @@ import dataURLtoBlob from "./utils/dataURLtoBlob";
 
 interface EditProfileImgProps {
   selectedProfileImage: string;
-  setNewProfileImage: React.Dispatch<React.SetStateAction<string>>;
+  setNewProfileImage: React.Dispatch<React.SetStateAction<Blob | undefined>>;
   handleEditingImage: React.Dispatch<React.SetStateAction<boolean>>;
   BGRef: React.RefObject<HTMLDivElement>;
 }
@@ -38,28 +38,6 @@ export default function EditProfileImg({
   BGRef,
 }: EditProfileImgProps) {
   const editedImgRef = useRef<Blob>();
-  // image hosting on imgur after finishing editing the profile image
-  const [ImageHosting] = useImageHostingMutation();
-  const handleImageHosting = async () => {
-    if (editedImgRef.current) {
-      const formData = new FormData();
-
-      formData.append("image", editedImgRef.current);
-
-      await ImageHosting(formData)
-        .unwrap()
-        .then((result) => {
-          const imageLink = result.link; // get image link from imgur
-          setNewProfileImage(imageLink);
-          handleEditingImage(false); // show profile modal
-        })
-        .catch((err) => {
-          console.log("after requesting image hosting, err:", err);
-          alert("10MB까지 저장 가능합니다");
-        });
-    }
-  };
-
   // get BG width and height to size canvas
   const BGWidth = useComponentWidth(BGRef);
   const BGHeight = useComponentHeight(BGRef);
@@ -135,8 +113,10 @@ export default function EditProfileImg({
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
+    // image for canvas' background
     const image = new Image();
     image.src = selectedProfileImage; // it is needed for setting the canvas' width and height
+
     // crop image
     if (isImageSelected) {
       // create a hidden canvas to draw the image user edited
@@ -178,8 +158,9 @@ export default function EditProfileImg({
       //   because no matter how the image capacity is big
       //   the image will shrink to fit in the canvas as its background image
       if (blob.size <= 2e7) {
-        editedImgRef.current = blob;
-        handleImageHosting();
+        // editedImgRef.current = blob;
+        setNewProfileImage(blob);
+        handleEditingImage(false); // show profile modal
       } else {
         alert(`20MB 이하로 저장 가능해요! 현재 용량: ${dataCapacity}`);
       }
@@ -282,6 +263,10 @@ export default function EditProfileImg({
 
   return (
     <CanvasContnr>
+      {/* spinner appears when user finished editing image */}
+      {/* - right after user selected the image from their device */}
+      {/*   if image is too big then image appears slowly */}
+      {/*   in that case spinner isn't necessary cause the spinner also appears slowly */}
       {isImageSelected && <Spinner />}
 
       <BtnUponCanvasContnr>

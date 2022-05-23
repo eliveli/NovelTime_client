@@ -7,7 +7,7 @@ export default function HostingProfileImgForMobile({
   handleEditingImage,
 }: {
   selectedProfileImage: string;
-  setNewProfileImage: React.Dispatch<React.SetStateAction<string>>;
+  setNewProfileImage: React.Dispatch<React.SetStateAction<Blob | undefined>>;
   handleEditingImage: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   // image hosting on imgur after finishing editing the profile image

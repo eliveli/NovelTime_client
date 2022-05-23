@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { closeModal } from "store/clientSlices/modalSlice";
+import { useImageHostingMutation } from "store/serverAPIs/imageHosting";
 import { CheckDeviceType } from "utils";
 
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
@@ -42,9 +43,13 @@ export default function EditProfile() {
 
   // set image
   const [selectedProfileImage, setSelectedProfileImage] = useState<string>("");
-  const [newProfileImage, setNewProfileImage] = useState<string>(""); // image link after hosting image
+  const [newProfileImage, setNewProfileImage] = useState<Blob>(); // image link after hosting image
+  const [newProfileImageAsString, setNewProfileImageAsString] = useState<
+    string | ArrayBuffer | null
+  >(null);
   const [isEditingImage, handleEditingImage] = useState(false); // if it is false show the profile modal
   const [selectedProfileBGImage, setSelectedProfileBGImage] = useState<null | File | Blob>(null);
+
   // convert file to DataURL
   const handleProfileImage = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();
@@ -63,6 +68,25 @@ export default function EditProfile() {
     }
   };
 
+  // image hosting on imgur after finishing editing the profile image
+  const [ImageHosting] = useImageHostingMutation();
+  const handleImageHosting = async () => {
+    if (newProfileImage) {
+      const formData = new FormData();
+
+      formData.append("image", newProfileImage);
+
+      await ImageHosting(formData)
+        .unwrap()
+        .then((result) => {
+          const imageLink = result.link; // get image link from imgur
+        })
+        .catch((err) => {
+          console.log("as requesting image hosting err occurred:", err);
+        });
+    }
+  };
+
   const BGRef = useRef<HTMLDivElement>(null);
 
   // this will set selectedProfileImage as empty string //
@@ -76,7 +100,15 @@ export default function EditProfile() {
     if (isEditingImage) {
       setSelectedProfileImage("");
     }
-  }, [isEditingImage]);
+    // convert newProfileImage type from blob to string to show it on profile modal
+    if (newProfileImage) {
+      const reader = new FileReader();
+      reader.readAsText(newProfileImage);
+      reader.onload = function () {
+        setNewProfileImageAsString(reader.result);
+      };
+    }
+  }, [isEditingImage, newProfileImage]);
 
   return (
     <TranslucentBG
@@ -118,11 +150,17 @@ export default function EditProfile() {
             <ClosingBox isSmallWidth isProfile onClick={() => dispatch(closeModal())}>
               <ClosingIcon isProfile />
             </ClosingBox>
-            <TextForSave onClick={() => {}}>저장</TextForSave>
+            <TextForSave
+              onClick={() => {
+                handleImageHosting();
+              }}
+            >
+              저장
+            </TextForSave>
           </CloseOrSave>
           <ContentContnr>
             <ProfileImgBox>
-              <ProfileImg userImg={newProfileImage || loginUserInfo.userImg} />
+              <ProfileImg userImg={(newProfileImageAsString as string) || loginUserInfo.userImg} />
               <SelectBtnBox isPhoto>
                 <SelectBtn isPhoto>수정</SelectBtn>
 
