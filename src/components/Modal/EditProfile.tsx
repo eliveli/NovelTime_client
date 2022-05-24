@@ -6,7 +6,7 @@ import { CheckDeviceType } from "utils";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 
 import EditProfileImg from "./EditProfile.components";
-import HostingProfileImgForMobile from "./EditProfile.HostingProfileImgForMobile";
+
 import {
   CloseOrSave,
   TextForSave,
@@ -23,6 +23,7 @@ import {
   SelectBtnBox,
   UploadImg,
 } from "./Modal.styles";
+import SelectImagePosition from "./EditProfile.componentForMobile";
 
 export default function EditProfile() {
   const dispatch = useAppDispatch();
@@ -115,7 +116,7 @@ export default function EditProfile() {
     >
       {/* edit image on desktop not on mobile or tablet where canvas can't work */}
       {/* note : it is not about screen size. it is about device type */}
-      {/* after selecting and hosting image close the component */}
+      {/* after selecting image close the component */}
       {selectedProfileImage && isEditingImage && CheckDeviceType() === "desktop" && (
         <EditProfileImg
           selectedProfileImage={selectedProfileImage}
@@ -124,16 +125,14 @@ export default function EditProfile() {
           BGRef={BGRef}
         />
       )}
-      {selectedProfileImage && isEditingImage && CheckDeviceType() !== "desktop" && (
-        <HostingProfileImgForMobile
-          selectedProfileImage={selectedProfileImage}
-          setNewProfileImage={setNewProfileImage}
-          handleEditingImage={handleEditingImage}
-        />
-      )}
+
       {/* show profile modal at first and after hosting image */}
       {/* (at first) || (canceling editing image and back here) || (finishing editing and back) */}
-      {(!selectedProfileImage || !isEditingImage || (newProfileImage && !isEditingImage)) && (
+      {/* || (mobile or tablet browser)  : in this case user see the selected image directly */}
+      {(!selectedProfileImage ||
+        !isEditingImage ||
+        (newProfileImage && !isEditingImage) ||
+        CheckDeviceType() !== "desktop") && (
         <ModalBox
           padding="54px 40px"
           onClick={(event: React.MouseEvent<HTMLElement>) => {
@@ -154,7 +153,9 @@ export default function EditProfile() {
           </CloseOrSave>
           <ContentContnr>
             <ProfileImgBox>
-              <ProfileImg userImg={newProfileImageAsString || loginUserInfo.userImg} />
+              <ProfileImg
+                userImg={newProfileImageAsString || selectedProfileImage || loginUserInfo.userImg}
+              />
               <SelectBtnBox isPhoto>
                 <SelectBtn isPhoto>수정</SelectBtn>
 
@@ -166,6 +167,8 @@ export default function EditProfile() {
                   }}
                 />
               </SelectBtnBox>
+              {/* select the image position on mobile or tablet browser */}
+              {selectedProfileImage && CheckDeviceType() !== "desktop" && <SelectImagePosition />}
             </ProfileImgBox>
             <ProfileNameBox>
               <ProfileName type="text" ref={userNameRef} defaultValue={loginUserInfo.userName} />
