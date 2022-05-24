@@ -15,7 +15,16 @@ import {
   BiUser,
 } from "react-icons/bi";
 import { GrClose } from "react-icons/gr";
-import { BsJournalRichtext, BsEmojiSunglasses, BsPencilSquare } from "react-icons/bs";
+import {
+  BsJournalRichtext,
+  BsEmojiSunglasses,
+  BsPencilSquare,
+  BsFillCaretLeftFill,
+  BsFillCaretRightFill,
+  BsFillCaretUpFill,
+  BsFillCaretDownFill,
+  BsFillRecordFill,
+} from "react-icons/bs";
 import {
   HiHeart,
   HiOutlineHeart,
@@ -28,10 +37,8 @@ import { RiRunLine, RiShareForward2Fill, RiKakaoTalkFill } from "react-icons/ri"
 import { MdOutlineShare, MdOutlineMoreHoriz } from "react-icons/md";
 import { IoIosSearch, IoMdClose } from "react-icons/io";
 import { AiOutlineUser, AiOutlineMessage, AiOutlineLogout } from "react-icons/ai";
-import { FiMessageCircle } from "react-icons/fi";
 import { ImBooks } from "react-icons/im";
-import { GiBookshelf } from "react-icons/gi";
-import { SiNaver, SiKakaotalk } from "react-icons/si";
+import { SiNaver } from "react-icons/si";
 
 import theme, { styled } from "./styles/theme";
 
@@ -83,9 +90,6 @@ const Icon = {
   NovelList: styled(ImBooks)`
     ${iconStyle()};
   `,
-  // NovelList: styled(GiBookshelf)`
-  //   ${iconStyle()};
-  // `,
   ListRight: styled(FaChevronRight)``,
   BigDown: FaChevronDown,
   BigUp: FaChevronUp,
@@ -131,9 +135,6 @@ const Icon = {
   CommentLabel: styled(AiOutlineMessage)`
     ${iconStyle()};
   `,
-  // CommentLabel: styled(FiMessageCircle)`
-  //   ${iconStyle()};
-  // `,
   SmallRight: styled(BiChevronRight)`
     ${iconStyle()};
   `,
@@ -174,6 +175,21 @@ const Icon = {
     ${iconStyleHover()};
   `,
   More: styled(MdOutlineMoreHoriz)`
+    ${iconStyleHover()};
+  `,
+  PositionLeft: styled(BsFillCaretLeftFill)`
+    ${iconStyleHover()};
+  `,
+  PositionRight: styled(BsFillCaretRightFill)`
+    ${iconStyleHover()};
+  `,
+  PositionTop: styled(BsFillCaretUpFill)`
+    ${iconStyleHover()};
+  `,
+  PositionBottom: styled(BsFillCaretDownFill)`
+    ${iconStyleHover()};
+  `,
+  PositionCenter: styled(BsFillRecordFill)`
     ${iconStyleHover()};
   `,
 };
