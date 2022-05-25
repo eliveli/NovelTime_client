@@ -18,26 +18,30 @@ const PositionOption = styled(Icon.IconBox)`
   max-height: 23px;
 `;
 
-export default function SelectImagePosition() {
+export default function SelectImagePosition({
+  setProfileImgPosition,
+}: {
+  setProfileImgPosition: React.Dispatch<React.SetStateAction<string>>;
+}) {
   return (
     <PoisitionControllerContnr>
       <PositionOption />
       <PositionOption>
-        <Icon.PositionTop />
+        <Icon.PositionTop onClick={() => setProfileImgPosition("top")} />
       </PositionOption>
       <PositionOption />
       <PositionOption>
-        <Icon.PositionLeft />
+        <Icon.PositionLeft onClick={() => setProfileImgPosition("left")} />
       </PositionOption>
       <PositionOption>
-        <Icon.PositionCenter />
+        <Icon.PositionCenter onClick={() => setProfileImgPosition("center")} />
       </PositionOption>
       <PositionOption>
-        <Icon.PositionRight />
+        <Icon.PositionRight onClick={() => setProfileImgPosition("right")} />
       </PositionOption>
       <PositionOption />
       <PositionOption>
-        <Icon.PositionBottom />
+        <Icon.PositionBottom onClick={() => setProfileImgPosition("bottom")} />
       </PositionOption>
       <PositionOption />
     </PoisitionControllerContnr>

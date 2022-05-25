@@ -49,6 +49,9 @@ export default function EditProfile() {
   const [isEditingImage, handleEditingImage] = useState(false); // if it is false show the profile modal
   const [selectedProfileBGImage, setSelectedProfileBGImage] = useState<null | File | Blob>(null);
 
+  // set profile image background position for mobile and tablet device
+  const [profileImgPosition, setProfileImgPosition] = useState("center");
+
   // convert file to DataURL
   const handleProfileImage = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();
@@ -154,6 +157,7 @@ export default function EditProfile() {
           <ContentContnr>
             <ProfileImgBox>
               <ProfileImg
+                imgPosition={profileImgPosition}
                 userImg={newProfileImageAsString || selectedProfileImage || loginUserInfo.userImg}
               />
               <SelectBtnBox isPhoto>
@@ -168,7 +172,9 @@ export default function EditProfile() {
                 />
               </SelectBtnBox>
               {/* select the image position on mobile or tablet browser */}
-              {selectedProfileImage && CheckDeviceType() !== "desktop" && <SelectImagePosition />}
+              {selectedProfileImage && CheckDeviceType() !== "desktop" && (
+                <SelectImagePosition setProfileImgPosition={setProfileImgPosition} />
+              )}
             </ProfileImgBox>
             <ProfileNameBox>
               <ProfileName type="text" ref={userNameRef} defaultValue={loginUserInfo.userName} />
