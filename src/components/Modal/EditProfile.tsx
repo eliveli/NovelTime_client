@@ -24,6 +24,8 @@ import {
   UploadImg,
 } from "./Modal.styles";
 import SelectImagePosition from "./EditProfile.componentForMobile";
+import dataURLtoBlob from "./utils/dataURLtoBlob";
+import formatBytes from "./utils/formatBytes";
 
 export default function EditProfile() {
   const dispatch = useAppDispatch();
@@ -67,6 +69,25 @@ export default function EditProfile() {
       // if this is the second time that user try to edit image
       // this setState will make the user do that
       // without this user can't edit the second image on canvas
+
+      // check the image data capacity in mobile or tablet browser
+      //    in desktop, data capacity would be checked after editing image
+      if (CheckDeviceType() !== "desktop") {
+        const blob = dataURLtoBlob(reader.result as string);
+
+        const dataCapacity = formatBytes(blob.size);
+
+        // if blob size is smaller than 20MB image hosting is available
+        if (blob.size <= 2e7) {
+          // editedImgRef.current = blob;
+          setNewProfileImage(blob);
+          handleEditingImage(false); // show profile modal
+          console.log("dataCapacity:", dataCapacity);
+        } else {
+          console.log("dataCapacity:", dataCapacity);
+          alert(`20MB 이하로 저장 가능해요! 현재 용량: ${dataCapacity}`);
+        }
+      }
     }
   };
 

@@ -153,7 +153,7 @@ export default function EditProfileImg({
 
       const dataCapacity = formatBytes(blob.size);
 
-      // if blob size is smaller than 20MB then host image
+      // if blob size is smaller than 20MB image hosting is available
       //   but almost images will be smaller than 20MB
       //   because no matter how the image capacity is big
       //   the image will shrink to fit in the canvas as its background image
@@ -161,8 +161,10 @@ export default function EditProfileImg({
         // editedImgRef.current = blob;
         setNewProfileImage(blob);
         handleEditingImage(false); // show profile modal
+        console.log("dataCapacity:", dataCapacity);
       } else {
         alert(`20MB 이하로 저장 가능해요! 현재 용량: ${dataCapacity}`);
+        console.log("dataCapacity:", dataCapacity);
       }
     }
 
