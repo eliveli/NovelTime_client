@@ -161,10 +161,8 @@ export default function EditProfileImg({
         // editedImgRef.current = blob;
         setNewProfileImage(blob);
         handleEditingImage(false); // show profile modal
-        console.log("dataCapacity:", dataCapacity);
       } else {
         alert(`20MB 이하로 저장 가능해요! 현재 용량: ${dataCapacity}`);
-        console.log("dataCapacity:", dataCapacity);
       }
     }
 
