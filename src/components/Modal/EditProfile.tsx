@@ -61,8 +61,6 @@ export default function EditProfile() {
       const reader = new FileReader();
       const file = event.target.files[0];
       reader.onloadend = () => {
-        setSelectedProfileImage(reader.result as string);
-
         // check the image data capacity in mobile or tablet browser
         //    in desktop, data capacity would be checked after editing image
         if (CheckDeviceType() !== "desktop") {
@@ -72,17 +70,22 @@ export default function EditProfile() {
 
           // if blob size is smaller than 20MB image hosting is available
           if (blob.size <= 2e7) {
-            // editedImgRef.current = blob;
+            // set the image and show it as image profile
             setNewProfileImage(blob);
-            handleEditingImage(false); // show profile modal
           } else {
-            alert(`20MB 이하로 저장 가능해요! 현재 용량: ${dataCapacity}`);
+            alert(
+              `20MB 이하로 저장 가능해요! 다른 이미지를 선택해 주세요. 현재 용량: ${dataCapacity}`,
+            );
           }
+        }
+        // always set the image in desktop
+        else {
+          setSelectedProfileImage(reader.result as string);
         }
       };
       reader.readAsDataURL(file);
       //
-      handleEditingImage(true);
+      handleEditingImage(true); // for desktop
       // if this is the second time that user try to edit image
       // this setState will make the user do that
       // without this user can't edit the second image on canvas
@@ -191,7 +194,7 @@ export default function EditProfile() {
                 />
               </SelectBtnBox>
               {/* select the image position on mobile or tablet browser */}
-              {selectedProfileImage && CheckDeviceType() !== "desktop" && (
+              {newProfileImage && CheckDeviceType() !== "desktop" && (
                 <SelectImagePosition setProfileImgPosition={setProfileImgPosition} />
               )}
             </ProfileImgBox>
