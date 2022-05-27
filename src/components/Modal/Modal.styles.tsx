@@ -305,6 +305,8 @@ export const ProfileNameBox = styled.div`
   border: 1px solid rgba(0, 0, 0, 0.1);
   padding: 6px 8px 6px 12px;
   border-radius: 50px;
+
+  position: relative;
 `;
 export const ProfileName = styled.input`
   text-align: center;
@@ -349,6 +351,32 @@ export const SelectBtn = styled.button<{ isPhoto?: true; isBG?: true }>`
     isBG &&
     `padding: 6px 18px 6px 18px;
     font-size: 14px;     border: 1px solid rgba(0,0,0,0.16);`}
+`;
+export const TextByteContnr = styled.div`
+  position: absolute;
+  bottom: -25px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+
+  left: 0;
+  width: 100%;
+`;
+export const NoteUserName = styled.span`
+  font-size: 12px;
+`;
+export const UserNameAsByteContnr = styled.span`
+  font-size: 15px;
+  font-weight: 700;
+`;
+export const MarkUserNameAsByte = styled.span<{ userNameByte: number }>`
+  font-size: 15px;
+  font-weight: 700;
+  // mark as color when the user name bytes was over the limit
+  ${({ userNameByte }) => userNameByte > 12 && `color: ${theme.color.main}`}
+`;
+export const NormalFontWeight = styled.span`
+  font-weight: 300;
 `;
 export const LoginIconBox = styled(Icon.IconBox)<{ isKaKao?: true }>`
   margin-right: 10px;

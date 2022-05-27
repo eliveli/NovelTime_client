@@ -22,10 +22,16 @@ import {
   SelectBtn,
   SelectBtnBox,
   UploadImg,
+  TextByteContnr,
+  NoteUserName,
+  MarkUserNameAsByte,
+  NormalFontWeight,
+  UserNameAsByteContnr,
 } from "./Modal.styles";
 import SelectImagePosition from "./EditProfile.componentForMobile";
 import dataURLtoBlob from "./utils/dataURLtoBlob";
 import formatBytes from "./utils/formatBytes";
+import { getTextLength } from "./utils/EditProfile.utils";
 
 export default function EditProfile() {
   const dispatch = useAppDispatch();
@@ -35,9 +41,30 @@ export default function EditProfile() {
   const loginUserInfo = useAppSelector((state) => state.user.loginUserInfo);
   const userNameRef = useRef<HTMLInputElement>(null);
 
+  // userName
+  const [userNameByte, setUserNameByte] = useState(0);
+  // onChange handler to calculate the user name as bytes as typing userName
+  const calcUserNameAsByte = () => {
+    if (userNameByte === undefined) return;
+    // (X) don't do : if (!userNameByte)
+    // it worked when userNameByte was zero because it was also falsy value.
+    // after I removed all the text and typed again, this handler looked not working
+    // in that time the current text byte shown in modal didn't change from 0
+    //
+    const tempUserName = userNameRef.current?.value as string;
+    setUserNameByte(getTextLength(tempUserName));
+  };
+  // as clicking the select button for user name
   const confirmUserName = () => {
-    if (!userNameRef.current?.value) {
+    const tempUserName = userNameRef.current?.value as string;
+    if (!tempUserName) {
       alert("유저 네임을 입력해 주세요");
+    }
+    // limit the text length by 12byte
+    else if (userNameByte > 12) {
+      alert("입력 가능한 글자 수를 초과했어요");
+    } else if (tempUserName === loginUserInfo.userName) {
+      alert("기존 이름과 같아요. 새로운 이름을 입력해 주세요");
     }
     // 서버에 보내서 동일 유저 네임 여부 확인
     // 유저 네임 길이 제한(얼만큼?) 알림 문구도 미리 넣자.
@@ -47,7 +74,7 @@ export default function EditProfile() {
   // set image
   const [selectedProfileImage, setSelectedProfileImage] = useState<string>("");
   const [newProfileImage, setNewProfileImage] = useState<Blob>(); // image link after hosting image
-  const [newProfileImageAsString, setNewProfileImageAsString] = useState<string>();
+  const [newProfileImageAsString, setNewProfileImageAsString] = useState<string>(); // to show as profile image
   const [isEditingImage, handleEditingImage] = useState(false); // if it is false show the profile modal
   const [selectedProfileBGImage, setSelectedProfileBGImage] = useState<null | File | Blob>(null);
 
@@ -130,6 +157,13 @@ export default function EditProfile() {
     }
   }, [isEditingImage, newProfileImage]);
 
+  // set the userNameByte at first
+  useEffect(() => {
+    if (loginUserInfo.userName) {
+      setUserNameByte(getTextLength(loginUserInfo.userName));
+    }
+  }, [loginUserInfo]);
+
   return (
     <TranslucentBG
       onClick={() => {
@@ -199,8 +233,23 @@ export default function EditProfile() {
               )}
             </ProfileImgBox>
             <ProfileNameBox>
-              <ProfileName type="text" ref={userNameRef} defaultValue={loginUserInfo.userName} />
+              <ProfileName
+                type="text"
+                ref={userNameRef}
+                defaultValue={loginUserInfo.userName}
+                onChange={calcUserNameAsByte}
+              />
               <SelectBtn onClick={confirmUserName}>선택</SelectBtn>
+              <TextByteContnr>
+                <NoteUserName>영문, 숫자는 1로, 한글은 2로 계산됩니다</NoteUserName>
+                <UserNameAsByteContnr>
+                  <MarkUserNameAsByte userNameByte={userNameByte}>
+                    {`${userNameByte} `}
+                  </MarkUserNameAsByte>
+                  <NormalFontWeight>/</NormalFontWeight>
+                  {" 12"}
+                </UserNameAsByteContnr>
+              </TextByteContnr>
             </ProfileNameBox>
             <SelectBtnBox isBG>
               <SelectBtn isBG>

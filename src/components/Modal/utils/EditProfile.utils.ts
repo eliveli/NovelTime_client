@@ -412,3 +412,14 @@ export const handleMouseUp = (
   });
   handleMoving(undefined);
 };
+
+export const getTextLength = (str: string) => {
+  let len = 0;
+  for (let i = 0; i < str.length; i += 1) {
+    if (escape(str.charAt(i)).length === 6) {
+      len += 1;
+    }
+    len += 1;
+  }
+  return len;
+};
