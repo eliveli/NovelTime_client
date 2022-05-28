@@ -59,12 +59,15 @@ export default function EditProfile() {
     const tempUserName = userNameRef.current?.value as string;
     if (!tempUserName) {
       alert("유저 네임을 입력해 주세요");
-    }
-    // limit the text length by 12byte
-    else if (userNameByte > 12) {
+    } else if (userNameByte > 12) {
+      // limit the text length by 12byte
       alert("입력 가능한 글자 수를 초과했어요");
     } else if (tempUserName === loginUserInfo.userName) {
       alert("기존 이름과 같아요. 새로운 이름을 입력해 주세요");
+    } else if (tempUserName[0] === " " || tempUserName[tempUserName.length - 1] === " ") {
+      // Make user exclude leading or trailing spaces in userName
+      // and allow spaces between userName letters. this naming rule is the same as kakao's
+      alert("이름 맨 앞 또는 맨 뒤 공백이 없어야 해요");
     }
     // 서버에 보내서 동일 유저 네임 여부 확인
     // 유저 네임 길이 제한(얼만큼?) 알림 문구도 미리 넣자.
