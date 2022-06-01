@@ -50,6 +50,14 @@ export const novelTimeApi = createApi({
     getLogout: builder.query<undefined, undefined>({
       query: () => `/user/logout`,
     }),
+    checkForUserName: builder.mutation<string, string>({
+      query: (newUserName) => ({
+        url: "/user/checkUserName",
+        method: "POST",
+        body: newUserName,
+      }),
+      // transformResponse: (rawResult: { data: ImgHostingResult }) => rawResult.data,
+    }),
   }),
 });
 
@@ -60,4 +68,5 @@ export const {
   useGetLoginKakaoQuery,
   useGetLogoutQuery,
   useGetAccessTokenQuery,
+  useCheckForUserNameMutation,
 } = novelTimeApi;

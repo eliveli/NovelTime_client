@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { closeModal } from "store/clientSlices/modalSlice";
 import { useImageHostingMutation } from "store/serverAPIs/imageHosting";
+import { useCheckForUserNameMutation } from "store/serverAPIs/novelTime";
 import { CheckDeviceType } from "utils";
 
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
@@ -54,8 +55,11 @@ export default function EditProfile() {
     const tempUserName = userNameRef.current?.value as string;
     setUserNameByte(getTextLength(tempUserName));
   };
+
+  const [CheckForUserName] = useCheckForUserNameMutation();
+
   // as clicking the select button for user name
-  const confirmUserName = () => {
+  const confirmUserName = async () => {
     const tempUserName = userNameRef.current?.value as string;
     if (!tempUserName) {
       alert("유저 네임을 입력해 주세요");
@@ -68,10 +72,18 @@ export default function EditProfile() {
       // Make user exclude leading or trailing spaces in userName
       // and allow spaces between userName letters. this naming rule is the same as kakao's
       alert("이름 맨 앞 또는 맨 뒤 공백이 없어야 해요");
+    } else {
+      // request with user name to check if it is duplicate or not
+      await CheckForUserName(tempUserName)
+        .then((data) => {
+          console.log("after checking user name:", data);
+        })
+        .catch((err) => {
+          console.log("as checking new user name err occurred:", err);
+        });
+      // 중복일 경우 alert, 중복 값 true 설정 (디폴트 false. false일 때 최종적으로 저장 가능(버튼클릭))
+      // 중복 아니면 alert "사용 가능한 이름이에요"
     }
-    // 서버에 보내서 동일 유저 네임 여부 확인
-    // 유저 네임 길이 제한(얼만큼?) 알림 문구도 미리 넣자.
-    // 성공하면 변경된 유저 네임 스토어에 저장
   };
 
   // set image
