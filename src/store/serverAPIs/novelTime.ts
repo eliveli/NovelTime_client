@@ -54,9 +54,11 @@ export const novelTimeApi = createApi({
       query: (newUserName) => ({
         url: "/user/checkUserName",
         method: "POST",
-        body: newUserName,
+        body: { newUserName },
       }),
-      // transformResponse: (rawResult: { data: ImgHostingResult }) => rawResult.data,
+      // can't use transformResponse.
+      // when I did that the response data became undefined
+      // I guess that the reason is it was primitive type
     }),
   }),
 });

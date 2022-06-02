@@ -75,8 +75,12 @@ export default function EditProfile() {
     } else {
       // request with user name to check if it is duplicate or not
       await CheckForUserName(tempUserName)
-        .then((data) => {
-          console.log("after checking user name:", data);
+        .then((result) => {
+          if ("data" in result) {
+            console.log("checking user name response:", result.data);
+            const alertMessage = result.data; // can't read it directly in alert
+            alert(alertMessage);
+          }
         })
         .catch((err) => {
           console.log("as checking new user name err occurred:", err);
