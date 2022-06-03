@@ -44,8 +44,11 @@ export default function EditProfile() {
 
   // userName
   const [userNameByte, setUserNameByte] = useState(0);
+  // as clicking "save" button : pass for undefined or true, stop for false
+  const isCheckedForDuplicateRef = useRef<undefined | boolean>();
+
   // onChange handler to calculate the user name as bytes as typing userName
-  const calcUserNameAsByte = () => {
+  const handleTypeUserName = () => {
     if (userNameByte === undefined) return;
     // (X) don't do : if (!userNameByte)
     // it worked when userNameByte was zero because it was also falsy value.
@@ -54,6 +57,9 @@ export default function EditProfile() {
     //
     const tempUserName = userNameRef.current?.value as string;
     setUserNameByte(getTextLength(tempUserName));
+
+    // not yet checked for duplicate user name
+    isCheckedForDuplicateRef.current = false;
   };
 
   const [CheckForUserName] = useCheckForUserNameMutation();
@@ -79,7 +85,13 @@ export default function EditProfile() {
           if ("data" in result) {
             console.log("checking user name response:", result.data);
             const alertMessage = result.data; // can't read it directly in alert
+
             alert(alertMessage);
+
+            if (alertMessage === "you can use this name") {
+              // complete checking for duplicate user name
+              isCheckedForDuplicateRef.current = true;
+            }
           }
         })
         .catch((err) => {
@@ -224,6 +236,8 @@ export default function EditProfile() {
             <TextForSave
               onClick={() => {
                 handleImageHosting();
+                // when "isCheckedForDuplicateRef.current" is false
+                // then don't save and just alarm "유저네임 중복 체크를 완료해 주세요"
               }}
             >
               저장
@@ -256,7 +270,7 @@ export default function EditProfile() {
                 type="text"
                 ref={userNameRef}
                 defaultValue={loginUserInfo.userName}
-                onChange={calcUserNameAsByte}
+                onChange={handleTypeUserName}
               />
               <SelectBtn onClick={confirmUserName}>선택</SelectBtn>
               <TextByteContnr>
