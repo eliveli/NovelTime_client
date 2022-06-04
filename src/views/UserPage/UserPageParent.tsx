@@ -24,15 +24,23 @@ import {
 
 // server request with userName
 const dataFromServer = {
-  userInfo: { userName: "eunhye shin", userImg: "" },
+  userInfo: {
+    userName: "eunhye shin",
+    userImg: { src: "", position: "top" },
+    userBG: {
+      src: "https://cdn.pixabay.com/photo/2017/02/01/09/52/animal-2029245_960_720.png",
+      position: "center",
+    },
+  },
 };
 
 interface ProfileProps {
-  userImg: string;
   userName: string;
+  userImg: { src: string; position: string };
+  userBG: { src: string; position: string };
 }
 
-function Profile({ userImg, userName }: ProfileProps) {
+function Profile({ userImg, userName, userBG }: ProfileProps) {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const loginUserInfo = useAppSelector((state) => state.user.loginUserInfo);
@@ -46,7 +54,20 @@ function Profile({ userImg, userName }: ProfileProps) {
   if (data && loginUserInfo.userId) {
     console.log("in logout handler");
     dispatch(setAccessToken(""));
-    dispatch(setLoginUserInfo({ userId: "", userName: "", userImg: "" }));
+    dispatch(
+      setLoginUserInfo({
+        userId: "",
+        userName: "",
+        userImg: {
+          src: "",
+          position: "",
+        },
+        userBG: {
+          src: "",
+          position: "",
+        },
+      }),
+    );
   }
   const handleLogout = () => {
     alert("로그아웃 하시겠습니까?");
@@ -56,7 +77,7 @@ function Profile({ userImg, userName }: ProfileProps) {
   };
   return (
     <ProfileContnr>
-      <ProfileAlign>
+      <ProfileAlign userBG={userBG}>
         <ProfileUserCntnr>
           <UserImg userImg={userImg} />
           <UserName onClick={() => navigate(`/user_page/${userName}`)}>{userName}</UserName>
@@ -92,6 +113,7 @@ export default function UserPageParent() {
       <Profile
         userImg={dataFromServer.userInfo.userImg}
         userName={dataFromServer.userInfo.userName}
+        userBG={dataFromServer.userInfo.userBG}
       />
       <Outlet />
     </>
