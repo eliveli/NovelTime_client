@@ -252,6 +252,11 @@ interface DetailProps {
   };
 }
 
+interface InterfaceUserImg {
+  src: string;
+  position: string;
+}
+
 export function NavMobileDetail({ parameter, pathname, handleMsgList }: DetailProps) {
   // one nav component: top
 
@@ -322,29 +327,29 @@ export function NavMobileDetail({ parameter, pathname, handleMsgList }: DetailPr
           ["message", loginUserInfo.userImg, loginUserInfo.userName],
           ["user_page", userInfoInUserPage.userImg, userInfoInUserPage.userName],
         ].map((_, idx) => {
-          if (idx === 2 && !pathname.includes(_[0]) && parameter?.novelId) {
+          if (idx === 2 && !pathname.includes(_[0] as string) && parameter?.novelId) {
             return <PageTitle>{novelTitle}</PageTitle>;
           }
-          if (idx === 2 && pathname.includes(_[0])) {
+          if (idx === 2 && pathname.includes(_[0] as string)) {
             return <PageTitle>{_[1]}</PageTitle>;
           }
-          if (idx === 3 && pathname.includes(_[0])) {
+          if (idx === 3 && pathname.includes(_[0] as string)) {
             return (
               <PageTitle>
-                <UserImg userImg={_[1]} />
+                <UserImg userImg={_[1] as InterfaceUserImg} />
                 <UserName>{_[2]}</UserName>
               </PageTitle>
             );
           }
-          if (idx === 4 && pathname.includes(_[0])) {
+          if (idx === 4 && pathname.includes(_[0] as string)) {
             return (
               <PageTitle onClick={() => navigate(`user_page/${_[2]}`)}>
-                <UserImg userImg={_[1]} />
+                <UserImg userImg={_[1] as InterfaceUserImg} />
                 <UserName>{_[2]}</UserName>
               </PageTitle>
             );
           }
-          if (pathname.includes(_[0])) return <PageTitle>{_[1]}</PageTitle>;
+          if (pathname.includes(_[0] as string)) return <PageTitle>{_[1]}</PageTitle>;
         })}
 
         <IconsBox isRight>

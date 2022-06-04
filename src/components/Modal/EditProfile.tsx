@@ -83,7 +83,6 @@ export default function EditProfile() {
       await CheckForUserName(tempUserName)
         .then((result) => {
           if ("data" in result) {
-            console.log("checking user name response:", result.data);
             const alertMessage = result.data; // can't read it directly in alert
 
             alert(alertMessage);
@@ -247,7 +246,9 @@ export default function EditProfile() {
             <ProfileImgBox>
               <ProfileImg
                 imgPosition={profileImgPosition}
-                userImg={newProfileImageAsString || selectedProfileImage || loginUserInfo.userImg}
+                userImg={
+                  newProfileImageAsString || selectedProfileImage || loginUserInfo.userImg.src
+                }
               />
               <SelectBtnBox isPhoto>
                 <SelectBtn isPhoto>수정</SelectBtn>

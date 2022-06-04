@@ -2,17 +2,36 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export type IsUserState = {
-  loginUserInfo: { userId: string; userName: string; userImg: string };
+  loginUserInfo: {
+    userId: string;
+    userName: string;
+    userImg: { src: string; position: string };
+    userBG: { src: string; position: string };
+  };
   accessToken: string;
-  isLogout: true | undefined; // this state will be reset as undefined when user login and refresh page
-  userInfoInUserPage: { userName: string; userImg: string };
+  // "isLogout" will be reset as undefined when user login and refresh page
+  isLogout: true | undefined;
+  userInfoInUserPage: {
+    userName: string;
+    userImg: { src: string; position: string };
+    userBG: { src: string; position: string };
+  };
 };
 
 const initialState: IsUserState = {
-  loginUserInfo: { userId: "", userName: "", userImg: "" },
+  loginUserInfo: {
+    userId: "",
+    userName: "",
+    userImg: { src: "", position: "" },
+    userBG: { src: "", position: "" },
+  },
   accessToken: "",
   isLogout: undefined,
-  userInfoInUserPage: { userName: "", userImg: "" },
+  userInfoInUserPage: {
+    userName: "",
+    userImg: { src: "", position: "" },
+    userBG: { src: "", position: "" },
+  },
 };
 
 export const userSlice = createSlice({
@@ -21,7 +40,12 @@ export const userSlice = createSlice({
   reducers: {
     setLoginUserInfo: (
       state,
-      action: PayloadAction<{ userId: string; userName: string; userImg: string }>,
+      action: PayloadAction<{
+        userId: string;
+        userName: string;
+        userImg: { src: string; position: string };
+        userBG: { src: string; position: string };
+      }>,
     ) => {
       state.loginUserInfo = action.payload;
     },
@@ -33,7 +57,11 @@ export const userSlice = createSlice({
     },
     setUserInfoForUserPage: (
       state,
-      action: PayloadAction<{ userName: string; userImg: string }>,
+      action: PayloadAction<{
+        userName: string;
+        userImg: { src: string; position: string };
+        userBG: { src: string; position: string };
+      }>,
     ) => {
       state.userInfoInUserPage = action.payload;
     },

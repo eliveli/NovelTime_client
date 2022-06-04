@@ -373,14 +373,18 @@ export const SearchIconBox = styled(Icon.IconBox)`
   min-height: 27px;
   max-height: 27px;
 `;
-export const UserImg = styled.div<{ userImg: string }>`
+interface InterfaceUserImg {
+  src: string;
+  position: string;
+}
+export const UserImg = styled.div<{ userImg: InterfaceUserImg }>`
   border-radius: 50%;
   min-width: 30px;
   height: 30px;
   background-image: url(${({ userImg }) =>
-    userImg || "https://cdn.pixabay.com/photo/2017/02/01/09/52/animal-2029245_960_720.png"});
+    userImg.src || "https://cdn.pixabay.com/photo/2017/02/01/09/52/animal-2029245_960_720.png"});
 
-  background-position: center;
+  background-position: ${({ userImg }) => userImg.position || "center"};
   background-repeat: no-repeat;
   background-size: cover;
 `;

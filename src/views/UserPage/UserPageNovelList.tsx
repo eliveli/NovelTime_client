@@ -60,7 +60,10 @@ const novelList = {
   // above is necessary especially in other's list
   // only in other's list this info is necessary, not in my list
   userName: "asda",
-  userImg: "https://cdn.pixabay.com/photo/2017/02/01/09/52/animal-2029245_960_720.png",
+  userImg: {
+    src: "https://cdn.pixabay.com/photo/2017/02/01/09/52/animal-2029245_960_720.png",
+    position: "center",
+  },
   //
   // it is necessary in both my list and other's list
   // but login user is the owner of the user page, this info will not be received
@@ -143,6 +146,11 @@ const novelList = {
     },
   ],
 };
+
+interface ProfileImg {
+  src: string;
+  position: string;
+}
 
 export default function UserPageNovelList({ isMyList }: { isMyList: boolean }) {
   const loginUserInfo = useAppSelector((state) => state.user.loginUserInfo);
@@ -294,7 +302,7 @@ export default function UserPageNovelList({ isMyList }: { isMyList: boolean }) {
                 _.listTitle
               ) : (
                 <OthersTitleContnr>
-                  <UserImg userImg={_.userImg} isTitle />
+                  <UserImg userImg={_.userImg as ProfileImg} isTitle />
                   {_.userName} <ListTitleNormalStyle>의 리스트 : </ListTitleNormalStyle>
                   &nbsp;
                   {_.listTitle}

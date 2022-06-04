@@ -21,6 +21,7 @@ export interface UserAndToken {
   userInfo: {
     userId: string;
     userName: string;
-    userImg: string;
+    userImg: { src: string; position: string };
+    userBG: { src: string; position: string };
   };
 }

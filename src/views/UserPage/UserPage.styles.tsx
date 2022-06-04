@@ -9,19 +9,27 @@ export const ProfileContnr = styled.div`
     height: 250px;
   `)}
 `;
-export const ProfileAlign = styled.div`
+interface ProfileImg {
+  src: string;
+  position: string;
+}
+export const ProfileAlign = styled.div<{ userBG: ProfileImg }>`
   height: 100%;
   width: 100%;
   max-width: 860px;
   margin: auto;
   display: flex;
+  background-image: url(${({ userBG }) => userBG.src});
+  background-position: ${({ userBG }) => userBG.position};
 `;
-export const UserImg = styled.div<{ userImg: string; isTitle?: true }>`
+export const UserImg = styled.div<{ userImg: ProfileImg; isTitle?: true }>`
   border-radius: 50%;
   min-width: 45px;
   height: 45px;
   background-image: url(${({ userImg }) =>
-    userImg || "https://cdn.pixabay.com/photo/2017/02/01/09/52/animal-2029245_960_720.png"});
+    userImg.src || "https://cdn.pixabay.com/photo/2017/02/01/09/52/animal-2029245_960_720.png"});
+
+  background-position: ${({ userImg }) => userImg.position};
 
   ${({ isTitle }) =>
     isTitle &&
