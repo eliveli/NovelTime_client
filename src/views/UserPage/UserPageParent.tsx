@@ -10,7 +10,7 @@ import { messageIconUserPage } from "assets/images";
 import { Outlet, useNavigate, useParams } from "react-router-dom";
 import Icon from "assets/Icon";
 import { useGetLogoutQuery } from "store/serverAPIs/novelTime";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   ProfileContnr,
   ProfileAlign,
@@ -45,6 +45,10 @@ function Profile({ userImg, userName, userBG }: ProfileProps) {
   const dispatch = useAppDispatch();
   const loginUserInfo = useAppSelector((state) => state.user.loginUserInfo);
   const isLogout = useAppSelector((state) => state.user.isLogout);
+  // userBG when user is changing the BG
+  const tempUserBG = useAppSelector((state) => state.user.tempUserBG);
+
+  console.log("tempUserBG:", tempUserBG);
 
   // after logout remove access token and user info in store
   const { data, error, isLoading, isUninitialized } = useGetLogoutQuery(undefined, {
@@ -75,14 +79,18 @@ function Profile({ userImg, userName, userBG }: ProfileProps) {
     // it is not required to set logout with undefined again
     // because when user login, page will be refreshed then isLogout state will be undefined
   };
+
+  useEffect(() => {
+    console.log("tempUserBG in useEffect:", tempUserBG);
+  }, [tempUserBG]);
   return (
     <ProfileContnr>
-      <ProfileAlign userBG={userBG}>
+      <ProfileAlign userBG={tempUserBG || userBG}>
         <ProfileUserCntnr>
           <UserImg userImg={userImg} />
           <UserName onClick={() => navigate(`/user_page/${userName}`)}>{userName}</UserName>
           {/* message icon for other's page, logout icon for login user's page */}
-          {loginUserInfo.userName !== dataFromServer.userInfo.userName ? (
+          {loginUserInfo.userName !== userName ? (
             <MessageIcon src={messageIconUserPage} alt="message" />
           ) : (
             <>
@@ -102,18 +110,24 @@ function Profile({ userImg, userName, userBG }: ProfileProps) {
 
 export default function UserPageParent() {
   const { userName } = useParams();
-  // server request with userName
+  // request with userName to server when the user is not the login user
 
-  // set user info to show in nav
   const dispatch = useAppDispatch();
-  dispatch(setUserInfoForUserPage(dataFromServer.userInfo));
+  const loginUserInfo = useAppSelector((state) => state.user.loginUserInfo);
+  // user info : login user or not
+  const userInfoForUserPage =
+    loginUserInfo.userName !== dataFromServer.userInfo.userName
+      ? dataFromServer.userInfo
+      : loginUserInfo;
+  // set user info to show on nav //
+  dispatch(setUserInfoForUserPage(userInfoForUserPage));
 
   return (
     <>
       <Profile
-        userImg={dataFromServer.userInfo.userImg}
-        userName={dataFromServer.userInfo.userName}
-        userBG={dataFromServer.userInfo.userBG}
+        userImg={userInfoForUserPage.userImg}
+        userName={userInfoForUserPage.userName}
+        userBG={userInfoForUserPage.userBG}
       />
       <Outlet />
     </>

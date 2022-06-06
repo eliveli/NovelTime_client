@@ -16,6 +16,7 @@ export type IsUserState = {
     userImg: { src: string; position: string };
     userBG: { src: string; position: string };
   };
+  tempUserBG: { src: string; position: string };
 };
 
 const initialState: IsUserState = {
@@ -32,6 +33,7 @@ const initialState: IsUserState = {
     userImg: { src: "", position: "" },
     userBG: { src: "", position: "" },
   },
+  tempUserBG: { src: "", position: "" },
 };
 
 export const userSlice = createSlice({
@@ -65,6 +67,16 @@ export const userSlice = createSlice({
     ) => {
       state.userInfoInUserPage = action.payload;
     },
+    setTempUserBG: (
+      state,
+      action: PayloadAction<{
+        src: string;
+        position: string;
+      }>,
+    ) => {
+      state.tempUserBG = action.payload;
+    },
+
     // Redux Toolkit allows us to write "mutating" logic in reducers. It
     // doesn't actually mutate the state because it uses the Immer library,
     // which detects changes to a "draft state" and produces a brand new
@@ -73,7 +85,12 @@ export const userSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { setUserInfoForUserPage, setLoginUserInfo, setLogout, setAccessToken } =
-  userSlice.actions;
+export const {
+  setUserInfoForUserPage,
+  setLoginUserInfo,
+  setLogout,
+  setAccessToken,
+  setTempUserBG,
+} = userSlice.actions;
 
 export default userSlice.reducer;

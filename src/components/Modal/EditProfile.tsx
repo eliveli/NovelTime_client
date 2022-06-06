@@ -4,6 +4,7 @@ import { useImageHostingMutation } from "store/serverAPIs/imageHosting";
 import { useCheckForUserNameMutation } from "store/serverAPIs/novelTime";
 import { CheckDeviceType } from "utils";
 
+import { setTempUserBG } from "store/clientSlices/userSlice";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 
 import EditProfileImg from "./EditProfile.components";
@@ -106,7 +107,7 @@ export default function EditProfile() {
   const [newProfileImage, setNewProfileImage] = useState<Blob>(); // image link after hosting image
   const [newProfileImageAsString, setNewProfileImageAsString] = useState<string>(); // to show as profile image
   const [isEditingImage, handleEditingImage] = useState(false); // if it is false show the profile modal
-  const [selectedProfileBGImage, setSelectedProfileBGImage] = useState<null | File | Blob>(null);
+  // const [selectedProfileBGImage, setSelectedProfileBGImage] = useState<null | File | Blob>(null);
 
   // set profile image background position for mobile and tablet device
   const [profileImgPosition, setProfileImgPosition] = useState("center");
@@ -146,6 +147,33 @@ export default function EditProfile() {
       // if this is the second time that user try to edit image
       // this setState will make the user do that
       // without this user can't edit the second image on canvas
+    }
+  };
+
+  const handleProfileBG = (event: React.ChangeEvent<HTMLInputElement>) => {
+    event.preventDefault();
+    if (event && event.target && event.target.files) {
+      const reader = new FileReader();
+      const file = event.target.files[0];
+      reader.onloadend = () => {
+        const blob = dataURLtoBlob(reader.result as string);
+
+        const dataCapacity = formatBytes(blob.size);
+
+        console.log("before size checking : set user BG in redux");
+        // if blob size is smaller than 20MB image hosting is available
+        if (blob.size <= 2e7) {
+          const BGasString = window.URL.createObjectURL(blob);
+          // show selected BG in UserPageParent component
+          setTempUserBG({ src: BGasString, position: "center" });
+          console.log("after size checking : set user BG in redux");
+        } else {
+          alert(
+            `20MB 이하로 저장 가능해요! 다른 이미지를 선택해 주세요. 현재 용량: ${dataCapacity}`,
+          );
+        }
+      };
+      reader.readAsDataURL(file);
     }
   };
 
@@ -294,10 +322,13 @@ export default function EditProfile() {
                 type="file"
                 name="BGImage"
                 onChange={(event) => {
-                  if (event && event.target && event.target.files) {
-                    setSelectedProfileBGImage(event.target.files[0]);
-                  }
+                  handleProfileBG(event);
                 }}
+                // {(event) => {
+                //   if (event && event.target && event.target.files) {
+                //     setSelectedProfileBGImage(event.target.files[0]);
+                //   }
+                // }}
               />
             </SelectBtnBox>
           </ContentContnr>
