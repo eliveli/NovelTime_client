@@ -10,7 +10,7 @@ import { messageIconUserPage } from "assets/images";
 import { Outlet, useNavigate, useParams } from "react-router-dom";
 import Icon from "assets/Icon";
 import { useGetLogoutQuery } from "store/serverAPIs/novelTime";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import {
   ProfileContnr,
   ProfileAlign,
@@ -47,9 +47,6 @@ function Profile({ userImg, userName, userBG }: ProfileProps) {
   const isLogout = useAppSelector((state) => state.user.isLogout);
   // userBG when user is changing the BG
   const tempUserBG = useAppSelector((state) => state.user.tempUserBG);
-
-  console.log("tempUserBG:", tempUserBG);
-
   // after logout remove access token and user info in store
   const { data, error, isLoading, isUninitialized } = useGetLogoutQuery(undefined, {
     skip: !isLogout,

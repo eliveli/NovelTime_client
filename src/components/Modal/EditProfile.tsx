@@ -107,7 +107,6 @@ export default function EditProfile() {
   const [newProfileImage, setNewProfileImage] = useState<Blob>(); // image link after hosting image
   const [newProfileImageAsString, setNewProfileImageAsString] = useState<string>(); // to show as profile image
   const [isEditingImage, handleEditingImage] = useState(false); // if it is false show the profile modal
-  // const [selectedProfileBGImage, setSelectedProfileBGImage] = useState<null | File | Blob>(null);
 
   // set profile image background position for mobile and tablet device
   const [profileImgPosition, setProfileImgPosition] = useState("center");
@@ -165,8 +164,7 @@ export default function EditProfile() {
         if (blob.size <= 2e7) {
           const BGasString = window.URL.createObjectURL(blob);
           // show selected BG in UserPageParent component
-          setTempUserBG({ src: BGasString, position: "center" });
-          console.log("after size checking : set user BG in redux");
+          dispatch(setTempUserBG({ src: BGasString, position: "" }));
         } else {
           alert(
             `20MB 이하로 저장 가능해요! 다른 이미지를 선택해 주세요. 현재 용량: ${dataCapacity}`,
