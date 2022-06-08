@@ -30,7 +30,7 @@ import {
   NormalFontWeight,
   UserNameAsByteContnr,
 } from "./Modal.styles";
-import SelectImagePosition from "./EditProfile.componentForMobile";
+import SelectImagePosition from "./EditProfile.componentForImgPosition";
 import dataURLtoBlob from "./utils/dataURLtoBlob";
 import formatBytes from "./utils/formatBytes";
 import { getTextLength } from "./utils/EditProfile.utils";
@@ -337,6 +337,7 @@ export default function EditProfile() {
                 // }}
               />
             </SelectBtnBox>
+            <SelectImagePosition />
           </ContentContnr>
         </ModalBox>
       )}
