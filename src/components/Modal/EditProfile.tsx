@@ -175,6 +175,11 @@ export default function EditProfile() {
     }
   };
 
+  const closeProfileModal = () => {
+    dispatch(closeModal());
+    dispatch(setTempUserBG({ src: "", position: "" })); // remove the temp bg data
+  };
+
   // image hosting on imgur after finishing editing the profile image
   const [ImageHosting] = useImageHostingMutation();
   const handleImageHosting = async () => {
@@ -195,7 +200,6 @@ export default function EditProfile() {
   };
 
   const BGRef = useRef<HTMLDivElement>(null);
-
   // this will set selectedProfileImage as empty string //
   // thanks to this setting
   //    in EditProfileImg component especially when user try to edit image twice
@@ -225,7 +229,7 @@ export default function EditProfile() {
       onClick={() => {
         // prevent modal from being closed
         //  when dragging to area outside the modal as editing the image
-        if (!isEditingImage) dispatch(closeModal());
+        if (!isEditingImage) closeProfileModal();
       }}
       ref={BGRef}
     >
@@ -255,14 +259,18 @@ export default function EditProfile() {
           }}
         >
           <CloseOrSave>
-            <ClosingBox isSmallWidth isProfile onClick={() => dispatch(closeModal())}>
+            <ClosingBox isSmallWidth isProfile onClick={closeProfileModal}>
               <ClosingIcon isProfile />
             </ClosingBox>
             <TextForSave
               onClick={() => {
                 handleImageHosting();
+
                 // when "isCheckedForDuplicateRef.current" is false
                 // then don't save and just alarm "유저네임 중복 체크를 완료해 주세요"
+
+                // after all passed close the modal // change upper code later
+                closeProfileModal();
               }}
             >
               저장
