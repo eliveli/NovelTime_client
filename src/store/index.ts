@@ -1,6 +1,7 @@
 /* eslint-disable */
 // 지금은 뷰 구성에 집중할 것임. 린트 무시하는 주석은 나중에 해제하기
 import { configureStore } from "@reduxjs/toolkit";
+import logger from "redux-logger";
 // import { configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
 import { setupListeners } from "@reduxjs/toolkit/query";
 import modalReducer from "./clientSlices/modalSlice";
@@ -24,6 +25,7 @@ const store = configureStore({
     getDefaultMiddleware({
       serializableCheck: false,
     })
+      .concat(logger)
       .concat(novelTimeApi.middleware)
       .concat(imageHostingApi.middleware),
 });
