@@ -3,17 +3,20 @@ import theme, { styled } from "assets/styles/theme";
 import { setTempUserBG } from "store/clientSlices/userSlice";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 
-const PositionControllerContnr = styled.div`
+const PositionControllerContnr = styled.div<{ isBG: boolean }>`
   position: absolute;
-  bottom: -33px;
-  left: 0;
+  ${({ isBG }) =>
+    isBG
+      ? `bottom: 37px;
+    right: 35px;`
+      : ` bottom: -33px;
+  left: 0; `};
 
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  grid-gap: 2px;
 `;
-const PositionOption = styled(Icon.IconBox)`
-  color: ${theme.color.mainLight};
+const PositionOption = styled(Icon.IconBox)<{ isBG: boolean }>`
+  color: ${({ isBG }) => (isBG ? theme.color.main : theme.color.mainLight)};
   min-width: 23px;
   max-width: 23px;
   min-height: 23px;
@@ -32,9 +35,9 @@ export default function SelectImagePosition({
   const tempUserBG = useAppSelector((state) => state.user.tempUserBG);
 
   return (
-    <PositionControllerContnr>
-      <PositionOption />
-      <PositionOption>
+    <PositionControllerContnr isBG={!setProfileImgPosition}>
+      <PositionOption isBG={!setProfileImgPosition} />
+      <PositionOption isBG={!setProfileImgPosition}>
         <Icon.PositionTop
           onClick={() => {
             if (setProfileImgPosition) {
@@ -45,8 +48,8 @@ export default function SelectImagePosition({
           }}
         />
       </PositionOption>
-      <PositionOption />
-      <PositionOption>
+      <PositionOption isBG={!setProfileImgPosition} />
+      <PositionOption isBG={!setProfileImgPosition}>
         <Icon.PositionLeft
           onClick={() => {
             if (setProfileImgPosition) {
@@ -57,7 +60,7 @@ export default function SelectImagePosition({
           }}
         />
       </PositionOption>
-      <PositionOption>
+      <PositionOption isBG={!setProfileImgPosition}>
         <Icon.PositionCenter
           onClick={() => {
             if (setProfileImgPosition) {
@@ -68,7 +71,7 @@ export default function SelectImagePosition({
           }}
         />
       </PositionOption>
-      <PositionOption>
+      <PositionOption isBG={!setProfileImgPosition}>
         <Icon.PositionRight
           onClick={() => {
             if (setProfileImgPosition) {
@@ -79,8 +82,8 @@ export default function SelectImagePosition({
           }}
         />
       </PositionOption>
-      <PositionOption />
-      <PositionOption>
+      <PositionOption isBG={!setProfileImgPosition} />
+      <PositionOption isBG={!setProfileImgPosition}>
         <Icon.PositionBottom
           onClick={() => {
             if (setProfileImgPosition) {
@@ -91,7 +94,7 @@ export default function SelectImagePosition({
           }}
         />
       </PositionOption>
-      <PositionOption />
+      <PositionOption isBG={!setProfileImgPosition} />
     </PositionControllerContnr>
   );
 }
