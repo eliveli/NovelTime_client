@@ -21,6 +21,7 @@ export const ProfileAlign = styled.div<{ userBG: ProfileImg }>`
   display: flex;
   background-image: url(${({ userBG }) => userBG.src});
   background-position: ${({ userBG }) => userBG.position};
+  background-size: cover; // show full image
 `;
 export const UserImg = styled.div<{ userImg: ProfileImg; isTitle?: true }>`
   border-radius: 50%;
