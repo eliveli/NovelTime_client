@@ -111,6 +111,9 @@ export default function EditProfile() {
   // set profile image background position for mobile and tablet device
   const [profileImgPosition, setProfileImgPosition] = useState("center");
 
+  // to show image background positioning controller for temporary userBG just after selecting it
+  const tempUserBG = useAppSelector((state) => state.user.tempUserBG);
+
   // convert file to DataURL
   const handleProfileImage = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();
@@ -337,7 +340,7 @@ export default function EditProfile() {
                 // }}
               />
             </SelectBtnBox>
-            <SelectImagePosition />
+            {tempUserBG.src && <SelectImagePosition />}
           </ContentContnr>
         </ModalBox>
       )}
