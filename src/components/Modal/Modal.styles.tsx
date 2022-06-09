@@ -226,13 +226,15 @@ export const CropImageCanvas = styled.canvas`
   background-position: center;
 `;
 
-export const ModalBox = styled.div<{ padding?: string }>`
+export const ModalBox = styled.div<{ padding?: string; isEditingUserBG: boolean }>`
   display: flex;
   flex-direction: column;
   padding: ${({ padding }) => padding || "54px"};
   background-color: white;
   position: relative;
   border-radius: 7px;
+
+  ${({ isEditingUserBG }) => isEditingUserBG && `bottom: -122px;`}
 `;
 export const LoginCategoryContnr = styled.div`
   width: 100%;

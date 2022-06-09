@@ -257,6 +257,7 @@ export default function EditProfile() {
         CheckDeviceType() !== "desktop") && (
         <ModalBox
           padding="54px 40px"
+          isEditingUserBG={!!tempUserBG.src}
           onClick={(event: React.MouseEvent<HTMLElement>) => {
             event.stopPropagation();
           }}
