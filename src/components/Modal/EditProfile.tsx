@@ -115,6 +115,8 @@ export default function EditProfile() {
 
   // to show image background positioning controller for temporary userBG just after selecting it
   const tempUserBG = useAppSelector((state) => state.user.tempUserBG);
+  // to host image as blob
+  const temUserBGasBlobRef = useRef<Blob>();
 
   // convert file to DataURL
   const handleProfileImage = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -166,6 +168,7 @@ export default function EditProfile() {
 
         // if blob size is smaller than 20MB image hosting is available
         if (blob.size <= 2e7) {
+          temUserBGasBlobRef.current = blob;
           const BGasString = window.URL.createObjectURL(blob);
           // show selected BG in UserPageParent component
           dispatch(setTempUserBG({ src: BGasString, position: "" }));
@@ -186,9 +189,8 @@ export default function EditProfile() {
 
   // image hosting on imgur
   const [ImageHosting] = useImageHostingMutation();
-  const handleImageHosting = (selectedImg: Blob | string) => {
-    console.log("selectedImg:", selectedImg);
-    return new Promise<any>((resolve) => {
+  const handleImageHosting = (selectedImg: Blob) =>
+    new Promise<any>((resolve) => {
       if (selectedImg) {
         const formData = new FormData();
 
@@ -205,7 +207,6 @@ export default function EditProfile() {
           });
       }
     });
-  };
 
   const saveChangedInfo = async () => {
     let profileImgLink: string;
@@ -218,7 +219,7 @@ export default function EditProfile() {
       })
       .catch((err) => console.log("err occurred in handleImageHosting function : ", err));
     // hosting user bg image
-    await handleImageHosting(tempUserBG.src)
+    await handleImageHosting(temUserBGasBlobRef?.current as Blob)
       .then((link) => {
         console.log("bgImgLink:", link);
         bgImgLink = link as string;
