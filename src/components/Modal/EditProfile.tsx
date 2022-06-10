@@ -207,6 +207,12 @@ export default function EditProfile() {
     });
 
   const saveChangedInfo = async () => {
+    // in this case don't save and do alert
+    if (isCheckedForDuplicateRef.current === false) {
+      alert("유저네임 중복 체크를 완료해 주세요");
+      return;
+    }
+
     let profileImgLink: string;
     let bgImgLink: string;
     // hosting user profile image
@@ -227,10 +233,6 @@ export default function EditProfile() {
         })
         .catch((err) => console.log("err occurred in handleImageHosting function : ", err));
     }
-
-    // when "isCheckedForDuplicateRef.current" is false
-    // then don't save and just alarm "유저네임 중복 체크를 완료해 주세요"
-
     // after all passed close the modal // change upper code later
     closeProfileModal();
   };
