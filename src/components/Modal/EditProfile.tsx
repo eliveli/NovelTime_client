@@ -191,40 +191,42 @@ export default function EditProfile() {
   const [ImageHosting] = useImageHostingMutation();
   const handleImageHosting = (selectedImg: Blob) =>
     new Promise<any>((resolve) => {
-      if (selectedImg) {
-        const formData = new FormData();
+      const formData = new FormData();
 
-        formData.append("image", selectedImg);
+      formData.append("image", selectedImg);
 
-        ImageHosting(formData)
-          .unwrap()
-          .then((result) => {
-            const imageLink = result.link; // get image link from imgur
-            resolve(imageLink);
-          })
-          .catch((err) => {
-            console.log("as requesting image hosting err occurred:", err);
-          });
-      }
+      ImageHosting(formData)
+        .unwrap()
+        .then((result) => {
+          const imageLink = result.link; // get image link from imgur
+          resolve(imageLink);
+        })
+        .catch((err) => {
+          console.log("as requesting image hosting err occurred:", err);
+        });
     });
 
   const saveChangedInfo = async () => {
     let profileImgLink: string;
     let bgImgLink: string;
     // hosting user profile image
-    await handleImageHosting(newProfileImage as Blob)
-      .then((link) => {
-        console.log("profileImgLink:", link);
-        profileImgLink = link as string;
-      })
-      .catch((err) => console.log("err occurred in handleImageHosting function : ", err));
+    if (newProfileImage) {
+      await handleImageHosting(newProfileImage)
+        .then((link) => {
+          console.log("profileImgLink:", link);
+          profileImgLink = link as string;
+        })
+        .catch((err) => console.log("err occurred in handleImageHosting function : ", err));
+    }
     // hosting user bg image
-    await handleImageHosting(temUserBGasBlobRef?.current as Blob)
-      .then((link) => {
-        console.log("bgImgLink:", link);
-        bgImgLink = link as string;
-      })
-      .catch((err) => console.log("err occurred in handleImageHosting function : ", err));
+    if (temUserBGasBlobRef?.current) {
+      await handleImageHosting(temUserBGasBlobRef?.current)
+        .then((link) => {
+          console.log("bgImgLink:", link);
+          bgImgLink = link as string;
+        })
+        .catch((err) => console.log("err occurred in handleImageHosting function : ", err));
+    }
 
     // when "isCheckedForDuplicateRef.current" is false
     // then don't save and just alarm "유저네임 중복 체크를 완료해 주세요"
