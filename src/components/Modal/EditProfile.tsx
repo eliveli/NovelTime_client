@@ -36,6 +36,8 @@ import formatBytes from "./utils/formatBytes";
 import { getTextLength } from "./utils/EditProfile.utils";
 
 export default function EditProfile() {
+  const BGRef = useRef<HTMLDivElement>(null);
+
   const dispatch = useAppDispatch();
   const modalCategory = useAppSelector((state) => state.modal.modalCategory);
 
@@ -162,7 +164,6 @@ export default function EditProfile() {
 
         const dataCapacity = formatBytes(blob.size);
 
-        console.log("before size checking : set user BG in redux");
         // if blob size is smaller than 20MB image hosting is available
         if (blob.size <= 2e7) {
           const BGasString = window.URL.createObjectURL(blob);
@@ -183,26 +184,54 @@ export default function EditProfile() {
     dispatch(setTempUserBG({ src: "", position: "" })); // remove the temp bg data
   };
 
-  // image hosting on imgur after finishing editing the profile image
+  // image hosting on imgur
   const [ImageHosting] = useImageHostingMutation();
-  const handleImageHosting = async () => {
-    if (newProfileImage) {
-      const formData = new FormData();
+  const handleImageHosting = (selectedImg: Blob | string) => {
+    console.log("selectedImg:", selectedImg);
+    return new Promise<any>((resolve) => {
+      if (selectedImg) {
+        const formData = new FormData();
 
-      formData.append("image", newProfileImage);
+        formData.append("image", selectedImg);
 
-      await ImageHosting(formData)
-        .unwrap()
-        .then((result) => {
-          const imageLink = result.link; // get image link from imgur
-        })
-        .catch((err) => {
-          console.log("as requesting image hosting err occurred:", err);
-        });
-    }
+        ImageHosting(formData)
+          .unwrap()
+          .then((result) => {
+            const imageLink = result.link; // get image link from imgur
+            resolve(imageLink);
+          })
+          .catch((err) => {
+            console.log("as requesting image hosting err occurred:", err);
+          });
+      }
+    });
   };
 
-  const BGRef = useRef<HTMLDivElement>(null);
+  const saveChangedInfo = async () => {
+    let profileImgLink: string;
+    let bgImgLink: string;
+    // hosting user profile image
+    await handleImageHosting(newProfileImage as Blob)
+      .then((link) => {
+        console.log("profileImgLink:", link);
+        profileImgLink = link as string;
+      })
+      .catch((err) => console.log("err occurred in handleImageHosting function : ", err));
+    // hosting user bg image
+    await handleImageHosting(tempUserBG.src)
+      .then((link) => {
+        console.log("bgImgLink:", link);
+        bgImgLink = link as string;
+      })
+      .catch((err) => console.log("err occurred in handleImageHosting function : ", err));
+
+    // when "isCheckedForDuplicateRef.current" is false
+    // then don't save and just alarm "유저네임 중복 체크를 완료해 주세요"
+
+    // after all passed close the modal // change upper code later
+    closeProfileModal();
+  };
+
   // this will set selectedProfileImage as empty string //
   // thanks to this setting
   //    in EditProfileImg component especially when user try to edit image twice
@@ -268,13 +297,7 @@ export default function EditProfile() {
             </ClosingBox>
             <TextForSave
               onClick={() => {
-                handleImageHosting();
-
-                // when "isCheckedForDuplicateRef.current" is false
-                // then don't save and just alarm "유저네임 중복 체크를 완료해 주세요"
-
-                // after all passed close the modal // change upper code later
-                closeProfileModal();
+                saveChangedInfo();
               }}
             >
               저장
