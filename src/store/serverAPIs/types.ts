@@ -25,3 +25,13 @@ export interface UserAndToken {
     userBG: { src: string; position: string };
   };
 }
+
+interface ChangedImg {
+  src: string;
+  position: string;
+}
+export interface ChangedUserInfo {
+  changedUserName: string;
+  changedUserImg: ChangedImg;
+  changedUserBG: ChangedImg;
+}

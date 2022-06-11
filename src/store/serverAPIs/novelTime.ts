@@ -1,6 +1,6 @@
 // Need to use the React-specific entry point to import createApi
 import { createApi, fetchBaseQuery, BaseQueryFn } from "@reduxjs/toolkit/query/react";
-import { NovelInfo, UserAndToken } from "./types";
+import { NovelInfo, UserAndToken, ChangedUserInfo } from "./types";
 import type { RootState } from "../index";
 
 interface FetchArgs extends RequestInit {
@@ -59,6 +59,13 @@ export const novelTimeApi = createApi({
       // can't use transformResponse.
       // when I did that the response data became undefined
       // I guess that the reason is it was primitive type
+    }),
+    saveUserInfo: builder.mutation<undefined, ChangedUserInfo>({
+      query: (changedUserInfo) => ({
+        url: "/user/saveChangedInfo",
+        method: "POST",
+        body: { changedUserInfo },
+      }),
     }),
   }),
 });
