@@ -243,7 +243,7 @@ export default function EditProfile() {
         position: profileImgPosition || loginUserInfo.userImg.position,
       },
       changedUserBG: {
-        src: tempUserBG.src || loginUserInfo.userBG.src,
+        src: bgImgLink || loginUserInfo.userBG.src,
         position: tempUserBG.position || loginUserInfo.userBG.position,
       },
     };
