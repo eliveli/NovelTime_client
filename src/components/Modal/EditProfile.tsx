@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { closeModal } from "store/clientSlices/modalSlice";
 import { useImageHostingMutation } from "store/serverAPIs/imageHosting";
-import { useCheckForUserNameMutation } from "store/serverAPIs/novelTime";
+import { useCheckForUserNameMutation, useSaveUserInfoMutation } from "store/serverAPIs/novelTime";
 import { CheckDeviceType } from "utils";
 
 import { setTempUserBG } from "store/clientSlices/userSlice";
@@ -66,6 +66,7 @@ export default function EditProfile() {
   };
 
   const [CheckForUserName] = useCheckForUserNameMutation();
+  const [SaveUserInfo] = useSaveUserInfoMutation();
 
   // as clicking the select button for user name
   const confirmUserName = async () => {
@@ -111,7 +112,7 @@ export default function EditProfile() {
   const [isEditingImage, handleEditingImage] = useState(false); // if it is false show the profile modal
 
   // set profile image background position for mobile and tablet device
-  const [profileImgPosition, setProfileImgPosition] = useState("center");
+  const [profileImgPosition, setProfileImgPosition] = useState("");
 
   // to show image background positioning controller for temporary userBG just after selecting it
   const tempUserBG = useAppSelector((state) => state.user.tempUserBG);
@@ -213,8 +214,8 @@ export default function EditProfile() {
       return;
     }
 
-    let profileImgLink: string;
-    let bgImgLink: string;
+    let profileImgLink = "";
+    let bgImgLink = "";
     // hosting user profile image
     if (newProfileImage) {
       await handleImageHosting(newProfileImage)
@@ -233,6 +234,29 @@ export default function EditProfile() {
         })
         .catch((err) => console.log("err occurred in handleImageHosting function : ", err));
     }
+
+    // changed or unchanged user info(as it didn't exist) to save
+    const changedUserInfo = {
+      changedUserName: userNameRef.current?.value || loginUserInfo.userName,
+      changedUserImg: {
+        src: profileImgLink || loginUserInfo.userImg.src,
+        position: profileImgPosition || loginUserInfo.userImg.position,
+      },
+      changedUserBG: {
+        src: tempUserBG.src || loginUserInfo.userBG.src,
+        position: tempUserBG.position || loginUserInfo.userBG.position,
+      },
+    };
+
+    await SaveUserInfo(changedUserInfo)
+      .then(() => {
+        alert("유저 정보가 성공적으로 저장되었어요");
+      })
+      .catch((err) => {
+        console.log("failed to save user info : ", err);
+        alert("유저 정보 저장에 실패했어요");
+      });
+
     // after all passed close the modal // change upper code later
     closeProfileModal();
   };

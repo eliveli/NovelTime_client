@@ -78,4 +78,5 @@ export const {
   useGetLogoutQuery,
   useGetAccessTokenQuery,
   useCheckForUserNameMutation,
+  useSaveUserInfoMutation,
 } = novelTimeApi;
