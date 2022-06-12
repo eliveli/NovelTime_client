@@ -60,7 +60,7 @@ export const novelTimeApi = createApi({
       // when I did that the response data became undefined
       // I guess that the reason is it was primitive type
     }),
-    saveUserInfo: builder.mutation<undefined, ChangedUserInfo>({
+    saveUserInfo: builder.mutation<any, ChangedUserInfo>({
       query: (changedUserInfo) => ({
         url: "/user/saveChangedInfo",
         method: "POST",

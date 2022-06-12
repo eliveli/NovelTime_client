@@ -4,7 +4,7 @@ import { useImageHostingMutation } from "store/serverAPIs/imageHosting";
 import { useCheckForUserNameMutation, useSaveUserInfoMutation } from "store/serverAPIs/novelTime";
 import { CheckDeviceType } from "utils";
 
-import { setTempUserBG } from "store/clientSlices/userSlice";
+import { setAccessToken, setLoginUserInfo, setTempUserBG } from "store/clientSlices/userSlice";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 
 import EditProfileImg from "./EditProfile.components";
@@ -207,6 +207,16 @@ export default function EditProfile() {
         });
     });
 
+  interface UserAndToken {
+    accessToken: string;
+    userInfo: {
+      userId: string;
+      userName: string;
+      userImg: { src: string; position: string };
+      userBG: { src: string; position: string };
+    };
+  }
+
   const saveChangedInfo = async () => {
     // in this case don't save and do alert
     if (isCheckedForDuplicateRef.current === false) {
@@ -249,7 +259,13 @@ export default function EditProfile() {
     };
 
     await SaveUserInfo(changedUserInfo)
-      .then(() => {
+      .then((data) => {
+        console.log("get access token and user info :", data);
+        if (!data) return;
+        if ("userInfo" in data) {
+          dispatch(setLoginUserInfo(data.userInfo));
+        }
+        dispatch(setAccessToken(data.accessToken as string));
         alert("유저 정보가 성공적으로 저장되었어요");
       })
       .catch((err) => {
