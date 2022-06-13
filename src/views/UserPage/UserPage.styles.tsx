@@ -13,14 +13,14 @@ interface ProfileImg {
   src: string;
   position: string;
 }
-export const ProfileAlign = styled.div<{ userBG: ProfileImg }>`
+export const ProfileAlign = styled.div<{ userBGSrc: string; userBGPosition: string }>`
   height: 100%;
   width: 100%;
   max-width: 860px;
   margin: auto;
   display: flex;
-  background-image: url(${({ userBG }) => userBG.src});
-  background-position: ${({ userBG }) => userBG.position};
+  background-image: url(${({ userBGSrc }) => userBGSrc});
+  background-position: ${({ userBGPosition }) => userBGPosition};
   background-size: cover; // show full image
 `;
 export const UserImg = styled.div<{ userImg: ProfileImg; isTitle?: true }>`

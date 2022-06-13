@@ -82,7 +82,10 @@ function Profile({ userImg, userName, userBG }: ProfileProps) {
   }, [tempUserBG]);
   return (
     <ProfileContnr>
-      <ProfileAlign userBG={tempUserBG || userBG}>
+      <ProfileAlign
+        userBGSrc={tempUserBG.src || userBG.src}
+        userBGPosition={tempUserBG.position || userBG.position}
+      >
         <ProfileUserCntnr>
           <UserImg userImg={userImg} />
           <UserName onClick={() => navigate(`/user_page/${userName}`)}>{userName}</UserName>
