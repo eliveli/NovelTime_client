@@ -81,7 +81,7 @@ function Profile({ userImg, userName, userBG }: ProfileProps) {
     console.log("tempUserBG in useEffect:", tempUserBG);
   }, [tempUserBG]);
   return (
-    <ProfileContnr>
+    <ProfileContnr whenBGisNot={!!tempUserBG.src || !!userBG.src}>
       <ProfileAlign
         userBGSrc={tempUserBG.src || userBG.src}
         userBGPosition={tempUserBG.position || userBG.position}

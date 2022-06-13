@@ -1,9 +1,9 @@
 import theme, { styled } from "assets/styles/theme";
 import Icon from "../../assets/Icon";
 
-export const ProfileContnr = styled.div`
+export const ProfileContnr = styled.div<{ whenBGisNot?: boolean }>`
   height: 200px;
-  background-color: #ff9c3db0;
+  background-color: ${({ whenBGisNot }) => !whenBGisNot && "#ff9c3db0"};
   margin-bottom: 7px;
   ${theme.media.tablet(`
     height: 250px;
