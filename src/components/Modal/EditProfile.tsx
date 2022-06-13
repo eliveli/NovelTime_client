@@ -260,12 +260,8 @@ export default function EditProfile() {
 
     await SaveUserInfo(changedUserInfo)
       .then((data) => {
-        console.log("get access token and user info :", data);
-        if (!data) return;
-        if ("userInfo" in data) {
-          dispatch(setLoginUserInfo(data.userInfo));
-        }
-        dispatch(setAccessToken(data.accessToken as string));
+        dispatch(setLoginUserInfo(data.data.userInfo));
+        dispatch(setAccessToken(data.data.accessToken));
         alert("유저 정보가 성공적으로 저장되었어요");
       })
       .catch((err) => {
