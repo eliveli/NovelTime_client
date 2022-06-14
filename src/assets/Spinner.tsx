@@ -13,6 +13,8 @@ const spinnerShowOn = keyframes`
       }
     `;
 const SpinnerContnr = styled.div`
+  z-index: 2;
+
   position: absolute;
   margin-left: auto;
   margin-right: auto;

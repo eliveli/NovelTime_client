@@ -5,6 +5,7 @@ import { useCheckForUserNameMutation, useSaveUserInfoMutation } from "store/serv
 import { CheckDeviceType } from "utils";
 
 import { setAccessToken, setLoginUserInfo, setTempUserBG } from "store/clientSlices/userSlice";
+import Spinner from "assets/Spinner";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 
 import EditProfileImg from "./EditProfile.components";
@@ -39,7 +40,8 @@ export default function EditProfile() {
   const BGRef = useRef<HTMLDivElement>(null);
 
   const dispatch = useAppDispatch();
-  const modalCategory = useAppSelector((state) => state.modal.modalCategory);
+
+  const isLoadingRef = useRef(false);
 
   // get login user info
   const loginUserInfo = useAppSelector((state) => state.user.loginUserInfo);
@@ -207,19 +209,13 @@ export default function EditProfile() {
         });
     });
 
-  interface UserAndToken {
-    accessToken: string;
-    userInfo: {
-      userId: string;
-      userName: string;
-      userImg: { src: string; position: string };
-      userBG: { src: string; position: string };
-    };
-  }
-
   const saveChangedInfo = async () => {
+    // set loading state
+    isLoadingRef.current = true;
+
     // in this case don't save and do alert
     if (isCheckedForDuplicateRef.current === false) {
+      isLoadingRef.current = false;
       alert("유저네임 중복 체크를 완료해 주세요");
       return;
     }
@@ -230,7 +226,6 @@ export default function EditProfile() {
     if (newProfileImage) {
       await handleImageHosting(newProfileImage)
         .then((link) => {
-          console.log("profileImgLink:", link);
           profileImgLink = link as string;
         })
         .catch((err) => console.log("err occurred in handleImageHosting function : ", err));
@@ -258,17 +253,20 @@ export default function EditProfile() {
       },
     };
 
+    // save changed user info in DB
+    // and set new token and user info in redux store
     await SaveUserInfo(changedUserInfo)
       .then((data) => {
         dispatch(setLoginUserInfo(data.data.userInfo));
         dispatch(setAccessToken(data.data.accessToken));
+        isLoadingRef.current = false;
         alert("유저 정보가 성공적으로 저장되었어요");
       })
       .catch((err) => {
         console.log("failed to save user info : ", err);
+        isLoadingRef.current = false;
         alert("유저 정보 저장에 실패했어요");
       });
-
     // after all passed close the modal // change upper code later
     closeProfileModal();
   };
@@ -306,6 +304,8 @@ export default function EditProfile() {
       }}
       ref={BGRef}
     >
+      {isLoadingRef.current && <Spinner />}
+
       {/* edit image on desktop not on mobile or tablet where canvas can't work */}
       {/* note : it is not about screen size. it is about device type */}
       {/* after selecting image close the component */}
@@ -388,21 +388,13 @@ export default function EditProfile() {
               </TextByteContnr>
             </ProfileNameBox>
             <SelectBtnBox isBG>
-              <SelectBtn isBG>
-                배경 수정
-                {/* 배경 이미지도 요청 시 받아와야 하는군... */}
-              </SelectBtn>
+              <SelectBtn isBG>배경 수정</SelectBtn>
               <UploadImg
                 type="file"
                 name="BGImage"
                 onChange={(event) => {
                   handleProfileBG(event);
                 }}
-                // {(event) => {
-                //   if (event && event.target && event.target.files) {
-                //     setSelectedProfileBGImage(event.target.files[0]);
-                //   }
-                // }}
               />
             </SelectBtnBox>
             {tempUserBG.src && <SelectImagePosition />}
