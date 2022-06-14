@@ -38,6 +38,9 @@ export default function EditProfileImg({
   BGRef,
 }: EditProfileImgProps) {
   const editedImgRef = useRef<Blob>();
+
+  const imgOnLoadRef = useRef(true);
+
   // get BG width and height to size canvas
   const BGWidth = useComponentWidth(BGRef);
   const BGHeight = useComponentHeight(BGRef);
@@ -168,6 +171,10 @@ export default function EditProfileImg({
 
     // draw canvas for editing image
     image.onload = () => {
+      if (imgOnLoadRef.current) {
+        imgOnLoadRef.current = false;
+      }
+
       if (isImageSelected) return;
 
       const canvasRatio = image.width / image.height;
@@ -267,6 +274,7 @@ export default function EditProfileImg({
       {/* - right after user selected the image from their device */}
       {/*   if image is too big then image appears slowly */}
       {/*   in that case spinner isn't necessary cause the spinner also appears slowly */}
+      {imgOnLoadRef.current && <Spinner />}
       {isImageSelected && <Spinner />}
 
       <BtnUponCanvasContnr>
