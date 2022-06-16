@@ -226,7 +226,7 @@ export const CropImageCanvas = styled.canvas`
   background-position: center;
 `;
 
-export const ModalBox = styled.div<{ padding?: string; isEditingUserBG: boolean }>`
+export const ModalBox = styled.div<{ padding?: string; isEditingUserBG?: boolean }>`
   display: flex;
   flex-direction: column;
   padding: ${({ padding }) => padding || "54px"};
@@ -243,7 +243,7 @@ export const LoginCategoryContnr = styled.div`
   gap: 20px;
 `;
 export const LoginLink = styled.a``;
-export const LoginCategory = styled.button<{ isKaKao?: true }>`
+export const LoginCategory = styled.button<{ isKaKao?: true; isNaver?: true; isGoogle?: true }>`
   width: 100%;
 
   padding: 13px 15px;
@@ -263,9 +263,11 @@ export const LoginCategory = styled.button<{ isKaKao?: true }>`
   border: 0;
 
   ${({ isKaKao }) =>
-    isKaKao
-      ? `color: rgb(211 185 0 / 76%); box-shadow: 0 0 4px rgb(250 225 0 / 90%);`
-      : `    color: rgba(3,199,90,0.7); box-shadow: 0 0 4px rgba(3, 199, 90, 0.5); `};
+    isKaKao && `color: rgb(211 204 0 / 76%); box-shadow: 0 0 4px rgb(250 225 0 / 100%);`};
+  ${({ isNaver }) =>
+    isNaver && `color: rgba(3,199,90,0.6); box-shadow: 0 0 4px rgba(3, 199, 90, 0.5);`};
+  ${({ isGoogle }) =>
+    isGoogle && `color: rgba(255, 61, 0, 0.6); box-shadow: 0 0 4px rgb(255 61 0 / 44%);`};
 `;
 export const LoginTitle = styled.h3`
   margin: 0;

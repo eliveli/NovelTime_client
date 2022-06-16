@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useComponentHeight, useComponentWidth } from "utils";
 import theme from "assets/styles/theme";
-import { useImageHostingMutation } from "store/serverAPIs/imageHosting";
 
 import Spinner from "assets/Spinner";
 import {

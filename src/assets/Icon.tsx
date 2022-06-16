@@ -39,6 +39,7 @@ import { IoIosSearch, IoMdClose } from "react-icons/io";
 import { AiOutlineUser, AiOutlineMessage, AiOutlineLogout } from "react-icons/ai";
 import { ImBooks } from "react-icons/im";
 import { SiNaver } from "react-icons/si";
+import { FcGoogle } from "react-icons/fc";
 
 import theme, { styled } from "./styles/theme";
 
@@ -103,6 +104,9 @@ const Icon = {
     ${iconStyleHover()};
   `,
   Kakao: styled(RiKakaoTalkFill)`
+    ${iconStyleHover()};
+  `,
+  Google: styled(FcGoogle)`
     ${iconStyleHover()};
   `,
   Emoji: styled(BsEmojiSunglasses)`

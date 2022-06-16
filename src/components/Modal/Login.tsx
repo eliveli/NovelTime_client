@@ -45,11 +45,19 @@ export default function Login() {
               </LoginCategory>
             </LoginLink>
             <LoginLink>
-              <LoginCategory>
+              <LoginCategory isNaver>
                 <LoginIconBox size={20}>
                   <Icon.Naver />
                 </LoginIconBox>
                 네이버
+              </LoginCategory>
+            </LoginLink>
+            <LoginLink>
+              <LoginCategory isGoogle>
+                <LoginIconBox size={20}>
+                  <Icon.Google />
+                </LoginIconBox>
+                구글
               </LoginCategory>
             </LoginLink>
           </LoginCategoryContnr>
