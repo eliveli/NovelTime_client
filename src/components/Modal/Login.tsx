@@ -4,7 +4,7 @@ import Icon from "assets/Icon";
 import { catWalking } from "assets/images";
 import { useAppDispatch } from "../../store/hooks";
 
-import { KAKAO_AUTH_URL } from "./utils/OAuth";
+import { KAKAO_AUTH_URL, GOOGLE_AUTH_URL } from "./utils/OAuth";
 import {
   LoginCategoryContnr,
   LoginCategory,
@@ -52,7 +52,7 @@ export default function Login() {
                 네이버
               </LoginCategory>
             </LoginLink>
-            <LoginLink>
+            <LoginLink href={GOOGLE_AUTH_URL}>
               <LoginCategory isGoogle>
                 <LoginIconBox size={20}>
                   <Icon.Google />

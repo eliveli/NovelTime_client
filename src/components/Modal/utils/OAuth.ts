@@ -1,13 +1,17 @@
-// import dotenv from "dotenv";
-
-// dotenv.config();
-const REST_API_KEY = process.env.REACT_APP_KAKAO_CLIENT_ID;
-
-// 개발 환경에 따라 달라짐. 환경변수 미리 설정 : process.env.REACT_APP_ENV
-// 터미널 CMD에서 set NODE_ENV=development
-const REDIRECT_URI =
+// for kakao
+const REST_API_KEY_KAKAO = process.env.REACT_APP_KAKAO_CLIENT_ID;
+const REDIRECT_URI_KAKAO =
   process.env.REACT_APP_ENV === "production"
     ? ""
     : "http://domainfordev.com:3000/oauth/callback/kakao";
 
-export const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
+// for google
+const REST_API_KEY_GOOGLE = process.env.REACT_APP_GOOGLE_CLIENT_ID;
+const REDIRECT_URI_GOOGLE =
+  process.env.REACT_APP_ENV === "production"
+    ? ""
+    : "http://domainfordev.com:3000/oauth/callback/google";
+
+// oauth url
+export const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY_KAKAO}&redirect_uri=${REDIRECT_URI_KAKAO}&response_type=code`;
+export const GOOGLE_AUTH_URL = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${REST_API_KEY_GOOGLE}&response_type=token&redirect_uri=${REDIRECT_URI_GOOGLE}&scope=https://www.googleapis.com/auth/userinfo.email`;
