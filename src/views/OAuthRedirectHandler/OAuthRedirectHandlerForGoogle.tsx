@@ -6,7 +6,7 @@ import { setLoginUserInfo, setAccessToken } from "store/clientSlices/userSlice";
 import { useGetLoginKakaoQuery } from "store/serverAPIs/novelTime";
 import {} from "./OAuthRedirectHandler.styles";
 
-export default function OAuthRedirectHandler() {
+export default function OAuthRedirectHandlerForGoogle() {
   // 인가코드 받고 서버에 보냄. 이후 토큰과 유저 정보를 받아 옴
   const code = new URL(window.location.href).searchParams.get("code") as string;
 

@@ -19,7 +19,10 @@ import NovelDetailTalk from "./NovelDetailTalk";
 import NovelDetailRecommend from "./NovelDetailRecommend";
 import AddWriting from "./AddWriting";
 import Home from "./Home";
-import OAuthRedirectHandler from "./OAuthRedirectHandler";
+import {
+  OAuthRedirectHandlerForGoogle,
+  OAuthRedirectHandlerForKakao,
+} from "./OAuthRedirectHandler";
 
 export {
   NovelDetailTalk,
@@ -47,5 +50,6 @@ export {
   NovelDetailMark,
   AddWriting,
   Home,
-  OAuthRedirectHandler,
+  OAuthRedirectHandlerForGoogle,
+  OAuthRedirectHandlerForKakao,
 };
