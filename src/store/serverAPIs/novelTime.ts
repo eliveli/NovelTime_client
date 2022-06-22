@@ -44,6 +44,9 @@ export const novelTimeApi = createApi({
     getLoginKakao: builder.query<UserAndToken, string>({
       query: (AUTHORIZE_CODE) => `/user/login/kakao?code=${AUTHORIZE_CODE}`,
     }),
+    getLoginGoogle: builder.query<UserAndToken, string>({
+      query: (ACCESS_TOKEN) => `/user/login/google?token=${ACCESS_TOKEN}`,
+    }),
     getAccessToken: builder.query<UserAndToken, undefined>({
       query: () => `/user/refreshToken`,
     }),
@@ -75,6 +78,7 @@ export const novelTimeApi = createApi({
 export const {
   useGetNovelByIdQuery,
   useGetLoginKakaoQuery,
+  useGetLoginGoogleQuery,
   useGetLogoutQuery,
   useGetAccessTokenQuery,
   useCheckForUserNameMutation,

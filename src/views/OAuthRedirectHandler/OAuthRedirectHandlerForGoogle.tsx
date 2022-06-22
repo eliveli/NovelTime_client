@@ -3,14 +3,16 @@ import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "store/hooks";
 
 import { setLoginUserInfo, setAccessToken } from "store/clientSlices/userSlice";
-import { useGetLoginKakaoQuery } from "store/serverAPIs/novelTime";
+import { useGetLoginGoogleQuery } from "store/serverAPIs/novelTime";
 import {} from "./OAuthRedirectHandler.styles";
 
 export default function OAuthRedirectHandlerForGoogle() {
+  console.log("url:", new URL(window.location.href));
   // 인가코드 받고 서버에 보냄. 이후 토큰과 유저 정보를 받아 옴
-  const code = new URL(window.location.href).searchParams.get("code") as string;
+  const { hash } = new URL(window.location.href);
+  const accessToken = hash.split("=")[1].split("&")[0];
 
-  const { data, error, isLoading } = useGetLoginKakaoQuery(code);
+  const { data, error, isLoading } = useGetLoginGoogleQuery(accessToken);
 
   console.log("in RedirectHandler");
   if (isLoading) {
