@@ -1,6 +1,6 @@
 // Need to use the React-specific entry point to import createApi
 import { createApi, fetchBaseQuery, BaseQueryFn } from "@reduxjs/toolkit/query/react";
-import { NovelInfo, UserAndToken, ChangedUserInfo } from "./types";
+import { NovelInfo, UserAndToken, OauthData, ChangedUserInfo } from "./types";
 import type { RootState } from "../index";
 
 interface FetchArgs extends RequestInit {
@@ -41,11 +41,8 @@ export const novelTimeApi = createApi({
     getNovelById: builder.query<NovelInfo, string>({
       query: (novelId) => `/novels/detail/${novelId}`,
     }),
-    getLoginKakao: builder.query<UserAndToken, string>({
-      query: (AUTHORIZE_CODE) => `/user/login/kakao?code=${AUTHORIZE_CODE}`,
-    }),
-    getLoginGoogle: builder.query<UserAndToken, string>({
-      query: (ACCESS_TOKEN) => `/user/login/google?token=${ACCESS_TOKEN}`,
+    getLoginOauthServer: builder.query<UserAndToken, OauthData>({
+      query: (oauthData) => `/user/login/${oauthData.oauthServer}?data=${oauthData.oauthInfo}`,
     }),
     getAccessToken: builder.query<UserAndToken, undefined>({
       query: () => `/user/refreshToken`,
@@ -77,8 +74,7 @@ export const novelTimeApi = createApi({
 // auto-generated based on the defined endpoints
 export const {
   useGetNovelByIdQuery,
-  useGetLoginKakaoQuery,
-  useGetLoginGoogleQuery,
+  useGetLoginOauthServerQuery,
   useGetLogoutQuery,
   useGetAccessTokenQuery,
   useCheckForUserNameMutation,

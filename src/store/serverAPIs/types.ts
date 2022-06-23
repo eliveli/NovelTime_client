@@ -26,6 +26,11 @@ export interface UserAndToken {
   };
 }
 
+export interface OauthData {
+  oauthServer: string;
+  oauthInfo: string;
+}
+
 interface ChangedImg {
   src: string;
   position: string;
