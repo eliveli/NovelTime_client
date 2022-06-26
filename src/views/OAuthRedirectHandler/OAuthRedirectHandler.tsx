@@ -15,6 +15,8 @@ export default function OAuthRedirectHandler() {
   if (oauthServer === "kakao") {
     // 인가코드 받고 서버에 보냄. 이후 토큰과 유저 정보를 받아 옴
     oauthInfo = url.searchParams.get("code") as string;
+  } else if (oauthServer === "naver") {
+    //
   } else if (oauthServer === "google") {
     const { hash } = url;
     const accessToken = hash.split("=")[1].split("&")[0];

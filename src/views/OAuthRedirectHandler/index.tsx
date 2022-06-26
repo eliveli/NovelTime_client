@@ -26,10 +26,11 @@ export default function OAuthRedirectHandler() {
     const accessToken = hash.split("=")[1].split("&")[0];
     oauthInfo = accessToken;
   }
+
   const { data, error, isLoading } = useGetLoginOauthServerQuery(
     { oauthServer: oauthServer as string, oauthInfo },
     {
-      skip: !oauthServer,
+      skip: !oauthServerUrl,
     },
   );
 

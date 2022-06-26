@@ -4,7 +4,7 @@ import Icon from "assets/Icon";
 import { catWalking } from "assets/images";
 import { useAppDispatch } from "../../store/hooks";
 
-import { KAKAO_AUTH_URL, GOOGLE_AUTH_URL } from "./utils/OAuth";
+import { KAKAO_AUTH_URL, NAVER_AUTH_URL, GOOGLE_AUTH_URL } from "./utils/OAuth";
 import {
   LoginCategoryContnr,
   LoginCategory,
@@ -44,7 +44,7 @@ export default function Login() {
                 카카오
               </LoginCategory>
             </LoginLink>
-            <LoginLink>
+            <LoginLink href={NAVER_AUTH_URL}>
               <LoginCategory isNaver>
                 <LoginIconBox size={20}>
                   <Icon.Naver />
