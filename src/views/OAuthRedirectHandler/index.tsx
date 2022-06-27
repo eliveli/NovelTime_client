@@ -11,6 +11,8 @@ export default function OAuthRedirectHandler() {
 
   const oauthServer = oauthServerUrl?.startsWith("kakao")
     ? "kakao"
+    : oauthServerUrl?.startsWith("naver")
+    ? "naver"
     : oauthServerUrl?.startsWith("google")
     ? "google"
     : "";
@@ -18,7 +20,7 @@ export default function OAuthRedirectHandler() {
   let oauthInfo = "";
 
   const url = new URL(window.location.href);
-  if (oauthServer === "kakao") {
+  if (["kakao", "naver"].includes(oauthServer as string)) {
     // 인가코드 받고 서버에 보냄. 이후 토큰과 유저 정보를 받아 옴
     oauthInfo = url.searchParams.get("code") as string;
   } else if (oauthServer === "google") {
