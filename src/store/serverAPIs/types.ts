@@ -41,9 +41,7 @@ export interface ChangedUserInfo {
   changedUserBG: Img;
 }
 export interface UserInfo {
-  userInfo: {
-    userName: string;
-    userImg: Img;
-    userBG: Img;
-  };
+  userName: string;
+  userImg: Img;
+  userBG: Img;
 }

@@ -132,7 +132,7 @@ export default function UserPageParent() {
   userInfoForUserPage = loginUserInfo;
 
   if (data) {
-    userInfoForUserPage = data.userInfo;
+    userInfoForUserPage = data;
   }
 
   // set user info to show on nav //
@@ -140,7 +140,7 @@ export default function UserPageParent() {
 
   // when user name doesn't exist in DB
   if (error) {
-    alert("DB에 유저네임 없음");
+    alert("존재하지 않는 사용자입니다.");
     navigate("/");
   }
 
