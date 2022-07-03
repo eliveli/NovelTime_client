@@ -12,13 +12,14 @@ const spinnerShowOn = keyframes`
         opacity: 1;
       }
     `;
-const SpinnerContnr = styled.div`
+const SpinnerContnr = styled.div<{ styles?: string }>`
   z-index: 2;
 
   position: absolute;
   margin-left: auto;
   margin-right: auto;
 
+  ${({ styles }) => styles && styles}
   animation-name: ${spinnerShowOn};
   animation-direction: alternate;
   animation-iteration-count: infinite;
@@ -26,9 +27,9 @@ const SpinnerContnr = styled.div`
   animation-duration: 1.5s;
 `;
 
-export default function Spinner() {
+export default function Spinner({ styles }: { styles?: string }) {
   return (
-    <SpinnerContnr>
+    <SpinnerContnr styles={styles}>
       <StaticSpinner />
     </SpinnerContnr>
   );

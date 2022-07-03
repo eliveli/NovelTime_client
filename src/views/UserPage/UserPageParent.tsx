@@ -23,18 +23,6 @@ import {
   EditProfileBtn,
 } from "./UserPage.styles";
 
-// server request with userName
-const dataFromServer = {
-  userInfo: {
-    userName: "eunhye shin",
-    userImg: { src: "", position: "top" },
-    userBG: {
-      src: "https://cdn.pixabay.com/photo/2017/02/01/09/52/animal-2029245_960_720.png",
-      position: "center",
-    },
-  },
-};
-
 interface ProfileProps {
   userName: string;
   userImg: { src: string; position: string };
@@ -144,12 +132,17 @@ export default function UserPageParent() {
     navigate("/");
   }
 
-  if (!error && isLoading) {
-    return <Spinner />;
-  }
-
+  // center the spinner in user page
+  const spinnerStyles = `
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    margin-top: ${-94 / 2}px;
+    margin-left: ${-87 / 2}px;
+  `;
   return (
     <>
+      {!error && isLoading && <Spinner styles={spinnerStyles} />}
       <Profile
         userImg={userInfoForUserPage.userImg}
         userName={userInfoForUserPage.userName}
