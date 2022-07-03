@@ -31,12 +31,19 @@ export interface OauthData {
   oauthInfo: string;
 }
 
-interface ChangedImg {
+interface Img {
   src: string;
   position: string;
 }
 export interface ChangedUserInfo {
   changedUserName: string;
-  changedUserImg: ChangedImg;
-  changedUserBG: ChangedImg;
+  changedUserImg: Img;
+  changedUserBG: Img;
+}
+export interface UserInfo {
+  userInfo: {
+    userName: string;
+    userImg: Img;
+    userBG: Img;
+  };
 }

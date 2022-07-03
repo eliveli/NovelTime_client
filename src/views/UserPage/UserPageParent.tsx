@@ -9,8 +9,9 @@ import { openModal } from "store/clientSlices/modalSlice";
 import { messageIconUserPage } from "assets/images";
 import { Outlet, useNavigate, useParams } from "react-router-dom";
 import Icon from "assets/Icon";
-import { useGetLogoutQuery } from "store/serverAPIs/novelTime";
+import { useGetLogoutQuery, useGetUserInfoByUserNameQuery } from "store/serverAPIs/novelTime";
 import { useEffect } from "react";
+import Spinner from "assets/Spinner";
 import {
   ProfileContnr,
   ProfileAlign,
@@ -109,18 +110,43 @@ function Profile({ userImg, userName, userBG }: ProfileProps) {
 }
 
 export default function UserPageParent() {
-  const { userName } = useParams();
-  // request with userName to server when the user is not the login user
-
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  const { userName } = useParams();
+
   const loginUserInfo = useAppSelector((state) => state.user.loginUserInfo);
+
+  const isLoginUser = (userName as string) === loginUserInfo.userName;
+
+  const { data, error, isLoading } = useGetUserInfoByUserNameQuery(userName as string, {
+    skip: !userName || isLoginUser,
+    // to request after userName variable gets value
+    // only request by userName when the user is not the login user
+  });
+
+  console.log("user info :", data);
+
   // user info : login user or not
-  const userInfoForUserPage =
-    loginUserInfo.userName !== dataFromServer.userInfo.userName
-      ? dataFromServer.userInfo
-      : loginUserInfo;
+  let userInfoForUserPage: ProfileProps;
+  userInfoForUserPage = loginUserInfo;
+
+  if (data) {
+    userInfoForUserPage = data.userInfo;
+  }
+
   // set user info to show on nav //
   dispatch(setUserInfoForUserPage(userInfoForUserPage));
+
+  // when user name doesn't exist in DB
+  if (error) {
+    alert("DB에 유저네임 없음");
+    navigate("/");
+  }
+
+  if (!error && isLoading) {
+    return <Spinner />;
+  }
 
   return (
     <>
