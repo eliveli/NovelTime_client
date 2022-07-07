@@ -4,6 +4,7 @@ import MainBG from "components/MainBG";
 import { CategoryMark } from "components/CategoryMark";
 import { useAppSelector } from "store/hooks";
 import { useParams } from "react-router-dom";
+import { useGetContentsForUserPageHomeByUserNameQuery } from "store/serverAPIs/novelTime";
 import { RowSlide } from "../../components/NovelListFrame";
 import { NovelRow } from "../../components/Novel";
 
@@ -11,315 +12,19 @@ import { WritingSection } from "./UserPage.styles";
 import { Writing, Comment, WritingFilter } from "./UserPage.components";
 import contentMark from "./utils/contentMark";
 
-// server request with userName
-const dataFromServer = {
-  myTalk: [
-    {
-      talkId: "12",
-
-      novelImg:
-        "https://comicthumb-phinf.pstatic.net/20220126_148/pocket_16431735084292970r_JPEG/%C5%A9%B8%AE%BD%BA%C5%BB%BE%C6%B0%A1%BE%BE%B4%C2%B3%B2%C0%DA%B4%D9-%C0%CF%B7%AF%BD%BA%C6%AE%C7%A5%C1%F61.jpg?type=m260", // 시리즈
-
-      talkTitle: "이 소설 강추",
-
-      createDate: "22.03.03",
-      likeNO: 5,
-      commentNO: 7,
-
-      novelTitle: "헌터와 매드 사이언티스트",
-    },
-  ],
-  myRecommend: [
-    {
-      recommendId: "34",
-
-      novelImg:
-        "https://comicthumb-phinf.pstatic.net/20220126_148/pocket_16431735084292970r_JPEG/%C5%A9%B8%AE%BD%BA%C5%BB%BE%C6%B0%A1%BE%BE%B4%C2%B3%B2%C0%DA%B4%D9-%C0%CF%B7%AF%BD%BA%C6%AE%C7%A5%C1%F61.jpg?type=m260", // 시리즈
-
-      recommendTitle: "이 소설 강추",
-
-      createDate: "22.03.03",
-      likeNO: 5,
-
-      novelTitle: "헌터와 매드 사이언티스트",
-    },
-  ],
-  myComment: [
-    {
-      commentId: "abdfdfcdef",
-      commentContent: "코멘트 작성 중",
-      createDate: "22.01.05",
-      talkId: "as",
-      talkTitle: "it is the best novel I've ever read",
-      novelTitle: "헌터와 매드 사이언티스트",
-    },
-  ],
-  otherTalk: [
-    {
-      talkId: "abdfdfcd",
-
-      novelImg:
-        "https://comicthumb-phinf.pstatic.net/20220126_148/pocket_16431735084292970r_JPEG/%C5%A9%B8%AE%BD%BA%C5%BB%BE%C6%B0%A1%BE%BE%B4%C2%B3%B2%C0%DA%B4%D9-%C0%CF%B7%AF%BD%BA%C6%AE%C7%A5%C1%F61.jpg?type=m260", // 시리즈
-
-      talkTitle: "이 소설 강추",
-
-      userName: "나나",
-      createDate: "22.03.03",
-      likeNO: 5,
-      commentNO: 7,
-
-      novelTitle: "헌터와 매드 사이언티스트",
-    },
-    {
-      talkId: "a",
-
-      novelImg:
-        "https://comicthumb-phinf.pstatic.net/20220126_148/pocket_16431735084292970r_JPEG/%C5%A9%B8%AE%BD%BA%C5%BB%BE%C6%B0%A1%BE%BE%B4%C2%B3%B2%C0%DA%B4%D9-%C0%CF%B7%AF%BD%BA%C6%AE%C7%A5%C1%F61.jpg?type=m260", // 시리즈
-
-      talkTitle: "이 소설 강추",
-
-      userName: "나나a",
-      createDate: "22.03.03",
-      likeNO: 5,
-      commentNO: 7,
-
-      novelTitle: "헌터와 매드 사이언티스트",
-    },
-    {
-      talkId: "a",
-
-      novelImg:
-        "https://comicthumb-phinf.pstatic.net/20220126_148/pocket_16431735084292970r_JPEG/%C5%A9%B8%AE%BD%BA%C5%BB%BE%C6%B0%A1%BE%BE%B4%C2%B3%B2%C0%DA%B4%D9-%C0%CF%B7%AF%BD%BA%C6%AE%C7%A5%C1%F61.jpg?type=m260", // 시리즈
-
-      talkTitle: "이 소설 강추",
-
-      userName: "나d나",
-      createDate: "22.03.03",
-      likeNO: 5,
-      commentNO: 7,
-
-      novelTitle: "헌터와 매드 사이언티스트",
-    },
-  ],
-  otherRecommend: [
-    {
-      recommendId: "as",
-
-      novelImg:
-        "https://comicthumb-phinf.pstatic.net/20220126_148/pocket_16431735084292970r_JPEG/%C5%A9%B8%AE%BD%BA%C5%BB%BE%C6%B0%A1%BE%BE%B4%C2%B3%B2%C0%DA%B4%D9-%C0%CF%B7%AF%BD%BA%C6%AE%C7%A5%C1%F61.jpg?type=m260", // 시리즈
-
-      recommendTitle: "이 소설 강추",
-
-      userName: "as나나나",
-      createDate: "22.03.03",
-      likeNO: 5,
-
-      novelTitle: "헌터와 매드 사이언티스트",
-    },
-    {
-      recommendId: "df",
-
-      novelImg:
-        "https://comicthumb-phinf.pstatic.net/20220126_148/pocket_16431735084292970r_JPEG/%C5%A9%B8%AE%BD%BA%C5%BB%BE%C6%B0%A1%BE%BE%B4%C2%B3%B2%C0%DA%B4%D9-%C0%CF%B7%AF%BD%BA%C6%AE%C7%A5%C1%F61.jpg?type=m260", // 시리즈
-
-      recommendTitle: "이 소설 강추",
-
-      userName: "나나나",
-      createDate: "22.03.03",
-      likeNO: 5,
-
-      novelTitle: "헌터와 매드 사이언티스트",
-    },
-  ],
-  novelList: {
-    isMyList: [
-      {
-        listId: "sssss",
-        listTitle: "list where is romance",
-        userName: "asda",
-        userImg: "",
-        novel: [
-          {
-            novelId: "20220225082010201",
-            novelImg: "https://img.ridicdn.net/cover/372009713/xxlarge#1", // 리디북스
-            novelTitle: "헌터와 매드 사이언티스트",
-            novelAuthor: "델마르",
-            novelGenre: "로판",
-            novelIsEnd: "완결",
-          },
-          {
-            novelId: "20220225082010201",
-            novelImg:
-              "https://comicthumb-phinf.pstatic.net/20220126_148/pocket_16431735084292970r_JPEG/%C5%A9%B8%AE%BD%BA%C5%BB%BE%C6%B0%A1%BE%BE%B4%C2%B3%B2%C0%DA%B4%D9-%C0%CF%B7%AF%BD%BA%C6%AE%C7%A5%C1%F61.jpg?type=m260", // 시리즈
-            novelTitle: "헌터와 매드 사이언티스트",
-            novelAuthor: "델마르",
-            novelGenre: "로판",
-            novelIsEnd: "완결",
-          },
-          {
-            novelId: "20220225082010201",
-            novelImg: "https://img.ridicdn.net/cover/372009713/xxlarge#1", // 리디북스
-            novelTitle: "헌터와 매드 사이언티스트",
-            novelAuthor: "델마르",
-            novelGenre: "로판",
-            novelIsEnd: "완결",
-          },
-          {
-            novelId: "20220225082010201",
-            novelImg: "https://img.ridicdn.net/cover/372009713/xxlarge#1", // 리디북스
-            novelTitle: "헌터와 매드 사이언티스트",
-            novelAuthor: "델마르",
-            novelGenre: "로판",
-            novelIsEnd: "완결",
-          },
-          {
-            novelId: "20220225082010201",
-            novelImg: "https://img.ridicdn.net/cover/372009713/xxlarge#1", // 리디북스
-            novelTitle: "헌터와 매드 사이언티스트",
-            novelAuthor: "델마르",
-            novelGenre: "로판",
-            novelIsEnd: "완결",
-          },
-        ],
-      },
-      {
-        listId: "sddssss",
-        listTitle: "list where is romance",
-        userName: "asda",
-        userImg: "",
-        novel: [
-          {
-            novelId: "20220225082010201",
-            novelImg:
-              "//dn-img-page.kakao.com/download/resource?kid=1Opki/hzmU0W8saq/pEkrur7BcK1FgYESJqDyXK", // 카카페
-            novelTitle: "헌터와 매드 사이언티스트",
-            novelAuthor: "델마르",
-            novelGenre: "로판",
-            novelIsEnd: "완결",
-          },
-          {
-            novelId: "20220225082010201",
-            novelImg:
-              "https://comicthumb-phinf.pstatic.net/20220126_148/pocket_16431735084292970r_JPEG/%C5%A9%B8%AE%BD%BA%C5%BB%BE%C6%B0%A1%BE%BE%B4%C2%B3%B2%C0%DA%B4%D9-%C0%CF%B7%AF%BD%BA%C6%AE%C7%A5%C1%F61.jpg?type=m260", // 시리즈
-            novelTitle: "헌터와 매드 사이언티스트",
-            novelAuthor: "델마르",
-            novelGenre: "로판",
-            novelIsEnd: "완결",
-          },
-          {
-            novelId: "20220225082010201",
-            novelImg: "https://img.ridicdn.net/cover/372009713/xxlarge#1", // 리디북스
-            novelTitle: "헌터와 매드 사이언티스트",
-            novelAuthor: "델마르",
-            novelGenre: "로판",
-            novelIsEnd: "완결",
-          },
-          {
-            novelId: "20220225082010201",
-            novelImg:
-              "https://comicthumb-phinf.pstatic.net/20220126_148/pocket_16431735084292970r_JPEG/%C5%A9%B8%AE%BD%BA%C5%BB%BE%C6%B0%A1%BE%BE%B4%C2%B3%B2%C0%DA%B4%D9-%C0%CF%B7%AF%BD%BA%C6%AE%C7%A5%C1%F61.jpg?type=m260", // 시리즈
-            novelTitle: "헌터와 매드 사이언티스트",
-            novelAuthor: "델마르",
-            novelGenre: "로판",
-            novelIsEnd: "완결",
-          },
-          {
-            novelId: "20220225082010201",
-            novelImg: "https://img.ridicdn.net/cover/372009713/xxlarge#1", // 리디북스
-            novelTitle: "헌터와 매드 사이언티스트",
-            novelAuthor: "델마르",
-            novelGenre: "로판",
-            novelIsEnd: "완결",
-          },
-          {
-            novelId: "20220225082010201",
-            novelImg: "https://img.ridicdn.net/cover/372009713/xxlarge#1", // 리디북스
-            novelTitle: "헌터와 매드 사이언티스트",
-            novelAuthor: "델마르",
-            novelGenre: "로판",
-            novelIsEnd: "완결",
-          },
-          {
-            novelId: "20220225082010201",
-            novelImg: "https://img.ridicdn.net/cover/372009713/xxlarge#1", // 리디북스
-            novelTitle: "헌터와 매드 사이언티스트",
-            novelAuthor: "델마르",
-            novelGenre: "로판",
-            novelIsEnd: "완결",
-          },
-        ],
-      },
-    ],
-    isOthersList: [
-      {
-        listId: "ssaasss",
-        listTitle: "list where is romance",
-        userName: "asda",
-        userImg: "",
-        novel: [
-          {
-            novelId: "20220225082010201",
-            novelImg:
-              "//dn-img-page.kakao.com/download/resource?kid=1Opki/hzmU0W8saq/pEkrur7BcK1FgYESJqDyXK", // 카카페
-            novelTitle: "헌터와 매드 사이언티스트",
-            novelAuthor: "델마르",
-            novelGenre: "로판",
-            novelIsEnd: "완결",
-          },
-          {
-            novelId: "20220225082010201",
-            novelImg:
-              "https://comicthumb-phinf.pstatic.net/20220126_148/pocket_16431735084292970r_JPEG/%C5%A9%B8%AE%BD%BA%C5%BB%BE%C6%B0%A1%BE%BE%B4%C2%B3%B2%C0%DA%B4%D9-%C0%CF%B7%AF%BD%BA%C6%AE%C7%A5%C1%F61.jpg?type=m260", // 시리즈
-            novelTitle: "헌터와 매드 사이언티스트",
-            novelAuthor: "델마르",
-            novelGenre: "로판",
-            novelIsEnd: "완결",
-          },
-          {
-            novelId: "20220225082010201",
-            novelImg: "https://img.ridicdn.net/cover/372009713/xxlarge#1", // 리디북스
-            novelTitle: "헌터와 매드 사이언티스트",
-            novelAuthor: "델마르",
-            novelGenre: "로판",
-            novelIsEnd: "완결",
-          },
-        ],
-      },
-      {
-        listId: "ssssjgrs",
-        listTitle: "list where is romance",
-        userName: "asda",
-        userImg: "",
-        novel: [
-          {
-            novelId: "20220225082010201",
-            novelImg:
-              "//dn-img-page.kakao.com/download/resource?kid=1Opki/hzmU0W8saq/pEkrur7BcK1FgYESJqDyXK", // 카카페
-            novelTitle: "헌터와 매드 사이언티스트",
-            novelAuthor: "델마르",
-            novelGenre: "로판",
-            novelIsEnd: "완결",
-          },
-          {
-            novelId: "20220225082010201",
-            novelImg:
-              "https://comicthumb-phinf.pstatic.net/20220126_148/pocket_16431735084292970r_JPEG/%C5%A9%B8%AE%BD%BA%C5%BB%BE%C6%B0%A1%BE%BE%B4%C2%B3%B2%C0%DA%B4%D9-%C0%CF%B7%AF%BD%BA%C6%AE%C7%A5%C1%F61.jpg?type=m260", // 시리즈
-            novelTitle: "헌터와 매드 사이언티스트",
-            novelAuthor: "델마르",
-            novelGenre: "로판",
-            novelIsEnd: "완결",
-          },
-        ],
-      },
-    ],
-  },
-};
-
 export default function UserPageHome() {
   const loginUserInfo = useAppSelector((state) => state.user.loginUserInfo);
   const { userName } = useParams();
 
   // server request with userName
+  const { data, error, isLoading } = useGetContentsForUserPageHomeByUserNameQuery(
+    userName as string,
+    {
+      skip: !userName,
+    },
+  );
+
+  console.log("userPageHome data:", data);
 
   // get the content mark
   const myWritingMark = contentMark(
@@ -367,11 +72,11 @@ export default function UserPageHome() {
       />
       <WritingSection>
         {myFilter === "프리톡" &&
-          dataFromServer.myTalk.map((_) => <Writing key={_.talkId} writingInfo={_} />)}
+          data?.talksUserCreated.map((_) => <Writing key={_.talkId} writingInfo={_} />)}
         {myFilter === "추천" &&
-          dataFromServer.myRecommend.map((_) => <Writing key={_.recommendId} writingInfo={_} />)}
+          data?.recommendsUserCreated.map((_) => <Writing key={_.recommendId} writingInfo={_} />)}
         {myFilter === "댓글" &&
-          dataFromServer.myComment.map((_) => <Comment key={_.commentId} commentInfo={_} />)}
+          data?.commentsUserCreated.map((_) => <Comment key={_.commentId} commentInfo={_} />)}
       </WritingSection>
 
       <CategoryMark
@@ -390,9 +95,9 @@ export default function UserPageHome() {
       />
       <WritingSection>
         {otherFilter === "프리톡" &&
-          dataFromServer.otherTalk.map((_) => <Writing key={_.talkId} writingInfo={_} />)}
+          data?.talksUserLikes.map((_) => <Writing key={_.talkId} writingInfo={_} />)}
         {otherFilter === "추천" &&
-          dataFromServer.otherRecommend.map((_) => <Writing key={_.recommendId} writingInfo={_} />)}
+          data?.recommendsUserLikes.map((_) => <Writing key={_.recommendId} writingInfo={_} />)}
       </WritingSection>
 
       <CategoryMark
@@ -401,13 +106,13 @@ export default function UserPageHome() {
           path: "myList",
           list: {
             isMainCategory: true,
-            listId: dataFromServer.novelList.isMyList[0].listId,
+            listId: data?.novelLists.listsUserCreated[0].listId as string,
           },
         }}
         categoryText={myListMark}
         isShowAllButton="모두 보기"
       />
-      {dataFromServer.novelList.isMyList.map((list) => (
+      {data?.novelLists.listsUserCreated.map((list) => (
         <RowSlide
           categoryId={list.listId}
           categoryText={list.listTitle}
@@ -430,13 +135,13 @@ export default function UserPageHome() {
           path: "othersList",
           list: {
             isMainCategory: true,
-            listId: dataFromServer.novelList.isOthersList[0].listId,
+            listId: data?.novelLists.listsUserLikes[0].listId as string,
           },
         }}
         categoryText={othersListMark}
         isShowAllButton="모두 보기"
       />
-      {dataFromServer.novelList.isOthersList.map((list) => (
+      {data?.novelLists.listsUserLikes.map((list) => (
         <RowSlide
           categoryId={list.listId}
           categoryText={list.listTitle}

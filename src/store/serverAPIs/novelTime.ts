@@ -1,6 +1,13 @@
 // Need to use the React-specific entry point to import createApi
 import { createApi, fetchBaseQuery, BaseQueryFn } from "@reduxjs/toolkit/query/react";
-import { NovelInfo, UserAndToken, OauthData, ChangedUserInfo, UserInfo } from "./types";
+import {
+  NovelInfo,
+  UserAndToken,
+  OauthData,
+  ChangedUserInfo,
+  UserInfo,
+  ContentsForUserPageHome,
+} from "./types";
 import type { RootState } from "../index";
 
 interface FetchArgs extends RequestInit {
@@ -53,6 +60,9 @@ export const novelTimeApi = createApi({
     getUserInfoByUserName: builder.query<UserInfo, string>({
       query: (userName) => `/user/userInfo/${userName}`,
     }),
+    getContentsForUserPageHomeByUserName: builder.query<ContentsForUserPageHome, string>({
+      query: (userName) => `/contents/userPageHome/${userName}`,
+    }),
     checkForUserName: builder.mutation<string, string>({
       query: (newUserName) => ({
         url: "/user/checkUserName",
@@ -83,4 +93,5 @@ export const {
   useGetUserInfoByUserNameQuery,
   useCheckForUserNameMutation,
   useSaveUserInfoMutation,
+  useGetContentsForUserPageHomeByUserNameQuery,
 } = novelTimeApi;
