@@ -19,7 +19,7 @@ type Props = React.PropsWithChildren<{
   novelNO: number;
   categoryText: string;
   userMark?: {
-    userImg: string;
+    userImg: { src: string; position: string };
     userName: string;
   };
 

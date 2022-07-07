@@ -37,7 +37,7 @@ export default function CategoryMark({
   novelId?: string; // writing list request by novelId
   fontSize?: number;
   userMark?: {
-    userImg: string;
+    userImg: { src: string; position: string };
     userName: string;
   };
 
