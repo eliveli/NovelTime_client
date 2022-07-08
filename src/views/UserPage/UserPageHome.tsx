@@ -18,12 +18,12 @@ export default function UserPageHome() {
   const { userName } = useParams();
 
   // server request with userName
-  const { data, error, isLoading } = useGetContentsForUserPageHomeByUserNameQuery(
-    userName as string,
-    {
-      skip: !userName,
-    },
-  );
+  const { data, isLoading } = useGetContentsForUserPageHomeByUserNameQuery(userName as string, {
+    skip: !userName,
+  });
+  // I think this error object from the api doesn't required to be handled.
+  // because if the user doesn't exist in DB the error is handled in UserPageParent component.
+  // and if the user's contents don't exist it is not an error.
 
   console.log("userPageHome data:", data);
 
