@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-indent */
 import React, { useState } from "react";
 import MainBG from "components/MainBG";
 
@@ -10,7 +11,7 @@ import { RowSlide } from "../../components/NovelListFrame";
 import { NovelRow } from "../../components/Novel";
 
 import { WritingSection } from "./UserPage.styles";
-import { Writing, Comment, WritingFilter } from "./UserPage.components";
+import { Writing, Comment, WritingFilter, NoContent } from "./UserPage.components";
 import contentMark from "./utils/contentMark";
 
 export default function UserPageHome() {
@@ -72,13 +73,31 @@ export default function UserPageHome() {
         writingFilter={myFilter}
         selectWritingFilter={setMyFilter}
       />
-      <WritingSection>
+      <WritingSection
+        isNoContent={
+          (myFilter === "프리톡" && data?.talksUserCreated.length === 0) ||
+          (myFilter === "추천" && data?.recommendsUserCreated.length === 0) ||
+          (myFilter === "댓글" && data?.commentsUserCreated.length === 0)
+        }
+      >
         {myFilter === "프리톡" &&
-          data?.talksUserCreated.map((_) => <Writing key={_.talkId} writingInfo={_} />)}
+          (data?.talksUserCreated.length ? (
+            data.talksUserCreated.map((_) => <Writing key={_.talkId} writingInfo={_} />)
+          ) : (
+            <NoContent contentsType="T" isCreatedBy />
+          ))}
         {myFilter === "추천" &&
-          data?.recommendsUserCreated.map((_) => <Writing key={_.recommendId} writingInfo={_} />)}
+          (data?.recommendsUserCreated.length ? (
+            data.recommendsUserCreated.map((_) => <Writing key={_.recommendId} writingInfo={_} />)
+          ) : (
+            <NoContent contentsType="R" isCreatedBy />
+          ))}
         {myFilter === "댓글" &&
-          data?.commentsUserCreated.map((_) => <Comment key={_.commentId} commentInfo={_} />)}
+          (data?.commentsUserCreated.length ? (
+            data.commentsUserCreated.map((_) => <Comment key={_.commentId} commentInfo={_} />)
+          ) : (
+            <NoContent contentsType="C" isCreatedBy />
+          ))}
       </WritingSection>
 
       <CategoryMark
@@ -95,11 +114,24 @@ export default function UserPageHome() {
         writingFilter={otherFilter}
         selectWritingFilter={setOtherFilter}
       />
-      <WritingSection>
+      <WritingSection
+        isNoContent={
+          (otherFilter === "프리톡" && data?.talksUserLikes.length === 0) ||
+          (otherFilter === "추천" && data?.recommendsUserLikes.length === 0)
+        }
+      >
         {otherFilter === "프리톡" &&
-          data?.talksUserLikes.map((_) => <Writing key={_.talkId} writingInfo={_} />)}
+          (data?.talksUserLikes.length ? (
+            data?.talksUserLikes.map((_) => <Writing key={_.talkId} writingInfo={_} />)
+          ) : (
+            <NoContent contentsType="T" isCreatedBy={false} />
+          ))}
         {otherFilter === "추천" &&
-          data?.recommendsUserLikes.map((_) => <Writing key={_.recommendId} writingInfo={_} />)}
+          (data?.recommendsUserLikes.length ? (
+            data?.recommendsUserLikes.map((_) => <Writing key={_.recommendId} writingInfo={_} />)
+          ) : (
+            <NoContent contentsType="R" isCreatedBy={false} />
+          ))}
       </WritingSection>
 
       <CategoryMark
@@ -108,13 +140,13 @@ export default function UserPageHome() {
           path: "myList",
           list: {
             isMainCategory: true,
-            listId: data?.novelLists.listsUserCreated[0].listId as string,
+            listId: data?.novelLists.listsUserCreated[0]?.listId as string,
           },
         }}
         categoryText={myListMark}
         isShowAllButton="모두 보기"
       />
-      {data?.novelLists.listsUserCreated.map((list) => (
+      {data?.novelLists.listsUserCreated?.map((list) => (
         <RowSlide
           categoryId={list.listId}
           categoryText={list.listTitle}
@@ -137,13 +169,13 @@ export default function UserPageHome() {
           path: "othersList",
           list: {
             isMainCategory: true,
-            listId: data?.novelLists.listsUserLikes[0].listId as string,
+            listId: data?.novelLists.listsUserLikes[0]?.listId as string,
           },
         }}
         categoryText={othersListMark}
         isShowAllButton="모두 보기"
       />
-      {data?.novelLists.listsUserLikes.map((list) => (
+      {data?.novelLists.listsUserLikes?.map((list) => (
         <RowSlide
           categoryId={list.listId}
           categoryText={list.listTitle}

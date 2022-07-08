@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import Icon from "assets/Icon";
 import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
@@ -25,6 +26,23 @@ import {
   WritingMark,
 } from "./UserPage.styles";
 
+interface NoContentParams {
+  contentsType: "T" | "R" | "C" | "L"; // talk or recommend or comment or novelList
+  isCreatedBy: boolean; // true : createByUser, false: likedByUser
+}
+export function NoContent({ contentsType, isCreatedBy }: NoContentParams) {
+  const part1 = isCreatedBy ? "작성한 " : "좋아요를 누른 ";
+  const part2 =
+    contentsType === "T"
+      ? "프리톡 게시글이"
+      : contentsType === "R"
+      ? "리코멘드 게시글이"
+      : contentsType === "C"
+      ? "코멘트가"
+      : "소설 리스트가";
+  const sentence = `${part1 + part2} 없어요.`;
+  return <WiringContnr isNoContent>{sentence}</WiringContnr>;
+}
 interface WritingInfo {
   writingInfo: {
     talkId?: string;

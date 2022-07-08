@@ -86,7 +86,7 @@ export const EditProfileBtn = styled.button`
   font-weight: 300;
 `;
 
-export const WritingSection = styled.section`
+export const WritingSection = styled.section<{ isNoContent: boolean }>`
   // in mobile
   display: flex;
   flex-direction: column;
@@ -94,21 +94,26 @@ export const WritingSection = styled.section`
 
   margin-bottom: 7px;
 
-  ${theme.media.tablet(`
+  // if there is no content do not set grid
+  ${({ isNoContent }) =>
+    !isNoContent &&
+    theme.media.tablet(`
     display: grid;
     grid-template-columns: repeat(2,1fr);
     grid-gap: 10px;
   `)}
 `;
-export const WiringContnr = styled.div<{ isComment?: true }>`
+export const WiringContnr = styled.div<{ isComment?: true; isNoContent?: true }>`
   border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 9px;
   padding: 10px;
   display: flex;
   ${({ isComment }) => isComment && `flex-direction:column;`}
-  ${theme.media.tablet(`
-    justify-content: space-between;
-  `)}
+  ${({ isNoContent }) =>
+    isNoContent
+      ? `justify-content: center;
+    align-items: center;`
+      : theme.media.tablet(`justify-content: space-between;`)}
 `;
 export const NovelImg = styled.div<{ novelImg: string; imgHeight: number }>`
   min-height: 80px;
