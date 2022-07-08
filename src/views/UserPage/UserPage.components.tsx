@@ -14,7 +14,7 @@ import {
   NovelImg,
   NovelTitle,
   UserContnr,
-  WiringContnr,
+  WritingContnr,
   WritingTitle,
   WritingUserName,
   Filter,
@@ -41,7 +41,11 @@ export function NoContent({ contentsType, isCreatedBy }: NoContentParams) {
       ? "코멘트가"
       : "소설 리스트가";
   const sentence = `${part1 + part2} 없어요.`;
-  return <WiringContnr isNoContent>{sentence}</WiringContnr>;
+  return (
+    <WritingContnr isNoContent isNovelList={contentsType === "L"}>
+      {sentence}
+    </WritingContnr>
+  );
 }
 interface WritingInfo {
   writingInfo: {
@@ -78,7 +82,7 @@ export function Writing({ writingInfo }: WritingInfo) {
   // talk
   if (talkId) {
     return (
-      <WiringContnr onClick={() => navigate(`/talk_detail/${talkId}`)}>
+      <WritingContnr onClick={() => navigate(`/talk_detail/${talkId}`)}>
         <ContnrNearImg isTalk>
           <WritingTitle talkId={talkId}>{talkTitle}</WritingTitle>
           <UserContnr talkId={talkId}>
@@ -105,12 +109,12 @@ export function Writing({ writingInfo }: WritingInfo) {
           <NovelTitle talkId={talkId}>{novelTitle}</NovelTitle>
         </ContnrNearImg>
         <NovelImg ref={imgRef} novelImg={novelImg} imgHeight={imgHeight} />
-      </WiringContnr>
+      </WritingContnr>
     );
   }
   // recommend
   return (
-    <WiringContnr
+    <WritingContnr
       onClick={() => {
         if (recommendId) {
           navigate(`/recommend_detail/${recommendId}`);
@@ -137,7 +141,7 @@ export function Writing({ writingInfo }: WritingInfo) {
           </IconsContnr>
         </UserContnr>
       </ContnrNearImg>
-    </WiringContnr>
+    </WritingContnr>
   );
 }
 
@@ -157,7 +161,7 @@ export function Comment({ commentInfo }: CommentInfo) {
   const navigate = useNavigate();
 
   return (
-    <WiringContnr isComment onClick={() => navigate(`/talk_detail/${talkId}/${commentId}`)}>
+    <WritingContnr isComment onClick={() => navigate(`/talk_detail/${talkId}/${commentId}`)}>
       <CommentContentContnr>
         <CommentContent>{commentContent}</CommentContent>
         <CreateDate>{createDate}</CreateDate>
@@ -167,7 +171,7 @@ export function Comment({ commentInfo }: CommentInfo) {
         {talkTitle}
       </CommentTalkTitle>
       <CommentNovelTitle>{novelTitle}</CommentNovelTitle>
-    </WiringContnr>
+    </WritingContnr>
   );
 }
 

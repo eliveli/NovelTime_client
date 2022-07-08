@@ -146,23 +146,27 @@ export default function UserPageHome() {
         categoryText={myListMark}
         isShowAllButton="모두 보기"
       />
-      {data?.novelLists.listsUserCreated?.map((list) => (
-        <RowSlide
-          categoryId={list.listId}
-          categoryText={list.listTitle}
-          novelNO={list.novel.length}
-          infoFromUserPage={{
-            userName: userName as string,
-            path: "myList",
-            list: { isMainCategory: false, listId: list.listId },
-          }}
-          isShowAllMark
-        >
-          {list.novel.map((_) => (
-            <NovelRow key={_.novelId} novel={_} isNotSubInfo />
-          ))}
-        </RowSlide>
-      ))}
+      {data?.novelLists.listsUserCreated.length ? (
+        data?.novelLists.listsUserCreated.map((list) => (
+          <RowSlide
+            categoryId={list.listId}
+            categoryText={list.listTitle}
+            novelNO={list.novel.length}
+            infoFromUserPage={{
+              userName: userName as string,
+              path: "myList",
+              list: { isMainCategory: false, listId: list.listId },
+            }}
+            isShowAllMark
+          >
+            {list.novel.map((_) => (
+              <NovelRow key={_.novelId} novel={_} isNotSubInfo />
+            ))}
+          </RowSlide>
+        ))
+      ) : (
+        <NoContent contentsType="L" isCreatedBy />
+      )}
       <CategoryMark
         infoFromUserPage={{
           userName: userName as string,
@@ -175,24 +179,28 @@ export default function UserPageHome() {
         categoryText={othersListMark}
         isShowAllButton="모두 보기"
       />
-      {data?.novelLists.listsUserLikes?.map((list) => (
-        <RowSlide
-          categoryId={list.listId}
-          categoryText={list.listTitle}
-          novelNO={list.novel.length}
-          infoFromUserPage={{
-            userName: userName as string,
-            path: "othersList",
-            list: { isMainCategory: false, listId: list.listId },
-          }}
-          userMark={{ userImg: list.userImg, userName: list.userName }}
-          isShowAllMark
-        >
-          {list.novel.map((_) => (
-            <NovelRow key={_.novelId} novel={_} isNotSubInfo />
-          ))}
-        </RowSlide>
-      ))}
+      {data?.novelLists.listsUserLikes.length ? (
+        data?.novelLists.listsUserLikes.map((list) => (
+          <RowSlide
+            categoryId={list.listId}
+            categoryText={list.listTitle}
+            novelNO={list.novel.length}
+            infoFromUserPage={{
+              userName: userName as string,
+              path: "othersList",
+              list: { isMainCategory: false, listId: list.listId },
+            }}
+            userMark={{ userImg: list.userImg, userName: list.userName }}
+            isShowAllMark
+          >
+            {list.novel.map((_) => (
+              <NovelRow key={_.novelId} novel={_} isNotSubInfo />
+            ))}
+          </RowSlide>
+        ))
+      ) : (
+        <NoContent contentsType="L" isCreatedBy={false} />
+      )}
     </MainBG>
   );
 }

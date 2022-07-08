@@ -103,7 +103,11 @@ export const WritingSection = styled.section<{ isNoContent: boolean }>`
     grid-gap: 10px;
   `)}
 `;
-export const WiringContnr = styled.div<{ isComment?: true; isNoContent?: true }>`
+export const WritingContnr = styled.div<{
+  isComment?: true;
+  isNoContent?: true;
+  isNovelList?: boolean;
+}>`
   border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 9px;
   padding: 10px;
@@ -114,6 +118,7 @@ export const WiringContnr = styled.div<{ isComment?: true; isNoContent?: true }>
       ? `justify-content: center;
     align-items: center;`
       : theme.media.tablet(`justify-content: space-between;`)}
+  ${({ isNovelList }) => isNovelList && `margin: 15px 0 7px;`}
 `;
 export const NovelImg = styled.div<{ novelImg: string; imgHeight: number }>`
   min-height: 80px;
