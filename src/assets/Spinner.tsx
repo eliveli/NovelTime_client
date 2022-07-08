@@ -12,6 +12,16 @@ const spinnerShowOn = keyframes`
         opacity: 1;
       }
     `;
+
+// center the spinner
+const fixedStyles = `
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  margin-top: ${-94 / 2}px;
+  margin-left: ${-87 / 2}px;
+`;
+
 const SpinnerContnr = styled.div<{ styles?: string }>`
   z-index: 2;
 
@@ -19,7 +29,7 @@ const SpinnerContnr = styled.div<{ styles?: string }>`
   margin-left: auto;
   margin-right: auto;
 
-  ${({ styles }) => styles && styles}
+  ${({ styles }) => styles === "fixed" && fixedStyles}
   animation-name: ${spinnerShowOn};
   animation-direction: alternate;
   animation-iteration-count: infinite;

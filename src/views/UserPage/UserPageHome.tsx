@@ -5,6 +5,7 @@ import { CategoryMark } from "components/CategoryMark";
 import { useAppSelector } from "store/hooks";
 import { useParams } from "react-router-dom";
 import { useGetContentsForUserPageHomeByUserNameQuery } from "store/serverAPIs/novelTime";
+import Spinner from "assets/Spinner";
 import { RowSlide } from "../../components/NovelListFrame";
 import { NovelRow } from "../../components/Novel";
 
@@ -57,6 +58,7 @@ export default function UserPageHome() {
 
   return (
     <MainBG>
+      {isLoading && <Spinner styles="fixed" />}
       <CategoryMark
         infoFromUserPage={{
           userName: userName as string,

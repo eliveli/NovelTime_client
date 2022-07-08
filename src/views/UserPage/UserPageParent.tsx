@@ -132,17 +132,9 @@ export default function UserPageParent() {
     navigate("/");
   }
 
-  // center the spinner in user page
-  const spinnerStyles = `
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    margin-top: ${-94 / 2}px;
-    margin-left: ${-87 / 2}px;
-  `;
   return (
     <>
-      {!error && isLoading && <Spinner styles={spinnerStyles} />}
+      {!error && isLoading && <Spinner styles="fixed" />}
       <Profile
         userImg={userInfoForUserPage.userImg}
         userName={userInfoForUserPage.userName}
