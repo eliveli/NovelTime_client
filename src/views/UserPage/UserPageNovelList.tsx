@@ -66,7 +66,7 @@ const novelList = {
   },
   //
   // it is necessary in both my list and other's list
-  // but login user is the owner of the user page, this info will not be received
+  // but login user is the owner of the user page, this info will be false
   isLike: true,
   // otherList is used in two cases, one is when entering this page at first,
   //                                the other is when the list doesn't exist
@@ -75,13 +75,19 @@ const novelList = {
       listId: "ssdfsdfsdfdds",
       listTitle: "첫번째 list where is romance",
       userName: "asdaaa",
-      userImg: "",
+      userImg: {
+        src: "https://cdn.pixabay.com/photo/2017/02/01/09/52/animal-2029245_960_720.png",
+        position: "center",
+      },
     },
     {
       listId: "sd00dfdssss",
       listTitle: "두번째 list where is romance",
       userName: "asdass",
-      userImg: "",
+      userImg: {
+        src: "https://cdn.pixabay.com/photo/2017/02/01/09/52/animal-2029245_960_720.png",
+        position: "center",
+      },
     },
   ],
   novel: [

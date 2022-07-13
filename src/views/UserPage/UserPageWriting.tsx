@@ -9,7 +9,7 @@ import {
   useGetContentsForUserPageOthersWritingQuery,
 } from "store/serverAPIs/novelTime";
 import { Writing, Comment, WritingFilter } from "./UserPage.components";
-import { ShareIconBox, WritingSection } from "./UserPage.styles";
+import { NextContentsBtn, ShareIconBox, WritingSection } from "./UserPage.styles";
 import contentMark from "./utils/contentMark";
 
 // - server request -------------important----------------------------
@@ -53,8 +53,8 @@ const dataFromServerForTest = {
       userName: "나나나",
       // how to set userName from server
       // 1. exist or not : myWriting -> userName exists, othersWriting -> don't exist
-      //  //  2. always exist, but if it is the same in the userName of useParams(), set myWriting,
-      //  //                       if not othersWriting
+      //  2. always exist, but if it is the same in the userName of useParams(), set myWriting,
+      //                       if not othersWriting
 
       createDate: "22.03.03",
       likeNO: 5,
@@ -137,6 +137,14 @@ export default function UserPageWriting({ isMyWriting }: { isMyWriting: boolean 
             <Comment key={_.commentId} commentInfo={_} />
           ))}
       </WritingSection>
+      {dataFromServer?.data?.isNextOrder && (
+        <NextContentsBtn>
+          <Icon.IconBox noPointer>
+            <Icon.SmallDown />
+          </Icon.IconBox>
+          더보기
+        </NextContentsBtn>
+      )}
     </MainBG>
   );
 }

@@ -103,6 +103,19 @@ export const WritingSection = styled.section<{ isNoContent: boolean }>`
     grid-gap: 10px;
   `)}
 `;
+export const NextContentsBtn = styled.div`
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 9px;
+  padding: 10px;
+  display: flex;
+
+  justify-content: center;
+  align-items: center;
+
+  box-shadow: 0 0 2px rgb(0 0 0 / 20%);
+  color: rgba(0, 0, 0, 0.66);
+  font-weight: 300;
+`;
 export const WritingContnr = styled.div<{
   isComment?: true;
   isNoContent?: true;
