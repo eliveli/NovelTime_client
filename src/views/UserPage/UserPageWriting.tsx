@@ -79,14 +79,11 @@ export default function UserPageWriting({ isMyWriting }: { isMyWriting: boolean 
 
   const { userName } = useParams();
 
-  const contentsTypeRef = useRef<"T" | "R" | "C">("T");
-  const orderRef = useRef(1);
-
-  const paramsForRequest = {
+  const [paramsForRequest, setParamsForRequest] = useState({
     userName: userName as string,
-    contentsType: contentsTypeRef.current,
-    order: orderRef.current,
-  };
+    contentsType: "T" as "T" | "R" | "C",
+    order: 1,
+  });
 
   // to divide these two results don't destructure at first like { data, isLoading, ... }
   // just get it as variables
@@ -98,8 +95,6 @@ export default function UserPageWriting({ isMyWriting }: { isMyWriting: boolean 
   });
 
   const dataFromServer = myWritingResult || othersWritingResult;
-  console.log("myWritingResult.data:", myWritingResult.data);
-  console.log("myWritingResult.isLoading:", myWritingResult.isLoading);
 
   // get the content page mark
   const contentPageMark = contentMark(
@@ -126,6 +121,7 @@ export default function UserPageWriting({ isMyWriting }: { isMyWriting: boolean 
         writingCategory={writingCategory}
         writingFilter={writingFilter}
         selectWritingFilter={selectWritingFilter}
+        setParamsForRequest={setParamsForRequest}
       />
       <WritingSection>
         {writingFilter === "프리톡" &&

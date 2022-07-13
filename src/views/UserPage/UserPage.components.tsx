@@ -180,11 +180,19 @@ interface WritingProps {
   writingCategory: string[];
   writingFilter: string;
   selectWritingFilter: React.Dispatch<React.SetStateAction<string>>;
+  setParamsForRequest: React.Dispatch<
+    React.SetStateAction<{
+      userName: string;
+      contentsType: "T" | "R" | "C";
+      order: number;
+    }>
+  >;
 }
 export function WritingFilter({
   writingCategory,
   writingFilter,
   selectWritingFilter,
+  setParamsForRequest,
 }: WritingProps) {
   return (
     <FilterContnr>
@@ -192,7 +200,11 @@ export function WritingFilter({
         <Filter
           category={_ as FilterType}
           selectedCtgr={writingFilter as FilterType}
-          onClick={() => selectWritingFilter(_)}
+          onClick={() => {
+            const contentsType = _ === "프리톡" ? "T" : _ === "추천" ? "R" : "C";
+            selectWritingFilter(_);
+            setParamsForRequest((paramsForRequest) => ({ ...paramsForRequest, contentsType }));
+          }}
         >
           &nbsp;&nbsp;
           {_}
