@@ -47,11 +47,11 @@ export interface UserInfo {
 }
 interface TalkUserCreated {
   talkId: string;
-  novelImg: string;
   talkTitle: string;
   createDate: string;
   likeNO: number;
   commentNO: number;
+  novelImg: string;
   novelTitle: string;
 }
 interface RecommendUserCreated {
@@ -59,6 +59,17 @@ interface RecommendUserCreated {
   recommendTitle: string;
   createDate: string;
   likeNO: number;
+  novelImg: string;
+  novelTitle: string;
+}
+interface TalkOrRecommendUserCreated {
+  talkId?: string;
+  talkTitle?: string;
+  recommendId?: string;
+  recommendTitle?: string;
+  createDate: string;
+  likeNO: number;
+  commentNO?: number;
   novelImg: string;
   novelTitle: string;
 }
@@ -121,7 +132,7 @@ export interface ContentsForUserPageHome {
   };
 }
 export interface ContentsForUserPageMyWriting {
-  writingsUserCreated?: TalkUserCreated[] | RecommendUserCreated[];
+  writingsUserCreated?: TalkOrRecommendUserCreated[];
   commentsUserCreated?: CommentUserCreated[];
   isNextOrder: boolean;
 }
