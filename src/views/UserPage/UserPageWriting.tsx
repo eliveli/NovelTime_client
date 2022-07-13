@@ -1,9 +1,13 @@
 import MainBG from "components/MainBG";
 import { CategoryMark } from "components/CategoryMark";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Icon from "assets/Icon";
 import { useAppSelector } from "store/hooks";
 import { useParams } from "react-router-dom";
+import {
+  useGetContentsForUserPageMyWritingQuery,
+  useGetContentsForUserPageOthersWritingQuery,
+} from "store/serverAPIs/novelTime";
 import { Writing, Comment, WritingFilter } from "./UserPage.components";
 import { ShareIconBox, WritingSection } from "./UserPage.styles";
 import contentMark from "./utils/contentMark";
@@ -16,7 +20,8 @@ import contentMark from "./utils/contentMark";
 //   - received two userName : in talk and in recommend data from server
 //          in my writing, get the value of "". in fact no matter what it is except type
 //
-const dataFromServer = {
+// server request with userName
+const dataFromServerForTest = {
   talk: [
     {
       talkId: "12",
@@ -70,11 +75,31 @@ const dataFromServer = {
 };
 
 export default function UserPageWriting({ isMyWriting }: { isMyWriting: boolean }) {
-  // server request with userName //
-
   const loginUserInfo = useAppSelector((state) => state.user.loginUserInfo);
 
   const { userName } = useParams();
+
+  const contentsTypeRef = useRef<"T" | "R" | "C">("T");
+  const orderRef = useRef(1);
+
+  const paramsForRequest = {
+    userName: userName as string,
+    contentsType: contentsTypeRef.current,
+    order: orderRef.current,
+  };
+
+  // to divide these two results don't destructure at first like { data, isLoading, ... }
+  // just get it as variables
+  const myWritingResult = useGetContentsForUserPageMyWritingQuery(paramsForRequest, {
+    skip: !userName && !isMyWriting,
+  });
+  const othersWritingResult = useGetContentsForUserPageOthersWritingQuery(paramsForRequest, {
+    skip: !userName && isMyWriting,
+  });
+
+  const dataFromServer = myWritingResult || othersWritingResult;
+  console.log("myWritingResult.data:", myWritingResult.data);
+  console.log("myWritingResult.isLoading:", myWritingResult.isLoading);
 
   // get the content page mark
   const contentPageMark = contentMark(
@@ -104,11 +129,17 @@ export default function UserPageWriting({ isMyWriting }: { isMyWriting: boolean 
       />
       <WritingSection>
         {writingFilter === "프리톡" &&
-          dataFromServer.talk.map((_) => <Writing key={_.talkId} writingInfo={_} />)}
+          dataFromServer?.data?.writingsUserCreated?.map((_) => (
+            <Writing key={_.talkId} writingInfo={_} />
+          ))}
         {writingFilter === "추천" &&
-          dataFromServer.recommend.map((_) => <Writing key={_.recommendId} writingInfo={_} />)}
+          dataFromServer?.data?.writingsUserCreated?.map((_) => (
+            <Writing key={_.recommendId} writingInfo={_} />
+          ))}
         {writingFilter === "댓글" &&
-          dataFromServer.comment.map((_) => <Comment key={_.commentId} commentInfo={_} />)}
+          dataFromServer?.data?.commentsUserCreated?.map((_) => (
+            <Comment key={_.commentId} commentInfo={_} />
+          ))}
       </WritingSection>
     </MainBG>
   );
