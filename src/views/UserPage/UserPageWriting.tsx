@@ -108,6 +108,7 @@ export default function UserPageWriting({ isMyWriting }: { isMyWriting: boolean 
     comments: CommentUserCreated[];
     isNextOrder: boolean;
   }>();
+
   // get and save the contents in my writing page
   useEffect(() => {
     if (!myWritingResult.data) return;
@@ -173,6 +174,15 @@ export default function UserPageWriting({ isMyWriting }: { isMyWriting: boolean 
   const writingCategory = isMyWriting ? ["프리톡", "추천", "댓글"] : ["프리톡", "추천"];
   // set filter category
   const [writingFilter, selectWritingFilter] = useState("프리톡");
+
+  // to decide whether display show-more button of current contents or not
+  const typeOfCurrentContents = paramsForRequest.contentsType;
+  const isNextOrderOfCurrentContents =
+    typeOfCurrentContents === "T"
+      ? talksUserCreated?.isNextOrder
+      : typeOfCurrentContents === "R"
+      ? recommendsUserCreated?.isNextOrder
+      : commentsUserCreated?.isNextOrder;
   return (
     <MainBG>
       <CategoryMark categoryText={contentPageMark}>
@@ -197,13 +207,18 @@ export default function UserPageWriting({ isMyWriting }: { isMyWriting: boolean 
         {writingFilter === "댓글" &&
           commentsUserCreated?.comments?.map((_) => <Comment key={_.commentId} commentInfo={_} />)}
       </WritingSection>
-
-      <NextContentsBtn>
-        <Icon.IconBox noPointer>
-          <Icon.SmallDown />
-        </Icon.IconBox>
-        더보기
-      </NextContentsBtn>
+      {isNextOrderOfCurrentContents && (
+        <NextContentsBtn
+          onClick={() => {
+            setParamsForRequest({ ...paramsForRequest, order: (paramsForRequest.order += 1) });
+          }}
+        >
+          <Icon.IconBox noPointer>
+            <Icon.SmallDown />
+          </Icon.IconBox>
+          더보기
+        </NextContentsBtn>
+      )}
     </MainBG>
   );
 }
