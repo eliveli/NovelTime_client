@@ -99,16 +99,18 @@ export default function UserPageWriting({ isMyWriting }: { isMyWriting: boolean 
   const [talksUserCreated, setTalksUserCreated] = useState<{
     talks: TalkOrRecommend[];
     isNextOrder: boolean;
+    currentOrder: number;
   }>();
   const [recommendsUserCreated, setRecommendsUserCreated] = useState<{
     recommends: TalkOrRecommend[];
     isNextOrder: boolean;
+    currentOrder: number;
   }>();
   const [commentsUserCreated, setCommentsUserCreated] = useState<{
     comments: CommentUserCreated[];
     isNextOrder: boolean;
+    currentOrder: number;
   }>();
-
   // get and save the contents in my writing page
   useEffect(() => {
     if (!myWritingResult.data) return;
@@ -122,11 +124,13 @@ export default function UserPageWriting({ isMyWriting }: { isMyWriting: boolean 
         setTalksUserCreated({
           talks: writingsFromServer,
           isNextOrder: myWritingResult.data.isNextOrder,
+          currentOrder: 1,
         });
       } else {
         setTalksUserCreated({
           talks: [...talksUserCreated.talks, ...writingsFromServer],
           isNextOrder: myWritingResult.data.isNextOrder,
+          currentOrder: talksUserCreated.currentOrder + 1,
         });
       }
     }
@@ -137,11 +141,13 @@ export default function UserPageWriting({ isMyWriting }: { isMyWriting: boolean 
         setRecommendsUserCreated({
           recommends: writingsFromServer,
           isNextOrder: myWritingResult.data.isNextOrder,
+          currentOrder: 1,
         });
       } else {
         setRecommendsUserCreated({
           recommends: [...recommendsUserCreated.recommends, ...writingsFromServer],
           isNextOrder: myWritingResult.data.isNextOrder,
+          currentOrder: recommendsUserCreated.currentOrder + 1,
         });
       }
     }
@@ -152,11 +158,13 @@ export default function UserPageWriting({ isMyWriting }: { isMyWriting: boolean 
         setCommentsUserCreated({
           comments: commentsFromServer,
           isNextOrder: myWritingResult.data.isNextOrder,
+          currentOrder: 1,
         });
       } else {
         setCommentsUserCreated({
           comments: [...commentsUserCreated.comments, ...commentsFromServer],
           isNextOrder: myWritingResult.data.isNextOrder,
+          currentOrder: commentsUserCreated.currentOrder + 1,
         });
       }
     }
@@ -175,14 +183,23 @@ export default function UserPageWriting({ isMyWriting }: { isMyWriting: boolean 
   // set filter category
   const [writingFilter, selectWritingFilter] = useState("프리톡");
 
-  // to decide whether display show-more button of current contents or not
+  // type, isNextOrder, currentOrder of current contents
   const typeOfCurrentContents = paramsForRequest.contentsType;
+  // to decide whether display show-more button of current contents or not
   const isNextOrderOfCurrentContents =
     typeOfCurrentContents === "T"
       ? talksUserCreated?.isNextOrder
       : typeOfCurrentContents === "R"
       ? recommendsUserCreated?.isNextOrder
       : commentsUserCreated?.isNextOrder;
+  // to set next order
+  const currentOrderOfCurrentContents =
+    typeOfCurrentContents === "T"
+      ? (talksUserCreated?.currentOrder as number)
+      : typeOfCurrentContents === "R"
+      ? (recommendsUserCreated?.currentOrder as number)
+      : (commentsUserCreated?.currentOrder as number);
+
   return (
     <MainBG>
       <CategoryMark categoryText={contentPageMark}>
@@ -210,7 +227,10 @@ export default function UserPageWriting({ isMyWriting }: { isMyWriting: boolean 
       {isNextOrderOfCurrentContents && (
         <NextContentsBtn
           onClick={() => {
-            setParamsForRequest({ ...paramsForRequest, order: (paramsForRequest.order += 1) });
+            setParamsForRequest({
+              ...paramsForRequest,
+              order: currentOrderOfCurrentContents + 1,
+            });
           }}
         >
           <Icon.IconBox noPointer>
