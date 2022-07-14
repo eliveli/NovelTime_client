@@ -213,6 +213,9 @@ export default function UserPageWriting({ isMyWriting }: { isMyWriting: boolean 
         writingFilter={writingFilter}
         selectWritingFilter={selectWritingFilter}
         setParamsForRequest={setParamsForRequest}
+        talksUserCreated={talksUserCreated}
+        recommendsUserCreated={recommendsUserCreated}
+        commentsUserCreated={commentsUserCreated}
       />
       <WritingSection>
         {writingFilter === "프리톡" &&

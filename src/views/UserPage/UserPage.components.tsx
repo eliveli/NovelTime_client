@@ -2,6 +2,7 @@
 import Icon from "assets/Icon";
 import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import { CommentUserCreated, TalkOrRecommend } from "store/serverAPIs/types";
 import { useComponentHeight } from "utils";
 import {
   CommntIcon,
@@ -180,19 +181,38 @@ interface WritingProps {
   writingCategory: string[];
   writingFilter: string;
   selectWritingFilter: React.Dispatch<React.SetStateAction<string>>;
-  setParamsForRequest: React.Dispatch<
+  setParamsForRequest?: React.Dispatch<
     React.SetStateAction<{
       userName: string;
       contentsType: "T" | "R" | "C";
       order: number;
     }>
   >;
+  talksUserCreated?: {
+    talks: TalkOrRecommend[];
+    isNextOrder: boolean;
+    currentOrder: number;
+  };
+
+  recommendsUserCreated?: {
+    recommends: TalkOrRecommend[];
+    isNextOrder: boolean;
+    currentOrder: number;
+  };
+  commentsUserCreated?: {
+    comments: CommentUserCreated[];
+    isNextOrder: boolean;
+    currentOrder: number;
+  };
 }
 export function WritingFilter({
   writingCategory,
   writingFilter,
   selectWritingFilter,
   setParamsForRequest,
+  talksUserCreated,
+  recommendsUserCreated,
+  commentsUserCreated,
 }: WritingProps) {
   return (
     <FilterContnr>
@@ -201,9 +221,32 @@ export function WritingFilter({
           category={_ as FilterType}
           selectedCtgr={writingFilter as FilterType}
           onClick={() => {
-            const contentsType = _ === "프리톡" ? "T" : _ === "추천" ? "R" : "C";
             selectWritingFilter(_);
-            setParamsForRequest((paramsForRequest) => ({ ...paramsForRequest, contentsType }));
+
+            // request content when clicking other filter but the content is empty
+            if (setParamsForRequest) {
+              if (_ === "프리톡" && !talksUserCreated) {
+                setParamsForRequest((paramsForRequest) => ({
+                  ...paramsForRequest,
+                  contentsType: "T",
+                  order: 1,
+                }));
+              }
+              if (_ === "추천" && !recommendsUserCreated) {
+                setParamsForRequest((paramsForRequest) => ({
+                  ...paramsForRequest,
+                  contentsType: "R",
+                  order: 1,
+                }));
+              }
+              if (_ === "댓글" && !commentsUserCreated) {
+                setParamsForRequest((paramsForRequest) => ({
+                  ...paramsForRequest,
+                  contentsType: "C",
+                  order: 1,
+                }));
+              }
+            }
           }}
         >
           &nbsp;&nbsp;
