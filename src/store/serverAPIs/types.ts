@@ -73,7 +73,7 @@ interface TalkOrRecommendUserCreated {
   novelImg: string;
   novelTitle: string;
 }
-interface TalkOrRecommend {
+export interface TalkOrRecommend {
   talkId?: string;
   talkTitle?: string;
   recommendId?: string;
@@ -104,7 +104,7 @@ interface RecommendUserLikes {
   novelTitle: string;
   userName: string;
 }
-interface CommentUserCreated {
+export interface CommentUserCreated {
   commentId: string;
   commentContent: string;
   createDate: string;

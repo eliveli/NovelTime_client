@@ -1,6 +1,6 @@
 import MainBG from "components/MainBG";
 import { CategoryMark } from "components/CategoryMark";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Icon from "assets/Icon";
 import { useAppSelector } from "store/hooks";
 import { useParams } from "react-router-dom";
@@ -8,6 +8,8 @@ import {
   useGetContentsForUserPageMyWritingQuery,
   useGetContentsForUserPageOthersWritingQuery,
 } from "store/serverAPIs/novelTime";
+import { ContentsForUserPageWriting } from "store/serverAPIs/types";
+import { TalkOrRecommend, CommentUserCreated } from "../../store/serverAPIs/types";
 import { Writing, Comment, WritingFilter } from "./UserPage.components";
 import { NextContentsBtn, ShareIconBox, WritingSection } from "./UserPage.styles";
 import contentMark from "./utils/contentMark";
@@ -73,7 +75,6 @@ const dataFromServerForTest = {
     },
   ],
 };
-
 export default function UserPageWriting({ isMyWriting }: { isMyWriting: boolean }) {
   const loginUserInfo = useAppSelector((state) => state.user.loginUserInfo);
 
@@ -85,7 +86,7 @@ export default function UserPageWriting({ isMyWriting }: { isMyWriting: boolean 
     order: 1,
   });
 
-  // to divide these two results don't destructure at first like { data, isLoading, ... }
+  // to divide these two results don't destructure at first like : const { data, isLoading, ... }
   // just get it as variables
   const myWritingResult = useGetContentsForUserPageMyWritingQuery(paramsForRequest, {
     skip: !userName && !isMyWriting,
@@ -94,7 +95,39 @@ export default function UserPageWriting({ isMyWriting }: { isMyWriting: boolean 
     skip: !userName && isMyWriting,
   });
 
-  const dataFromServer = myWritingResult || othersWritingResult;
+  const [dataFromServer, setDataFromServer] = useState<{
+    writingsUserCreated?: TalkOrRecommend[];
+    commentsUserCreated?: CommentUserCreated[];
+    writingsUserLikes?: TalkOrRecommend[];
+    isNextOrder: boolean;
+  }>();
+
+  useEffect(() => {
+    if (!myWritingResult.data) return;
+    if (!dataFromServer) {
+      setDataFromServer(myWritingResult.data);
+    }
+    if (dataFromServer?.writingsUserCreated && myWritingResult.data.writingsUserCreated) {
+      setDataFromServer({
+        ...dataFromServer,
+        writingsUserCreated: [
+          ...dataFromServer.writingsUserCreated,
+          ...myWritingResult.data.writingsUserCreated,
+        ],
+        isNextOrder: myWritingResult.data.isNextOrder,
+      });
+    }
+    if (dataFromServer?.commentsUserCreated && myWritingResult.data.commentsUserCreated) {
+      setDataFromServer({
+        ...dataFromServer,
+        commentsUserCreated: [
+          ...dataFromServer.commentsUserCreated,
+          ...myWritingResult.data.commentsUserCreated,
+        ],
+        isNextOrder: myWritingResult.data.isNextOrder,
+      });
+    }
+  }, [myWritingResult.data]);
 
   // get the content page mark
   const contentPageMark = contentMark(
@@ -125,19 +158,19 @@ export default function UserPageWriting({ isMyWriting }: { isMyWriting: boolean 
       />
       <WritingSection>
         {writingFilter === "프리톡" &&
-          dataFromServer?.data?.writingsUserCreated?.map((_) => (
+          dataFromServer?.writingsUserCreated?.map((_) => (
             <Writing key={_.talkId} writingInfo={_} />
           ))}
         {writingFilter === "추천" &&
-          dataFromServer?.data?.writingsUserCreated?.map((_) => (
+          dataFromServer?.writingsUserCreated?.map((_) => (
             <Writing key={_.recommendId} writingInfo={_} />
           ))}
         {writingFilter === "댓글" &&
-          dataFromServer?.data?.commentsUserCreated?.map((_) => (
+          dataFromServer?.commentsUserCreated?.map((_) => (
             <Comment key={_.commentId} commentInfo={_} />
           ))}
       </WritingSection>
-      {dataFromServer?.data?.isNextOrder && (
+      {dataFromServer?.isNextOrder && (
         <NextContentsBtn>
           <Icon.IconBox noPointer>
             <Icon.SmallDown />
