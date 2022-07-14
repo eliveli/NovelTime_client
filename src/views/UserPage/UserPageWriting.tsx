@@ -95,37 +95,69 @@ export default function UserPageWriting({ isMyWriting }: { isMyWriting: boolean 
     skip: !userName && isMyWriting,
   });
 
-  const [dataFromServer, setDataFromServer] = useState<{
-    writingsUserCreated?: TalkOrRecommend[];
-    commentsUserCreated?: CommentUserCreated[];
-    writingsUserLikes?: TalkOrRecommend[];
+  // states for saving contents from server in my writing page
+  const [talksUserCreated, setTalksUserCreated] = useState<{
+    talks: TalkOrRecommend[];
     isNextOrder: boolean;
   }>();
-
+  const [recommendsUserCreated, setRecommendsUserCreated] = useState<{
+    recommends: TalkOrRecommend[];
+    isNextOrder: boolean;
+  }>();
+  const [commentsUserCreated, setCommentsUserCreated] = useState<{
+    comments: CommentUserCreated[];
+    isNextOrder: boolean;
+  }>();
+  // get and save the contents in my writing page
   useEffect(() => {
     if (!myWritingResult.data) return;
-    if (!dataFromServer) {
-      setDataFromServer(myWritingResult.data);
+
+    const writingsFromServer = myWritingResult.data.writingsUserCreated;
+    const commentsFromServer = myWritingResult.data.commentsUserCreated;
+
+    // save talks
+    if (writingsFromServer && writingsFromServer[0]?.talkId) {
+      if (!talksUserCreated) {
+        setTalksUserCreated({
+          talks: writingsFromServer,
+          isNextOrder: myWritingResult.data.isNextOrder,
+        });
+      } else {
+        setTalksUserCreated({
+          talks: [...talksUserCreated.talks, ...writingsFromServer],
+          isNextOrder: myWritingResult.data.isNextOrder,
+        });
+      }
     }
-    if (dataFromServer?.writingsUserCreated && myWritingResult.data.writingsUserCreated) {
-      setDataFromServer({
-        ...dataFromServer,
-        writingsUserCreated: [
-          ...dataFromServer.writingsUserCreated,
-          ...myWritingResult.data.writingsUserCreated,
-        ],
-        isNextOrder: myWritingResult.data.isNextOrder,
-      });
+
+    // save recommends
+    if (writingsFromServer && writingsFromServer[0]?.recommendId) {
+      if (!recommendsUserCreated) {
+        setRecommendsUserCreated({
+          recommends: writingsFromServer,
+          isNextOrder: myWritingResult.data.isNextOrder,
+        });
+      } else {
+        setRecommendsUserCreated({
+          recommends: [...recommendsUserCreated.recommends, ...writingsFromServer],
+          isNextOrder: myWritingResult.data.isNextOrder,
+        });
+      }
     }
-    if (dataFromServer?.commentsUserCreated && myWritingResult.data.commentsUserCreated) {
-      setDataFromServer({
-        ...dataFromServer,
-        commentsUserCreated: [
-          ...dataFromServer.commentsUserCreated,
-          ...myWritingResult.data.commentsUserCreated,
-        ],
-        isNextOrder: myWritingResult.data.isNextOrder,
-      });
+
+    // save comments
+    if (commentsFromServer) {
+      if (!commentsUserCreated) {
+        setCommentsUserCreated({
+          comments: commentsFromServer,
+          isNextOrder: myWritingResult.data.isNextOrder,
+        });
+      } else {
+        setCommentsUserCreated({
+          comments: [...commentsUserCreated.comments, ...commentsFromServer],
+          isNextOrder: myWritingResult.data.isNextOrder,
+        });
+      }
     }
   }, [myWritingResult.data]);
 
@@ -141,7 +173,6 @@ export default function UserPageWriting({ isMyWriting }: { isMyWriting: boolean 
   const writingCategory = isMyWriting ? ["프리톡", "추천", "댓글"] : ["프리톡", "추천"];
   // set filter category
   const [writingFilter, selectWritingFilter] = useState("프리톡");
-
   return (
     <MainBG>
       <CategoryMark categoryText={contentPageMark}>
@@ -158,26 +189,21 @@ export default function UserPageWriting({ isMyWriting }: { isMyWriting: boolean 
       />
       <WritingSection>
         {writingFilter === "프리톡" &&
-          dataFromServer?.writingsUserCreated?.map((_) => (
-            <Writing key={_.talkId} writingInfo={_} />
-          ))}
+          talksUserCreated?.talks?.map((_) => <Writing key={_.talkId} writingInfo={_} />)}
         {writingFilter === "추천" &&
-          dataFromServer?.writingsUserCreated?.map((_) => (
+          recommendsUserCreated?.recommends?.map((_) => (
             <Writing key={_.recommendId} writingInfo={_} />
           ))}
         {writingFilter === "댓글" &&
-          dataFromServer?.commentsUserCreated?.map((_) => (
-            <Comment key={_.commentId} commentInfo={_} />
-          ))}
+          commentsUserCreated?.comments?.map((_) => <Comment key={_.commentId} commentInfo={_} />)}
       </WritingSection>
-      {dataFromServer?.isNextOrder && (
-        <NextContentsBtn>
-          <Icon.IconBox noPointer>
-            <Icon.SmallDown />
-          </Icon.IconBox>
-          더보기
-        </NextContentsBtn>
-      )}
+
+      <NextContentsBtn>
+        <Icon.IconBox noPointer>
+          <Icon.SmallDown />
+        </Icon.IconBox>
+        더보기
+      </NextContentsBtn>
     </MainBG>
   );
 }
