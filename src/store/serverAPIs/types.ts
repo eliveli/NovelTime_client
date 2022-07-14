@@ -73,6 +73,18 @@ interface TalkOrRecommendUserCreated {
   novelImg: string;
   novelTitle: string;
 }
+interface TalkOrRecommend {
+  talkId?: string;
+  talkTitle?: string;
+  recommendId?: string;
+  recommendTitle?: string;
+  createDate: string;
+  likeNO: number;
+  commentNO?: number;
+  novelImg: string;
+  novelTitle: string;
+  userName?: string;
+}
 interface TalkUserLikes {
   talkId: string;
   talkTitle: string;
@@ -85,10 +97,10 @@ interface TalkUserLikes {
 }
 interface RecommendUserLikes {
   recommendId: string;
-  novelImg: string;
   recommendTitle: string;
   createDate: string;
   likeNO: number;
+  novelImg: string;
   novelTitle: string;
   userName: string;
 }
@@ -130,6 +142,12 @@ export interface ContentsForUserPageHome {
     listsUserCreated: ListUserCreated[];
     listsUserLikes: ListUserLikes[];
   };
+}
+export interface ContentsForUserPageWriting {
+  writingsUserCreated?: TalkOrRecommend[];
+  commentsUserCreated?: CommentUserCreated[];
+  writingsUserLikes?: TalkOrRecommend[];
+  isNextOrder: boolean;
 }
 export interface ContentsForUserPageMyWriting {
   writingsUserCreated?: TalkOrRecommendUserCreated[];

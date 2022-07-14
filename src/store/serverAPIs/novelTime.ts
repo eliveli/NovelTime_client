@@ -10,6 +10,7 @@ import {
   ParamsForUserPageWriting,
   ContentsForUserPageMyWriting,
   ContentsForUserPageOthersWriting,
+  ContentsForUserPageWriting,
 } from "./types";
 import type { RootState } from "../index";
 
@@ -67,14 +68,14 @@ export const novelTimeApi = createApi({
       query: (userName) => `/contents/userPageHome/${userName}`,
     }),
     getContentsForUserPageMyWriting: builder.query<
-      ContentsForUserPageMyWriting,
+      ContentsForUserPageWriting,
       ParamsForUserPageWriting
     >({
       query: (params) =>
         `/contents/userPageMyWriting/${params.userName}/${params.contentsType}/${params.order}`,
     }),
     getContentsForUserPageOthersWriting: builder.query<
-      ContentsForUserPageOthersWriting,
+      ContentsForUserPageWriting,
       ParamsForUserPageWriting
     >({
       query: (params) =>
