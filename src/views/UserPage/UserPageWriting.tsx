@@ -177,14 +177,16 @@ export default function UserPageWriting({ isMyWriting }: { isMyWriting: boolean 
     isMyWriting,
     true,
   );
-
   // writing category array : my writing or other's writing
   const writingCategory = isMyWriting ? ["프리톡", "추천", "댓글"] : ["프리톡", "추천"];
   // set filter category
   const [writingFilter, selectWritingFilter] = useState("프리톡");
 
-  // type, isNextOrder, currentOrder of current contents
-  const typeOfCurrentContents = paramsForRequest.contentsType;
+  // type, isNextOrder, currentOrder of current content //
+  // to get the current content type
+  const getContentTypeOfWritingFilter = (currentFilter: string) =>
+    currentFilter === "프리톡" ? "T" : currentFilter === "추천" ? "R" : "C";
+  const typeOfCurrentContents = getContentTypeOfWritingFilter(writingFilter);
   // to decide whether display show-more button of current contents or not
   const isNextOrderOfCurrentContents =
     typeOfCurrentContents === "T"
