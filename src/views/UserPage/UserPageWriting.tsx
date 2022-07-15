@@ -75,6 +75,11 @@ const dataFromServerForTest = {
     },
   ],
 };
+export type ContentInfo = {
+  type: "T" | "R" | "C";
+  isNextOrder: boolean;
+  currentOrder: number;
+};
 export default function UserPageWriting({ isMyWriting }: { isMyWriting: boolean }) {
   const loginUserInfo = useAppSelector((state) => state.user.loginUserInfo);
 
@@ -86,6 +91,14 @@ export default function UserPageWriting({ isMyWriting }: { isMyWriting: boolean 
     order: 1,
   });
 
+  // to set this is required because
+  //   it can be done that user don't request content but do change writing filter(content)
+  // (so it is not always correct to get the current content value from "paramsForRequest")
+  const currentContentRef = useRef<ContentInfo>({ type: "T", isNextOrder: false, currentOrder: 1 });
+
+  const handleCurrentContent = (currentContent: ContentInfo) => {
+    currentContentRef.current = currentContent;
+  };
   // to divide these two results don't destructure at first like : const { data, isLoading, ... }
   // just get it as variables
   const myWritingResult = useGetContentsForUserPageMyWritingQuery(paramsForRequest, {
@@ -117,56 +130,79 @@ export default function UserPageWriting({ isMyWriting }: { isMyWriting: boolean 
 
     const writingsFromServer = myWritingResult.data.writingsUserCreated;
     const commentsFromServer = myWritingResult.data.commentsUserCreated;
+    const { isNextOrder } = myWritingResult.data;
 
     // save talks
     if (writingsFromServer && writingsFromServer[0]?.talkId) {
+      const currentOrder = talksUserCreated ? talksUserCreated.currentOrder + 1 : 1;
       if (!talksUserCreated) {
         setTalksUserCreated({
           talks: writingsFromServer,
-          isNextOrder: myWritingResult.data.isNextOrder,
-          currentOrder: 1,
+          isNextOrder,
+          currentOrder,
         });
       } else {
         setTalksUserCreated({
           talks: [...talksUserCreated.talks, ...writingsFromServer],
-          isNextOrder: myWritingResult.data.isNextOrder,
-          currentOrder: talksUserCreated.currentOrder + 1,
+          isNextOrder,
+          currentOrder,
         });
       }
+      // set current content info
+      currentContentRef.current = {
+        type: "T",
+        isNextOrder,
+        currentOrder,
+      };
     }
 
     // save recommends
     if (writingsFromServer && writingsFromServer[0]?.recommendId) {
+      const currentOrder = recommendsUserCreated ? recommendsUserCreated.currentOrder + 1 : 1;
+
       if (!recommendsUserCreated) {
         setRecommendsUserCreated({
           recommends: writingsFromServer,
-          isNextOrder: myWritingResult.data.isNextOrder,
-          currentOrder: 1,
+          isNextOrder,
+          currentOrder,
         });
       } else {
         setRecommendsUserCreated({
           recommends: [...recommendsUserCreated.recommends, ...writingsFromServer],
-          isNextOrder: myWritingResult.data.isNextOrder,
-          currentOrder: recommendsUserCreated.currentOrder + 1,
+          isNextOrder,
+          currentOrder,
         });
       }
+      // set current content info
+      currentContentRef.current = {
+        type: "R",
+        isNextOrder,
+        currentOrder,
+      };
     }
 
     // save comments
     if (commentsFromServer) {
+      const currentOrder = commentsUserCreated ? commentsUserCreated.currentOrder + 1 : 1;
       if (!commentsUserCreated) {
         setCommentsUserCreated({
           comments: commentsFromServer,
-          isNextOrder: myWritingResult.data.isNextOrder,
-          currentOrder: 1,
+          isNextOrder,
+          currentOrder,
         });
       } else {
         setCommentsUserCreated({
           comments: [...commentsUserCreated.comments, ...commentsFromServer],
-          isNextOrder: myWritingResult.data.isNextOrder,
-          currentOrder: commentsUserCreated.currentOrder + 1,
+          isNextOrder,
+          currentOrder,
         });
       }
+      // set current content info
+      currentContentRef.current = {
+        type: "C",
+        isNextOrder,
+        currentOrder,
+      };
     }
   }, [myWritingResult.data]);
 
@@ -181,26 +217,6 @@ export default function UserPageWriting({ isMyWriting }: { isMyWriting: boolean 
   const writingCategory = isMyWriting ? ["프리톡", "추천", "댓글"] : ["프리톡", "추천"];
   // set filter category
   const [writingFilter, selectWritingFilter] = useState("프리톡");
-
-  // type, isNextOrder, currentOrder of current content //
-  // to get the current content type
-  const getContentTypeOfWritingFilter = (currentFilter: string) =>
-    currentFilter === "프리톡" ? "T" : currentFilter === "추천" ? "R" : "C";
-  const typeOfCurrentContents = getContentTypeOfWritingFilter(writingFilter);
-  // to decide whether display show-more button of current contents or not
-  const isNextOrderOfCurrentContents =
-    typeOfCurrentContents === "T"
-      ? talksUserCreated?.isNextOrder
-      : typeOfCurrentContents === "R"
-      ? recommendsUserCreated?.isNextOrder
-      : commentsUserCreated?.isNextOrder;
-  // to set next order
-  const currentOrderOfCurrentContents =
-    typeOfCurrentContents === "T"
-      ? (talksUserCreated?.currentOrder as number)
-      : typeOfCurrentContents === "R"
-      ? (recommendsUserCreated?.currentOrder as number)
-      : (commentsUserCreated?.currentOrder as number);
 
   return (
     <MainBG>
@@ -218,6 +234,7 @@ export default function UserPageWriting({ isMyWriting }: { isMyWriting: boolean 
         talksUserCreated={talksUserCreated}
         recommendsUserCreated={recommendsUserCreated}
         commentsUserCreated={commentsUserCreated}
+        handleCurrentContent={handleCurrentContent}
       />
       <WritingSection>
         {writingFilter === "프리톡" &&
@@ -229,12 +246,13 @@ export default function UserPageWriting({ isMyWriting }: { isMyWriting: boolean 
         {writingFilter === "댓글" &&
           commentsUserCreated?.comments?.map((_) => <Comment key={_.commentId} commentInfo={_} />)}
       </WritingSection>
-      {isNextOrderOfCurrentContents && (
+      {currentContentRef.current.isNextOrder && (
         <NextContentsBtn
           onClick={() => {
             setParamsForRequest({
               ...paramsForRequest,
-              order: currentOrderOfCurrentContents + 1,
+              contentsType: currentContentRef.current.type,
+              order: currentContentRef.current.currentOrder + 1,
             });
           }}
         >

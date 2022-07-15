@@ -26,6 +26,7 @@ import {
   CommentContentContnr,
   WritingMark,
 } from "./UserPage.styles";
+import { ContentInfo } from "./UserPageWriting";
 
 interface NoContentParams {
   contentsType: "T" | "R" | "C" | "L"; // talk or recommend or comment or novelList
@@ -204,6 +205,7 @@ interface WritingProps {
     isNextOrder: boolean;
     currentOrder: number;
   };
+  handleCurrentContent?: (currentContent: ContentInfo) => void;
 }
 export function WritingFilter({
   writingCategory,
@@ -213,6 +215,7 @@ export function WritingFilter({
   talksUserCreated,
   recommendsUserCreated,
   commentsUserCreated,
+  handleCurrentContent,
 }: WritingProps) {
   return (
     <FilterContnr>
@@ -223,6 +226,7 @@ export function WritingFilter({
           onClick={() => {
             selectWritingFilter(_);
 
+            // it is for UserPageWriting not for UserPageHome //
             // request content when clicking other filter but the content is empty
             if (setParamsForRequest) {
               if (_ === "프리톡" && !talksUserCreated) {
@@ -231,20 +235,38 @@ export function WritingFilter({
                   contentsType: "T",
                   order: 1,
                 }));
-              }
-              if (_ === "추천" && !recommendsUserCreated) {
+              } else if (_ === "추천" && !recommendsUserCreated) {
                 setParamsForRequest((paramsForRequest) => ({
                   ...paramsForRequest,
                   contentsType: "R",
                   order: 1,
                 }));
-              }
-              if (_ === "댓글" && !commentsUserCreated) {
+              } else if (_ === "댓글" && !commentsUserCreated) {
                 setParamsForRequest((paramsForRequest) => ({
                   ...paramsForRequest,
                   contentsType: "C",
                   order: 1,
                 }));
+              } else if (handleCurrentContent) {
+                // set current content when changing writing filter without request
+                const getContentTypeOfWritingFilter = (currentFilter: string) =>
+                  currentFilter === "프리톡" ? "T" : currentFilter === "추천" ? "R" : "C";
+
+                const contentType = getContentTypeOfWritingFilter(_);
+                const isNextOrder =
+                  contentType === "T"
+                    ? (talksUserCreated?.isNextOrder as boolean)
+                    : contentType === "R"
+                    ? (recommendsUserCreated?.isNextOrder as boolean)
+                    : (commentsUserCreated?.isNextOrder as boolean);
+                const currentOrder =
+                  contentType === "T"
+                    ? (talksUserCreated?.currentOrder as number)
+                    : contentType === "R"
+                    ? (recommendsUserCreated?.currentOrder as number)
+                    : (commentsUserCreated?.currentOrder as number);
+
+                handleCurrentContent({ type: contentType, isNextOrder, currentOrder });
               }
             }
           }}
