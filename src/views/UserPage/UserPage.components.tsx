@@ -1,6 +1,6 @@
 /* eslint-disable no-nested-ternary */
 import Icon from "assets/Icon";
-import { useRef } from "react";
+import React, { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { CommentUserCreated, TalkOrRecommend } from "store/serverAPIs/types";
 import { useComponentHeight } from "utils";
@@ -63,7 +63,7 @@ interface WritingInfo {
     novelTitle: string;
   };
 }
-export function Writing({ writingInfo }: WritingInfo) {
+export const Writing = React.memo(({ writingInfo }: WritingInfo) => {
   const {
     talkId,
     recommendId,
@@ -80,7 +80,6 @@ export function Writing({ writingInfo }: WritingInfo) {
   const imgHeight = useComponentHeight(imgRef);
 
   const navigate = useNavigate();
-
   // talk
   if (talkId) {
     return (
@@ -145,8 +144,7 @@ export function Writing({ writingInfo }: WritingInfo) {
       </ContnrNearImg>
     </WritingContnr>
   );
-}
-
+});
 interface CommentInfo {
   commentInfo: {
     commentId: string;
@@ -158,7 +156,7 @@ interface CommentInfo {
     novelTitle: string;
   };
 }
-export function Comment({ commentInfo }: CommentInfo) {
+export const Comment = React.memo(({ commentInfo }: CommentInfo) => {
   const { commentId, commentContent, createDate, talkId, talkTitle, novelTitle } = commentInfo;
   const navigate = useNavigate();
 
@@ -175,7 +173,7 @@ export function Comment({ commentInfo }: CommentInfo) {
       <CommentNovelTitle>{novelTitle}</CommentNovelTitle>
     </WritingContnr>
   );
-}
+});
 
 type FilterType = "프리톡" | "추천" | "댓글";
 interface WritingProps {
