@@ -87,14 +87,14 @@ export const EditProfileBtn = styled.button`
 `;
 
 export const WritingSection = styled.section<{ isNoContent: boolean }>`
-  // in mobile
+  // when there is content in mobile size or there is no content
   display: flex;
   flex-direction: column;
   gap: 10px;
 
   margin-bottom: 7px;
 
-  // if there is no content do not set grid
+  // when there is content in tablet size
   ${({ isNoContent }) =>
     !isNoContent &&
     theme.media.tablet(`

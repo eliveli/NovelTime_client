@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import MainBG from "components/MainBG";
 import { CategoryMark } from "components/CategoryMark";
 import { useEffect, useRef, useState } from "react";
@@ -10,7 +11,7 @@ import {
 } from "store/serverAPIs/novelTime";
 import { ContentsForUserPageWriting } from "store/serverAPIs/types";
 import { TalkOrRecommend, CommentUserCreated } from "../../store/serverAPIs/types";
-import { Writing, Comment, WritingFilter } from "./UserPage.components";
+import { Writing, Comment, WritingFilter, NoContent } from "./UserPage.components";
 import { NextContentsBtn, ShareIconBox, WritingSection } from "./UserPage.styles";
 import contentMark from "./utils/contentMark";
 
@@ -256,16 +257,42 @@ export default function UserPageWriting({ isMyWriting }: { isMyWriting: boolean 
         recommendsUserLikes={recommendsUserLikes}
         handleCurrentContent={handleCurrentContent}
       />
-      <WritingSection>
-        {(writingFilter === "프리톡" &&
-          talksUserCreated?.talks?.map((_) => <Writing key={_.talkId} writingInfo={_} />)) ||
-          talksUserLikes?.talks?.map((_) => <Writing key={_.talkId} writingInfo={_} />)}
+      <WritingSection
+        isNoContent={
+          (writingFilter === "프리톡" && !talksUserCreated && !talksUserLikes) ||
+          (writingFilter === "추천" && !recommendsUserCreated && !recommendsUserLikes) ||
+          (writingFilter === "댓글" && !commentsUserCreated)
+        }
+      >
+        {writingFilter === "프리톡" &&
+          // return talks for my writing or talks for other's writing or no-content-mark
+          (talksUserCreated ? (
+            talksUserCreated.talks.map((_) => <Writing key={_.talkId} writingInfo={_} />)
+          ) : talksUserLikes ? (
+            talksUserLikes.talks.map((_) => <Writing key={_.talkId} writingInfo={_} />)
+          ) : (
+            <NoContent contentsType="T" isCreatedBy={!!talksUserCreated} />
+          ))}
         {writingFilter === "추천" &&
-          recommendsUserCreated?.recommends?.map((_) => (
-            <Writing key={_.recommendId} writingInfo={_} />
+          // return recommends for my writing or recommends for other's writing or no-content-mark
+          (recommendsUserCreated ? (
+            recommendsUserCreated.recommends.map((_) => (
+              <Writing key={_.recommendId} writingInfo={_} />
+            ))
+          ) : recommendsUserLikes ? (
+            recommendsUserLikes.recommends.map((_) => (
+              <Writing key={_.recommendId} writingInfo={_} />
+            ))
+          ) : (
+            <NoContent contentsType="R" isCreatedBy={!!recommendsUserCreated} />
           ))}
         {writingFilter === "댓글" &&
-          commentsUserCreated?.comments?.map((_) => <Comment key={_.commentId} commentInfo={_} />)}
+          // return comments or no-content-mark
+          (commentsUserCreated ? (
+            commentsUserCreated.comments.map((_) => <Comment key={_.commentId} commentInfo={_} />)
+          ) : (
+            <NoContent contentsType="C" isCreatedBy={!!commentsUserCreated} />
+          ))}
       </WritingSection>
       {currentContentRef.current.isNextOrder && (
         <NextContentsBtn
