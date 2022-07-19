@@ -223,7 +223,7 @@ export default function UserPageWriting({ isMyWriting }: { isMyWriting: boolean 
   useEffect(() => {
     if (!othersWritingResult.data) return;
 
-    const writingsFromServer = othersWritingResult.data.writingsUserCreated;
+    const writingsFromServer = othersWritingResult.data.writingsUserLikes;
     const { isNextOrder } = othersWritingResult.data;
 
     // save talks
@@ -310,8 +310,9 @@ export default function UserPageWriting({ isMyWriting }: { isMyWriting: boolean 
         handleCurrentContent={handleCurrentContent}
       />
       <WritingSection>
-        {writingFilter === "프리톡" &&
-          talksUserCreated?.talks?.map((_) => <Writing key={_.talkId} writingInfo={_} />)}
+        {(writingFilter === "프리톡" &&
+          talksUserCreated?.talks?.map((_) => <Writing key={_.talkId} writingInfo={_} />)) ||
+          talksUserLikes?.talks?.map((_) => <Writing key={_.talkId} writingInfo={_} />)}
         {writingFilter === "추천" &&
           recommendsUserCreated?.recommends?.map((_) => (
             <Writing key={_.recommendId} writingInfo={_} />

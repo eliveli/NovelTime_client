@@ -79,7 +79,7 @@ export const novelTimeApi = createApi({
       ParamsForUserPageWriting
     >({
       query: (params) =>
-        `/contents/userPageMyWriting/${params.userName}/${params.contentsType}/${params.order}`,
+        `/contents/userPageOthersWriting/${params.userName}/${params.contentsType}/${params.order}`,
     }),
     checkForUserName: builder.mutation<string, string>({
       query: (newUserName) => ({
