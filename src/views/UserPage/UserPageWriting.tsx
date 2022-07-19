@@ -14,67 +14,6 @@ import { Writing, Comment, WritingFilter } from "./UserPage.components";
 import { NextContentsBtn, ShareIconBox, WritingSection } from "./UserPage.styles";
 import contentMark from "./utils/contentMark";
 
-// - server request -------------important----------------------------
-// - when entering this page at first,
-//   - request with userName, isMyWriting
-//            isMyWriting is true, it will be the my writing
-//                        is false, other's writing
-//   - received two userName : in talk and in recommend data from server
-//          in my writing, get the value of "". in fact no matter what it is except type
-//
-// server request with userName
-const dataFromServerForTest = {
-  talk: [
-    {
-      talkId: "12",
-
-      novelImg:
-        "https://comicthumb-phinf.pstatic.net/20220126_148/pocket_16431735084292970r_JPEG/%C5%A9%B8%AE%BD%BA%C5%BB%BE%C6%B0%A1%BE%BE%B4%C2%B3%B2%C0%DA%B4%D9-%C0%CF%B7%AF%BD%BA%C6%AE%C7%A5%C1%F61.jpg?type=m260", // 시리즈
-
-      talkTitle: "이 소설 강추",
-
-      userName: "나나a",
-      // how to set userName from server : exist or not
-      // 1. exist or not : myWriting -> userName exists, othersWriting -> don't exist
-      createDate: "22.03.03",
-      likeNO: 5,
-      commentNO: 7,
-
-      novelTitle: "헌터와 매드 사이언티스트",
-    },
-  ],
-  recommend: [
-    {
-      recommendId: "34",
-
-      novelImg:
-        "https://comicthumb-phinf.pstatic.net/20220126_148/pocket_16431735084292970r_JPEG/%C5%A9%B8%AE%BD%BA%C5%BB%BE%C6%B0%A1%BE%BE%B4%C2%B3%B2%C0%DA%B4%D9-%C0%CF%B7%AF%BD%BA%C6%AE%C7%A5%C1%F61.jpg?type=m260", // 시리즈
-
-      recommendTitle: "이 소설 강추",
-
-      userName: "나나나",
-      // how to set userName from server
-      // 1. exist or not : myWriting -> userName exists, othersWriting -> don't exist
-      //  2. always exist, but if it is the same in the userName of useParams(), set myWriting,
-      //                       if not othersWriting
-
-      createDate: "22.03.03",
-      likeNO: 5,
-
-      novelTitle: "헌터와 매드 사이언티스트",
-    },
-  ],
-  comment: [
-    {
-      commentId: "abdfdfcdef",
-      commentContent: "코멘트 작성 중",
-      createDate: "22.01.05",
-      talkId: "as",
-      talkTitle: "it is the best novel I've ever read",
-      novelTitle: "헌터와 매드 사이언티스트",
-    },
-  ],
-};
 export type ContentInfo = {
   type: "T" | "R" | "C";
   isNextOrder: boolean;
@@ -139,6 +78,10 @@ export default function UserPageWriting({ isMyWriting }: { isMyWriting: boolean 
 
   // get and save the contents in my writing page
   useEffect(() => {
+    // don't save cached data for other's writing
+    // it may remain because of rtk query trait
+    if (!isMyWriting) return;
+
     if (!myWritingResult.data) return;
 
     const writingsFromServer = myWritingResult.data.writingsUserCreated;
@@ -221,6 +164,10 @@ export default function UserPageWriting({ isMyWriting }: { isMyWriting: boolean 
 
   // get and save the contents in other's writing page
   useEffect(() => {
+    // don't save cached data for my writing
+    // it may remain because of rtk query trait
+    if (isMyWriting) return;
+
     if (!othersWritingResult.data) return;
 
     const writingsFromServer = othersWritingResult.data.writingsUserLikes;
