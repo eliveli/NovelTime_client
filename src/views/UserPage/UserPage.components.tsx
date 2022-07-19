@@ -187,6 +187,7 @@ interface WritingProps {
       order: number;
     }>
   >;
+  isMyWriting?: boolean;
   talksUserCreated?: {
     talks: TalkOrRecommend[];
     isNextOrder: boolean;
@@ -203,6 +204,17 @@ interface WritingProps {
     isNextOrder: boolean;
     currentOrder: number;
   };
+  talksUserLikes?: {
+    talks: TalkOrRecommend[];
+    isNextOrder: boolean;
+    currentOrder: number;
+  };
+
+  recommendsUserLikes?: {
+    recommends: TalkOrRecommend[];
+    isNextOrder: boolean;
+    currentOrder: number;
+  };
   handleCurrentContent?: (currentContent: ContentInfo) => void;
 }
 export function WritingFilter({
@@ -210,9 +222,12 @@ export function WritingFilter({
   writingFilter,
   selectWritingFilter,
   setParamsForRequest,
+  isMyWriting,
   talksUserCreated,
   recommendsUserCreated,
   commentsUserCreated,
+  talksUserLikes,
+  recommendsUserLikes,
   handleCurrentContent,
 }: WritingProps) {
   return (
@@ -225,8 +240,9 @@ export function WritingFilter({
             selectWritingFilter(_);
 
             // it is for UserPageWriting not for UserPageHome //
-            // request content when clicking other filter but the content is empty
-            if (setParamsForRequest) {
+            // - for my writing page
+            // -- request content when clicking other filter but the content is empty
+            if (isMyWriting && setParamsForRequest) {
               if (_ === "프리톡" && !talksUserCreated) {
                 setParamsForRequest((paramsForRequest) => ({
                   ...paramsForRequest,
@@ -245,8 +261,9 @@ export function WritingFilter({
                   contentsType: "C",
                   order: 1,
                 }));
-              } else if (handleCurrentContent) {
-                // set current content when changing writing filter without request
+              }
+              // -- set current content when changing writing filter without request
+              else if (handleCurrentContent) {
                 const getContentTypeOfWritingFilter = (currentFilter: string) =>
                   currentFilter === "프리톡" ? "T" : currentFilter === "추천" ? "R" : "C";
 
@@ -263,6 +280,41 @@ export function WritingFilter({
                     : contentType === "R"
                     ? (recommendsUserCreated?.currentOrder as number)
                     : (commentsUserCreated?.currentOrder as number);
+
+                handleCurrentContent({ type: contentType, isNextOrder, currentOrder });
+              }
+            }
+            // - for other's writing page
+            // -- request content when clicking other filter but the content is empty
+            if (!isMyWriting && setParamsForRequest) {
+              if (_ === "프리톡" && !talksUserLikes) {
+                setParamsForRequest((paramsForRequest) => ({
+                  ...paramsForRequest,
+                  contentsType: "T",
+                  order: 1,
+                }));
+              } else if (_ === "추천" && !recommendsUserLikes) {
+                setParamsForRequest((paramsForRequest) => ({
+                  ...paramsForRequest,
+                  contentsType: "R",
+                  order: 1,
+                }));
+              }
+              // -- set current content when changing writing filter without request
+              else if (handleCurrentContent) {
+                const getContentTypeOfWritingFilter = (currentFilter: string) =>
+                  currentFilter === "프리톡" ? "T" : "R";
+
+                const contentType = getContentTypeOfWritingFilter(_);
+                const isNextOrder =
+                  contentType === "T"
+                    ? (talksUserLikes?.isNextOrder as boolean)
+                    : (recommendsUserLikes?.isNextOrder as boolean);
+
+                const currentOrder =
+                  contentType === "T"
+                    ? (talksUserLikes?.currentOrder as number)
+                    : (recommendsUserLikes?.currentOrder as number);
 
                 handleCurrentContent({ type: contentType, isNextOrder, currentOrder });
               }

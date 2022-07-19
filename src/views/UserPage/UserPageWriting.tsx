@@ -124,6 +124,19 @@ export default function UserPageWriting({ isMyWriting }: { isMyWriting: boolean 
     isNextOrder: boolean;
     currentOrder: number;
   }>();
+
+  // states for saving contents from server in other's writing page
+  const [talksUserLikes, setTalksUserLikes] = useState<{
+    talks: TalkOrRecommend[];
+    isNextOrder: boolean;
+    currentOrder: number;
+  }>();
+  const [recommendsUserLikes, setRecommendsUserLikes] = useState<{
+    recommends: TalkOrRecommend[];
+    isNextOrder: boolean;
+    currentOrder: number;
+  }>();
+
   // get and save the contents in my writing page
   useEffect(() => {
     if (!myWritingResult.data) return;
@@ -206,6 +219,63 @@ export default function UserPageWriting({ isMyWriting }: { isMyWriting: boolean 
     }
   }, [myWritingResult.data]);
 
+  // get and save the contents in other's writing page
+  useEffect(() => {
+    if (!othersWritingResult.data) return;
+
+    const writingsFromServer = othersWritingResult.data.writingsUserCreated;
+    const { isNextOrder } = othersWritingResult.data;
+
+    // save talks
+    if (writingsFromServer && writingsFromServer[0]?.talkId) {
+      const currentOrder = talksUserLikes ? talksUserLikes.currentOrder + 1 : 1;
+      if (!talksUserLikes) {
+        setTalksUserLikes({
+          talks: writingsFromServer,
+          isNextOrder,
+          currentOrder,
+        });
+      } else {
+        setTalksUserLikes({
+          talks: [...talksUserLikes.talks, ...writingsFromServer],
+          isNextOrder,
+          currentOrder,
+        });
+      }
+      // set current content info
+      currentContentRef.current = {
+        type: "T",
+        isNextOrder,
+        currentOrder,
+      };
+    }
+
+    // save recommends
+    if (writingsFromServer && writingsFromServer[0]?.recommendId) {
+      const currentOrder = recommendsUserLikes ? recommendsUserLikes.currentOrder + 1 : 1;
+
+      if (!recommendsUserLikes) {
+        setRecommendsUserLikes({
+          recommends: writingsFromServer,
+          isNextOrder,
+          currentOrder,
+        });
+      } else {
+        setRecommendsUserLikes({
+          recommends: [...recommendsUserLikes.recommends, ...writingsFromServer],
+          isNextOrder,
+          currentOrder,
+        });
+      }
+      // set current content info
+      currentContentRef.current = {
+        type: "R",
+        isNextOrder,
+        currentOrder,
+      };
+    }
+  }, [othersWritingResult.data]);
+
   // get the content page mark
   const contentPageMark = contentMark(
     userName as string,
@@ -231,9 +301,12 @@ export default function UserPageWriting({ isMyWriting }: { isMyWriting: boolean 
         writingFilter={writingFilter}
         selectWritingFilter={selectWritingFilter}
         setParamsForRequest={setParamsForRequest}
+        isMyWriting={isMyWriting}
         talksUserCreated={talksUserCreated}
         recommendsUserCreated={recommendsUserCreated}
         commentsUserCreated={commentsUserCreated}
+        talksUserLikes={talksUserLikes}
+        recommendsUserLikes={recommendsUserLikes}
         handleCurrentContent={handleCurrentContent}
       />
       <WritingSection>
