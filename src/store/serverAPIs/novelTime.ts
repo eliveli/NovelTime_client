@@ -11,6 +11,8 @@ import {
   ContentsForUserPageMyWriting,
   ContentsForUserPageOthersWriting,
   ContentsForUserPageWriting,
+  ContentsForUserPageNovelList,
+  ParamsForUserPageNovelList,
 } from "./types";
 import type { RootState } from "../index";
 
@@ -81,6 +83,20 @@ export const novelTimeApi = createApi({
       query: (params) =>
         `/contents/userPageOthersWriting/${params.userName}/${params.contentsType}/${params.order}`,
     }),
+    getContentsForUserPageMyList: builder.query<
+      ContentsForUserPageNovelList,
+      ParamsForUserPageNovelList
+    >({
+      query: (params) =>
+        `/contents/userPageMyList/${params.userName}/${params.listId}/${params.order}`,
+    }),
+    getContentsForUserPageOthersList: builder.query<
+      ContentsForUserPageNovelList,
+      ParamsForUserPageNovelList
+    >({
+      query: (params) =>
+        `/contents/userPageOthersList/${params.userName}/${params.listId}/${params.order}`,
+    }),
     checkForUserName: builder.mutation<string, string>({
       query: (newUserName) => ({
         url: "/user/checkUserName",
@@ -114,4 +130,6 @@ export const {
   useGetContentsForUserPageHomeByUserNameQuery,
   useGetContentsForUserPageMyWritingQuery,
   useGetContentsForUserPageOthersWritingQuery,
+  useGetContentsForUserPageMyListQuery,
+  useGetContentsForUserPageOthersListQuery,
 } = novelTimeApi;

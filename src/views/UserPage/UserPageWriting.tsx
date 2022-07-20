@@ -39,8 +39,10 @@ export default function UserPageWriting({ isMyWriting }: { isMyWriting: boolean 
   const handleCurrentContent = (currentContent: ContentInfo) => {
     currentContentRef.current = currentContent;
   };
-  // to divide these two results don't destructure at first like : const { data, isLoading, ... }
-  // just get it as variables
+
+  // divide these two results
+  // don't destructure like this : const { data, isLoading, ... }
+  // just get it as variables to avoid getting same name
   const myWritingResult = useGetContentsForUserPageMyWritingQuery(paramsForRequest, {
     skip: !userName && !isMyWriting,
   });

@@ -118,7 +118,7 @@ interface NovelInNovelList {
   novelTitle: string;
   novelAuthor: string;
   novelGenre: string;
-  novelIsEnd: string;
+  novelIsEnd: boolean;
 }
 interface ListUserCreated {
   listId: string;
@@ -131,6 +131,25 @@ interface ListUserLikes {
   userName: string;
   userImg: { src: string; position: string };
   novel: NovelInNovelList[];
+}
+
+interface NovelListsSimpleInfos {
+  listId: string;
+  listTitle: string;
+  userName?: string;
+  userImg?: {
+    src: string;
+    position: string;
+  };
+}
+export interface NovelListSetForMyOrOthersList {
+  listId: string;
+  listTitle: string;
+  isLike: boolean;
+  otherList: NovelListsSimpleInfos[];
+  novel: NovelInNovelList[];
+  userName?: string;
+  userImg?: { src: string; position: string };
 }
 export interface ContentsForUserPageHome {
   talksUserCreated: TalkUserCreated[];
@@ -162,5 +181,14 @@ export interface ContentsForUserPageOthersWriting {
 export interface ParamsForUserPageWriting {
   userName: string;
   contentsType: "T" | "R" | "C";
+  order: number;
+}
+export interface ContentsForUserPageNovelList {
+  novelList: NovelListSetForMyOrOthersList;
+  isNextOrder: boolean;
+}
+export interface ParamsForUserPageNovelList {
+  userName: string;
+  listId: string;
   order: number;
 }
