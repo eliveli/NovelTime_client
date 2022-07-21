@@ -1,10 +1,17 @@
+/* eslint-disable react/jsx-indent */
+/* eslint-disable no-restricted-syntax */
 import Icon from "assets/Icon";
 import { CategoryMark } from "components/CategoryMark";
 import MainBG from "components/MainBG";
 import { NovelRow } from "components/Novel";
-import { useRef, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { useAppSelector } from "store/hooks";
+import {
+  useGetContentsForUserPageMyListQuery,
+  useGetContentsForUserPageOthersListQuery,
+} from "store/serverAPIs/novelTime";
+import { NovelListSetForMyOrOthersList } from "store/serverAPIs/types";
 import { useComponentWidth, useComponentScrollWidth, useComponentHeight } from "utils";
 import {
   ContainerWidth,
@@ -52,126 +59,106 @@ import contentMark from "./utils/contentMark";
 //               after receiving the data, execute toggleLike with isLike
 //               (for more detail, go looking at the code below)
 
-const novelList = {
-  listId: "sddssss",
-  listTitle: "0번째 list where is romance",
-  //
-  // who is the user made this list, not the owner of this user page
-  // above is necessary especially in other's list
-  // only in other's list this info is necessary, not in my list
-  userName: "asda",
-  userImg: {
-    src: "https://cdn.pixabay.com/photo/2017/02/01/09/52/animal-2029245_960_720.png",
-    position: "center",
-  },
-  //
-  // it is necessary in both my list and other's list
-  // but login user is the owner of the user page, this info will be false
-  isLike: true,
-  // otherList is used in two cases, one is when entering this page at first,
-  //                                the other is when the list doesn't exist
-  otherList: [
-    {
-      listId: "ssdfsdfsdfdds",
-      listTitle: "첫번째 list where is romance",
-      userName: "asdaaa",
-      userImg: {
-        src: "https://cdn.pixabay.com/photo/2017/02/01/09/52/animal-2029245_960_720.png",
-        position: "center",
-      },
-    },
-    {
-      listId: "sd00dfdssss",
-      listTitle: "두번째 list where is romance",
-      userName: "asdass",
-      userImg: {
-        src: "https://cdn.pixabay.com/photo/2017/02/01/09/52/animal-2029245_960_720.png",
-        position: "center",
-      },
-    },
-  ],
-  novel: [
-    {
-      novelId: "20220225082010201",
-      novelImg:
-        "//dn-img-page.kakao.com/download/resource?kid=1Opki/hzmU0W8saq/pEkrur7BcK1FgYESJqDyXK", // 카카페
-      novelTitle: "헌터와 매드 사이언티스트",
-      novelAuthor: "델마르",
-      novelGenre: "로판",
-      novelIsEnd: "완결",
-    },
-    {
-      novelId: "20220225082010201",
-      novelImg:
-        "https://comicthumb-phinf.pstatic.net/20220126_148/pocket_16431735084292970r_JPEG/%C5%A9%B8%AE%BD%BA%C5%BB%BE%C6%B0%A1%BE%BE%B4%C2%B3%B2%C0%DA%B4%D9-%C0%CF%B7%AF%BD%BA%C6%AE%C7%A5%C1%F61.jpg?type=m260", // 시리즈
-      novelTitle: "헌터와 매드 사이언티스트",
-      novelAuthor: "델마르",
-      novelGenre: "로판",
-      novelIsEnd: "완결",
-    },
-    {
-      novelId: "20220225082010201",
-      novelImg: "https://img.ridicdn.net/cover/372009713/xxlarge#1", // 리디북스
-      novelTitle: "헌터와 매드 사이언티스트",
-      novelAuthor: "델마르",
-      novelGenre: "로판",
-      novelIsEnd: "완결",
-    },
-    {
-      novelId: "20220225082010201",
-      novelImg:
-        "https://comicthumb-phinf.pstatic.net/20220126_148/pocket_16431735084292970r_JPEG/%C5%A9%B8%AE%BD%BA%C5%BB%BE%C6%B0%A1%BE%BE%B4%C2%B3%B2%C0%DA%B4%D9-%C0%CF%B7%AF%BD%BA%C6%AE%C7%A5%C1%F61.jpg?type=m260", // 시리즈
-      novelTitle: "헌터와 매드 사이언티스트",
-      novelAuthor: "델마르",
-      novelGenre: "로판",
-      novelIsEnd: "완결",
-    },
-    {
-      novelId: "20220225082010201",
-      novelImg: "https://img.ridicdn.net/cover/372009713/xxlarge#1", // 리디북스
-      novelTitle: "헌터와 매드 사이언티스트",
-      novelAuthor: "델마르",
-      novelGenre: "로판",
-      novelIsEnd: "완결",
-    },
-    {
-      novelId: "20220225082010201",
-      novelImg: "https://img.ridicdn.net/cover/372009713/xxlarge#1", // 리디북스
-      novelTitle: "헌터와 매드 사이언티스트",
-      novelAuthor: "델마르",
-      novelGenre: "로판",
-      novelIsEnd: "완결",
-    },
-    {
-      novelId: "20220225082010201",
-      novelImg: "https://img.ridicdn.net/cover/372009713/xxlarge#1", // 리디북스
-      novelTitle: "헌터와 매드 사이언티스트",
-      novelAuthor: "델마르",
-      novelGenre: "로판",
-      novelIsEnd: "완결",
-    },
-  ],
-};
-
 interface ProfileImg {
   src: string;
   position: string;
 }
+interface NovelList {
+  novelList: NovelListSetForMyOrOthersList;
+  isNextOrder: boolean;
+  currentOrder: number;
+}
 
 export default function UserPageNovelList({ isMyList }: { isMyList: boolean }) {
+  const navigate = useNavigate();
+
+  const { userName, listId } = useParams();
   const loginUserInfo = useAppSelector((state) => state.user.loginUserInfo);
 
-  const { userName } = useParams();
+  const [paramsForRequest, setParamsForRequest] = useState({
+    userName: userName as string,
+    listId: listId as string,
+    order: 1,
+  });
 
+  const currentListInfoRef = useRef({
+    isNextOrder: false,
+    currentOrder: 1,
+  });
+
+  // divide these two results
+  // don't destructure like this : const { data, isLoading, ... }
+  // just get it as variables to avoid getting same name
+  const myListResult = useGetContentsForUserPageMyListQuery(paramsForRequest, {
+    skip: !userName && !isMyList,
+  });
+  const othersListResult = useGetContentsForUserPageOthersListQuery(paramsForRequest, {
+    skip: !userName && isMyList,
+  });
+
+  // state for saving novel lists from server
+  // {
+  //   [ listId1 ]: { novelList : ... , isNextOrder : ... , currentOrder : ... },
+  //   [ listId2 ]: { novelList : ... , isNextOrder : ... , currentOrder : ... }
+  // }
+  // in my novel list page
+  const [listsUserCreated, setListsUserCreated] = useState<{ [x: string]: NovelList }>();
+  // in other's novel list page
+  const [listsUserLikes, setListsUserLikes] = useState<{ [x: string]: NovelList }>();
+
+  // get and save the novel lists in my novel list page
+  useEffect(() => {
+    // don't save cached data for other's list
+    // it may remain because of rtk query trait
+    if (!isMyList) return;
+
+    if (!myListResult.data) return;
+    if (!listId) return;
+
+    const { novelList, isNextOrder } = myListResult.data;
+
+    // save novel list //
+    if (!listsUserCreated || (listsUserCreated && !listsUserCreated[listId])) {
+      // saving at first or adding new novel list
+      const currentOrder = 1;
+
+      setListsUserCreated({
+        ...listsUserCreated,
+        [listId]: {
+          novelList,
+          isNextOrder,
+          currentOrder,
+        },
+      });
+      // set current novel list info
+      currentListInfoRef.current = {
+        isNextOrder,
+        currentOrder,
+      };
+    } else if (listsUserCreated && listsUserCreated[listId]) {
+      // adding novels in the existing list which has the same listId
+      const currentOrder = listsUserCreated[listId].currentOrder + 1;
+
+      setListsUserCreated({
+        ...listsUserCreated,
+        [listId]: {
+          novelList: {
+            ...listsUserCreated[listId].novelList,
+            novel: [...listsUserCreated[listId].novelList.novel, ...novelList.novel],
+          },
+          isNextOrder,
+          currentOrder,
+        },
+      });
+      // set current novel list info
+      currentListInfoRef.current = {
+        isNextOrder,
+        currentOrder,
+      };
+    }
+  }, [myListResult.data]);
   // get the content page mark
   const contentPageMark = contentMark(userName as string, loginUserInfo.userName, isMyList, false);
-
-  // set list title
-  const [currentList, selectList] = useState({
-    listId: novelList.listId,
-    listTitle: novelList.listTitle,
-    userName: novelList.userName,
-  });
 
   // maintain previous title list : do not rerender every time getting novel list from server
   // when a user click a title that doesn't exist on server,
@@ -181,18 +168,6 @@ export default function UserPageNovelList({ isMyList }: { isMyList: boolean }) {
   //
   //        note : I get the title list always when clicking a title,
   //               but I don't use it except for case above.
-
-  // initial title list getting from server at first
-  const novelTitleList = useRef([
-    {
-      listId: novelList.listId,
-      listTitle: novelList.listTitle,
-      userName: novelList.userName,
-      userImg: novelList.userImg,
-    },
-    ...novelList.otherList,
-  ]);
-
   // - list more button : show or not all the list title
   const [isListMore, setListMore] = useState(false);
 
@@ -214,116 +189,133 @@ export default function UserPageNovelList({ isMyList }: { isMyList: boolean }) {
 
   // - to scroll to first title that is clicked
   const limitContainerRef = useRef<HTMLDivElement>(null);
-
-  // - heart
-  const [isLike, toggleLike] = useState(novelList.isLike);
-  return (
-    <MainBG>
-      <CategoryMark categoryText={contentPageMark}>
-        <ShareIconBox>
-          <Icon.SharePC />
-        </ShareIconBox>
-      </CategoryMark>
-      {/* more button to show or not all the title list */}
-      {/* when isListMore is true, always : limitContnrWidth === titleListWidthScrollable
+  if (!listId) {
+    alert("리스트가 존재하지 않습니다.");
+    navigate(-1);
+  } else {
+    return (
+      <MainBG>
+        <CategoryMark categoryText={contentPageMark}>
+          <ShareIconBox>
+            <Icon.SharePC />
+          </ShareIconBox>
+        </CategoryMark>
+        {/* more button to show or not all the title list */}
+        {/* when isListMore is true, always : limitContnrWidth === titleListWidthScrollable
           so the following should be divided two, not put together in one expression.
       */}
-      <ContainerWidth ref={containerWidthRef} />
-      {isListMore && titleListHeight > 32 && (
-        <MoreBtnParent>
-          <MoreBtnBoxBG isListMore={isListMore}>
-            <MoreBtnBox
-              size={28}
-              onClick={() => {
-                setListMore(!isListMore);
-              }}
-            >
-              <Icon.SmallUp />
-            </MoreBtnBox>
-          </MoreBtnBoxBG>
-        </MoreBtnParent>
-      )}
-      {!isListMore && limitContnrWidth < titleListWidthScrollable && (
-        <MoreBtnParent>
-          <MoreBtnBoxBG isListMore={isListMore}>
-            <MoreBtnBox
-              size={28}
-              onClick={() => {
-                setListMore(!isListMore);
-              }}
-            >
-              <Icon.SmallDown />
-            </MoreBtnBox>
-          </MoreBtnBoxBG>
-        </MoreBtnParent>
-      )}
-      {/* title list container */}
-      <ListTitleLimitHeightContnr
-        ref={limitContainerRef}
-        limitContnrWidth={limitContnrWidth}
-        isListMore={isListMore}
-      >
-        <ListTitleContnr
+        <ContainerWidth ref={containerWidthRef} />
+        {isListMore && titleListHeight > 32 && (
+          <MoreBtnParent>
+            <MoreBtnBoxBG isListMore={isListMore}>
+              <MoreBtnBox
+                size={28}
+                onClick={() => {
+                  setListMore(!isListMore);
+                }}
+              >
+                <Icon.SmallUp />
+              </MoreBtnBox>
+            </MoreBtnBoxBG>
+          </MoreBtnParent>
+        )}
+        {!isListMore && limitContnrWidth < titleListWidthScrollable && (
+          <MoreBtnParent>
+            <MoreBtnBoxBG isListMore={isListMore}>
+              <MoreBtnBox
+                size={28}
+                onClick={() => {
+                  setListMore(!isListMore);
+                }}
+              >
+                <Icon.SmallDown />
+              </MoreBtnBox>
+            </MoreBtnBoxBG>
+          </MoreBtnParent>
+        )}
+        {/* title list container */}
+        <ListTitleLimitHeightContnr
+          ref={limitContainerRef}
           limitContnrWidth={limitContnrWidth}
           isListMore={isListMore}
-          ref={titleListRef}
         >
-          {userName !== loginUserInfo.userName && (
-            <HearIconBox
-              isLike={isLike}
-              size={28}
-              onClick={() => {
-                // server request with loginUserName, listId
-                // after receiving the data, execute toggleLike with isLike
-                toggleLike(!isLike);
-              }}
-            >
-              <Icon.BigFillHeart />
-            </HearIconBox>
-          )}
-          {novelTitleList.current.map((_) => (
-            <ListTitle
-              key={_.listId}
-              listId={_.listId}
-              selectedListId={currentList.listId}
-              onClick={() => {
-                // server request with list id //
-                //
-                // about like :
-                // this data will be the new data from server
-                // later modify data in "toggleLike( this!! )" below
-                //              or make a new function execute when clicking
-                toggleLike(novelList.isLike);
-                //
-                selectList(_);
-                // if the list of title doesn't exist on server,
-                // put this list's info and "otherList" data in novelTitleList.current
-                // and execute "selectList" with first element of novelTitleList.current
+          <ListTitleContnr
+            limitContnrWidth={limitContnrWidth}
+            isListMore={isListMore}
+            ref={titleListRef}
+          >
+            {userName !== loginUserInfo.userName && (
+              <HearIconBox
+                isLike={listsUserCreated ? listsUserCreated[listId].novelList.isLike : false}
+                size={28}
+                onClick={() => {
+                  // to toggle like-info
+                  // server request with loginUserName, listId
+                }}
+              >
+                <Icon.BigFillHeart />
+              </HearIconBox>
+            )}
+            {listsUserCreated && (
+                // selected list
+                <ListTitle key={listId} listId={listId} selectedListId={listId}>
+                  {isMyList ? (
+                    listsUserCreated[listId].novelList.listTitle
+                  ) : (
+                    <OthersTitleContnr>
+                      <UserImg
+                        userImg={listsUserCreated[listId].novelList.userImg as ProfileImg}
+                        isTitle
+                      />
+                      {listsUserCreated[listId].novelList.userName}
+                      <ListTitleNormalStyle>의 리스트 : </ListTitleNormalStyle>
+                      &nbsp;
+                      {listsUserCreated[listId].novelList.listTitle}
+                    </OthersTitleContnr>
+                  )}
+                </ListTitle>
+              ) &&
+              // otherListInfo
+              listsUserCreated[listId].novelList.otherList.map((_) => (
+                <ListTitle
+                  key={_.listId}
+                  listId={_.listId}
+                  selectedListId={listId}
+                  onClick={() => {
+                    // server request with list id //
 
-                limitContainerRef.current?.scroll(0, 0);
-                // scroll to (0,0) to show the selected title arranged first in the title container
-              }}
-            >
-              {isMyList ? (
-                _.listTitle
-              ) : (
-                <OthersTitleContnr>
-                  <UserImg userImg={_.userImg as ProfileImg} isTitle />
-                  {_.userName} <ListTitleNormalStyle>의 리스트 : </ListTitleNormalStyle>
-                  &nbsp;
-                  {_.listTitle}
-                </OthersTitleContnr>
-              )}
-            </ListTitle>
-          ))}
-        </ListTitleContnr>
-      </ListTitleLimitHeightContnr>
+                    // selectList(_);
+                    // if the list of title doesn't exist on server,
+                    // put this list's info and "otherList" data in novelTitleList.current
+                    // and execute "selectList" with first element of novelTitleList.current
 
-      <NovelListContnr>
-        {novelList.novel.map((_) => (
-          <NovelRow key={_.novelId} novel={_} isWidth100 isNotSubInfo />
-        ))}
-      </NovelListContnr>
-    </MainBG>
-  );
+                    limitContainerRef.current?.scroll(0, 0);
+                    // scroll to (0,0) to show the selected title arranged first in the title container
+                  }}
+                >
+                  {isMyList ? (
+                    _.listTitle
+                  ) : (
+                    <OthersTitleContnr>
+                      <UserImg userImg={_.userImg as ProfileImg} isTitle />
+                      {_.userName}
+                      <ListTitleNormalStyle>의 리스트 : </ListTitleNormalStyle>
+                      &nbsp;
+                      {_.listTitle}
+                    </OthersTitleContnr>
+                  )}
+                </ListTitle>
+              ))}
+          </ListTitleContnr>
+        </ListTitleLimitHeightContnr>
+
+        <NovelListContnr>
+          {listsUserCreated &&
+            listsUserCreated[listId].novelList.novel.map((_) => (
+              <NovelRow key={_.novelId} novel={_} isWidth100 isNotSubInfo />
+            ))}
+        </NovelListContnr>
+      </MainBG>
+    );
+  }
 }
