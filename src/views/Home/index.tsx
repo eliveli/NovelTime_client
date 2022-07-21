@@ -208,7 +208,7 @@ const dataFromServer = {
       novelTitle: "헌터와 매드 사이언티스트",
       novelAuthor: "델마르",
       novelGenre: "로판",
-      novelIsEnd: "완결",
+      novelIsEnd: true,
     },
     {
       novelId: "20220225082010201",
@@ -219,7 +219,7 @@ const dataFromServer = {
       novelTitle: "헌터와 매드 사이언티스트",
       novelAuthor: "델마르",
       novelGenre: "로판",
-      novelIsEnd: "완결",
+      novelIsEnd: true,
     },
     {
       novelId: "20220225082010201",
@@ -230,7 +230,7 @@ const dataFromServer = {
       novelTitle: "헌터와 매드 사이언티스트",
       novelAuthor: "델마르",
       novelGenre: "로판",
-      novelIsEnd: "완결",
+      novelIsEnd: true,
     },
     {
       novelId: "20220225082010201",
@@ -241,7 +241,7 @@ const dataFromServer = {
       novelTitle: "헌터와 매드 사이언티스트",
       novelAuthor: "델마르",
       novelGenre: "로판",
-      novelIsEnd: "완결",
+      novelIsEnd: true,
     },
   ],
 
@@ -259,7 +259,7 @@ const dataFromServer = {
           novelTitle: "헌터와 매드 사이언티스트",
           novelAuthor: "델마르",
           novelGenre: "로판",
-          novelIsEnd: "완결",
+          novelIsEnd: true,
         },
         {
           novelId: "20220225082010201",
@@ -268,7 +268,7 @@ const dataFromServer = {
           novelTitle: "헌터와 매드 사이언티스트",
           novelAuthor: "델마르",
           novelGenre: "로판",
-          novelIsEnd: "완결",
+          novelIsEnd: true,
         },
         {
           novelId: "20220225082010201",
@@ -276,7 +276,7 @@ const dataFromServer = {
           novelTitle: "헌터와 매드 사이언티스트",
           novelAuthor: "델마르",
           novelGenre: "로판",
-          novelIsEnd: "완결",
+          novelIsEnd: true,
         },
         {
           novelId: "20220225082010201",
@@ -284,7 +284,7 @@ const dataFromServer = {
           novelTitle: "헌터와 매드 사이언티스트",
           novelAuthor: "델마르",
           novelGenre: "로판",
-          novelIsEnd: "완결",
+          novelIsEnd: true,
         },
         {
           novelId: "20220225082010201",
@@ -292,7 +292,7 @@ const dataFromServer = {
           novelTitle: "헌터와 매드 사이언티스트",
           novelAuthor: "델마르",
           novelGenre: "로판",
-          novelIsEnd: "완결",
+          novelIsEnd: true,
         },
       ],
     },
@@ -308,7 +308,7 @@ const dataFromServer = {
           novelTitle: "헌터와 매드 사이언티스트",
           novelAuthor: "델마르",
           novelGenre: "로판",
-          novelIsEnd: "완결",
+          novelIsEnd: true,
         },
         {
           novelId: "20220225082010201",
@@ -317,7 +317,7 @@ const dataFromServer = {
           novelTitle: "헌터와 매드 사이언티스트",
           novelAuthor: "델마르",
           novelGenre: "로판",
-          novelIsEnd: "완결",
+          novelIsEnd: true,
         },
         {
           novelId: "20220225082010201",
@@ -325,7 +325,7 @@ const dataFromServer = {
           novelTitle: "헌터와 매드 사이언티스트",
           novelAuthor: "델마르",
           novelGenre: "로판",
-          novelIsEnd: "완결",
+          novelIsEnd: true,
         },
         {
           novelId: "20220225082010201",
@@ -333,7 +333,7 @@ const dataFromServer = {
           novelTitle: "헌터와 매드 사이언티스트",
           novelAuthor: "델마르",
           novelGenre: "로판",
-          novelIsEnd: "완결",
+          novelIsEnd: true,
         },
         {
           novelId: "20220225082010201",
@@ -341,7 +341,7 @@ const dataFromServer = {
           novelTitle: "헌터와 매드 사이언티스트",
           novelAuthor: "델마르",
           novelGenre: "로판",
-          novelIsEnd: "완결",
+          novelIsEnd: true,
         },
       ],
     },
@@ -393,7 +393,7 @@ const platformNovelList = [
     novelTitle: "카카페헌터와 매드 사이언티스트",
     novelAuthor: "델마르",
     novelGenre: "로판",
-    novelIsEnd: "완결",
+    novelIsEnd: true,
   },
   {
     novelId: "20220225082010201",
@@ -402,7 +402,7 @@ const platformNovelList = [
     novelTitle: "헌터와 매드 사이언티스트",
     novelAuthor: "델마르",
     novelGenre: "로판",
-    novelIsEnd: "완결",
+    novelIsEnd: true,
   },
   {
     novelId: "20220225082010201",
@@ -410,7 +410,7 @@ const platformNovelList = [
     novelTitle: "헌터와 매드 사이언티스트",
     novelAuthor: "델마르",
     novelGenre: "로판",
-    novelIsEnd: "완결",
+    novelIsEnd: true,
   },
   {
     novelId: "20220225082010201",
@@ -418,7 +418,7 @@ const platformNovelList = [
     novelTitle: "헌터와 매드 사이언티스트",
     novelAuthor: "델마르",
     novelGenre: "로판",
-    novelIsEnd: "완결",
+    novelIsEnd: true,
   },
   {
     novelId: "20220225082010201",
@@ -426,7 +426,7 @@ const platformNovelList = [
     novelTitle: "헌터와 매드 사이언티스트",
     novelAuthor: "델마르",
     novelGenre: "로판",
-    novelIsEnd: "완결",
+    novelIsEnd: true,
   },
 ];
 

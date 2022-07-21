@@ -20,7 +20,7 @@ type MyComponentProps = React.PropsWithChildren<{
     novelTitle: string;
     novelAuthor: string;
     novelGenre: string;
-    novelIsEnd: string;
+    novelIsEnd: boolean;
   };
   isWidth100?: true;
   isNotSubInfo?: true;
@@ -35,7 +35,7 @@ export default function NovelRow({ novel, isWidth100, isNotSubInfo }: MyComponen
     novelTitle = "제목",
     novelAuthor = "작가",
     novelGenre = "장르",
-    novelIsEnd = "완결여부",
+    novelIsEnd = false,
   } = novel;
   const theme = {};
 
@@ -52,7 +52,7 @@ export default function NovelRow({ novel, isWidth100, isNotSubInfo }: MyComponen
           {!isNotSubInfo && (
             <NovelSubInfoBox>
               <NovelInfoLineHeight>{novelAuthor}</NovelInfoLineHeight>
-              <NovelInfo>{`${novelGenre} | ${novelIsEnd}`}</NovelInfo>
+              <NovelInfo>{`${novelGenre} | ${novelIsEnd ? "완결" : "미완"}`}</NovelInfo>
             </NovelSubInfoBox>
           )}
         </NovelInfoBox>

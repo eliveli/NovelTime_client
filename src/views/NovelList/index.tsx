@@ -20,7 +20,7 @@ export default function NovelList() {
         novelTitle: "헌터와 매드 사이언티스트",
         novelAuthor: "델마르",
         novelGenre: "로판",
-        novelIsEnd: "완결",
+        novelIsEnd: true,
       },
       {
         novelId: "20220225082010201",
@@ -31,7 +31,7 @@ export default function NovelList() {
         novelTitle: "헌터와 매드 사이언티스트",
         novelAuthor: "델마르",
         novelGenre: "로판",
-        novelIsEnd: "완결",
+        novelIsEnd: true,
       },
       {
         novelId: "20220225082010201",
@@ -42,7 +42,7 @@ export default function NovelList() {
         novelTitle: "헌터와 매드 사이언티스트",
         novelAuthor: "델마르",
         novelGenre: "로판",
-        novelIsEnd: "완결",
+        novelIsEnd: true,
       },
       {
         novelId: "20220225082010201",
@@ -53,7 +53,7 @@ export default function NovelList() {
         novelTitle: "헌터와 매드 사이언티스트",
         novelAuthor: "델마르",
         novelGenre: "로판",
-        novelIsEnd: "완결",
+        novelIsEnd: true,
       },
     ],
     detailNovelInfo: [

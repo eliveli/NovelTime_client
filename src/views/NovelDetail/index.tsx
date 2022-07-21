@@ -32,7 +32,7 @@ export default function NovelDetail() {
     novelTitle: "헌터와 매드 사이언티스트",
     novelAuthor: "델마르",
     novelGenre: "로판",
-    novelIsEnd: "완결",
+    novelIsEnd: true,
     novelAge: "전체연령가",
     novelDesc: `[에이번데일 백작의 저택]
 
@@ -76,7 +76,7 @@ export default function NovelDetail() {
     novelTitle: "헌터와 매드 사이언티스트",
     novelAuthor: "델마르",
     novelGenre: "로판",
-    novelIsEnd: "완결",
+    novelIsEnd: true,
   };
 
   const anotherNovels = [

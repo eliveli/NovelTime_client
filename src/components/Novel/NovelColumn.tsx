@@ -22,7 +22,7 @@ type MyComponentProps = React.PropsWithChildren<{
     novelTitle: string;
     novelAuthor: string;
     novelGenre: string;
-    novelIsEnd: string;
+    novelIsEnd: boolean;
   };
 }>;
 
@@ -36,7 +36,7 @@ export default function NovelColumn({ novel }: MyComponentProps) {
     novelTitle = "제목",
     novelAuthor = "작가",
     novelGenre = "장르",
-    novelIsEnd = "완결여부",
+    novelIsEnd,
   } = novel;
   const theme = {};
   const infoRef = useRef<HTMLDivElement>(null);
@@ -64,7 +64,7 @@ export default function NovelColumn({ novel }: MyComponentProps) {
             <NovelTitle infoWidth={infoWidth}>{novelTitle}</NovelTitle>
             <NovelSubInfoBox>
               <NovelInfoLineHeight>{novelAuthor}</NovelInfoLineHeight>
-              <NovelInfo>{`${novelGenre} | ${novelIsEnd}`}</NovelInfo>
+              <NovelInfo>{`${novelGenre} | ${novelIsEnd ? "완결" : "미완"}`}</NovelInfo>
             </NovelSubInfoBox>
           </NovelInfoBox>
         </NovelLink>
@@ -83,7 +83,7 @@ export default function NovelColumn({ novel }: MyComponentProps) {
           <NovelTitle infoWidth={infoWidth}>{novelTitle}</NovelTitle>
           <NovelSubInfoBox>
             <NovelInfoLineHeight>{novelAuthor}</NovelInfoLineHeight>
-            <NovelInfo>{`${novelGenre} | ${novelIsEnd}`}</NovelInfo>
+            <NovelInfo>{`${novelGenre} | ${novelIsEnd ? "완결" : "미완"}`}</NovelInfo>
           </NovelSubInfoBox>
         </NovelInfoBox>
       </NovelLink>

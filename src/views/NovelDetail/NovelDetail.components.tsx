@@ -51,7 +51,7 @@ type NovelProps = React.PropsWithChildren<{
     novelTitle: string;
     novelAuthor: string;
     novelGenre: string;
-    novelIsEnd: string;
+    novelIsEnd: boolean;
     novelAge: string;
     novelDesc: string;
     novelPlatform: string;
@@ -78,7 +78,7 @@ export default function NovelDetailInfo({ novel }: NovelProps) {
     novelTitle = "제목",
     novelAuthor = "작가",
     novelGenre = "장르",
-    novelIsEnd = "완결여부",
+    novelIsEnd,
     novelAge = "이용가능연령",
     novelDesc = `작품소개`,
     novelPlatform,
@@ -140,9 +140,13 @@ export default function NovelDetailInfo({ novel }: NovelProps) {
               <NovelSubInfoBox>
                 <NovelInfoAuthorBox>
                   <NovelInfoAuthor>{novelAuthor}</NovelInfoAuthor>
-                  <NovelInfoTablet>{`${novelGenre} | ${novelIsEnd} | ${novelAge}`}</NovelInfoTablet>
+                  <NovelInfoTablet>
+                    {`${novelGenre} | ${novelIsEnd ? "완결" : "미완"} | ${novelAge}`}
+                  </NovelInfoTablet>
 
-                  <NovelInfoMobile>{`${novelGenre} | ${novelIsEnd}`}</NovelInfoMobile>
+                  <NovelInfoMobile>
+                    {`${novelGenre} | ${novelIsEnd ? "완결" : "미완"}`}
+                  </NovelInfoMobile>
                   <NovelInfoMobileAge>{novelAge}</NovelInfoMobileAge>
                 </NovelInfoAuthorBox>
                 <InfoIconBox>

@@ -39,7 +39,7 @@ export default function SearchPage() {
     novelTitle: "헌터와 매드 사이언티스트",
     novelAuthor: "델마르",
     novelGenre: "로판",
-    novelIsEnd: "완결",
+    novelIsEnd: true,
   };
   const novelInfo2 = {
     novelId: "2022000000201",
@@ -50,7 +50,7 @@ export default function SearchPage() {
     novelTitle: "헌터와 매드 사이언티스트",
     novelAuthor: "델마르",
     novelGenre: "로판",
-    novelIsEnd: "완결",
+    novelIsEnd: true,
   };
   const novels = [novelInfo, novelInfo2];
 
