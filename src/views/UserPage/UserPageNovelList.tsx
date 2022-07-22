@@ -26,6 +26,7 @@ import {
   ShareIconBox,
   UserImg,
   OthersTitleContnr,
+  NextContentsBtn,
 } from "./UserPage.styles";
 import contentMark from "./utils/contentMark";
 // - server request --------------------------------important---------------------------------------
@@ -81,7 +82,7 @@ export default function UserPageNovelList({ isMyList }: { isMyList: boolean }) {
   });
 
   const currentListInfoRef = useRef({
-    listId: "",
+    listId: listId as string,
     isNextOrder: false,
     currentOrder: 1,
   });
@@ -147,11 +148,13 @@ export default function UserPageNovelList({ isMyList }: { isMyList: boolean }) {
       // adding novels in the existing list as clicking show-more button
       const currentOrder = listsUserCreated[newListId].currentOrder + 1;
 
+      // in this case variable "new list id" is the same as previous one.
+
       setListsUserCreated({
         ...listsUserCreated,
         [newListId]: {
           novelList: {
-            ...listsUserCreated[newListId].novelList,
+            ...novelList,
             novel: [...listsUserCreated[newListId].novelList.novel, ...novelList.novel],
           },
           isNextOrder,
@@ -160,7 +163,7 @@ export default function UserPageNovelList({ isMyList }: { isMyList: boolean }) {
       });
       // set current novel list info
       currentListInfoRef.current = {
-        listId: newListId,
+        listId,
         isNextOrder,
         currentOrder,
       };
@@ -349,6 +352,21 @@ export default function UserPageNovelList({ isMyList }: { isMyList: boolean }) {
             <NovelRow key={_.novelId} novel={_} isWidth100 isNotSubInfo />
           ))}
       </NovelListContnr>
+      {currentListInfoRef.current.isNextOrder && (
+        <NextContentsBtn
+          onClick={() => {
+            setParamsForRequest({
+              ...paramsForRequest,
+              order: currentListInfoRef.current.currentOrder + 1,
+            });
+          }}
+        >
+          <Icon.IconBox noPointer>
+            <Icon.SmallDown />
+          </Icon.IconBox>
+          더보기
+        </NextContentsBtn>
+      )}
     </MainBG>
   );
 }
