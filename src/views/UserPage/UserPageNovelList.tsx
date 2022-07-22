@@ -1,10 +1,9 @@
 /* eslint-disable react/jsx-indent */
-/* eslint-disable no-restricted-syntax */
 import Icon from "assets/Icon";
 import { CategoryMark } from "components/CategoryMark";
 import MainBG from "components/MainBG";
 import { NovelRow } from "components/Novel";
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAppSelector } from "store/hooks";
 import {
@@ -136,7 +135,7 @@ export default function UserPageNovelList({ isMyList }: { isMyList: boolean }) {
         currentOrder,
       };
     } else if (listsUserCreated && listsUserCreated[listId]) {
-      // adding novels in the existing list which has the same listId
+      // adding novels in the existing list as clicking show-more button
       const currentOrder = listsUserCreated[listId].currentOrder + 1;
 
       setListsUserCreated({
@@ -189,133 +188,137 @@ export default function UserPageNovelList({ isMyList }: { isMyList: boolean }) {
 
   // - to scroll to first title that is clicked
   const limitContainerRef = useRef<HTMLDivElement>(null);
+
   if (!listId) {
     alert("리스트가 존재하지 않습니다.");
     navigate(-1);
-  } else {
-    return (
-      <MainBG>
-        <CategoryMark categoryText={contentPageMark}>
-          <ShareIconBox>
-            <Icon.SharePC />
-          </ShareIconBox>
-        </CategoryMark>
-        {/* more button to show or not all the title list */}
-        {/* when isListMore is true, always : limitContnrWidth === titleListWidthScrollable
+    return <></>;
+  }
+
+  return (
+    <MainBG>
+      <CategoryMark categoryText={contentPageMark}>
+        <ShareIconBox>
+          <Icon.SharePC />
+        </ShareIconBox>
+      </CategoryMark>
+      {/* more button to show or not all the title list */}
+      {/* when isListMore is true, always : limitContnrWidth === titleListWidthScrollable
           so the following should be divided two, not put together in one expression.
       */}
-        <ContainerWidth ref={containerWidthRef} />
-        {isListMore && titleListHeight > 32 && (
-          <MoreBtnParent>
-            <MoreBtnBoxBG isListMore={isListMore}>
-              <MoreBtnBox
-                size={28}
-                onClick={() => {
-                  setListMore(!isListMore);
-                }}
-              >
-                <Icon.SmallUp />
-              </MoreBtnBox>
-            </MoreBtnBoxBG>
-          </MoreBtnParent>
-        )}
-        {!isListMore && limitContnrWidth < titleListWidthScrollable && (
-          <MoreBtnParent>
-            <MoreBtnBoxBG isListMore={isListMore}>
-              <MoreBtnBox
-                size={28}
-                onClick={() => {
-                  setListMore(!isListMore);
-                }}
-              >
-                <Icon.SmallDown />
-              </MoreBtnBox>
-            </MoreBtnBoxBG>
-          </MoreBtnParent>
-        )}
-        {/* title list container */}
-        <ListTitleLimitHeightContnr
-          ref={limitContainerRef}
+      <ContainerWidth ref={containerWidthRef} />
+      {isListMore && titleListHeight > 32 && (
+        <MoreBtnParent>
+          <MoreBtnBoxBG isListMore={isListMore}>
+            <MoreBtnBox
+              size={28}
+              onClick={() => {
+                setListMore(!isListMore);
+              }}
+            >
+              <Icon.SmallUp />
+            </MoreBtnBox>
+          </MoreBtnBoxBG>
+        </MoreBtnParent>
+      )}
+      {!isListMore && limitContnrWidth < titleListWidthScrollable && (
+        <MoreBtnParent>
+          <MoreBtnBoxBG isListMore={isListMore}>
+            <MoreBtnBox
+              size={28}
+              onClick={() => {
+                setListMore(!isListMore);
+              }}
+            >
+              <Icon.SmallDown />
+            </MoreBtnBox>
+          </MoreBtnBoxBG>
+        </MoreBtnParent>
+      )}
+      {/* title list container */}
+      <ListTitleLimitHeightContnr
+        ref={limitContainerRef}
+        limitContnrWidth={limitContnrWidth}
+        isListMore={isListMore}
+      >
+        <ListTitleContnr
           limitContnrWidth={limitContnrWidth}
           isListMore={isListMore}
+          ref={titleListRef}
         >
-          <ListTitleContnr
-            limitContnrWidth={limitContnrWidth}
-            isListMore={isListMore}
-            ref={titleListRef}
-          >
-            {userName !== loginUserInfo.userName && (
-              <HearIconBox
-                isLike={listsUserCreated ? listsUserCreated[listId].novelList.isLike : false}
-                size={28}
+          {userName !== loginUserInfo.userName && (
+            <HearIconBox
+              isLike={listsUserCreated ? listsUserCreated[listId].novelList.isLike : false}
+              size={28}
+              onClick={() => {
+                // to toggle like-info
+                // server request with loginUserName, listId
+              }}
+            >
+              <Icon.BigFillHeart />
+            </HearIconBox>
+          )}
+
+          {/* selected list title */}
+          {listsUserCreated && listsUserCreated[listId] && (
+            <ListTitle key={listId} listId={listId} selectedListId={listId}>
+              {isMyList ? (
+                listsUserCreated[listId].novelList.listTitle
+              ) : (
+                <OthersTitleContnr>
+                  <UserImg
+                    userImg={listsUserCreated[listId].novelList.userImg as ProfileImg}
+                    isTitle
+                  />
+                  {listsUserCreated[listId].novelList.userName}
+                  <ListTitleNormalStyle>의 리스트 : </ListTitleNormalStyle>
+                  &nbsp;
+                  {listsUserCreated[listId].novelList.listTitle}
+                </OthersTitleContnr>
+              )}
+            </ListTitle>
+          )}
+          {/* otherListInfo title list */}
+          {listsUserCreated &&
+            listsUserCreated[listId].novelList.otherList.map((_) => (
+              <ListTitle
+                key={_.listId}
+                listId={_.listId}
+                selectedListId={listId}
                 onClick={() => {
-                  // to toggle like-info
-                  // server request with loginUserName, listId
+                  // server request with list id //
+
+                  // selectList(_);
+                  // if the list of title doesn't exist on server,
+                  // put this list's info and "otherList" data in novelTitleList.current
+                  // and execute "selectList" with first element of novelTitleList.current
+
+                  limitContainerRef.current?.scroll(0, 0);
+                  // scroll to (0,0) to show the selected title arranged first in the title container
                 }}
               >
-                <Icon.BigFillHeart />
-              </HearIconBox>
-            )}
-            {listsUserCreated && (
-                // selected list
-                <ListTitle key={listId} listId={listId} selectedListId={listId}>
-                  {isMyList ? (
-                    listsUserCreated[listId].novelList.listTitle
-                  ) : (
-                    <OthersTitleContnr>
-                      <UserImg
-                        userImg={listsUserCreated[listId].novelList.userImg as ProfileImg}
-                        isTitle
-                      />
-                      {listsUserCreated[listId].novelList.userName}
-                      <ListTitleNormalStyle>의 리스트 : </ListTitleNormalStyle>
-                      &nbsp;
-                      {listsUserCreated[listId].novelList.listTitle}
-                    </OthersTitleContnr>
-                  )}
-                </ListTitle>
-              ) &&
-              // otherListInfo
-              listsUserCreated[listId].novelList.otherList.map((_) => (
-                <ListTitle
-                  key={_.listId}
-                  listId={_.listId}
-                  selectedListId={listId}
-                  onClick={() => {
-                    // server request with list id //
-
-                    // selectList(_);
-                    // if the list of title doesn't exist on server,
-                    // put this list's info and "otherList" data in novelTitleList.current
-                    // and execute "selectList" with first element of novelTitleList.current
-
-                    limitContainerRef.current?.scroll(0, 0);
-                    // scroll to (0,0) to show the selected title arranged first in the title container
-                  }}
-                >
-                  {isMyList ? (
-                    _.listTitle
-                  ) : (
-                    <OthersTitleContnr>
-                      <UserImg userImg={_.userImg as ProfileImg} isTitle />
-                      {_.userName}
-                      <ListTitleNormalStyle>의 리스트 : </ListTitleNormalStyle>
-                      &nbsp;
-                      {_.listTitle}
-                    </OthersTitleContnr>
-                  )}
-                </ListTitle>
-              ))}
-          </ListTitleContnr>
-        </ListTitleLimitHeightContnr>
-
-        <NovelListContnr>
-          {listsUserCreated &&
-            listsUserCreated[listId].novelList.novel.map((_) => (
-              <NovelRow key={_.novelId} novel={_} isWidth100 isNotSubInfo />
+                {isMyList ? (
+                  _.listTitle
+                ) : (
+                  <OthersTitleContnr>
+                    <UserImg userImg={_.userImg as ProfileImg} isTitle />
+                    {_.userName}
+                    <ListTitleNormalStyle>의 리스트 : </ListTitleNormalStyle>
+                    &nbsp;
+                    {_.listTitle}
+                  </OthersTitleContnr>
+                )}
+              </ListTitle>
             ))}
-        </NovelListContnr>
-      </MainBG>
-    );
-  }
+        </ListTitleContnr>
+      </ListTitleLimitHeightContnr>
+
+      <NovelListContnr>
+        {listsUserCreated &&
+          listsUserCreated[listId].novelList.novel.map((_) => (
+            <NovelRow key={_.novelId} novel={_} isWidth100 isNotSubInfo />
+          ))}
+      </NovelListContnr>
+    </MainBG>
+  );
 }
