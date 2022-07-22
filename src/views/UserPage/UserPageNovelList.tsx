@@ -303,6 +303,18 @@ export default function UserPageNovelList({ isMyList }: { isMyList: boolean }) {
                       order: 1,
                     });
                   }
+                  // show other list that already exists
+                  if (listsUserCreated[_.listId]) {
+                    const { isNextOrder, currentOrder } = listsUserCreated[_.listId];
+                    // set current novel list info
+                    currentListInfoRef.current = {
+                      listId: _.listId,
+                      isNextOrder,
+                      currentOrder,
+                    };
+
+                    navigate(`/user_page/${userName as string}/myList/${_.listId}`);
+                  }
 
                   // server request with list id //
 
