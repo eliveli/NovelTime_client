@@ -3,7 +3,7 @@ import Icon from "assets/Icon";
 import { CategoryMark } from "components/CategoryMark";
 import MainBG from "components/MainBG";
 import { NovelRow } from "components/Novel";
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAppSelector } from "store/hooks";
 import {
@@ -81,6 +81,7 @@ export default function UserPageNovelList({ isMyList }: { isMyList: boolean }) {
   });
 
   const currentListInfoRef = useRef({
+    listId: "",
     isNextOrder: false,
     currentOrder: 1,
   });
@@ -115,15 +116,17 @@ export default function UserPageNovelList({ isMyList }: { isMyList: boolean }) {
     if (!listId) return;
 
     const { novelList, isNextOrder } = myListResult.data;
+    const newListId = novelList.listId;
 
     // save novel list //
-    if (!listsUserCreated || (listsUserCreated && !listsUserCreated[listId])) {
-      // saving at first or adding new novel list
+    if (!listsUserCreated || (listsUserCreated && !listsUserCreated[newListId])) {
+      // saving at first || adding new novel list
+
       const currentOrder = 1;
 
       setListsUserCreated({
         ...listsUserCreated,
-        [listId]: {
+        [newListId]: {
           novelList,
           isNextOrder,
           currentOrder,
@@ -131,19 +134,25 @@ export default function UserPageNovelList({ isMyList }: { isMyList: boolean }) {
       });
       // set current novel list info
       currentListInfoRef.current = {
+        listId: newListId,
         isNextOrder,
         currentOrder,
       };
-    } else if (listsUserCreated && listsUserCreated[listId]) {
+
+      // change url to show changed-list-id in it
+      // after doing this component is rendered but state in it remains.
+      // but request is not occurred. so I requested before changing url.
+      navigate(`/user_page/${userName as string}/myList/${newListId}`);
+    } else if (listsUserCreated && listsUserCreated[newListId]) {
       // adding novels in the existing list as clicking show-more button
-      const currentOrder = listsUserCreated[listId].currentOrder + 1;
+      const currentOrder = listsUserCreated[newListId].currentOrder + 1;
 
       setListsUserCreated({
         ...listsUserCreated,
-        [listId]: {
+        [newListId]: {
           novelList: {
-            ...listsUserCreated[listId].novelList,
-            novel: [...listsUserCreated[listId].novelList.novel, ...novelList.novel],
+            ...listsUserCreated[newListId].novelList,
+            novel: [...listsUserCreated[newListId].novelList.novel, ...novelList.novel],
           },
           isNextOrder,
           currentOrder,
@@ -151,6 +160,7 @@ export default function UserPageNovelList({ isMyList }: { isMyList: boolean }) {
       });
       // set current novel list info
       currentListInfoRef.current = {
+        listId: newListId,
         isNextOrder,
         currentOrder,
       };
@@ -194,7 +204,6 @@ export default function UserPageNovelList({ isMyList }: { isMyList: boolean }) {
     navigate(-1);
     return <></>;
   }
-
   return (
     <MainBG>
       <CategoryMark categoryText={contentPageMark}>
@@ -286,6 +295,15 @@ export default function UserPageNovelList({ isMyList }: { isMyList: boolean }) {
                 listId={_.listId}
                 selectedListId={listId}
                 onClick={() => {
+                  // get new list from server
+                  if (!listsUserCreated[_.listId]) {
+                    setParamsForRequest({
+                      userName: userName as string,
+                      listId: _.listId,
+                      order: 1,
+                    });
+                  }
+
                   // server request with list id //
 
                   // selectList(_);
