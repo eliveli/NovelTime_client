@@ -357,6 +357,7 @@ export default function UserPageNovelList({ isMyList }: { isMyList: boolean }) {
           onClick={() => {
             setParamsForRequest({
               ...paramsForRequest,
+              listId: currentListInfoRef.current.listId,
               order: currentListInfoRef.current.currentOrder + 1,
             });
           }}

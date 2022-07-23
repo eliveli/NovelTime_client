@@ -1,5 +1,6 @@
 // /* eslint-disable */
 // 지금은 뷰 구성에 집중할 것임. 린트 무시하는 주석은 나중에 해제하기
+import React from "react";
 import { ThemeProvider } from "styled-components";
 import {
   NovelImg,
@@ -25,7 +26,7 @@ type MyComponentProps = React.PropsWithChildren<{
   isWidth100?: true;
   isNotSubInfo?: true;
 }>;
-export default function NovelRow({ novel, isWidth100, isNotSubInfo }: MyComponentProps) {
+const NovelRow = React.memo(({ novel, isWidth100, isNotSubInfo }: MyComponentProps) => {
   // props or default props
   const {
     novelId = "",
@@ -59,4 +60,5 @@ export default function NovelRow({ novel, isWidth100, isNotSubInfo }: MyComponen
       </NovelLink>
     </ThemeProvider>
   );
-}
+});
+export default NovelRow;
