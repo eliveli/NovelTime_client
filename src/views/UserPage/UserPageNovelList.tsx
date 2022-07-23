@@ -102,10 +102,9 @@ export default function UserPageNovelList({ isMyList }: { isMyList: boolean }) {
   //   [ listId1 ]: { novelList : ... , isNextOrder : ... , currentOrder : ... },
   //   [ listId2 ]: { novelList : ... , isNextOrder : ... , currentOrder : ... }
   // }
-  // in my novel list page
-  const [listsUserCreated, setListsUserCreated] = useState<{ [x: string]: NovelList }>();
-  // in other's novel list page
-  const [listsUserLikes, setListsUserLikes] = useState<{ [x: string]: NovelList }>();
+
+  // for both in my novel list page and in other's novel list page
+  const [novelListsOfUser, setNovelListsOfUser] = useState<{ [x: string]: NovelList }>();
 
   // get and save the novel lists in my novel list page
   useEffect(() => {
@@ -120,13 +119,13 @@ export default function UserPageNovelList({ isMyList }: { isMyList: boolean }) {
     const newListId = novelList.listId;
 
     // save novel list //
-    if (!listsUserCreated || (listsUserCreated && !listsUserCreated[newListId])) {
+    if (!novelListsOfUser || (novelListsOfUser && !novelListsOfUser[newListId])) {
       // saving at first || adding new novel list
 
       const currentOrder = 1;
 
-      setListsUserCreated({
-        ...listsUserCreated,
+      setNovelListsOfUser({
+        ...novelListsOfUser,
         [newListId]: {
           novelList,
           isNextOrder,
@@ -144,18 +143,18 @@ export default function UserPageNovelList({ isMyList }: { isMyList: boolean }) {
       // after doing this component is rendered but state in it remains.
       // but request is not occurred. so I requested before changing url.
       navigate(`/user_page/${userName as string}/myList/${newListId}`);
-    } else if (listsUserCreated && listsUserCreated[newListId]) {
+    } else if (novelListsOfUser && novelListsOfUser[newListId]) {
       // adding novels in the existing list as clicking show-more button
-      const currentOrder = listsUserCreated[newListId].currentOrder + 1;
+      const currentOrder = novelListsOfUser[newListId].currentOrder + 1;
 
       // in this case variable "new list id" is the same as previous one.
 
-      setListsUserCreated({
-        ...listsUserCreated,
+      setNovelListsOfUser({
+        ...novelListsOfUser,
         [newListId]: {
           novelList: {
             ...novelList,
-            novel: [...listsUserCreated[newListId].novelList.novel, ...novelList.novel],
+            novel: [...novelListsOfUser[newListId].novelList.novel, ...novelList.novel],
           },
           isNextOrder,
           currentOrder,
@@ -169,6 +168,70 @@ export default function UserPageNovelList({ isMyList }: { isMyList: boolean }) {
       };
     }
   }, [myListResult.data]);
+
+  // get and save the novel lists in other's novel list page
+  useEffect(() => {
+    // don't save cached data for my list
+    // it may remain because of rtk query trait
+    if (isMyList) return;
+
+    if (!othersListResult.data) return;
+    if (!listId) return;
+
+    const { novelList, isNextOrder } = othersListResult.data;
+    const newListId = novelList.listId;
+
+    // save novel list //
+    if (!novelListsOfUser || (novelListsOfUser && !novelListsOfUser[newListId])) {
+      // saving at first || adding new novel list
+
+      const currentOrder = 1;
+
+      setNovelListsOfUser({
+        ...novelListsOfUser,
+        [newListId]: {
+          novelList,
+          isNextOrder,
+          currentOrder,
+        },
+      });
+      // set current novel list info
+      currentListInfoRef.current = {
+        listId: newListId,
+        isNextOrder,
+        currentOrder,
+      };
+
+      // change url to show changed-list-id in it
+      // after doing this component is rendered but state in it remains.
+      // but request is not occurred. so I requested before changing url.
+      navigate(`/user_page/${userName as string}/othersList/${newListId}`);
+    } else if (novelListsOfUser && novelListsOfUser[newListId]) {
+      // adding novels in the existing list as clicking show-more button
+      const currentOrder = novelListsOfUser[newListId].currentOrder + 1;
+
+      // in this case variable "new list id" is the same as previous one.
+
+      setNovelListsOfUser({
+        ...novelListsOfUser,
+        [newListId]: {
+          novelList: {
+            ...novelList,
+            novel: [...novelListsOfUser[newListId].novelList.novel, ...novelList.novel],
+          },
+          isNextOrder,
+          currentOrder,
+        },
+      });
+      // set current novel list info
+      currentListInfoRef.current = {
+        listId,
+        isNextOrder,
+        currentOrder,
+      };
+    }
+  }, [othersListResult.data]);
+
   // get the content page mark
   const contentPageMark = contentMark(userName as string, loginUserInfo.userName, isMyList, false);
 
@@ -260,7 +323,7 @@ export default function UserPageNovelList({ isMyList }: { isMyList: boolean }) {
         >
           {userName !== loginUserInfo.userName && (
             <HearIconBox
-              isLike={listsUserCreated ? listsUserCreated[listId].novelList.isLike : false}
+              isLike={novelListsOfUser ? novelListsOfUser[listId].novelList.isLike : false}
               size={28}
               onClick={() => {
                 // to toggle like-info
@@ -272,43 +335,42 @@ export default function UserPageNovelList({ isMyList }: { isMyList: boolean }) {
           )}
 
           {/* selected list title */}
-          {listsUserCreated && listsUserCreated[listId] && (
+          {novelListsOfUser && (
             <ListTitle key={listId} listId={listId} selectedListId={listId}>
-              {isMyList ? (
-                listsUserCreated[listId].novelList.listTitle
-              ) : (
-                <OthersTitleContnr>
-                  <UserImg
-                    userImg={listsUserCreated[listId].novelList.userImg as ProfileImg}
-                    isTitle
-                  />
-                  {listsUserCreated[listId].novelList.userName}
-                  <ListTitleNormalStyle>의 리스트 : </ListTitleNormalStyle>
-                  &nbsp;
-                  {listsUserCreated[listId].novelList.listTitle}
-                </OthersTitleContnr>
-              )}
+              {/* in my list page */}
+              {novelListsOfUser[listId].novelList.listTitle}
+              {/* in other's list page */}
+              <OthersTitleContnr>
+                <UserImg
+                  userImg={novelListsOfUser[listId].novelList.userImg as ProfileImg}
+                  isTitle
+                />
+                {novelListsOfUser[listId].novelList.userName}
+                <ListTitleNormalStyle>의 리스트 : </ListTitleNormalStyle>
+                &nbsp;
+                {novelListsOfUser[listId].novelList.listTitle}
+              </OthersTitleContnr>
             </ListTitle>
           )}
           {/* otherListInfo title list */}
-          {listsUserCreated &&
-            listsUserCreated[listId].novelList.otherList.map((_) => (
+          {novelListsOfUser &&
+            novelListsOfUser[listId].novelList.otherList.map((_) => (
               <ListTitle
                 key={_.listId}
                 listId={_.listId}
                 selectedListId={listId}
                 onClick={() => {
                   // get new list from server
-                  if (!listsUserCreated[_.listId]) {
+                  if (!novelListsOfUser[_.listId]) {
                     setParamsForRequest({
                       userName: userName as string,
                       listId: _.listId,
                       order: 1,
                     });
                   }
-                  // show other list that already exists
-                  if (listsUserCreated[_.listId]) {
-                    const { isNextOrder, currentOrder } = listsUserCreated[_.listId];
+                  // show other list that is not displayed in this time but already exists
+                  if (novelListsOfUser[_.listId]) {
+                    const { isNextOrder, currentOrder } = novelListsOfUser[_.listId];
                     // set current novel list info
                     currentListInfoRef.current = {
                       listId: _.listId,
@@ -316,7 +378,11 @@ export default function UserPageNovelList({ isMyList }: { isMyList: boolean }) {
                       currentOrder,
                     };
 
-                    navigate(`/user_page/${userName as string}/myList/${_.listId}`);
+                    navigate(
+                      `/user_page/${userName as string}/${isMyList ? `myList` : `othersList`}/${
+                        _.listId
+                      }`,
+                    );
                   }
 
                   // server request with list id //
@@ -331,8 +397,10 @@ export default function UserPageNovelList({ isMyList }: { isMyList: boolean }) {
                 }}
               >
                 {isMyList ? (
+                  // in my list page
                   _.listTitle
                 ) : (
+                  // in other's list page
                   <OthersTitleContnr>
                     <UserImg userImg={_.userImg as ProfileImg} isTitle />
                     {_.userName}
@@ -347,8 +415,8 @@ export default function UserPageNovelList({ isMyList }: { isMyList: boolean }) {
       </ListTitleLimitHeightContnr>
 
       <NovelListContnr>
-        {listsUserCreated &&
-          listsUserCreated[listId].novelList.novel.map((_) => (
+        {novelListsOfUser &&
+          novelListsOfUser[listId].novelList.novel.map((_) => (
             <NovelRow key={_.novelId} novel={_} isWidth100 isNotSubInfo />
           ))}
       </NovelListContnr>
