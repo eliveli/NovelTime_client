@@ -1,5 +1,6 @@
 /* eslint-disable react/jsx-indent */
 import Icon from "assets/Icon";
+import { triggerAsyncId } from "async_hooks";
 import { CategoryMark } from "components/CategoryMark";
 import MainBG from "components/MainBG";
 import { NovelRow } from "components/Novel";
@@ -70,16 +71,28 @@ interface NovelList {
 }
 
 export default function UserPageNovelList({ isMyList }: { isMyList: boolean }) {
+  const accessToken = useAppSelector((state) => state.user.accessToken);
+
   const navigate = useNavigate();
 
   const { userName, listId } = useParams();
   const loginUserInfo = useAppSelector((state) => state.user.loginUserInfo);
 
   const [paramsForRequest, setParamsForRequest] = useState({
+    accessToken,
     userName: userName as string,
     listId: listId as string,
     order: 1,
   });
+
+  // Refetch when token is added as page refresh //
+  // isLike는 로그인 유저에 의존하는 값인데 새로고침 직후에는 항상 false.
+  // 새로고침 직후에는 토큰 및 로그인 유저 정보가 없기 때문. 자동로그인 요청을 할 뿐.
+  // 그 때 로그인 성공 시 토큰을 받아 오면 재요청해 페이지에 필요한 데이터를 받아오기.
+  // 새로고침을 하지 않고 로그인 상태에서 단순히 페이지 이동만 했을 때에는 값을 처음부터 잘 받아옴.
+  if (!!accessToken && !paramsForRequest.accessToken) {
+    setParamsForRequest({ ...paramsForRequest, accessToken });
+  }
 
   const currentListInfoRef = useRef({
     listId: listId as string,
@@ -311,31 +324,31 @@ export default function UserPageNovelList({ isMyList }: { isMyList: boolean }) {
         </MoreBtnParent>
       )}
       {/* title list container */}
-      <ListTitleLimitHeightContnr
-        ref={limitContainerRef}
-        limitContnrWidth={limitContnrWidth}
-        isListMore={isListMore}
-      >
-        <ListTitleContnr
+      {novelListsOfUser && (
+        <ListTitleLimitHeightContnr
+          ref={limitContainerRef}
           limitContnrWidth={limitContnrWidth}
           isListMore={isListMore}
-          ref={titleListRef}
         >
-          {userName !== loginUserInfo.userName && (
-            <HearIconBox
-              isLike={novelListsOfUser ? novelListsOfUser[listId].novelList.isLike : false}
-              size={28}
-              onClick={() => {
-                // to toggle like-info
-                // server request with loginUserName, listId
-              }}
-            >
-              <Icon.BigFillHeart />
-            </HearIconBox>
-          )}
+          <ListTitleContnr
+            limitContnrWidth={limitContnrWidth}
+            isListMore={isListMore}
+            ref={titleListRef}
+          >
+            {(!isMyList || userName !== loginUserInfo.userName) && (
+              <HearIconBox
+                isLike={novelListsOfUser[listId].novelList.isLike}
+                size={28}
+                onClick={() => {
+                  // to toggle like-info
+                  // server request with loginUserName, listId
+                }}
+              >
+                <Icon.BigFillHeart />
+              </HearIconBox>
+            )}
 
-          {/* selected list title */}
-          {novelListsOfUser && (
+            {/* selected list title */}
             <ListTitle key={listId} listId={listId} selectedListId={listId}>
               {/* in my list page */}
               {isMyList && novelListsOfUser[listId].novelList.listTitle}
@@ -353,10 +366,8 @@ export default function UserPageNovelList({ isMyList }: { isMyList: boolean }) {
                 </OthersTitleContnr>
               )}
             </ListTitle>
-          )}
-          {/* otherListInfo title list */}
-          {novelListsOfUser &&
-            novelListsOfUser[listId].novelList.otherList.map((_) => (
+            {/* otherListInfo title list */}
+            {novelListsOfUser[listId].novelList.otherList.map((_) => (
               <ListTitle
                 key={_.listId}
                 listId={_.listId}
@@ -365,7 +376,7 @@ export default function UserPageNovelList({ isMyList }: { isMyList: boolean }) {
                   // get new list from server
                   if (!novelListsOfUser[_.listId]) {
                     setParamsForRequest({
-                      userName: userName as string,
+                      ...paramsForRequest,
                       listId: _.listId,
                       order: 1,
                     });
@@ -413,8 +424,9 @@ export default function UserPageNovelList({ isMyList }: { isMyList: boolean }) {
                 )}
               </ListTitle>
             ))}
-        </ListTitleContnr>
-      </ListTitleLimitHeightContnr>
+          </ListTitleContnr>
+        </ListTitleLimitHeightContnr>
+      )}
 
       <NovelListContnr>
         {novelListsOfUser &&

@@ -188,6 +188,7 @@ export interface ContentsForUserPageNovelList {
   isNextOrder: boolean;
 }
 export interface ParamsForUserPageNovelList {
+  accessToken?: string;
   userName: string;
   listId: string;
   order: number;
