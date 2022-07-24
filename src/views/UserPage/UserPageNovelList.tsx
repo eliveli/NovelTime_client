@@ -338,18 +338,20 @@ export default function UserPageNovelList({ isMyList }: { isMyList: boolean }) {
           {novelListsOfUser && (
             <ListTitle key={listId} listId={listId} selectedListId={listId}>
               {/* in my list page */}
-              {novelListsOfUser[listId].novelList.listTitle}
+              {isMyList && novelListsOfUser[listId].novelList.listTitle}
               {/* in other's list page */}
-              <OthersTitleContnr>
-                <UserImg
-                  userImg={novelListsOfUser[listId].novelList.userImg as ProfileImg}
-                  isTitle
-                />
-                {novelListsOfUser[listId].novelList.userName}
-                <ListTitleNormalStyle>의 리스트 : </ListTitleNormalStyle>
-                &nbsp;
-                {novelListsOfUser[listId].novelList.listTitle}
-              </OthersTitleContnr>
+              {!isMyList && (
+                <OthersTitleContnr>
+                  <UserImg
+                    userImg={novelListsOfUser[listId].novelList.userImg as ProfileImg}
+                    isTitle
+                  />
+                  {novelListsOfUser[listId].novelList.userName}
+                  <ListTitleNormalStyle>의 리스트 : </ListTitleNormalStyle>
+                  &nbsp;
+                  {novelListsOfUser[listId].novelList.listTitle}
+                </OthersTitleContnr>
+              )}
             </ListTitle>
           )}
           {/* otherListInfo title list */}
