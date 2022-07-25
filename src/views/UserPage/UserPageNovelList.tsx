@@ -1,6 +1,5 @@
 /* eslint-disable react/jsx-indent */
 import Icon from "assets/Icon";
-import { triggerAsyncId } from "async_hooks";
 import { CategoryMark } from "components/CategoryMark";
 import MainBG from "components/MainBG";
 import { NovelRow } from "components/Novel";
@@ -278,9 +277,9 @@ export default function UserPageNovelList({ isMyList }: { isMyList: boolean }) {
   // - to scroll to first title that is clicked
   const limitContainerRef = useRef<HTMLDivElement>(null);
 
-  if (!listId) {
+  if (!listId || (novelListsOfUser && !novelListsOfUser[listId].novelList.listId)) {
     alert("리스트가 존재하지 않습니다.");
-    navigate(-1);
+    navigate(`/user_page/${userName as string}`);
     return <></>;
   }
   return (
