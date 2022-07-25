@@ -103,10 +103,10 @@ export default function UserPageNovelList({ isMyList }: { isMyList: boolean }) {
   // don't destructure like this : const { data, isLoading, ... }
   // just get it as variables to avoid getting same name
   const myListResult = useGetContentsForUserPageMyListQuery(paramsForRequest, {
-    skip: !userName && !isMyList,
+    skip: !isMyList,
   });
   const othersListResult = useGetContentsForUserPageOthersListQuery(paramsForRequest, {
-    skip: !userName && isMyList,
+    skip: isMyList,
   });
 
   // state for saving novel lists from server

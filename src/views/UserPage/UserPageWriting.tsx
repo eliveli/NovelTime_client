@@ -44,10 +44,10 @@ export default function UserPageWriting({ isMyWriting }: { isMyWriting: boolean 
   // don't destructure like this : const { data, isLoading, ... }
   // just get it as variables to avoid getting same name
   const myWritingResult = useGetContentsForUserPageMyWritingQuery(paramsForRequest, {
-    skip: !userName && !isMyWriting,
+    skip: !isMyWriting,
   });
   const othersWritingResult = useGetContentsForUserPageOthersWritingQuery(paramsForRequest, {
-    skip: !userName && isMyWriting,
+    skip: isMyWriting,
   });
 
   // states for saving contents from server in my writing page
