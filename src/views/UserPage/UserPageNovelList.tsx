@@ -273,10 +273,7 @@ export default function UserPageNovelList({ isMyList }: { isMyList: boolean }) {
   // - if titleListHeight is not longer than the height 32px that is 1 line of ListTitleContnr,
   // - then don't show the button even if isListMore is true
   const titleListHeight = useComponentHeight(titleListRef, isListMore);
-
-  // - to scroll to first title that is clicked
-  const limitContainerRef = useRef<HTMLDivElement>(null);
-
+  // there isn't selected list in DB or user and selected novel list don't match
   if (!listId || (novelListsOfUser && !novelListsOfUser[listId].novelList.listId)) {
     alert("리스트가 존재하지 않습니다.");
     navigate(`/user_page/${userName as string}`);
@@ -324,11 +321,7 @@ export default function UserPageNovelList({ isMyList }: { isMyList: boolean }) {
       )}
       {/* title list container */}
       {novelListsOfUser && (
-        <ListTitleLimitHeightContnr
-          ref={limitContainerRef}
-          limitContnrWidth={limitContnrWidth}
-          isListMore={isListMore}
-        >
+        <ListTitleLimitHeightContnr limitContnrWidth={limitContnrWidth} isListMore={isListMore}>
           <ListTitleContnr
             limitContnrWidth={limitContnrWidth}
             isListMore={isListMore}
@@ -396,16 +389,6 @@ export default function UserPageNovelList({ isMyList }: { isMyList: boolean }) {
                       }`,
                     );
                   }
-
-                  // server request with list id //
-
-                  // selectList(_);
-                  // if the list of title doesn't exist on server,
-                  // put this list's info and "otherList" data in novelTitleList.current
-                  // and execute "selectList" with first element of novelTitleList.current
-
-                  limitContainerRef.current?.scroll(0, 0);
-                  // scroll to (0,0) to show the selected title arranged first in the title container
                 }}
               >
                 {isMyList ? (
