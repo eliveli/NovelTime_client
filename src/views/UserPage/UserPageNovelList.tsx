@@ -112,8 +112,19 @@ const UserPageNovelList = React.memo(({ isMyList }: { isMyList: boolean }) => {
 
   // toggle like
   const [toggleLike, handleToggleLike] = useState(false);
+  //
+  // it is only for enabling request to toggle LIKE
+  //   it is necessary when toggling LIKE of the same novel list continuously
+  // because when state for query parameter is same with previous one,
+  //   request is not fired again even if switching skip state
+  const countTogglingLikeRef = useRef(1);
+  //
   const toggleLikeResult = useToggleLikeQuery(
-    { contentType: "novelList", contentId: listId as string },
+    {
+      contentType: "novelList",
+      contentId: listId as string,
+      countTogglingLike: countTogglingLikeRef.current,
+    },
     {
       skip: !toggleLike,
     },
@@ -273,6 +284,7 @@ const UserPageNovelList = React.memo(({ isMyList }: { isMyList: boolean }) => {
     });
 
     handleToggleLike(false);
+    countTogglingLikeRef.current += 1;
   }, [toggleLike, toggleLikeResult.data]);
 
   // get the content page mark
