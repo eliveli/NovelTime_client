@@ -257,11 +257,11 @@ const UserPageNovelList = React.memo(({ isMyList }: { isMyList: boolean }) => {
   // save "isLike" after toggling like
   useEffect(() => {
     if (!toggleLike) return;
+
     if (!toggleLikeResult.data) return;
-
     if (!novelListsOfUser) return;
-    if (!listId) return;
 
+    if (!listId) return;
     const { isLike } = toggleLikeResult.data;
 
     setNovelListsOfUser({
@@ -273,7 +273,7 @@ const UserPageNovelList = React.memo(({ isMyList }: { isMyList: boolean }) => {
     });
 
     handleToggleLike(false);
-  }, [toggleLike]);
+  }, [toggleLike, toggleLikeResult.data]);
 
   // get the content page mark
   const contentPageMark = contentMark(userName as string, loginUserInfo.userName, isMyList, false);
@@ -358,7 +358,9 @@ const UserPageNovelList = React.memo(({ isMyList }: { isMyList: boolean }) => {
             isListMore={isListMore}
             ref={titleListRef}
           >
-            {(!isMyList || userName !== loginUserInfo.userName) && (
+            {/* isLike */}
+            {/* except when login user sees his/her my list in user page */}
+            {!(isMyList && userName === loginUserInfo.userName) && (
               <HearIconBox
                 isLike={novelListsOfUser[listId].novelList.isLike}
                 size={28}
