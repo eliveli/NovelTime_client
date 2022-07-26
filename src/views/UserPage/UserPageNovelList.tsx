@@ -3,12 +3,13 @@ import Icon from "assets/Icon";
 import { CategoryMark } from "components/CategoryMark";
 import MainBG from "components/MainBG";
 import { NovelRow } from "components/Novel";
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAppSelector } from "store/hooks";
 import {
   useGetContentsForUserPageMyListQuery,
   useGetContentsForUserPageOthersListQuery,
+  useToggleLikeQuery,
 } from "store/serverAPIs/novelTime";
 import { NovelListSetForMyOrOthersList } from "store/serverAPIs/types";
 import { useComponentWidth, useComponentScrollWidth, useComponentHeight } from "utils";
@@ -69,7 +70,7 @@ interface NovelList {
   currentOrder: number;
 }
 
-export default function UserPageNovelList({ isMyList }: { isMyList: boolean }) {
+const UserPageNovelList = React.memo(({ isMyList }: { isMyList: boolean }) => {
   const accessToken = useAppSelector((state) => state.user.accessToken);
 
   const navigate = useNavigate();
@@ -108,6 +109,15 @@ export default function UserPageNovelList({ isMyList }: { isMyList: boolean }) {
   const othersListResult = useGetContentsForUserPageOthersListQuery(paramsForRequest, {
     skip: isMyList,
   });
+
+  // toggle like
+  const [toggleLike, handleToggleLike] = useState(false);
+  const toggleLikeResult = useToggleLikeQuery(
+    { contentType: "novelList", contentId: listId as string },
+    {
+      skip: !toggleLike,
+    },
+  );
 
   // state for saving novel lists from server
   // {
@@ -244,6 +254,27 @@ export default function UserPageNovelList({ isMyList }: { isMyList: boolean }) {
     }
   }, [othersListResult.data]);
 
+  // save "isLike" after toggling like
+  useEffect(() => {
+    if (!toggleLike) return;
+    if (!toggleLikeResult.data) return;
+
+    if (!novelListsOfUser) return;
+    if (!listId) return;
+
+    const { isLike } = toggleLikeResult.data;
+
+    setNovelListsOfUser({
+      ...novelListsOfUser,
+      [listId]: {
+        ...novelListsOfUser[listId],
+        novelList: { ...novelListsOfUser[listId].novelList, isLike },
+      },
+    });
+
+    handleToggleLike(false);
+  }, [toggleLike]);
+
   // get the content page mark
   const contentPageMark = contentMark(userName as string, loginUserInfo.userName, isMyList, false);
 
@@ -332,8 +363,7 @@ export default function UserPageNovelList({ isMyList }: { isMyList: boolean }) {
                 isLike={novelListsOfUser[listId].novelList.isLike}
                 size={28}
                 onClick={() => {
-                  // to toggle like-info
-                  // server request with loginUserName, listId
+                  if (!toggleLikeResult.isLoading) handleToggleLike(true);
                 }}
               >
                 <Icon.BigFillHeart />
@@ -434,4 +464,5 @@ export default function UserPageNovelList({ isMyList }: { isMyList: boolean }) {
       )}
     </MainBG>
   );
-}
+});
+export default UserPageNovelList;

@@ -13,6 +13,8 @@ import {
   ContentsForUserPageWriting,
   ContentsForUserPageNovelList,
   ParamsForUserPageNovelList,
+  ContentForLike,
+  IsLike,
 } from "./types";
 import type { RootState } from "../index";
 
@@ -97,6 +99,12 @@ export const novelTimeApi = createApi({
       query: (params) =>
         `/contents/userPageOthersList/${params.userName}/${params.listId}/${params.order}`,
     }),
+    toggleLike: builder.query<IsLike, ContentForLike>({
+      query: (contentForLike) => ({
+        url: `/contents/toggleLike/${contentForLike.contentType}/${contentForLike.contentId}`,
+        method: "PUT",
+      }),
+    }),
     checkForUserName: builder.mutation<string, string>({
       query: (newUserName) => ({
         url: "/user/checkUserName",
@@ -132,4 +140,5 @@ export const {
   useGetContentsForUserPageOthersWritingQuery,
   useGetContentsForUserPageMyListQuery,
   useGetContentsForUserPageOthersListQuery,
+  useToggleLikeQuery,
 } = novelTimeApi;

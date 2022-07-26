@@ -193,3 +193,10 @@ export interface ParamsForUserPageNovelList {
   listId: string;
   order: number;
 }
+export interface ContentForLike {
+  contentType: "writing" | "novelList";
+  contentId: string;
+}
+export interface IsLike {
+  isLike: boolean;
+}
