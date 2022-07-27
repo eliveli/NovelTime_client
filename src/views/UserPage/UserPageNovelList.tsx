@@ -294,7 +294,6 @@ const UserPageNovelList = React.memo(({ isMyList }: { isMyList: boolean }) => {
     handleToggleLike(false);
     countTogglingLikeRef.current += 1;
   }, [toggleLike, toggleLikeResult.data, toggleLikeResult.isFetching]);
-
   // get the content page mark
   const contentPageMark = contentMark(userName as string, loginUserInfo.userName, isMyList, false);
 
@@ -385,7 +384,35 @@ const UserPageNovelList = React.memo(({ isMyList }: { isMyList: boolean }) => {
                 isLike={novelListsOfUser[listId].novelList.isLike}
                 size={28}
                 onClick={() => {
-                  if (!toggleLikeResult.isFetching) handleToggleLike(true);
+                  const { isLike } = novelListsOfUser[listId].novelList;
+
+                  // prevent click event as fetching
+                  if (toggleLikeResult.isFetching) return;
+                  if (!loginUserInfo.userId) {
+                    // when user didn't login
+                    alert("좋아요를 누르려면 로그인을 해 주세요.");
+                  } else if (!isLike) {
+                    // set isLike to true without alert when it was false
+                    handleToggleLike(true);
+                    alert("내 좋아요 리스트에 추가되었습니다.");
+                    //
+                    // change this to modal that disappears later
+                    //
+                  } else if (userName !== loginUserInfo.userName) {
+                    // when login user who isn't the owner of user page tries to set isLike to false
+                    if (
+                      confirm(
+                        "좋아요를 취소하면 내 유저페이지의 리스트에서 지워집니다. 취소하시겠어요?",
+                      )
+                    ) {
+                      handleToggleLike(true);
+                    }
+                  } else if (userName === loginUserInfo.userName) {
+                    // when login user who is the owner of user page tries to set isLike to false
+                    if (confirm("좋아요를 취소하면 리스트에서 지워집니다. 취소하시겠어요?")) {
+                      handleToggleLike(true);
+                    }
+                  }
                 }}
               >
                 <Icon.BigFillHeart />
