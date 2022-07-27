@@ -101,7 +101,7 @@ const UserPageNovelList = React.memo(({ isMyList }: { isMyList: boolean }) => {
   });
 
   // divide these two results
-  // don't destructure like this : const { data, isLoading, ... }
+  // don't destructure like this : const { data, isFetching, ... }
   // just get it as variables to avoid getting same name
   const myListResult = useGetContentsForUserPageMyListQuery(paramsForRequest, {
     skip: !isMyList,
@@ -269,10 +269,18 @@ const UserPageNovelList = React.memo(({ isMyList }: { isMyList: boolean }) => {
   useEffect(() => {
     if (!toggleLike) return;
 
+    // isFetching(O) isLoading(X)
+    // when requesting twice or later, isLoading is always false
+    // so I used "isFetching" that changes in any request
+    //   to set LIKE after getting it from server
+    if (toggleLikeResult.isFetching) return;
+
     if (!toggleLikeResult.data) return;
+
     if (!novelListsOfUser) return;
 
     if (!listId) return;
+
     const { isLike } = toggleLikeResult.data;
 
     setNovelListsOfUser({
@@ -285,7 +293,7 @@ const UserPageNovelList = React.memo(({ isMyList }: { isMyList: boolean }) => {
 
     handleToggleLike(false);
     countTogglingLikeRef.current += 1;
-  }, [toggleLike, toggleLikeResult.data]);
+  }, [toggleLike, toggleLikeResult.data, toggleLikeResult.isFetching]);
 
   // get the content page mark
   const contentPageMark = contentMark(userName as string, loginUserInfo.userName, isMyList, false);
@@ -377,7 +385,7 @@ const UserPageNovelList = React.memo(({ isMyList }: { isMyList: boolean }) => {
                 isLike={novelListsOfUser[listId].novelList.isLike}
                 size={28}
                 onClick={() => {
-                  if (!toggleLikeResult.isLoading) handleToggleLike(true);
+                  if (!toggleLikeResult.isFetching) handleToggleLike(true);
                 }}
               >
                 <Icon.BigFillHeart />
