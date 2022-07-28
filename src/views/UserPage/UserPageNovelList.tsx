@@ -130,6 +130,11 @@ const UserPageNovelList = React.memo(({ isMyList }: { isMyList: boolean }) => {
     },
   );
 
+  // if it is true delete list by list id after saving other list
+  // when login user canceled LIKE in other's list that he/she liked in his/her user page
+  const isNeedToDeleteListRef = useRef(false);
+  //
+
   // state for saving novel lists from server
   // {
   //   [ listId1 ]: { novelList : ... , isNextOrder : ... , currentOrder : ... },
@@ -235,6 +240,28 @@ const UserPageNovelList = React.memo(({ isMyList }: { isMyList: boolean }) => {
         currentOrder,
       };
 
+      // when login user canceled LIKE in other's list he/she liked in his/her user page
+      // delete the list where isLike variable was set to false
+      if (novelListsOfUser && isNeedToDeleteListRef.current) {
+        setNovelListsOfUser((prevNovelListsOfUser) => {
+          const copyOfNovelListsOfUser = {
+            ...prevNovelListsOfUser,
+            // add next list
+            [newListId]: {
+              novelList,
+              isNextOrder,
+              currentOrder,
+            },
+          };
+          // delete current list
+          delete copyOfNovelListsOfUser[listId];
+
+          return copyOfNovelListsOfUser;
+        });
+
+        isNeedToDeleteListRef.current = false;
+      }
+
       // change url to show changed-list-id in it
       // after doing this component is rendered but state in it remains.
       // but request is not occurred. so I requested before changing url.
@@ -283,13 +310,37 @@ const UserPageNovelList = React.memo(({ isMyList }: { isMyList: boolean }) => {
 
     const { isLike } = toggleLikeResult.data;
 
-    setNovelListsOfUser({
-      ...novelListsOfUser,
-      [listId]: {
-        ...novelListsOfUser[listId],
-        novelList: { ...novelListsOfUser[listId].novelList, isLike },
-      },
-    });
+    // when login user canceled LIKE in other's list page of his/her user page
+    //                                          that displays novel list he/she likes
+    if (!isLike && !isMyList && userName === loginUserInfo.userName) {
+      const listIDsSaved = Object.keys(novelListsOfUser);
+      const otherListNotSelected = novelListsOfUser[listId].novelList.otherList;
+
+      // if there is no other saved list in "novelListsOfUser" but is in DB
+      if (listIDsSaved.length === 1 && !!otherListNotSelected) {
+        const nextListId = otherListNotSelected[0].listId;
+
+        // delete the list where isLike variable was set to false after saving next list
+        isNeedToDeleteListRef.current = true;
+
+        // request new novel list
+        setParamsForRequest({
+          ...paramsForRequest,
+          listId: nextListId,
+          order: 1,
+        });
+      }
+    }
+    // set LIKE as being changed
+    else {
+      setNovelListsOfUser({
+        ...novelListsOfUser,
+        [listId]: {
+          ...novelListsOfUser[listId],
+          novelList: { ...novelListsOfUser[listId].novelList, isLike },
+        },
+      });
+    }
 
     handleToggleLike(false);
     countTogglingLikeRef.current += 1;
@@ -324,7 +375,7 @@ const UserPageNovelList = React.memo(({ isMyList }: { isMyList: boolean }) => {
   // - then don't show the button even if isListMore is true
   const titleListHeight = useComponentHeight(titleListRef, isListMore);
   // there isn't selected list in DB or user and selected novel list don't match
-  if (!listId || (novelListsOfUser && !novelListsOfUser[listId].novelList.listId)) {
+  if (!listId || (novelListsOfUser && !novelListsOfUser[listId]?.novelList.listId)) {
     alert("리스트가 존재하지 않습니다.");
     navigate(`/user_page/${userName as string}`);
     return <></>;
