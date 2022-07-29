@@ -52,7 +52,7 @@ export const novelTimeApi = createApi({
       return headers;
     },
   }) as BaseQueryFn<string | FetchArgs, unknown, CustomError, {}>,
-
+  tagTypes: ["EmptyOthersListsForLoginUser"],
   endpoints: (builder) => ({
     getNovelById: builder.query<NovelInfo, string>({
       query: (novelId) => `/novels/detail/${novelId}`,
@@ -71,6 +71,12 @@ export const novelTimeApi = createApi({
     }),
     getContentsForUserPageHomeByUserName: builder.query<ContentsForUserPageHome, string>({
       query: (userName) => `/contents/userPageHome/${userName}`,
+      // refetch data //
+      // don't use cached data where part of them is not the same with them in other's list page
+      //   when login user navigates automatically to his/her user's home
+      //   from other's list in his/her user page
+      //   for the reason that other's list doesn't exist anymore
+      providesTags: ["EmptyOthersListsForLoginUser"],
     }),
     getContentsForUserPageMyWriting: builder.query<
       ContentsForUserPageWriting,
@@ -105,6 +111,7 @@ export const novelTimeApi = createApi({
         url: `/contents/toggleLike/${contentForLike.contentType}/${contentForLike.contentId}`,
         method: "PUT",
       }),
+      invalidatesTags: ["EmptyOthersListsForLoginUser"],
     }),
     checkForUserName: builder.mutation<string, string>({
       query: (newUserName) => ({
