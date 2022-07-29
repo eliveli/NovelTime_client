@@ -52,6 +52,7 @@ export const novelTimeApi = createApi({
       return headers;
     },
   }) as BaseQueryFn<string | FetchArgs, unknown, CustomError, {}>,
+
   endpoints: (builder) => ({
     getNovelById: builder.query<NovelInfo, string>({
       query: (novelId) => `/novels/detail/${novelId}`,
@@ -99,7 +100,7 @@ export const novelTimeApi = createApi({
       query: (params) =>
         `/contents/userPageOthersList/${params.userName}/${params.listId}/${params.order}`,
     }),
-    toggleLike: builder.query<IsLike, ContentForLike>({
+    toggleLike: builder.mutation<IsLike, ContentForLike>({
       query: (contentForLike) => ({
         url: `/contents/toggleLike/${contentForLike.contentType}/${contentForLike.contentId}`,
         method: "PUT",
@@ -140,5 +141,5 @@ export const {
   useGetContentsForUserPageOthersWritingQuery,
   useGetContentsForUserPageMyListQuery,
   useGetContentsForUserPageOthersListQuery,
-  useToggleLikeQuery,
+  useToggleLikeMutation,
 } = novelTimeApi;

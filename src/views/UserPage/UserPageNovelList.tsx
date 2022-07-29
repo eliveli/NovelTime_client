@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable react/jsx-indent */
 import Icon from "assets/Icon";
 import { CategoryMark } from "components/CategoryMark";
@@ -9,7 +10,7 @@ import { useAppSelector } from "store/hooks";
 import {
   useGetContentsForUserPageMyListQuery,
   useGetContentsForUserPageOthersListQuery,
-  useToggleLikeQuery,
+  useToggleLikeMutation,
 } from "store/serverAPIs/novelTime";
 import { NovelListSetForMyOrOthersList } from "store/serverAPIs/types";
 import { useComponentWidth, useComponentScrollWidth, useComponentHeight } from "utils";
@@ -109,26 +110,18 @@ const UserPageNovelList = React.memo(({ isMyList }: { isMyList: boolean }) => {
   const othersListResult = useGetContentsForUserPageOthersListQuery(paramsForRequest, {
     skip: isMyList,
   });
+  // toggle like //
+  const [toggleLike, toggleLikeResult] = useToggleLikeMutation();
 
-  // toggle like
-  const [toggleLike, handleToggleLike] = useState(false);
+  const toggleLikeRequest = async () => {
+    try {
+      if (toggleLikeResult.isLoading) return; // prevent click event as loading
+      await toggleLike({ contentType: "novelList", contentId: listId as string }).unwrap();
+    } catch (error) {
+      console.log("Failed to toggle LIKE:", error);
+    }
+  };
   //
-  // it is only for enabling request to toggle LIKE
-  //   it is necessary when toggling LIKE of the same novel list continuously
-  // because when state for query parameter is same with previous one,
-  //   request is not fired again even if switching skip state
-  const countTogglingLikeRef = useRef(1);
-  //
-  const toggleLikeResult = useToggleLikeQuery(
-    {
-      contentType: "novelList",
-      contentId: listId as string,
-      countTogglingLike: countTogglingLikeRef.current,
-    },
-    {
-      skip: !toggleLike,
-    },
-  );
 
   // if it is true delete list by list id after saving other list
   // when login user canceled LIKE in other's list that he/she liked in his/her user page
@@ -294,13 +287,7 @@ const UserPageNovelList = React.memo(({ isMyList }: { isMyList: boolean }) => {
 
   // save "isLike" after toggling like
   useEffect(() => {
-    if (!toggleLike) return;
-
-    // isFetching(O) isLoading(X)
-    // when requesting twice or later, isLoading is always false
-    // so I used "isFetching" that changes in any request
-    //   to set LIKE after getting it from server
-    if (toggleLikeResult.isFetching) return;
+    if (toggleLikeResult.isLoading) return;
 
     if (!toggleLikeResult.data) return;
 
@@ -310,12 +297,12 @@ const UserPageNovelList = React.memo(({ isMyList }: { isMyList: boolean }) => {
 
     const { isLike } = toggleLikeResult.data;
 
-    // when login user canceled LIKE in other's list page of his/her user page
-    //                                          that displays novel list he/she likes
+    // don't display novel list again where LIKE was canceled                          //
+    // when login user canceled LIKE in other's list page of his/her user page         //
+    //                                          that displays novel list he/she likes  //
     if (!isLike && !isMyList && userName === loginUserInfo.userName) {
       const listIDsSaved = Object.keys(novelListsOfUser);
       const otherListNotSelected = novelListsOfUser[listId].novelList.otherList;
-
       // if there is no other saved list in "novelListsOfUser" but is in DB
       if (listIDsSaved.length === 1 && !!otherListNotSelected.length) {
         const nextListId = otherListNotSelected[0].listId;
@@ -338,7 +325,8 @@ const UserPageNovelList = React.memo(({ isMyList }: { isMyList: boolean }) => {
         navigate(`/user_page/${userName}`);
       }
     }
-    // set LIKE as being changed
+    //
+    //  set LIKE as being changed ----------------------------------------------------- //
     else {
       setNovelListsOfUser({
         ...novelListsOfUser,
@@ -348,10 +336,7 @@ const UserPageNovelList = React.memo(({ isMyList }: { isMyList: boolean }) => {
         },
       });
     }
-
-    handleToggleLike(false);
-    countTogglingLikeRef.current += 1;
-  }, [toggleLike, toggleLikeResult.data, toggleLikeResult.isFetching]);
+  }, [toggleLikeResult.data, toggleLikeResult.isLoading]);
   // get the content page mark
   const contentPageMark = contentMark(userName as string, loginUserInfo.userName, isMyList, false);
 
@@ -441,17 +426,15 @@ const UserPageNovelList = React.memo(({ isMyList }: { isMyList: boolean }) => {
               <HearIconBox
                 isLike={novelListsOfUser[listId].novelList.isLike}
                 size={28}
-                onClick={() => {
+                onClick={async () => {
                   const { isLike } = novelListsOfUser[listId].novelList;
 
-                  // prevent click event as fetching
-                  if (toggleLikeResult.isFetching) return;
                   if (!loginUserInfo.userId) {
                     // when user didn't login
                     alert("좋아요를 누르려면 로그인을 해 주세요.");
                   } else if (!isLike) {
-                    // set isLike to true without alert when it was false
-                    handleToggleLike(true);
+                    // set isLike to true by request without alert when it was false
+                    await toggleLikeRequest();
                     alert("내 좋아요 리스트에 추가되었습니다.");
                     //
                     // change this to modal that disappears later
@@ -463,12 +446,12 @@ const UserPageNovelList = React.memo(({ isMyList }: { isMyList: boolean }) => {
                         "좋아요를 취소하면 내 유저페이지의 리스트에서 지워집니다. 취소하시겠어요?",
                       )
                     ) {
-                      handleToggleLike(true);
+                      await toggleLikeRequest();
                     }
                   } else if (userName === loginUserInfo.userName) {
                     // when login user who is the owner of user page tries to set isLike to false
                     if (confirm("좋아요를 취소하면 리스트에서 지워집니다. 취소하시겠어요?")) {
-                      handleToggleLike(true);
+                      await toggleLikeRequest();
                     }
                   }
                 }}

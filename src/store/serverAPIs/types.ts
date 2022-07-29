@@ -196,7 +196,6 @@ export interface ParamsForUserPageNovelList {
 export interface ContentForLike {
   contentType: "writing" | "novelList";
   contentId: string;
-  countTogglingLike: number;
 }
 export interface IsLike {
   isLike: boolean;
