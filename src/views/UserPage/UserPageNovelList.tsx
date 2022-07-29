@@ -317,7 +317,7 @@ const UserPageNovelList = React.memo(({ isMyList }: { isMyList: boolean }) => {
       const otherListNotSelected = novelListsOfUser[listId].novelList.otherList;
 
       // if there is no other saved list in "novelListsOfUser" but is in DB
-      if (listIDsSaved.length === 1 && !!otherListNotSelected) {
+      if (listIDsSaved.length === 1 && !!otherListNotSelected.length) {
         const nextListId = otherListNotSelected[0].listId;
 
         // delete the list where isLike variable was set to false after saving next list
@@ -329,6 +329,13 @@ const UserPageNovelList = React.memo(({ isMyList }: { isMyList: boolean }) => {
           listId: nextListId,
           order: 1,
         });
+      }
+
+      // if there is no other saved list in "novelListsOfUser" and also not in DB
+      // go to the user's home page
+      if (listIDsSaved.length === 1 && !otherListNotSelected.length) {
+        alert("리스트가 더이상 존재하지 않습니다.");
+        navigate(`/user_page/${userName}`);
       }
     }
     // set LIKE as being changed
