@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax */
 /* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable react/jsx-indent */
 import Icon from "assets/Icon";
@@ -211,7 +212,6 @@ const UserPageNovelList = React.memo(({ isMyList }: { isMyList: boolean }) => {
 
     const { novelList, isNextOrder } = othersListResult.data;
     const newListId = novelList.listId;
-
     // save novel list //
     if (!novelListsOfUser || (novelListsOfUser && !novelListsOfUser[newListId])) {
       // saving at first || adding new novel list
@@ -303,6 +303,30 @@ const UserPageNovelList = React.memo(({ isMyList }: { isMyList: boolean }) => {
     if (!isLike && !isMyList && userName === loginUserInfo.userName) {
       const listIDsSaved = Object.keys(novelListsOfUser);
       const otherListNotSelected = novelListsOfUser[listId].novelList.otherList;
+
+      // if there is other saved list in "novelListsOfUser"
+      if (listIDsSaved.length > 1) {
+        let nextListId = "";
+        for (const listIdSaved of listIDsSaved) {
+          if (listIdSaved !== listId) {
+            nextListId = listIdSaved;
+            break;
+          }
+        }
+        // delete the list where isLike variable was set to false
+        setNovelListsOfUser((prevNovelListsOfUser) => {
+          const copyOfNovelListsOfUser = {
+            ...prevNovelListsOfUser,
+          };
+          // delete current list
+          delete copyOfNovelListsOfUser[listId];
+
+          return copyOfNovelListsOfUser;
+        });
+
+        navigate(`/user_page/${userName}/othersList/${nextListId}`);
+      }
+
       // if there is no other saved list in "novelListsOfUser" but is in DB
       if (listIDsSaved.length === 1 && !!otherListNotSelected.length) {
         const nextListId = otherListNotSelected[0].listId;
