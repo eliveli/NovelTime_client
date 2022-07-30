@@ -503,11 +503,14 @@ const UserPageNovelList = React.memo(({ isMyList }: { isMyList: boolean }) => {
                 isLike={novelListsOfUser[listId].novelList.isLike}
                 size={28}
                 onClick={async () => {
-                  const { isLike } = novelListsOfUser[listId].novelList;
+                  const { isLike, userName } = novelListsOfUser[listId].novelList;
 
                   if (!loginUserInfo.userId) {
                     // when user didn't login
                     alert("좋아요를 누르려면 로그인을 해 주세요.");
+                  } else if (loginUserInfo.userName === userName) {
+                    // prevent login user from setting LIKE of list that he/she created
+                    alert("내가 만든 리스트에는 좋아요를 누를 수 없어요.");
                   } else if (!isLike) {
                     // set isLike to true by request without alert when it was false
                     await toggleLikeRequest();
