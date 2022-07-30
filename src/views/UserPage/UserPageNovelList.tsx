@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable react/jsx-indent */
 import Icon from "assets/Icon";
+import Spinner from "assets/Spinner";
 import { CategoryMark } from "components/CategoryMark";
 import MainBG from "components/MainBG";
 import { NovelRow } from "components/Novel";
@@ -446,6 +447,9 @@ const UserPageNovelList = React.memo(({ isMyList }: { isMyList: boolean }) => {
   }
   return (
     <MainBG>
+      {(myListResult.isFetching || othersListResult.isFetching || toggleLikeResult.isLoading) && (
+        <Spinner styles="fixed" />
+      )}
       <CategoryMark categoryText={contentPageMark}>
         <ShareIconBox>
           <Icon.SharePC />
