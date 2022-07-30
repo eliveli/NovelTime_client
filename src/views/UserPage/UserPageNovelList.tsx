@@ -71,6 +71,12 @@ interface NovelList {
   isNextOrder: boolean;
   currentOrder: number;
 }
+interface NovelListTitle {
+  listId: string;
+  listTitle: string;
+  userName?: string;
+  userImg?: { src: string; position: string };
+}
 
 const UserPageNovelList = React.memo(({ isMyList }: { isMyList: boolean }) => {
   const accessToken = useAppSelector((state) => state.user.accessToken);
@@ -111,6 +117,7 @@ const UserPageNovelList = React.memo(({ isMyList }: { isMyList: boolean }) => {
   const othersListResult = useGetContentsForUserPageOthersListQuery(paramsForRequest, {
     skip: isMyList,
   });
+
   // toggle like //
   const [toggleLike, toggleLikeResult] = useToggleLikeMutation();
 
@@ -137,6 +144,9 @@ const UserPageNovelList = React.memo(({ isMyList }: { isMyList: boolean }) => {
 
   // for both in my novel list page and in other's novel list page
   const [novelListsOfUser, setNovelListsOfUser] = useState<{ [x: string]: NovelList }>();
+
+  // for saving all novel list titles with simple info //
+  const novelListTitlesRef = useRef<NovelListTitle[]>([]);
 
   // get and save the novel lists in my novel list page
   useEffect(() => {
@@ -171,10 +181,22 @@ const UserPageNovelList = React.memo(({ isMyList }: { isMyList: boolean }) => {
         currentOrder,
       };
 
+      // set all the novel list titles as new whenever getting new novel list
+      novelListTitlesRef.current = [
+        {
+          listId: newListId,
+          listTitle: novelList.listTitle,
+          userName: novelList.userName,
+          userImg: novelList.userImg,
+        },
+        ...novelList.otherList.map((_) => ({ ..._ })),
+      ];
+
       // change url to show changed-list-id in it
       // after doing this component is rendered but state in it remains.
       // but request is not occurred. so I requested before changing url.
       navigate(`/user_page/${userName as string}/myList/${newListId}`);
+      //
     } else if (novelListsOfUser && novelListsOfUser[newListId]) {
       // adding novels in the existing list as clicking show-more button
       const currentOrder = novelListsOfUser[newListId].currentOrder + 1;
@@ -232,6 +254,17 @@ const UserPageNovelList = React.memo(({ isMyList }: { isMyList: boolean }) => {
         isNextOrder,
         currentOrder,
       };
+
+      // set all the novel list titles as new whenever getting new novel list
+      novelListTitlesRef.current = [
+        {
+          listId: newListId,
+          listTitle: novelList.listTitle,
+          userName: novelList.userName,
+          userImg: novelList.userImg,
+        },
+        ...novelList.otherList.map((_) => ({ ..._ })),
+      ];
 
       // when login user canceled LIKE in other's list he/she liked in his/her user page
       // delete the list where isLike variable was set to false
@@ -302,7 +335,7 @@ const UserPageNovelList = React.memo(({ isMyList }: { isMyList: boolean }) => {
     //                                          that displays novel list he/she likes  //
     if (!isLike && !isMyList && userName === loginUserInfo.userName) {
       const listIDsSaved = Object.keys(novelListsOfUser);
-      const otherListNotSelected = novelListsOfUser[listId].novelList.otherList;
+      const allListsInDB = novelListTitlesRef.current;
 
       // if there is other saved list in "novelListsOfUser"
       if (listIDsSaved.length > 1) {
@@ -324,12 +357,27 @@ const UserPageNovelList = React.memo(({ isMyList }: { isMyList: boolean }) => {
           return copyOfNovelListsOfUser;
         });
 
+        // delete current list from titles
+        novelListTitlesRef.current = novelListTitlesRef.current.filter((_) => _.listId !== listId);
+
         navigate(`/user_page/${userName}/othersList/${nextListId}`);
       }
 
       // if there is no other saved list in "novelListsOfUser" but is in DB
-      if (listIDsSaved.length === 1 && !!otherListNotSelected.length) {
-        const nextListId = otherListNotSelected[0].listId;
+      if (listIDsSaved.length === 1 && allListsInDB.length > 1) {
+        // to get next list from server
+        let nextListId;
+        for (const list of allListsInDB) {
+          if (list.listId !== listId) {
+            nextListId = list.listId;
+            break;
+          }
+        }
+        if (!nextListId) {
+          alert("리스트가 더이상 존재하지 않습니다.");
+          navigate(`/user_page/${userName}`);
+          return;
+        }
 
         // delete the list where isLike variable was set to false after saving next list
         isNeedToDeleteListRef.current = true;
@@ -344,7 +392,7 @@ const UserPageNovelList = React.memo(({ isMyList }: { isMyList: boolean }) => {
 
       // if there is no other saved list in "novelListsOfUser" and also not in DB
       // go to the user's home page
-      if (listIDsSaved.length === 1 && !otherListNotSelected.length) {
+      if (listIDsSaved.length === 1 && allListsInDB.length === 1) {
         alert("리스트가 더이상 존재하지 않습니다.");
         navigate(`/user_page/${userName}`);
       }
@@ -484,7 +532,7 @@ const UserPageNovelList = React.memo(({ isMyList }: { isMyList: boolean }) => {
               </HearIconBox>
             )}
 
-            {/* selected list title */}
+            {/* title of selected novel list */}
             <ListTitle key={listId} listId={listId} selectedListId={listId}>
               {/* in my list page */}
               {isMyList && novelListsOfUser[listId].novelList.listTitle}
@@ -502,54 +550,58 @@ const UserPageNovelList = React.memo(({ isMyList }: { isMyList: boolean }) => {
                 </OthersTitleContnr>
               )}
             </ListTitle>
-            {/* otherListInfo title list */}
-            {novelListsOfUser[listId].novelList.otherList.map((_) => (
-              <ListTitle
-                key={_.listId}
-                listId={_.listId}
-                selectedListId={listId}
-                onClick={() => {
-                  // get new list from server
-                  if (!novelListsOfUser[_.listId]) {
-                    setParamsForRequest({
-                      ...paramsForRequest,
-                      listId: _.listId,
-                      order: 1,
-                    });
-                  }
-                  // show other list that is not displayed in this time but already exists
-                  if (novelListsOfUser[_.listId]) {
-                    const { isNextOrder, currentOrder } = novelListsOfUser[_.listId];
-                    // set current novel list info
-                    currentListInfoRef.current = {
-                      listId: _.listId,
-                      isNextOrder,
-                      currentOrder,
-                    };
 
-                    navigate(
-                      `/user_page/${userName as string}/${isMyList ? `myList` : `othersList`}/${
-                        _.listId
-                      }`,
-                    );
-                  }
-                }}
-              >
-                {isMyList ? (
-                  // in my list page
-                  _.listTitle
-                ) : (
-                  // in other's list page
-                  <OthersTitleContnr>
-                    <UserImg userImg={_.userImg as ProfileImg} isTitle />
-                    {_.userName}
-                    <ListTitleNormalStyle>의 리스트 : </ListTitleNormalStyle>
-                    &nbsp;
-                    {_.listTitle}
-                  </OthersTitleContnr>
-                )}
-              </ListTitle>
-            ))}
+            {/* titles of novel lists except selected one */}
+            {novelListTitlesRef.current.map((_) => {
+              if (_.listId === listId) return <></>; // except selected list
+              return (
+                <ListTitle
+                  key={_.listId}
+                  listId={_.listId}
+                  selectedListId={listId}
+                  onClick={() => {
+                    // get new list from server
+                    if (!novelListsOfUser[_.listId]) {
+                      setParamsForRequest({
+                        ...paramsForRequest,
+                        listId: _.listId,
+                        order: 1,
+                      });
+                    }
+                    // show other list that is not displayed in this time but already exists
+                    if (novelListsOfUser[_.listId]) {
+                      const { isNextOrder, currentOrder } = novelListsOfUser[_.listId];
+                      // set current novel list info
+                      currentListInfoRef.current = {
+                        listId: _.listId,
+                        isNextOrder,
+                        currentOrder,
+                      };
+
+                      navigate(
+                        `/user_page/${userName as string}/${isMyList ? `myList` : `othersList`}/${
+                          _.listId
+                        }`,
+                      );
+                    }
+                  }}
+                >
+                  {isMyList ? (
+                    // in my list page
+                    _.listTitle
+                  ) : (
+                    // in other's list page
+                    <OthersTitleContnr>
+                      <UserImg userImg={_.userImg as ProfileImg} isTitle />
+                      {_.userName}
+                      <ListTitleNormalStyle>의 리스트 : </ListTitleNormalStyle>
+                      &nbsp;
+                      {_.listTitle}
+                    </OthersTitleContnr>
+                  )}
+                </ListTitle>
+              );
+            })}
           </ListTitleContnr>
         </ListTitleLimitHeightContnr>
       )}
