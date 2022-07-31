@@ -28,6 +28,8 @@ export default function CategoryMark({
 
   isShowAllButton,
 
+  isNoContent,
+
   children,
 }: {
   writing?: boolean;
@@ -54,6 +56,8 @@ export default function CategoryMark({
   linkPath?: string;
 
   isShowAllButton?: string;
+
+  isNoContent?: boolean;
 
   novelNO?: number;
   children?: React.ReactChild | React.ReactChildren;
@@ -149,7 +153,15 @@ export default function CategoryMark({
         <CategoryDesc fontSize={fontSize}>{categoryText}</CategoryDesc>
 
         {isShowAllButton && (
-          <GoToAllContentBtn onClick={() => navigate(userPagePath)}>
+          <GoToAllContentBtn
+            onClick={() => {
+              if (isNoContent) {
+                alert("게시글이 존재하지 않아요.");
+                return;
+              }
+              navigate(userPagePath);
+            }}
+          >
             {isShowAllButton}
           </GoToAllContentBtn>
         )}

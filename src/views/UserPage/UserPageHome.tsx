@@ -66,6 +66,11 @@ export default function UserPageHome() {
           path: "myWriting",
         }}
         isShowAllButton="모두 보기"
+        isNoContent={
+          data?.talksUserCreated.length === 0 &&
+          data?.recommendsUserCreated.length === 0 &&
+          data?.commentsUserCreated.length === 0
+        }
         categoryText={myWritingMark}
       />
       <WritingFilter
@@ -106,6 +111,7 @@ export default function UserPageHome() {
           path: "othersWriting",
         }}
         isShowAllButton="모두 보기"
+        isNoContent={data?.talksUserLikes.length === 0 && data?.recommendsUserLikes.length === 0}
         categoryText={othersWritingMark}
       />
 
@@ -145,6 +151,7 @@ export default function UserPageHome() {
         }}
         categoryText={myListMark}
         isShowAllButton="모두 보기"
+        isNoContent={data?.novelLists.listsUserCreated.length === 0}
       />
       {data?.novelLists.listsUserCreated.length ? (
         data?.novelLists.listsUserCreated.map((list) => (
@@ -178,6 +185,7 @@ export default function UserPageHome() {
         }}
         categoryText={othersListMark}
         isShowAllButton="모두 보기"
+        isNoContent={data?.novelLists.listsUserLikes.length === 0}
       />
       {data?.novelLists.listsUserLikes.length ? (
         data?.novelLists.listsUserLikes.map((list) => (
