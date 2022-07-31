@@ -33,35 +33,6 @@ import {
   NextContentsBtn,
 } from "./UserPage.styles";
 import contentMark from "./utils/contentMark";
-// - server request --------------------------------important---------------------------------------
-// 1. when entering this page at first,
-//    request with listId, loginUserName, userName, isMyList
-//    : note :
-//      - received data isLike : it is login user's info
-//         - when userName(the owner of this UserPage) is the different from loginUserName,
-//                 receive isLike as true or false
-//         - when userName is the same as loginUserName
-//                 receive isLike as false. in fact, no matter what the value is except type
-//                                                        because in this case it will be not used
-//      - isMyList is whether the list is userName's list (it is my list)
-//                                       or other's list that userName(the page's owner)'s like
-//                    send it as true in my list, false in other's list
-//      - received data otherList
-//         - when isMyList is true, it will be the list that the user compose
-//         - when isMyList is false, it will be the list that the user like
-//
-//      - received two userName : one in global, the other in the element of the otherList array
-//                 in my list, get the value of "". in fact no matter what it is except type
-//
-//
-// 2. when clicking the other title,
-//    request with listId, isMe, isMyList
-//    receive the novel list, and set it in NovelRow component (is it necessary to modify the code?)
-//
-// 3. when clicking the heart,
-//    request with loginUserName, listId
-//               after receiving the data, execute toggleLike with isLike
-//               (for more detail, go looking at the code below)
 
 interface ProfileImg {
   src: string;
@@ -156,7 +127,18 @@ const UserPageNovelList = React.memo(({ isMyList }: { isMyList: boolean }) => {
     if (!isMyList) return;
 
     if (!myListResult.data) return;
-    if (!listId) return;
+
+    // if list id is undefined or there isn't selected list in DB
+    //     or both user and selected novel list don't match
+    if (
+      !listId ||
+      (myListResult.data && Object.keys(myListResult.data?.novelList).length === 0) ||
+      (novelListsOfUser && !novelListsOfUser[listId]?.novelList.listId)
+    ) {
+      alert("리스트가 존재하지 않습니다.");
+      navigate(`/user_page/${userName as string}`);
+      return;
+    }
 
     const { novelList, isNextOrder } = myListResult.data;
     const newListId = novelList.listId;
@@ -231,7 +213,18 @@ const UserPageNovelList = React.memo(({ isMyList }: { isMyList: boolean }) => {
     if (isMyList) return;
 
     if (!othersListResult.data) return;
-    if (!listId) return;
+
+    // if list id is undefined or there isn't selected list in DB
+    //    or both user and selected novel list don't match
+    if (
+      !listId ||
+      (othersListResult.data && Object.keys(othersListResult.data?.novelList).length === 0) ||
+      (novelListsOfUser && !novelListsOfUser[listId]?.novelList.listId)
+    ) {
+      alert("리스트가 존재하지 않습니다.");
+      navigate(`/user_page/${userName as string}`);
+      return;
+    }
 
     const { novelList, isNextOrder } = othersListResult.data;
     const newListId = novelList.listId;
@@ -410,17 +403,10 @@ const UserPageNovelList = React.memo(({ isMyList }: { isMyList: boolean }) => {
       });
     }
   }, [toggleLikeResult.data, toggleLikeResult.isLoading]);
+
   // get the content page mark
   const contentPageMark = contentMark(userName as string, loginUserInfo.userName, isMyList, false);
 
-  // maintain previous title list : do not rerender every time getting novel list from server
-  // when a user click a title that doesn't exist on server,
-  //      show user alarm modal,
-  //      and reset the title list that is new from server
-  //     --------  I will do this work later    ---------     //
-  //
-  //        note : I get the title list always when clicking a title,
-  //               but I don't use it except for case above.
   // - list more button : show or not all the list title
   const [isListMore, setListMore] = useState(false);
 
@@ -439,12 +425,9 @@ const UserPageNovelList = React.memo(({ isMyList }: { isMyList: boolean }) => {
   // - if titleListHeight is not longer than the height 32px that is 1 line of ListTitleContnr,
   // - then don't show the button even if isListMore is true
   const titleListHeight = useComponentHeight(titleListRef, isListMore);
-  // there isn't selected list in DB or user and selected novel list don't match
-  if (!listId || (novelListsOfUser && !novelListsOfUser[listId]?.novelList.listId)) {
-    alert("리스트가 존재하지 않습니다.");
-    navigate(`/user_page/${userName as string}`);
-    return <></>;
-  }
+
+  // when list id is undefined the page will be navigated in useEffect
+  if (!listId) return <></>;
   return (
     <MainBG>
       {(myListResult.isFetching || othersListResult.isFetching || toggleLikeResult.isLoading) && (
