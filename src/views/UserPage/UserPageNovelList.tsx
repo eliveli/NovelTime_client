@@ -427,7 +427,7 @@ const UserPageNovelList = React.memo(({ isMyList }: { isMyList: boolean }) => {
   const titleListHeight = useComponentHeight(titleListRef, isListMore);
 
   // when list id is undefined the page will be navigated in useEffect
-  if (!listId) return <></>;
+  if (!listId || !novelListsOfUser) return <></>;
   return (
     <MainBG>
       {(myListResult.isFetching || othersListResult.isFetching || toggleLikeResult.isLoading) && (
@@ -472,129 +472,127 @@ const UserPageNovelList = React.memo(({ isMyList }: { isMyList: boolean }) => {
         </MoreBtnParent>
       )}
       {/* title list container */}
-      {novelListsOfUser && (
-        <ListTitleLimitHeightContnr limitContnrWidth={limitContnrWidth} isListMore={isListMore}>
-          <ListTitleContnr
-            limitContnrWidth={limitContnrWidth}
-            isListMore={isListMore}
-            ref={titleListRef}
-          >
-            {/* isLike */}
-            {/* except when login user sees his/her my list in user page */}
-            {!(isMyList && userName === loginUserInfo.userName) && (
-              <HearIconBox
-                isLike={novelListsOfUser[listId].novelList.isLike}
-                size={28}
-                onClick={async () => {
-                  const { isLike, userName } = novelListsOfUser[listId].novelList;
+      <ListTitleLimitHeightContnr limitContnrWidth={limitContnrWidth} isListMore={isListMore}>
+        <ListTitleContnr
+          limitContnrWidth={limitContnrWidth}
+          isListMore={isListMore}
+          ref={titleListRef}
+        >
+          {/* isLike */}
+          {/* except when login user sees his/her my list in user page */}
+          {!(isMyList && userName === loginUserInfo.userName) && (
+            <HearIconBox
+              isLike={novelListsOfUser[listId].novelList.isLike}
+              size={28}
+              onClick={async () => {
+                const { isLike, userName } = novelListsOfUser[listId].novelList;
 
-                  if (!loginUserInfo.userId) {
-                    // when user didn't login
-                    alert("좋아요를 누르려면 로그인을 해 주세요.");
-                  } else if (loginUserInfo.userName === userName) {
-                    // prevent login user from setting LIKE of list that he/she created
-                    alert("내가 만든 리스트에는 좋아요를 누를 수 없어요.");
-                  } else if (!isLike) {
-                    // set isLike to true by request without alert when it was false
+                if (!loginUserInfo.userId) {
+                  // when user didn't login
+                  alert("좋아요를 누르려면 로그인을 해 주세요.");
+                } else if (loginUserInfo.userName === userName) {
+                  // prevent login user from setting LIKE of list that he/she created
+                  alert("내가 만든 리스트에는 좋아요를 누를 수 없어요.");
+                } else if (!isLike) {
+                  // set isLike to true by request without alert when it was false
+                  await toggleLikeRequest();
+                  alert("내 좋아요 리스트에 추가되었습니다.");
+                  //
+                  // change this to modal that disappears later
+                  //
+                } else if (userName !== loginUserInfo.userName) {
+                  // when login user who isn't the owner of user page tries to set isLike to false
+                  if (
+                    confirm(
+                      "좋아요를 취소하면 내 유저페이지의 리스트에서 지워집니다. 취소하시겠어요?",
+                    )
+                  ) {
                     await toggleLikeRequest();
-                    alert("내 좋아요 리스트에 추가되었습니다.");
-                    //
-                    // change this to modal that disappears later
-                    //
-                  } else if (userName !== loginUserInfo.userName) {
-                    // when login user who isn't the owner of user page tries to set isLike to false
-                    if (
-                      confirm(
-                        "좋아요를 취소하면 내 유저페이지의 리스트에서 지워집니다. 취소하시겠어요?",
-                      )
-                    ) {
-                      await toggleLikeRequest();
-                    }
-                  } else if (userName === loginUserInfo.userName) {
-                    // when login user who is the owner of user page tries to set isLike to false
-                    if (confirm("좋아요를 취소하면 리스트에서 지워집니다. 취소하시겠어요?")) {
-                      await toggleLikeRequest();
-                    }
+                  }
+                } else if (userName === loginUserInfo.userName) {
+                  // when login user who is the owner of user page tries to set isLike to false
+                  if (confirm("좋아요를 취소하면 리스트에서 지워집니다. 취소하시겠어요?")) {
+                    await toggleLikeRequest();
+                  }
+                }
+              }}
+            >
+              <Icon.BigFillHeart />
+            </HearIconBox>
+          )}
+
+          {/* title of selected novel list */}
+          <ListTitle key={listId} listId={listId} selectedListId={listId}>
+            {/* in my list page */}
+            {isMyList && novelListsOfUser[listId].novelList.listTitle}
+            {/* in other's list page */}
+            {!isMyList && (
+              <OthersTitleContnr>
+                <UserImg
+                  userImg={novelListsOfUser[listId].novelList.userImg as ProfileImg}
+                  isTitle
+                />
+                {novelListsOfUser[listId].novelList.userName}
+                <ListTitleNormalStyle>의 리스트 : </ListTitleNormalStyle>
+                &nbsp;
+                {novelListsOfUser[listId].novelList.listTitle}
+              </OthersTitleContnr>
+            )}
+          </ListTitle>
+
+          {/* titles of novel lists except selected one */}
+          {novelListTitlesRef.current.map((_) => {
+            if (_.listId === listId) return <></>; // except selected list
+            return (
+              <ListTitle
+                key={_.listId}
+                listId={_.listId}
+                selectedListId={listId}
+                onClick={() => {
+                  // get new list from server
+                  if (!novelListsOfUser[_.listId]) {
+                    setParamsForRequest({
+                      ...paramsForRequest,
+                      listId: _.listId,
+                      order: 1,
+                    });
+                  }
+                  // show other list that is not displayed in this time but already exists
+                  if (novelListsOfUser[_.listId]) {
+                    const { isNextOrder, currentOrder } = novelListsOfUser[_.listId];
+                    // set current novel list info
+                    currentListInfoRef.current = {
+                      listId: _.listId,
+                      isNextOrder,
+                      currentOrder,
+                    };
+
+                    navigate(
+                      `/user_page/${userName as string}/${isMyList ? `myList` : `othersList`}/${
+                        _.listId
+                      }`,
+                    );
                   }
                 }}
               >
-                <Icon.BigFillHeart />
-              </HearIconBox>
-            )}
-
-            {/* title of selected novel list */}
-            <ListTitle key={listId} listId={listId} selectedListId={listId}>
-              {/* in my list page */}
-              {isMyList && novelListsOfUser[listId].novelList.listTitle}
-              {/* in other's list page */}
-              {!isMyList && (
-                <OthersTitleContnr>
-                  <UserImg
-                    userImg={novelListsOfUser[listId].novelList.userImg as ProfileImg}
-                    isTitle
-                  />
-                  {novelListsOfUser[listId].novelList.userName}
-                  <ListTitleNormalStyle>의 리스트 : </ListTitleNormalStyle>
-                  &nbsp;
-                  {novelListsOfUser[listId].novelList.listTitle}
-                </OthersTitleContnr>
-              )}
-            </ListTitle>
-
-            {/* titles of novel lists except selected one */}
-            {novelListTitlesRef.current.map((_) => {
-              if (_.listId === listId) return <></>; // except selected list
-              return (
-                <ListTitle
-                  key={_.listId}
-                  listId={_.listId}
-                  selectedListId={listId}
-                  onClick={() => {
-                    // get new list from server
-                    if (!novelListsOfUser[_.listId]) {
-                      setParamsForRequest({
-                        ...paramsForRequest,
-                        listId: _.listId,
-                        order: 1,
-                      });
-                    }
-                    // show other list that is not displayed in this time but already exists
-                    if (novelListsOfUser[_.listId]) {
-                      const { isNextOrder, currentOrder } = novelListsOfUser[_.listId];
-                      // set current novel list info
-                      currentListInfoRef.current = {
-                        listId: _.listId,
-                        isNextOrder,
-                        currentOrder,
-                      };
-
-                      navigate(
-                        `/user_page/${userName as string}/${isMyList ? `myList` : `othersList`}/${
-                          _.listId
-                        }`,
-                      );
-                    }
-                  }}
-                >
-                  {isMyList ? (
-                    // in my list page
-                    _.listTitle
-                  ) : (
-                    // in other's list page
-                    <OthersTitleContnr>
-                      <UserImg userImg={_.userImg as ProfileImg} isTitle />
-                      {_.userName}
-                      <ListTitleNormalStyle>의 리스트 : </ListTitleNormalStyle>
-                      &nbsp;
-                      {_.listTitle}
-                    </OthersTitleContnr>
-                  )}
-                </ListTitle>
-              );
-            })}
-          </ListTitleContnr>
-        </ListTitleLimitHeightContnr>
-      )}
+                {isMyList ? (
+                  // in my list page
+                  _.listTitle
+                ) : (
+                  // in other's list page
+                  <OthersTitleContnr>
+                    <UserImg userImg={_.userImg as ProfileImg} isTitle />
+                    {_.userName}
+                    <ListTitleNormalStyle>의 리스트 : </ListTitleNormalStyle>
+                    &nbsp;
+                    {_.listTitle}
+                  </OthersTitleContnr>
+                )}
+              </ListTitle>
+            );
+          })}
+        </ListTitleContnr>
+      </ListTitleLimitHeightContnr>
 
       <NovelListContnr>
         {novelListsOfUser &&
