@@ -83,6 +83,22 @@ const iconStyleHover = () => `
       color: rgba(0, 0, 0, 0.2);
   `)}`;
 
+const TogglingBigHeartIcon = styled(HiHeart)<{ isLike: boolean }>`
+  width: 100%;
+  height: 100%;
+  color: ${({ isLike }) => (isLike ? `${theme.color.main}` : `rgba(150, 150, 150, 0.4)`)};
+
+  @media (hover: hover) {
+    &:hover {
+      ${({ isLike }) =>
+        isLike
+          ? `color: rgba(0, 0, 0, 0.2);`
+          : `color: ${theme.color.mainLight};
+        `}
+    }
+  }
+`;
+
 const Icon = {
   IconBox,
   Write: styled(BsPencilSquare)`
@@ -175,6 +191,7 @@ const Icon = {
   BigFillHeart: styled(HiHeart)`
     ${iconStyleHover()};
   `,
+  TogglingBigHeartIcon,
   Search: styled(IoIosSearch)`
     ${iconStyleHover()};
   `,

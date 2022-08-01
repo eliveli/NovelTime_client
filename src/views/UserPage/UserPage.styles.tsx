@@ -367,7 +367,6 @@ export const ContainerWidth = styled.div`
 export const HearIconBox = styled(Icon.IconBox)<{ isLike: boolean }>`
   order: -1;
   margin-right: -7px;
-  color: ${({ isLike }) => (isLike ? theme.color.main : `rgba(150,150,150,0.4)`)};
 `;
 export const ShareIconBox = styled(Icon.IconBox)`
   color: rgba(100, 100, 100, 0.4);

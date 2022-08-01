@@ -517,7 +517,7 @@ const UserPageNovelList = React.memo(({ isMyList }: { isMyList: boolean }) => {
                 }
               }}
             >
-              <Icon.BigFillHeart />
+              <Icon.TogglingBigHeartIcon isLike={novelListsOfUser[listId].novelList.isLike} />
             </HearIconBox>
           )}
 
