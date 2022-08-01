@@ -81,7 +81,7 @@ export default function Recommend({ recommendInfo, isLast }: RecommendProps) {
         isLast={isLast}
         ref={contnrRef}
         onClick={() => {
-          navigate(`/recommend_detail/${recommendId}`);
+          navigate(`/recommend-detail/${recommendId}`);
         }}
       >
         <NovelContainer>

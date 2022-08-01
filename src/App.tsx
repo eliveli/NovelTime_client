@@ -124,30 +124,30 @@ function App() {
         <Modal />
         <ScrollToTop>
           <Routes>
-            {["/", "/talk_list", "/recommend_list", "/novel_list", "/message_list"].map((path) => (
+            {["/", "/talk-list", "/recommend-list", "/novel-list", "/message-list"].map((path) => (
               <Route path={path} element={<MainListNav />} />
             ))}
             {[
-              "/novel_detail/:novelId",
-              "/novel_detail/:novelId/writing_list",
-              "/novel_detail/:novelId/:talkId",
-              "/novel_detail/:novelId/:recommendId",
-              "/talk_detail/:talkId",
-              "/talk_detail/:talkId/:commentId",
-              "/recommend_detail/:recommendId",
-              "/novel_list/:categoryText/:categoryId",
-              "/novel_list/:categoryText/:categoryId/:novelId",
-              "/add_writing",
-              "/add_writing/:novelId/:novelTitle",
+              "/novel-detail/:novelId",
+              "/novel-detail/:novelId/writing-list",
+              "/novel-detail/:novelId/:talkId",
+              "/novel-detail/:novelId/:recommendId",
+              "/talk-detail/:talkId",
+              "/talk-detail/:talkId/:commentId",
+              "/recommend-detail/:recommendId",
+              "/novel-list/:categoryText/:categoryId",
+              "/novel-list/:categoryText/:categoryId/:novelId",
+              "/add-writing",
+              "/add-writing/:novelId/:novelTitle",
               "/search",
               "/search/novel",
-              "/message_room/:roomId",
+              "/message-room/:roomId",
 
-              "/user_page/:userName",
-              "/user_page/:userName/myWriting",
-              "/user_page/:userName/othersWriting",
-              "/user_page/:userName/myList/:listId",
-              "/user_page/:userName/othersList/:listId",
+              "/user-page/:userName",
+              "/user-page/:userName/my-writing",
+              "/user-page/:userName/others-writing",
+              "/user-page/:userName/my-list/:listId",
+              "/user-page/:userName/others-list/:listId",
               "*",
             ].map((path) => (
               <Route path={path} element={<DetailNav />} />
@@ -162,55 +162,55 @@ function App() {
 
           <Route path="/oauth/callback/:oauthServerUrl" element={<OAuthRedirectHandler />} />
 
-          <Route path="/talk_list" element={<FreeTalkList />} />
-          <Route path="/recommend_list" element={<RecommendList />} />
+          <Route path="/talk-list" element={<FreeTalkList />} />
+          <Route path="/recommend-list" element={<RecommendList />} />
 
-          <Route path="/novel_list" element={<NovelList />} />
-          <Route path="/novel_list/:categoryText/:categoryId" element={<NovelListByCategory />} />
+          <Route path="/novel-list" element={<NovelList />} />
+          <Route path="/novel-list/:categoryText/:categoryId" element={<NovelListByCategory />} />
           <Route
-            path="/novel_list/:categoryText/:categoryId/:novelId"
+            path="/novel-list/:categoryText/:categoryId/:novelId"
             element={<NovelListByCategory />}
           />
 
-          <Route path="/novel_detail/:novelId" element={<NovelDetail />} />
-          <Route path="/novel_detail/:novelId/writing_list" element={<WritingList />} />
-          <Route path="/novel_detail/:novelId/:talkId" element={<NovelDetailTalk />} />
-          <Route path="/novel_detail/:novelId/:recommendId" element={<NovelDetailRecommend />} />
+          <Route path="/novel-detail/:novelId" element={<NovelDetail />} />
+          <Route path="/novel-detail/:novelId/writing-list" element={<WritingList />} />
+          <Route path="/novel-detail/:novelId/:talkId" element={<NovelDetailTalk />} />
+          <Route path="/novel-detail/:novelId/:recommendId" element={<NovelDetailRecommend />} />
 
-          <Route path="/talk_detail/:talkId" element={<FreeTalkDetail />} />
-          <Route path="/talk_detail/:talkId/:commentId" element={<FreeTalkDetail />} />
-          <Route path="/recommend_detail/:recommendId" element={<RecommendDetail />} />
+          <Route path="/talk-detail/:talkId" element={<FreeTalkDetail />} />
+          <Route path="/talk-detail/:talkId/:commentId" element={<FreeTalkDetail />} />
+          <Route path="/recommend-detail/:recommendId" element={<RecommendDetail />} />
 
-          <Route path="/add_writing" element={<AddWriting />} />
-          <Route path="/add_writing/:novelId/:novelTitle" element={<AddWriting />} />
+          <Route path="/add-writing" element={<AddWriting />} />
+          <Route path="/add-writing/:novelId/:novelTitle" element={<AddWriting />} />
 
           <Route path="/search" element={<SearchPage />} />
           <Route path="/search/novel" element={<SearchPage />} />
           <Route path="/search/novel/iframe" element={<SearchPage />} />
           {/* 검색 전 예시 작품 보여주기 */}
 
-          <Route path="/message_list" element={<MessageList />} />
+          <Route path="/message-list" element={<MessageList />} />
 
-          <Route path="/message_room/:roomId" element={<MessageRoom />} />
+          <Route path="/message-room/:roomId" element={<MessageRoom />} />
 
           {/* 새로고침 등 상황에 로그인 유지 위해 클라이언트 스토어 이용*/}
 
-          <Route path="/user_page/:userName" element={<UserPageParent />}>
+          <Route path="/user-page/:userName" element={<UserPageParent />}>
             <Route index element={<UserPageHome />} />
             <Route
-              path="/user_page/:userName/myWriting"
+              path="/user-page/:userName/my-writing"
               element={<UserPageWriting isMyWriting={true} />}
             />
             <Route
-              path="/user_page/:userName/othersWriting"
+              path="/user-page/:userName/others-writing"
               element={<UserPageWriting isMyWriting={false} />}
             />
             <Route
-              path="/user_page/:userName/myList/:listId"
+              path="/user-page/:userName/my-list/:listId"
               element={<UserPageNovelList isMyList={true} />}
             />
             <Route
-              path="/user_page/:userName/othersList/:listId"
+              path="/user-page/:userName/others-list/:listId"
               element={<UserPageNovelList isMyList={false} />}
             />
           </Route>

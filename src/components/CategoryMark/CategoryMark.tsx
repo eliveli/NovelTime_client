@@ -84,7 +84,7 @@ export default function CategoryMark({
         <CategoryDesc fontSize={fontSize}>{categoryText}</CategoryDesc>
         {/* display show-all mark */}
         {isShowAllMark && (
-          <LinkCategory to={`/novel_detail/${novelId as string}/writing_list`}>
+          <LinkCategory to={`/novel-detail/${novelId as string}/writing-list`}>
             <ShowAllText>전체보기</ShowAllText>
             <ShowAllIcon />
           </LinkCategory>
@@ -98,7 +98,7 @@ export default function CategoryMark({
         <CategoryDesc>{categoryText}</CategoryDesc>
         {/* display show-all mark */}
         {isShowAllMark && (
-          <LinkCategory to={`/novel_list/${categoryText}/${categoryId as string}/${novelId}`}>
+          <LinkCategory to={`/novel-list/${categoryText}/${categoryId as string}/${novelId}`}>
             <ShowAllText>전체보기</ShowAllText>
             <ShowAllIcon />
           </LinkCategory>
@@ -131,7 +131,7 @@ export default function CategoryMark({
           <LinkCategory
             novelNO={novelNO}
             isUserMark={userMark !== undefined}
-            to={`/user_page/${infoFromUserPage.userName}/${infoFromUserPage.path}/${infoFromUserPage.list.listId}`}
+            to={`/user-page/${infoFromUserPage.userName}/${infoFromUserPage.path}/${infoFromUserPage.list.listId}`}
           >
             <ShowAllText isUserNovelList>이 리스트 모두 보기</ShowAllText>
             <ShowAllIcon />
@@ -145,8 +145,8 @@ export default function CategoryMark({
   if (infoFromUserPage?.list?.isMainCategory || infoFromUserPage) {
     // writing or novel list
     const userPagePath = infoFromUserPage.list?.isMainCategory
-      ? `/user_page/${infoFromUserPage.userName}/${infoFromUserPage.path}/${infoFromUserPage.list.listId}`
-      : `/user_page/${infoFromUserPage.userName}/${infoFromUserPage.path}`;
+      ? `/user-page/${infoFromUserPage.userName}/${infoFromUserPage.path}/${infoFromUserPage.list.listId}`
+      : `/user-page/${infoFromUserPage.userName}/${infoFromUserPage.path}`;
 
     return (
       <CategoryContainer>
@@ -173,7 +173,7 @@ export default function CategoryMark({
       <CategoryDesc>{categoryText}</CategoryDesc>
       {/* display show-all mark */}
       {isShowAllMark && (
-        <LinkCategory to={`/novel_list/${categoryText}/${categoryId as string}`}>
+        <LinkCategory to={`/novel-list/${categoryText}/${categoryId as string}`}>
           <ShowAllText>전체보기</ShowAllText>
           <ShowAllIcon />
         </LinkCategory>

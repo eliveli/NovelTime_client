@@ -83,7 +83,7 @@ export const Writing = React.memo(({ writingInfo }: WritingInfo) => {
   // talk
   if (talkId) {
     return (
-      <WritingContnr onClick={() => navigate(`/talk_detail/${talkId}`)}>
+      <WritingContnr onClick={() => navigate(`/talk-detail/${talkId}`)}>
         <ContnrNearImg isTalk>
           <WritingTitle talkId={talkId}>{talkTitle}</WritingTitle>
           <UserContnr talkId={talkId}>
@@ -118,7 +118,7 @@ export const Writing = React.memo(({ writingInfo }: WritingInfo) => {
     <WritingContnr
       onClick={() => {
         if (recommendId) {
-          navigate(`/recommend_detail/${recommendId}`);
+          navigate(`/recommend-detail/${recommendId}`);
         }
       }}
     >
@@ -161,7 +161,7 @@ export const Comment = React.memo(({ commentInfo }: CommentInfo) => {
   const navigate = useNavigate();
 
   return (
-    <WritingContnr isComment onClick={() => navigate(`/talk_detail/${talkId}/${commentId}`)}>
+    <WritingContnr isComment onClick={() => navigate(`/talk-detail/${talkId}/${commentId}`)}>
       <CommentContentContnr>
         <CommentContent>{commentContent}</CommentContent>
         <CreateDate>{createDate}</CreateDate>

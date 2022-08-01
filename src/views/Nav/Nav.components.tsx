@@ -79,16 +79,16 @@ export function NavPC({ pathname }: Props) {
         <NavContentPC>
           {/* [category name, route path] */}
           {[
-            ["FreeTalk", "/talk_list"],
-            ["Recommend", "/recommend_list"],
-            ["Novel", "/novel_list"],
-            ["Message", "/message_list"],
+            ["FreeTalk", "/talk-list"],
+            ["Recommend", "/recommend-list"],
+            ["Novel", "/novel-list"],
+            ["Message", "/message-list"],
           ].map((_, idx) => {
             // when path is from novel detail to anywhere, mark Novel in the NavBar
             // but for other path, path is the same name in the Nav
             let isPath;
             if (idx === 2) {
-              isPath = ["novel_detail", _[1]].filter((__) => pathname.includes(__)).length === 1;
+              isPath = ["novel-detail", _[1]].filter((__) => pathname.includes(__)).length === 1;
             } else {
               isPath = pathname.includes(_[1]);
             }
@@ -112,7 +112,7 @@ export function NavPC({ pathname }: Props) {
           {loginUserInfo.userName && (
             <MyPageBtn
               onClick={() => {
-                navigate(`/user_page/${loginUserInfo.userName}`);
+                navigate(`/user-page/${loginUserInfo.userName}`);
               }}
             >
               보관함
@@ -163,7 +163,7 @@ export function NavMobileMainTop() {
           {loginUserInfo.userName && (
             <MyPageBtn
               onClick={() => {
-                navigate(`/user_page/${loginUserInfo.userName}`);
+                navigate(`/user-page/${loginUserInfo.userName}`);
               }}
             >
               보관함
@@ -206,11 +206,11 @@ export function NavMobileMainBottom({ pathname }: Props) {
       <NavContentBoxMobile isMainBottom>
         {/* [category name, route path] */}
         {[
-          ["FreeTalk", "/talk_list", freeTalk, freeTalkActive],
-          ["Recommend", "/recommend_list", recommend, recommendActive],
-          ["AddWriting", "/add_writing", addWriting, addWritingActive], // 추후 라우팅 필요
-          ["Novel", "/novel_list", novel, novelActive],
-          ["Message", "/message_list", message, messageActive],
+          ["FreeTalk", "/talk-list", freeTalk, freeTalkActive],
+          ["Recommend", "/recommend-list", recommend, recommendActive],
+          ["AddWriting", "/add-writing", addWriting, addWritingActive], // 추후 라우팅 필요
+          ["Novel", "/novel-list", novel, novelActive],
+          ["Message", "/message-list", message, messageActive],
         ].map((_) => (
           <NavContent
             key={_[0]}
@@ -288,13 +288,13 @@ export function NavMobileDetail({ parameter, pathname, handleMsgList }: DetailPr
       <NavContentBoxMobile isDetail isMsgList={handleMsgList ? true : undefined}>
         <IconsBox isLeft>
           {/* nav icon for normal case  */}
-          {!(pathname.includes("add_writing") && !novelId) && !handleMsgList && (
+          {!(pathname.includes("add-writing") && !novelId) && !handleMsgList && (
             <LeftIconBox onClick={() => navigate(-1)}>
               <BackIcon />
             </LeftIconBox>
           )}
           {/* at add-writing page without novelId from useParams */}
-          {pathname.includes("add_writing") && !novelId && (
+          {pathname.includes("add-writing") && !novelId && (
             <LeftIconBox onClick={() => navigate("/")}>
               <Icon.CloseWriting />
             </LeftIconBox>
@@ -321,11 +321,11 @@ export function NavMobileDetail({ parameter, pathname, handleMsgList }: DetailPr
         </IconsBox>
         {/* what page title is */}
         {[
-          ["talk_detail", "여기는 프리톡!"],
-          ["recommend_detail", "여기는 리코멘드!"],
-          ["add_writing", "add writing"],
+          ["talk-detail", "여기는 프리톡!"],
+          ["recommend-detail", "여기는 리코멘드!"],
+          ["add-writing", "add writing"],
           ["message", loginUserInfo.userImg, loginUserInfo.userName],
-          ["user_page", userInfoInUserPage.userImg, userInfoInUserPage.userName],
+          ["user-page", userInfoInUserPage.userImg, userInfoInUserPage.userName],
         ].map((_, idx) => {
           if (idx === 2 && !pathname.includes(_[0] as string) && parameter?.novelId) {
             return <PageTitle>{novelTitle}</PageTitle>;
@@ -343,7 +343,7 @@ export function NavMobileDetail({ parameter, pathname, handleMsgList }: DetailPr
           }
           if (idx === 4 && pathname.includes(_[0] as string)) {
             return (
-              <PageTitle onClick={() => navigate(`user_page/${_[2]}`)}>
+              <PageTitle onClick={() => navigate(`user-page/${_[2]}`)}>
                 <UserImg userImg={_[1] as InterfaceUserImg} />
                 <UserName>{_[2]}</UserName>
               </PageTitle>
@@ -353,7 +353,7 @@ export function NavMobileDetail({ parameter, pathname, handleMsgList }: DetailPr
         })}
 
         <IconsBox isRight>
-          {(pathname === `/novel_detail/${parameter?.novelId as string}` ||
+          {(pathname === `/novel-detail/${parameter?.novelId as string}` ||
             parameter?.recommendId ||
             parameter?.talkId) && (
             <HeartIconBox
@@ -373,7 +373,7 @@ export function NavMobileDetail({ parameter, pathname, handleMsgList }: DetailPr
             </ShareIconBox>
           )}
           {/* submit writing */}
-          {pathname?.includes("add_writing") && (
+          {pathname?.includes("add-writing") && (
             <SubmitBtn onClick={() => dispatch(handleWritingSubmit(true))}>작성</SubmitBtn>
           )}
         </IconsBox>

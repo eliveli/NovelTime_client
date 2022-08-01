@@ -136,7 +136,7 @@ const UserPageNovelList = React.memo(({ isMyList }: { isMyList: boolean }) => {
       (novelListsOfUser && !novelListsOfUser[listId]?.novelList.listId)
     ) {
       alert("리스트가 존재하지 않습니다.");
-      navigate(`/user_page/${userName as string}`);
+      navigate(`/user-page/${userName as string}`);
       return;
     }
 
@@ -178,7 +178,7 @@ const UserPageNovelList = React.memo(({ isMyList }: { isMyList: boolean }) => {
       // change url to show changed-list-id in it
       // after doing this component is rendered but state in it remains.
       // but request is not occurred. so I requested before changing url.
-      navigate(`/user_page/${userName as string}/myList/${newListId}`);
+      navigate(`/user-page/${userName as string}/my-list/${newListId}`);
       //
     } else if (novelListsOfUser && novelListsOfUser[newListId]) {
       // adding novels in the existing list as clicking show-more button
@@ -222,7 +222,7 @@ const UserPageNovelList = React.memo(({ isMyList }: { isMyList: boolean }) => {
       (novelListsOfUser && !novelListsOfUser[listId]?.novelList.listId)
     ) {
       alert("리스트가 존재하지 않습니다.");
-      navigate(`/user_page/${userName as string}`);
+      navigate(`/user-page/${userName as string}`);
       return;
     }
 
@@ -285,7 +285,7 @@ const UserPageNovelList = React.memo(({ isMyList }: { isMyList: boolean }) => {
       // change url to show changed-list-id in it
       // after doing this component is rendered but state in it remains.
       // but request is not occurred. so I requested before changing url.
-      navigate(`/user_page/${userName as string}/othersList/${newListId}`);
+      navigate(`/user-page/${userName as string}/others-list/${newListId}`);
     } else if (novelListsOfUser && novelListsOfUser[newListId]) {
       // adding novels in the existing list as clicking show-more button
       const currentOrder = novelListsOfUser[newListId].currentOrder + 1;
@@ -354,7 +354,7 @@ const UserPageNovelList = React.memo(({ isMyList }: { isMyList: boolean }) => {
         // delete current list from titles
         novelListTitlesRef.current = novelListTitlesRef.current.filter((_) => _.listId !== listId);
 
-        navigate(`/user_page/${userName}/othersList/${nextListId}`);
+        navigate(`/user-page/${userName}/others-list/${nextListId}`);
       }
 
       // if there is no other saved list in "novelListsOfUser" but is in DB
@@ -369,7 +369,7 @@ const UserPageNovelList = React.memo(({ isMyList }: { isMyList: boolean }) => {
         }
         if (!nextListId) {
           alert("리스트가 더이상 존재하지 않습니다.");
-          navigate(`/user_page/${userName}`);
+          navigate(`/user-page/${userName}`);
           return;
         }
 
@@ -388,7 +388,7 @@ const UserPageNovelList = React.memo(({ isMyList }: { isMyList: boolean }) => {
       // go to the user's home page
       if (listIDsSaved.length === 1 && allListsInDB.length === 1) {
         alert("리스트가 더이상 존재하지 않습니다.");
-        navigate(`/user_page/${userName}`);
+        navigate(`/user-page/${userName}`);
       }
     }
     //
@@ -568,7 +568,7 @@ const UserPageNovelList = React.memo(({ isMyList }: { isMyList: boolean }) => {
                     };
 
                     navigate(
-                      `/user_page/${userName as string}/${isMyList ? `myList` : `othersList`}/${
+                      `/user-page/${userName as string}/${isMyList ? `my-list` : `others-list`}/${
                         _.listId
                       }`,
                     );

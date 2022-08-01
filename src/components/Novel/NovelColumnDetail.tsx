@@ -144,7 +144,7 @@ export default function NovelColumnDetail({ recommendDetail, novel }: MyComponen
   };
   return (
     <ThemeProvider theme={theme}>
-      <NovelLink to={`/novel_detail/${novelId}`}>
+      <NovelLink to={`/novel-detail/${novelId}`}>
         <NovelImg
           screenWidth={screenWidth}
           novelImg={novelImg}

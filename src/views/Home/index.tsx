@@ -474,7 +474,7 @@ function RankUser({ info, idx }: RankUserProps) {
 
   const navigate = useNavigate();
   return (
-    <UserContnr onClick={() => navigate(`/user_page/${userName}`)}>
+    <UserContnr onClick={() => navigate(`/user-page/${userName}`)}>
       <UserImg userImg={userImg} />
       <UserInfo>
         {userAct?.writing && (
@@ -616,14 +616,14 @@ function UserRankSection({ category, rankList }: UserRankSectionProps) {
 export default function Home() {
   return (
     <MainBG>
-      <CategoryMark categoryText="소설 한담 new" linkPath="talk_list" />
+      <CategoryMark categoryText="소설 한담 new" linkPath="talk-list" />
       {dataFromServer.talkList.map((talk, idx) => (
         <FreeTalk talk={talk} isLast={idx + 1 === dataFromServer.talkList.length} />
       ))}
 
       <UserRankSection category="소설 한담" rankList={dataFromServer.talkUserRank} />
 
-      <CategoryMark categoryText="소설 추천 new" linkPath="recommend_list" />
+      <CategoryMark categoryText="소설 추천 new" linkPath="recommend-list" />
       {dataFromServer.recommendList.map((recommendInfo, idx) => (
         <Recommend
           recommendInfo={recommendInfo}
@@ -649,7 +649,7 @@ export default function Home() {
           novelNO={list.novel.length}
           infoFromUserPage={{
             userName: list.userName,
-            path: "myList",
+            path: "my-list",
             list: { isMainCategory: false, listId: list.listId },
           }}
           userMark={{ userImg: list.userImg, userName: list.userName }}

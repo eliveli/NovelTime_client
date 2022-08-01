@@ -77,7 +77,7 @@ function Profile({ userImg, userName, userBG }: ProfileProps) {
       >
         <ProfileUserCntnr>
           <UserImg userImg={userImg} />
-          <UserName onClick={() => navigate(`/user_page/${userName}`)}>{userName}</UserName>
+          <UserName onClick={() => navigate(`/user-page/${userName}`)}>{userName}</UserName>
           {/* message icon for other's page, logout icon for login user's page */}
           {loginUserInfo.userName !== userName ? (
             <MessageIcon src={messageIconUserPage} alt="message" />

@@ -26,18 +26,18 @@ export function MainListNav() {
 
 export function DetailNav() {
   // if novelId exists, pageTitle is novelTitle //
-  // "/novel_detail/:novelId/:talkId",
-  // "/novel_detail/:novelId/:recommendId",
-  // "/novel_detail/:novelId",
-  // "/novel_detail/:novelId/writing_list",
-  // "/novel_list/:categoryText/:categoryId/:novelId",
+  // "/novel-detail/:novelId/:talkId",
+  // "/novel-detail/:novelId/:recommendId",
+  // "/novel-detail/:novelId",
+  // "/novel-detail/:novelId/writing-list",
+  // "/novel-list/:categoryText/:categoryId/:novelId",
 
   // if not, pageTitle is empty : it can be changed //
-  // "/novel_list/:categoryText/:categoryId",
+  // "/novel-list/:categoryText/:categoryId",
 
   // from MainList to Detail, get board name - talk or recommend //
-  // "/talk_detail/:talkId",
-  // "/recommend_detail/:recommendId",
+  // "/talk-detail/:talkId",
+  // "/recommend-detail/:recommendId",
 
   const { pathname } = window.location;
   // const { novelId } = useParams();

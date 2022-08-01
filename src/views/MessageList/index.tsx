@@ -131,7 +131,7 @@ export default function MessageList() {
       handleCrntMsg(msgRoomId);
     } else {
       // at mobile
-      navigate(`/message_room/${msgRoomId}`);
+      navigate(`/message-room/${msgRoomId}`);
     }
   };
   return (

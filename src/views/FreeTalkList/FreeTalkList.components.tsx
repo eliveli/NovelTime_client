@@ -76,14 +76,14 @@ function TalkTablet({ talk }: { talk: TalkProps }) {
             userImg={userImg}
             onClick={(event: React.MouseEvent<HTMLElement>) => {
               event.stopPropagation();
-              navigate(`/user_page/${userName}`);
+              navigate(`/user-page/${userName}`);
             }}
           />
           {/* <UserNameBox> */}
           <UserName
             onClick={(event: React.MouseEvent<HTMLElement>) => {
               event.stopPropagation();
-              navigate(`/user_page/${userName}`);
+              navigate(`/user-page/${userName}`);
             }}
           >
             {userName}
@@ -151,7 +151,7 @@ function TalkMobile({ talk }: { talk: TalkProps }) {
         userImg={userImg}
         onClick={(event: React.MouseEvent<HTMLElement>) => {
           event.stopPropagation();
-          navigate(`/user_page/${userName}`);
+          navigate(`/user-page/${userName}`);
         }}
       />
       <BesideImgContainer>
@@ -160,7 +160,7 @@ function TalkMobile({ talk }: { talk: TalkProps }) {
             <UserName
               onClick={(event: React.MouseEvent<HTMLElement>) => {
                 event.stopPropagation();
-                navigate(`/user_page/${userName}`);
+                navigate(`/user-page/${userName}`);
               }}
             >
               {userName}
@@ -207,7 +207,7 @@ export default function FreeTalk({ talk, isLast }: { talk: TalkProps; isLast?: b
     <Talk
       isLast={isLast}
       onClick={() => {
-        navigate(`/talk_detail/${talk.talkId}`);
+        navigate(`/talk-detail/${talk.talkId}`);
       }}
     >
       <TalkMobile talk={talk} />

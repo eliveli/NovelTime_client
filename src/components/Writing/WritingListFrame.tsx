@@ -46,7 +46,7 @@ export default function WritingListFrame({
       />
       <AddWritingContainer
         onClick={() => {
-          navigate(`/add_writing/${novelId}/${novelTitle}`);
+          navigate(`/add-writing/${novelId}/${novelTitle}`);
         }}
       >
         <AddWriting src={addWritingInPage} alt="addWriting" />

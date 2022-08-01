@@ -29,7 +29,7 @@ export const MainBG = styled.main<{
 
   @media screen and (max-width: 1023px) {
     // at mobile and tablet, 메인리스트 페이지에서 하단 내비게이션 만큼 margin-bottom 설정
-    ${["/", "/talk_list", "/recommend_list", "/novel_list", "/message_list"].includes(pathname) &&
+    ${["/", "/talk-list", "/recommend-list", "/novel-list", "/message-list"].includes(pathname) &&
     "margin-bottom: 60px;"}
   }
 

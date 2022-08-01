@@ -63,7 +63,7 @@ export default function UserPageHome() {
       <CategoryMark
         infoFromUserPage={{
           userName: userName as string,
-          path: "myWriting",
+          path: "my-writing",
         }}
         isShowAllButton="모두 보기"
         isNoContent={
@@ -108,7 +108,7 @@ export default function UserPageHome() {
       <CategoryMark
         infoFromUserPage={{
           userName: userName as string,
-          path: "othersWriting",
+          path: "others-writing",
         }}
         isShowAllButton="모두 보기"
         isNoContent={data?.talksUserLikes.length === 0 && data?.recommendsUserLikes.length === 0}
@@ -143,7 +143,7 @@ export default function UserPageHome() {
       <CategoryMark
         infoFromUserPage={{
           userName: userName as string,
-          path: "myList",
+          path: "my-list",
           list: {
             isMainCategory: true,
             listId: data?.novelLists.listsUserCreated[0]?.listId as string,
@@ -161,7 +161,7 @@ export default function UserPageHome() {
             novelNO={list.novel.length}
             infoFromUserPage={{
               userName: userName as string,
-              path: "myList",
+              path: "my-list",
               list: { isMainCategory: false, listId: list.listId },
             }}
             isShowAllMark
@@ -177,7 +177,7 @@ export default function UserPageHome() {
       <CategoryMark
         infoFromUserPage={{
           userName: userName as string,
-          path: "othersList",
+          path: "others-list",
           list: {
             isMainCategory: true,
             listId: data?.novelLists.listsUserLikes[0]?.listId as string,
@@ -195,7 +195,7 @@ export default function UserPageHome() {
             novelNO={list.novel.length}
             infoFromUserPage={{
               userName: userName as string,
-              path: "othersList",
+              path: "others-list",
               list: { isMainCategory: false, listId: list.listId },
             }}
             userMark={{ userImg: list.userImg, userName: list.userName }}

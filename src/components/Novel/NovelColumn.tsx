@@ -75,7 +75,7 @@ export default function NovelColumn({ novel }: MyComponentProps) {
     <ThemeProvider theme={theme}>
       <NovelLink
         onClick={() => {
-          navigate(`/novel_detail/${novelId}`);
+          navigate(`/novel-detail/${novelId}`);
         }}
       >
         <NovelImg novelImg={novelImg} />

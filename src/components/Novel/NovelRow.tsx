@@ -42,7 +42,7 @@ const NovelRow = React.memo(({ novel, isWidth100, isNotSubInfo }: MyComponentPro
 
   return (
     <ThemeProvider theme={theme}>
-      <NovelLink isWidth100={isWidth100} to={`/novel_detail/${novelId}`}>
+      <NovelLink isWidth100={isWidth100} to={`/novel-detail/${novelId}`}>
         <NovelImgBox>
           <NovelImg novelImg={novelImg} />
         </NovelImgBox>
