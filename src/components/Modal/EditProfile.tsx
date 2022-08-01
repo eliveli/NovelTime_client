@@ -255,18 +255,17 @@ export default function EditProfile() {
 
     // save changed user info in DB
     // and set new token and user info in redux store
-    await SaveUserInfo(changedUserInfo)
-      .then((data) => {
-        dispatch(setLoginUserInfo(data.data.userInfo));
-        dispatch(setAccessToken(data.data.accessToken));
-        isLoadingRef.current = false;
-        alert("유저 정보가 성공적으로 저장되었어요");
-      })
-      .catch((err) => {
-        console.log("failed to save user info : ", err);
-        isLoadingRef.current = false;
-        alert("유저 정보 저장에 실패했어요");
-      });
+    try {
+      const payload = await SaveUserInfo(changedUserInfo).unwrap();
+      dispatch(setLoginUserInfo(payload.userInfo));
+      dispatch(setAccessToken(payload.accessToken));
+      isLoadingRef.current = false;
+      alert("유저 정보가 성공적으로 저장되었어요");
+    } catch (err) {
+      console.log("failed to save user info : ", err);
+      isLoadingRef.current = false;
+      alert("유저 정보 저장에 실패했어요");
+    }
     // after all passed close the modal // change upper code later
     closeProfileModal();
   };
