@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax */
 import { useEffect, useRef, useState } from "react";
 import { closeModal } from "store/clientSlices/modalSlice";
 import { useImageHostingMutation } from "store/serverAPIs/imageHosting";
@@ -6,6 +7,7 @@ import { CheckDeviceType } from "utils";
 
 import { setAccessToken, setLoginUserInfo, setTempUserBG } from "store/clientSlices/userSlice";
 import Spinner from "assets/Spinner";
+import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 
 import EditProfileImg from "./EditProfile.components";
@@ -40,6 +42,7 @@ export default function EditProfile() {
   const BGRef = useRef<HTMLDivElement>(null);
 
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const isLoadingRef = useRef(false);
 
@@ -261,6 +264,29 @@ export default function EditProfile() {
       dispatch(setAccessToken(payload.accessToken));
       isLoadingRef.current = false;
       alert("유저 정보가 성공적으로 저장되었어요");
+
+      // navigate to next path by new user name //
+      const { pathname } = window.location; // pathname : "/user-page/" + userName (+ ...)
+      // get the back of user name in url
+      const pages = ["/my-writing", "/others-writing", "/my-list", "/others-list"];
+      let backIndexOfUserName = -1;
+      for (const page of pages) {
+        const indexOfPageName = pathname.indexOf(page);
+        if (indexOfPageName !== -1) {
+          backIndexOfUserName = indexOfPageName;
+          break;
+        }
+      }
+      const backOfUserName = pathname.substring(backIndexOfUserName);
+
+      let nextPathName;
+      if (backIndexOfUserName === -1) {
+        nextPathName = `/user-page/${payload.userInfo.userName}`;
+      } else {
+        nextPathName = `/user-page/${payload.userInfo.userName}${backOfUserName}`;
+      }
+
+      navigate(nextPathName);
     } catch (err) {
       console.log("failed to save user info : ", err);
       isLoadingRef.current = false;
