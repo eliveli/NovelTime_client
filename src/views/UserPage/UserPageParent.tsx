@@ -119,7 +119,7 @@ export default function UserPageParent() {
   let userInfoForUserPage: ProfileProps;
   userInfoForUserPage = loginUserInfo;
 
-  if (data) {
+  if (!isLoginUser && data) {
     userInfoForUserPage = data;
   }
 
