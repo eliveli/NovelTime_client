@@ -52,7 +52,7 @@ export const novelTimeApi = createApi({
       return headers;
     },
   }) as BaseQueryFn<string | FetchArgs, unknown, CustomError, {}>,
-  tagTypes: ["EmptyOthersListsForLoginUser"],
+  tagTypes: ["ContentsUpdated"],
   endpoints: (builder) => ({
     getNovelById: builder.query<NovelInfo, string>({
       query: (novelId) => `/novels/detail/${novelId}`,
@@ -76,7 +76,7 @@ export const novelTimeApi = createApi({
       //   when login user navigates automatically to his/her user's home
       //   from other's list in his/her user page
       //   for the reason that other's list doesn't exist anymore
-      providesTags: ["EmptyOthersListsForLoginUser"],
+      providesTags: ["ContentsUpdated"],
     }),
     getContentsForUserPageMyWriting: builder.query<
       ContentsForUserPageWriting,
@@ -98,6 +98,7 @@ export const novelTimeApi = createApi({
     >({
       query: (params) =>
         `/contents/userPageMyList/${params.userName}/${params.listId}/${params.order}`,
+      providesTags: (result, error, arg) => [{ type: "ContentsUpdated", id: arg.listId }],
     }),
     getContentsForUserPageOthersList: builder.query<
       ContentsForUserPageNovelList,
@@ -105,13 +106,17 @@ export const novelTimeApi = createApi({
     >({
       query: (params) =>
         `/contents/userPageOthersList/${params.userName}/${params.listId}/${params.order}`,
+      providesTags: (result, error, arg) => [{ type: "ContentsUpdated", id: arg.listId }],
     }),
     toggleLike: builder.mutation<IsLike, ContentForLike>({
       query: (contentForLike) => ({
         url: `/contents/toggleLike/${contentForLike.contentType}/${contentForLike.contentId}`,
         method: "PUT",
       }),
-      invalidatesTags: ["EmptyOthersListsForLoginUser"],
+      invalidatesTags: (result, error, arg) => [
+        "ContentsUpdated",
+        { type: "ContentsUpdated", id: arg.contentId },
+      ],
     }),
     checkForUserName: builder.mutation<string, string>({
       query: (newUserName) => ({
