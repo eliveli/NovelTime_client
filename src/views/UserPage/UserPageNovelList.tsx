@@ -49,7 +49,6 @@ interface NovelListTitle {
   userName?: string;
   userImg?: { src: string; position: string };
 }
-
 const UserPageNovelList = React.memo(({ isMyList }: { isMyList: boolean }) => {
   const accessToken = useAppSelector((state) => state.user.accessToken);
 
@@ -90,18 +89,23 @@ const UserPageNovelList = React.memo(({ isMyList }: { isMyList: boolean }) => {
     skip: isMyList,
   });
 
+  // it is used to update novel list right after toggling LIKE
+  const isLikeUpdatedRef = useRef(false);
+  //
+
   // toggle like //
   const [toggleLike, toggleLikeResult] = useToggleLikeMutation();
 
   const toggleLikeRequest = async () => {
     try {
       if (toggleLikeResult.isLoading) return; // prevent click event as loading
+      isLikeUpdatedRef.current = true;
+
       await toggleLike({ contentType: "novelList", contentId: listId as string }).unwrap();
     } catch (error) {
       console.log("Failed to toggle LIKE:", error);
     }
   };
-  //
 
   // if it is true delete list by list id after saving other list
   // when login user canceled LIKE in other's list that he/she liked in his/her user page
@@ -136,7 +140,7 @@ const UserPageNovelList = React.memo(({ isMyList }: { isMyList: boolean }) => {
       (novelListsOfUser && !novelListsOfUser[listId]?.novelList.listId)
     ) {
       alert("리스트가 존재하지 않습니다.");
-      navigate(`/user-page/${userName as string}`);
+      navigate(`/user-page/${userName as string}`, { replace: true });
       return;
     }
 
@@ -157,6 +161,7 @@ const UserPageNovelList = React.memo(({ isMyList }: { isMyList: boolean }) => {
           currentOrder,
         },
       });
+
       // set current novel list info
       currentListInfoRef.current = {
         listId: newListId,
@@ -178,8 +183,43 @@ const UserPageNovelList = React.memo(({ isMyList }: { isMyList: boolean }) => {
       // change url to show changed-list-id in it
       // after doing this component is rendered but state in it remains.
       // but request is not occurred. so I requested before changing url.
-      navigate(`/user-page/${userName as string}/my-list/${newListId}`);
+      if (novelListsOfUser) {
+        // if condition is required to prevent user from navigating once more to this url
+        //                                                   as entering this page at fist
+        navigate(`/user-page/${userName as string}/my-list/${newListId}`);
+      }
       //
+    } else if (isLikeUpdatedRef.current) {
+      // after toggling LIKE and refetching data
+      // just reset LIKE not all because if novel order is 2 and I reset all
+      //   then the list that contains both order 1 and 2 would be replaced as order 2 not all
+      // this request is required because if it is used as cached data
+      //   when navigating other page and coming back here,
+      //   LIKE info should be as updated from the cached data
+
+      setNovelListsOfUser({
+        ...novelListsOfUser,
+        [listId]: {
+          ...novelListsOfUser[listId],
+          novelList: {
+            ...novelListsOfUser[listId].novelList,
+            isLike: novelList.isLike,
+          },
+        },
+      });
+
+      isLikeUpdatedRef.current = false;
+
+      // set all the novel list titles as new whenever getting new novel list
+      novelListTitlesRef.current = [
+        {
+          listId,
+          listTitle: novelList.listTitle,
+          userName: novelList.userName,
+          userImg: novelList.userImg,
+        },
+        ...novelList.otherList.map((_) => ({ ..._ })),
+      ];
     } else if (novelListsOfUser && novelListsOfUser[newListId]) {
       // adding novels in the existing list as clicking show-more button
       const currentOrder = novelListsOfUser[newListId].currentOrder + 1;
@@ -205,7 +245,6 @@ const UserPageNovelList = React.memo(({ isMyList }: { isMyList: boolean }) => {
       };
     }
   }, [myListResult.data]);
-
   // get and save the novel lists in other's novel list page
   useEffect(() => {
     // don't save cached data for my list
@@ -222,7 +261,7 @@ const UserPageNovelList = React.memo(({ isMyList }: { isMyList: boolean }) => {
       (novelListsOfUser && !novelListsOfUser[listId]?.novelList.listId)
     ) {
       alert("리스트가 존재하지 않습니다.");
-      navigate(`/user-page/${userName as string}`);
+      navigate(`/user-page/${userName as string}`, { replace: true });
       return;
     }
 
@@ -285,7 +324,42 @@ const UserPageNovelList = React.memo(({ isMyList }: { isMyList: boolean }) => {
       // change url to show changed-list-id in it
       // after doing this component is rendered but state in it remains.
       // but request is not occurred. so I requested before changing url.
-      navigate(`/user-page/${userName as string}/others-list/${newListId}`);
+      if (novelListsOfUser) {
+        // if condition is required to prevent user from navigating once more to this url
+        //                                                   as entering this page at fist
+        navigate(`/user-page/${userName as string}/others-list/${newListId}`);
+      }
+    } else if (isLikeUpdatedRef.current) {
+      // after toggling LIKE and refetching data
+      // just reset LIKE not all because if novel order is 2 and I reset all
+      //   then the list that contains both order 1 and 2 would be replaced as order 2 not all
+      // this request is required because if it is used as cached data
+      //   when navigating other page and coming back here,
+      //   LIKE info should be as updated from the cached data
+
+      setNovelListsOfUser({
+        ...novelListsOfUser,
+        [listId]: {
+          ...novelListsOfUser[listId],
+          novelList: {
+            ...novelListsOfUser[listId].novelList,
+            isLike: novelList.isLike,
+          },
+        },
+      });
+
+      isLikeUpdatedRef.current = false;
+
+      // set all the novel list titles as new whenever getting new novel list
+      novelListTitlesRef.current = [
+        {
+          listId,
+          listTitle: novelList.listTitle,
+          userName: novelList.userName,
+          userImg: novelList.userImg,
+        },
+        ...novelList.otherList.map((_) => ({ ..._ })),
+      ];
     } else if (novelListsOfUser && novelListsOfUser[newListId]) {
       // adding novels in the existing list as clicking show-more button
       const currentOrder = novelListsOfUser[newListId].currentOrder + 1;
@@ -311,7 +385,8 @@ const UserPageNovelList = React.memo(({ isMyList }: { isMyList: boolean }) => {
       };
     }
   }, [othersListResult.data]);
-
+  //
+  // I will remove this later //
   // save "isLike" after toggling like
   useEffect(() => {
     if (toggleLikeResult.isLoading) return;
@@ -354,7 +429,7 @@ const UserPageNovelList = React.memo(({ isMyList }: { isMyList: boolean }) => {
         // delete current list from titles
         novelListTitlesRef.current = novelListTitlesRef.current.filter((_) => _.listId !== listId);
 
-        navigate(`/user-page/${userName}/others-list/${nextListId}`);
+        navigate(`/user-page/${userName}/others-list/${nextListId}`, { replace: true });
       }
 
       // if there is no other saved list in "novelListsOfUser" but is in DB
@@ -369,7 +444,7 @@ const UserPageNovelList = React.memo(({ isMyList }: { isMyList: boolean }) => {
         }
         if (!nextListId) {
           alert("리스트가 더이상 존재하지 않습니다.");
-          navigate(`/user-page/${userName}`);
+          navigate(`/user-page/${userName}`, { replace: true });
           return;
         }
 
@@ -388,22 +463,14 @@ const UserPageNovelList = React.memo(({ isMyList }: { isMyList: boolean }) => {
       // go to the user's home page
       if (listIDsSaved.length === 1 && allListsInDB.length === 1) {
         alert("리스트가 더이상 존재하지 않습니다.");
-        navigate(`/user-page/${userName}`);
+        navigate(`/user-page/${userName}`, { replace: true });
       }
     }
     //
     //  set LIKE as being changed ----------------------------------------------------- //
     else {
-      setNovelListsOfUser({
-        ...novelListsOfUser,
-        [listId]: {
-          ...novelListsOfUser[listId],
-          novelList: { ...novelListsOfUser[listId].novelList, isLike },
-        },
-      });
     }
   }, [toggleLikeResult.data, toggleLikeResult.isLoading]);
-
   // get the content page mark
   const contentPageMark = contentMark(userName as string, loginUserInfo.userName, isMyList, false);
 
@@ -425,7 +492,6 @@ const UserPageNovelList = React.memo(({ isMyList }: { isMyList: boolean }) => {
   // - if titleListHeight is not longer than the height 32px that is 1 line of ListTitleContnr,
   // - then don't show the button even if isListMore is true
   const titleListHeight = useComponentHeight(titleListRef, isListMore);
-
   // when list id is undefined the page will be navigated in useEffect
   if (!listId || !novelListsOfUser) return <></>;
   return (
@@ -485,12 +551,12 @@ const UserPageNovelList = React.memo(({ isMyList }: { isMyList: boolean }) => {
               isLike={novelListsOfUser[listId].novelList.isLike}
               size={28}
               onClick={async () => {
-                const { isLike, userName } = novelListsOfUser[listId].novelList;
+                const { isLike, userName: userNameAtTitle } = novelListsOfUser[listId].novelList;
 
                 if (!loginUserInfo.userId) {
                   // when user didn't login
                   alert("좋아요를 누르려면 로그인을 해 주세요.");
-                } else if (loginUserInfo.userName === userName) {
+                } else if (loginUserInfo.userName === userNameAtTitle) {
                   // prevent login user from setting LIKE of list that he/she created
                   alert("내가 만든 리스트에는 좋아요를 누를 수 없어요.");
                 } else if (!isLike) {
@@ -500,7 +566,7 @@ const UserPageNovelList = React.memo(({ isMyList }: { isMyList: boolean }) => {
                   //
                   // change this to modal that disappears later
                   //
-                } else if (userName !== loginUserInfo.userName) {
+                } else if (userNameAtTitle !== loginUserInfo.userName) {
                   // when login user who isn't the owner of user page tries to set isLike to false
                   if (
                     confirm(
@@ -509,10 +575,18 @@ const UserPageNovelList = React.memo(({ isMyList }: { isMyList: boolean }) => {
                   ) {
                     await toggleLikeRequest();
                   }
-                } else if (userName === loginUserInfo.userName) {
+                } else if (userNameAtTitle === loginUserInfo.userName) {
                   // when login user who is the owner of user page tries to set isLike to false
                   if (confirm("좋아요를 취소하면 리스트에서 지워집니다. 취소하시겠어요?")) {
                     await toggleLikeRequest();
+                    isLikeUpdatedRef.current = true;
+                    // to refetch though list is the same as current one
+                    // it can be done because of "invalidatesTags" in api slice
+                    setParamsForRequest({
+                      ...paramsForRequest,
+                      listId,
+                      order: currentListInfoRef.current.currentOrder,
+                    });
                   }
                 }
               }}
@@ -600,6 +674,7 @@ const UserPageNovelList = React.memo(({ isMyList }: { isMyList: boolean }) => {
             <NovelRow key={_.novelId} novel={_} isWidth100 isNotSubInfo />
           ))}
       </NovelListContnr>
+
       {currentListInfoRef.current.isNextOrder && (
         <NextContentsBtn
           onClick={() => {
