@@ -98,6 +98,7 @@ export const novelTimeApi = createApi({
     >({
       query: (params) =>
         `/contents/userPageMyList/${params.userName}/${params.listId}/${params.order}`,
+      keepUnusedDataFor: 120,
       providesTags: (result, error, arg) => [{ type: "ContentsUpdated", id: arg.listId }],
     }),
     getContentsForUserPageOthersList: builder.query<
@@ -106,6 +107,7 @@ export const novelTimeApi = createApi({
     >({
       query: (params) =>
         `/contents/userPageOthersList/${params.userName}/${params.listId}/${params.order}`,
+      keepUnusedDataFor: 120,
       providesTags: (result, error, arg) => [{ type: "ContentsUpdated", id: arg.listId }],
     }),
     toggleLike: builder.mutation<IsLike, ContentForLike>({

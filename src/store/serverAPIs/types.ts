@@ -112,7 +112,7 @@ export interface CommentUserCreated {
   talkTitle: string;
   novelTitle: string;
 }
-interface NovelInNovelList {
+export interface NovelInNovelList {
   novelId: string;
   novelImg: string;
   novelTitle: string;
