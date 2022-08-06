@@ -46,7 +46,7 @@ interface NovelListTitle {
   userImg?: { src: string; position: string };
 }
 
-const UserPageNovelList = React.memo(({ isMyList }: { isMyList: boolean }) => {
+function UserPageNovelList({ isMyList }: { isMyList: boolean }) {
   const navigate = useNavigate();
 
   const { userName, listId } = useParams();
@@ -141,6 +141,10 @@ const UserPageNovelList = React.memo(({ isMyList }: { isMyList: boolean }) => {
       navigate(`/user-page/${userName as string}`, { replace: true });
     }
   }, [currentNovelListInfo]);
+
+  if (!currentNovelListInfo) {
+    return <Spinner styles="fixed" />;
+  }
   return (
     <MainBG>
       {(myListResult.isFetching || othersListResult.isFetching || toggleLikeResult.isLoading) && (
@@ -195,9 +199,9 @@ const UserPageNovelList = React.memo(({ isMyList }: { isMyList: boolean }) => {
         >
           {/* isLike */}
           {/* except when login user sees his/her my list in user page */}
-          {!(isMyList && userName === loginUserInfo.userName) && currentNovelListInfo && (
+          {!(isMyList && userName === loginUserInfo.userName) && (
             <HearIconBox
-              isLike={currentNovelListInfo?.novelList.isLike}
+              isLike={currentNovelListInfo.novelList.isLike}
               size={28}
               onClick={async () => {
                 const { isLike, userName: userNameAtTitle } = currentNovelListInfo.novelList;
@@ -240,7 +244,7 @@ const UserPageNovelList = React.memo(({ isMyList }: { isMyList: boolean }) => {
                 }
               }}
             >
-              <Icon.TogglingBigHeartIcon isLike={currentNovelListInfo?.novelList.isLike} />
+              <Icon.TogglingBigHeartIcon isLike={currentNovelListInfo.novelList.isLike} />
             </HearIconBox>
           )}
 
@@ -251,15 +255,15 @@ const UserPageNovelList = React.memo(({ isMyList }: { isMyList: boolean }) => {
             selectedListId={listId as string}
           >
             {/* in my list page */}
-            {isMyList && currentNovelListInfo?.novelList.listTitle}
+            {isMyList && currentNovelListInfo.novelList.listTitle}
             {/* in other's list page */}
-            {!isMyList && (
+            {!isMyList && currentNovelListInfo && (
               <OthersTitleContnr>
-                <UserImg userImg={currentNovelListInfo?.novelList.userImg as ProfileImg} isTitle />
-                {currentNovelListInfo?.novelList.userName}
+                <UserImg userImg={currentNovelListInfo.novelList.userImg as ProfileImg} isTitle />
+                {currentNovelListInfo.novelList.userName}
                 <ListTitleNormalStyle>의 리스트 : </ListTitleNormalStyle>
                 &nbsp;
-                {currentNovelListInfo?.novelList.listTitle}
+                {currentNovelListInfo.novelList.listTitle}
               </OthersTitleContnr>
             )}
           </ListTitle>
@@ -305,7 +309,7 @@ const UserPageNovelList = React.memo(({ isMyList }: { isMyList: boolean }) => {
         ))}
       </NovelListContnr>
 
-      {currentNovelListInfo?.isNextOrder && (
+      {currentNovelListInfo.isNextOrder && (
         <NextContentsBtn
           onClick={() => {
             setOrderNumber((currentOrder) => currentOrder + 1);
@@ -320,5 +324,5 @@ const UserPageNovelList = React.memo(({ isMyList }: { isMyList: boolean }) => {
       )}
     </MainBG>
   );
-});
+}
 export default UserPageNovelList;

@@ -105,36 +105,40 @@ export default function UserPageParent() {
 
   const loginUserInfo = useAppSelector((state) => state.user.loginUserInfo);
 
-  const isLoginUser = (userName as string) === loginUserInfo.userName;
+  const isLoginUser = !!userName && userName === loginUserInfo.userName;
 
-  const { data, error, isLoading } = useGetUserInfoByUserNameQuery(userName as string, {
-    skip: !userName || isLoginUser,
-    // to request after userName variable gets value
-    // only request by userName when the user is not the login user
+  const { data, isError, isLoading } = useGetUserInfoByUserNameQuery(userName as string, {
+    skip: isLoginUser,
+    // only request by userName when the user didn't login
   });
 
   console.log("user info :", data);
 
   // user info : login user or not
-  let userInfoForUserPage: ProfileProps;
-  userInfoForUserPage = loginUserInfo;
+  let userInfoForUserPage = {
+    userName: "",
+    userImg: { src: "", position: "" },
+    userBG: { src: "", position: "" },
+  };
 
-  if (!isLoginUser && data) {
-    userInfoForUserPage = data;
-  }
-
-  // set user info to show on nav //
-  dispatch(setUserInfoForUserPage(userInfoForUserPage));
-
-  // when user name doesn't exist in DB
-  if (error) {
-    alert("존재하지 않는 사용자입니다.");
-    navigate("/");
-  }
+  useEffect(() => {
+    // set user info to show on nav //
+    if (!isLoginUser && !!data) {
+      userInfoForUserPage = data;
+    } else if (isLoginUser) {
+      userInfoForUserPage = loginUserInfo;
+    }
+    dispatch(setUserInfoForUserPage(userInfoForUserPage));
+    // when user name doesn't exist in DB
+    if (isError) {
+      alert("존재하지 않는 사용자입니다.");
+      navigate("/");
+    }
+  }, [isLoginUser, data, isError]);
 
   return (
     <>
-      {!error && isLoading && <Spinner styles="fixed" />}
+      {isLoading && <Spinner styles="fixed" />}
       <Profile
         userImg={userInfoForUserPage.userImg}
         userName={userInfoForUserPage.userName}
