@@ -121,20 +121,18 @@ export default function UserPageParent() {
     userBG: { src: "", position: "" },
   };
 
-  useEffect(() => {
-    // set user info to show on nav //
-    if (!isLoginUser && !!data) {
-      userInfoForUserPage = data;
-    } else if (isLoginUser) {
-      userInfoForUserPage = loginUserInfo;
-    }
-    dispatch(setUserInfoForUserPage(userInfoForUserPage));
-    // when user name doesn't exist in DB
-    if (isError) {
-      alert("존재하지 않는 사용자입니다.");
-      navigate("/");
-    }
-  }, [isLoginUser, data, isError]);
+  // set user info to show on nav //
+  if (!isLoginUser && !!data) {
+    userInfoForUserPage = data;
+  } else if (isLoginUser) {
+    userInfoForUserPage = loginUserInfo;
+  }
+  dispatch(setUserInfoForUserPage(userInfoForUserPage));
+  // when user name doesn't exist in DB
+  if (isError) {
+    alert("존재하지 않는 사용자입니다.");
+    navigate("/");
+  }
 
   return (
     <>
