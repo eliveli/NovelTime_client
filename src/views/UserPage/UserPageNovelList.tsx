@@ -86,6 +86,7 @@ function UserPageNovelList({ isMyList }: { isMyList: boolean }) {
       skip: isMyList,
     },
   );
+
   const currentNovelListInfo = isMyList ? myListResult?.data : othersListResult?.data;
 
   // for setting novel list titles with simple infos //
@@ -106,7 +107,24 @@ function UserPageNovelList({ isMyList }: { isMyList: boolean }) {
     try {
       if (toggleLikeResult.isLoading) return; // prevent click event as loading
 
-      await toggleLike({ contentType: "novelList", contentId: listId as string }).unwrap();
+      const isOthersListOfLoginUser = !isMyList && userName === loginUserInfo?.userName;
+
+      await toggleLike({
+        contentType: "novelList",
+        contentId: listId as string,
+        isOthersListOfLoginUser,
+      }).unwrap();
+
+      // don't display current list after login user canceled LIKE in his/her other's list
+      // just request next list and display it
+      if (isOthersListOfLoginUser) {
+        navigate(
+          `/user-page/${userName}/${isMyList ? `my-list` : `others-list`}/${
+            novelListTitlesExceptSelectedOne[0].listId
+          }`,
+          { replace: true },
+        );
+      }
     } catch (error) {
       console.log("Failed to toggle LIKE:", error);
     }
@@ -142,7 +160,9 @@ function UserPageNovelList({ isMyList }: { isMyList: boolean }) {
     }
   }, [currentNovelListInfo]);
 
-  if (!currentNovelListInfo) {
+  // case 1. fetching data at first
+  // case 2. fetching next novel list right after canceling LIKE in login user's other's list page
+  if (!currentNovelListInfo || listId !== currentNovelListInfo.novelList.listId) {
     return <Spinner styles="fixed" />;
   }
   return (
@@ -220,7 +240,7 @@ function UserPageNovelList({ isMyList }: { isMyList: boolean }) {
                   // change this to modal that disappears later
                   //
                 } else if (userNameAtTitle !== loginUserInfo.userName) {
-                  // when login user who isn't the owner of user page tries to set isLike to false
+                  // when login user who isn't the owner of user page tries to cancel LIKE
                   if (
                     confirm(
                       "좋아요를 취소하면 내 유저페이지의 리스트에서 지워집니다. 취소하시겠어요?",
@@ -229,17 +249,9 @@ function UserPageNovelList({ isMyList }: { isMyList: boolean }) {
                     await toggleLikeRequest();
                   }
                 } else if (userNameAtTitle === loginUserInfo.userName) {
-                  // when login user who is the owner of user page tries to set isLike to false
+                  // when login user who is the owner of user page tries to cancel LIKE
                   if (confirm("좋아요를 취소하면 리스트에서 지워집니다. 취소하시겠어요?")) {
                     await toggleLikeRequest();
-
-                    // request next list and display it
-                    navigate(
-                      `/user-page/${userName as string}/${isMyList ? `my-list` : `others-list`}/${
-                        novelListTitlesExceptSelectedOne[0].listId
-                      }`,
-                      { replace: true },
-                    );
                   }
                 }
               }}
@@ -249,11 +261,7 @@ function UserPageNovelList({ isMyList }: { isMyList: boolean }) {
           )}
 
           {/* title of selected novel list */}
-          <ListTitle
-            key={listId as string}
-            listId={listId as string}
-            selectedListId={listId as string}
-          >
+          <ListTitle key={listId} listId={listId} selectedListId={listId}>
             {/* in my list page */}
             {isMyList && currentNovelListInfo.novelList.listTitle}
             {/* in other's list page */}

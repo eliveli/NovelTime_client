@@ -196,6 +196,7 @@ export interface ParamsForUserPageNovelList {
 export interface ContentForLike {
   contentType: "writing" | "novelList";
   contentId: string;
+  isOthersListOfLoginUser: boolean;
 }
 export interface IsLike {
   isLike: boolean;

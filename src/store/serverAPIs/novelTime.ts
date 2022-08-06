@@ -52,7 +52,7 @@ export const novelTimeApi = createApi({
       return headers;
     },
   }) as BaseQueryFn<string | FetchArgs, unknown, CustomError, {}>,
-  tagTypes: ["ContentsUpdated"],
+  tagTypes: ["ContentsUpdatedInHome", "ContentsUpdatedInNovelList"],
   endpoints: (builder) => ({
     getNovelById: builder.query<NovelInfo, string>({
       query: (novelId) => `/novels/detail/${novelId}`,
@@ -76,7 +76,7 @@ export const novelTimeApi = createApi({
       //   when login user navigates automatically to his/her user's home
       //   from other's list in his/her user page
       //   for the reason that other's list doesn't exist anymore
-      providesTags: ["ContentsUpdated"],
+      providesTags: ["ContentsUpdatedInHome"],
     }),
     getContentsForUserPageMyWriting: builder.query<
       ContentsForUserPageWriting,
@@ -99,7 +99,9 @@ export const novelTimeApi = createApi({
       query: (params) =>
         `/contents/userPageMyList/${params.userName}/${params.listId}/${params.order}`,
       keepUnusedDataFor: 120,
-      providesTags: (result, error, arg) => [{ type: "ContentsUpdated", id: arg.listId }],
+      providesTags: (result, error, arg) => [
+        { type: "ContentsUpdatedInNovelList", id: arg.listId },
+      ],
     }),
     getContentsForUserPageOthersList: builder.query<
       ContentsForUserPageNovelList,
@@ -108,17 +110,26 @@ export const novelTimeApi = createApi({
       query: (params) =>
         `/contents/userPageOthersList/${params.userName}/${params.listId}/${params.order}`,
       keepUnusedDataFor: 120,
-      providesTags: (result, error, arg) => [{ type: "ContentsUpdated", id: arg.listId }],
+      providesTags: (result, error, arg) => [
+        { type: "ContentsUpdatedInNovelList", id: arg.listId },
+      ],
     }),
     toggleLike: builder.mutation<IsLike, ContentForLike>({
       query: (contentForLike) => ({
         url: `/contents/toggleLike/${contentForLike.contentType}/${contentForLike.contentId}`,
         method: "PUT",
       }),
-      invalidatesTags: (result, error, arg) => [
-        "ContentsUpdated",
-        { type: "ContentsUpdated", id: arg.contentId },
-      ],
+      invalidatesTags: (result, error, arg) => {
+        if (arg.isOthersListOfLoginUser) {
+          // do not invalidate tag in novel list page not to refetch current list
+          // next list will be fetched
+          //
+          // this tag is necessary when navigating to an user's home page
+          // to get updated contents after toggling LIKE
+          return ["ContentsUpdatedInHome"];
+        }
+        return ["ContentsUpdatedInHome", { type: "ContentsUpdatedInNovelList", id: arg.contentId }];
+      },
     }),
     checkForUserName: builder.mutation<string, string>({
       query: (newUserName) => ({
