@@ -88,7 +88,7 @@ const UserPageNovelList = React.memo(({ isMyList }: { isMyList: boolean }) => {
   );
   const currentNovelListInfo = isMyList ? myListResult?.data : othersListResult?.data;
 
-  // for saving novel list titles with simple info //
+  // for setting novel list titles with simple infos //
   const novelListTitlesExceptSelectedOne = currentNovelListInfo?.novelList
     .otherList as NovelListTitle[];
 
@@ -229,7 +229,13 @@ const UserPageNovelList = React.memo(({ isMyList }: { isMyList: boolean }) => {
                   if (confirm("좋아요를 취소하면 리스트에서 지워집니다. 취소하시겠어요?")) {
                     await toggleLikeRequest();
 
-                    // needed to fix about this step
+                    // request next list and display it
+                    navigate(
+                      `/user-page/${userName as string}/${isMyList ? `my-list` : `others-list`}/${
+                        novelListTitlesExceptSelectedOne[0].listId
+                      }`,
+                      { replace: true },
+                    );
                   }
                 }
               }}
