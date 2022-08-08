@@ -10,6 +10,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAppSelector } from "store/hooks";
 import {
+  useGetAllNovelListTitlesQuery,
   useGetContentsForUserPageMyListQuery,
   useGetContentsForUserPageOthersListQuery,
   useToggleLikeMutation,
@@ -87,11 +88,12 @@ function UserPageNovelList({ isMyList }: { isMyList: boolean }) {
     },
   );
 
-  const currentNovelListInfo = isMyList ? myListResult?.data : othersListResult?.data;
+  const { data: allTitles } = useGetAllNovelListTitlesQuery({
+    userName: userName as string,
+    isMyList: isMyList.toString(),
+  });
 
-  // for setting novel list titles with simple infos //
-  const novelListTitlesExceptSelectedOne = currentNovelListInfo?.novelList
-    .otherList as NovelListTitle[];
+  const currentNovelListInfo = isMyList ? myListResult?.data : othersListResult?.data;
 
   const novelsAsCurrentOrder = currentNovelListInfo?.novelList.novel;
   const novelsAsPreviousOrder = useRef<NovelInNovelList[]>();
@@ -99,6 +101,11 @@ function UserPageNovelList({ isMyList }: { isMyList: boolean }) {
     orderNumber > 1 && novelsAsPreviousOrder.current && novelsAsCurrentOrder
       ? [...novelsAsPreviousOrder.current, ...novelsAsCurrentOrder]
       : novelsAsCurrentOrder;
+
+  // for setting novel list titles with simple infos //
+  const novelListTitlesExceptSelectedOne = allTitles?.filter(
+    (_) => _.listId !== listId,
+  ) as NovelListTitle[];
 
   // toggle like //
   const [toggleLike, toggleLikeResult] = useToggleLikeMutation();

@@ -15,6 +15,8 @@ import {
   ParamsForUserPageNovelList,
   ContentForLike,
   IsLike,
+  AllTitlesAndOtherInfo,
+  ParamsForAllNovelListTitles,
 } from "./types";
 import type { RootState } from "../index";
 
@@ -52,7 +54,7 @@ export const novelTimeApi = createApi({
       return headers;
     },
   }) as BaseQueryFn<string | FetchArgs, unknown, CustomError, {}>,
-  tagTypes: ["ContentsUpdatedInHome", "ContentsUpdatedInNovelList"],
+  tagTypes: ["ContentsUpdatedInHome", "ListTitlesUpdated", "ContentsUpdatedInNovelList"],
   endpoints: (builder) => ({
     getNovelById: builder.query<NovelInfo, string>({
       query: (novelId) => `/novels/detail/${novelId}`,
@@ -114,6 +116,11 @@ export const novelTimeApi = createApi({
         { type: "ContentsUpdatedInNovelList", id: arg.listId },
       ],
     }),
+    getAllNovelListTitles: builder.query<AllTitlesAndOtherInfo, ParamsForAllNovelListTitles>({
+      query: (params) => `/contents/userPageNovelListTitles/${params.userName}/${params.isMyList}`,
+      keepUnusedDataFor: 120,
+      providesTags: ["ListTitlesUpdated"],
+    }),
     toggleLike: builder.mutation<IsLike, ContentForLike>({
       query: (contentForLike) => ({
         url: `/contents/toggleLike/${contentForLike.contentType}/${contentForLike.contentId}`,
@@ -121,12 +128,15 @@ export const novelTimeApi = createApi({
       }),
       invalidatesTags: (result, error, arg) => {
         if (arg.isOthersListOfLoginUser) {
-          // do not invalidate tag in novel list page not to refetch current list
+          // do not invalidate tag of "ContentsUpdatedInNovelList" not to refetch current list
           // next list will be fetched
           //
-          // this tag is necessary when navigating to an user's home page
+          // tag of "ContentsUpdatedInHome" is necessary when navigating to an user's home page
           // to get updated contents after toggling LIKE
-          return ["ContentsUpdatedInHome"];
+          //
+          // tag of "ListTitlesUpdated" is necessary to get all list titles of user updated
+          // list title where user canceled LIKE won't be in data of new titles
+          return ["ContentsUpdatedInHome", "ListTitlesUpdated"];
         }
         return ["ContentsUpdatedInHome", { type: "ContentsUpdatedInNovelList", id: arg.contentId }];
       },
@@ -167,4 +177,5 @@ export const {
   useGetContentsForUserPageMyListQuery,
   useGetContentsForUserPageOthersListQuery,
   useToggleLikeMutation,
+  useGetAllNovelListTitlesQuery,
 } = novelTimeApi;

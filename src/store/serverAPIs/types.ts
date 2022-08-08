@@ -187,6 +187,13 @@ export interface ContentsForUserPageNovelList {
   novelList: NovelListSetForMyOrOthersList;
   isNextOrder: boolean;
 }
+export type AllTitlesAndOtherInfo = NovelListsSimpleInfos[];
+
+export interface ParamsForAllNovelListTitles {
+  userName: string;
+  isMyList: string;
+}
+
 export interface ParamsForUserPageNovelList {
   accessToken?: string;
   userName: string;
