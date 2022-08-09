@@ -71,6 +71,11 @@ function Profile({ userImg, userName, userBG }: ProfileProps) {
   useEffect(() => {
     console.log("tempUserBG in useEffect:", tempUserBG);
   }, [tempUserBG]);
+
+  const stylesForUserHomeIcon = `transform: scaleX(-1); ${theme.media.mobile(
+    `display:none;`,
+  )} ${theme.media.tablet(`display:none;`)} ${theme.media.desktop(`display:block;`)}`;
+  //
   return (
     <ProfileContnr whenBGisNot={!!tempUserBG.src || !!userBG.src}>
       <ProfileAlign
@@ -81,7 +86,7 @@ function Profile({ userImg, userName, userBG }: ProfileProps) {
           <UserImg userImg={userImg} />
           <NavigatingToUserHome onClick={() => navigate(`/user-page/${userName}`)}>
             <UserName>{userName}</UserName>
-            <Icon.IconBox color={theme.color.main} styles="transform: scaleX(-1);">
+            <Icon.IconBox color={theme.color.main} styles={stylesForUserHomeIcon}>
               <Icon.Runner />
             </Icon.IconBox>
           </NavigatingToUserHome>
