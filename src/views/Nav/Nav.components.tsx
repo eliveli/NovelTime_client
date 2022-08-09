@@ -37,7 +37,7 @@ import {
   NavContentBoxPC,
   NavContentBoxMobile,
   NavContentPC,
-  MyPageBtn,
+  MyPageTablet,
   NavContent,
   HomeIcon,
   HomeIconBox,
@@ -57,6 +57,7 @@ import {
   LoginText,
   UserImg,
   UserName,
+  MyPageMobile,
 } from "./Nav.styles";
 
 interface Props {
@@ -111,13 +112,13 @@ export function NavPC({ pathname }: Props) {
           </SearchIconBox>
 
           {loginUserInfo.userName && (
-            <MyPageBtn
+            <MyPageTablet
               onClick={() => {
                 navigate(`/user-page/${loginUserInfo.userName}`);
               }}
             >
               보관함
-            </MyPageBtn>
+            </MyPageTablet>
           )}
           {!loginUserInfo.userName && (
             <LoginText
@@ -162,13 +163,22 @@ export function NavMobileMainTop() {
             <Icon.Search />
           </SearchIconBox>
           {loginUserInfo.userName && (
-            <MyPageBtn
+            <MyPageTablet
               onClick={() => {
                 navigate(`/user-page/${loginUserInfo.userName}`);
               }}
             >
               보관함
-            </MyPageBtn>
+            </MyPageTablet>
+          )}
+          {/* for mobile size */}
+          {loginUserInfo.userName && (
+            <MyPageMobile
+              userImg={loginUserInfo.userImg}
+              onClick={() => {
+                navigate(`/user-page/${loginUserInfo.userName}`);
+              }}
+            />
           )}
           {!loginUserInfo.userName && (
             <LoginText
@@ -179,7 +189,7 @@ export function NavMobileMainTop() {
               로그인
             </LoginText>
           )}
-          {/* following is for mobile size */}
+          {/* for mobile size */}
           {!loginUserInfo.userName && (
             <LoginIconBox
               onClick={() => {
@@ -380,15 +390,24 @@ export function NavMobileDetail({ parameter, pathname, handleMsgList }: DetailPr
           {pathname?.includes("add-writing") && (
             <SubmitBtn onClick={() => dispatch(handleWritingSubmit(true))}>작성</SubmitBtn>
           )}
-          {/* user page : my page button */}
+          {/* user page : my page button for tablet size */}
           {pathname.includes("user-page") && loginUserInfo.userName && (
-            <MyPageBtn
+            <MyPageTablet
               onClick={() => {
                 navigate(`/user-page/${loginUserInfo.userName}`);
               }}
             >
               보관함
-            </MyPageBtn>
+            </MyPageTablet>
+          )}
+          {/* user page : my page button for mobile size */}
+          {pathname.includes("user-page") && loginUserInfo.userName && (
+            <MyPageMobile
+              userImg={loginUserInfo.userImg}
+              onClick={() => {
+                navigate(`/user-page/${loginUserInfo.userName}`);
+              }}
+            />
           )}
           {/* user page : login button for tablet size */}
           {pathname.includes("user-page") && !loginUserInfo.userName && (

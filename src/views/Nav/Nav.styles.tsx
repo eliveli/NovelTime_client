@@ -184,7 +184,7 @@ export const NavText = styled.span<{ isActive: boolean }>`
   ${({ isActive }) => isActive && `color:${theme.color.main};`}
 `;
 
-export const MyPageBtn = styled.button`
+export const MyPageTablet = styled.button`
   padding: 3px 6px;
   /* padding: 7px 10px; */
   white-space: nowrap;
@@ -200,6 +200,10 @@ export const MyPageBtn = styled.button`
 
   @media screen and (min-width: 768px) {
     padding: 6px 8px;
+  }
+
+  @media screen and (max-width: 767px) {
+    display: none;
   }
 
   ${theme.media.hover(
@@ -231,6 +235,7 @@ export const LoginText = styled.button`
     display: none;
   }
 `;
+
 export const LoginIconBox = styled(Icon.IconBox)`
   min-width: 27px;
   max-width: 27px;
@@ -377,6 +382,7 @@ interface InterfaceUserImg {
   src: string;
   position: string;
 }
+
 export const UserImg = styled.div<{ userImg: InterfaceUserImg }>`
   border-radius: 50%;
   min-width: 30px;
@@ -388,6 +394,34 @@ export const UserImg = styled.div<{ userImg: InterfaceUserImg }>`
   background-repeat: no-repeat;
   background-size: cover;
 `;
+
+export const MyPageMobile = styled.div<{ userImg: InterfaceUserImg }>`
+  min-width: 27px;
+  max-width: 27px;
+  min-height: 27px;
+  max-height: 27px;
+
+  margin-left: 7px;
+
+  border-radius: 50%;
+  background-image: url(${({ userImg }) =>
+    userImg.src || "https://cdn.pixabay.com/photo/2017/02/01/09/52/animal-2029245_960_720.png"});
+
+  background-position: ${({ userImg }) => userImg.position || "center"};
+  background-repeat: no-repeat;
+  background-size: cover;
+
+  @media screen and (min-width: 768px) {
+    display: none;
+  }
+
+  ${theme.media.hover(
+    `cursor: pointer;
+    opacity: 0.7;
+    color: rgba(100, 100, 100, 0.8);`,
+  )}
+`;
+
 export const UserName = styled.span`
   padding-left: 12px;
 `;
