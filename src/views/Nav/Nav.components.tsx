@@ -343,7 +343,7 @@ export function NavMobileDetail({ parameter, pathname, handleMsgList }: DetailPr
           }
           if (idx === 4 && pathname.includes(_[0] as string)) {
             return (
-              <PageTitle onClick={() => navigate(`user-page/${_[2]}`)}>
+              <PageTitle onClick={() => navigate(`/user-page/${_[2] as string}`)}>
                 <UserImg userImg={_[1] as InterfaceUserImg} />
                 <UserName>{_[2]}</UserName>
               </PageTitle>
