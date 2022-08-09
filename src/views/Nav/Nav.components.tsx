@@ -1,4 +1,5 @@
 import { ThemeProvider } from "styled-components";
+import themeStyle from "assets/styles/theme";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   freeTalk,
@@ -306,8 +307,8 @@ export function NavMobileDetail({ parameter, pathname, handleMsgList }: DetailPr
               {!handleMsgList.isListOpen && <ForwardIcon />}
             </LeftIconBox>
           )}
-          {/* from novelDetail to ... : show Home Icon */}
-          {parameter?.novelId && (
+          {/* (from novelDetail to ...) or (from an user's page) : show Home Icon */}
+          {(parameter?.novelId || pathname.includes("user-page")) && (
             <HomeIconBox
               onClick={() => {
                 navigate("/");
@@ -346,6 +347,9 @@ export function NavMobileDetail({ parameter, pathname, handleMsgList }: DetailPr
               <PageTitle onClick={() => navigate(`/user-page/${_[2] as string}`)}>
                 <UserImg userImg={_[1] as InterfaceUserImg} />
                 <UserName>{_[2]}</UserName>
+                <Icon.IconBox color={themeStyle.color.mainLight} styles="transform: scaleX(-1);">
+                  <Icon.Runner />
+                </Icon.IconBox>
               </PageTitle>
             );
           }
