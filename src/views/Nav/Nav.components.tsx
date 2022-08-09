@@ -380,6 +380,36 @@ export function NavMobileDetail({ parameter, pathname, handleMsgList }: DetailPr
           {pathname?.includes("add-writing") && (
             <SubmitBtn onClick={() => dispatch(handleWritingSubmit(true))}>작성</SubmitBtn>
           )}
+          {/* user page : my page button */}
+          {pathname.includes("user-page") && loginUserInfo.userName && (
+            <MyPageBtn
+              onClick={() => {
+                navigate(`/user-page/${loginUserInfo.userName}`);
+              }}
+            >
+              보관함
+            </MyPageBtn>
+          )}
+          {/* user page : login button for tablet size */}
+          {pathname.includes("user-page") && !loginUserInfo.userName && (
+            <LoginText
+              onClick={() => {
+                dispatch(openModal("login"));
+              }}
+            >
+              로그인
+            </LoginText>
+          )}
+          {/* user page : login button for mobile size */}
+          {pathname.includes("user-page") && !loginUserInfo.userName && (
+            <LoginIconBox
+              onClick={() => {
+                dispatch(openModal("login"));
+              }}
+            >
+              <Icon.Login />
+            </LoginIconBox>
+          )}
         </IconsBox>
       </NavContentBoxMobile>
     </ThemeProvider>
