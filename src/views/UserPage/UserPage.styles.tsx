@@ -50,6 +50,10 @@ export const UserName = styled.span`
   font-size: 15px;
   color: white;
 `;
+export const NavigatingToUserHome = styled.div`
+  display: flex;
+  align-items: flex-end;
+`;
 export const MessageIcon = styled.img`
   margin-left: 15px;
   width: 37px;

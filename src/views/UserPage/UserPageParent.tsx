@@ -1,3 +1,4 @@
+import theme from "assets/styles/theme";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import {
   setLoginUserInfo,
@@ -21,6 +22,7 @@ import {
   MessageIcon,
   LogOutIconBox,
   EditProfileBtn,
+  NavigatingToUserHome,
 } from "./UserPage.styles";
 
 interface ProfileProps {
@@ -77,7 +79,12 @@ function Profile({ userImg, userName, userBG }: ProfileProps) {
       >
         <ProfileUserCntnr>
           <UserImg userImg={userImg} />
-          <UserName onClick={() => navigate(`/user-page/${userName}`)}>{userName}</UserName>
+          <NavigatingToUserHome onClick={() => navigate(`/user-page/${userName}`)}>
+            <UserName>{userName}</UserName>
+            <Icon.IconBox color={theme.color.main} styles="transform: scaleX(-1);">
+              <Icon.Runner />
+            </Icon.IconBox>
+          </NavigatingToUserHome>
           {/* message icon for other's page, logout icon for login user's page */}
           {loginUserInfo.userName !== userName ? (
             <MessageIcon src={messageIconUserPage} alt="message" />

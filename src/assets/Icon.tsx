@@ -50,6 +50,7 @@ const IconBox = styled.div<{
   color?: string;
   noPointer?: boolean;
   hover?: string;
+  styles?: string;
 }>`
   z-index: ${({ zIndex }) => zIndex || 1};
   background-color: ${({ bgColor }) => bgColor || "transparent"};
@@ -71,6 +72,8 @@ const IconBox = styled.div<{
       `}
     }
   }
+
+  ${({ styles }) => styles}
 `;
 const iconStyle = () => `
     width: 100%;
