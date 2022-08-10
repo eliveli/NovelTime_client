@@ -7,7 +7,14 @@ interface NovelLike {
 }
 
 export interface IsModalState {
-  modalCategory: "novelImage" | "sortWriting" | "filterContent" | "login" | "editProfile" | "none";
+  modalCategory:
+    | "novelImage"
+    | "sortWriting"
+    | "filterContent"
+    | "login"
+    | "editProfile"
+    | "share"
+    | "none";
   novelImage: string;
   sortingText: string;
   filteringContent: string;
@@ -35,7 +42,7 @@ export const modalSlice = createSlice({
     openModal: (
       state,
       action: PayloadAction<
-        "novelImage" | "sortWriting" | "filterContent" | "login" | "editProfile" | "none"
+        "novelImage" | "sortWriting" | "filterContent" | "login" | "editProfile" | "share" | "none"
       >,
     ) => {
       state.modalCategory = action.payload;

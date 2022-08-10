@@ -236,14 +236,19 @@ export const ModalBox = styled.div<{ padding?: string; isEditingUserBG?: boolean
 
   ${({ isEditingUserBG }) => isEditingUserBG && `bottom: -122px;`}
 `;
-export const LoginCategoryContnr = styled.div`
+export const SocialCategoryContnr = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
   gap: 20px;
 `;
-export const LoginLink = styled.a``;
-export const LoginCategory = styled.button<{ isKaKao?: true; isNaver?: true; isGoogle?: true }>`
+export const SocialLink = styled.a``;
+export const SocialCategory = styled.button<{
+  isKaKao?: true;
+  isNaver?: true;
+  isGoogle?: true;
+  isFaceBook?: true;
+}>`
   width: 100%;
 
   padding: 13px 15px;
@@ -268,8 +273,10 @@ export const LoginCategory = styled.button<{ isKaKao?: true; isNaver?: true; isG
     isNaver && `color: rgba(3,199,90,0.6); box-shadow: 0 0 4px rgba(3, 199, 90, 0.5);`};
   ${({ isGoogle }) =>
     isGoogle && `color: rgba(255, 61, 0, 0.6); box-shadow: 0 0 4px rgb(255 61 0 / 44%);`};
+  ${({ isFaceBook }) =>
+    isFaceBook && `color: rgb(8 116 231 / 63%); box-shadow: 0 0 4px rgb(8 116 231 / 66%);`};
 `;
-export const LoginTitle = styled.h3`
+export const ModalTitle = styled.h3`
   margin: 0;
   text-align: center;
   margin-bottom: 30px;
@@ -382,15 +389,21 @@ export const MarkUserNameAsByte = styled.span<{ userNameByte: number }>`
 export const NormalFontWeight = styled.span`
   font-weight: 300;
 `;
-export const LoginIconBox = styled(Icon.IconBox)<{ isKaKao?: true }>`
+export const SocialIconBox = styled(Icon.IconBox)<{
+  isKaKao?: true;
+  isNaver?: true;
+  isGoogle?: true;
+  isFaceBook?: true;
+}>`
   margin-right: 10px;
 
   ${({ isKaKao }) =>
-    isKaKao
-      ? ` background-color: rgba(250, 225, 0,0.6);
+    isKaKao &&
+    ` background-color: rgba(250, 225, 0,0.6);
     color: rgba(60, 30, 30,0.7); padding: 2px;
-    border-radius: 3px;`
-      : `color: rgba(3, 199, 90, 0.6);`}
+    border-radius: 3px;`}
+  ${({ isNaver, isGoogle }) => (isNaver || isGoogle) && `color: rgba(3, 199, 90, 0.6);`};
+  ${({ isFaceBook }) => isFaceBook && `color: rgb(8 116 231 / 85%);`};
 `;
 export const LogoContnr = styled.div`
   opacity: 0.8;

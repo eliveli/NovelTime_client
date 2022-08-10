@@ -5,6 +5,7 @@ import SortWriting from "./SortWriting";
 import FilterContent from "./FilterContent";
 import Login from "./Login";
 import EditProfile from "./EditProfile";
+import Share from "./Share";
 
 export default function Modal() {
   const modalCategory = useAppSelector((state) => state.modal.modalCategory);
@@ -26,6 +27,8 @@ export default function Modal() {
             return <Login />;
           case "editProfile":
             return <EditProfile />;
+          case "share":
+            return <Share />;
 
           case "none":
             // eslint-disable-next-line react/jsx-no-useless-fragment

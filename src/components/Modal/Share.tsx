@@ -4,7 +4,7 @@ import Icon from "assets/Icon";
 import { catWalking } from "assets/images";
 import { useAppDispatch } from "../../store/hooks";
 
-import { KAKAO_AUTH_URL, NAVER_AUTH_URL, GOOGLE_AUTH_URL } from "./utils/OAuth";
+import {} from "./utils/SocialSharing";
 import {
   SocialCategoryContnr,
   SocialCategory,
@@ -20,7 +20,7 @@ import {
   ModalBox,
 } from "./Modal.styles";
 
-export default function Login() {
+export default function Share() {
   const dispatch = useAppDispatch();
 
   return (
@@ -33,31 +33,16 @@ export default function Login() {
         <ClosingBox isSmallWidth onClick={() => dispatch(closeModal())}>
           <ClosingIcon />
         </ClosingBox>
+
         <ContentContnr>
-          <ModalTitle>로그인</ModalTitle>
+          <ModalTitle>공유하기</ModalTitle>
           <SocialCategoryContnr>
-            <SocialLink href={KAKAO_AUTH_URL}>
-              <SocialCategory isKaKao>
-                <SocialIconBox isKaKao size={20}>
-                  <Icon.Kakao />
+            <SocialLink href="">
+              <SocialCategory isFaceBook>
+                <SocialIconBox isFaceBook size={20}>
+                  <Icon.FaceBook />
                 </SocialIconBox>
-                카카오
-              </SocialCategory>
-            </SocialLink>
-            <SocialLink href={NAVER_AUTH_URL}>
-              <SocialCategory isNaver>
-                <SocialIconBox isNaver size={20}>
-                  <Icon.Naver />
-                </SocialIconBox>
-                네이버
-              </SocialCategory>
-            </SocialLink>
-            <SocialLink href={GOOGLE_AUTH_URL}>
-              <SocialCategory isGoogle>
-                <SocialIconBox isGoogle size={20}>
-                  <Icon.Google />
-                </SocialIconBox>
-                구글
+                페이스북
               </SocialCategory>
             </SocialLink>
           </SocialCategoryContnr>

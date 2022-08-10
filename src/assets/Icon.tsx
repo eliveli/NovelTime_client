@@ -36,11 +36,13 @@ import {
 import { RiRunLine, RiShareForward2Fill, RiKakaoTalkFill } from "react-icons/ri";
 import { MdOutlineShare, MdOutlineMoreHoriz } from "react-icons/md";
 import { IoIosSearch, IoMdClose } from "react-icons/io";
-import { AiOutlineUser, AiOutlineMessage, AiOutlineLogout } from "react-icons/ai";
+import { AiOutlineUser, AiOutlineMessage, AiOutlineLogout, AiFillFacebook } from "react-icons/ai";
 import { ImBooks } from "react-icons/im";
 import { SiNaver } from "react-icons/si";
 import { FcGoogle } from "react-icons/fc";
 
+import { openModal } from "store/clientSlices/modalSlice";
+import { useAppDispatch } from "store/hooks";
 import theme, { styled } from "./styles/theme";
 
 const IconBox = styled.div<{
@@ -128,6 +130,9 @@ const Icon = {
   Google: styled(FcGoogle)`
     ${iconStyleHover()};
   `,
+  FaceBook: styled(AiFillFacebook)`
+    ${iconStyleHover()};
+  `,
   Emoji: styled(BsEmojiSunglasses)`
     ${iconStyleHover()};
   `,
@@ -182,9 +187,21 @@ const Icon = {
   Share: styled(MdOutlineShare)`
     ${iconStyleHover()};
   `,
-  SharePC: styled(RiShareForward2Fill)`
-    ${iconStyleHover()};
-  `,
+  ShareWithArrow: () => {
+    const dispatch = useAppDispatch();
+
+    const SharingIcon = styled(RiShareForward2Fill)`
+      ${iconStyleHover()};
+    `;
+    return (
+      <SharingIcon
+        onClick={() => {
+          dispatch(openModal("share"));
+        }}
+      />
+    );
+  },
+
   Home: styled(HiOutlineHome)`
     ${iconStyleHover()};
   `,

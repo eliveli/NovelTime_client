@@ -180,7 +180,7 @@ function UserPageNovelList({ isMyList }: { isMyList: boolean }) {
 
       <CategoryMark categoryText={contentPageMark}>
         <ShareIconBox>
-          <Icon.SharePC />
+          <Icon.ShareWithArrow />
         </ShareIconBox>
       </CategoryMark>
       {/* more button to show or not all the title list */}

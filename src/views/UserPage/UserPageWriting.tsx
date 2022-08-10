@@ -242,7 +242,7 @@ export default function UserPageWriting({ isMyWriting }: { isMyWriting: boolean 
     <MainBG>
       <CategoryMark categoryText={contentPageMark}>
         <ShareIconBox>
-          <Icon.SharePC />
+          <Icon.ShareWithArrow />
         </ShareIconBox>
       </CategoryMark>
 
