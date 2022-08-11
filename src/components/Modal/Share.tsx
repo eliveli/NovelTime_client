@@ -23,6 +23,12 @@ import {
 export default function Share() {
   const dispatch = useAppDispatch();
 
+  const { href } = window.location;
+
+  const socialUrl = {
+    facebook: `https://www.facebook.com/sharer/sharer.php?u=${href}`,
+  };
+
   return (
     <TranslucentBG onClick={() => dispatch(closeModal())}>
       <ModalBox
@@ -37,7 +43,7 @@ export default function Share() {
         <ContentContnr>
           <ModalTitle>공유하기</ModalTitle>
           <SocialCategoryContnr>
-            <SocialLink href="">
+            <SocialLink target="_blank" href={socialUrl.facebook}>
               <SocialCategory isFaceBook>
                 <SocialIconBox isFaceBook size={20}>
                   <Icon.FaceBook />
