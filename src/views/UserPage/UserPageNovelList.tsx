@@ -17,6 +17,7 @@ import {
 } from "store/serverAPIs/novelTime";
 import { NovelInNovelList } from "store/serverAPIs/types";
 import { useComponentWidth, useComponentScrollWidth, useComponentHeight } from "utils";
+import MetaTag from "utils/MetaTag";
 import {
   ContainerWidth,
   ListTitleLimitHeightContnr,
@@ -166,14 +167,24 @@ function UserPageNovelList({ isMyList }: { isMyList: boolean }) {
       navigate(`/user-page/${userName as string}`, { replace: true });
     }
   }, [currentNovelListInfo]);
-
   // case 1. fetching data at first
   // case 2. fetching next novel list right after canceling LIKE in login user's other's list page
   if (!currentNovelListInfo || listId !== currentNovelListInfo.novelList.listId) {
     return <Spinner styles="fixed" />;
   }
+
+  const metaTags = {
+    title: `${currentNovelListInfo?.novelList.listTitle}`,
+    description: `${
+      isMyList ? userName : currentNovelListInfo?.novelList.userName
+    }의 리스트 - ${contentPageMark}`,
+    image: currentNovelListInfo?.novelList.novel[0].novelImg,
+    url: window.location.href,
+  };
+
   return (
     <MainBG>
+      {currentNovelListInfo && <MetaTag tags={metaTags} />}
       {(myListResult.isFetching || othersListResult.isFetching || toggleLikeResult.isLoading) && (
         <Spinner styles="fixed" />
       )}

@@ -13,7 +13,6 @@ import {
   SocialIconBox,
   Logo,
   LogoContnr,
-  SocialLink,
   TranslucentBG,
   ClosingBox,
   ClosingIcon,
@@ -25,8 +24,22 @@ export default function Share() {
 
   const { href } = window.location;
 
+  interface SocialList {
+    [x: string]: string;
+  }
   const socialUrl = {
-    facebook: `https://www.facebook.com/sharer/sharer.php?u=${href}`,
+    facebook: `https://www.facebook.com/sharer.php?u=${href}`,
+  };
+  const socialList: SocialList = { FB: socialUrl.facebook };
+
+  const onSharingClick = (site: string) => {
+    const screenWidth = window.screen.width;
+    const screenHeight = window.screen.height;
+    if (screenWidth <= 420 || screenHeight <= 420) {
+      window.open(socialList[site], "sharer");
+    } else {
+      window.open(socialList[site], "sharer", "width=400,height=400");
+    }
   };
 
   return (
@@ -43,14 +56,12 @@ export default function Share() {
         <ContentContnr>
           <ModalTitle>공유하기</ModalTitle>
           <SocialCategoryContnr>
-            <SocialLink target="_blank" href={socialUrl.facebook}>
-              <SocialCategory isFaceBook>
-                <SocialIconBox isFaceBook size={20}>
-                  <Icon.FaceBook />
-                </SocialIconBox>
-                페이스북
-              </SocialCategory>
-            </SocialLink>
+            <SocialCategory isFaceBook onClick={() => onSharingClick("FB")}>
+              <SocialIconBox isFaceBook size={20}>
+                <Icon.FaceBook />
+              </SocialIconBox>
+              페이스북
+            </SocialCategory>
           </SocialCategoryContnr>
         </ContentContnr>
         <LogoContnr>
