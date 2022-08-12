@@ -1,8 +1,9 @@
+import { useEffect } from "react";
 import { closeModal } from "store/clientSlices/modalSlice";
 
 import Icon from "assets/Icon";
 import { catWalking } from "assets/images";
-import { useAppDispatch } from "../../store/hooks";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
 
 import {} from "./utils/SocialSharing";
 import {
@@ -24,11 +25,12 @@ export default function Share() {
 
   const { href } = window.location;
 
+  // share to twitter, facebook
   interface SocialList {
     [x: string]: string;
   }
   const socialUrl = {
-    facebook: `https://www.facebook.com/sharer.php?u=${href}`,
+    facebook: `https://www.facebook.com/sharer/sharer.php?u=${href}`,
     twitter: `https://twitter.com/share?url=${href}&text=NovelTime`,
   };
   const socialList: SocialList = { FB: socialUrl.facebook, TW: socialUrl.twitter };
@@ -41,6 +43,36 @@ export default function Share() {
     } else {
       window.open(socialList[site], "sharer", "width=400,height=400,scrollbars=yes");
     }
+  };
+
+  // share to KaKaoTalk
+  const metaTags = useAppSelector((state) => state.modal.metaTags);
+  const initKakao = () => {
+    if (window.Kakao) {
+      const kakao = window.Kakao;
+      if (!kakao.isInitialized()) {
+        kakao.init(process.env.REACT_APP_KAKAO_JAVASCRIPT_KEY);
+      }
+    }
+  };
+
+  useEffect(() => {
+    initKakao();
+  }, []);
+
+  const onSharingKakao = () => {
+    window.Kakao.Share.sendDefault({
+      objectType: "feed",
+      content: {
+        title: metaTags.title,
+        description: metaTags.description,
+        imageUrl: metaTags.image,
+        link: {
+          mobileWebUrl: metaTags.url,
+          webUrl: metaTags.url,
+        },
+      },
+    });
   };
 
   return (
@@ -57,17 +89,23 @@ export default function Share() {
         <ContentContnr>
           <ModalTitle>공유하기</ModalTitle>
           <SocialCategoryContnr>
-            <SocialCategory isFaceBook onClick={() => onSharingClick("FB")}>
-              <SocialIconBox isFaceBook size={20}>
-                <Icon.FaceBook />
-              </SocialIconBox>
-              페이스북
-            </SocialCategory>
             <SocialCategory isTwitter onClick={() => onSharingClick("TW")}>
               <SocialIconBox isTwitter size={20}>
                 <Icon.Twitter />
               </SocialIconBox>
               트위터
+            </SocialCategory>
+            <SocialCategory isKaKao onClick={() => onSharingKakao()}>
+              <SocialIconBox isKaKao size={20}>
+                <Icon.Kakao />
+              </SocialIconBox>
+              카카오톡
+            </SocialCategory>
+            <SocialCategory isFaceBook onClick={() => onSharingClick("FB")}>
+              <SocialIconBox isFaceBook size={20}>
+                <Icon.FaceBook />
+              </SocialIconBox>
+              페이스북
             </SocialCategory>
           </SocialCategoryContnr>
         </ContentContnr>

@@ -8,7 +8,9 @@ import MainBG from "components/MainBG";
 import { NovelRow } from "components/Novel";
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useAppSelector } from "store/hooks";
+import { useAppDispatch, useAppSelector } from "store/hooks";
+import { closeModal, setMetaTags } from "store/clientSlices/modalSlice";
+
 import {
   useGetAllNovelListTitlesQuery,
   useGetContentsForUserPageMyListQuery,
@@ -49,6 +51,8 @@ interface NovelListTitle {
 }
 
 function UserPageNovelList({ isMyList }: { isMyList: boolean }) {
+  const dispatch = useAppDispatch();
+
   const navigate = useNavigate();
 
   const { userName, listId } = useParams();
@@ -178,9 +182,19 @@ function UserPageNovelList({ isMyList }: { isMyList: boolean }) {
     description: `${
       isMyList ? userName : currentNovelListInfo?.novelList.userName
     }의 리스트 - ${contentPageMark}`,
-    image: currentNovelListInfo?.novelList.novel[0].novelImg,
+    image: `https://photos.google.com/album/AF1QipOy4A30VtN2Afb5ynQYejvDxN_5CVBjYRa_DYX4/photo/AF1QipM-TuRzTrhw9-AH4fdhB9EwS1vxjwdOfdX2svVp`,
     url: window.location.href,
   };
+  if (currentNovelListInfo) {
+    dispatch(
+      setMetaTags({
+        title: metaTags.title,
+        description: metaTags.description,
+        image: metaTags.image,
+        url: metaTags.url,
+      }),
+    );
+  }
 
   return (
     <MainBG>

@@ -6,6 +6,13 @@ interface NovelLike {
   isLike: boolean | undefined;
 }
 
+interface MetaTags {
+  title: string;
+  description: string;
+  image: string;
+  url: string;
+}
+
 export interface IsModalState {
   modalCategory:
     | "novelImage"
@@ -18,6 +25,7 @@ export interface IsModalState {
   novelImage: string;
   sortingText: string;
   filteringContent: string;
+  metaTags: MetaTags;
 
   // 아래는 나중에 모듈 분리
   novelTitle: string;
@@ -29,7 +37,13 @@ const initialState: IsModalState = {
   novelImage: "",
   sortingText: "작성일New",
   filteringContent: "Novel",
-
+  metaTags: {
+    title: "NovelTime",
+    description: "It's time to read novels!",
+    image:
+      "https://photos.google.com/album/AF1QipOy4A30VtN2Afb5ynQYejvDxN_5CVBjYRa_DYX4/photo/AF1QipM-TuRzTrhw9-AH4fdhB9EwS1vxjwdOfdX2svVp",
+    url: "",
+  },
   //
   novelTitle: "",
   novelLike: [{ novelId: undefined, isLike: undefined }],
@@ -60,6 +74,10 @@ export const modalSlice = createSlice({
     filterContent: (state, action: PayloadAction<string>) => {
       state.filteringContent = action.payload;
     },
+    setMetaTags: (state, action: PayloadAction<MetaTags>) => {
+      state.metaTags = action.payload;
+    },
+
     // 아래 리듀서 모듈 분리
     getNovelTitle: (state, action: PayloadAction<string>) => {
       state.novelTitle = action.payload;
@@ -90,6 +108,7 @@ export const {
   sortWriting,
   getNovelTitle,
   setLikeNovel,
+  setMetaTags,
 } = modalSlice.actions;
 
 export default modalSlice.reducer;
