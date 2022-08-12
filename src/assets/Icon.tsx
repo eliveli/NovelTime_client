@@ -5,6 +5,7 @@ import {
   FaRegHeart,
   FaRegComment,
   FaRegHandPointer,
+  FaTwitterSquare,
 } from "react-icons/fa";
 import {
   BiBookReader,
@@ -131,6 +132,9 @@ const Icon = {
     ${iconStyleHover()};
   `,
   FaceBook: styled(AiFillFacebook)`
+    ${iconStyleHover()};
+  `,
+  Twitter: styled(FaTwitterSquare)`
     ${iconStyleHover()};
   `,
   Emoji: styled(BsEmojiSunglasses)`

@@ -62,6 +62,12 @@ export default function Share() {
               </SocialIconBox>
               페이스북
             </SocialCategory>
+            <SocialCategory isTwitter onClick={() => onSharingClick("FB")}>
+              <SocialIconBox isTwitter size={20}>
+                <Icon.Twitter />
+              </SocialIconBox>
+              트위터
+            </SocialCategory>
           </SocialCategoryContnr>
         </ContentContnr>
         <LogoContnr>
