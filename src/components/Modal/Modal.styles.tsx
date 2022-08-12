@@ -249,6 +249,7 @@ export const SocialCategory = styled.button<{
   isGoogle?: true;
   isFaceBook?: true;
   isTwitter?: true;
+  isLink?: true;
 }>`
   width: 100%;
 
@@ -268,6 +269,8 @@ export const SocialCategory = styled.button<{
   /* border: 1px solid rgba(0, 0, 0, 0.2); */
   border: 0;
 
+  ${theme.media.hover(`cursor: pointer;`)}
+
   ${({ isKaKao }) =>
     isKaKao && `color: rgb(211 204 0 / 76%); box-shadow: 0 0 4px rgb(250 225 0 / 100%);`};
   ${({ isNaver }) =>
@@ -278,6 +281,8 @@ export const SocialCategory = styled.button<{
     isFaceBook && `color: rgb(8 116 231 / 63%); box-shadow: 0 0 4px rgb(8 116 231 / 66%);`};
   ${({ isTwitter }) =>
     isTwitter && `color: rgb(44 184 251 / 86%); box-shadow: 0 0 4px rgb(29 155 240 / 88%);`};
+  ${({ isLink }) =>
+    isLink && `color: rgb(96 96 96 / 65%); box-shadow: 0 0 4px rgb(96 96 96 / 75%); `};
 `;
 export const ModalTitle = styled.h3`
   margin: 0;
@@ -398,6 +403,7 @@ export const SocialIconBox = styled(Icon.IconBox)<{
   isGoogle?: true;
   isFaceBook?: true;
   isTwitter?: true;
+  isLink?: true;
 }>`
   margin-right: 10px;
 
@@ -409,6 +415,7 @@ export const SocialIconBox = styled(Icon.IconBox)<{
   ${({ isNaver, isGoogle }) => (isNaver || isGoogle) && `color: rgba(3, 199, 90, 0.6);`};
   ${({ isFaceBook }) => isFaceBook && `color: rgb(8 116 231 / 85%);`};
   ${({ isTwitter }) => isTwitter && `color: rgb(29 155 240 / 88%);`};
+  ${({ isLink }) => isLink && `color: rgb(96 96 96 / 98%);`};
 `;
 export const LogoContnr = styled.div`
   opacity: 0.8;

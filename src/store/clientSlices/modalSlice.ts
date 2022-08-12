@@ -41,6 +41,7 @@ const initialState: IsModalState = {
     title: "NovelTime",
     description: "It's time to read novels!",
     image:
+      // 사이트 썸네일 이미지 in 구글 포토 앨범
       "https://photos.google.com/album/AF1QipOy4A30VtN2Afb5ynQYejvDxN_5CVBjYRa_DYX4/photo/AF1QipM-TuRzTrhw9-AH4fdhB9EwS1vxjwdOfdX2svVp",
     url: "",
   },

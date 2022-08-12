@@ -25,6 +25,7 @@ import {
   BsFillCaretUpFill,
   BsFillCaretDownFill,
   BsFillRecordFill,
+  BsLink45Deg,
 } from "react-icons/bs";
 import {
   HiHeart,
@@ -135,6 +136,9 @@ const Icon = {
     ${iconStyleHover()};
   `,
   Twitter: styled(FaTwitterSquare)`
+    ${iconStyleHover()};
+  `,
+  Link: styled(BsLink45Deg)`
     ${iconStyleHover()};
   `,
   Emoji: styled(BsEmojiSunglasses)`

@@ -75,6 +75,10 @@ export default function Share() {
     });
   };
 
+  // copy link
+  const onCopyLink = async () => {
+    await navigator.clipboard.writeText(href);
+  };
   return (
     <TranslucentBG onClick={() => dispatch(closeModal())}>
       <ModalBox
@@ -106,6 +110,12 @@ export default function Share() {
                 <Icon.FaceBook />
               </SocialIconBox>
               페이스북
+            </SocialCategory>
+            <SocialCategory isLink onClick={onCopyLink}>
+              <SocialIconBox isLink size={20}>
+                <Icon.Link />
+              </SocialIconBox>
+              링크 복사
             </SocialCategory>
           </SocialCategoryContnr>
         </ContentContnr>
