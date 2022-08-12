@@ -29,8 +29,9 @@ export default function Share() {
   }
   const socialUrl = {
     facebook: `https://www.facebook.com/sharer.php?u=${href}`,
+    twitter: `https://twitter.com/share?url=${href}&text=NovelTime`,
   };
-  const socialList: SocialList = { FB: socialUrl.facebook };
+  const socialList: SocialList = { FB: socialUrl.facebook, TW: socialUrl.twitter };
 
   const onSharingClick = (site: string) => {
     const screenWidth = window.screen.width;
@@ -38,7 +39,7 @@ export default function Share() {
     if (screenWidth <= 420 || screenHeight <= 420) {
       window.open(socialList[site], "sharer");
     } else {
-      window.open(socialList[site], "sharer", "width=400,height=400");
+      window.open(socialList[site], "sharer", "width=400,height=400,scrollbars=yes");
     }
   };
 
@@ -62,7 +63,7 @@ export default function Share() {
               </SocialIconBox>
               페이스북
             </SocialCategory>
-            <SocialCategory isTwitter onClick={() => onSharingClick("FB")}>
+            <SocialCategory isTwitter onClick={() => onSharingClick("TW")}>
               <SocialIconBox isTwitter size={20}>
                 <Icon.Twitter />
               </SocialIconBox>
