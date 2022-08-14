@@ -18,10 +18,9 @@ import {
   useToggleLikeMutation,
 } from "store/serverAPIs/novelTime";
 import { NovelInNovelList } from "store/serverAPIs/types";
-import { useComponentWidth, useComponentScrollWidth, useComponentHeight } from "utils";
+import { useComponentScrollWidth, useComponentHeight } from "utils";
 import MetaTag from "utils/MetaTag";
 import useCallbackComponentWidth from "utils/useCallbackComponentWidth";
-import useCallbackComponentHeightAndScrollWidth from "utils/useCallbackComponentHeightAndScrollWidth";
 import {
   ContainerWidth,
   ListTitleLimitHeightContnr,
@@ -156,17 +155,18 @@ function UserPageNovelList({ isMyList }: { isMyList: boolean }) {
     useCallbackComponentWidth(isListMore);
   const limitContnrWidth = containerWidth - 35; // shown width
   // - get scrollable width including overflowed hidden space
-  const {
-    width: titleListWidthScrollable,
-    height: titleListHeight,
-    refCallback: titleListRef,
-  } = useCallbackComponentHeightAndScrollWidth(isListMore);
-  // ---------------------------------------------------------------------------------- //
+  const titleListRef = useRef<HTMLDivElement>(null);
+  const titleListWidthScrollable = useComponentScrollWidth(
+    titleListRef,
+    containerWidth,
+    isListMore,
+  );
 
-  // - get title list height to show or not more button when isListMore is true ----------  //
+  // ---------------------------------------------------------------------------------- //
+  // - get title list height to show or no more button when isListMore is true ----------  //
   // - if titleListHeight is not longer than the height 32px that is 1 line of ListTitleContnr,
   // - then don't show the button even if isListMore is true
-  // const titleListHeight = useComponentHeight(titleListRef, isListMore);
+  const titleListHeight = useComponentHeight(titleListRef, containerWidth, isListMore);
   //
   const metaTags = {
     title: `${currentNovelListInfo?.novelList.listTitle}`,
