@@ -20,6 +20,8 @@ import {
 import { NovelInNovelList } from "store/serverAPIs/types";
 import { useComponentWidth, useComponentScrollWidth, useComponentHeight } from "utils";
 import MetaTag from "utils/MetaTag";
+import useCallbackComponentWidth from "utils/useCallbackComponentWidth";
+import useCallbackComponentHeightAndScrollWidth from "utils/useCallbackComponentHeightAndScrollWidth";
 import {
   ContainerWidth,
   ListTitleLimitHeightContnr,
@@ -150,33 +152,22 @@ function UserPageNovelList({ isMyList }: { isMyList: boolean }) {
   // - calculate the size of the title list container -------------------------   //
   // if the list title container is over than title list width, show the MoreBtn. //
   // - get shown width of title container
-  const containerWidthRef = useRef<HTMLDivElement>(null);
-  const containerWidth = useComponentWidth(containerWidthRef, isListMore);
+  const { width: containerWidth, refCallback: containerWidthRef } =
+    useCallbackComponentWidth(isListMore);
   const limitContnrWidth = containerWidth - 35; // shown width
   // - get scrollable width including overflowed hidden space
-  const titleListRef = useRef<HTMLDivElement>(null);
-  const titleListWidthScrollable = useComponentScrollWidth(titleListRef, isListMore);
+  const {
+    width: titleListWidthScrollable,
+    height: titleListHeight,
+    refCallback: titleListRef,
+  } = useCallbackComponentHeightAndScrollWidth(isListMore);
   // ---------------------------------------------------------------------------------- //
 
   // - get title list height to show or not more button when isListMore is true ----------  //
   // - if titleListHeight is not longer than the height 32px that is 1 line of ListTitleContnr,
   // - then don't show the button even if isListMore is true
-  const titleListHeight = useComponentHeight(titleListRef, isListMore);
-  useEffect(() => {
-    if (!currentNovelListInfo) return;
-
-    // when list id is undefined or there is no list that matches list id
-    if (!listId || !currentNovelListInfo?.novelList?.novel) {
-      alert("리스트가 존재하지 않습니다.");
-      navigate(`/user-page/${userName as string}`, { replace: true });
-    }
-  }, [currentNovelListInfo]);
-  // case 1. fetching data at first
-  // case 2. fetching next novel list right after canceling LIKE in login user's other's list page
-  if (!currentNovelListInfo || listId !== currentNovelListInfo.novelList.listId) {
-    return <Spinner styles="fixed" />;
-  }
-
+  // const titleListHeight = useComponentHeight(titleListRef, isListMore);
+  //
   const metaTags = {
     title: `${currentNovelListInfo?.novelList.listTitle}`,
     description: `${
@@ -185,17 +176,33 @@ function UserPageNovelList({ isMyList }: { isMyList: boolean }) {
     image: `https://photos.google.com/album/AF1QipOy4A30VtN2Afb5ynQYejvDxN_5CVBjYRa_DYX4/photo/AF1QipM-TuRzTrhw9-AH4fdhB9EwS1vxjwdOfdX2svVp`,
     url: window.location.href,
   };
-  if (currentNovelListInfo) {
-    dispatch(
-      setMetaTags({
-        title: metaTags.title,
-        description: metaTags.description,
-        image: metaTags.image,
-        url: metaTags.url,
-      }),
-    );
-  }
+  //
+  useEffect(() => {
+    if (!currentNovelListInfo) return;
 
+    // when list id is undefined or there is no list that matches list id
+    if (!listId || !currentNovelListInfo?.novelList?.novel) {
+      alert("리스트가 존재하지 않습니다.");
+      navigate(`/user-page/${userName as string}`, { replace: true });
+    }
+    //
+    if (currentNovelListInfo) {
+      dispatch(
+        setMetaTags({
+          title: metaTags.title,
+          description: metaTags.description,
+          image: metaTags.image,
+          url: metaTags.url,
+        }),
+      );
+    }
+  }, [currentNovelListInfo]);
+
+  // case 1. fetching data at first
+  // case 2. fetching next novel list right after canceling LIKE in login user's other's list page
+  if (!currentNovelListInfo || listId !== currentNovelListInfo.novelList.listId) {
+    return <Spinner styles="fixed" />;
+  }
   return (
     <MainBG>
       {currentNovelListInfo && <MetaTag tags={metaTags} />}

@@ -5,7 +5,6 @@ import Icon from "assets/Icon";
 import { catWalking } from "assets/images";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 
-import {} from "./utils/SocialSharing";
 import {
   SocialCategoryContnr,
   SocialCategory,
