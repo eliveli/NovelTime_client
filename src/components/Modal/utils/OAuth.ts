@@ -3,14 +3,14 @@ const REST_API_KEY_KAKAO = process.env.REACT_APP_KAKAO_CLIENT_ID;
 const REDIRECT_URI_KAKAO =
   process.env.REACT_APP_ENV === "production"
     ? ""
-    : "http://domainfordev.com:3000/oauth/callback/kakao";
+    : "https://domainfordev.com:3000/oauth/callback/kakao";
 
 // for naver
 const REST_API_KEY_NAVER = process.env.REACT_APP_NAVER_CLIENT_ID;
 const REDIRECT_URI_NAVER =
   process.env.REACT_APP_ENV === "production"
     ? ""
-    : "http://domainfordev.com:3000/oauth/callback/naver";
+    : "https://domainfordev.com:3000/oauth/callback/naver";
 const BEFORE_ENCODED_URI_NAVER = process.env.REACT_APP_NAVER_STATE as string;
 const STATE_NAVER = encodeURI(BEFORE_ENCODED_URI_NAVER);
 
@@ -19,7 +19,7 @@ const REST_API_KEY_GOOGLE = process.env.REACT_APP_GOOGLE_CLIENT_ID;
 const REDIRECT_URI_GOOGLE =
   process.env.REACT_APP_ENV === "production"
     ? ""
-    : "http://domainfordev.com:3000/oauth/callback/google";
+    : "https://domainfordev.com:3000/oauth/callback/google";
 
 // oauth url
 export const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY_KAKAO}&redirect_uri=${REDIRECT_URI_KAKAO}&response_type=code`;

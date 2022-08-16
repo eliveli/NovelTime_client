@@ -38,7 +38,7 @@ interface CustomError {
 export const novelTimeApi = createApi({
   reducerPath: "novelTimeApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://domainfordev.com:8082",
+    baseUrl: "https://domainfordev.com:8082",
     credentials: "include",
     prepareHeaders: (headers, { getState, endpoint }) => {
       const { accessToken } = (getState() as RootState).user;

@@ -237,7 +237,7 @@ export default function MessageRoom({ roomIdTablet }: { roomIdTablet?: string })
   const contnrRef = useRef<HTMLElement>(null);
 
   // for realtime communication
-  const socket = io("http://domainfordev.com:8082", {
+  const socket = io("https://domainfordev.com:8082", {
     withCredentials: true,
     extraHeaders: {
       "my-custom-header": "abcd",
