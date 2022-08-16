@@ -4,8 +4,8 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 // in react, I must not install or import dotenv just use it //
 // after changing .env file kill and rerun the process in terminal to read the changed env var
 
-// set env variable in advance : process.env.REACT_APP_ENV
-// type " set NODE_ENV=development " in terminal CMD
+//
+// REACT_APP_ENV is set by scripts in package.json
 // set client id for production in .env file later
 const IMAGE_HOSTING_CLIENT_ID =
   process.env.REACT_APP_ENV === "production"
