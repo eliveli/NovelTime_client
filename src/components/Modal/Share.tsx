@@ -76,7 +76,12 @@ export default function Share() {
 
   // copy link
   const onCopyLink = async () => {
-    await navigator.clipboard.writeText(href);
+    try {
+      await navigator.clipboard.writeText(href);
+      alert("링크가 복사되었습니다!");
+    } catch (err) {
+      console.log("error occurred when copying url to clipboard :", err);
+    }
   };
   return (
     <TranslucentBG onClick={() => dispatch(closeModal())}>
