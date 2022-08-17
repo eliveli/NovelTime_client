@@ -13,7 +13,7 @@ interface ProfileImg {
   src: string;
   position: string;
 }
-export const ProfileAlign = styled.div<{ userBGSrc: string; userBGPosition: string }>`
+export const ProfileBG = styled.div<{ userBGSrc: string; userBGPosition: string }>`
   height: 100%;
   width: 100%;
   max-width: 860px;
@@ -48,7 +48,10 @@ export const UserImg = styled.div<{ userImg: ProfileImg; isTitle?: true }>`
 export const UserName = styled.span`
   margin-left: 5px;
   font-size: 15px;
-  color: white;
+  font-weight: 500;
+  font-size: 16px;
+  font-family: "Noto Sans KR";
+  color: #ff9c3dd9;
 `;
 export const NavigatingToUserHome = styled.div`
   display: flex;
@@ -65,29 +68,36 @@ export const LogOutIconBox = styled(Icon.IconBox)`
 export const ProfileUserCntnr = styled.div`
   display: flex;
   align-items: flex-end;
-  margin-bottom: 12px;
-
+  margin-bottom: 16px;
   margin-left: 16px;
   ${theme.media.tablet(`
+    margin-bottom: 20px;
     margin-left: 20px;
   `)}
+`;
+export const ProfileUserInfoBG = styled.div`
+  background-color: #ffffffd9;
+  box-shadow: 0 0 7px 7px #ffffffd9;
+
+  border-radius: 10px;
+
+  display: flex;
+  align-items: flex-end;
 `;
 
 export const EditProfileBtn = styled.button`
   white-space: nowrap;
 
-  margin-left: 15px;
-
   border-radius: 20px;
   padding: 2px 9px 2px 7px;
   margin-left: 12px;
 
-  color: #ffffffbf;
-  background-color: transparent;
-  border: 1px solid #ffffff5c;
+  color: #f29f05f0;
+  border: 1px solid #f29f058f;
+  background-color: #ffffff96;
 
   font-size: 13px;
-  font-weight: 300;
+  font-weight: 500;
 `;
 
 export const WritingSection = styled.section<{ isNoContent: boolean }>`

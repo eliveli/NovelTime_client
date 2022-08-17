@@ -15,8 +15,9 @@ import { useEffect } from "react";
 import Spinner from "assets/Spinner";
 import {
   ProfileContnr,
-  ProfileAlign,
+  ProfileBG,
   ProfileUserCntnr,
+  ProfileUserInfoBG,
   UserImg,
   UserName,
   MessageIcon,
@@ -78,33 +79,35 @@ function Profile({ userImg, userName, userBG }: ProfileProps) {
   //
   return (
     <ProfileContnr whenBGisNot={!!tempUserBG.src || !!userBG.src}>
-      <ProfileAlign
+      <ProfileBG
         userBGSrc={tempUserBG.src || userBG.src}
         userBGPosition={tempUserBG.position || userBG.position}
       >
         <ProfileUserCntnr>
-          <UserImg userImg={userImg} />
-          <NavigatingToUserHome onClick={() => navigate(`/user-page/${userName}`)}>
-            <UserName>{userName}</UserName>
-            <Icon.IconBox color={theme.color.main} styles={stylesForUserHomeIcon}>
-              <Icon.Runner />
-            </Icon.IconBox>
-          </NavigatingToUserHome>
-          {/* message icon for other's page, logout icon for login user's page */}
-          {loginUserInfo.userName !== userName ? (
-            <MessageIcon src={messageIconUserPage} alt="message" />
-          ) : (
-            <>
-              <EditProfileBtn onClick={() => dispatch(openModal("editProfile"))}>
-                수정
-              </EditProfileBtn>
-              <LogOutIconBox size={33} onClick={handleLogout}>
-                <Icon.Logout />
-              </LogOutIconBox>
-            </>
-          )}
+          <ProfileUserInfoBG>
+            <UserImg userImg={userImg} />
+            <NavigatingToUserHome onClick={() => navigate(`/user-page/${userName}`)}>
+              <UserName>{userName}</UserName>
+              <Icon.IconBox color={theme.color.main} styles={stylesForUserHomeIcon}>
+                <Icon.Runner />
+              </Icon.IconBox>
+            </NavigatingToUserHome>
+            {/* message icon for other's page, logout icon for login user's page */}
+            {loginUserInfo.userName !== userName ? (
+              <MessageIcon src={messageIconUserPage} alt="message" />
+            ) : (
+              <>
+                <EditProfileBtn onClick={() => dispatch(openModal("editProfile"))}>
+                  수정
+                </EditProfileBtn>
+                <LogOutIconBox size={33} onClick={handleLogout}>
+                  <Icon.Logout />
+                </LogOutIconBox>
+              </>
+            )}
+          </ProfileUserInfoBG>
         </ProfileUserCntnr>
-      </ProfileAlign>
+      </ProfileBG>
     </ProfileContnr>
   );
 }
