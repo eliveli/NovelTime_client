@@ -1,14 +1,14 @@
 {
   "files": {
-    "main.js": "/NovelTime_client/static/js/main.05c97063.js",
+    "main.js": "/NovelTime_client/static/js/main.8f0a8c8e.js",
     "static/js/787.c4e7f8f9.chunk.js": "/NovelTime_client/static/js/787.c4e7f8f9.chunk.js",
     "static/media/logoMobile.png": "/NovelTime_client/static/media/logoMobile.cd40febb26c091535d4f.png",
     "static/media/staticSpinner.svg": "/NovelTime_client/static/media/staticSpinner.d5094c8d6b7a1c6056976f19f43dfe68.svg",
     "index.html": "/NovelTime_client/index.html",
-    "main.05c97063.js.map": "/NovelTime_client/static/js/main.05c97063.js.map",
+    "main.8f0a8c8e.js.map": "/NovelTime_client/static/js/main.8f0a8c8e.js.map",
     "787.c4e7f8f9.chunk.js.map": "/NovelTime_client/static/js/787.c4e7f8f9.chunk.js.map"
   },
   "entrypoints": [
-    "static/js/main.05c97063.js"
+    "static/js/main.8f0a8c8e.js"
   ]
 }
