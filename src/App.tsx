@@ -1,7 +1,7 @@
 /* eslint-disable */
 // 지금은 뷰 구성에 집중할 것임. 린트 무시하는 주석은 나중에 해제하기
 import React, { useState } from "react";
-import { HashRouter as Router, Routes, Route, Outlet } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Outlet } from "react-router-dom";
 
 import {
   NovelDetailRecommend,
@@ -118,7 +118,7 @@ function App() {
   //   최초 페이지 진입 시 리프레시 요청 감. 이 때 non login user 에러 받고 polling interval 막기
 
   return (
-    <Router>
+    <Router basename="/NovelTime_client">
       <GlobalStyle />
       <ThemeProvider theme={theme}>
         <Modal />
