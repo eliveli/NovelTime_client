@@ -43,14 +43,14 @@ export const UserContnr = styled.div`
   border-radius: 10px;
   padding: 10px;
 `;
-export const UserImg = styled.div<{ userImg: string }>`
+export const UserImg = styled.div<{ userImg: { src: string; position: string } }>`
   border-radius: 50%;
   min-width: 45px;
   height: 45px;
   background-image: url(${({ userImg }) =>
-    userImg || "https://cdn.pixabay.com/photo/2017/02/01/09/52/animal-2029245_960_720.png"});
+    userImg.src || "https://cdn.pixabay.com/photo/2017/02/01/09/52/animal-2029245_960_720.png"});
 
-  background-position: center;
+  background-position: ${({ userImg }) => userImg.position || "center"};
   background-repeat: no-repeat;
   background-size: cover;
 

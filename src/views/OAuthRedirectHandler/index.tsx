@@ -4,7 +4,6 @@ import { useAppDispatch } from "store/hooks";
 
 import { setLoginUserInfo, setAccessToken } from "store/clientSlices/userSlice";
 import { useGetLoginOauthServerQuery } from "store/serverAPIs/novelTime";
-import {} from "./OAuthRedirectHandler.styles";
 
 export default function OAuthRedirectHandler() {
   const { oauthServerUrl } = useParams();

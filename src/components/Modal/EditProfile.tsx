@@ -135,6 +135,10 @@ export default function EditProfile() {
         //    in desktop, data capacity would be checked after editing image
         if (CheckDeviceType() !== "desktop") {
           const blob = dataURLtoBlob(reader.result as string);
+          if (!blob) {
+            alert("이미지 편집에 실패했습니다. 다시 한 번 시도해주세요.");
+            return;
+          }
 
           const dataCapacity = formatBytes(blob.size);
 
@@ -169,6 +173,10 @@ export default function EditProfile() {
       const file = event.target.files[0];
       reader.onloadend = () => {
         const blob = dataURLtoBlob(reader.result as string);
+        if (!blob) {
+          alert("이미지 편집에 실패했습니다. 다시 한 번 시도해주세요.");
+          return;
+        }
 
         const dataCapacity = formatBytes(blob.size);
 

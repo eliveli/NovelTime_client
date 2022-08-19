@@ -83,28 +83,64 @@ const dataFromServer = {
   // 각 10순위 씩
   talkUserRank: {
     content: [
-      { userImg: "", userName: "lala", userAct: { writing: 6, comment: 6 } },
-      { userImg: "", userName: "lalaa", userAct: { writing: 6, comment: 6 } },
-      { userImg: "", userName: "laaala", userAct: { writing: 6, comment: 6 } },
-      { userImg: "", userName: "lalas", userAct: { writing: 6, comment: 6 } },
-      { userImg: "", userName: "lalda", userAct: { writing: 6, comment: 6 } },
-      { userImg: "", userName: "lalfa", userAct: { writing: 6, comment: 6 } },
-      { userImg: "", userName: "lalae", userAct: { writing: 6, comment: 6 } },
-      { userImg: "", userName: "lalwa", userAct: { writing: 6, comment: 6 } },
-      { userImg: "", userName: "lalwa", userAct: { writing: 6, comment: 6 } },
-      { userImg: "", userName: "lalwa", userAct: { writing: 6, comment: 6 } },
+      { userImg: { src: "", position: "" }, userName: "lala", userAct: { writing: 6, comment: 6 } },
+      {
+        userImg: { src: "", position: "" },
+        userName: "lalaa",
+        userAct: { writing: 6, comment: 6 },
+      },
+      {
+        userImg: { src: "", position: "" },
+        userName: "laaala",
+        userAct: { writing: 6, comment: 6 },
+      },
+      {
+        userImg: { src: "", position: "" },
+        userName: "lalas",
+        userAct: { writing: 6, comment: 6 },
+      },
+      {
+        userImg: { src: "", position: "" },
+        userName: "lalda",
+        userAct: { writing: 6, comment: 6 },
+      },
+      {
+        userImg: { src: "", position: "" },
+        userName: "lalfa",
+        userAct: { writing: 6, comment: 6 },
+      },
+      {
+        userImg: { src: "", position: "" },
+        userName: "lalae",
+        userAct: { writing: 6, comment: 6 },
+      },
+      {
+        userImg: { src: "", position: "" },
+        userName: "lalwa",
+        userAct: { writing: 6, comment: 6 },
+      },
+      {
+        userImg: { src: "", position: "" },
+        userName: "lalwa",
+        userAct: { writing: 6, comment: 6 },
+      },
+      {
+        userImg: { src: "", position: "" },
+        userName: "lalwa",
+        userAct: { writing: 6, comment: 6 },
+      },
     ],
     like: [
-      { userImg: "", userName: "lala", likeReceived: 7 },
-      { userImg: "", userName: "lalaa", likeReceived: 7 },
-      { userImg: "", userName: "laaala", likeReceived: 7 },
-      { userImg: "", userName: "lalas", likeReceived: 7 },
-      { userImg: "", userName: "lalda", likeReceived: 7 },
-      { userImg: "", userName: "lalfa", likeReceived: 7 },
-      { userImg: "", userName: "lalae", likeReceived: 7 },
-      { userImg: "", userName: "lalwa", likeReceived: 7 },
-      { userImg: "", userName: "lalwa", likeReceived: 7 },
-      { userImg: "", userName: "lalwa", likeReceived: 7 },
+      { userImg: { src: "", position: "" }, userName: "lala", likeReceived: 7 },
+      { userImg: { src: "", position: "" }, userName: "lalaa", likeReceived: 7 },
+      { userImg: { src: "", position: "" }, userName: "laaala", likeReceived: 7 },
+      { userImg: { src: "", position: "" }, userName: "lalas", likeReceived: 7 },
+      { userImg: { src: "", position: "" }, userName: "lalda", likeReceived: 7 },
+      { userImg: { src: "", position: "" }, userName: "lalfa", likeReceived: 7 },
+      { userImg: { src: "", position: "" }, userName: "lalae", likeReceived: 7 },
+      { userImg: { src: "", position: "" }, userName: "lalwa", likeReceived: 7 },
+      { userImg: { src: "", position: "" }, userName: "lalwa", likeReceived: 7 },
+      { userImg: { src: "", position: "" }, userName: "lalwa", likeReceived: 7 },
     ],
   },
   recommendList: [
@@ -174,28 +210,28 @@ const dataFromServer = {
   ],
   recommendUserRank: {
     content: [
-      { userImg: "", userName: "lala", userAct: { writing: 7 } },
-      { userImg: "", userName: "lalaa", userAct: { writing: 7 } },
-      { userImg: "", userName: "laaala", userAct: { writing: 7 } },
-      { userImg: "", userName: "lalas", userAct: { writing: 7 } },
-      { userImg: "", userName: "lalda", userAct: { writing: 7 } },
-      { userImg: "", userName: "lalfa", userAct: { writing: 7 } },
-      { userImg: "", userName: "lalae", userAct: { writing: 7 } },
-      { userImg: "", userName: "lalwa", userAct: { writing: 7 } },
-      { userImg: "", userName: "lalwa", userAct: { writing: 7 } },
-      { userImg: "", userName: "lalwa", userAct: { writing: 7 } },
+      { userImg: { src: "", position: "" }, userName: "lala", userAct: { writing: 7 } },
+      { userImg: { src: "", position: "" }, userName: "lalaa", userAct: { writing: 7 } },
+      { userImg: { src: "", position: "" }, userName: "laaala", userAct: { writing: 7 } },
+      { userImg: { src: "", position: "" }, userName: "lalas", userAct: { writing: 7 } },
+      { userImg: { src: "", position: "" }, userName: "lalda", userAct: { writing: 7 } },
+      { userImg: { src: "", position: "" }, userName: "lalfa", userAct: { writing: 7 } },
+      { userImg: { src: "", position: "" }, userName: "lalae", userAct: { writing: 7 } },
+      { userImg: { src: "", position: "" }, userName: "lalwa", userAct: { writing: 7 } },
+      { userImg: { src: "", position: "" }, userName: "lalwa", userAct: { writing: 7 } },
+      { userImg: { src: "", position: "" }, userName: "lalwa", userAct: { writing: 7 } },
     ],
     like: [
-      { userImg: "", userName: "lala", likeReceived: 7 },
-      { userImg: "", userName: "lalaa", likeReceived: 7 },
-      { userImg: "", userName: "laaala", likeReceived: 7 },
-      { userImg: "", userName: "lalas", likeReceived: 7 },
-      { userImg: "", userName: "lalda", likeReceived: 7 },
-      { userImg: "", userName: "lalfa", likeReceived: 7 },
-      { userImg: "", userName: "lalae", likeReceived: 7 },
-      { userImg: "", userName: "lalwa", likeReceived: 7 },
-      { userImg: "", userName: "lalwa", likeReceived: 7 },
-      { userImg: "", userName: "lalwa", likeReceived: 7 },
+      { userImg: { src: "", position: "" }, userName: "lala", likeReceived: 7 },
+      { userImg: { src: "", position: "" }, userName: "lalaa", likeReceived: 7 },
+      { userImg: { src: "", position: "" }, userName: "laaala", likeReceived: 7 },
+      { userImg: { src: "", position: "" }, userName: "lalas", likeReceived: 7 },
+      { userImg: { src: "", position: "" }, userName: "lalda", likeReceived: 7 },
+      { userImg: { src: "", position: "" }, userName: "lalfa", likeReceived: 7 },
+      { userImg: { src: "", position: "" }, userName: "lalae", likeReceived: 7 },
+      { userImg: { src: "", position: "" }, userName: "lalwa", likeReceived: 7 },
+      { userImg: { src: "", position: "" }, userName: "lalwa", likeReceived: 7 },
+      { userImg: { src: "", position: "" }, userName: "lalwa", likeReceived: 7 },
     ],
   },
   simpleNovelInfo: [
@@ -251,7 +287,7 @@ const dataFromServer = {
       listId: "ssseefss",
       listTitle: "list where is romance",
       userName: "바바바",
-      userImg: "",
+      userImg: { src: "", position: "" },
       novel: [
         {
           novelId: "20220225082010201",
@@ -300,7 +336,7 @@ const dataFromServer = {
       listId: "ssseess",
       listTitle: "list where is romance",
       userName: "나나나",
-      userImg: "",
+      userImg: { src: "", position: "" },
       novel: [
         {
           novelId: "20220225082010201",
@@ -349,28 +385,28 @@ const dataFromServer = {
 
   novelListUserRank: {
     content: [
-      { userImg: "", userName: "lala", userAct: { list: 6 } },
-      { userImg: "", userName: "lalaa", userAct: { list: 6 } },
-      { userImg: "", userName: "laaala", userAct: { list: 6 } },
-      { userImg: "", userName: "lalas", userAct: { list: 6 } },
-      { userImg: "", userName: "lalda", userAct: { list: 6 } },
-      { userImg: "", userName: "lalfa", userAct: { list: 6 } },
-      { userImg: "", userName: "lalae", userAct: { list: 6 } },
-      { userImg: "", userName: "lalwa", userAct: { list: 6 } },
-      { userImg: "", userName: "lalwa", userAct: { list: 6 } },
-      { userImg: "", userName: "lalwa", userAct: { list: 6 } },
+      { userImg: { src: "", position: "" }, userName: "lala", userAct: { list: 6 } },
+      { userImg: { src: "", position: "" }, userName: "lalaa", userAct: { list: 6 } },
+      { userImg: { src: "", position: "" }, userName: "laaala", userAct: { list: 6 } },
+      { userImg: { src: "", position: "" }, userName: "lalas", userAct: { list: 6 } },
+      { userImg: { src: "", position: "" }, userName: "lalda", userAct: { list: 6 } },
+      { userImg: { src: "", position: "" }, userName: "lalfa", userAct: { list: 6 } },
+      { userImg: { src: "", position: "" }, userName: "lalae", userAct: { list: 6 } },
+      { userImg: { src: "", position: "" }, userName: "lalwa", userAct: { list: 6 } },
+      { userImg: { src: "", position: "" }, userName: "lalwa", userAct: { list: 6 } },
+      { userImg: { src: "", position: "" }, userName: "lalwa", userAct: { list: 6 } },
     ],
     like: [
-      { userImg: "", userName: "lala", likeReceived: 7 },
-      { userImg: "", userName: "lalaa", likeReceived: 7 },
-      { userImg: "", userName: "laaala", likeReceived: 7 },
-      { userImg: "", userName: "lalas", likeReceived: 7 },
-      { userImg: "", userName: "lalda", likeReceived: 7 },
-      { userImg: "", userName: "lalfa", likeReceived: 7 },
-      { userImg: "", userName: "lalae", likeReceived: 7 },
-      { userImg: "", userName: "lalwa", likeReceived: 7 },
-      { userImg: "", userName: "lalwa", likeReceived: 7 },
-      { userImg: "", userName: "lalwa", likeReceived: 7 },
+      { userImg: { src: "", position: "" }, userName: "lala", likeReceived: 7 },
+      { userImg: { src: "", position: "" }, userName: "lalaa", likeReceived: 7 },
+      { userImg: { src: "", position: "" }, userName: "laaala", likeReceived: 7 },
+      { userImg: { src: "", position: "" }, userName: "lalas", likeReceived: 7 },
+      { userImg: { src: "", position: "" }, userName: "lalda", likeReceived: 7 },
+      { userImg: { src: "", position: "" }, userName: "lalfa", likeReceived: 7 },
+      { userImg: { src: "", position: "" }, userName: "lalae", likeReceived: 7 },
+      { userImg: { src: "", position: "" }, userName: "lalwa", likeReceived: 7 },
+      { userImg: { src: "", position: "" }, userName: "lalwa", likeReceived: 7 },
+      { userImg: { src: "", position: "" }, userName: "lalwa", likeReceived: 7 },
     ],
   },
 };
@@ -458,7 +494,7 @@ export function PlatformNovelList({ isDetailInfo }: { isDetailInfo: boolean }) {
 }
 interface RankUserProps {
   info: {
-    userImg: string;
+    userImg: { src: string; position: string };
     userName: string;
     userAct?: {
       writing?: number;
@@ -531,7 +567,10 @@ interface UserRankSectionProps {
   category: "소설 한담" | "소설 추천" | "소설 리스트";
   rankList: {
     content: {
-      userImg: string;
+      userImg: {
+        src: string;
+        position: string;
+      };
       userName: string;
       userAct: {
         writing?: number;
@@ -539,7 +578,14 @@ interface UserRankSectionProps {
         list?: number;
       };
     }[];
-    like: { userImg: string; userName: string; likeReceived: number }[];
+    like: {
+      userImg: {
+        src: string;
+        position: string;
+      };
+      userName: string;
+      likeReceived: number;
+    }[];
   };
 }
 function UserRankSection({ category, rankList }: UserRankSectionProps) {

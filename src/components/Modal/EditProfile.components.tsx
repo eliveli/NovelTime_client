@@ -149,6 +149,11 @@ export default function EditProfileImg({
 
       const blob = dataURLtoBlob(dataUrlImg);
 
+      if (!blob) {
+        alert("이미지 편집에 실패했습니다. 다시 한 번 시도해주세요.");
+        return;
+      }
+
       const dataCapacity = formatBytes(blob.size);
 
       // if blob size is smaller than 20MB image hosting is available
