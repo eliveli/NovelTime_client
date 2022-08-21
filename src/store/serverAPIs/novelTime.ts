@@ -38,7 +38,10 @@ interface CustomError {
 export const novelTimeApi = createApi({
   reducerPath: "novelTimeApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: "https://domainfordev.com:8082",
+    baseUrl:
+      process.env.REACT_APP_ENV === "production"
+        ? "https://novel-time.vercel.app"
+        : "https://domainfordev.com:8082",
     credentials: "include",
     prepareHeaders: (headers, { getState, endpoint }) => {
       const { accessToken } = (getState() as RootState).user;
