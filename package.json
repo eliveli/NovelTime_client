@@ -28,7 +28,7 @@
   },
   "homepage": "https://eliveli.github.io/NovelTime_client",
   "scripts": {
-    "start": "set REACT_APP_ENV=development&&set HOST=domainfordev.com&&set HTTPS=true&&set SSL_CRT_FILE=domainfordev.com.pem&&set SSL_KEY_FILE=domainfordev.com-key.pem&react-scripts start",
+    "start": "set HOST=domainfordev.com&react-scripts start",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
     "build": "set REACT_APP_ENV=production&&react-scripts build",
