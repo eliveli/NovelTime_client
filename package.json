@@ -26,7 +26,6 @@
     "typescript": "^4.6.2",
     "web-vitals": "^2.1.4"
   },
-  "homepage": "https://eliveli.github.io/NovelTime_client",
   "scripts": {
     "start": "set HOST=domainfordev.com&react-scripts start",
     "predeploy": "npm run build",

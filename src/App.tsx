@@ -118,7 +118,7 @@ function App() {
   //   최초 페이지 진입 시 리프레시 요청 감. 이 때 non login user 에러 받고 polling interval 막기
 
   return (
-    <Router basename="/NovelTime_client">
+    <Router>
       <GlobalStyle />
       <ThemeProvider theme={theme}>
         <Modal />
