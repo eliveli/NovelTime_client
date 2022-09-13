@@ -40,8 +40,8 @@ export const novelTimeApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl:
       process.env.REACT_APP_ENV === "production"
-        ? "https://noveltime.shop/api"
-        : "http://domainfordev.com:8082/api",
+        ? "http://www.noveltime.shop/api"
+        : "http://domainfordev.com/api",
     credentials: "include",
     prepareHeaders: (headers, { getState, endpoint }) => {
       const { accessToken } = (getState() as RootState).user;

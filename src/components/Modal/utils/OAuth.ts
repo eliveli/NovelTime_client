@@ -2,15 +2,15 @@
 const REST_API_KEY_KAKAO = process.env.REACT_APP_KAKAO_CLIENT_ID;
 const REDIRECT_URI_KAKAO =
   process.env.REACT_APP_ENV === "production"
-    ? "https://noveltime.shop/oauth/callback/kakao"
-    : "http://domainfordev.com:3000/oauth/callback/kakao";
+    ? "http://www.noveltime.shop/oauth/callback/kakao"
+    : "http://domainfordev.com/oauth/callback/kakao";
 
 // for naver
 const REST_API_KEY_NAVER = process.env.REACT_APP_NAVER_CLIENT_ID;
 const REDIRECT_URI_NAVER =
   process.env.REACT_APP_ENV === "production"
-    ? "https://noveltime.shop/oauth/callback/naver"
-    : "http://domainfordev.com:3000/oauth/callback/naver";
+    ? "http://www.noveltime.shop/oauth/callback/naver"
+    : "http://domainfordev.com/oauth/callback/naver";
 const BEFORE_ENCODED_URI_NAVER = process.env.REACT_APP_NAVER_STATE as string;
 const STATE_NAVER = encodeURI(BEFORE_ENCODED_URI_NAVER);
 
@@ -18,8 +18,8 @@ const STATE_NAVER = encodeURI(BEFORE_ENCODED_URI_NAVER);
 const REST_API_KEY_GOOGLE = process.env.REACT_APP_GOOGLE_CLIENT_ID;
 const REDIRECT_URI_GOOGLE =
   process.env.REACT_APP_ENV === "production"
-    ? "https://noveltime.shop/oauth/callback/google"
-    : "http://domainfordev.com:3000/oauth/callback/google";
+    ? "http://www.noveltime.shop/oauth/callback/google"
+    : "http://domainfordev.com/oauth/callback/google";
 
 // oauth url
 export const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY_KAKAO}&redirect_uri=${REDIRECT_URI_KAKAO}&response_type=code`;
