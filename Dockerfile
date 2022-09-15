@@ -11,7 +11,7 @@ COPY . .
 RUN npm run build
 
 # web server and proxy
-FROM nginx:latest
+FROM nginx:1.23.1
 
 RUN rm -rf /etc/nginx/conf.d/default.conf
 COPY nginx.conf /etc/nginx/conf.d

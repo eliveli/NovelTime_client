@@ -28,6 +28,7 @@
   },
   "scripts": {
     "start": "set HOST=domainfordev.com&react-scripts start",
+    "prodTest": "set REACT_APP_ENV=production&react-scripts start",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
     "build": "react-scripts build",

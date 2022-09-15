@@ -1,11 +1,16 @@
 version: "3.9"
 services:
   nginx:
-    image: nginx:latest
-    container_name: dev-server
+    image: nginx:1.23.1
+    container_name: dev-or-test-server
     volumes:
       - ./dev.nginx.conf:/etc/nginx/conf.d/default.conf
     extra_hosts:
       - "host.docker.internal:host-gateway"
     ports:
       - "80:80"
+
+
+#  use following command
+#   : docker compose -f (X)   docker-compose -f (O)
+#  -> docker-compose -f dev.docker-compose.yml -p noveltime-dev-server up
