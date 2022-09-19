@@ -3,8 +3,13 @@ services:
   nginx:
     image: nginx:1.23.1
     container_name: prod-test-server
+    restart: unless-stopped
     volumes:
       - ./prod-test.nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./nginx-log:/var/log/nginx
+      - ./www:/var/www/html
+      # - ./certbot/conf:/etc/letsencrypt 
+      # - ./certbot/www:/var/www/certbot
 
     # to connect to host address it is necessary 
     #   to create docker-compose file with extra_hosts option
@@ -13,6 +18,22 @@ services:
       - "host.docker.internal:host-gateway"
     ports:
       - "80:80"
+      - "443:443"
+    # command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \\"daemon off;\\"'"
+
+  certbot:
+    image: certbot/certbot
+    container_name: certbot
+    depends_on:
+      - nginx
+    restart: unless-stopped
+    volumes:
+      - ./certbot/conf:/etc/letsencrypt 
+      # - ./certbot/www:/var/www/certbot
+      - ./certbot/var:/var/lib/letsencrypt
+      - ./www:/var/www/html      
+    # command: certonly --webroot --webroot-path=/var/www/html --email elivevvv@gmail.com --agree-tos --no-eff-email --force-renewal -d www.noveltime.shop      
+    # entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
 
 
 #  use following command
