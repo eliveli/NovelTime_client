@@ -151,7 +151,7 @@ export interface NovelListSetForMyOrOthersList {
   userName?: string;
   userImg?: { src: string; position: string };
 }
-export interface ContentsForUserPageHome {
+export interface ContentForUserPageHome {
   talksUserCreated: TalkUserCreated[];
   recommendsUserCreated: RecommendUserCreated[];
   commentsUserCreated: CommentUserCreated[];
@@ -162,28 +162,28 @@ export interface ContentsForUserPageHome {
     listsUserLikes: ListUserLikes[];
   };
 }
-export interface ContentsForUserPageWriting {
+export interface ContentForUserPageWriting {
   writingsUserCreated?: TalkOrRecommend[];
   commentsUserCreated?: CommentUserCreated[];
   writingsUserLikes?: TalkOrRecommend[];
   isNextOrder: boolean;
 }
-export interface ContentsForUserPageMyWriting {
+export interface ContentForUserPageMyWriting {
   writingsUserCreated?: TalkOrRecommendUserCreated[];
   commentsUserCreated?: CommentUserCreated[];
   isNextOrder: boolean;
 }
-export interface ContentsForUserPageOthersWriting {
+export interface ContentForUserPageOthersWriting {
   writingsUserLikes: TalkUserLikes[] | RecommendUserLikes[];
   isNextOrder: boolean;
 }
 
 export interface ParamsForUserPageWriting {
   userName: string;
-  contentsType: "T" | "R" | "C";
+  contentType: "T" | "R" | "C";
   order: number;
 }
-export interface ContentsForUserPageNovelList {
+export interface ContentForUserPageNovelList {
   novelList: NovelListSetForMyOrOthersList;
   isNextOrder: boolean;
 }

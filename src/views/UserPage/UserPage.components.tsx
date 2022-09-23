@@ -29,22 +29,22 @@ import {
 import { ContentInfo } from "./UserPageWriting";
 
 interface NoContentParams {
-  contentsType: "T" | "R" | "C" | "L"; // talk or recommend or comment or novelList
+  contentType: "T" | "R" | "C" | "L"; // talk or recommend or comment or novelList
   isCreatedBy: boolean; // true : createByUser, false: likedByUser
 }
-export function NoContent({ contentsType, isCreatedBy }: NoContentParams) {
+export function NoContent({ contentType, isCreatedBy }: NoContentParams) {
   const part1 = isCreatedBy ? "작성한 " : "좋아요를 누른 ";
   const part2 =
-    contentsType === "T"
+    contentType === "T"
       ? "프리톡 게시글이"
-      : contentsType === "R"
+      : contentType === "R"
       ? "리코멘드 게시글이"
-      : contentsType === "C"
+      : contentType === "C"
       ? "코멘트가"
       : "소설 리스트가";
   const sentence = `${part1 + part2} 없어요.`;
   return (
-    <WritingContnr isNoContent isNovelList={contentsType === "L"}>
+    <WritingContnr isNoContent isNovelList={contentType === "L"}>
       {sentence}
     </WritingContnr>
   );
@@ -183,7 +183,7 @@ interface WritingProps {
   setParamsForRequest?: React.Dispatch<
     React.SetStateAction<{
       userName: string;
-      contentsType: "T" | "R" | "C";
+      contentType: "T" | "R" | "C";
       order: number;
     }>
   >;
@@ -246,19 +246,19 @@ export function WritingFilter({
               if (_ === "프리톡" && !talksUserCreated) {
                 setParamsForRequest((paramsForRequest) => ({
                   ...paramsForRequest,
-                  contentsType: "T",
+                  contentType: "T",
                   order: 1,
                 }));
               } else if (_ === "추천" && !recommendsUserCreated) {
                 setParamsForRequest((paramsForRequest) => ({
                   ...paramsForRequest,
-                  contentsType: "R",
+                  contentType: "R",
                   order: 1,
                 }));
               } else if (_ === "댓글" && !commentsUserCreated) {
                 setParamsForRequest((paramsForRequest) => ({
                   ...paramsForRequest,
-                  contentsType: "C",
+                  contentType: "C",
                   order: 1,
                 }));
               }
@@ -290,13 +290,13 @@ export function WritingFilter({
               if (_ === "프리톡" && !talksUserLikes) {
                 setParamsForRequest((paramsForRequest) => ({
                   ...paramsForRequest,
-                  contentsType: "T",
+                  contentType: "T",
                   order: 1,
                 }));
               } else if (_ === "추천" && !recommendsUserLikes) {
                 setParamsForRequest((paramsForRequest) => ({
                   ...paramsForRequest,
-                  contentsType: "R",
+                  contentType: "R",
                   order: 1,
                 }));
               }

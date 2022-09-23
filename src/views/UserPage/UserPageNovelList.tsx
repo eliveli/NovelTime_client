@@ -13,8 +13,8 @@ import { closeModal, setMetaTags } from "store/clientSlices/modalSlice";
 
 import {
   useGetAllNovelListTitlesQuery,
-  useGetContentsForUserPageMyListQuery,
-  useGetContentsForUserPageOthersListQuery,
+  useGetContentForUserPageMyListQuery,
+  useGetContentForUserPageOthersListQuery,
   useToggleLikeMutation,
 } from "store/serverAPIs/novelTime";
 import { NovelInNovelList } from "store/serverAPIs/types";
@@ -35,7 +35,7 @@ import {
   ShareIconBox,
   UserImg,
   OthersTitleContnr,
-  NextContentsBtn,
+  NextContentBtn,
 } from "./UserPage.styles";
 import contentMark from "./utils/contentMark";
 
@@ -71,7 +71,7 @@ function UserPageNovelList({ isMyList }: { isMyList: boolean }) {
   // divide these two results
   // don't destructure like this : const { data, isFetching, ... }
   // just get it as variables to avoid getting same name
-  const myListResult = useGetContentsForUserPageMyListQuery(
+  const myListResult = useGetContentForUserPageMyListQuery(
     {
       accessToken,
       userName: userName as string,
@@ -82,7 +82,7 @@ function UserPageNovelList({ isMyList }: { isMyList: boolean }) {
       skip: !isMyList,
     },
   );
-  const othersListResult = useGetContentsForUserPageOthersListQuery(
+  const othersListResult = useGetContentForUserPageOthersListQuery(
     {
       accessToken,
       userName: userName as string,
@@ -357,7 +357,7 @@ function UserPageNovelList({ isMyList }: { isMyList: boolean }) {
       </NovelListContnr>
 
       {currentNovelListInfo.isNextOrder && (
-        <NextContentsBtn
+        <NextContentBtn
           onClick={() => {
             setOrderNumber((currentOrder) => currentOrder + 1);
             novelsAsPreviousOrder.current = novels;
@@ -367,7 +367,7 @@ function UserPageNovelList({ isMyList }: { isMyList: boolean }) {
             <Icon.SmallDown />
           </Icon.IconBox>
           더보기
-        </NextContentsBtn>
+        </NextContentBtn>
       )}
     </MainBG>
   );

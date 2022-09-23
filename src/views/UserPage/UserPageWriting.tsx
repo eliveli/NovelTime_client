@@ -6,13 +6,13 @@ import Icon from "assets/Icon";
 import { useAppSelector } from "store/hooks";
 import { useParams } from "react-router-dom";
 import {
-  useGetContentsForUserPageMyWritingQuery,
-  useGetContentsForUserPageOthersWritingQuery,
+  useGetContentForUserPageMyWritingQuery,
+  useGetContentForUserPageOthersWritingQuery,
 } from "store/serverAPIs/novelTime";
-import { ContentsForUserPageWriting } from "store/serverAPIs/types";
+import { ContentForUserPageWriting } from "store/serverAPIs/types";
 import { TalkOrRecommend, CommentUserCreated } from "../../store/serverAPIs/types";
 import { Writing, Comment, WritingFilter, NoContent } from "./UserPage.components";
-import { NextContentsBtn, ShareIconBox, WritingSection } from "./UserPage.styles";
+import { NextContentBtn, ShareIconBox, WritingSection } from "./UserPage.styles";
 import contentMark from "./utils/contentMark";
 
 export type ContentInfo = {
@@ -27,7 +27,7 @@ export default function UserPageWriting({ isMyWriting }: { isMyWriting: boolean 
 
   const [paramsForRequest, setParamsForRequest] = useState({
     userName: userName as string,
-    contentsType: "T" as "T" | "R" | "C",
+    contentType: "T" as "T" | "R" | "C",
     order: 1,
   });
 
@@ -43,14 +43,14 @@ export default function UserPageWriting({ isMyWriting }: { isMyWriting: boolean 
   // divide these two results
   // don't destructure like this : const { data, isLoading, ... }
   // just get it as variables to avoid getting same name
-  const myWritingResult = useGetContentsForUserPageMyWritingQuery(paramsForRequest, {
+  const myWritingResult = useGetContentForUserPageMyWritingQuery(paramsForRequest, {
     skip: !isMyWriting,
   });
-  const othersWritingResult = useGetContentsForUserPageOthersWritingQuery(paramsForRequest, {
+  const othersWritingResult = useGetContentForUserPageOthersWritingQuery(paramsForRequest, {
     skip: isMyWriting,
   });
 
-  // states for saving contents from server in my writing page
+  // states for saving content from server in my writing page
   const [talksUserCreated, setTalksUserCreated] = useState<{
     talks: TalkOrRecommend[];
     isNextOrder: boolean;
@@ -67,7 +67,7 @@ export default function UserPageWriting({ isMyWriting }: { isMyWriting: boolean 
     currentOrder: number;
   }>();
 
-  // states for saving contents from server in other's writing page
+  // states for saving content from server in other's writing page
   const [talksUserLikes, setTalksUserLikes] = useState<{
     talks: TalkOrRecommend[];
     isNextOrder: boolean;
@@ -79,7 +79,7 @@ export default function UserPageWriting({ isMyWriting }: { isMyWriting: boolean 
     currentOrder: number;
   }>();
 
-  // get and save the contents in my writing page
+  // get and save the content in my writing page
   useEffect(() => {
     // don't save cached data for other's writing
     // it may remain because of rtk query trait
@@ -165,7 +165,7 @@ export default function UserPageWriting({ isMyWriting }: { isMyWriting: boolean 
     }
   }, [myWritingResult.data]);
 
-  // get and save the contents in other's writing page
+  // get and save the content in other's writing page
   useEffect(() => {
     // don't save cached data for my writing
     // it may remain because of rtk query trait
@@ -273,7 +273,7 @@ export default function UserPageWriting({ isMyWriting }: { isMyWriting: boolean 
           ) : talksUserLikes ? (
             talksUserLikes.talks.map((_) => <Writing key={_.talkId} writingInfo={_} />)
           ) : (
-            <NoContent contentsType="T" isCreatedBy={!!talksUserCreated} />
+            <NoContent contentType="T" isCreatedBy={!!talksUserCreated} />
           ))}
         {writingFilter === "추천" &&
           // return recommends for my writing or recommends for other's writing or no-content-mark
@@ -286,22 +286,22 @@ export default function UserPageWriting({ isMyWriting }: { isMyWriting: boolean 
               <Writing key={_.recommendId} writingInfo={_} />
             ))
           ) : (
-            <NoContent contentsType="R" isCreatedBy={!!recommendsUserCreated} />
+            <NoContent contentType="R" isCreatedBy={!!recommendsUserCreated} />
           ))}
         {writingFilter === "댓글" &&
           // return comments or no-content-mark
           (commentsUserCreated ? (
             commentsUserCreated.comments.map((_) => <Comment key={_.commentId} commentInfo={_} />)
           ) : (
-            <NoContent contentsType="C" isCreatedBy={!!commentsUserCreated} />
+            <NoContent contentType="C" isCreatedBy={!!commentsUserCreated} />
           ))}
       </WritingSection>
       {currentContentRef.current.isNextOrder && (
-        <NextContentsBtn
+        <NextContentBtn
           onClick={() => {
             setParamsForRequest({
               ...paramsForRequest,
-              contentsType: currentContentRef.current.type,
+              contentType: currentContentRef.current.type,
               order: currentContentRef.current.currentOrder + 1,
             });
           }}
@@ -310,7 +310,7 @@ export default function UserPageWriting({ isMyWriting }: { isMyWriting: boolean 
             <Icon.SmallDown />
           </Icon.IconBox>
           더보기
-        </NextContentsBtn>
+        </NextContentBtn>
       )}
     </MainBG>
   );

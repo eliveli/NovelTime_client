@@ -117,7 +117,7 @@ export const WritingSection = styled.section<{ isNoContent: boolean }>`
     grid-gap: 10px;
   `)}
 `;
-export const NextContentsBtn = styled.div`
+export const NextContentBtn = styled.div`
   border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 9px;
   padding: 10px;

@@ -5,7 +5,7 @@ import MainBG from "components/MainBG";
 import { CategoryMark } from "components/CategoryMark";
 import { useAppSelector } from "store/hooks";
 import { useParams } from "react-router-dom";
-import { useGetContentsForUserPageHomeByUserNameQuery } from "store/serverAPIs/novelTime";
+import { useGetContentForUserPageHomeByUserNameQuery } from "store/serverAPIs/novelTime";
 import Spinner from "assets/Spinner";
 import { RowSlide } from "../../components/NovelListFrame";
 import { NovelRow } from "../../components/Novel";
@@ -19,12 +19,12 @@ export default function UserPageHome() {
   const { userName } = useParams();
 
   // server request with userName
-  const { data, isLoading } = useGetContentsForUserPageHomeByUserNameQuery(userName as string, {
+  const { data, isLoading } = useGetContentForUserPageHomeByUserNameQuery(userName as string, {
     skip: !userName,
   });
   // I think this error object from the api doesn't required to be handled.
   // because if the user doesn't exist in DB the error is handled in UserPageParent component.
-  // and if the user's contents don't exist it is not an error.
+  // and if the user's content don't exist it is not an error.
 
   console.log("userPageHome data:", data);
 
@@ -89,19 +89,19 @@ export default function UserPageHome() {
           (data?.talksUserCreated.length ? (
             data.talksUserCreated.map((_) => <Writing key={_.talkId} writingInfo={_} />)
           ) : (
-            <NoContent contentsType="T" isCreatedBy />
+            <NoContent contentType="T" isCreatedBy />
           ))}
         {myFilter === "추천" &&
           (data?.recommendsUserCreated.length ? (
             data.recommendsUserCreated.map((_) => <Writing key={_.recommendId} writingInfo={_} />)
           ) : (
-            <NoContent contentsType="R" isCreatedBy />
+            <NoContent contentType="R" isCreatedBy />
           ))}
         {myFilter === "댓글" &&
           (data?.commentsUserCreated.length ? (
             data.commentsUserCreated.map((_) => <Comment key={_.commentId} commentInfo={_} />)
           ) : (
-            <NoContent contentsType="C" isCreatedBy />
+            <NoContent contentType="C" isCreatedBy />
           ))}
       </WritingSection>
 
@@ -130,13 +130,13 @@ export default function UserPageHome() {
           (data?.talksUserLikes.length ? (
             data?.talksUserLikes.map((_) => <Writing key={_.talkId} writingInfo={_} />)
           ) : (
-            <NoContent contentsType="T" isCreatedBy={false} />
+            <NoContent contentType="T" isCreatedBy={false} />
           ))}
         {otherFilter === "추천" &&
           (data?.recommendsUserLikes.length ? (
             data?.recommendsUserLikes.map((_) => <Writing key={_.recommendId} writingInfo={_} />)
           ) : (
-            <NoContent contentsType="R" isCreatedBy={false} />
+            <NoContent contentType="R" isCreatedBy={false} />
           ))}
       </WritingSection>
 
@@ -172,7 +172,7 @@ export default function UserPageHome() {
           </RowSlide>
         ))
       ) : (
-        <NoContent contentsType="L" isCreatedBy />
+        <NoContent contentType="L" isCreatedBy />
       )}
       <CategoryMark
         infoFromUserPage={{
@@ -207,7 +207,7 @@ export default function UserPageHome() {
           </RowSlide>
         ))
       ) : (
-        <NoContent contentsType="L" isCreatedBy={false} />
+        <NoContent contentType="L" isCreatedBy={false} />
       )}
     </MainBG>
   );
