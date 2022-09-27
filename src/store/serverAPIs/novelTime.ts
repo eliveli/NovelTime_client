@@ -75,7 +75,7 @@ export const novelTimeApi = createApi({
       query: (userName) => `/user/userInfo/${userName}`,
     }),
     getContentForUserPageHomeByUserName: builder.query<ContentForUserPageHome, string>({
-      query: (userName) => `/content/userPage/${userName}`,
+      query: (userName) => `/userContent/${userName}`,
       // refetch data //
       // don't use cached data where part of them is not the same with them in other's list page
       //   when login user navigates automatically to his/her user's home
@@ -88,21 +88,20 @@ export const novelTimeApi = createApi({
       ParamsForUserPageWriting
     >({
       query: (params) =>
-        `/content/userPage/myWriting/${params.userName}/${params.contentType}/${params.order}`,
+        `/userContent/myWriting/${params.userName}/${params.contentType}/${params.order}`,
     }),
     getContentForUserPageOthersWriting: builder.query<
       ContentForUserPageWriting,
       ParamsForUserPageWriting
     >({
       query: (params) =>
-        `/content/userPage/othersWriting/${params.userName}/${params.contentType}/${params.order}`,
+        `/userContent/othersWriting/${params.userName}/${params.contentType}/${params.order}`,
     }),
     getContentForUserPageMyList: builder.query<
       ContentForUserPageNovelList,
       ParamsForUserPageNovelList
     >({
-      query: (params) =>
-        `/content/userPage/myList/${params.userName}/${params.listId}/${params.order}`,
+      query: (params) => `/userContent/myList/${params.userName}/${params.listId}/${params.order}`,
       keepUnusedDataFor: 120,
       providesTags: (result, error, arg) => [{ type: "ContentUpdatedInNovelList", id: arg.listId }],
     }),
@@ -111,18 +110,18 @@ export const novelTimeApi = createApi({
       ParamsForUserPageNovelList
     >({
       query: (params) =>
-        `/content/userPage/othersList/${params.userName}/${params.listId}/${params.order}`,
+        `/userContent/othersList/${params.userName}/${params.listId}/${params.order}`,
       keepUnusedDataFor: 120,
       providesTags: (result, error, arg) => [{ type: "ContentUpdatedInNovelList", id: arg.listId }],
     }),
     getAllNovelListTitles: builder.query<AllTitlesAndOtherInfo, ParamsForAllNovelListTitles>({
-      query: (params) => `/content/userPage/novelListTitles/${params.userName}/${params.isMyList}`,
+      query: (params) => `/userContent/novelListTitles/${params.userName}/${params.isMyList}`,
       keepUnusedDataFor: 120,
       providesTags: ["ListTitlesUpdated"],
     }),
     toggleLike: builder.mutation<IsLike, ContentForLike>({
       query: (contentForLike) => ({
-        url: `/content/toggleLike/${contentForLike.contentType}/${contentForLike.contentId}`,
+        url: `/toggleLike/${contentForLike.contentType}/${contentForLike.contentId}`,
         method: "PUT",
       }),
       invalidatesTags: (result, error, arg) => {
