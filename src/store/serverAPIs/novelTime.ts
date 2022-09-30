@@ -6,17 +6,17 @@ import {
   OauthData,
   ChangedUserInfo,
   UserInfo,
-  ContentForUserPageHome,
-  ParamsForUserPageWriting,
+  ContentOfUserHome,
+  ParamsOfUserWriting,
   ContentForUserPageMyWriting,
   ContentForUserPageOthersWriting,
-  ContentForUserPageWriting,
-  ContentForUserPageNovelList,
-  ParamsForUserPageNovelList,
-  ContentForLike,
+  ContentOfUserWriting,
+  ContentOfUserNovelList,
+  ParamsOfUserNovelList,
+  ContentOfLike,
   IsLike,
   AllTitlesAndOtherInfo,
-  ParamsForAllNovelListTitles,
+  ParamsOfAllNovelListTitles,
 } from "./types";
 import type { RootState } from "../index";
 
@@ -74,7 +74,7 @@ export const novelTimeApi = createApi({
     getUserInfoByUserName: builder.query<UserInfo, string>({
       query: (userName) => `/user/userInfo/${userName}`,
     }),
-    getContentForUserPageHomeByUserName: builder.query<ContentForUserPageHome, string>({
+    getContentOfUserHome: builder.query<ContentOfUserHome, string>({
       query: (userName) => `/userContent/${userName}`,
       // refetch data //
       // don't use cached data where part of them is not the same with them in other's list page
@@ -83,43 +83,31 @@ export const novelTimeApi = createApi({
       //   for the reason that other's list doesn't exist anymore
       providesTags: ["ContentUpdatedInHome"],
     }),
-    getContentForUserPageMyWriting: builder.query<
-      ContentForUserPageWriting,
-      ParamsForUserPageWriting
-    >({
+    getContentOfUserMyWriting: builder.query<ContentOfUserWriting, ParamsOfUserWriting>({
       query: (params) =>
         `/userContent/myWriting/${params.userName}/${params.contentType}/${params.order}`,
     }),
-    getContentForUserPageOthersWriting: builder.query<
-      ContentForUserPageWriting,
-      ParamsForUserPageWriting
-    >({
+    getContentOfUserOthersWriting: builder.query<ContentOfUserWriting, ParamsOfUserWriting>({
       query: (params) =>
         `/userContent/othersWriting/${params.userName}/${params.contentType}/${params.order}`,
     }),
-    getContentForUserPageMyList: builder.query<
-      ContentForUserPageNovelList,
-      ParamsForUserPageNovelList
-    >({
+    getContentOfUserMyList: builder.query<ContentOfUserNovelList, ParamsOfUserNovelList>({
       query: (params) => `/userContent/myList/${params.userName}/${params.listId}/${params.order}`,
       keepUnusedDataFor: 120,
       providesTags: (result, error, arg) => [{ type: "ContentUpdatedInNovelList", id: arg.listId }],
     }),
-    getContentForUserPageOthersList: builder.query<
-      ContentForUserPageNovelList,
-      ParamsForUserPageNovelList
-    >({
+    getContentOfUserOthersList: builder.query<ContentOfUserNovelList, ParamsOfUserNovelList>({
       query: (params) =>
         `/userContent/othersList/${params.userName}/${params.listId}/${params.order}`,
       keepUnusedDataFor: 120,
       providesTags: (result, error, arg) => [{ type: "ContentUpdatedInNovelList", id: arg.listId }],
     }),
-    getAllNovelListTitles: builder.query<AllTitlesAndOtherInfo, ParamsForAllNovelListTitles>({
+    getAllNovelListTitles: builder.query<AllTitlesAndOtherInfo, ParamsOfAllNovelListTitles>({
       query: (params) => `/userContent/novelListTitles/${params.userName}/${params.isMyList}`,
       keepUnusedDataFor: 120,
       providesTags: ["ListTitlesUpdated"],
     }),
-    toggleLike: builder.mutation<IsLike, ContentForLike>({
+    toggleLike: builder.mutation<IsLike, ContentOfLike>({
       query: (contentForLike) => ({
         url: `/toggleLike/${contentForLike.contentType}/${contentForLike.contentId}`,
         method: "PUT",
@@ -169,11 +157,11 @@ export const {
   useGetUserInfoByUserNameQuery,
   useCheckForUserNameMutation,
   useSaveUserInfoMutation,
-  useGetContentForUserPageHomeByUserNameQuery,
-  useGetContentForUserPageMyWritingQuery,
-  useGetContentForUserPageOthersWritingQuery,
-  useGetContentForUserPageMyListQuery,
-  useGetContentForUserPageOthersListQuery,
+  useGetContentOfUserHomeQuery,
+  useGetContentOfUserMyWritingQuery,
+  useGetContentOfUserOthersWritingQuery,
+  useGetContentOfUserMyListQuery,
+  useGetContentOfUserOthersListQuery,
   useToggleLikeMutation,
   useGetAllNovelListTitlesQuery,
 } = novelTimeApi;

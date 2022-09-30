@@ -26,7 +26,7 @@ import {
   CommentContentContnr,
   WritingMark,
 } from "./UserPage.styles";
-import { ContentInfo } from "./UserPageWriting";
+import { ContentInfo } from "./UserWriting";
 
 interface NoContentParams {
   contentType: "T" | "R" | "C" | "L"; // talk or recommend or comment or novelList

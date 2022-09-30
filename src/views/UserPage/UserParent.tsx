@@ -112,7 +112,7 @@ function Profile({ userImg, userName, userBG }: ProfileProps) {
   );
 }
 
-export default function UserPageParent() {
+export default function UserParent() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 

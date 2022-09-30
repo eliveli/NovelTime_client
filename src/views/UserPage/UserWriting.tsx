@@ -6,10 +6,10 @@ import Icon from "assets/Icon";
 import { useAppSelector } from "store/hooks";
 import { useParams } from "react-router-dom";
 import {
-  useGetContentForUserPageMyWritingQuery,
-  useGetContentForUserPageOthersWritingQuery,
+  useGetContentOfUserMyWritingQuery,
+  useGetContentOfUserOthersWritingQuery,
 } from "store/serverAPIs/novelTime";
-import { ContentForUserPageWriting } from "store/serverAPIs/types";
+import { ContentOfUserWriting } from "store/serverAPIs/types";
 import { TalkOrRecommend, CommentUserCreated } from "../../store/serverAPIs/types";
 import { Writing, Comment, WritingFilter, NoContent } from "./UserPage.components";
 import { NextContentBtn, ShareIconBox, WritingSection } from "./UserPage.styles";
@@ -20,7 +20,7 @@ export type ContentInfo = {
   isNextOrder: boolean;
   currentOrder: number;
 };
-export default function UserPageWriting({ isMyWriting }: { isMyWriting: boolean }) {
+export default function UserWriting({ isMyWriting }: { isMyWriting: boolean }) {
   const loginUserInfo = useAppSelector((state) => state.user.loginUserInfo);
 
   const { userName } = useParams();
@@ -43,10 +43,10 @@ export default function UserPageWriting({ isMyWriting }: { isMyWriting: boolean 
   // divide these two results
   // don't destructure like this : const { data, isLoading, ... }
   // just get it as variables to avoid getting same name
-  const myWritingResult = useGetContentForUserPageMyWritingQuery(paramsForRequest, {
+  const myWritingResult = useGetContentOfUserMyWritingQuery(paramsForRequest, {
     skip: !isMyWriting,
   });
-  const othersWritingResult = useGetContentForUserPageOthersWritingQuery(paramsForRequest, {
+  const othersWritingResult = useGetContentOfUserOthersWritingQuery(paramsForRequest, {
     skip: isMyWriting,
   });
 

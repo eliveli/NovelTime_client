@@ -13,8 +13,8 @@ import { closeModal, setMetaTags } from "store/clientSlices/modalSlice";
 
 import {
   useGetAllNovelListTitlesQuery,
-  useGetContentForUserPageMyListQuery,
-  useGetContentForUserPageOthersListQuery,
+  useGetContentOfUserMyListQuery,
+  useGetContentOfUserOthersListQuery,
   useToggleLikeMutation,
 } from "store/serverAPIs/novelTime";
 import { NovelInNovelList } from "store/serverAPIs/types";
@@ -51,7 +51,7 @@ interface NovelListTitle {
   userImg?: { src: string; position: string };
 }
 
-function UserPageNovelList({ isMyList }: { isMyList: boolean }) {
+export default function UserNovelList({ isMyList }: { isMyList: boolean }) {
   const dispatch = useAppDispatch();
 
   const navigate = useNavigate();
@@ -71,7 +71,7 @@ function UserPageNovelList({ isMyList }: { isMyList: boolean }) {
   // divide these two results
   // don't destructure like this : const { data, isFetching, ... }
   // just get it as variables to avoid getting same name
-  const myListResult = useGetContentForUserPageMyListQuery(
+  const myListResult = useGetContentOfUserMyListQuery(
     {
       accessToken,
       userName: userName as string,
@@ -82,7 +82,7 @@ function UserPageNovelList({ isMyList }: { isMyList: boolean }) {
       skip: !isMyList,
     },
   );
-  const othersListResult = useGetContentForUserPageOthersListQuery(
+  const othersListResult = useGetContentOfUserOthersListQuery(
     {
       accessToken,
       userName: userName as string,
@@ -372,4 +372,3 @@ function UserPageNovelList({ isMyList }: { isMyList: boolean }) {
     </MainBG>
   );
 }
-export default UserPageNovelList;

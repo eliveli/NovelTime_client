@@ -151,7 +151,7 @@ export interface NovelListSetForMyOrOthersList {
   userName?: string;
   userImg?: { src: string; position: string };
 }
-export interface ContentForUserPageHome {
+export interface ContentOfUserHome {
   talksUserCreated: TalkUserCreated[];
   recommendsUserCreated: RecommendUserCreated[];
   commentsUserCreated: CommentUserCreated[];
@@ -162,7 +162,7 @@ export interface ContentForUserPageHome {
     listsUserLikes: ListUserLikes[];
   };
 }
-export interface ContentForUserPageWriting {
+export interface ContentOfUserWriting {
   writingsUserCreated?: TalkOrRecommend[];
   commentsUserCreated?: CommentUserCreated[];
   writingsUserLikes?: TalkOrRecommend[];
@@ -178,29 +178,29 @@ export interface ContentForUserPageOthersWriting {
   isNextOrder: boolean;
 }
 
-export interface ParamsForUserPageWriting {
+export interface ParamsOfUserWriting {
   userName: string;
   contentType: "T" | "R" | "C";
   order: number;
 }
-export interface ContentForUserPageNovelList {
+export interface ContentOfUserNovelList {
   novelList: NovelListSetForMyOrOthersList;
   isNextOrder: boolean;
 }
 export type AllTitlesAndOtherInfo = NovelListsSimpleInfos[];
 
-export interface ParamsForAllNovelListTitles {
+export interface ParamsOfAllNovelListTitles {
   userName: string;
   isMyList: string;
 }
 
-export interface ParamsForUserPageNovelList {
+export interface ParamsOfUserNovelList {
   accessToken?: string;
   userName: string;
   listId: string;
   order: number;
 }
-export interface ContentForLike {
+export interface ContentOfLike {
   contentType: "writing" | "novelList";
   contentId: string;
   isOthersListOfLoginUser: boolean;

@@ -1,6 +1,6 @@
-import UserPageParent from "./UserPageParent";
-import UserPageHome from "./UserPageHome";
-import UserPageNovelList from "./UserPageNovelList";
-import UserPageWriting from "./UserPageWriting";
+import UserParent from "./UserParent";
+import UserHome from "./UserHome";
+import UserNovelList from "./UserNovelList";
+import UserWriting from "./UserWriting";
 
-export { UserPageHome, UserPageNovelList, UserPageWriting, UserPageParent };
+export { UserHome, UserNovelList, UserParent, UserWriting };

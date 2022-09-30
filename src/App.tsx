@@ -14,10 +14,10 @@ import {
   NovelList,
   RecommendList,
   RecommendDetail,
-  UserPageHome,
-  UserPageWriting,
-  UserPageNovelList,
-  UserPageParent,
+  UserHome,
+  UserNovelList,
+  UserParent,
+  UserWriting,
   NotFound,
   MainListNav,
   DetailNav,
@@ -110,8 +110,8 @@ function App() {
   // 3. 로그인 후 액세스 토큰 만료 기간마다 액세스 토큰 받아 와 로그인 상태 유지
   //   - polling interval 이용
   // 3. 로그아웃 시
-  //   - 액세스 토큰 및 유저 정보 스토어에서 지우기 : UserPageParent 컴포넌트
-  //   - 스토어의 로그아웃 상태 또한 true로 변경 : UserPageParent 컴포넌트
+  //   - 액세스 토큰 및 유저 정보 스토어에서 지우기 : UserParent 컴포넌트
+  //   - 스토어의 로그아웃 상태 또한 true로 변경 : UserParent 컴포넌트
   //  -> 액세스 토큰 상태를 구독하는 앱 컴포넌트의 무한 리렌더링 막기 : App 컴포넌트
   //      - dispatch 작동 조건을 다음과 같이 설정했기에 가능 : isLogout === undefined
   // 4. 비로그인일 경우
@@ -195,23 +195,23 @@ function App() {
 
           {/* 새로고침 등 상황에 로그인 유지 위해 클라이언트 스토어 이용*/}
 
-          <Route path="/user-page/:userName" element={<UserPageParent />}>
-            <Route index element={<UserPageHome />} />
+          <Route path="/user-page/:userName" element={<UserParent />}>
+            <Route index element={<UserHome />} />
             <Route
               path="/user-page/:userName/my-writing"
-              element={<UserPageWriting isMyWriting={true} />}
+              element={<UserWriting isMyWriting={true} />}
             />
             <Route
               path="/user-page/:userName/others-writing"
-              element={<UserPageWriting isMyWriting={false} />}
+              element={<UserWriting isMyWriting={false} />}
             />
             <Route
               path="/user-page/:userName/my-list/:listId"
-              element={<UserPageNovelList isMyList={true} />}
+              element={<UserNovelList isMyList={true} />}
             />
             <Route
               path="/user-page/:userName/others-list/:listId"
-              element={<UserPageNovelList isMyList={false} />}
+              element={<UserNovelList isMyList={false} />}
             />
           </Route>
 
