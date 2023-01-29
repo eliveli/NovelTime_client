@@ -1,3 +1,91 @@
+interface Img {
+  src: string;
+  position: string;
+}
+interface UserRank {
+  userImg: Img;
+  userName: string;
+  count: number;
+}
+
+interface SimpleNovel {
+  novelId: string;
+  novelImg: string;
+  novelTitle: string;
+  novelAuthor: string;
+  novelGenre: string;
+  novelIsEnd: boolean;
+}
+
+export interface SimpleNovelWithoutId {
+  novelImg: string;
+  novelTitle: string;
+  novelAuthor: string;
+  novelGenre: string;
+  novelIsEnd: boolean;
+}
+
+export interface HomeData {
+  talkList: {
+    talkId: string;
+    userName: string;
+    userImg: Img;
+    createDate: string;
+    likeNO: number;
+    commentNO: number;
+    talkTitle: string;
+    talkImg: string;
+    novelTitle: string;
+  }[];
+
+  talkUserRank: {
+    talk?: UserRank[];
+    comment?: UserRank[];
+    likeReceived?: UserRank[];
+  };
+
+  recommendList: {
+    recommend: {
+      recommendId: string;
+      userName: string;
+      userImg: Img;
+      createDate: string;
+      likeNO: number;
+      recommendTitle: string;
+    };
+    novel: SimpleNovelWithoutId;
+  }[];
+
+  recommendUserRank: {
+    recommend?: UserRank[];
+    likeReceived?: UserRank[];
+  };
+
+  novelListUserRank: {
+    list?: UserRank[];
+    likeReceived?: UserRank[];
+  };
+
+  popularNovelsInNovelTime: SimpleNovel[];
+
+  weeklyNovelsFromPlatforms: {
+    kakape?: SimpleNovel[];
+    series?: SimpleNovel[];
+    ridi?: SimpleNovel[];
+    joara?: SimpleNovel[];
+  };
+}
+
+export type UserNovelLists =
+  | {
+      listId: string;
+      listTitle: string;
+      userName: string;
+      userImg: Img;
+      novel: SimpleNovel[];
+    }[]
+  | undefined;
+
 export interface NovelInfo {
   novelId: string;
   novelImg: string;
@@ -29,11 +117,6 @@ export interface UserAndToken {
 export interface OauthData {
   oauthServer: string;
   oauthInfo: string;
-}
-
-interface Img {
-  src: string;
-  position: string;
 }
 export interface ChangedUserInfo {
   changedUserName: string;
@@ -112,25 +195,18 @@ export interface CommentUserCreated {
   talkTitle: string;
   novelTitle: string;
 }
-export interface NovelInNovelList {
-  novelId: string;
-  novelImg: string;
-  novelTitle: string;
-  novelAuthor: string;
-  novelGenre: string;
-  novelIsEnd: boolean;
-}
+
 interface ListUserCreated {
   listId: string;
   listTitle: string;
-  novel: NovelInNovelList[];
+  novel: SimpleNovel[];
 }
 interface ListUserLikes {
   listId: string;
   listTitle: string;
   userName: string;
   userImg: { src: string; position: string };
-  novel: NovelInNovelList[];
+  novel: SimpleNovel[];
 }
 
 interface NovelListsSimpleInfos {
@@ -147,7 +223,7 @@ export interface NovelListSetForMyOrOthersList {
   listTitle: string;
   isLike: boolean;
   otherList: NovelListsSimpleInfos[];
-  novel: NovelInNovelList[];
+  novel: SimpleNovel[];
   userName?: string;
   userImg?: { src: string; position: string };
 }

@@ -17,6 +17,8 @@ import {
   IsLike,
   AllTitlesAndOtherInfo,
   ParamsOfAllNovelListTitles,
+  HomeData,
+  UserNovelLists,
 } from "./types";
 import type { RootState } from "../index";
 
@@ -59,6 +61,14 @@ export const novelTimeApi = createApi({
   }) as BaseQueryFn<string | FetchArgs, unknown, CustomError, {}>,
   tagTypes: ["ContentUpdatedInHome", "ListTitlesUpdated", "ContentUpdatedInNovelList"],
   endpoints: (builder) => ({
+    // at home page
+    getHomeData: builder.query<HomeData, undefined>({
+      query: () => `/home`,
+    }),
+    getUserNovelListAtRandom: builder.query<UserNovelLists, undefined>({
+      query: () => `/home/userNovelList`,
+    }),
+
     getNovelById: builder.query<NovelInfo, string>({
       query: (novelId) => `/novels/detail/${novelId}`,
     }),
@@ -150,6 +160,8 @@ export const novelTimeApi = createApi({
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
 export const {
+  useGetHomeDataQuery,
+  useGetUserNovelListAtRandomQuery,
   useGetNovelByIdQuery,
   useGetLoginOauthServerQuery,
   useGetLogoutQuery,
