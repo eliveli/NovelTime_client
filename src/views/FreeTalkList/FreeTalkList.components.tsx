@@ -1,5 +1,6 @@
 import React, { useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import { Img } from "store/serverAPIs/types";
 import { useComponentHeight, useComponentWidth } from "utils";
 
 import Icon from "../../assets/Icon";
@@ -33,7 +34,7 @@ interface TalkProps {
   talkId: string;
 
   userName: string;
-  userImg: string;
+  userImg: Img;
   createDate: string;
 
   likeNO: number;

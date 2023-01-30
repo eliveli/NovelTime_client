@@ -1,11 +1,14 @@
 /* eslint-disable react/jsx-wrap-multilines */
 import Icon from "assets/Icon";
+import Spinner from "assets/Spinner";
 import { CategoryMark } from "components/CategoryMark";
 import MainBG from "components/MainBG";
 import { NovelColumn, NovelColumnDetail, NovelRow } from "components/Novel";
 import { ColumnDetailList, ColumnList, RowSlide } from "components/NovelListFrame";
 import React, { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useGetHomeDataQuery, useGetUserNovelListAtRandomQuery } from "store/serverAPIs/novelTime";
+import { Img } from "store/serverAPIs/types";
 import { useComponentWidth } from "utils";
 import FreeTalk from "views/FreeTalkList/FreeTalkList.components";
 import Recommend from "views/RecommendList/RecommendList.components";
@@ -39,6 +42,8 @@ const dataFromServer = {
 
       userName: "나나나",
       userImg: "https://cdn.pixabay.com/photo/2018/08/31/08/35/toys-3644073_960_720.png",
+      // need to change like this
+      // userImg : { src : "", positon : "" }
       createDate: "22.03.03",
 
       likeNO: 5,
@@ -82,6 +87,19 @@ const dataFromServer = {
   ],
   // 각 10순위 씩
   talkUserRank: {
+    // 바꾸기. 작성글순 & 작성댓글순 & 받은좋아요순
+    // talkUserRank //
+    // talk: [{ userImg, userName, count }],
+    // comment: [{ userImg, userName, count }],
+    // likeReceived: [{ userImg, userName, count }],
+
+    // recommendUserRank //
+    // recommend: [{ userImg, userName, count }],
+    // likeReceived: [{ userImg, userName, count }],
+
+    // novel list //
+    // list: [{ userImg, userName, count }],
+    // likeReceived: [{ userImg, userName, count }],
     content: [
       { userImg: { src: "", position: "" }, userName: "lala", userAct: { writing: 6, comment: 6 } },
       {
@@ -282,7 +300,7 @@ const dataFromServer = {
   ],
 
   // 2개씩 받아오기
-  userNovelList: [
+  userNovelLists: [
     {
       listId: "ssseefss",
       listTitle: "list where is romance",
@@ -493,67 +511,47 @@ export function PlatformNovelList({ isDetailInfo }: { isDetailInfo: boolean }) {
   );
 }
 interface RankUserProps {
+  category: {
+    main: Category;
+    sub: string;
+  };
   info: {
-    userImg: { src: string; position: string };
+    userImg: Img;
     userName: string;
-    userAct?: {
-      writing?: number;
-      comment?: number;
-      list?: number;
-    };
-    likeReceived?: number;
+    count: number;
   };
   idx: number;
 }
-function RankUser({ info, idx }: RankUserProps) {
-  const { userImg, userName, userAct, likeReceived } = info;
+
+function CategoryIcon({ mainCtgr, subCtgr }: { mainCtgr: Category; subCtgr: string }) {
+  if (subCtgr === "받은 좋아요 수") return <Icon.SmallHeart />;
+
+  if (mainCtgr === "소설 리스트") return <Icon.NovelList />;
+
+  if (subCtgr === "작성글 수") return <Icon.Write />;
+
+  if (subCtgr === "작성댓글 수") return <Icon.Comment />;
+
+  throw Error("정해진 카테고리가 아니에요");
+}
+
+function RankUser({ category, info, idx }: RankUserProps) {
+  const { userImg, userName, count } = info;
 
   const navigate = useNavigate();
+
   return (
     <UserContnr onClick={() => navigate(`/user-page/${userName}`)}>
       <UserImg userImg={userImg} />
       <UserInfo>
-        {userAct?.writing && (
-          <UserAct>
-            <IconContainer>
-              <Icon.IconBox noPointer size={17}>
-                <Icon.Write />
-              </Icon.IconBox>
-              <IconNO>{userAct.writing}</IconNO>
-            </IconContainer>
-          </UserAct>
-        )}
-        {userAct?.comment && (
-          <UserAct>
-            <IconContainer>
-              <Icon.IconBox noPointer size={17}>
-                <Icon.Comment />
-              </Icon.IconBox>
-              <IconNO>{userAct.comment}</IconNO>
-            </IconContainer>
-          </UserAct>
-        )}
-        {userAct?.list && (
-          <UserAct>
-            <IconContainer>
-              <Icon.IconBox noPointer size={17}>
-                <Icon.NovelList />
-              </Icon.IconBox>
-              <IconNO>{userAct.list}</IconNO>
-            </IconContainer>
-          </UserAct>
-        )}
-
-        {likeReceived !== undefined && (
-          <UserAct>
-            <IconContainer>
-              <Icon.IconBox noPointer size={17}>
-                <Icon.SmallHeart />
-              </Icon.IconBox>
-              <IconNO>{likeReceived}</IconNO>
-            </IconContainer>
-          </UserAct>
-        )}
+        <UserAct>
+          <IconContainer>
+            <Icon.IconBox noPointer size={17}>
+              <CategoryIcon mainCtgr={category.main} subCtgr={category.sub} />
+            </Icon.IconBox>
+            <IconNO>{count}</IconNO>
+          </IconContainer>
+        </UserAct>
 
         <UserName>{userName}</UserName>
       </UserInfo>
@@ -562,37 +560,53 @@ function RankUser({ info, idx }: RankUserProps) {
     </UserContnr>
   );
 }
+type UserRanks = {
+  userImg: Img;
+  userName: string;
+  count: number;
+}[];
 
+type Category = "소설 한담" | "소설 추천" | "소설 리스트";
+
+type RankList = {
+  talk?: UserRanks;
+  comment?: UserRanks;
+  recommend?: UserRanks;
+  novelList?: UserRanks;
+  likeReceived?: UserRanks;
+};
 interface UserRankSectionProps {
-  category: "소설 한담" | "소설 추천" | "소설 리스트";
-  rankList: {
-    content: {
-      userImg: {
-        src: string;
-        position: string;
-      };
-      userName: string;
-      userAct: {
-        writing?: number;
-        comment?: number;
-        list?: number;
-      };
-    }[];
-    like: {
-      userImg: {
-        src: string;
-        position: string;
-      };
-      userName: string;
-      likeReceived: number;
-    }[];
-  };
+  category: Category;
+  rankList: RankList;
 }
+
+function setSubCategories(category: Category) {
+  if (category === "소설 한담") return ["작성글 수", "작성댓글 수", "받은 좋아요 수"];
+  if (category === "소설 추천") return ["작성글 수", "받은 좋아요 수"];
+  if (category === "소설 리스트") return ["작성리스트 수", "받은 좋아요 수"];
+  throw Error("정해진 카테고리가 아니에요");
+}
+
+function setUserRanks(category: Category, rankFilter: string, rankList: RankList) {
+  if (rankFilter === "받은 좋아요 수") return rankList.likeReceived;
+
+  if (category === "소설 리스트") return rankList.novelList;
+
+  if (category === "소설 추천") return rankList.recommend;
+
+  if (category === "소설 한담" && rankFilter === "작성글 수") return rankList.talk;
+
+  if (category === "소설 한담" && rankFilter === "작성댓글 수") return rankList.comment;
+
+  throw Error("정해진 카테고리가 아니에요");
+}
+
 function UserRankSection({ category, rankList }: UserRankSectionProps) {
-  const categoryArray = ["소설 한담", "소설 추천"].includes(category)
-    ? ["작성글 수", "받은 좋아요 수"] // 카테고리가 프리톡, 추천일 때
-    : ["작성리스트 수", "받은 좋아요 수"]; // 카테고리가 소설리스트일 때
-  const [rankFilter, setRankFilter] = useState(categoryArray[0]);
+  const subCategories = setSubCategories(category);
+
+  const [rankFilter, setRankFilter] = useState(subCategories[0]);
+
+  const userRanks = setUserRanks(category, rankFilter, rankList);
 
   const contnrRef = useRef<HTMLDivElement>(null);
   const contnrWidth = useComponentWidth(contnrRef);
@@ -622,11 +636,11 @@ function UserRankSection({ category, rankList }: UserRankSectionProps) {
     <RankSectionContnr ref={contnrRef}>
       <SectionMark>
         <SectionTitle>
-          <TitleNormalStyle>{category} - </TitleNormalStyle>
+          <TitleNormalStyle> {category} - </TitleNormalStyle>
           <TitleEmphasis>유저 활동</TitleEmphasis>
         </SectionTitle>
         <FilterContnr>
-          {categoryArray.map((_) => (
+          {subCategories.map((_) => (
             <Filter
               category={_}
               selectedCtgr={rankFilter}
@@ -651,33 +665,48 @@ function UserRankSection({ category, rankList }: UserRankSectionProps) {
         </FilterContnr>
       </SectionMark>
       <UserRankCntnr rankContnrWidth={rankContnrWidth} ref={rankContnrRef}>
-        {rankFilter === categoryArray[0] &&
-          rankList.content.map((_, idx) => <RankUser info={_} idx={idx} key={_.userName} />)}
-        {rankFilter === categoryArray[1] &&
-          rankList.like.map((_, idx) => <RankUser info={_} idx={idx} key={_.userName} />)}
+        {userRanks?.map((_, idx) => (
+          <RankUser
+            category={{ main: category, sub: rankFilter }}
+            info={_}
+            idx={idx}
+            key={_.userName}
+          />
+        ))}
       </UserRankCntnr>
     </RankSectionContnr>
   );
 }
+
 export default function Home() {
+  // const { data, error, isLoading } = useGetHomeDataQuery(undefined);
+  const homeResult = useGetHomeDataQuery(undefined);
+  const userNovelListResult = useGetUserNovelListAtRandomQuery(undefined);
+
   return (
     <MainBG>
+      {homeResult.isLoading && <Spinner styles="fixed" />}
+
       <CategoryMark categoryText="소설 한담 new" linkPath="talk-list" />
-      {dataFromServer.talkList.map((talk, idx) => (
-        <FreeTalk talk={talk} isLast={idx + 1 === dataFromServer.talkList.length} />
+      {homeResult.data?.talkList?.map((talk, idx) => (
+        <FreeTalk talk={talk} isLast={idx + 1 === homeResult.data?.talkList.length} />
       ))}
 
-      <UserRankSection category="소설 한담" rankList={dataFromServer.talkUserRank} />
+      {homeResult.data?.talkUserRank && (
+        <UserRankSection category="소설 한담" rankList={homeResult.data.talkUserRank} />
+      )}
 
       <CategoryMark categoryText="소설 추천 new" linkPath="recommend-list" />
-      {dataFromServer.recommendList.map((recommendInfo, idx) => (
+      {homeResult.data?.recommendList?.map((recommendInfo, idx) => (
         <Recommend
           recommendInfo={recommendInfo}
           isLast={idx + 1 === dataFromServer.recommendList.length}
         />
       ))}
 
-      <UserRankSection category="소설 추천" rankList={dataFromServer.recommendUserRank} />
+      {homeResult.data?.recommendUserRank && (
+        <UserRankSection category="소설 추천" rankList={homeResult.data.recommendUserRank} />
+      )}
 
       <CategoryMark categoryText="유저들의 소설 리스트">
         <LoadNovelListBtn
@@ -688,7 +717,7 @@ export default function Home() {
           다른 유저의 리스트 보기
         </LoadNovelListBtn>
       </CategoryMark>
-      {dataFromServer.userNovelList.map((list) => (
+      {dataFromServer.userNovelLists.map((list) => (
         <RowSlide
           categoryId={list.listId}
           categoryText={list.listTitle}
@@ -706,9 +735,7 @@ export default function Home() {
           ))}
         </RowSlide>
       ))}
-
       <UserRankSection category="소설 리스트" rankList={dataFromServer.novelListUserRank} />
-
       <RowSlide
         categoryText="노블타임 인기 소설"
         novelNO={dataFromServer.simpleNovelInfo.length}
@@ -719,9 +746,7 @@ export default function Home() {
           <NovelRow key={novel.novelId} novel={novel} />
         ))}
       </RowSlide>
-
       <AddSpace height={16} />
-
       <RowSlide
         categoryText="플랫폼 별 인기 소설"
         novelNO={dataFromServer.simpleNovelInfo.length}

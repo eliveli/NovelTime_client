@@ -1,4 +1,4 @@
-interface Img {
+export interface Img {
   src: string;
   position: string;
 }

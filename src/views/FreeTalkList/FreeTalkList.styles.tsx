@@ -3,6 +3,7 @@
 import { keyframes } from "styled-components";
 import theme, { styled } from "assets/styles/theme";
 import Icon from "assets/Icon";
+import { Img } from "store/serverAPIs/types";
 
 export const Talk = styled.article<{ isLast?: boolean }>`
   width: 100%;
@@ -83,13 +84,13 @@ export const BesideImgContainer = styled.div`
 //   imgUrl = img;
 // }
 // let imgUrl = "https://cdn.pixabay.com/photo/2018/08/31/08/35/toys-3644073_960_720.png";
-export const UserImg = styled.div<{ userImg: string }>`
+export const UserImg = styled.div<{ userImg: Img }>`
   border-radius: 50%;
   min-width: 43px;
   height: 43px;
   background-image: url(${({ userImg }) =>
-    userImg || "https://cdn.pixabay.com/photo/2018/08/31/08/35/toys-3644073_960_720.png"});
-  background-position: center;
+    userImg.src || "https://cdn.pixabay.com/photo/2018/08/31/08/35/toys-3644073_960_720.png"});
+  background-position: ${({ userImg }) => userImg.position} || center;
   background-repeat: no-repeat;
   background-size: cover;
   @media screen and (min-width: 600px) {

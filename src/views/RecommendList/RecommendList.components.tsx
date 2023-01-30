@@ -2,6 +2,7 @@ import { useRef } from "react";
 import { ThemeProvider } from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { useComponentWidth } from "utils";
+import { Img } from "store/serverAPIs/types";
 import Icon from "../../assets/Icon";
 
 import {
@@ -33,7 +34,7 @@ interface RecommendProps {
       recommendId: string;
 
       userName: string;
-      userImg: string;
+      userImg: Img;
       createDate: string;
 
       likeNO: number;
@@ -45,7 +46,7 @@ interface RecommendProps {
       novelTitle: string;
       novelAuthor: string;
       novelGenre: string;
-      isEnd: boolean;
+      novelIsEnd: boolean;
     };
   };
   isLast?: boolean;
@@ -65,7 +66,7 @@ export default function Recommend({ recommendInfo, isLast }: RecommendProps) {
 
     recommendTitle,
   } = recommend;
-  const { novelImg, novelTitle, novelAuthor, novelGenre, isEnd } = novel;
+  const { novelImg, novelTitle, novelAuthor, novelGenre, novelIsEnd } = novel;
   const theme = {
     novelImg,
     userImg,
@@ -90,7 +91,7 @@ export default function Recommend({ recommendInfo, isLast }: RecommendProps) {
             <NovelTitle contnrWidth={contnrWidth}>{novelTitle}</NovelTitle>
             <NovelSubInfoBox>
               <NovelInfoLineHeight>{novelAuthor}</NovelInfoLineHeight>
-              <NovelInfo>{`${novelGenre} | ${isEnd ? "완결" : "미완"}`}</NovelInfo>
+              <NovelInfo>{`${novelGenre} | ${novelIsEnd ? "완결" : "미완"}`}</NovelInfo>
             </NovelSubInfoBox>
           </NovelInfoBox>
         </NovelContainer>
