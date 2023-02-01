@@ -8,7 +8,7 @@ interface UserRank {
   count: number;
 }
 
-interface SimpleNovel {
+export interface SimpleNovel {
   novelId: string;
   novelImg: string;
   novelTitle: string;

@@ -17,7 +17,7 @@ import {
   useGetContentOfUserOthersListQuery,
   useToggleLikeMutation,
 } from "store/serverAPIs/novelTime";
-import { NovelInNovelList } from "store/serverAPIs/types";
+import { SimpleNovel } from "store/serverAPIs/types";
 import { useComponentScrollWidth, useComponentHeight } from "utils";
 import MetaTag from "utils/MetaTag";
 import useCallbackComponentWidth from "utils/useCallbackComponentWidth";
@@ -102,7 +102,7 @@ export default function UserNovelList({ isMyList }: { isMyList: boolean }) {
   const currentNovelListInfo = isMyList ? myListResult?.data : othersListResult?.data;
 
   const novelsAsCurrentOrder = currentNovelListInfo?.novelList.novel;
-  const novelsAsPreviousOrder = useRef<NovelInNovelList[]>();
+  const novelsAsPreviousOrder = useRef<SimpleNovel[]>();
   const novels =
     orderNumber > 1 && novelsAsPreviousOrder.current && novelsAsCurrentOrder
       ? [...novelsAsPreviousOrder.current, ...novelsAsCurrentOrder]
