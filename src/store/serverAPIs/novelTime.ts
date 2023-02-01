@@ -43,7 +43,7 @@ export const novelTimeApi = createApi({
     baseUrl:
       process.env.REACT_APP_ENV === "production"
         ? "http://www.noveltime.shop/api"
-        : "http://domainfordev.com/api",
+        : "http://domainfordev.com/api", // 개발 환경에서도 도커 필요
     credentials: "include",
     prepareHeaders: (headers, { getState, endpoint }) => {
       const { accessToken } = (getState() as RootState).user;

@@ -524,13 +524,13 @@ interface RankUserProps {
 }
 
 function CategoryIcon({ mainCtgr, subCtgr }: { mainCtgr: Category; subCtgr: string }) {
-  if (subCtgr === "받은 좋아요 수") return <Icon.SmallHeart />;
+  if (subCtgr === "좋아요") return <Icon.SmallHeart />;
 
   if (mainCtgr === "소설 리스트") return <Icon.NovelList />;
 
-  if (subCtgr === "작성글 수") return <Icon.Write />;
+  if (subCtgr === "작성글") return <Icon.Write />;
 
-  if (subCtgr === "작성댓글 수") return <Icon.Comment />;
+  if (subCtgr === "작성댓글") return <Icon.Comment />;
 
   throw Error("정해진 카테고리가 아니에요");
 }
@@ -581,22 +581,22 @@ interface UserRankSectionProps {
 }
 
 function setSubCategories(category: Category) {
-  if (category === "소설 한담") return ["작성글 수", "작성댓글 수", "받은 좋아요 수"];
-  if (category === "소설 추천") return ["작성글 수", "받은 좋아요 수"];
-  if (category === "소설 리스트") return ["작성리스트 수", "받은 좋아요 수"];
+  if (category === "소설 한담") return ["작성글", "작성댓글", "좋아요"];
+  if (category === "소설 추천") return ["작성글", "좋아요"];
+  if (category === "소설 리스트") return ["작성리스트", "좋아요"];
   throw Error("정해진 카테고리가 아니에요");
 }
 
 function setUserRanks(category: Category, rankFilter: string, rankList: RankList) {
-  if (rankFilter === "받은 좋아요 수") return rankList.likeReceived;
+  if (rankFilter === "좋아요") return rankList.likeReceived;
 
   if (category === "소설 리스트") return rankList.novelList;
 
   if (category === "소설 추천") return rankList.recommend;
 
-  if (category === "소설 한담" && rankFilter === "작성글 수") return rankList.talk;
+  if (category === "소설 한담" && rankFilter === "작성글") return rankList.talk;
 
-  if (category === "소설 한담" && rankFilter === "작성댓글 수") return rankList.comment;
+  if (category === "소설 한담" && rankFilter === "작성댓글") return rankList.comment;
 
   throw Error("정해진 카테고리가 아니에요");
 }
@@ -717,6 +717,7 @@ export default function Home() {
           다른 유저의 리스트 보기
         </LoadNovelListBtn>
       </CategoryMark>
+
       {dataFromServer.userNovelLists.map((list) => (
         <RowSlide
           categoryId={list.listId}
@@ -735,6 +736,7 @@ export default function Home() {
           ))}
         </RowSlide>
       ))}
+
       <UserRankSection category="소설 리스트" rankList={dataFromServer.novelListUserRank} />
       <RowSlide
         categoryText="노블타임 인기 소설"
