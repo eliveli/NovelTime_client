@@ -62,7 +62,7 @@ export interface HomeData {
   };
 
   novelListUserRank: {
-    list?: UserRank[];
+    novelList?: UserRank[];
     likeReceived?: UserRank[];
   };
 

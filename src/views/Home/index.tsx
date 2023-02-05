@@ -685,14 +685,13 @@ function UserRankSection({ category, rankList }: UserRankSectionProps) {
 export default function Home() {
   const homeResult = useGetHomeDataQuery(undefined);
 
+  // userNovelListResult //
   // 1. default value
   const userNovelListResult = useGetUserNovelListAtRandomQuery(undefined);
-
   // 2. when clicking the button "다른 유저의 리스트 보기" below
   const [userNovelListTrigger, lazyUserNovelListResult] =
     useLazyGetUserNovelListAtRandomQuery(undefined);
-
-  // 2 or 1
+  // => 2 or 1
   const userNovelListSelected = lazyUserNovelListResult?.data || userNovelListResult?.data;
 
   return (
@@ -745,7 +744,10 @@ export default function Home() {
         </RowSlide>
       ))}
 
-      <UserRankSection category="소설 리스트" rankList={dataFromServer.novelListUserRank} />
+      {homeResult.data?.novelListUserRank && (
+        <UserRankSection category="소설 리스트" rankList={homeResult.data.novelListUserRank} />
+      )}
+
       <RowSlide
         categoryText="노블타임 인기 소설"
         novelNO={dataFromServer.simpleNovelInfo.length}
