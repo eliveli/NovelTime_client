@@ -58,6 +58,7 @@
         "max-len":"warn",
         "operator-linebreak":"off",
         "react/jsx-curly-newline": "off",
-        "import/no-extraneous-dependencies": "warn"
+        "import/no-extraneous-dependencies": "warn",
+        "@typescript-eslint/no-misused-promises": "warn"
     }
 }

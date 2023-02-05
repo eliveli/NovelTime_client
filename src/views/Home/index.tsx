@@ -7,7 +7,11 @@ import { NovelColumn, NovelColumnDetail, NovelRow } from "components/Novel";
 import { ColumnDetailList, ColumnList, RowSlide } from "components/NovelListFrame";
 import React, { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useGetHomeDataQuery, useGetUserNovelListAtRandomQuery } from "store/serverAPIs/novelTime";
+import {
+  useGetHomeDataQuery,
+  useGetUserNovelListAtRandomQuery,
+  useLazyGetUserNovelListAtRandomQuery,
+} from "store/serverAPIs/novelTime";
 import { Img } from "store/serverAPIs/types";
 import { useComponentWidth } from "utils";
 import FreeTalk from "views/FreeTalkList/FreeTalkList.components";
@@ -679,9 +683,17 @@ function UserRankSection({ category, rankList }: UserRankSectionProps) {
 }
 
 export default function Home() {
-  // const { data, error, isLoading } = useGetHomeDataQuery(undefined);
   const homeResult = useGetHomeDataQuery(undefined);
+
+  // 1. default value
   const userNovelListResult = useGetUserNovelListAtRandomQuery(undefined);
+
+  // 2. when clicking the button "다른 유저의 리스트 보기" below
+  const [userNovelListTrigger, lazyUserNovelListResult] =
+    useLazyGetUserNovelListAtRandomQuery(undefined);
+
+  // 2 or 1
+  const userNovelListSelected = lazyUserNovelListResult?.data || userNovelListResult?.data;
 
   return (
     <MainBG>
@@ -709,16 +721,12 @@ export default function Home() {
       )}
 
       <CategoryMark categoryText="유저들의 소설 리스트">
-        <LoadNovelListBtn
-          onClick={() => {
-            // server request
-          }}
-        >
+        <LoadNovelListBtn onClick={() => userNovelListTrigger(undefined)}>
           다른 유저의 리스트 보기
         </LoadNovelListBtn>
       </CategoryMark>
 
-      {dataFromServer.userNovelLists.map((list) => (
+      {userNovelListSelected?.map((list) => (
         <RowSlide
           categoryId={list.listId}
           categoryText={list.listTitle}

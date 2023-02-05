@@ -162,6 +162,7 @@ export const novelTimeApi = createApi({
 export const {
   useGetHomeDataQuery,
   useGetUserNovelListAtRandomQuery,
+  useLazyGetUserNovelListAtRandomQuery,
   useGetNovelByIdQuery,
   useGetLoginOauthServerQuery,
   useGetLogoutQuery,
