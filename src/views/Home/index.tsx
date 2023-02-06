@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import {
   useGetHomeDataQuery,
   useGetUserNovelListAtRandomQuery,
+  useGetWeeklyNovelsFromPlatformQuery,
   useLazyGetUserNovelListAtRandomQuery,
 } from "store/serverAPIs/novelTime";
 import { Img } from "store/serverAPIs/types";
@@ -488,10 +489,17 @@ const platformNovelList = [
   },
 ];
 
-export function PlatformNovelList({ isDetailInfo }: { isDetailInfo: boolean }) {
+export function PlatformNovelList({
+  isDetailInfo,
+  platformFilter,
+  setPlatformFilter,
+}: {
+  isDetailInfo: boolean;
+  platformFilter: string;
+  setPlatformFilter: React.Dispatch<React.SetStateAction<string>>;
+}) {
   // category for platform novel list
   const categoryArray = ["카카페", "시리즈", "리디북스", "조아라"];
-  const [platformFilter, setPlatformFilter] = useState(categoryArray[0]);
 
   return (
     <FilterContnr isPlatformNovel>
@@ -682,6 +690,15 @@ function UserRankSection({ category, rankList }: UserRankSectionProps) {
   );
 }
 
+function setPlatformName(platformSelected: string) {
+  if (platformSelected === "카카페") return "kakape";
+  if (platformSelected === "시리즈") return "series";
+  if (platformSelected === "리디북스") return "ridi";
+  if (platformSelected === "조아라") return "joara";
+
+  throw Error("플랫폼 선택 오류");
+}
+
 export default function Home() {
   const homeResult = useGetHomeDataQuery(undefined);
 
@@ -693,6 +710,23 @@ export default function Home() {
     useLazyGetUserNovelListAtRandomQuery(undefined);
   // => 2 or 1
   const userNovelListSelected = lazyUserNovelListResult?.data || userNovelListResult?.data;
+
+  // weekly novels from each platforms //
+  const [platformFilter, setPlatformFilter] = useState("카카페"); // for clicking the platform tab
+
+  const platformSelected = setPlatformName(platformFilter); // for matching the name to request server
+
+  const weeklyNovelsResult = useGetWeeklyNovelsFromPlatformQuery({
+    platform: platformSelected,
+    isAllNovels: false, // false for getting 10 novels in home page, true for 20 in its list page
+  }); // use cached data when requesting novels for each platforms
+
+  const weeklyNovelsFromPlatform =
+    weeklyNovelsResult.data && weeklyNovelsResult.data[platformSelected];
+
+  // for popular novels in novel time and weekly novels from each platforms //
+  // display 10 novels in home page
+  // and 20 in each novel list page after clicking show-all button
 
   return (
     <MainBG>
@@ -761,17 +795,26 @@ export default function Home() {
         </RowSlide>
       )}
       <AddSpace height={16} />
-      <RowSlide
-        categoryText="플랫폼 별 인기 소설"
-        novelNO={dataFromServer.simpleNovelInfo.length}
-        categoryId="popularPlatform" // it can be changed later
-        categoryFilter={<PlatformNovelList isDetailInfo={false} />}
-        isShowAllMark
-      >
-        {platformNovelList.map((novel) => (
-          <NovelRow key={novel.novelId} novel={novel} />
-        ))}
-      </RowSlide>
+
+      {weeklyNovelsFromPlatform && (
+        <RowSlide
+          categoryText="플랫폼 별 인기 소설"
+          novelNO={weeklyNovelsFromPlatform.length}
+          categoryId="popularPlatform" // it can be changed later
+          categoryFilter={
+            <PlatformNovelList
+              isDetailInfo={false}
+              platformFilter={platformFilter}
+              setPlatformFilter={setPlatformFilter}
+            />
+          }
+          isShowAllMark
+        >
+          {weeklyNovelsFromPlatform.map((novel) => (
+            <NovelRow key={novel.novelId} novel={novel} />
+          ))}
+        </RowSlide>
+      )}
     </MainBG>
   );
 }

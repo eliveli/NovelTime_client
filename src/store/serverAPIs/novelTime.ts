@@ -19,6 +19,8 @@ import {
   ParamsOfAllNovelListTitles,
   HomeData,
   UserNovelLists,
+  WeeklyNovelsFromPlatform,
+  ParamForWeeklyNovels,
 } from "./types";
 import type { RootState } from "../index";
 
@@ -68,6 +70,9 @@ export const novelTimeApi = createApi({
     getUserNovelListAtRandom: builder.query<UserNovelLists, undefined>({
       query: () => `/home/userNovelList`,
     }),
+    getWeeklyNovelsFromPlatform: builder.query<WeeklyNovelsFromPlatform, ParamForWeeklyNovels>({
+      query: (params) => `/home/weeklyNovels/${params.platform}/${String(params.isAllNovels)}`,
+    }),
 
     getNovelById: builder.query<NovelInfo, string>({
       query: (novelId) => `/novels/detail/${novelId}`,
@@ -84,6 +89,7 @@ export const novelTimeApi = createApi({
     getUserInfoByUserName: builder.query<UserInfo, string>({
       query: (userName) => `/user/userInfo/${userName}`,
     }),
+
     getContentOfUserHome: builder.query<ContentOfUserHome, string>({
       query: (userName) => `/userContent/${userName}`,
       // refetch data //
@@ -163,6 +169,7 @@ export const {
   useGetHomeDataQuery,
   useGetUserNovelListAtRandomQuery,
   useLazyGetUserNovelListAtRandomQuery,
+  useGetWeeklyNovelsFromPlatformQuery,
   useGetNovelByIdQuery,
   useGetLoginOauthServerQuery,
   useGetLogoutQuery,

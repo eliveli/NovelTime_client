@@ -67,14 +67,19 @@ export interface HomeData {
   };
 
   popularNovelsInNovelTime: SimpleNovel[];
-
-  weeklyNovelsFromPlatforms: {
-    kakape?: SimpleNovel[];
-    series?: SimpleNovel[];
-    ridi?: SimpleNovel[];
-    joara?: SimpleNovel[];
-  };
 }
+
+export type WeeklyNovelsFromPlatform = {
+  kakape?: SimpleNovel[];
+  series?: SimpleNovel[];
+  ridi?: SimpleNovel[];
+  joara?: SimpleNovel[];
+};
+
+export type ParamForWeeklyNovels = {
+  platform: "kakape" | "series" | "ridi" | "joara";
+  isAllNovels: boolean;
+};
 
 export type UserNovelLists =
   | {
