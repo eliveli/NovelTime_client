@@ -748,16 +748,18 @@ export default function Home() {
         <UserRankSection category="소설 리스트" rankList={homeResult.data.novelListUserRank} />
       )}
 
-      <RowSlide
-        categoryText="노블타임 인기 소설"
-        novelNO={dataFromServer.simpleNovelInfo.length}
-        categoryId="popularNovelTime"
-        isShowAllMark
-      >
-        {dataFromServer.simpleNovelInfo.map((novel) => (
-          <NovelRow key={novel.novelId} novel={novel} />
-        ))}
-      </RowSlide>
+      {homeResult.data?.popularNovelsInNovelTime && (
+        <RowSlide
+          categoryText="노블타임 인기 소설"
+          novelNO={homeResult.data.popularNovelsInNovelTime.length}
+          categoryId="popularNovelTime"
+          isShowAllMark
+        >
+          {homeResult.data.popularNovelsInNovelTime.map((novel) => (
+            <NovelRow key={novel.novelId} novel={novel} />
+          ))}
+        </RowSlide>
+      )}
       <AddSpace height={16} />
       <RowSlide
         categoryText="플랫폼 별 인기 소설"
