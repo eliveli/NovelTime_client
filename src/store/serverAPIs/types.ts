@@ -91,6 +91,23 @@ export type UserNovelLists =
     }[]
   | undefined;
 
+export type NovelListByCategory =
+  | {
+      novelId: string;
+      novelImg: string;
+      novelTitle: string;
+      novelAuthor: string;
+      novelGenre: string;
+      novelDesc: string;
+    }[]
+  | undefined;
+
+export type ParamForNovelListByCategory = {
+  category: string;
+  platform?: string;
+  novelId?: string;
+};
+
 export interface NovelInfo {
   novelId: string;
   novelImg: string;

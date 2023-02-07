@@ -21,6 +21,8 @@ import {
   UserNovelLists,
   WeeklyNovelsFromPlatform,
   ParamForWeeklyNovels,
+  NovelListByCategory,
+  ParamForNovelListByCategory,
 } from "./types";
 import type { RootState } from "../index";
 
@@ -74,9 +76,18 @@ export const novelTimeApi = createApi({
       query: (params) => `/home/weeklyNovels/${params.platform}/${String(params.isAllNovels)}`,
     }),
 
+    // at novel list page for each category
+    getNovelListByCategory: builder.query<NovelListByCategory, ParamForNovelListByCategory>({
+      query: (params) =>
+        `/novelListByCategory/${params.category}/${String(params.platform)}/${String(
+          params.novelId,
+        )}`,
+    }),
+
     getNovelById: builder.query<NovelInfo, string>({
       query: (novelId) => `/novels/detail/${novelId}`,
     }),
+
     getLoginOauthServer: builder.query<UserAndToken, OauthData>({
       query: (oauthData) => `/user/login/${oauthData.oauthServer}?data=${oauthData.oauthInfo}`,
     }),
@@ -125,6 +136,7 @@ export const novelTimeApi = createApi({
     }),
     toggleLike: builder.mutation<IsLike, ContentOfLike>({
       query: (contentForLike) => ({
+        // /userContent/   << should I add this in front of the following url?
         url: `/toggleLike/${contentForLike.contentType}/${contentForLike.contentId}`,
         method: "PUT",
       }),
@@ -143,6 +155,7 @@ export const novelTimeApi = createApi({
         return ["ContentUpdatedInHome", { type: "ContentUpdatedInNovelList", id: arg.contentId }];
       },
     }),
+
     checkForUserName: builder.mutation<string, string>({
       query: (newUserName) => ({
         url: "/user/checkUserName",
@@ -170,6 +183,7 @@ export const {
   useGetUserNovelListAtRandomQuery,
   useLazyGetUserNovelListAtRandomQuery,
   useGetWeeklyNovelsFromPlatformQuery,
+  useGetNovelListByCategoryQuery,
   useGetNovelByIdQuery,
   useGetLoginOauthServerQuery,
   useGetLogoutQuery,

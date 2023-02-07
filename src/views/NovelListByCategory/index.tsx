@@ -2,12 +2,15 @@
 import { useParams } from "react-router-dom";
 import MainBG from "components/MainBG";
 import { useState } from "react";
-import { PlatformNovelList } from "views/Home";
+import { FilterForWeeklyNovelsFromPlatform } from "views/Home";
+import { matchPlatformName } from "utils";
+import { useGetNovelListByCategoryQuery } from "store/serverAPIs/novelTime";
 import { ColumnDetailList } from "../../components/NovelListFrame";
 import { NovelColumnDetail } from "../../components/Novel";
 
 // api 호출, 서버 스테이트 받아오기
 // api가 카테고리별 나누어져야 함 : required params for categoryId
+//  아래에서 사용자별 구분 여부는 좀더 생각 (because of 현재 프로젝트 예상 기간 경과)
 // from NovelList : 모든 사용자용 - 종류별 카테고리
 //                : 로그인 사용자 - userId 이용, 종류별 카테고리
 //                : 비로그인 사용자 - 랜덤. 로그인 사용자와 같은 종류별 카테고리
@@ -63,8 +66,8 @@ export default function NovelListByCategory() {
     detailNovelInfo,
   ];
 
-  // request with category id, platform, isDetailInfo(boolean) to receive platform novel list
-  // - categoryId : "popularPlatform", platform : "카카페", isDetailInfo : true
+  // request with category id, platform to receive platform novel list
+  // - categoryId : "weeklyNovelsFromPlatform", platform : "카카페"
 
   // request will be executed after entering this page and clicking the platform filter
 
@@ -84,15 +87,35 @@ export default function NovelListByCategory() {
     detailNovelInfo,
     detailNovelInfo,
   ];
+
+  // weekly novels from each platform //
+  const [platformFilter, setPlatformFilter] = useState("카카페"); // for clicking the platform tab
+
+  const platformSelected = matchPlatformName(platformFilter); // for matching the name to request
+
+  const { isLoading, data, isError } = useGetNovelListByCategoryQuery(
+    {
+      category: String(categoryId),
+      platform: categoryId === "weeklyNovelsFromPlatform" ? platformSelected : undefined,
+      novelId,
+    },
+    { skip: !categoryId },
+  );
+
   // categoryId can be changed later
-  if (categoryId === "popularPlatform") {
+  if (categoryId === "weeklyNovelsFromPlatform") {
     return (
       <MainBG>
         <ColumnDetailList
           categoryText={categoryText as string}
-          categoryFilter={<PlatformNovelList isDetailInfo />}
+          categoryFilter={
+            <FilterForWeeklyNovelsFromPlatform
+              platformFilter={platformFilter}
+              setPlatformFilter={setPlatformFilter}
+            />
+          }
         >
-          {platformNovelList.map((novel) => (
+          {data?.map((novel) => (
             <NovelColumnDetail key={novel.novelId} novel={novel} />
           ))}
         </ColumnDetailList>

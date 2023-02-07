@@ -7,8 +7,10 @@ import useCloseOutsideClick from "./useCloseOutsideClick";
 import useAsyncStateNumber from "./useAsyncStateNumber";
 import ScrollToTop from "./ScrollToTop";
 import CheckDeviceType from "./CheckDeviceType";
+import matchPlatformName from "./matchPlatformName";
 
 export {
+  matchPlatformName,
   ScrollToTop,
   CheckDeviceType,
   useCloseOutsideClick,
