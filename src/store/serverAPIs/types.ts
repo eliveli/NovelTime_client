@@ -76,10 +76,7 @@ export type WeeklyNovelsFromPlatform = {
   joara?: SimpleNovel[];
 };
 
-export type ParamForWeeklyNovels = {
-  platform: "kakape" | "series" | "ridi" | "joara";
-  isAllNovels: boolean;
-};
+export type NovelPlatformInUrl = "kakape" | "series" | "ridi" | "joara";
 
 export type UserNovelLists =
   | {

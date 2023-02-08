@@ -20,7 +20,7 @@ import {
   HomeData,
   UserNovelLists,
   WeeklyNovelsFromPlatform,
-  ParamForWeeklyNovels,
+  NovelPlatformInUrl,
   NovelListByCategory,
   ParamForNovelListByCategory,
 } from "./types";
@@ -72,16 +72,14 @@ export const novelTimeApi = createApi({
     getUserNovelListAtRandom: builder.query<UserNovelLists, undefined>({
       query: () => `/home/userNovelList`,
     }),
-    getWeeklyNovelsFromPlatform: builder.query<WeeklyNovelsFromPlatform, ParamForWeeklyNovels>({
-      query: (params) => `/home/weeklyNovels/${params.platform}/${String(params.isAllNovels)}`,
+    getWeeklyNovelsFromPlatform: builder.query<WeeklyNovelsFromPlatform, NovelPlatformInUrl>({
+      query: (novelPlatformInUrl) => `/home/weeklyNovels/${novelPlatformInUrl}`,
     }),
 
     // at novel list page for each category
     getNovelListByCategory: builder.query<NovelListByCategory, ParamForNovelListByCategory>({
       query: (params) =>
-        `/novelListByCategory/${params.category}/${String(params.platform)}/${String(
-          params.novelId,
-        )}`,
+        `/novels/${params.category}/${String(params.platform)}/${String(params.novelId)}`,
     }),
 
     getNovelById: builder.query<NovelInfo, string>({

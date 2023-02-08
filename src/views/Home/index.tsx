@@ -701,10 +701,9 @@ export default function Home() {
 
   const platformSelected = matchPlatformName(platformFilter); // for matching the name to request
 
-  const weeklyNovelsResult = useGetWeeklyNovelsFromPlatformQuery({
-    platform: platformSelected,
-    isAllNovels: false, // false for getting 10 novels in home page, true for 20 in its list page
-  }); // use cached data when requesting novels for each platforms
+  const weeklyNovelsResult = useGetWeeklyNovelsFromPlatformQuery(platformSelected);
+  // use cached data when requesting novels for each platforms
+  // 10 novels displayed in home page. 20 in its list page
 
   const weeklyNovelsFromPlatform =
     weeklyNovelsResult.data && weeklyNovelsResult.data[platformSelected];
