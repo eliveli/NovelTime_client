@@ -80,6 +80,8 @@ export const novelTimeApi = createApi({
     getNovelListByCategory: builder.query<NovelListByCategory, ParamForNovelListByCategory>({
       query: (params) =>
         `/novels/${params.category}/${String(params.platform)}/${String(params.novelId)}`,
+      // ㄴif platform or novelId is undefined then it will be changed to "undefined" as string type
+      // ㄴempty string "" can't be used in url that can cause 404 error
     }),
 
     getNovelById: builder.query<NovelInfo, string>({

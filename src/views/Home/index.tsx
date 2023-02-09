@@ -775,7 +775,7 @@ export default function Home() {
         <RowSlide
           categoryText="노블타임 인기 소설"
           novelNO={homeResult.data.popularNovelsInNovelTime.length}
-          categoryId="popularNovelTime"
+          categoryId="popularNovelsInNovelTime"
           isShowAllMark
         >
           {homeResult.data.popularNovelsInNovelTime.map((novel) => (
