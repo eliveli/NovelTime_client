@@ -1,8 +1,9 @@
 import { styled } from "assets/styles/theme";
+import { Img } from "store/serverAPIs/types";
 import Icon from "../../assets/Icon";
 
 interface Props {
-  theme: { novelImg: string; userImg: string };
+  theme: { novelImg: string; userImg: Img };
 }
 
 export const RightIcon = styled(Icon.ListRight)`
@@ -122,8 +123,8 @@ export const UserImg = styled.div<Props>`
   border-radius: 50%;
   min-width: 20px;
   height: 20px;
-  background-image: url(${(props) => props.theme.userImg});
-  background-position: center;
+  background-image: url(${(props) => props.theme.userImg.src});
+  background-position: ${(props) => props.theme.userImg.position || "center"};
   background-repeat: no-repeat;
   background-size: cover;
 `;
