@@ -23,6 +23,8 @@ import {
   NovelPlatformInUrl,
   NovelListByCategory,
   ParamForNovelListByCategory,
+  WritingList,
+  ParamForGettingWritings,
 } from "./types";
 import type { RootState } from "../index";
 
@@ -86,6 +88,12 @@ export const novelTimeApi = createApi({
 
     getNovelById: builder.query<NovelInfo, string>({
       query: (novelId) => `/novels/detail/${novelId}`,
+    }),
+
+    // at writing list and search page
+    getWritingsFiltered: builder.query<WritingList, ParamForGettingWritings>({
+      query: (params) =>
+        `/writing/${params.listType}/${params.novelGenre}/${params.searchType}/${params.searchWord}/${params.sortBy}/${params.pageNo}`,
     }),
 
     getLoginOauthServer: builder.query<UserAndToken, OauthData>({
@@ -185,6 +193,7 @@ export const {
   useGetWeeklyNovelsFromPlatformQuery,
   useGetNovelListByCategoryQuery,
   useGetNovelByIdQuery,
+  useGetWritingsFilteredQuery,
   useGetLoginOauthServerQuery,
   useGetLogoutQuery,
   useGetAccessTokenQuery,

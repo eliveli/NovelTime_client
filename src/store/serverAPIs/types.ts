@@ -25,18 +25,56 @@ export interface SimpleNovelWithoutId {
   novelIsEnd: boolean;
 }
 
-export interface HomeData {
-  talkList: {
-    talkId: string;
+export type TalkList = {
+  talkId: string;
+  userName: string;
+  userImg: Img;
+  createDate: string;
+  likeNO: number;
+  commentNO: number;
+  talkTitle: string;
+  talkImg: string;
+  novelTitle: string;
+}[];
+
+export type RecommendList = {
+  recommend: {
+    recommendId: string;
     userName: string;
     userImg: Img;
     createDate: string;
     likeNO: number;
-    commentNO: number;
-    talkTitle: string;
-    talkImg: string;
-    novelTitle: string;
-  }[];
+    recommendTitle: string;
+  };
+  novel: SimpleNovelWithoutId;
+}[];
+
+export type WritingList =
+  | { talks?: TalkList; recommends?: RecommendList; isLastPage: boolean }
+  | undefined;
+
+export type ParamForGettingWritings = {
+  listType: "T" | "R";
+  novelGenre:
+    | "all"
+    | "패러디"
+    | "로판"
+    | "로맨스"
+    | "현판"
+    | "판타지"
+    | "무협"
+    | "라이트노벨"
+    | "BL"
+    | "미스터리"
+    | "extra";
+  searchType: "writingTitle" | "writingDesc" | "userName" | "no";
+  searchWord: string; // note. it can't be empty string
+  sortBy: "newDate" | "oldDate" | "manyComments" | "fewComments" | "manyLikes" | "fewLikes";
+  pageNo: number;
+};
+
+export interface HomeData {
+  talkList: TalkList;
 
   talkUserRank: {
     talk?: UserRank[];
@@ -44,17 +82,7 @@ export interface HomeData {
     likeReceived?: UserRank[];
   };
 
-  recommendList: {
-    recommend: {
-      recommendId: string;
-      userName: string;
-      userImg: Img;
-      createDate: string;
-      likeNO: number;
-      recommendTitle: string;
-    };
-    novel: SimpleNovelWithoutId;
-  }[];
+  recommendList: RecommendList;
 
   recommendUserRank: {
     recommend?: UserRank[];
