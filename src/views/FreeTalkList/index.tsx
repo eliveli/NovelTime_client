@@ -1,14 +1,37 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import MainBG from "components/MainBG";
 import Filter from "components/Filter";
 import { useGetWritingsFilteredQuery } from "store/serverAPIs/novelTime";
 import { TalkList } from "store/serverAPIs/types";
 import FreeTalk from "./FreeTalkList.components";
 
+export type GenresFromFilter =
+  | "All"
+  | "그 외"
+  | "패러디"
+  | "로판"
+  | "로맨스"
+  | "현판"
+  | "판타지"
+  | "무협"
+  | "라이트노벨"
+  | "BL"
+  | "미스터리";
+
+function matchGenreName(genre: GenresFromFilter) {
+  if (genre === "All") return "all";
+  if (genre === "그 외") return "extra";
+  return genre;
+}
+
 export default function FreeTalkList() {
+  const [genre, selectGenre] = useState<GenresFromFilter>("All");
+
+  const currentGenre = matchGenreName(genre);
+
   const { isLoading, isError, data } = useGetWritingsFilteredQuery({
     listType: "T",
-    novelGenre: "all",
+    novelGenre: currentGenre,
     searchType: "no",
     searchWord: "no",
     // ㄴwhen searchType is "no" searchWord is not considered
@@ -37,7 +60,7 @@ export default function FreeTalkList() {
 
   return (
     <MainBG>
-      <Filter />
+      <Filter genre={{ genreDisplayed: genre, selectGenre }} />
       {data?.talks?.map((talk) => (
         <FreeTalk talk={talk} />
       ))}

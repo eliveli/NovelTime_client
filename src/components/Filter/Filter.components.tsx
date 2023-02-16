@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useCloseOutsideClick } from "utils";
+import { GenresFromFilter } from "views/FreeTalkList";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { openModal } from "../../store/clientSlices/modalSlice";
 import {
@@ -21,8 +22,14 @@ import {
   ContainerWithBtn,
 } from "./Filter.styles";
 
-export function Genres() {
-  const [genre, selectGenre] = useState("All");
+export function Genres({
+  genre,
+}: {
+  genre: {
+    genreDisplayed: GenresFromFilter;
+    selectGenre: React.Dispatch<React.SetStateAction<GenresFromFilter>>;
+  };
+}) {
   return (
     <GenreBox>
       {[
@@ -36,14 +43,14 @@ export function Genres() {
         "라이트노벨",
         "미스터리",
         "BL",
-        "그리고",
+        "그 외",
       ].map((_) => (
         <Genre
           key={_}
           genreName={_}
-          selectedGenre={genre}
+          selectedGenre={genre.genreDisplayed}
           onClick={() => {
-            selectGenre(_);
+            genre.selectGenre(_);
             // require server request //
           }}
         >
