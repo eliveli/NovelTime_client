@@ -24,16 +24,30 @@ function matchGenreName(genre: GenresFromFilter) {
   return genre;
 }
 
+export type SrchTypeFromFilter = "Title" | "Desc" | "Writer" | "Novel";
+
+function matchSrchTypeName(srchType: SrchTypeFromFilter) {
+  if (srchType === "Title") return "writingTitle";
+  if (srchType === "Desc") return "writingDesc";
+  if (srchType === "Writer") return "userName";
+  if (srchType === "Novel") return "novelTitle"; // *** 백&프론트 작업 필요
+  throw Error("search Type error");
+}
+
 export default function FreeTalkList() {
   const [genre, selectGenre] = useState<GenresFromFilter>("All");
-
   const currentGenre = matchGenreName(genre);
+
+  const [srchType, selectSrchType] = useState<SrchTypeFromFilter>("Title");
+  const currentSrchType = matchSrchTypeName(srchType);
+
+  const [srchWord, handleSrchWord] = useState("");
 
   const { isLoading, isError, data } = useGetWritingsFilteredQuery({
     listType: "T",
     novelGenre: currentGenre,
-    searchType: "no",
-    searchWord: "no",
+    searchType: !srchWord ? "no" : currentSrchType,
+    searchWord: srchWord || "no",
     // ㄴwhen searchType is "no" searchWord is not considered
     // ㄴㄴbut searchWord can't be empty string because parameter in path can't be empty
     sortBy: "newDate",
@@ -60,7 +74,19 @@ export default function FreeTalkList() {
 
   return (
     <MainBG>
-      <Filter genre={{ genreDisplayed: genre, selectGenre }} />
+      <Filter
+        genre={{ genreDisplayed: genre, selectGenre }}
+        search={{
+          searchWord: {
+            srchWord,
+            handleSrchWord,
+          },
+          searchType: {
+            srchType,
+            selectSrchType,
+          },
+        }}
+      />
       {data?.talks?.map((talk) => (
         <FreeTalk talk={talk} />
       ))}

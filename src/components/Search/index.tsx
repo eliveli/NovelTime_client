@@ -1,6 +1,7 @@
 // import {} from "./Search.components";
 import { useEffect, useRef, useState } from "react";
 import { useCloseOutsideClick } from "utils";
+import { SrchTypeFromFilter } from "views/FreeTalkList";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import {
   setSearchWord,
@@ -36,23 +37,25 @@ import {
 // }
 export function SearchBar({
   handleSearchFilter,
+  searchWord,
 }: {
   handleSearchFilter: React.Dispatch<React.SetStateAction<boolean>>;
+  searchWord: {
+    srchWord: string;
+    handleSrchWord: React.Dispatch<React.SetStateAction<string>>;
+  };
 }) {
   const dispatch = useAppDispatch();
 
-  // server request by srchWord
-  const [srchWord, handleSrchWord] = useState("");
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    handleSrchWord(e.target.value);
+    searchWord.handleSrchWord(e.target.value);
   };
   const handleSubmit = (
     e: React.MouseEvent<HTMLDivElement, MouseEvent> | React.KeyboardEvent<HTMLInputElement>,
   ) => {
     e.preventDefault();
     // set client state for server request //
-    dispatch(setSearchWord(srchWord));
+    dispatch(setSearchWord(searchWord.srchWord));
     // and show search-filter-component
     handleSearchFilter(true);
   };
@@ -152,7 +155,14 @@ export function ContentFilterTablet({ filterContentProps }: FilterContentProps) 
     </SearchCategoryAll>
   );
 }
-export function SearchFilter() {
+export function SearchFilter({
+  searchType,
+}: {
+  searchType: {
+    srchType: SrchTypeFromFilter;
+    selectSrchType: React.Dispatch<React.SetStateAction<SrchTypeFromFilter>>;
+  };
+}) {
   const dispatch = useAppDispatch();
 
   // // props from Filter component
@@ -171,12 +181,14 @@ export function SearchFilter() {
   const [content, selectContent] = useState("Title");
 
   // --- for tablet ---------------------------------------------- //
+  // *** writing list 페이지 작업 필요 for tablet
+  // *** ㄴ 바로 위의 content from useState는 writing list에서 더이상 사용 X
   // open or close all list
   const [isCategoryList, handleCategoryList] = useState(false);
   // when selecting content, close all list if it is open
   useEffect(() => {
     handleCategoryList(false);
-  }, [content]);
+  }, [content, searchType.srchType]);
 
   const filterContentProps = {
     isCategoryList,
@@ -186,12 +198,11 @@ export function SearchFilter() {
     selectContent,
   };
   // ------------------------------------------------------------- //
-
-  /* in writing page, filter list */
-  if (!isSearchPage) {
+  /* with novel-search, filter list */
+  if (isNovelSearch) {
     return (
       <SearchFilterContainer isCategoryList={isCategoryList}>
-        {["Title", "Desc", "Author", "Novel"].map((_) => (
+        {["Title", "Desc", "Author"].map((_) => (
           <SearchFilterText
             key={_}
             contentName={_}
@@ -210,20 +221,20 @@ export function SearchFilter() {
     );
   }
 
-  /* with novel-search, filter list */
-  if (isNovelSearch) {
+  /* in writing page, filter list */
+  if (!isSearchPage) {
+    const searchTypes: SrchTypeFromFilter[] = ["Title", "Desc", "Writer", "Novel"];
+    const { srchType, selectSrchType } = searchType;
     return (
       <SearchFilterContainer isCategoryList={isCategoryList}>
-        {["Title", "Desc", "Author"].map((_) => (
+        {searchTypes.map((_) => (
           <SearchFilterText
             key={_}
             contentName={_}
-            selectedContent={content}
+            selectedContent={srchType}
             onClick={() => {
-              selectContent(_);
+              selectSrchType(_);
               dispatch(setSearchContentCtgr(_));
-
-              // require server request //
             }}
           >
             {_}
@@ -278,13 +289,26 @@ export function SearchFilter() {
     </SearchFilterContainer>
   );
 }
-export default function Search() {
+export default function Search({
+  search,
+}: {
+  search: {
+    searchWord: {
+      srchWord: string;
+      handleSrchWord: React.Dispatch<React.SetStateAction<string>>;
+    };
+    searchType: {
+      srchType: SrchTypeFromFilter;
+      selectSrchType: React.Dispatch<React.SetStateAction<SrchTypeFromFilter>>;
+    };
+  };
+}) {
   const [isSearchFilter, handleSearchFilter] = useState(false);
 
   return (
     <SearchContainer>
-      <SearchBar handleSearchFilter={handleSearchFilter} />
-      {isSearchFilter && <SearchFilter />}
+      <SearchBar handleSearchFilter={handleSearchFilter} searchWord={search.searchWord} />
+      {isSearchFilter && <SearchFilter searchType={search.searchType} />}
     </SearchContainer>
   );
 }

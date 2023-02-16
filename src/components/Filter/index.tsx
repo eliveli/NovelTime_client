@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { GenresFromFilter } from "views/FreeTalkList";
+import { GenresFromFilter, SrchTypeFromFilter } from "views/FreeTalkList";
 import Search from "../Search";
 import { SearchBtn, Genres, SortMobile, SortTablet } from "./Filter.components";
 import {
@@ -12,16 +12,26 @@ import {
 // required server request : Filter Genre & Sort for Writing!
 export default function Filter({
   genre,
+  search,
 }: {
   genre: {
     genreDisplayed: GenresFromFilter;
     selectGenre: React.Dispatch<React.SetStateAction<GenresFromFilter>>;
   };
+  search: {
+    searchWord: {
+      srchWord: string;
+      handleSrchWord: React.Dispatch<React.SetStateAction<string>>;
+    };
+    searchType: {
+      srchType: SrchTypeFromFilter;
+      selectSrchType: React.Dispatch<React.SetStateAction<SrchTypeFromFilter>>;
+    };
+  };
 }) {
   // get writing name
   const { pathname } = window.location;
   const writing = pathname.includes("talk") ? "FreeTalk" : "Recommend";
-
   // show or not search component
   const [isSearch, handleSearch] = useState(false);
   // // which category will be shown : novel or writing
@@ -52,7 +62,7 @@ export default function Filter({
       </ContainerWithSrchAlarm>
 
       {/* search : after clicking search icon */}
-      {isSearch && <Search />}
+      {isSearch && <Search search={search} />}
     </FilterBG>
   );
 }

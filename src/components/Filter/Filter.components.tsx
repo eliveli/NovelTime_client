@@ -30,21 +30,22 @@ export function Genres({
     selectGenre: React.Dispatch<React.SetStateAction<GenresFromFilter>>;
   };
 }) {
+  const genres: GenresFromFilter[] = [
+    "All",
+    "로판",
+    "판타지",
+    "로맨스",
+    "현판",
+    "무협",
+    "패러디",
+    "라이트노벨",
+    "미스터리",
+    "BL",
+    "그 외",
+  ];
   return (
     <GenreBox>
-      {[
-        "All",
-        "로판",
-        "판타지",
-        "로맨스",
-        "현판",
-        "무협",
-        "패러디",
-        "라이트노벨",
-        "미스터리",
-        "BL",
-        "그 외",
-      ].map((_) => (
+      {genres.map((_) => (
         <Genre
           key={_}
           genreName={_}

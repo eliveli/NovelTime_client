@@ -67,7 +67,7 @@ export type ParamForGettingWritings = {
     | "BL"
     | "미스터리"
     | "extra";
-  searchType: "writingTitle" | "writingDesc" | "userName" | "no";
+  searchType: "writingTitle" | "writingDesc" | "userName" | "novelTitle" | "no";
   searchWord: string; // note. it can't be empty string
   sortBy: "newDate" | "oldDate" | "manyComments" | "fewComments" | "manyLikes" | "fewLikes";
   pageNo: number;
