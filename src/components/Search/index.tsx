@@ -42,14 +42,20 @@ export function SearchBar({
   handleSearchFilter: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const dispatch = useAppDispatch();
+  const searchWord = useAppSelector((state) => state.filter.searchWord);
+
+  const searchWordRef = useRef(searchWord); // 입력하는 검색어를 기억해두고 submit 할 때만 서버 요청
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch(setSearchWord(e.target.value));
+    searchWordRef.current = e.target.value;
   };
+
   const handleSubmit = (
     e: React.MouseEvent<HTMLDivElement, MouseEvent> | React.KeyboardEvent<HTMLInputElement>,
   ) => {
     e.preventDefault();
+
+    dispatch(setSearchWord(searchWordRef.current));
 
     // show search-filter-component
     handleSearchFilter(true);
