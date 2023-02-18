@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useCloseOutsideClick } from "utils";
-import { GenresFromFilter } from "views/FreeTalkList";
+import { GenresFromFilter, selectGenre } from "store/clientSlices/filterSlice";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { openModal, SortTypeFromFilter, sortWriting } from "../../store/clientSlices/modalSlice";
 import {
@@ -22,14 +22,11 @@ import {
   ContainerWithBtn,
 } from "./Filter.styles";
 
-export function Genres({
-  genre,
-}: {
-  genre: {
-    genreDisplayed: GenresFromFilter;
-    selectGenre: React.Dispatch<React.SetStateAction<GenresFromFilter>>;
-  };
-}) {
+export function Genres() {
+  const dispatch = useAppDispatch();
+
+  const genre = useAppSelector((state) => state.filter.genre);
+
   const genres: GenresFromFilter[] = [
     "All",
     "로판",
@@ -49,10 +46,9 @@ export function Genres({
         <Genre
           key={_}
           genreName={_}
-          selectedGenre={genre.genreDisplayed}
+          selectedGenre={genre}
           onClick={() => {
-            genre.selectGenre(_);
-            // require server request //
+            dispatch(selectGenre(_));
           }}
         >
           {_}

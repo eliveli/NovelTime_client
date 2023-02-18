@@ -7,10 +7,18 @@ import useCloseOutsideClick from "./useCloseOutsideClick";
 import useAsyncStateNumber from "./useAsyncStateNumber";
 import ScrollToTop from "./ScrollToTop";
 import CheckDeviceType from "./CheckDeviceType";
-import matchPlatformName from "./matchPlatformName";
+import {
+  matchPlatformName,
+  matchGenreName,
+  matchSortTypeName,
+  matchSrchTypeName,
+} from "./matchName";
 
 export {
   matchPlatformName,
+  matchGenreName,
+  matchSortTypeName,
+  matchSrchTypeName,
   ScrollToTop,
   CheckDeviceType,
   useCloseOutsideClick,

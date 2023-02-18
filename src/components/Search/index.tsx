@@ -1,12 +1,13 @@
 // import {} from "./Search.components";
 import { useEffect, useRef, useState } from "react";
 import { useCloseOutsideClick } from "utils";
-import { SrchTypeFromFilter } from "views/FreeTalkList";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import {
   setSearchWord,
   setSearchTextCtgr,
   setSearchContentCtgr,
+  selectSearchType,
+  SearchTypeFromFilter,
 } from "../../store/clientSlices/filterSlice";
 import { openModal } from "../../store/clientSlices/modalSlice";
 import {
@@ -37,26 +38,20 @@ import {
 // }
 export function SearchBar({
   handleSearchFilter,
-  searchWord,
 }: {
   handleSearchFilter: React.Dispatch<React.SetStateAction<boolean>>;
-  searchWord: {
-    srchWord: string;
-    handleSrchWord: React.Dispatch<React.SetStateAction<string>>;
-  };
 }) {
   const dispatch = useAppDispatch();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    searchWord.handleSrchWord(e.target.value);
+    dispatch(setSearchWord(e.target.value));
   };
   const handleSubmit = (
     e: React.MouseEvent<HTMLDivElement, MouseEvent> | React.KeyboardEvent<HTMLInputElement>,
   ) => {
     e.preventDefault();
-    // set client state for server request //
-    dispatch(setSearchWord(searchWord.srchWord));
-    // and show search-filter-component
+
+    // show search-filter-component
     handleSearchFilter(true);
   };
 
@@ -155,15 +150,9 @@ export function ContentFilterTablet({ filterContentProps }: FilterContentProps) 
     </SearchCategoryAll>
   );
 }
-export function SearchFilter({
-  searchType,
-}: {
-  searchType: {
-    srchType: SrchTypeFromFilter;
-    selectSrchType: React.Dispatch<React.SetStateAction<SrchTypeFromFilter>>;
-  };
-}) {
+export function SearchFilter() {
   const dispatch = useAppDispatch();
+  const searchType = useAppSelector((state) => state.filter.searchType);
 
   // // props from Filter component
   // const { writing, selectedCategory, handleCategory, content, selectContent } = searchProps;
@@ -188,7 +177,7 @@ export function SearchFilter({
   // when selecting content, close all list if it is open
   useEffect(() => {
     handleCategoryList(false);
-  }, [content, searchType.srchType]);
+  }, [content, searchType]);
 
   const filterContentProps = {
     isCategoryList,
@@ -223,17 +212,17 @@ export function SearchFilter({
 
   /* in writing page, filter list */
   if (!isSearchPage) {
-    const searchTypes: SrchTypeFromFilter[] = ["Title", "Desc", "Writer", "Novel"];
-    const { srchType, selectSrchType } = searchType;
+    const searchTypes: SearchTypeFromFilter[] = ["Title", "Desc", "Writer", "Novel"];
+
     return (
       <SearchFilterContainer isCategoryList={isCategoryList}>
         {searchTypes.map((_) => (
           <SearchFilterText
             key={_}
             contentName={_}
-            selectedContent={srchType}
+            selectedContent={searchType}
             onClick={() => {
-              selectSrchType(_);
+              dispatch(selectSearchType(_));
               dispatch(setSearchContentCtgr(_));
             }}
           >
@@ -289,25 +278,13 @@ export function SearchFilter({
     </SearchFilterContainer>
   );
 }
-export default function Search({
-  searchType,
-  searchWord,
-}: {
-  searchType: {
-    srchType: SrchTypeFromFilter;
-    selectSrchType: React.Dispatch<React.SetStateAction<SrchTypeFromFilter>>;
-  };
-  searchWord: {
-    srchWord: string;
-    handleSrchWord: React.Dispatch<React.SetStateAction<string>>;
-  };
-}) {
+export default function Search() {
   const [isSearchFilter, handleSearchFilter] = useState(false);
 
   return (
     <SearchContainer>
-      <SearchBar handleSearchFilter={handleSearchFilter} searchWord={searchWord} />
-      {isSearchFilter && <SearchFilter searchType={searchType} />}
+      <SearchBar handleSearchFilter={handleSearchFilter} />
+      {isSearchFilter && <SearchFilter />}
     </SearchContainer>
   );
 }
