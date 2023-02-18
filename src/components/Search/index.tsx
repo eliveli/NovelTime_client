@@ -69,7 +69,12 @@ export function SearchBar({
   };
   return (
     <SearchBarContainer>
-      <SearchInput onChange={handleChange} onKeyPress={handleKeyPress} />
+      <SearchInput
+        defaultValue={searchWordRef.current}
+        // ㄴto show the same keywords when closing the search bar and reopening it
+        onChange={handleChange}
+        onKeyPress={handleKeyPress}
+      />
       <SearchIconBox onClick={handleSubmit}>
         <SearchIcon />
       </SearchIconBox>
