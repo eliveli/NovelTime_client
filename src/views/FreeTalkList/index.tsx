@@ -34,6 +34,36 @@ function matchSrchTypeName(srchType: SrchTypeFromFilter) {
   throw Error("search Type error");
 }
 
+export type SortTypeFromFilter =
+  | "작성일New"
+  | "작성일Old"
+  | "댓글Up"
+  | "댓글Down"
+  | "좋아요Up"
+  | "좋아요Down";
+
+function matchSortTypeName(sortType: SortTypeFromFilter) {
+  if (sortType === "작성일New") {
+    return "newDate";
+  }
+  if (sortType === "작성일Old") {
+    return "oldDate";
+  }
+  if (sortType === "댓글Up") {
+    return "manyComments";
+  }
+  if (sortType === "댓글Down") {
+    return "fewComments";
+  }
+  if (sortType === "좋아요Up") {
+    return "manyLikes";
+  }
+  if (sortType === "좋아요Down") {
+    return "fewLikes";
+  }
+  throw Error("sort Type error");
+}
+
 export default function FreeTalkList() {
   const [genre, selectGenre] = useState<GenresFromFilter>("All");
   const currentGenre = matchGenreName(genre);
@@ -43,6 +73,9 @@ export default function FreeTalkList() {
 
   const [srchWord, handleSrchWord] = useState("");
 
+  const [sortType, selectSortType] = useState<SortTypeFromFilter>("작성일New");
+  const currentSortType = matchSortTypeName(sortType);
+
   const { isLoading, isError, data } = useGetWritingsFilteredQuery({
     listType: "T",
     novelGenre: currentGenre,
@@ -50,7 +83,7 @@ export default function FreeTalkList() {
     searchWord: srchWord || "no",
     // ㄴwhen searchType is "no" searchWord is not considered
     // ㄴㄴbut searchWord can't be empty string because parameter in path can't be empty
-    sortBy: "newDate",
+    sortBy: currentSortType,
     pageNo: 1,
   });
   // 서버에서 데이터 받아올 때 구성
@@ -76,16 +109,15 @@ export default function FreeTalkList() {
     <MainBG>
       <Filter
         genre={{ genreDisplayed: genre, selectGenre }}
-        search={{
-          searchWord: {
-            srchWord,
-            handleSrchWord,
-          },
-          searchType: {
-            srchType,
-            selectSrchType,
-          },
+        searchType={{
+          srchType,
+          selectSrchType,
         }}
+        searchWord={{
+          srchWord,
+          handleSrchWord,
+        }}
+        sort={{ sortType, selectSortType }}
       />
       {data?.talks?.map((talk) => (
         <FreeTalk talk={talk} />

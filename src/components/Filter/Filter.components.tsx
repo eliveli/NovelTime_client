@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useCloseOutsideClick } from "utils";
-import { GenresFromFilter } from "views/FreeTalkList";
+import { GenresFromFilter, SortTypeFromFilter } from "views/FreeTalkList";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { openModal } from "../../store/clientSlices/modalSlice";
 import {
@@ -75,7 +75,16 @@ export function SearchBtn({
     </SearchIconBox>
   );
 }
-export function SortMobile({ borderOpacity }: { borderOpacity?: number }) {
+export function SortMobile({
+  sort,
+  borderOpacity,
+}: {
+  sort: {
+    sortType: SortTypeFromFilter;
+    selectSortType: React.Dispatch<React.SetStateAction<SortTypeFromFilter>>;
+  };
+  borderOpacity?: number;
+}) {
   const dispatch = useAppDispatch();
   const sortingText = useAppSelector((state) => state.modal.sortingText);
   // when clicking, in Modal component,
@@ -100,17 +109,29 @@ export function SortMobile({ borderOpacity }: { borderOpacity?: number }) {
   );
 }
 export function SortTablet({
+  sort,
   isSearch,
   borderOpacity,
 }: {
+  sort: {
+    sortType: SortTypeFromFilter;
+    selectSortType: React.Dispatch<React.SetStateAction<SortTypeFromFilter>>;
+  };
   isSearch: boolean;
   borderOpacity?: number;
 }) {
+  const { sortType, selectSortType } = sort;
+  const sortTypes: SortTypeFromFilter[] = [
+    "작성일New",
+    "작성일Old",
+    "댓글Up",
+    "댓글Down",
+    "좋아요Up",
+    "좋아요Down",
+  ];
+
   // open or close all list
   const [isCategoryList, handleCategoryList] = useState(false);
-
-  // which category will be shown
-  const [selectedCategory, handleCategory] = useState("작성일New");
 
   // when opening or closing search bar, close all list if it is open
   useEffect(() => {
@@ -137,7 +158,7 @@ export function SortTablet({
             handleCategoryList(true);
           }}
         >
-          <SortCategorySelected>{selectedCategory}</SortCategorySelected>
+          <SortCategorySelected>{sortType}</SortCategorySelected>
           {/* down arrow icon */}
           <DownIconBox>
             <DownIcon />
@@ -147,15 +168,14 @@ export function SortTablet({
       {/* after clicking category */}
       {isCategoryList && (
         <SortCategoryAll ref={sortRef}>
-          {["작성일New", "작성일Old", "댓글Up", "댓글Down", "좋아요Up", "좋아요Down"].map((_) => (
+          {sortTypes.map((_) => (
             <SortCategoryLi
               key={_}
-              selectedCategory={selectedCategory}
+              selectedCategory={sortType}
               category={_}
               onClick={() => {
-                handleCategory(_);
+                selectSortType(_);
                 handleCategoryList(false);
-                // require server request //
               }}
             >
               {_}
@@ -166,7 +186,7 @@ export function SortTablet({
     </SortTabletContainer>
   );
 }
-// now below is not used
+// now following is not used
 export function SortTablet2() {
   return (
     <CustomArrowBox>

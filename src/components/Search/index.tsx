@@ -290,25 +290,24 @@ export function SearchFilter({
   );
 }
 export default function Search({
-  search,
+  searchType,
+  searchWord,
 }: {
-  search: {
-    searchWord: {
-      srchWord: string;
-      handleSrchWord: React.Dispatch<React.SetStateAction<string>>;
-    };
-    searchType: {
-      srchType: SrchTypeFromFilter;
-      selectSrchType: React.Dispatch<React.SetStateAction<SrchTypeFromFilter>>;
-    };
+  searchType: {
+    srchType: SrchTypeFromFilter;
+    selectSrchType: React.Dispatch<React.SetStateAction<SrchTypeFromFilter>>;
+  };
+  searchWord: {
+    srchWord: string;
+    handleSrchWord: React.Dispatch<React.SetStateAction<string>>;
   };
 }) {
   const [isSearchFilter, handleSearchFilter] = useState(false);
 
   return (
     <SearchContainer>
-      <SearchBar handleSearchFilter={handleSearchFilter} searchWord={search.searchWord} />
-      {isSearchFilter && <SearchFilter searchType={search.searchType} />}
+      <SearchBar handleSearchFilter={handleSearchFilter} searchWord={searchWord} />
+      {isSearchFilter && <SearchFilter searchType={searchType} />}
     </SearchContainer>
   );
 }

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { GenresFromFilter, SrchTypeFromFilter } from "views/FreeTalkList";
+import { GenresFromFilter, SortTypeFromFilter, SrchTypeFromFilter } from "views/FreeTalkList";
 import Search from "../Search";
 import { SearchBtn, Genres, SortMobile, SortTablet } from "./Filter.components";
 import {
@@ -12,21 +12,27 @@ import {
 // required server request : Filter Genre & Sort for Writing!
 export default function Filter({
   genre,
-  search,
+  searchType,
+  searchWord,
+  sort,
 }: {
   genre: {
     genreDisplayed: GenresFromFilter;
     selectGenre: React.Dispatch<React.SetStateAction<GenresFromFilter>>;
   };
-  search: {
-    searchWord: {
-      srchWord: string;
-      handleSrchWord: React.Dispatch<React.SetStateAction<string>>;
-    };
-    searchType: {
-      srchType: SrchTypeFromFilter;
-      selectSrchType: React.Dispatch<React.SetStateAction<SrchTypeFromFilter>>;
-    };
+
+  searchType: {
+    srchType: SrchTypeFromFilter;
+    selectSrchType: React.Dispatch<React.SetStateAction<SrchTypeFromFilter>>;
+  };
+  searchWord: {
+    srchWord: string;
+    handleSrchWord: React.Dispatch<React.SetStateAction<string>>;
+  };
+
+  sort: {
+    sortType: SortTypeFromFilter;
+    selectSortType: React.Dispatch<React.SetStateAction<SortTypeFromFilter>>;
   };
 }) {
   // get writing name
@@ -55,17 +61,18 @@ export default function Filter({
       <ContainerWithSrchAlarm isSearch={isSearch}>
         {isSearch && <SearchAlarm>{`Search for ${writing} about Novel!`}</SearchAlarm>}
         <CantainerWithSrchBtn>
-          <SortMobile />
-          <SortTablet isSearch={isSearch} />
+          <SortMobile sort={sort} />
+          <SortTablet sort={sort} isSearch={isSearch} />
           <SearchBtn isSearch={isSearch} handleSearch={handleSearch} />
         </CantainerWithSrchBtn>
       </ContainerWithSrchAlarm>
 
       {/* search : after clicking search icon */}
-      {isSearch && <Search search={search} />}
+      {isSearch && <Search searchType={searchType} searchWord={searchWord} />}
     </FilterBG>
   );
 }
+
 export function SortOnly({
   marginBottom,
   height,
