@@ -3,6 +3,8 @@ import MainBG from "components/MainBG";
 import Filter from "components/Filter";
 import { useGetWritingsFilteredQuery } from "store/serverAPIs/novelTime";
 import { TalkList } from "store/serverAPIs/types";
+import { useAppSelector } from "store/hooks";
+import { SortTypeFromFilter } from "store/clientSlices/modalSlice";
 import FreeTalk from "./FreeTalkList.components";
 
 export type GenresFromFilter =
@@ -33,14 +35,6 @@ function matchSrchTypeName(srchType: SrchTypeFromFilter) {
   if (srchType === "Novel") return "novelTitle"; // *** 백&프론트 작업 필요
   throw Error("search Type error");
 }
-
-export type SortTypeFromFilter =
-  | "작성일New"
-  | "작성일Old"
-  | "댓글Up"
-  | "댓글Down"
-  | "좋아요Up"
-  | "좋아요Down";
 
 function matchSortTypeName(sortType: SortTypeFromFilter) {
   if (sortType === "작성일New") {
@@ -73,7 +67,7 @@ export default function FreeTalkList() {
 
   const [srchWord, handleSrchWord] = useState("");
 
-  const [sortType, selectSortType] = useState<SortTypeFromFilter>("작성일New");
+  const sortType = useAppSelector((state) => state.modal.sortType);
   const currentSortType = matchSortTypeName(sortType);
 
   const { isLoading, isError, data } = useGetWritingsFilteredQuery({
@@ -117,7 +111,6 @@ export default function FreeTalkList() {
           srchWord,
           handleSrchWord,
         }}
-        sort={{ sortType, selectSortType }}
       />
       {data?.talks?.map((talk) => (
         <FreeTalk talk={talk} />

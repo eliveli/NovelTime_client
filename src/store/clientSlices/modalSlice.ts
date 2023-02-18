@@ -13,6 +13,14 @@ interface MetaTags {
   url: string;
 }
 
+export type SortTypeFromFilter =
+  | "작성일New"
+  | "작성일Old"
+  | "댓글Up"
+  | "댓글Down"
+  | "좋아요Up"
+  | "좋아요Down";
+
 export interface IsModalState {
   modalCategory:
     | "novelImage"
@@ -23,7 +31,7 @@ export interface IsModalState {
     | "share"
     | "none";
   novelImage: string;
-  sortingText: string;
+  sortType: SortTypeFromFilter;
   filteringContent: string;
   metaTags: MetaTags;
 
@@ -35,7 +43,7 @@ export interface IsModalState {
 const initialState: IsModalState = {
   modalCategory: "none",
   novelImage: "",
-  sortingText: "작성일New",
+  sortType: "작성일New",
   filteringContent: "Novel",
   metaTags: {
     title: "NovelTime",
@@ -69,8 +77,8 @@ export const modalSlice = createSlice({
     closeModal: (state) => {
       state.modalCategory = "none";
     },
-    sortWriting: (state, action: PayloadAction<string>) => {
-      state.sortingText = action.payload;
+    sortWriting: (state, action: PayloadAction<SortTypeFromFilter>) => {
+      state.sortType = action.payload;
     },
     filterContent: (state, action: PayloadAction<string>) => {
       state.filteringContent = action.payload;

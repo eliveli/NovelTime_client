@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { GenresFromFilter, SortTypeFromFilter, SrchTypeFromFilter } from "views/FreeTalkList";
+import { GenresFromFilter, SrchTypeFromFilter } from "views/FreeTalkList";
 import Search from "../Search";
 import { SearchBtn, Genres, SortMobile, SortTablet } from "./Filter.components";
 import {
@@ -14,7 +14,6 @@ export default function Filter({
   genre,
   searchType,
   searchWord,
-  sort,
 }: {
   genre: {
     genreDisplayed: GenresFromFilter;
@@ -28,11 +27,6 @@ export default function Filter({
   searchWord: {
     srchWord: string;
     handleSrchWord: React.Dispatch<React.SetStateAction<string>>;
-  };
-
-  sort: {
-    sortType: SortTypeFromFilter;
-    selectSortType: React.Dispatch<React.SetStateAction<SortTypeFromFilter>>;
   };
 }) {
   // get writing name
@@ -61,8 +55,8 @@ export default function Filter({
       <ContainerWithSrchAlarm isSearch={isSearch}>
         {isSearch && <SearchAlarm>{`Search for ${writing} about Novel!`}</SearchAlarm>}
         <CantainerWithSrchBtn>
-          <SortMobile sort={sort} />
-          <SortTablet sort={sort} isSearch={isSearch} />
+          <SortMobile />
+          <SortTablet isSearch={isSearch} />
           <SearchBtn isSearch={isSearch} handleSearch={handleSearch} />
         </CantainerWithSrchBtn>
       </ContainerWithSrchAlarm>

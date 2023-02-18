@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { useCloseOutsideClick } from "utils";
-import { GenresFromFilter, SortTypeFromFilter } from "views/FreeTalkList";
+import { GenresFromFilter } from "views/FreeTalkList";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { openModal } from "../../store/clientSlices/modalSlice";
+import { openModal, SortTypeFromFilter, sortWriting } from "../../store/clientSlices/modalSlice";
 import {
   SortMobileContainer,
   SortTabletContainer,
@@ -75,18 +75,9 @@ export function SearchBtn({
     </SearchIconBox>
   );
 }
-export function SortMobile({
-  sort,
-  borderOpacity,
-}: {
-  sort: {
-    sortType: SortTypeFromFilter;
-    selectSortType: React.Dispatch<React.SetStateAction<SortTypeFromFilter>>;
-  };
-  borderOpacity?: number;
-}) {
+export function SortMobile({ borderOpacity }: { borderOpacity?: number }) {
   const dispatch = useAppDispatch();
-  const sortingText = useAppSelector((state) => state.modal.sortingText);
+  const sortType = useAppSelector((state) => state.modal.sortType);
   // when clicking, in Modal component,
   // require server request in this component!
   console.log("in sort only");
@@ -100,7 +91,7 @@ export function SortMobile({
           console.log("clicked in sort only");
         }}
       >
-        <SortCategorySelected>{sortingText}</SortCategorySelected>
+        <SortCategorySelected>{sortType}</SortCategorySelected>
         <DownIconBox>
           <DownIcon />
         </DownIconBox>
@@ -109,18 +100,16 @@ export function SortMobile({
   );
 }
 export function SortTablet({
-  sort,
   isSearch,
   borderOpacity,
 }: {
-  sort: {
-    sortType: SortTypeFromFilter;
-    selectSortType: React.Dispatch<React.SetStateAction<SortTypeFromFilter>>;
-  };
   isSearch: boolean;
   borderOpacity?: number;
 }) {
-  const { sortType, selectSortType } = sort;
+  const dispatch = useAppDispatch();
+
+  const sortType = useAppSelector((state) => state.modal.sortType);
+
   const sortTypes: SortTypeFromFilter[] = [
     "작성일New",
     "작성일Old",
@@ -174,7 +163,7 @@ export function SortTablet({
               selectedCategory={sortType}
               category={_}
               onClick={() => {
-                selectSortType(_);
+                dispatch(sortWriting(_));
                 handleCategoryList(false);
               }}
             >
