@@ -50,7 +50,7 @@ export type RecommendList = {
 }[];
 
 export type WritingList =
-  | { talks?: TalkList; recommends?: RecommendList; isLastPage: boolean }
+  | { talks?: TalkList; recommends?: RecommendList; lastPageNo: number }
   | undefined;
 
 export type ParamForGettingWritings = {
