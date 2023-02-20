@@ -22,6 +22,13 @@ export default function FreeTalkList() {
   const currentPageNo = useRef(1);
   // for mobile ~
   const allPageWritings = useRef<TalkList>([]);
+
+  const currentFiltersRef = useRef({
+    prevGenre: currentGenre,
+    prevSrchType: currentSrchType,
+    prevSearchWord: searchWord,
+    prevSortType: currentSortType,
+  });
   // ~ for mobile
 
   const { isLoading, isError, data } = useGetWritingsFilteredQuery({
@@ -36,8 +43,27 @@ export default function FreeTalkList() {
   });
 
   // for mobile ~
+  // 서버에서 새로 writings 받아온 후 writing filter를 이전 값과 비교
   if (data?.talks) {
-    allPageWritings.current.push(...data.talks);
+    const { prevGenre, prevSrchType, prevSearchWord, prevSortType } = currentFiltersRef.current;
+    if (
+      prevGenre === currentGenre &&
+      prevSrchType === currentSrchType &&
+      prevSearchWord === searchWord &&
+      prevSortType === currentSortType
+    ) {
+      // 직전과 필터가 같으면 기존 writings에 추가
+      allPageWritings.current.push(...data.talks);
+    } else {
+      // 직전과 필터가 다르면 writings 교체
+      allPageWritings.current = [...data.talks];
+
+      // 현재 필터로 교체
+      currentFiltersRef.current.prevGenre = currentGenre;
+      currentFiltersRef.current.prevSrchType = currentSrchType;
+      currentFiltersRef.current.prevSearchWord = searchWord;
+      currentFiltersRef.current.prevSortType = currentSortType;
+    }
   }
 
   const isNearBottom = checkIsNearBottom(200);
