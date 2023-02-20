@@ -1,10 +1,10 @@
-import React from "react";
+import React, { useRef } from "react";
 import MainBG from "components/MainBG";
 import Filter from "components/Filter";
 import { useGetWritingsFilteredQuery } from "store/serverAPIs/novelTime";
-import { TalkList } from "store/serverAPIs/types";
+import { TalkList, WritingList } from "store/serverAPIs/types";
 import { useAppSelector } from "store/hooks";
-import { matchGenreName, matchSortTypeName, matchSrchTypeName } from "utils";
+import { checkIsNearBottom, matchGenreName, matchSortTypeName, matchSrchTypeName } from "utils";
 import FreeTalk from "./FreeTalkList.components";
 
 export default function FreeTalkList() {
@@ -19,6 +19,11 @@ export default function FreeTalkList() {
   const sortType = useAppSelector((state) => state.modal.sortType);
   const currentSortType = matchSortTypeName(sortType);
 
+  const currentPageNo = useRef(1);
+  // for mobile ~
+  const allPageWritings = useRef<TalkList>([]);
+  // ~ for mobile
+
   const { isLoading, isError, data } = useGetWritingsFilteredQuery({
     listType: "T",
     novelGenre: currentGenre,
@@ -27,8 +32,20 @@ export default function FreeTalkList() {
     // ㄴwhen searchType is "no" searchWord is not considered
     // ㄴㄴbut searchWord can't be empty string because parameter in path can't be empty
     sortBy: currentSortType,
-    pageNo: 1,
+    pageNo: currentPageNo.current,
   });
+
+  // for mobile ~
+  if (data?.talks) {
+    allPageWritings.current.push(...data.talks);
+  }
+
+  const isNearBottom = checkIsNearBottom(200);
+  if (data && data?.lastPageNo !== currentPageNo.current && isNearBottom) {
+    currentPageNo.current += 1;
+  }
+  // ~ for mobile
+
   // 서버에서 데이터 받아올 때 구성
   const dataFromServer = [
     {
@@ -51,9 +68,15 @@ export default function FreeTalkList() {
   return (
     <MainBG>
       <Filter />
-      {data?.talks?.map((talk) => (
-        <FreeTalk talk={talk} />
+      {allPageWritings.current?.map((talk) => (
+        <FreeTalk key={talk.talkId} talk={talk} />
       ))}
+
+      {/* for tablet and pc
+      {data?.talks?.map((talk) => (
+         <FreeTalk key={talk.talkId} talk={talk} />
+       ))}
+      */}
     </MainBG>
   );
 }

@@ -13,8 +13,10 @@ import {
   matchSortTypeName,
   matchSrchTypeName,
 } from "./matchName";
+import checkIsNearBottom from "./checkIsNearBottom";
 
 export {
+  checkIsNearBottom,
   matchPlatformName,
   matchGenreName,
   matchSortTypeName,
