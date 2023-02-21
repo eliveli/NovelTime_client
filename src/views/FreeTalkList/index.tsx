@@ -3,8 +3,9 @@ import MainBG from "components/MainBG";
 import Filter from "components/Filter";
 import { useGetWritingsFilteredQuery } from "store/serverAPIs/novelTime";
 import { TalkList, WritingList } from "store/serverAPIs/types";
-import { useAppSelector } from "store/hooks";
+import { useAppDispatch, useAppSelector } from "store/hooks";
 import { checkIsNearBottom, matchGenreName, matchSortTypeName, matchSrchTypeName } from "utils";
+import { setPageNo } from "store/clientSlices/filterSlice";
 import FreeTalk from "./FreeTalkList.components";
 
 export default function FreeTalkList() {
@@ -19,7 +20,9 @@ export default function FreeTalkList() {
   const sortType = useAppSelector((state) => state.modal.sortType);
   const currentSortType = matchSortTypeName(sortType);
 
-  const [currentPageNo, setPageNo] = useState(1);
+  const dispatch = useAppDispatch();
+  const currentPageNo = useAppSelector((state) => state.filter.pageNo);
+
   // for mobile ~
   const [allPageWritings, setAllPageWritings] = useState<TalkList>([]);
 
@@ -51,7 +54,7 @@ export default function FreeTalkList() {
     function handleScroll() {
       const isNearBottom = checkIsNearBottom(50);
       if (data && data?.lastPageNo !== currentPageNo && isNearBottom) {
-        setPageNo((prev) => prev + 1);
+        dispatch(setPageNo(currentPageNo + 1));
       }
     }
     // ㅇ스크롤y값이 변할 때마다 실행해야 함
@@ -80,7 +83,8 @@ export default function FreeTalkList() {
         prevSrchType === currentSrchType &&
         prevSearchWord === searchWord &&
         prevSortType === currentSortType &&
-        prevPageNo !== currentPageNo
+        (prevPageNo === currentPageNo - 1 || // <- 이미 writings 존재, 다음 페이지 요청할 때
+          (prevPageNo === 1 && currentPageNo === 1)) // <- 최초 writings 요청 시
         // ㄴstate 재설정에 따라 컴포넌트가 한 번에 연이어 리렌더링될 수 있음
         // ㄴ이 때 allPageWritings에 새로운 writing을 한 번만 추가하기 위해 pageNo 확인 필요
       ) {
@@ -95,16 +99,13 @@ export default function FreeTalkList() {
         // 직전과 필터가 다르면 writings 교체
         setAllPageWritings(talksFromServer);
 
-        // 검색 필터 교체 시 페이지는 항상 1
-        setPageNo(1);
-
         // 현재 필터로 교체
         setPrevFilters({
           prevGenre: currentGenre,
           prevSrchType: currentSrchType,
           prevSearchWord: searchWord,
           prevSortType: currentSortType,
-          prevPageNo: 1,
+          prevPageNo: currentPageNo, // 리듀서에서 이미 1로 교체
         });
       }
     }

@@ -20,6 +20,7 @@ export type IsFilterState = {
   genre: GenresFromFilter;
   searchType: SearchTypeFromFilter;
   searchWord: string;
+  pageNo: number;
 
   searchTextCtgr: string;
   searchContentCtgr: string;
@@ -30,6 +31,7 @@ const initialState: IsFilterState = {
   genre: "All",
   searchType: "Title",
   searchWord: "",
+  pageNo: 1,
 
   searchTextCtgr: "",
   searchContentCtgr: "",
@@ -41,13 +43,29 @@ export const filterSlice = createSlice({
   initialState,
   reducers: {
     selectGenre: (state, action: PayloadAction<GenresFromFilter>) => {
+      // 현재와 다른 필터를 눌렀을 때만 페이지넘버 1로 리셋
+      if (state.genre !== action.payload) {
+        state.pageNo = 1;
+      }
+
       state.genre = action.payload;
     },
     selectSearchType: (state, action: PayloadAction<SearchTypeFromFilter>) => {
+      if (state.searchType !== action.payload) {
+        state.pageNo = 1;
+      }
+
       state.searchType = action.payload;
     },
     setSearchWord: (state, action: PayloadAction<string>) => {
+      if (state.searchWord !== action.payload) {
+        state.pageNo = 1;
+      }
+
       state.searchWord = action.payload;
+    },
+    setPageNo: (state, action: PayloadAction<number>) => {
+      state.pageNo = action.payload;
     },
 
     setSearchTextCtgr: (state, action: PayloadAction<string>) => {
@@ -76,6 +94,7 @@ export const {
   selectGenre,
   selectSearchType,
   setSearchWord,
+  setPageNo,
 
   setSearchTextCtgr,
   setSearchContentCtgr,
