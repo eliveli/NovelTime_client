@@ -66,19 +66,23 @@ export default function FreeTalkList() {
   }, [data, isFetching]);
 
   // 서버에서 새로 writings 받아온 후 writing filter를 이전 값과 비교
-  // cf. 필터가 같을 때 새로운 data가 undefined라면 아무것도 안 함
+  //  필터가 같을 때 새로운 data가 undefined라면 아무것도 안 함
   useEffect(() => {
     if (isFetching) return;
+
+    if (!data) {
+      // data is null
+      setAllPageWritings([]); // *** 콘텐트 없다는 컴포넌트 보이기 (아래 리턴 구문에서 이 값이 [] 일 때 조건문 넣기)
+      return;
+    }
 
     const { prevGenre, prevSrchType, prevSearchWord, prevSortType, prevPageNo } = prevFilters;
     if (data && data.talks) {
       const { talks: talksFromServer } = data;
 
-      // 최초 1페이지 불러오면 그대로 넣기
-      if (prevPageNo === 1 && currentPageNo === 1) {
-        setAllPageWritings(talksFromServer);
-      } else if (
-        // 다른 필터 유지한 채 페이지번호만 증가
+      if (
+        // - 필터 유지, 페이지번호만 증가할 때
+        // - 최초 writings 요청할 때
         prevGenre === currentGenre &&
         prevSrchType === currentSrchType &&
         prevSearchWord === searchWord &&
@@ -88,7 +92,6 @@ export default function FreeTalkList() {
         // ㄴstate 재설정에 따라 컴포넌트가 한 번에 연이어 리렌더링될 수 있음
         // ㄴ이 때 allPageWritings에 새로운 writing을 한 번만 추가하기 위해 pageNo 확인 필요
       ) {
-        // 직전과 필터가 같으면 기존 writings에 추가 (페이지 넘버만 다름)
         setAllPageWritings((prev) => [...prev, ...talksFromServer]);
 
         setPrevFilters((prev) => ({
