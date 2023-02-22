@@ -1,3 +1,4 @@
+import { setPageNo } from "store/clientSlices/filterSlice";
 import { closeModal, SortTypeFromFilter, sortWriting } from "store/clientSlices/modalSlice";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 
@@ -27,7 +28,13 @@ export default function SortWriting() {
             selectedCategory={sortType}
             category={_}
             onClick={() => {
+              if (sortType !== _) {
+                // 직전과 필터가 다를 때 페이지넘버 1
+                dispatch(setPageNo(1));
+              }
+
               dispatch(sortWriting(_));
+
               dispatch(closeModal());
             }}
           >

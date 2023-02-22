@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useCloseOutsideClick } from "utils";
-import { GenresFromFilter, selectGenre } from "store/clientSlices/filterSlice";
+import { GenresFromFilter, selectGenre, setPageNo } from "store/clientSlices/filterSlice";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { openModal, SortTypeFromFilter, sortWriting } from "../../store/clientSlices/modalSlice";
 import {
@@ -159,7 +159,13 @@ export function SortTablet({
               selectedCategory={sortType}
               category={_}
               onClick={() => {
+                if (sortType !== _) {
+                  // 직전과 필터가 다를 때 페이지넘버 1
+                  dispatch(setPageNo(1));
+                }
+
                 dispatch(sortWriting(_));
+
                 handleCategoryList(false);
               }}
             >
