@@ -18,6 +18,12 @@ import {
 } from "assets/images";
 import Icon from "assets/Icon";
 import {
+  selectGenre,
+  selectSearchType,
+  setPageNo,
+  setSearchWord,
+} from "store/clientSlices/filterSlice";
+import {
   sortWriting,
   filterContent,
   openModal,
@@ -95,7 +101,24 @@ export function NavPC({ pathname }: Props) {
               isPath = pathname.includes(_[1]);
             }
             return (
-              <NavContent key={_[0]} onClick={() => navigate(_[1])} isCurrentPath={isPath}>
+              <NavContent
+                key={_[0]}
+                onClick={() => {
+                  // 리스트 필터 초기화
+                  if ([0, 1].includes(idx)) {
+                    dispatch(selectGenre("All"));
+                    dispatch(selectSearchType("Title"));
+                    dispatch(setSearchWord(""));
+                    dispatch(setPageNo(1));
+                    dispatch(sortWriting("작성일New"));
+
+                    navigate(_[1]);
+                  } else {
+                    navigate(_[1]);
+                  }
+                }}
+                isCurrentPath={isPath}
+              >
                 {_[0]}
               </NavContent>
             );
@@ -105,6 +128,7 @@ export function NavPC({ pathname }: Props) {
         <RightSideContnr>
           <SearchIconBox
             onClick={() => {
+              dispatch(filterContent("Novel")); // 검색 필터 초기화
               navigate(`/search`);
             }}
           >
@@ -135,7 +159,7 @@ export function NavPC({ pathname }: Props) {
   );
 }
 
-// all below is only for Mobile, Tablet, not PC //
+// all followings are only for Mobile, Tablet, not for PC //
 export function NavMobileMainTop() {
   const theme = {};
   const navigate = useNavigate();
@@ -157,6 +181,7 @@ export function NavMobileMainTop() {
         <RightSideContnr>
           <SearchIconBox
             onClick={() => {
+              dispatch(filterContent("Novel")); // 검색 필터 초기화
               navigate(`/search`);
             }}
           >
@@ -222,13 +247,22 @@ export function NavMobileMainBottom({ pathname }: Props) {
           ["AddWriting", "/add-writing", addWriting, addWritingActive], // 추후 라우팅 필요
           ["Novel", "/novel-list", novel, novelActive],
           ["Message", "/message-list", message, messageActive],
-        ].map((_) => (
+        ].map((_, idx) => (
           <NavContent
             key={_[0]}
             onClick={() => {
-              navigate(_[1]);
-              dispatch(sortWriting("작성일New")); // reset category for sorting writings
-              dispatch(filterContent("Novel")); // reset category for filtering content
+              // 리스트 필터 초기화
+              if ([0, 1].includes(idx)) {
+                dispatch(selectGenre("All"));
+                dispatch(selectSearchType("Title"));
+                dispatch(setSearchWord(""));
+                dispatch(setPageNo(1));
+                dispatch(sortWriting("작성일New"));
+
+                navigate(_[1]);
+              } else {
+                navigate(_[1]);
+              }
             }}
           >
             {/* not clicked or clicked element */}
