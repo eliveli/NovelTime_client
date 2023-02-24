@@ -14,9 +14,13 @@ import {
   matchSrchTypeName,
 } from "./matchName";
 import checkIsNearBottom from "./checkIsNearBottom";
+import useSearchFilters from "./useSearchFilters";
+import useInfiniteScroll from "./useInfiniteScroll";
 
 export {
+  useInfiniteScroll,
   checkIsNearBottom,
+  useSearchFilters,
   matchPlatformName,
   matchGenreName,
   matchSortTypeName,

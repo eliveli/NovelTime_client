@@ -1,121 +1,59 @@
 import React, { useRef, useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import MainBG from "components/MainBG";
 import Filter from "components/Filter";
 import { useGetWritingsFilteredQuery } from "store/serverAPIs/novelTime";
 import { TalkList, WritingList } from "store/serverAPIs/types";
 import { useAppDispatch, useAppSelector } from "store/hooks";
-import { checkIsNearBottom, matchGenreName, matchSortTypeName, matchSrchTypeName } from "utils";
+import {
+  checkIsNearBottom,
+  matchGenreName,
+  matchSortTypeName,
+  matchSrchTypeName,
+  useInfiniteScroll,
+  useSearchFilters,
+} from "utils";
 import { setPageNo } from "store/clientSlices/filterSlice";
 import FreeTalk from "./FreeTalkList.components";
 
 export default function FreeTalkList() {
-  const genre = useAppSelector((state) => state.filter.genre);
-  const currentGenre = matchGenreName(genre);
+  // for pagination in tablet or pc ~
+  const [searchParams, setSearchParams] = useSearchParams();
+  const genreFromUrl = searchParams.get("genre");
+  const searchTypeFromUrl = searchParams.get("searchType");
+  const searchWordFromUrl = searchParams.get("searchWord");
+  const sortTypeFromUrl = searchParams.get("sortType");
+  const pageNoFromUrl = searchParams.get("pageNo");
 
-  const searchType = useAppSelector((state) => state.filter.searchType);
-  const currentSrchType = matchSrchTypeName(searchType);
+  console.log("genreFromUrl:", genreFromUrl); // it can be null
 
-  const searchWord = useAppSelector((state) => state.filter.searchWord);
+  // for infinite scroll in mobile
+  const { currentGenre, currentPageNo, currentSortType, currentSrchType, searchWord } =
+    useSearchFilters();
 
-  const sortType = useAppSelector((state) => state.modal.sortType);
-  const currentSortType = matchSortTypeName(sortType);
+  // *** sort type, pc에서 다루기
 
-  const dispatch = useAppDispatch();
-  const currentPageNo = useAppSelector((state) => state.filter.pageNo);
-
-  // for mobile ~
-  const [allPageWritings, setAllPageWritings] = useState<TalkList>([]);
-
-  const [prevFilters, setPrevFilters] = useState({
-    prevGenre: currentGenre,
-    prevSrchType: currentSrchType,
-    prevSearchWord: searchWord,
-    prevSortType: currentSortType,
-    prevPageNo: currentPageNo,
-  });
-  // ~ for mobile
-
-  // *** 하위 컴포넌트에서 필터 변경 후 페이지번호도 변경 필요. 이후에 쿼리 날리기
   const { isLoading, isFetching, isError, data } = useGetWritingsFilteredQuery({
     listType: "T",
-    novelGenre: currentGenre,
-    searchType: !searchWord ? "no" : currentSrchType,
-    searchWord: searchWord || "no",
+    novelGenre: genreFromUrl || currentGenre,
+    searchType: searchTypeFromUrl || !searchWord ? "no" : currentSrchType,
+    searchWord: searchWordFromUrl || searchWord || "no",
     // ㄴwhen searchType is "no" searchWord is not considered
     // ㄴㄴbut searchWord can't be empty string because parameter in path can't be empty
-    sortBy: currentSortType,
-    pageNo: currentPageNo,
+    sortBy: sortTypeFromUrl || currentSortType,
+    pageNo: pageNoFromUrl || currentPageNo,
   });
-  // for mobile ~
-  useEffect(() => {
-    if (isFetching) return;
-    if (!data) return;
-    if (data && data.lastPageNo === currentPageNo) return;
-    function handleScroll() {
-      const isNearBottom = checkIsNearBottom(50);
-      if (data && data?.lastPageNo !== currentPageNo && isNearBottom) {
-        dispatch(setPageNo(currentPageNo + 1));
-      }
-    }
-    // ㅇ스크롤y값이 변할 때마다 실행해야 함
-    //  throttle 같은 걸로 불필요한 렌더링 방지?
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll); // clean up
-    };
-  }, [data, isFetching]);
 
-  // 서버에서 새로 writings 받아온 후 writing filter를 이전 값과 비교
-  //  필터가 같을 때 새로운 data가 undefined라면 아무것도 안 함
-  useEffect(() => {
-    if (isFetching) return;
-
-    if (!data) {
-      // data is null
-      setAllPageWritings([]); // *** 콘텐트 없다는 컴포넌트 보이기 (아래 리턴 구문에서 이 값이 [] 일 때 조건문 넣기)
-      return;
-    }
-
-    const { prevGenre, prevSrchType, prevSearchWord, prevSortType, prevPageNo } = prevFilters;
-    if (data && data.talks) {
-      const { talks: talksFromServer } = data;
-
-      if (
-        // - 필터 유지, 페이지번호만 증가할 때
-        // - 최초 writings 요청할 때
-        prevGenre === currentGenre &&
-        prevSrchType === currentSrchType &&
-        prevSearchWord === searchWord &&
-        prevSortType === currentSortType &&
-        (prevPageNo === currentPageNo - 1 || // <- 이미 writings 존재, 다음 페이지 요청할 때
-          (prevPageNo === 1 && currentPageNo === 1)) // <- 최초 writings 요청 시
-        // ㄴstate 재설정에 따라 컴포넌트가 한 번에 연이어 리렌더링될 수 있음
-        // ㄴ이 때 allPageWritings에 새로운 writing을 한 번만 추가하기 위해 pageNo 확인 필요
-      ) {
-        setAllPageWritings((prev) => [...prev, ...talksFromServer]);
-
-        setPrevFilters((prev) => ({
-          ...prev,
-          prevPageNo: currentPageNo,
-        }));
-      } else {
-        // 직전과 필터가 다르면 writings 교체
-        setAllPageWritings(talksFromServer);
-
-        // 현재 필터로 교체
-        setPrevFilters({
-          prevGenre: currentGenre,
-          prevSrchType: currentSrchType,
-          prevSearchWord: searchWord,
-          prevSortType: currentSortType,
-          prevPageNo: currentPageNo, // 리듀서에서 이미 1로 교체
-        });
-      }
-    }
-  }, [data, isFetching]);
-  // data 값이 변할 때만 실행하기 위해 useEffect 활용
-  // 그렇지 않으면 한 번 data 받아온 후 리렌더링 몇 차례 되면서 서로 다른 조건문이 연이어 실행됨
-  // ~ for mobile
+  // *** 아래 함수에서 prev 값이 잘 기억되는 지 확인 필요
+  const allPageWritings = useInfiniteScroll({
+    currentGenre,
+    currentSrchType,
+    searchWord,
+    currentSortType,
+    currentPageNo,
+    isFetching,
+    data,
+  });
 
   // 서버에서 데이터 받아올 때 구성
   const dataFromServer = [
