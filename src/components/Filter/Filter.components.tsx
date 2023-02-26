@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { useCloseOutsideClick } from "utils";
-import { GenresFromFilter, selectGenre, setPageNo } from "store/clientSlices/filterSlice";
+import { useCloseOutsideClick, useSearchFilter } from "utils";
+import { GenresFromFilter, setPageNo } from "store/clientSlices/filterSlice";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { openModal, SortTypeFromFilter, sortWriting } from "../../store/clientSlices/modalSlice";
 import {
@@ -23,9 +23,7 @@ import {
 } from "./Filter.styles";
 
 export function Genres() {
-  const dispatch = useAppDispatch();
-
-  const genre = useAppSelector((state) => state.filter.genre);
+  const { currentFilter: currentGenre, setFilter: setGenre } = useSearchFilter("genre");
 
   const genres: GenresFromFilter[] = [
     "All",
@@ -40,15 +38,16 @@ export function Genres() {
     "BL",
     "그 외",
   ];
+
   return (
     <GenreBox>
       {genres.map((_) => (
         <Genre
           key={_}
           genreName={_}
-          selectedGenre={genre}
+          selectedGenre={currentGenre}
           onClick={() => {
-            dispatch(selectGenre(_));
+            setGenre(_);
           }}
         >
           {_}

@@ -14,7 +14,7 @@ export type GenresFromFilter =
   | "BL"
   | "미스터리";
 
-export type SearchTypeFromFilter = "no" | "Title" | "Desc" | "Writer" | "Novel";
+export type SearchTypeFromFilter = "Title" | "Desc" | "Writer" | "Novel";
 
 export type IsFilterState = {
   genre: GenresFromFilter;
@@ -29,7 +29,7 @@ export type IsFilterState = {
 
 const initialState: IsFilterState = {
   genre: "All",
-  searchType: "no",
+  searchType: "Title",
   searchWord: "",
   pageNo: 1,
 

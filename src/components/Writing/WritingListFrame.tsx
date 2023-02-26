@@ -53,7 +53,7 @@ export default function WritingListFrame({
       </AddWritingContainer>
       <WritingTabContainer>
         <WritingTab isTalk={isTalk} onClick={() => handleTalk(true)}>
-          <WritingTabText>FreeTalking</WritingTabText>
+          <WritingTabText>FreeTalk</WritingTabText>
         </WritingTab>
         <WritingTab isTalk={!isTalk} onClick={() => handleTalk(false)}>
           <WritingTabText>Recommend</WritingTabText>
