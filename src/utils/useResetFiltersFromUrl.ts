@@ -24,7 +24,7 @@ export default function useResetFiltersFromUrl(
 ) {
   const [searchParams, setSearchParams] = useSearchParams();
 
-  // url에 어떤 필터값도 없다면 필터 재설정 안 함. then for infinite scroll
+  // url에 어떤 필터도 없다면 필터 재설정 안 함. then for infinite scroll
   const filtersWithRealValues = filters.filter((f) => f.value !== null);
   if (filtersWithRealValues.length === 0) return;
 
@@ -39,6 +39,12 @@ export default function useResetFiltersFromUrl(
     } else if (filter === "searchType") {
       if (!searchTypes.includes(value as string)) {
         searchParams.set("searchType", "no");
+        setSearchParams(searchParams);
+      }
+    } else if (filter === "searchWord") {
+      if (value === null) {
+        // note. empty string is okay
+        searchParams.set("searchWord", "");
         setSearchParams(searchParams);
       }
     } else if (filter === "sortType") {

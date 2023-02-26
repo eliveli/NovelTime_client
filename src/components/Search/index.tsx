@@ -3,10 +3,8 @@ import { useEffect, useRef, useState } from "react";
 import { useCloseOutsideClick, useSearchFilter } from "utils";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import {
-  setSearchWord,
   setSearchTextCtgr,
   setSearchContentCtgr,
-  selectSearchType,
   SearchTypeFromFilter,
 } from "../../store/clientSlices/filterSlice";
 import { openModal } from "../../store/clientSlices/modalSlice";
@@ -41,10 +39,10 @@ export function SearchBar({
 }: {
   handleSearchFilter: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
-  const dispatch = useAppDispatch();
-  const searchWord = useAppSelector((state) => state.filter.searchWord);
+  const { currentFilter: currentSearchWord, setFilter: setSearchWord } =
+    useSearchFilter("searchWord");
 
-  const searchWordRef = useRef(searchWord); // 입력하는 검색어를 기억해두고 submit 할 때만 서버 요청
+  const searchWordRef = useRef(currentSearchWord); // 입력하는 검색어를 기억해두고 submit 할 때만 서버 요청
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     searchWordRef.current = e.target.value;
@@ -55,7 +53,7 @@ export function SearchBar({
   ) => {
     e.preventDefault();
 
-    dispatch(setSearchWord(searchWordRef.current));
+    setSearchWord(searchWordRef.current);
 
     // show search-filter-component
     handleSearchFilter(true);

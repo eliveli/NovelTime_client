@@ -27,6 +27,7 @@ export default function FreeTalkList() {
   const filtersToCheck = [
     { filter: "genre", value: genreFromUrl },
     { filter: "searchType", value: searchTypeFromUrl },
+    { filter: "searchWord", value: searchWordFromUrl },
     {
       filter: "sortType",
       value: sortTypeFromUrl,
@@ -58,7 +59,7 @@ export default function FreeTalkList() {
     listType: "T",
     novelGenre: currentGenre,
     searchType: !currentSearchWord ? "no" : currentSrchType,
-    searchWord: currentSearchWord || "no",
+    searchWord: currentSearchWord || "undefined",
     // ㄴwhen searchType is "no" searchWord is not considered
     // ㄴㄴbut searchWord can't be empty string because parameter in path can't be empty
     sortBy: currentSortType,

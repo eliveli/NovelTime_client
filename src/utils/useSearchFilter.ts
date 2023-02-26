@@ -5,6 +5,7 @@ import {
   selectGenre,
   selectSearchType,
   setPageNo,
+  setSearchWord,
 } from "store/clientSlices/filterSlice";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 
@@ -15,6 +16,7 @@ export default function useSearchFilter(
 
   const genreFromState = useAppSelector((state) => state.filter.genre);
   const searchTypeFromState = useAppSelector((state) => state.filter.searchType);
+  const searchWordFromState = useAppSelector((state) => state.filter.searchWord);
 
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -53,6 +55,26 @@ export default function useSearchFilter(
     const setFilter = (nextValue: any) => {
       if (searchTypeFromUrl) return setFilterForPagi(nextValue);
       return setFilterForInfntScroll(nextValue as SearchTypeFromFilter);
+    };
+
+    return { currentFilter, setFilter };
+  }
+
+  if (filterType === "searchWord") {
+    const searchWordFromUrl = searchParams.get("searchWord");
+
+    const currentFilter = searchWordFromUrl ?? searchWordFromState;
+    // search params in url (represented as query string) can be empty string or null
+    //   null means that search parameter doesn't exist in url
+    //   then get the filter from state for infinite scroll
+
+    const setFilterForInfntScroll = (nextValue: string) => {
+      dispatch(setSearchWord(nextValue));
+    };
+
+    const setFilter = (nextValue: any) => {
+      if (searchWordFromUrl) return setFilterForPagi(nextValue);
+      return setFilterForInfntScroll(nextValue as string);
     };
 
     return { currentFilter, setFilter };
