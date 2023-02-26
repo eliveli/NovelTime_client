@@ -1,6 +1,6 @@
 // import {} from "./Search.components";
 import { useEffect, useRef, useState } from "react";
-import { useCloseOutsideClick } from "utils";
+import { useCloseOutsideClick, useSearchFilter } from "utils";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import {
   setSearchWord,
@@ -163,7 +163,9 @@ export function ContentFilterTablet({ filterContentProps }: FilterContentProps) 
 }
 export function SearchFilter() {
   const dispatch = useAppDispatch();
-  const searchType = useAppSelector((state) => state.filter.searchType);
+
+  const { currentFilter: currentSearchType, setFilter: setSearchType } =
+    useSearchFilter("searchType");
 
   // // props from Filter component
   // const { writing, selectedCategory, handleCategory, content, selectContent } = searchProps;
@@ -188,7 +190,7 @@ export function SearchFilter() {
   // when selecting content, close all list if it is open
   useEffect(() => {
     handleCategoryList(false);
-  }, [content, searchType]);
+  }, [content, currentSearchType]);
 
   const filterContentProps = {
     isCategoryList,
@@ -231,9 +233,9 @@ export function SearchFilter() {
           <SearchFilterText
             key={_}
             contentName={_}
-            selectedContent={searchType}
+            selectedContent={currentSearchType}
             onClick={() => {
-              dispatch(selectSearchType(_));
+              setSearchType(_);
               dispatch(setSearchContentCtgr(_));
             }}
           >
