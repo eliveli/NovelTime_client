@@ -1,5 +1,6 @@
 import { GenresFromFilter, SearchTypeFromFilter } from "store/clientSlices/filterSlice";
 import { SortTypeFromFilter } from "store/clientSlices/modalSlice";
+import { NovelGenre } from "store/serverAPIs/types";
 
 export function matchPlatformName(platformSelected: string) {
   if (platformSelected === "카카페") return "kakape";
@@ -10,13 +11,23 @@ export function matchPlatformName(platformSelected: string) {
   throw Error("플랫폼 선택 오류");
 }
 
-export function matchGenreName(genre: GenresFromFilter) {
+// genreFromUrl for pagination, genreFromState for infinite scroll
+export function matchGenreName(genreFromUrl: string | null, genreFromState: string) {
+  const genre = genreFromUrl || genreFromState;
   if (genre === "All") return "all";
   if (genre === "그 외") return "extra";
-  return genre;
+  if (
+    ["패러디", "로판", "로맨스", "현판", "판타지", "무협", "라이트노벨", "BL", "미스터리"].includes(
+      genre,
+    )
+  ) {
+    return genre as NovelGenre;
+  }
+  throw Error("genre name error");
 }
 
-export function matchSrchTypeName(srchType: SearchTypeFromFilter) {
+export function matchSrchTypeName(searchTypeFromUrl: string | null, searchTypeFromState: string) {
+  const srchType = searchTypeFromUrl || searchTypeFromState;
   if (srchType === "Title") return "writingTitle";
   if (srchType === "Desc") return "writingDesc";
   if (srchType === "Writer") return "userName";
@@ -24,7 +35,8 @@ export function matchSrchTypeName(srchType: SearchTypeFromFilter) {
   throw Error("search Type error");
 }
 
-export function matchSortTypeName(sortType: SortTypeFromFilter) {
+export function matchSortTypeName(sortTypeFromUrl: string | null, sortTypeFromState: string) {
+  const sortType = sortTypeFromUrl || sortTypeFromState;
   if (sortType === "작성일New") {
     return "newDate";
   }

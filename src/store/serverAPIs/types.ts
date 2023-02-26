@@ -53,20 +53,21 @@ export type WritingList =
   | { talks?: TalkList; recommends?: RecommendList; lastPageNo: number }
   | undefined;
 
+export type NovelGenre =
+  | "all"
+  | "패러디"
+  | "로판"
+  | "로맨스"
+  | "현판"
+  | "판타지"
+  | "무협"
+  | "라이트노벨"
+  | "BL"
+  | "미스터리"
+  | "extra";
 export type ParamForGettingWritings = {
   listType: "T" | "R";
-  novelGenre:
-    | "all"
-    | "패러디"
-    | "로판"
-    | "로맨스"
-    | "현판"
-    | "판타지"
-    | "무협"
-    | "라이트노벨"
-    | "BL"
-    | "미스터리"
-    | "extra";
+  novelGenre: NovelGenre;
   searchType: "writingTitle" | "writingDesc" | "userName" | "novelTitle" | "no";
   searchWord: string; // note. it can't be empty string
   sortBy: "newDate" | "oldDate" | "manyComments" | "fewComments" | "manyLikes" | "fewLikes";

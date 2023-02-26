@@ -24,31 +24,39 @@ export default function FreeTalkList() {
   const searchWordFromUrl = searchParams.get("searchWord");
   const sortTypeFromUrl = searchParams.get("sortType");
   const pageNoFromUrl = searchParams.get("pageNo");
-
   console.log("genreFromUrl:", genreFromUrl); // it can be null
 
   // for infinite scroll in mobile
-  const { currentGenre, currentPageNo, currentSortType, currentSrchType, searchWord } =
-    useSearchFilters();
+  const genreFromState = useAppSelector((state) => state.filter.genre);
+  const searchTypeFromState = useAppSelector((state) => state.filter.searchType);
+  const searchWordFromState = useAppSelector((state) => state.filter.searchWord);
+  const sortTypeFromState = useAppSelector((state) => state.modal.sortType);
+  // *** ㄴsort type 작업 필요 for pc
+  const pageNoFromState = useAppSelector((state) => state.filter.pageNo);
 
-  // *** sort type, pc에서 다루기
+  // select filters for pagination or infinite scroll
+  const currentGenre = matchGenreName(genreFromUrl, genreFromState);
+  const currentSrchType = matchSrchTypeName(searchTypeFromUrl, searchTypeFromState);
+  const currentSearchWord = searchWordFromUrl || searchWordFromState;
+  const currentSortType = matchSortTypeName(sortTypeFromUrl, sortTypeFromState);
+  const currentPageNo = Number(pageNoFromUrl) || pageNoFromState;
 
   const { isLoading, isFetching, isError, data } = useGetWritingsFilteredQuery({
     listType: "T",
-    novelGenre: genreFromUrl || currentGenre,
-    searchType: searchTypeFromUrl || !searchWord ? "no" : currentSrchType,
-    searchWord: searchWordFromUrl || searchWord || "no",
+    novelGenre: currentGenre,
+    searchType: !currentSearchWord ? "no" : currentSrchType,
+    searchWord: currentSearchWord || "no",
     // ㄴwhen searchType is "no" searchWord is not considered
     // ㄴㄴbut searchWord can't be empty string because parameter in path can't be empty
-    sortBy: sortTypeFromUrl || currentSortType,
-    pageNo: pageNoFromUrl || currentPageNo,
+    sortBy: currentSortType,
+    pageNo: currentPageNo,
   });
 
   // *** 아래 함수에서 prev 값이 잘 기억되는 지 확인 필요
   const allPageWritings = useInfiniteScroll({
     currentGenre,
     currentSrchType,
-    searchWord,
+    currentSearchWord,
     currentSortType,
     currentPageNo,
     isFetching,
