@@ -16,8 +16,10 @@ import {
 import checkIsNearBottom from "./checkIsNearBottom";
 import useSearchFilters from "./useSearchFilters";
 import useInfiniteScroll from "./useInfiniteScroll";
+import useResetFiltersFromUrl from "./useResetFiltersFromUrl";
 
 export {
+  useResetFiltersFromUrl,
   useInfiniteScroll,
   checkIsNearBottom,
   useSearchFilters,

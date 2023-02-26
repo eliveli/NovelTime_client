@@ -11,20 +11,33 @@ import {
   matchSortTypeName,
   matchSrchTypeName,
   useInfiniteScroll,
-  useSearchFilters,
+  useResetFiltersFromUrl,
 } from "utils";
-import { setPageNo } from "store/clientSlices/filterSlice";
 import FreeTalk from "./FreeTalkList.components";
 
 export default function FreeTalkList() {
-  // for pagination in tablet or pc ~
-  const [searchParams, setSearchParams] = useSearchParams();
+  // for pagination in tablet or pc
+  const [searchParams] = useSearchParams();
   const genreFromUrl = searchParams.get("genre");
   const searchTypeFromUrl = searchParams.get("searchType");
   const searchWordFromUrl = searchParams.get("searchWord");
   const sortTypeFromUrl = searchParams.get("sortType");
   const pageNoFromUrl = searchParams.get("pageNo");
-  console.log("genreFromUrl:", genreFromUrl); // it can be null
+
+  const filtersToCheck = [
+    { filter: "genre", value: genreFromUrl },
+    { filter: "searchType", value: searchTypeFromUrl },
+    {
+      filter: "sortType",
+      value: sortTypeFromUrl,
+    },
+    {
+      filter: "pageNo",
+      value: pageNoFromUrl,
+    },
+  ];
+
+  useResetFiltersFromUrl(filtersToCheck);
 
   // for infinite scroll in mobile
   const genreFromState = useAppSelector((state) => state.filter.genre);
@@ -53,15 +66,15 @@ export default function FreeTalkList() {
   });
 
   // *** 아래 함수에서 prev 값이 잘 기억되는 지 확인 필요
-  const allPageWritings = useInfiniteScroll({
-    currentGenre,
-    currentSrchType,
-    currentSearchWord,
-    currentSortType,
-    currentPageNo,
-    isFetching,
-    data,
-  });
+  // const allPageWritings = useInfiniteScroll({
+  //   currentGenre,
+  //   currentSrchType,
+  //   currentSearchWord,
+  //   currentSortType,
+  //   currentPageNo,
+  //   isFetching,
+  //   data,
+  // });
 
   // 서버에서 데이터 받아올 때 구성
   const dataFromServer = [
@@ -85,15 +98,14 @@ export default function FreeTalkList() {
   return (
     <MainBG>
       <Filter />
-      {allPageWritings?.map((talk) => (
+      {/* {allPageWritings?.map((talk) => (
+        <FreeTalk key={talk.talkId} talk={talk} />
+      ))} */}
+
+      {/* for tablet and pc */}
+      {data?.talks?.map((talk) => (
         <FreeTalk key={talk.talkId} talk={talk} />
       ))}
-
-      {/* for tablet and pc
-      {data?.talks?.map((talk) => (
-         <FreeTalk key={talk.talkId} talk={talk} />
-       ))}
-      */}
     </MainBG>
   );
 }

@@ -16,6 +16,7 @@ export function matchGenreName(genreFromUrl: string | null, genreFromState: stri
   const genre = genreFromUrl || genreFromState;
   if (genre === "All") return "all";
   if (genre === "그 외") return "extra";
+
   if (
     ["패러디", "로판", "로맨스", "현판", "판타지", "무협", "라이트노벨", "BL", "미스터리"].includes(
       genre,
@@ -23,16 +24,20 @@ export function matchGenreName(genreFromUrl: string | null, genreFromState: stri
   ) {
     return genre as NovelGenre;
   }
-  throw Error("genre name error");
+
+  return genre as NovelGenre;
+  // ㄴ장르 이름이 맞지 않으면 "All"로 재설정되어 다시 요청 by useResetFiltersFromUrl
 }
 
 export function matchSrchTypeName(searchTypeFromUrl: string | null, searchTypeFromState: string) {
   const srchType = searchTypeFromUrl || searchTypeFromState;
+  if (srchType === "no") return "no";
   if (srchType === "Title") return "writingTitle";
   if (srchType === "Desc") return "writingDesc";
   if (srchType === "Writer") return "userName";
   if (srchType === "Novel") return "novelTitle";
-  throw Error("search Type error");
+  return srchType as "no" | "writingTitle" | "writingDesc" | "userName" | "novelTitle";
+  // ㄴ장르 이름이 맞지 않으면 재설정되어 다시 요청 by useResetFiltersFromUrl
 }
 
 export function matchSortTypeName(sortTypeFromUrl: string | null, sortTypeFromState: string) {
@@ -55,5 +60,12 @@ export function matchSortTypeName(sortTypeFromUrl: string | null, sortTypeFromSt
   if (sortType === "좋아요Down") {
     return "fewLikes";
   }
-  throw Error("sort Type error");
+  return sortType as
+    | "newDate"
+    | "oldDate"
+    | "manyComments"
+    | "fewComments"
+    | "manyLikes"
+    | "fewLikes";
+  // ㄴ장르 이름이 맞지 않으면 재설정되어 다시 요청 by useResetFiltersFromUrl
 }

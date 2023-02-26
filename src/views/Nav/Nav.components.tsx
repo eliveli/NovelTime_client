@@ -87,7 +87,7 @@ export function NavPC({ pathname }: Props) {
         <NavContentPC>
           {/* [category name, route path] */}
           {[
-            ["FreeTalk", "/talk-list"],
+            ["FreeTalk", "/talk-list?genre=All&searchType=no&sortType=작성일New&pageNo=1"],
             ["Recommend", "/recommend-list"],
             ["Novel", "/novel-list"],
             ["Message", "/message-list"],

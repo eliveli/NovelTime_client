@@ -1,5 +1,3 @@
-/* eslint-disable */
-// 지금은 뷰 구성에 집중할 것임. 린트 무시하는 주석은 나중에 해제하기
 import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route, Outlet } from "react-router-dom";
 
@@ -193,21 +191,18 @@ function App() {
 
           <Route path="/message-room/:roomId" element={<MessageRoom />} />
 
-          {/* 새로고침 등 상황에 로그인 유지 위해 클라이언트 스토어 이용*/}
+          {/* 새로고침 등 상황에 로그인 유지 위해 클라이언트 스토어 이용 */}
 
           <Route path="/user-page/:userName" element={<UserParent />}>
             <Route index element={<UserHome />} />
-            <Route
-              path="/user-page/:userName/my-writing"
-              element={<UserWriting isMyWriting={true} />}
-            />
+            <Route path="/user-page/:userName/my-writing" element={<UserWriting isMyWriting />} />
             <Route
               path="/user-page/:userName/others-writing"
               element={<UserWriting isMyWriting={false} />}
             />
             <Route
               path="/user-page/:userName/my-list/:listId"
-              element={<UserNovelList isMyList={true} />}
+              element={<UserNovelList isMyList />}
             />
             <Route
               path="/user-page/:userName/others-list/:listId"
