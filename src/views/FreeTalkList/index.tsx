@@ -51,14 +51,14 @@ export default function FreeTalkList() {
   // select filters for pagination or infinite scroll
   const currentGenre = matchGenreName(genreFromUrl, genreFromState);
   const currentSrchType = matchSrchTypeName(searchTypeFromUrl, searchTypeFromState);
-  const currentSearchWord = searchWordFromUrl || searchWordFromState;
+  const currentSearchWord = searchWordFromUrl ?? searchWordFromState;
   const currentSortType = matchSortTypeName(sortTypeFromUrl, sortTypeFromState);
   const currentPageNo = Number(pageNoFromUrl) || pageNoFromState;
 
   const { isLoading, isFetching, isError, data } = useGetWritingsFilteredQuery({
     listType: "T",
     novelGenre: currentGenre,
-    searchType: !currentSearchWord ? "no" : currentSrchType,
+    searchType: currentSearchWord === "" ? "no" : currentSrchType,
     searchWord: currentSearchWord || "undefined",
     // ㄴwhen searchType is "no" searchWord is not considered
     // ㄴㄴbut searchWord can't be empty string because parameter in path can't be empty

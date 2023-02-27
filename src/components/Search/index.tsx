@@ -1,6 +1,7 @@
 // import {} from "./Search.components";
 import { useEffect, useRef, useState } from "react";
 import { useCloseOutsideClick, useSearchFilter } from "utils";
+import { useSearchParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import {
   setSearchTextCtgr,
@@ -36,24 +37,41 @@ import {
 // }
 export function SearchBar({
   handleSearchFilter,
+  typeSearchWord,
+  searchWordRef,
 }: {
   handleSearchFilter: React.Dispatch<React.SetStateAction<boolean>>;
+  typeSearchWord: (newWord: string) => void;
+  // ㄴ don't : searchWordRef.current = someValue
+  //     to avoid warning : Assignment to property of function parameter 'searchWordRef'
+  searchWordRef: React.MutableRefObject<string>;
 }) {
-  const { currentFilter: currentSearchWord, setFilter: setSearchWord } =
-    useSearchFilter("searchWord");
+  const { setFilter: setSearchWord } = useSearchFilter("searchWord");
 
-  const searchWordRef = useRef(currentSearchWord); // 입력하는 검색어를 기억해두고 submit 할 때만 서버 요청
+  const { currentFilter: currentSearchType } = useSearchFilter("searchType");
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    searchWordRef.current = e.target.value;
+    typeSearchWord(e.target.value);
   };
 
   const handleSubmit = (
     e: React.MouseEvent<HTMLDivElement, MouseEvent> | React.KeyboardEvent<HTMLInputElement>,
   ) => {
     e.preventDefault();
-
-    setSearchWord(searchWordRef.current);
+    if (currentSearchType === "no" && searchWordRef.current !== "") {
+      // 직전 검색 타입이 없으나 현재 주어진 검색어가 있을 때
+      searchParams.set("searchType", "Title");
+      searchParams.set("searchWord", searchWordRef.current);
+      setSearchParams(searchParams);
+    } else if (searchWordRef.current === "") {
+      // 주어진 검색어가 없을 때
+      searchParams.set("searchType", "no");
+      searchParams.set("searchWord", searchWordRef.current);
+      setSearchParams(searchParams);
+    } else {
+      setSearchWord(searchWordRef.current);
+    }
 
     // show search-filter-component
     handleSearchFilter(true);
@@ -159,17 +177,22 @@ export function ContentFilterTablet({ filterContentProps }: FilterContentProps) 
     </SearchCategoryAll>
   );
 }
-export function SearchFilter() {
+export function SearchFilter({ searchWordRef }: { searchWordRef: React.MutableRefObject<string> }) {
   const dispatch = useAppDispatch();
 
   const { currentFilter: currentSearchType, setFilter: setSearchType } =
     useSearchFilter("searchType");
+
+  const { setFilter: setSearchWord } = useSearchFilter("searchWord");
+
+  const [searchParams, setSearchParams] = useSearchParams();
 
   // // props from Filter component
   // const { writing, selectedCategory, handleCategory, content, selectContent } = searchProps;
 
   // at search page , content filter is necessary
   const { pathname } = window.location;
+
   const isSearchPage = pathname.includes("search");
   // at the novel-search
   const isNovelSearch = pathname.includes("search/novel");
@@ -233,7 +256,11 @@ export function SearchFilter() {
             contentName={_}
             selectedContent={currentSearchType}
             onClick={() => {
-              setSearchType(_);
+              searchParams.set("searchType", _);
+              searchParams.set("searchWord", searchWordRef.current);
+              // ㄴ새로 타이핑한 검색어 함께 변경 - 그렇지 않으면 이전 검색어를 필터로 사용함
+              setSearchParams(searchParams);
+
               dispatch(setSearchContentCtgr(_));
             }}
           >
@@ -292,10 +319,23 @@ export function SearchFilter() {
 export default function Search() {
   const [isSearchFilter, handleSearchFilter] = useState(false);
 
+  const { currentFilter: currentSearchWord } = useSearchFilter("searchWord");
+
+  const searchWordRef = useRef(currentSearchWord);
+  // ㄴ입력하는 검색어를 기억해두고 submit 할 때만 서버 요청
+
+  const typeSearchWord = (newWord: string) => {
+    searchWordRef.current = newWord;
+  };
+
   return (
     <SearchContainer>
-      <SearchBar handleSearchFilter={handleSearchFilter} />
-      {isSearchFilter && <SearchFilter />}
+      <SearchBar
+        searchWordRef={searchWordRef}
+        typeSearchWord={typeSearchWord}
+        handleSearchFilter={handleSearchFilter}
+      />
+      {isSearchFilter && <SearchFilter searchWordRef={searchWordRef} />}
     </SearchContainer>
   );
 }

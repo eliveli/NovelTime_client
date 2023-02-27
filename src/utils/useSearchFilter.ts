@@ -73,7 +73,7 @@ export default function useSearchFilter(
     };
 
     const setFilter = (nextValue: any) => {
-      if (searchWordFromUrl) return setFilterForPagi(nextValue);
+      if (searchWordFromUrl !== null) return setFilterForPagi(nextValue);
       return setFilterForInfntScroll(nextValue as string);
     };
 
