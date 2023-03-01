@@ -12,9 +12,9 @@ import { useAppDispatch, useAppSelector } from "store/hooks";
 type FilterType = "genre" | "searchType" | "searchWord" | "sortType" | "pageNo";
 
 // ** 아래 코드 제작 중 to treat multiple search filter at once for both pagination and infinite scroll
-export function useMultipleSearchFilter(
-  filter1: FilterType,
-  filter2: FilterType,
+export function useMultipleSearchFilters(
+  filter1: FilterType, // also I can get one filter not only multiple them
+  filter2?: FilterType,
   filter3?: FilterType,
   filter4?: FilterType,
   filter5?: FilterType,
@@ -30,7 +30,7 @@ export function useMultipleSearchFilter(
   const filtersWithUndefined = [filter1, filter2, filter3, filter4, filter5];
   const filters = filtersWithUndefined.filter((_) => _ !== undefined) as FilterType[];
 
-  const currentFilters = { genre: "", searchType: "", searchWord: "" };
+  const currentFilters = { currentGenre: "", currentSearchType: "", currentSearchWord: "" };
 
   const getFilterFromState = (filterForState: FilterType) => {
     if (filterForState === "genre") return genreFromState;
@@ -49,13 +49,13 @@ export function useMultipleSearchFilter(
     }
 
     if (filter === "genre") {
-      currentFilters.genre = currentFilter;
+      currentFilters.currentGenre = currentFilter;
       //
     } else if (filter === "searchType") {
-      currentFilters.searchType = currentFilter;
+      currentFilters.currentSearchType = currentFilter;
       //
     } else if (filter === "searchWord") {
-      currentFilters.searchWord = currentFilter;
+      currentFilters.currentSearchWord = currentFilter;
     }
   });
 
@@ -114,7 +114,7 @@ export function useMultipleSearchFilter(
   return { currentFilters, setFilters };
 }
 
-export default function useSearchFilter(filter: FilterType) {
+export function useSearchFilter(filter: FilterType) {
   const dispatch = useAppDispatch();
   const [searchParams, setSearchParams] = useSearchParams();
 

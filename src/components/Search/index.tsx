@@ -1,6 +1,6 @@
 // import {} from "./Search.components";
 import { useEffect, useRef, useState } from "react";
-import { useCloseOutsideClick, useSearchFilter } from "utils";
+import { useCloseOutsideClick, useMultipleSearchFilters, useSearchFilter } from "utils";
 import { useSearchParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import {
@@ -180,12 +180,10 @@ export function ContentFilterTablet({ filterContentProps }: FilterContentProps) 
 export function SearchFilter({ searchWordRef }: { searchWordRef: React.MutableRefObject<string> }) {
   const dispatch = useAppDispatch();
 
-  const { currentFilter: currentSearchType, setFilter: setSearchType } =
-    useSearchFilter("searchType");
-
-  const { setFilter: setSearchWord } = useSearchFilter("searchWord");
-
-  const [searchParams, setSearchParams] = useSearchParams();
+  const {
+    currentFilters: { currentSearchType },
+    setFilters,
+  } = useMultipleSearchFilters("searchType");
 
   // // props from Filter component
   // const { writing, selectedCategory, handleCategory, content, selectContent } = searchProps;
@@ -256,10 +254,8 @@ export function SearchFilter({ searchWordRef }: { searchWordRef: React.MutableRe
             contentName={_}
             selectedContent={currentSearchType}
             onClick={() => {
-              searchParams.set("searchType", _);
-              searchParams.set("searchWord", searchWordRef.current);
+              setFilters({ searchType: _, searchWord: searchWordRef.current });
               // ㄴ새로 타이핑한 검색어 함께 변경 - 그렇지 않으면 이전 검색어를 필터로 사용함
-              setSearchParams(searchParams);
 
               dispatch(setSearchContentCtgr(_));
             }}
@@ -316,6 +312,7 @@ export function SearchFilter({ searchWordRef }: { searchWordRef: React.MutableRe
     </SearchFilterContainer>
   );
 }
+
 export default function Search() {
   const [isSearchFilter, handleSearchFilter] = useState(false);
 
