@@ -1,14 +1,16 @@
-import { setPageNo } from "store/clientSlices/filterSlice";
-import { closeModal, SortTypeFromFilter, sortWriting } from "store/clientSlices/modalSlice";
-import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { closeModal, SortTypeFromFilter } from "store/clientSlices/modalSlice";
+import { useMultipleSearchFilters } from "utils";
+import { useAppDispatch } from "../../store/hooks";
 
 import { MobileBG, SortBox, SortText, ClosingSpace } from "./Modal.styles";
 
 export default function SortWriting() {
   const dispatch = useAppDispatch();
 
-  // get selected category text to mark in the list
-  const sortType = useAppSelector((state) => state.modal.sortType);
+  const {
+    currentFilters: { currentSortType },
+    setFilters,
+  } = useMultipleSearchFilters("sortType");
 
   const sortTypes: SortTypeFromFilter[] = [
     "작성일New",
@@ -25,15 +27,15 @@ export default function SortWriting() {
         {sortTypes.map((_) => (
           <SortText
             key={_}
-            selectedCategory={sortType}
+            selectedCategory={currentSortType}
             category={_}
             onClick={() => {
-              if (sortType !== _) {
+              if (currentSortType !== _) {
                 // 직전과 필터가 다를 때 페이지넘버 1
-                dispatch(setPageNo(1));
+                setFilters({ sortType: _, pageNo: 1 });
+              } else {
+                setFilters({ sortType: _ });
               }
-
-              dispatch(sortWriting(_));
 
               dispatch(closeModal());
             }}

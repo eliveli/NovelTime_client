@@ -7,17 +7,18 @@ import {
   setPageNo,
   setSearchWord,
 } from "store/clientSlices/filterSlice";
+import { SortTypeFromFilter, sortWriting } from "store/clientSlices/modalSlice";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 
 type FilterType = "genre" | "searchType" | "searchWord" | "sortType" | "pageNo";
 
 // ** 아래 코드 제작 중 to treat multiple search filter at once for both pagination and infinite scroll
 export function useMultipleSearchFilters(
-  filter1: FilterType, // also I can get one filter not only multiple them
-  filter2?: FilterType,
-  filter3?: FilterType,
-  filter4?: FilterType,
-  filter5?: FilterType,
+  currentFilter1: FilterType, // also I can get one filter not only multiple them
+  currentFilter2?: FilterType,
+  currentFilter3?: FilterType,
+  currentFilter4?: FilterType,
+  currentFilter5?: FilterType,
 ) {
   const dispatch = useAppDispatch();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -25,17 +26,33 @@ export function useMultipleSearchFilters(
   const genreFromState = useAppSelector((state) => state.filter.genre);
   const searchTypeFromState = useAppSelector((state) => state.filter.searchType);
   const searchWordFromState = useAppSelector((state) => state.filter.searchWord);
+  const sortTypeFromState = useAppSelector((state) => state.modal.sortType);
+  const pageNoFromState = String(useAppSelector((state) => state.filter.pageNo));
 
   // get current filters //
-  const filtersWithUndefined = [filter1, filter2, filter3, filter4, filter5];
+  const filtersWithUndefined = [
+    currentFilter1,
+    currentFilter2,
+    currentFilter3,
+    currentFilter4,
+    currentFilter5,
+  ];
   const filters = filtersWithUndefined.filter((_) => _ !== undefined) as FilterType[];
 
-  const currentFilters = { currentGenre: "", currentSearchType: "", currentSearchWord: "" };
+  const currentFilters = {
+    currentGenre: "",
+    currentSearchType: "",
+    currentSearchWord: "",
+    currentSortType: "",
+    currentPageNo: 0,
+  };
 
   const getFilterFromState = (filterForState: FilterType) => {
     if (filterForState === "genre") return genreFromState;
     if (filterForState === "searchType") return searchTypeFromState;
     if (filterForState === "searchWord") return searchWordFromState;
+    if (filterForState === "sortType") return sortTypeFromState;
+    if (filterForState === "pageNo") return pageNoFromState;
 
     throw Error("filterForState was not matched in getFilterFromState");
   };
@@ -56,13 +73,19 @@ export function useMultipleSearchFilters(
       //
     } else if (filter === "searchWord") {
       currentFilters.currentSearchWord = currentFilter;
+      //
+    } else if (filter === "sortType") {
+      currentFilters.currentSortType = currentFilter;
+      //
+    } else if (filter === "pageNo") {
+      currentFilters.currentPageNo = Number(currentFilter);
     }
   });
 
   //
   // set next filters //
   const setFilterForPagi = (filter: string, nextValue: any) => {
-    searchParams.set(filter, nextValue as string);
+    searchParams.set(filter, String(nextValue));
   };
 
   const setFilterForInfntScroll = (filter: string, nextValue: any) => {
@@ -74,15 +97,21 @@ export function useMultipleSearchFilters(
       //
     } else if (filter === "searchWord") {
       dispatch(setSearchWord(nextValue as string));
+      //
+    } else if (filter === "sortType") {
+      dispatch(sortWriting(nextValue as SortTypeFromFilter));
+      //
+    } else if (filter === "pageNo") {
+      dispatch(setPageNo(nextValue as number));
     }
   };
 
   const setFilters = (filtersToSet: {
-    genre?: any;
-    searchType?: any;
-    searchWord?: any;
-    sortType?: any;
-    pageNo?: any;
+    genre?: string;
+    searchType?: string;
+    searchWord?: string;
+    sortType?: string;
+    pageNo?: number;
   }) => {
     const filterEntries = Object.entries(filtersToSet);
 
@@ -121,12 +150,16 @@ export function useSearchFilter(filter: FilterType) {
   const genreFromState = useAppSelector((state) => state.filter.genre);
   const searchTypeFromState = useAppSelector((state) => state.filter.searchType);
   const searchWordFromState = useAppSelector((state) => state.filter.searchWord);
+  const sortTypeFromState = useAppSelector((state) => state.modal.sortType);
+  const pageNoFromState = String(useAppSelector((state) => state.filter.pageNo));
 
   // get current filter //
   const getFilterFromState = (filterForState: FilterType) => {
     if (filterForState === "genre") return genreFromState;
     if (filterForState === "searchType") return searchTypeFromState;
     if (filterForState === "searchWord") return searchWordFromState;
+    if (filterForState === "sortType") return sortTypeFromState;
+    if (filterForState === "pageNo") return pageNoFromState;
 
     throw Error("filterForState was not matched in getFilterFromState");
   };
@@ -154,6 +187,12 @@ export function useSearchFilter(filter: FilterType) {
       //
     } else if (filterForInfntScroll === "searchWord") {
       dispatch(setSearchWord(nextValue as string));
+      //
+    } else if (filter === "sortType") {
+      dispatch(sortWriting(nextValue as SortTypeFromFilter));
+      //
+    } else if (filter === "pageNo") {
+      dispatch(setPageNo(nextValue as number));
     }
   };
 

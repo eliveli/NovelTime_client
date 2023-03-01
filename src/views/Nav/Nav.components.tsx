@@ -108,8 +108,10 @@ export function NavPC({ pathname }: Props) {
                 key={_[0]}
                 onClick={() => {
                   // 리스트 필터 초기화
-                  // *** 페이지네이션에서 불필요
-                  // 하지만 무한스크롤 <-> 페이지네이션 전환 버튼 고려 중
+                  // 페이지네이션에서 불필요
+                  // * but 무한스크롤 <-> 페이지네이션 전환 버튼 고려 중
+                  // *  이 경우 전체 코드에서 검색 필터(from client state) 설정 부분을
+                  // *  useMultipleSearchFilters or useSearchFilter 사용하도록 바꿀 필요 있음
                   if ([0, 1].includes(idx)) {
                     dispatch(selectGenre("All"));
                     dispatch(selectSearchType("Title"));

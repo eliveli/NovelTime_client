@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useCloseOutsideClick, useSearchFilter } from "utils";
+import { useCloseOutsideClick, useMultipleSearchFilters, useSearchFilter } from "utils";
 import { GenresFromFilter, setPageNo } from "store/clientSlices/filterSlice";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { openModal, SortTypeFromFilter, sortWriting } from "../../store/clientSlices/modalSlice";
@@ -72,7 +72,7 @@ export function SearchBtn({
 }
 export function SortMobile({ borderOpacity }: { borderOpacity?: number }) {
   const dispatch = useAppDispatch();
-  const sortType = useAppSelector((state) => state.modal.sortType);
+  const { currentFilter: currentSortType } = useSearchFilter("sortType");
   // when clicking, in Modal component,
   // require server request in this component!
   console.log("in sort only");
@@ -86,7 +86,7 @@ export function SortMobile({ borderOpacity }: { borderOpacity?: number }) {
           console.log("clicked in sort only");
         }}
       >
-        <SortCategorySelected>{sortType}</SortCategorySelected>
+        <SortCategorySelected>{currentSortType}</SortCategorySelected>
         <DownIconBox>
           <DownIcon />
         </DownIconBox>
@@ -101,9 +101,11 @@ export function SortTablet({
   isSearch: boolean;
   borderOpacity?: number;
 }) {
-  const dispatch = useAppDispatch();
-
-  const sortType = useAppSelector((state) => state.modal.sortType);
+  const {
+    currentFilters: { currentSortType },
+    setFilters,
+  } = useMultipleSearchFilters("sortType");
+  // * I am considering a button to exchange modes between pagination and infinite scroll
 
   const sortTypes: SortTypeFromFilter[] = [
     "작성일New",
@@ -142,7 +144,7 @@ export function SortTablet({
             handleCategoryList(true);
           }}
         >
-          <SortCategorySelected>{sortType}</SortCategorySelected>
+          <SortCategorySelected>{currentSortType}</SortCategorySelected>
           {/* down arrow icon */}
           <DownIconBox>
             <DownIcon />
@@ -155,15 +157,15 @@ export function SortTablet({
           {sortTypes.map((_) => (
             <SortCategoryLi
               key={_}
-              selectedCategory={sortType}
+              selectedCategory={currentSortType}
               category={_}
               onClick={() => {
-                if (sortType !== _) {
+                if (currentSortType !== _) {
                   // 직전과 필터가 다를 때 페이지넘버 1
-                  dispatch(setPageNo(1));
+                  setFilters({ sortType: _, pageNo: 1 });
+                } else {
+                  setFilters({ sortType: _ });
                 }
-
-                dispatch(sortWriting(_));
 
                 handleCategoryList(false);
               }}
