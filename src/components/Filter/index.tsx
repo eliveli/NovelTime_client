@@ -2,8 +2,8 @@ import { useState } from "react";
 import Search from "../Search";
 import { SearchBtn, Genres, SortMobile, SortTablet } from "./Filter.components";
 import {
-  CantainerOnlySort,
-  CantainerWithSrchBtn,
+  ContainerOnlySort,
+  ContainerWithSrchBtn,
   SearchAlarm,
   ContainerWithSrchAlarm,
   FilterBG,
@@ -35,11 +35,11 @@ export default function Filter() {
       {/* sort with search-button */}
       <ContainerWithSrchAlarm isSearch={isSearch}>
         {isSearch && <SearchAlarm>{`Search for ${writing} about Novel!`}</SearchAlarm>}
-        <CantainerWithSrchBtn>
+        <ContainerWithSrchBtn>
           <SortMobile />
           <SortTablet isSearch={isSearch} />
           <SearchBtn isSearch={isSearch} handleSearch={handleSearch} />
-        </CantainerWithSrchBtn>
+        </ContainerWithSrchBtn>
       </ContainerWithSrchAlarm>
 
       {/* search : after clicking search icon */}
@@ -58,9 +58,9 @@ export function SortOnly({
   borderOpacity?: number;
 }) {
   return (
-    <CantainerOnlySort marginBottom={marginBottom} height={height}>
+    <ContainerOnlySort marginBottom={marginBottom} height={height}>
       <SortMobile borderOpacity={borderOpacity} />
       <SortTablet isSearch={false} borderOpacity={borderOpacity} />
-    </CantainerOnlySort>
+    </ContainerOnlySort>
   );
 }

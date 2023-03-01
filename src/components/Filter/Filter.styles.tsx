@@ -149,11 +149,11 @@ export const ContainerWithSrchAlarm = styled.div<{ isSearch: boolean }>`
 export const SearchAlarm = styled.p`
   margin: auto;
 `;
-export const CantainerWithSrchBtn = styled.div`
+export const ContainerWithSrchBtn = styled.div`
   display: flex;
   height: 40px;
 `;
-export const CantainerOnlySort = styled.div<{
+export const ContainerOnlySort = styled.div<{
   marginBottom: number | undefined;
   height: number | undefined;
 }>`
