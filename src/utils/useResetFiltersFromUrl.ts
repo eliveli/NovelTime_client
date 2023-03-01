@@ -19,6 +19,7 @@ const searchTypes = ["no", "Title", "Desc", "Writer", "Novel"];
 const sortTypes = ["작성일New", "작성일Old", "댓글Up", "댓글Down", "좋아요Up", "좋아요Down"];
 
 // 필터 from url 이 설정된 목록에 없을 때 재설정
+// *** 추후 컴포넌트마다 필요한 필터가 다르다면 함수 보완 필요 ***
 export default function useResetFiltersFromUrl(
   filters: { filter: string; value: string | null }[],
 ) {

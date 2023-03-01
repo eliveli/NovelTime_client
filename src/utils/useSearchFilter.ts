@@ -114,76 +114,58 @@ export function useMultipleSearchFilter(
   return { currentFilters, setFilters };
 }
 
-export default function useSearchFilter(
-  filterType: "genre" | "searchType" | "searchWord" | "sortType" | "pageNo",
-) {
+export default function useSearchFilter(filter: FilterType) {
   const dispatch = useAppDispatch();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const genreFromState = useAppSelector((state) => state.filter.genre);
   const searchTypeFromState = useAppSelector((state) => state.filter.searchType);
   const searchWordFromState = useAppSelector((state) => state.filter.searchWord);
 
-  const [searchParams, setSearchParams] = useSearchParams();
+  // get current filter //
+  const getFilterFromState = (filterForState: FilterType) => {
+    if (filterForState === "genre") return genreFromState;
+    if (filterForState === "searchType") return searchTypeFromState;
+    if (filterForState === "searchWord") return searchWordFromState;
 
+    throw Error("filterForState was not matched in getFilterFromState");
+  };
+
+  const filterFromUrl = searchParams.get(filter);
+  let currentFilter = filterFromUrl;
+
+  if (currentFilter === null) {
+    currentFilter = getFilterFromState(filter);
+  }
+
+  //
+  // set next filter //
   const setFilterForPagi = (nextValue: any) => {
-    searchParams.set(filterType, nextValue as string);
+    searchParams.set(filter, nextValue as string);
     setSearchParams(searchParams);
   };
 
-  if (filterType === "genre") {
-    const genreFromUrl = searchParams.get("genre");
+  const setFilterForInfntScroll = (filterForInfntScroll: FilterType, nextValue: any) => {
+    if (filterForInfntScroll === "genre") {
+      dispatch(selectGenre(nextValue as GenresFromFilter));
+      //
+    } else if (filterForInfntScroll === "searchType") {
+      dispatch(selectSearchType(nextValue as SearchTypeFromFilter));
+      //
+    } else if (filterForInfntScroll === "searchWord") {
+      dispatch(setSearchWord(nextValue as string));
+    }
+  };
 
-    const currentFilter = genreFromUrl ?? genreFromState;
+  const setFilter = (nextValue: any) => {
+    // type of nextValue must be any to deal with all them in if-conditions
+    if (filterFromUrl !== null) return setFilterForPagi(nextValue);
+    return setFilterForInfntScroll(filter, nextValue);
+  };
 
-    const setFilterForInfntScroll = (nextValue: GenresFromFilter) => {
-      dispatch(selectGenre(nextValue));
-    };
+  // ㄴ search params in url (represented as query string) can be empty string or null
+  //    null means that search parameter doesn't exist in url
+  //    then get the filter from state for infinite scroll
 
-    // this parameter type of setFilter must be any to deal with all them in if-conditions
-    const setFilter = (nextValue: any) => {
-      if (genreFromUrl) return setFilterForPagi(nextValue);
-      return setFilterForInfntScroll(nextValue as GenresFromFilter);
-    };
-
-    return { currentFilter, setFilter };
-  }
-
-  if (filterType === "searchType") {
-    const searchTypeFromUrl = searchParams.get("searchType");
-
-    const currentFilter = searchTypeFromUrl ?? searchTypeFromState;
-
-    const setFilterForInfntScroll = (nextValue: SearchTypeFromFilter) => {
-      dispatch(selectSearchType(nextValue));
-    };
-
-    const setFilter = (nextValue: any) => {
-      if (searchTypeFromUrl) return setFilterForPagi(nextValue);
-      return setFilterForInfntScroll(nextValue as SearchTypeFromFilter);
-    };
-
-    return { currentFilter, setFilter };
-  }
-
-  if (filterType === "searchWord") {
-    const searchWordFromUrl = searchParams.get("searchWord");
-
-    const currentFilter = searchWordFromUrl ?? searchWordFromState;
-    // search params in url (represented as query string) can be empty string or null
-    //   null means that search parameter doesn't exist in url
-    //   then get the filter from state for infinite scroll
-
-    const setFilterForInfntScroll = (nextValue: string) => {
-      dispatch(setSearchWord(nextValue));
-    };
-
-    const setFilter = (nextValue: any) => {
-      if (searchWordFromUrl !== null) return setFilterForPagi(nextValue);
-      return setFilterForInfntScroll(nextValue as string);
-    };
-
-    return { currentFilter, setFilter };
-  }
-
-  throw Error("filter type error");
+  return { currentFilter, setFilter };
 }
