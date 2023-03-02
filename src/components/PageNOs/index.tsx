@@ -1,6 +1,6 @@
 import React from "react";
 
-function setFirstNoInCurrentList(selectedNo: number, lastNo: number) {
+function setFirstInCurrentNOs(selectedNo: number, lastNo: number) {
   if ([1, 2, 3].includes(selectedNo)) return 1;
 
   if (selectedNo >= lastNo - 2) return lastNo - 4;
@@ -12,7 +12,7 @@ function setCurrentPageNOs(firstInCurrentNOs: number, lastNo: number) {
   const currentPageNOs = [firstInCurrentNOs];
 
   for (let i = 1; i <= 4; i += 1) {
-    if (firstInCurrentNOs + i === lastNo) break;
+    if (currentPageNOs[currentPageNOs.length - 1] === lastNo) break;
 
     currentPageNOs.push(firstInCurrentNOs + i);
   }
@@ -24,7 +24,7 @@ function setCurrentPageNOs(firstInCurrentNOs: number, lastNo: number) {
 // i.e. [1,2,3,4] or [1,2,3] or [1,2] or [1]  <- less than 5
 
 export default function PageNOs(selectedNo: number, lastNo: number) {
-  const firstInCurrentNOs = setFirstNoInCurrentList(selectedNo, lastNo);
+  const firstInCurrentNOs = setFirstInCurrentNOs(selectedNo, lastNo);
 
   const currentPageNOs = setCurrentPageNOs(firstInCurrentNOs, lastNo);
 
