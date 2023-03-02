@@ -13,6 +13,7 @@ import {
   useInfiniteScroll,
   useResetFiltersFromUrl,
 } from "utils";
+import PageNOs from "components/PageNOs";
 import FreeTalk from "./FreeTalkList.components";
 
 export default function FreeTalkList() {
@@ -107,6 +108,8 @@ export default function FreeTalkList() {
       {data?.talks?.map((talk) => (
         <FreeTalk key={talk.talkId} talk={talk} />
       ))}
+
+      {data && <PageNOs selectedNo={currentPageNo} lastNo={data.lastPageNo} />}
     </MainBG>
   );
 }

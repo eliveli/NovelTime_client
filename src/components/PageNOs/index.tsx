@@ -1,4 +1,12 @@
 import React from "react";
+import {
+  IconBox,
+  LeftBtn,
+  PageNo,
+  PageNOsAndArrowBtn,
+  PageNOsBox,
+  RightBtn,
+} from "./PageNOs.styles";
 
 function setFirstInCurrentNOs(selectedNo: number, lastNo: number) {
   if ([1, 2, 3].includes(selectedNo)) return 1;
@@ -23,7 +31,7 @@ function setCurrentPageNOs(firstInCurrentNOs: number, lastNo: number) {
 // i.e. [4,5,6,7,8] or [1,2,3,4,5]  <- maximum is 5
 // i.e. [1,2,3,4] or [1,2,3] or [1,2] or [1]  <- less than 5
 
-export default function PageNOs(selectedNo: number, lastNo: number) {
+export default function PageNOs({ selectedNo, lastNo }: { selectedNo: number; lastNo: number }) {
   const firstInCurrentNOs = setFirstInCurrentNOs(selectedNo, lastNo);
 
   const currentPageNOs = setCurrentPageNOs(firstInCurrentNOs, lastNo);
@@ -31,5 +39,25 @@ export default function PageNOs(selectedNo: number, lastNo: number) {
   const isPrevBtn = firstInCurrentNOs >= 2;
   const isNextBtn = lastNo > 5 && (firstInCurrentNOs === 1 || firstInCurrentNOs + 4 < lastNo);
 
-  return <div>index</div>;
+  return (
+    <PageNOsAndArrowBtn>
+      {isPrevBtn && (
+        <IconBox>
+          <LeftBtn />
+        </IconBox>
+      )}
+      <PageNOsBox>
+        {currentPageNOs.map((_) => (
+          <PageNo currentNo={_} selectedNo={selectedNo}>
+            {_}
+          </PageNo>
+        ))}
+      </PageNOsBox>
+      {isNextBtn && (
+        <IconBox>
+          <RightBtn />
+        </IconBox>
+      )}
+    </PageNOsAndArrowBtn>
+  );
 }
