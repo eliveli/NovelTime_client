@@ -174,7 +174,7 @@ export function useSearchFilter(filter: FilterType) {
   //
   // set next filter //
   const setFilterForPagi = (nextValue: any) => {
-    searchParams.set(filter, nextValue as string);
+    searchParams.set(filter, String(nextValue));
     setSearchParams(searchParams);
   };
 

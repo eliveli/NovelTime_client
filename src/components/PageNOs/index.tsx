@@ -1,4 +1,5 @@
 import React from "react";
+import { useSearchParams } from "react-router-dom";
 import {
   IconBox,
   LeftBtn,
@@ -32,6 +33,13 @@ function setCurrentPageNOs(firstInCurrentNOs: number, lastNo: number) {
 // i.e. [1,2,3,4] or [1,2,3] or [1,2] or [1]  <- less than 5
 
 export default function PageNOs({ selectedNo, lastNo }: { selectedNo: number; lastNo: number }) {
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  function selectPageNo(pageNo: number) {
+    searchParams.set("pageNo", String(pageNo));
+    setSearchParams(searchParams);
+  }
+
   const firstInCurrentNOs = setFirstInCurrentNOs(selectedNo, lastNo);
 
   const currentPageNOs = setCurrentPageNOs(firstInCurrentNOs, lastNo);
@@ -42,19 +50,34 @@ export default function PageNOs({ selectedNo, lastNo }: { selectedNo: number; la
   return (
     <PageNOsAndArrowBtn>
       {isPrevBtn && (
-        <IconBox>
+        <IconBox
+          onClick={() => {
+            selectPageNo(firstInCurrentNOs - 1);
+          }}
+        >
           <LeftBtn />
         </IconBox>
       )}
       <PageNOsBox>
         {currentPageNOs.map((_) => (
-          <PageNo currentNo={_} selectedNo={selectedNo}>
+          <PageNo
+            key={_}
+            currentNo={_}
+            selectedNo={selectedNo}
+            onClick={() => {
+              selectPageNo(_);
+            }}
+          >
             {_}
           </PageNo>
         ))}
       </PageNOsBox>
       {isNextBtn && (
-        <IconBox>
+        <IconBox
+          onClick={() => {
+            selectPageNo(firstInCurrentNOs + 5);
+          }}
+        >
           <RightBtn />
         </IconBox>
       )}
