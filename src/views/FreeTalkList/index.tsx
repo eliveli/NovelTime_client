@@ -46,7 +46,6 @@ export default function FreeTalkList() {
   const searchTypeFromState = useAppSelector((state) => state.filter.searchType);
   const searchWordFromState = useAppSelector((state) => state.filter.searchWord);
   const sortTypeFromState = useAppSelector((state) => state.modal.sortType);
-  // *** ㄴsort type 작업 필요 for pc
   const pageNoFromState = useAppSelector((state) => state.filter.pageNo);
 
   // select filters for pagination or infinite scroll
@@ -68,16 +67,18 @@ export default function FreeTalkList() {
   });
 
   // *** 아래 함수에서 prev 값이 잘 기억되는 지 확인 필요
-  // const allPageWritings = useInfiniteScroll({
-  //   currentGenre,
-  //   currentSrchType,
-  //   currentSearchWord,
-  //   currentSortType,
-  //   currentPageNo,
-  //   isFetching,
-  //   data,
-  // });
-
+  const writingsForInfntScroll = useInfiniteScroll({
+    isForPagination: genreFromUrl !== null,
+    searchFilters: {
+      currentGenre,
+      currentSrchType,
+      currentSearchWord,
+      currentSortType,
+      currentPageNo,
+    },
+    isFetching,
+    data,
+  });
   // 서버에서 데이터 받아올 때 구성
   const dataFromServer = [
     {
@@ -100,16 +101,14 @@ export default function FreeTalkList() {
   return (
     <MainBG>
       <Filter />
-      {/* {allPageWritings?.map((talk) => (
-        <FreeTalk key={talk.talkId} talk={talk} />
-      ))} */}
-
-      {/* for tablet and pc */}
-      {data?.talks?.map((talk) => (
+      {writingsForInfntScroll?.map((talk) => (
         <FreeTalk key={talk.talkId} talk={talk} />
       ))}
 
-      {data && <PageNOs selectedNo={currentPageNo} lastNo={data.lastPageNo} />}
+      {/* for tablet and pc */}
+      {genreFromUrl && data?.talks?.map((talk) => <FreeTalk key={talk.talkId} talk={talk} />)}
+
+      {genreFromUrl && data && <PageNOs selectedNo={currentPageNo} lastNo={data.lastPageNo} />}
     </MainBG>
   );
 }
