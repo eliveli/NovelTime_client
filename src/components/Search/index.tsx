@@ -46,13 +46,13 @@ export function SearchBar({
   //     to avoid warning : Assignment to property of function parameter 'searchWordRef'
   searchWordRef: React.MutableRefObject<string>;
 }) {
-  const { setFilter: setSearchWord } = useSearchFilter("searchWord");
-
-  const { currentFilter: currentSearchType } = useSearchFilter("searchType");
-  const [searchParams, setSearchParams] = useSearchParams();
+  const {
+    currentFilters: { currentSearchType },
+    setFilters,
+  } = useMultipleSearchFilters("searchType");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    typeSearchWord(e.target.value);
+    typeSearchWord(e.target.value); // prevent component rerender as using useRef not useState
   };
 
   const handleSubmit = (
@@ -61,16 +61,12 @@ export function SearchBar({
     e.preventDefault();
     if (currentSearchType === "no" && searchWordRef.current !== "") {
       // 직전 검색 타입이 없으나 현재 주어진 검색어가 있을 때
-      searchParams.set("searchType", "Title");
-      searchParams.set("searchWord", searchWordRef.current);
-      setSearchParams(searchParams);
+      setFilters({ searchType: "Title", searchWord: searchWordRef.current });
     } else if (searchWordRef.current === "") {
       // 주어진 검색어가 없을 때
-      searchParams.set("searchType", "no");
-      searchParams.set("searchWord", searchWordRef.current);
-      setSearchParams(searchParams);
+      setFilters({ searchType: "no", searchWord: searchWordRef.current });
     } else {
-      setSearchWord(searchWordRef.current);
+      setFilters({ searchWord: searchWordRef.current });
     }
 
     // show search-filter-component
