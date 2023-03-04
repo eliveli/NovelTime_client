@@ -1,5 +1,7 @@
 import { useSearchParams } from "react-router-dom";
 
+type FilterType = "genre" | "searchType" | "searchWord" | "sortType" | "pageNo";
+
 const genres = [
   "All",
   "로판",
@@ -18,49 +20,48 @@ const searchTypes = ["no", "Title", "Desc", "Writer", "Novel"];
 
 const sortTypes = ["작성일New", "작성일Old", "댓글Up", "댓글Down", "좋아요Up", "좋아요Down"];
 
-// 필터 from url 이 설정된 목록에 없을 때 재설정
-// *** 추후 컴포넌트마다 필요한 필터가 다르다면 함수 보완 필요 ***
-export default function useResetFiltersFromUrl(
-  filters: { filter: string; value: string | null }[],
-) {
+// reset filters for pagination when they are not correct
+export default function useResetFiltersFromUrl() {
+  const { pathname, search } = window.location;
   const [searchParams, setSearchParams] = useSearchParams();
 
-  // url에 어떤 필터도 없다면 필터 재설정 안 함. then for infinite scroll
-  const filtersWithRealValues = filters.filter((f) => f.value !== null);
-  if (filtersWithRealValues.length === 0) return;
+  function resetFiltersFromUrl(filters: FilterType[]) {
+    filters.map((filterType) => {
+      const filterValue = searchParams.get(filterType); // it can be null
 
-  filters.map((f) => {
-    const { filter, value } = f;
+      if (filterType === "genre") {
+        if (!genres.includes(filterValue as string)) {
+          searchParams.set("genre", "All");
+        }
+      } else if (filterType === "searchType") {
+        if (!searchTypes.includes(filterValue as string)) {
+          searchParams.set("searchType", "no");
+        }
+      } else if (filterType === "searchWord") {
+        if (filterValue === null) {
+          // note. empty string is okay
+          searchParams.set("searchWord", "");
+        }
+      } else if (filterType === "sortType") {
+        if (!sortTypes.includes(filterValue as string)) {
+          searchParams.set("sortType", "작성일New");
+        }
+      } else if (filterType === "pageNo") {
+        const pageNoToNumber = Number(filterValue);
+        if (
+          !(typeof pageNoToNumber === "number" && pageNoToNumber >= 1 && pageNoToNumber % 1 === 0)
+        ) {
+          searchParams.set("pageNo", "1");
+        }
+      } else throw Error("filter type error");
+    });
 
-    if (filter === "genre") {
-      if (!genres.includes(value as string)) {
-        searchParams.set("genre", "All");
-        setSearchParams(searchParams);
-      }
-    } else if (filter === "searchType") {
-      if (!searchTypes.includes(value as string)) {
-        searchParams.set("searchType", "no");
-        setSearchParams(searchParams);
-      }
-    } else if (filter === "searchWord") {
-      if (value === null) {
-        // note. empty string is okay
-        searchParams.set("searchWord", "");
-        setSearchParams(searchParams);
-      }
-    } else if (filter === "sortType") {
-      if (!sortTypes.includes(value as string)) {
-        searchParams.set("sortType", "작성일New");
-        setSearchParams(searchParams);
-      }
-    } else if (filter === "pageNo") {
-      const pageNoToNumber = Number(value);
-      if (
-        !(typeof pageNoToNumber === "number" && pageNoToNumber >= 1 && pageNoToNumber % 1 === 0)
-      ) {
-        searchParams.set("pageNo", "1");
-        setSearchParams(searchParams);
-      }
-    } else throw Error("filter type error");
-  });
+    setSearchParams(searchParams);
+  }
+
+  if (pathname === "/talk-list") {
+    if (search === "") return; // for infinite scroll
+
+    resetFiltersFromUrl(["genre", "searchType", "searchWord", "sortType", "pageNo"]); // for pagination
+  }
 }
