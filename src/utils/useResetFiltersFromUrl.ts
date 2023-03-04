@@ -25,6 +25,14 @@ export default function useResetFiltersFromUrl() {
   const { pathname, search } = window.location;
   const [searchParams, setSearchParams] = useSearchParams();
 
+  let isForPagination = true;
+
+  // for infinite scroll
+  if (search === "") {
+    isForPagination = false;
+    return isForPagination;
+  }
+
   function resetFiltersFromUrl(filters: FilterType[]) {
     filters.map((filterType) => {
       const filterValue = searchParams.get(filterType); // it can be null
@@ -60,8 +68,8 @@ export default function useResetFiltersFromUrl() {
   }
 
   if (pathname === "/talk-list") {
-    if (search === "") return; // for infinite scroll
-
-    resetFiltersFromUrl(["genre", "searchType", "searchWord", "sortType", "pageNo"]); // for pagination
+    resetFiltersFromUrl(["genre", "searchType", "searchWord", "sortType", "pageNo"]);
   }
+
+  return isForPagination;
 }

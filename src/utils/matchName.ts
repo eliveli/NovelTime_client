@@ -1,6 +1,7 @@
-import { GenresFromFilter, SearchTypeFromFilter } from "store/clientSlices/filterSlice";
-import { SortTypeFromFilter } from "store/clientSlices/modalSlice";
 import { NovelGenre } from "store/serverAPIs/types";
+
+type SearchType = "writingTitle" | "writingDesc" | "userName" | "novelTitle" | "no";
+type SortType = "newDate" | "oldDate" | "manyComments" | "fewComments" | "manyLikes" | "fewLikes";
 
 export function matchPlatformName(platformSelected: string) {
   if (platformSelected === "카카페") return "kakape";
@@ -33,7 +34,7 @@ export function matchSrchTypeName(searchType: string) {
   if (searchType === "Desc") return "writingDesc";
   if (searchType === "Writer") return "userName";
   if (searchType === "Novel") return "novelTitle";
-  return searchType as "no" | "writingTitle" | "writingDesc" | "userName" | "novelTitle";
+  return searchType as SearchType;
 }
 
 export function matchSortTypeName(sortType: string) {
@@ -55,13 +56,7 @@ export function matchSortTypeName(sortType: string) {
   if (sortType === "좋아요Down") {
     return "fewLikes";
   }
-  return sortType as
-    | "newDate"
-    | "oldDate"
-    | "manyComments"
-    | "fewComments"
-    | "manyLikes"
-    | "fewLikes";
+  return sortType as SortType;
 }
 
 export function matchFilterNames(filters: {
@@ -72,9 +67,9 @@ export function matchFilterNames(filters: {
   const filterEntries = Object.entries(filters);
 
   const filtersMatched = {
-    genreMatched: "",
-    searchTypeMatched: "",
-    sortTypeMatched: "",
+    genreMatched: "" as NovelGenre,
+    searchTypeMatched: "" as SearchType,
+    sortTypeMatched: "" as SortType,
   };
 
   filterEntries.map(([filterType, filterValue]) => {

@@ -12,7 +12,7 @@ import { useAppDispatch, useAppSelector } from "store/hooks";
 
 type FilterType = "genre" | "searchType" | "searchWord" | "sortType" | "pageNo";
 
-// ** 아래 코드 제작 중 to treat multiple search filter at once for both pagination and infinite scroll
+// treat multiple search filter at once for both pagination and infinite scroll
 export function useMultipleSearchFilters(
   currentFilter1: FilterType, // also I can get one filter not only multiple them
   currentFilter2?: FilterType,

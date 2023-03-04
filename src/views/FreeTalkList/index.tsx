@@ -1,76 +1,53 @@
-import React, { useRef, useState, useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
 import MainBG from "components/MainBG";
 import Filter from "components/Filter";
 import { useGetWritingsFilteredQuery } from "store/serverAPIs/novelTime";
 import { TalkList, WritingList } from "store/serverAPIs/types";
-import { useAppDispatch, useAppSelector } from "store/hooks";
 import {
-  checkIsNearBottom,
-  matchGenreName,
-  matchSortTypeName,
-  matchSrchTypeName,
   useWritingsWithInfntScroll,
   useResetFiltersFromUrl,
+  useMultipleSearchFilters,
+  matchFilterNames,
 } from "utils";
 import PageNOs from "components/PageNOs";
 import FreeTalk from "./FreeTalkList.components";
 
 export default function FreeTalkList() {
-  // for pagination in tablet or pc
-  const [searchParams] = useSearchParams();
-  const genreFromUrl = searchParams.get("genre");
-  const searchTypeFromUrl = searchParams.get("searchType");
-  const searchWordFromUrl = searchParams.get("searchWord");
-  const sortTypeFromUrl = searchParams.get("sortType");
-  const pageNoFromUrl = searchParams.get("pageNo");
+  const isForPagination = useResetFiltersFromUrl();
 
-  const filtersToCheck = [
-    { filter: "genre", value: genreFromUrl },
-    { filter: "searchType", value: searchTypeFromUrl },
-    { filter: "searchWord", value: searchWordFromUrl },
-    {
-      filter: "sortType",
-      value: sortTypeFromUrl,
+  // get filters from url for pagination or them from state for infinite scroll
+  const {
+    currentFilters: {
+      currentGenre,
+      currentSearchType,
+      currentSearchWord,
+      currentSortType,
+      currentPageNo,
     },
-    {
-      filter: "pageNo",
-      value: pageNoFromUrl,
-    },
-  ];
+  } = useMultipleSearchFilters("genre", "searchType", "searchWord", "sortType", "pageNo");
 
-  useResetFiltersFromUrl(filtersToCheck);
-
-  // for infinite scroll in mobile
-  const genreFromState = useAppSelector((state) => state.filter.genre);
-  const searchTypeFromState = useAppSelector((state) => state.filter.searchType);
-  const searchWordFromState = useAppSelector((state) => state.filter.searchWord);
-  const sortTypeFromState = useAppSelector((state) => state.modal.sortType);
-  const pageNoFromState = useAppSelector((state) => state.filter.pageNo);
-
-  // select filters for pagination or infinite scroll
-  const currentGenre = matchGenreName(genreFromUrl, genreFromState);
-  const currentSrchType = matchSrchTypeName(searchTypeFromUrl, searchTypeFromState);
-  const currentSearchWord = searchWordFromUrl ?? searchWordFromState;
-  const currentSortType = matchSortTypeName(sortTypeFromUrl, sortTypeFromState);
-  const currentPageNo = Number(pageNoFromUrl) || pageNoFromState;
+  const { genreMatched, searchTypeMatched, sortTypeMatched } = matchFilterNames({
+    genre: currentGenre,
+    searchType: currentSearchType,
+    sortType: currentSortType,
+  });
 
   const { isLoading, isFetching, isError, data } = useGetWritingsFilteredQuery({
     listType: "T",
-    novelGenre: currentGenre,
-    searchType: currentSearchWord === "" ? "no" : currentSrchType,
+    novelGenre: genreMatched,
+    searchType: currentSearchWord === "" ? "no" : searchTypeMatched,
     searchWord: currentSearchWord || "undefined",
     // ㄴwhen searchType is "no" searchWord is not considered
     // ㄴㄴbut searchWord can't be empty string because parameter in path can't be empty
-    sortBy: currentSortType,
+    sortBy: sortTypeMatched,
     pageNo: currentPageNo,
   });
 
   const writingsForInfntScroll = useWritingsWithInfntScroll({
-    isForPagination: genreFromUrl !== null,
+    isForPagination,
     isFetching,
     data,
   });
+
   // 서버에서 데이터 받아올 때 구성
   const dataFromServer = [
     {
@@ -98,9 +75,9 @@ export default function FreeTalkList() {
       ))}
 
       {/* for tablet and pc */}
-      {genreFromUrl && data?.talks?.map((talk) => <FreeTalk key={talk.talkId} talk={talk} />)}
+      {isForPagination && data?.talks?.map((talk) => <FreeTalk key={talk.talkId} talk={talk} />)}
 
-      {genreFromUrl && data && <PageNOs selectedNo={currentPageNo} lastNo={data.lastPageNo} />}
+      {isForPagination && data && <PageNOs selectedNo={currentPageNo} lastNo={data.lastPageNo} />}
     </MainBG>
   );
 }
