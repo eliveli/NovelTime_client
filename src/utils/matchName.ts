@@ -11,9 +11,7 @@ export function matchPlatformName(platformSelected: string) {
   throw Error("플랫폼 선택 오류");
 }
 
-// genreFromUrl for pagination, genreFromState for infinite scroll
-export function matchGenreName(genreFromUrl: string | null, genreFromState: string) {
-  const genre = genreFromUrl || genreFromState;
+export function matchGenreName(genre: string) {
   if (genre === "All") return "all";
   if (genre === "그 외") return "extra";
 
@@ -26,22 +24,19 @@ export function matchGenreName(genreFromUrl: string | null, genreFromState: stri
   }
 
   return genre as NovelGenre;
-  // ㄴ장르 이름이 맞지 않으면 "All"로 재설정되어 다시 요청 by useResetFiltersFromUrl
+  // ㄴ최초 필터명이 맞지 않았어도 재설정되었을 것 by useResetFiltersFromUrl (이하 함수 동일)
 }
 
-export function matchSrchTypeName(searchTypeFromUrl: string | null, searchTypeFromState: string) {
-  const srchType = searchTypeFromUrl || searchTypeFromState;
-  if (srchType === "no") return "no";
-  if (srchType === "Title") return "writingTitle";
-  if (srchType === "Desc") return "writingDesc";
-  if (srchType === "Writer") return "userName";
-  if (srchType === "Novel") return "novelTitle";
-  return srchType as "no" | "writingTitle" | "writingDesc" | "userName" | "novelTitle";
-  // ㄴ장르 이름이 맞지 않으면 재설정되어 다시 요청 by useResetFiltersFromUrl
+export function matchSrchTypeName(searchType: string) {
+  if (searchType === "no") return "no";
+  if (searchType === "Title") return "writingTitle";
+  if (searchType === "Desc") return "writingDesc";
+  if (searchType === "Writer") return "userName";
+  if (searchType === "Novel") return "novelTitle";
+  return searchType as "no" | "writingTitle" | "writingDesc" | "userName" | "novelTitle";
 }
 
-export function matchSortTypeName(sortTypeFromUrl: string | null, sortTypeFromState: string) {
-  const sortType = sortTypeFromUrl || sortTypeFromState;
+export function matchSortTypeName(sortType: string) {
   if (sortType === "작성일New") {
     return "newDate";
   }
@@ -67,5 +62,32 @@ export function matchSortTypeName(sortTypeFromUrl: string | null, sortTypeFromSt
     | "fewComments"
     | "manyLikes"
     | "fewLikes";
-  // ㄴ장르 이름이 맞지 않으면 재설정되어 다시 요청 by useResetFiltersFromUrl
+}
+
+export function matchFilterNames(filters: {
+  genre?: string;
+  searchType?: string;
+  sortType?: string;
+}) {
+  const filterEntries = Object.entries(filters);
+
+  const filtersMatched = {
+    genreMatched: "",
+    searchTypeMatched: "",
+    sortTypeMatched: "",
+  };
+
+  filterEntries.map(([filterType, filterValue]) => {
+    if (filterType === "genre") {
+      filtersMatched.genreMatched = matchGenreName(filterValue);
+      //
+    } else if (filterType === "searchType") {
+      filtersMatched.searchTypeMatched = matchSrchTypeName(filterValue);
+      //
+    } else if (filterType === "sortType") {
+      filtersMatched.sortTypeMatched = matchSortTypeName(filterValue);
+    }
+  });
+
+  return filtersMatched;
 }

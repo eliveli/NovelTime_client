@@ -12,15 +12,16 @@ import {
   matchGenreName,
   matchSortTypeName,
   matchSrchTypeName,
+  matchFilterNames,
 } from "./matchName";
 import checkIsNearBottom from "./checkIsNearBottom";
 import { useSearchFilter, useMultipleSearchFilters } from "./useSearchFilter";
-import useInfiniteScroll from "./useInfiniteScroll";
+import useWritingsWithInfntScroll from "./useWritingsWithInfntScroll";
 import useResetFiltersFromUrl from "./useResetFiltersFromUrl";
 
 export {
   useResetFiltersFromUrl,
-  useInfiniteScroll,
+  useWritingsWithInfntScroll,
   checkIsNearBottom,
   useSearchFilter,
   useMultipleSearchFilters,
@@ -28,6 +29,7 @@ export {
   matchGenreName,
   matchSortTypeName,
   matchSrchTypeName,
+  matchFilterNames,
   ScrollToTop,
   CheckDeviceType,
   useCloseOutsideClick,
