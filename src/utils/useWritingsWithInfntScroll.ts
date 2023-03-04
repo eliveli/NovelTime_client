@@ -1,51 +1,25 @@
 import { useState, useEffect } from "react";
-import { GenresFromFilter, setPageNo } from "store/clientSlices/filterSlice";
+import { setPageNo } from "store/clientSlices/filterSlice";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { TalkList, WritingList } from "store/serverAPIs/types";
 import checkIsNearBottom from "./checkIsNearBottom";
 
-function useInfiniteScroll({
+function useWritingsWithInfntScroll({
   isForPagination,
-  searchFilters,
   isFetching,
   data,
 }: {
   isForPagination: boolean;
-  searchFilters: {
-    currentGenre:
-      | "패러디"
-      | "로판"
-      | "로맨스"
-      | "현판"
-      | "판타지"
-      | "무협"
-      | "라이트노벨"
-      | "BL"
-      | "미스터리"
-      | "all"
-      | "extra";
-    currentSrchType: "no" | "writingTitle" | "writingDesc" | "userName" | "novelTitle";
-    // ㄴ"no" can't be there in searchTypeFromState with any previous name before matching
-    //    but return value of matchSrchTypeName can be "no"
-    //     (see where the arg is used)
-    //    so in this react hook "no" is for avoiding type error. actually it won't be used here
-    currentSearchWord: string;
-    currentSortType:
-      | "newDate"
-      | "oldDate"
-      | "manyComments"
-      | "fewComments"
-      | "manyLikes"
-      | "fewLikes";
-    currentPageNo: number;
-  };
   isFetching: boolean;
   data: WritingList;
 }) {
-  const { currentGenre, currentPageNo, currentSearchWord, currentSortType, currentSrchType } =
-    searchFilters;
-
   const dispatch = useAppDispatch();
+
+  const currentGenre = useAppSelector((state) => state.filter.genre);
+  const currentSrchType = useAppSelector((state) => state.filter.searchType);
+  const currentSearchWord = useAppSelector((state) => state.filter.searchWord);
+  const currentSortType = useAppSelector((state) => state.modal.sortType);
+  const currentPageNo = useAppSelector((state) => state.filter.pageNo);
 
   const [writingsOfGivenPages, setWritingsOfGivenPages] = useState<TalkList>([]);
   // * change later for other writing list not for TalkList only
@@ -58,6 +32,7 @@ function useInfiniteScroll({
     prevPageNo: currentPageNo,
   });
 
+  // for infinite scroll
   useEffect(() => {
     if (isForPagination) return;
     if (isFetching) return;
@@ -137,4 +112,4 @@ function useInfiniteScroll({
   return writingsOfGivenPages;
 }
 
-export default useInfiniteScroll;
+export default useWritingsWithInfntScroll;

@@ -10,7 +10,7 @@ import {
   matchGenreName,
   matchSortTypeName,
   matchSrchTypeName,
-  useInfiniteScroll,
+  useWritingsWithInfntScroll,
   useResetFiltersFromUrl,
 } from "utils";
 import PageNOs from "components/PageNOs";
@@ -66,16 +66,8 @@ export default function FreeTalkList() {
     pageNo: currentPageNo,
   });
 
-  // *** 아래 함수에서 prev 값이 잘 기억되는 지 확인 필요
-  const writingsForInfntScroll = useInfiniteScroll({
+  const writingsForInfntScroll = useWritingsWithInfntScroll({
     isForPagination: genreFromUrl !== null,
-    searchFilters: {
-      currentGenre,
-      currentSrchType,
-      currentSearchWord,
-      currentSortType,
-      currentPageNo,
-    },
     isFetching,
     data,
   });
