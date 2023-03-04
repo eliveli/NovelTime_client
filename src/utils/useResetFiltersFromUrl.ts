@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+
 import { useSearchParams } from "react-router-dom";
 
 type FilterType = "genre" | "searchType" | "searchWord" | "sortType" | "pageNo";
@@ -26,13 +28,7 @@ export default function useResetFiltersFromUrl() {
 
   const [searchParams, setSearchParams] = useSearchParams();
 
-  let isForPagination = true;
-
-  // for infinite scroll
-  if (search === "") {
-    isForPagination = false;
-    return isForPagination;
-  }
+  const isForPagination = search !== "";
 
   function resetFiltersFromUrl(filters: FilterType[]) {
     let isFilterChanged = false;
@@ -41,12 +37,12 @@ export default function useResetFiltersFromUrl() {
       const filterValue = searchParams.get(filterType); // it can be null
 
       if (filterType === "genre") {
-        if (!genres.includes(filterValue as string)) {
+        if (filterValue === null || !genres.includes(filterValue)) {
           searchParams.set("genre", "All");
           isFilterChanged = true;
         }
       } else if (filterType === "searchType") {
-        if (!searchTypes.includes(filterValue as string)) {
+        if (filterValue === null || !searchTypes.includes(filterValue)) {
           searchParams.set("searchType", "no");
           isFilterChanged = true;
         }
@@ -57,7 +53,7 @@ export default function useResetFiltersFromUrl() {
           isFilterChanged = true;
         }
       } else if (filterType === "sortType") {
-        if (!sortTypes.includes(filterValue as string)) {
+        if (filterValue === null || !sortTypes.includes(filterValue)) {
           searchParams.set("sortType", "작성일New");
           isFilterChanged = true;
         }
@@ -78,9 +74,13 @@ export default function useResetFiltersFromUrl() {
     }
   }
 
-  if (pathname === "/talk-list") {
-    resetFiltersFromUrl(["genre", "searchType", "searchWord", "sortType", "pageNo"]);
-  }
+  useEffect(() => {
+    if (!isForPagination) return;
+
+    if (pathname === "/talk-list") {
+      resetFiltersFromUrl(["genre", "searchType", "searchWord", "sortType", "pageNo"]);
+    }
+  }, [isForPagination, pathname]);
 
   return isForPagination;
 }
