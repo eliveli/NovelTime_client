@@ -12,34 +12,28 @@ import { useAppDispatch, useAppSelector } from "store/hooks";
 
 type FilterType = "genre" | "searchType" | "searchWord" | "sortType" | "pageNo";
 
+type KeyOfFilters =
+  | "currentGenre"
+  | "currentSearchType"
+  | "currentSearchWord"
+  | "currentSortType"
+  | "currentPageNo";
+
+type CurrentFilters = { [key in KeyOfFilters]: string | number };
+
 // treat multiple search filter at once for both pagination and infinite scroll
-export function useMultipleSearchFilters(
-  currentFilter1: FilterType, // also I can get one filter not only multiple them
-  currentFilter2?: FilterType,
-  currentFilter3?: FilterType,
-  currentFilter4?: FilterType,
-  currentFilter5?: FilterType,
-) {
+export function useMultipleSearchFilters() {
+  const { pathname, search } = window.location;
+
+  const isForPagination = search !== "";
+
   const dispatch = useAppDispatch();
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const genreFromState = useAppSelector((state) => state.filter.genre);
-  const searchTypeFromState = useAppSelector((state) => state.filter.searchType);
-  const searchWordFromState = useAppSelector((state) => state.filter.searchWord);
-  const sortTypeFromState = useAppSelector((state) => state.modal.sortType);
-  const pageNoFromState = String(useAppSelector((state) => state.filter.pageNo));
+  const talkFiltersFromState = useAppSelector((state) => state.filter.talk.filters);
 
   // get current filters //
-  const filtersWithUndefined = [
-    currentFilter1,
-    currentFilter2,
-    currentFilter3,
-    currentFilter4,
-    currentFilter5,
-  ];
-  const filters = filtersWithUndefined.filter((_) => _ !== undefined) as FilterType[];
-
-  const currentFilters = {
+  const currentFilters: CurrentFilters = {
     currentGenre: "",
     currentSearchType: "",
     currentSearchWord: "",
@@ -47,40 +41,39 @@ export function useMultipleSearchFilters(
     currentPageNo: 0,
   };
 
-  const getFilterFromState = (filterForState: FilterType) => {
-    if (filterForState === "genre") return genreFromState;
-    if (filterForState === "searchType") return searchTypeFromState;
-    if (filterForState === "searchWord") return searchWordFromState;
-    if (filterForState === "sortType") return sortTypeFromState;
-    if (filterForState === "pageNo") return pageNoFromState;
+  function setCurrentFilter(filter: string, filterValue: string | number) {
+    const keyOfFilters = `current${filter.charAt(0).toUpperCase()}${filter.slice(
+      1,
+    )}` as KeyOfFilters;
 
-    throw Error("filterForState was not matched in getFilterFromState");
-  };
+    currentFilters[keyOfFilters] = filterValue;
+  }
 
-  filters.map((filter) => {
-    const filterFromUrl = searchParams.get(filter);
-    let currentFilter = filterFromUrl;
+  function getFiltersFromUrl(filters: FilterType[]) {
+    filters.map((filter) => {
+      const filterFromUrl = searchParams.get(filter);
 
-    if (currentFilter === null) {
-      currentFilter = getFilterFromState(filter);
+      if (filterFromUrl === null) throw Error("filter from url is null");
+
+      setCurrentFilter(filter, filterFromUrl);
+    });
+  }
+
+  function getFiltersFromState(filtersFromState: { [key in FilterType]: string | number }) {
+    const filterEntries = Object.entries(filtersFromState);
+
+    filterEntries.map(([filter, filterValueFromState]) => {
+      setCurrentFilter(filter, filterValueFromState);
+    });
+  }
+
+  if (pathname === "/talk-list") {
+    if (isForPagination) {
+      getFiltersFromUrl(["genre", "searchType", "searchWord", "sortType", "pageNo"]);
+    } else {
+      getFiltersFromState(talkFiltersFromState);
     }
-
-    if (filter === "genre") {
-      currentFilters.currentGenre = currentFilter;
-      //
-    } else if (filter === "searchType") {
-      currentFilters.currentSearchType = currentFilter;
-      //
-    } else if (filter === "searchWord") {
-      currentFilters.currentSearchWord = currentFilter;
-      //
-    } else if (filter === "sortType") {
-      currentFilters.currentSortType = currentFilter;
-      //
-    } else if (filter === "pageNo") {
-      currentFilters.currentPageNo = Number(currentFilter);
-    }
-  });
+  }
 
   //
   // set next filters //
