@@ -6,6 +6,7 @@ import {
   selectSearchType,
   setPageNo,
   setSearchWord,
+  setTalkList,
 } from "store/clientSlices/filterSlice";
 import { SortTypeFromFilter, sortWriting } from "store/clientSlices/modalSlice";
 import { useAppDispatch, useAppSelector } from "store/hooks";
@@ -20,6 +21,8 @@ type KeyOfFilters =
   | "currentPageNo";
 
 type CurrentFilters = { [key in KeyOfFilters]: string | number };
+
+type FiltersInState = { [key in FilterType]: string | number };
 
 // treat multiple search filter at once for both pagination and infinite scroll
 export function useMultipleSearchFilters() {
@@ -41,15 +44,15 @@ export function useMultipleSearchFilters() {
     currentPageNo: 0,
   };
 
-  function setCurrentFilter(filter: string, filterValue: string | number) {
+  const setCurrentFilter = (filter: string, filterValue: string | number) => {
     const keyOfFilters = `current${filter.charAt(0).toUpperCase()}${filter.slice(
       1,
     )}` as KeyOfFilters;
 
     currentFilters[keyOfFilters] = filterValue;
-  }
+  };
 
-  function getFiltersFromUrl(filters: FilterType[]) {
+  const getFiltersFromUrl = (filters: FilterType[]) => {
     filters.map((filter) => {
       const filterFromUrl = searchParams.get(filter);
 
@@ -57,15 +60,15 @@ export function useMultipleSearchFilters() {
 
       setCurrentFilter(filter, filterFromUrl);
     });
-  }
+  };
 
-  function getFiltersFromState(filtersFromState: { [key in FilterType]: string | number }) {
+  const getFiltersFromState = (filtersFromState: { [key in FilterType]: string | number }) => {
     const filterEntries = Object.entries(filtersFromState);
 
     filterEntries.map(([filter, filterValueFromState]) => {
       setCurrentFilter(filter, filterValueFromState);
     });
-  }
+  };
 
   if (pathname === "/talk-list") {
     if (isForPagination) {
@@ -81,21 +84,15 @@ export function useMultipleSearchFilters() {
     searchParams.set(filter, String(nextValue));
   };
 
-  const setFilterForInfntScroll = (filter: string, nextValue: any) => {
-    if (filter === "genre") {
-      dispatch(selectGenre(nextValue as GenresFromFilter));
-      //
-    } else if (filter === "searchType") {
-      dispatch(selectSearchType(nextValue as SearchTypeFromFilter));
-      //
-    } else if (filter === "searchWord") {
-      dispatch(setSearchWord(nextValue as string));
-      //
-    } else if (filter === "sortType") {
-      dispatch(sortWriting(nextValue as SortTypeFromFilter));
-      //
-    } else if (filter === "pageNo") {
-      dispatch(setPageNo(nextValue as number));
+  const checkForFilter = (filter: string) => {
+    if (pathname === "/talk-list") {
+      return ["genre", "searchType", "searchWord", "sortType", "pageNo"].includes(filter);
+    }
+  };
+
+  const setFilterForInfntScroll = (nextFiltersToSet: { [key: string]: any }) => {
+    if (pathname === "/talk-list") {
+      dispatch(setTalkList({ filters: nextFiltersToSet }));
     }
   };
 
@@ -106,25 +103,33 @@ export function useMultipleSearchFilters() {
     sortType?: string;
     pageNo?: number;
   }) => {
-    const filterEntries = Object.entries(filtersToSet);
+    const filterEntriesWithUndefined = Object.entries(filtersToSet);
 
-    let isForPagination = false;
-
-    filterEntries.map(([filter, filterValue]) => {
-      if (filterValue !== undefined) {
-        const filterFromUrl = searchParams.get(filter);
-
-        if (filterFromUrl !== null) {
-          isForPagination = true;
-          setFilterForPagi(filter, filterValue);
-        } else {
-          setFilterForInfntScroll(filter, filterValue);
-        }
-      }
-    });
+    const filterEntries = filterEntriesWithUndefined.filter(
+      ([filter, filterValue]) => filterValue !== undefined,
+    );
 
     if (isForPagination) {
+      filterEntries.map(([filterType, filterValue]) => {
+        const filterFromUrl = searchParams.get(filterType);
+
+        if (filterFromUrl !== null) {
+          setFilterForPagi(filterType, filterValue);
+        }
+      });
+
       setSearchParams(searchParams);
+      //
+    } else {
+      const nextFiltersToSet: { [key: string]: any } = {};
+
+      const nextFilters = filterEntries.filter(([filterType]) => checkForFilter(filterType));
+
+      nextFilters.forEach(([filterType, filterValue]) => {
+        nextFiltersToSet[filterType] = filterValue;
+      });
+
+      setFilterForInfntScroll(nextFiltersToSet);
     }
   };
 

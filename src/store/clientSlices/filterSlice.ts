@@ -117,7 +117,7 @@ export const filterSlice = createSlice({
       const { filters, list } = action.payload;
 
       if (filters) {
-        state.talk.filters = filters;
+        state.talk.filters = { ...state.talk.filters, ...filters };
       }
       if (list) {
         state.talk.list = list;
