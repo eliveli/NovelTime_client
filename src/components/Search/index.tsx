@@ -1,7 +1,6 @@
 // import {} from "./Search.components";
 import { useEffect, useRef, useState } from "react";
 import { useCloseOutsideClick, useMultipleSearchFilters, useSearchFilter } from "utils";
-import { useSearchParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import {
   setSearchTextCtgr,
@@ -49,7 +48,7 @@ export function SearchBar({
   const {
     currentFilters: { currentSearchType },
     setFilters,
-  } = useMultipleSearchFilters("searchType");
+  } = useMultipleSearchFilters();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     typeSearchWord(e.target.value); // prevent component rerender as using useRef not useState
@@ -179,7 +178,7 @@ export function SearchFilter({ searchWordRef }: { searchWordRef: React.MutableRe
   const {
     currentFilters: { currentSearchType },
     setFilters,
-  } = useMultipleSearchFilters("searchType");
+  } = useMultipleSearchFilters();
 
   // // props from Filter component
   // const { writing, selectedCategory, handleCategory, content, selectContent } = searchProps;

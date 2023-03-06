@@ -23,7 +23,7 @@ export default function FreeTalkList() {
       currentSortType,
       currentPageNo,
     },
-  } = useMultipleSearchFilters("genre", "searchType", "searchWord", "sortType", "pageNo");
+  } = useMultipleSearchFilters();
 
   const { genreMatched, searchTypeMatched, sortTypeMatched } = matchFilterNames({
     genre: currentGenre,
@@ -39,7 +39,7 @@ export default function FreeTalkList() {
     // ㄴwhen searchType is "no" searchWord is not considered
     // ㄴㄴbut searchWord can't be empty string because parameter in path can't be empty
     sortBy: sortTypeMatched,
-    pageNo: currentPageNo,
+    pageNo: Number(currentPageNo),
   });
 
   const writingsForInfntScroll = useWritingsWithInfntScroll({
@@ -77,7 +77,9 @@ export default function FreeTalkList() {
       {/* for tablet and pc */}
       {isForPagination && data?.talks?.map((talk) => <FreeTalk key={talk.talkId} talk={talk} />)}
 
-      {isForPagination && data && <PageNOs selectedNo={currentPageNo} lastNo={data.lastPageNo} />}
+      {isForPagination && data && (
+        <PageNOs selectedNo={Number(currentPageNo)} lastNo={data.lastPageNo} />
+      )}
     </MainBG>
   );
 }

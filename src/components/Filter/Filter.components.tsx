@@ -104,7 +104,7 @@ export function SortTablet({
   const {
     currentFilters: { currentSortType },
     setFilters,
-  } = useMultipleSearchFilters("sortType");
+  } = useMultipleSearchFilters();
   // * I am considering a button to exchange modes between pagination and infinite scroll
 
   const sortTypes: SortTypeFromFilter[] = [

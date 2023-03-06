@@ -10,7 +10,7 @@ export default function SortWriting() {
   const {
     currentFilters: { currentSortType },
     setFilters,
-  } = useMultipleSearchFilters("sortType");
+  } = useMultipleSearchFilters();
 
   const sortTypes: SortTypeFromFilter[] = [
     "작성일New",
