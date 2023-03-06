@@ -1,6 +1,5 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { SortTypeFromFilter } from "./modalSlice";
 
 export type GenresFromFilter =
   | "All"
@@ -17,7 +16,16 @@ export type GenresFromFilter =
 
 export type SearchTypeFromFilter = "Title" | "Desc" | "Writer" | "Novel";
 
+export type SortTypeFromFilter =
+  | "작성일New"
+  | "작성일Old"
+  | "댓글Up"
+  | "댓글Down"
+  | "좋아요Up"
+  | "좋아요Down";
+
 type FilterType = "genre" | "searchType" | "searchWord" | "sortType" | "pageNo";
+
 type TalkFilters = {
   genre: GenresFromFilter;
   searchType: SearchTypeFromFilter;
