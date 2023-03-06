@@ -110,7 +110,7 @@ export const filterSlice = createSlice({
     setTalkList: (
       state,
       action: PayloadAction<{
-        filters?: TalkFilters;
+        filters?: { [key: string]: string | number };
         list?: any[];
       }>,
     ) => {
