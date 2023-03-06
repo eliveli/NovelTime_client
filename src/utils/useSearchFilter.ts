@@ -1,6 +1,7 @@
 import { useSearchParams } from "react-router-dom";
 import { setTalkList } from "store/clientSlices/filterSlice";
 import { useAppDispatch, useAppSelector } from "store/hooks";
+import { TALK_LIST } from "./pathname";
 
 type FilterType = "genre" | "searchType" | "searchWord" | "sortType" | "pageNo";
 
@@ -11,7 +12,7 @@ type KeyOfFilters =
   | "currentSortType"
   | "currentPageNo";
 
-type CurrentFilters = { [key in KeyOfFilters]: string | number };
+type CurrentFilters = { [key in KeyOfFilters]: string };
 
 type FiltersInState = { [key in FilterType]: string | number };
 
@@ -32,10 +33,10 @@ export function useMultipleSearchFilters() {
     currentSearchType: "",
     currentSearchWord: "",
     currentSortType: "",
-    currentPageNo: 0,
+    currentPageNo: "0",
   };
 
-  const setCurrentFilter = (filter: string, filterValue: string | number) => {
+  const setCurrentFilter = (filter: string, filterValue: string) => {
     const keyOfFilters = `current${filter.charAt(0).toUpperCase()}${filter.slice(
       1,
     )}` as KeyOfFilters;
@@ -56,12 +57,12 @@ export function useMultipleSearchFilters() {
   const getFiltersFromState = (filtersFromState: { [key in FilterType]: string | number }) => {
     const filterEntries = Object.entries(filtersFromState);
 
-    filterEntries.map(([filter, filterValueFromState]) => {
-      setCurrentFilter(filter, filterValueFromState);
+    filterEntries.forEach(([filter, filterValueFromState]) => {
+      setCurrentFilter(filter, String(filterValueFromState));
     });
   };
 
-  if (pathname === "/talk-list") {
+  if (pathname === TALK_LIST) {
     if (isForPagination) {
       getFiltersFromUrl(["genre", "searchType", "searchWord", "sortType", "pageNo"]);
     } else {
@@ -74,25 +75,35 @@ export function useMultipleSearchFilters() {
     searchParams.set(filter, String(nextValue));
   };
 
-  const checkForFilterInCertainPath = (filter: string) => {
-    if (pathname === "/talk-list") {
+  const checkForFilterInCertainPath = (filter: string, pathForInfntScroll?: string) => {
+    // if pathForInfntScroll exists then check for it
+    if (pathForInfntScroll === TALK_LIST) {
+      return ["genre", "searchType", "searchWord", "sortType", "pageNo"].includes(filter);
+    }
+
+    if (pathname === TALK_LIST) {
       return ["genre", "searchType", "searchWord", "sortType", "pageNo"].includes(filter);
     }
   };
 
   const setFilterForInfntScroll = (nextFiltersToSet: { [key: string]: any }) => {
-    if (pathname === "/talk-list") {
+    if (pathname === TALK_LIST) {
       dispatch(setTalkList({ filters: nextFiltersToSet }));
     }
   };
 
-  const setFilters = (filtersToSet: {
-    genre?: string;
-    searchType?: string;
-    searchWord?: string;
-    sortType?: string;
-    pageNo?: number;
-  }) => {
+  const setFilters = (
+    filtersToSet: {
+      genre?: string;
+      searchType?: string;
+      searchWord?: string;
+      sortType?: string;
+      pageNo?: number;
+    },
+    pathForInfntScroll?: string,
+    // set filters for search list in this path
+    // if it is undefined, set filters for current path
+  ) => {
     const filterEntriesWithUndefined = Object.entries(filtersToSet);
 
     const filterEntries = filterEntriesWithUndefined.filter(
@@ -113,7 +124,7 @@ export function useMultipleSearchFilters() {
       const nextFiltersToSet: { [key: string]: any } = {};
 
       const nextFilters = filterEntries.filter(([filterType]) =>
-        checkForFilterInCertainPath(filterType),
+        checkForFilterInCertainPath(filterType, pathForInfntScroll),
       );
 
       nextFilters.forEach(([filterType, filterValue]) => {
@@ -137,7 +148,7 @@ export function useSearchFilter(filterType: FilterType) {
   const [searchParams, setSearchParams] = useSearchParams();
 
   // check whether the filter is correct in current path
-  if (pathname === "/talk-list") {
+  if (pathname === TALK_LIST) {
     const isCorrectFilter = ["genre", "searchType", "searchWord", "sortType", "pageNo"].includes(
       filterType,
     );
@@ -146,14 +157,14 @@ export function useSearchFilter(filterType: FilterType) {
   }
 
   // get current filter //
-  let currentFilter: string | number | undefined;
+  let currentFilter = "";
 
   const getFilterFromState = () => {
-    if (pathname === "/talk-list") {
-      currentFilter = talkFiltersFromState[filterType];
+    if (pathname === TALK_LIST) {
+      currentFilter = String(talkFiltersFromState[filterType]);
     }
 
-    if (currentFilter === undefined) {
+    if (currentFilter === "undefined") {
       throw Error("filter was not matched with filters from state");
     }
   };
@@ -179,7 +190,7 @@ export function useSearchFilter(filterType: FilterType) {
   };
 
   const setFilterForInfntScroll = (nextValue: string | number) => {
-    if (pathname === "/talk-list") {
+    if (pathname === TALK_LIST) {
       dispatch(setTalkList({ filters: { [filterType]: nextValue } }));
     }
   };

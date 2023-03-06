@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 
 import { useSearchParams } from "react-router-dom";
+import { TALK_LIST } from "./pathname";
 
 type FilterType = "genre" | "searchType" | "searchWord" | "sortType" | "pageNo";
 
@@ -77,7 +78,7 @@ export default function useResetFiltersFromUrl() {
   useEffect(() => {
     if (!isForPagination) return;
 
-    if (pathname === "/talk-list") {
+    if (pathname === TALK_LIST) {
       resetFiltersFromUrl(["genre", "searchType", "searchWord", "sortType", "pageNo"]);
     }
   }, [isForPagination, pathname]);

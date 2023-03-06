@@ -17,18 +17,9 @@ import {
   logoPC,
 } from "assets/images";
 import Icon from "assets/Icon";
-import {
-  selectGenre,
-  selectSearchType,
-  setPageNo,
-  setSearchWord,
-} from "store/clientSlices/filterSlice";
-import {
-  sortWriting,
-  filterContent,
-  openModal,
-  setLikeNovel,
-} from "../../store/clientSlices/modalSlice";
+import { useMultipleSearchFilters } from "utils";
+import { ADD_WRITING, MESSAGE_LIST, NOVEL_LIST, RECOMMEND_LIST, TALK_LIST } from "utils/pathname";
+import { filterContent, openModal, setLikeNovel } from "../../store/clientSlices/modalSlice";
 import { handleWritingSubmit } from "../../store/clientSlices/writingSlice";
 import { useAppSelector, useAppDispatch } from "../../store/hooks";
 
@@ -89,11 +80,11 @@ export function NavPC({ pathname }: Props) {
           {[
             [
               "FreeTalk",
-              "/talk-list?genre=All&searchType=no&searchWord=&sortType=작성일New&pageNo=1",
+              `${TALK_LIST}?genre=All&searchType=no&searchWord=&sortType=작성일New&pageNo=1`,
             ],
-            ["Recommend", "/recommend-list"],
-            ["Novel", "/novel-list"],
-            ["Message", "/message-list"],
+            ["Recommend", RECOMMEND_LIST],
+            ["Novel", NOVEL_LIST],
+            ["Message", MESSAGE_LIST],
           ].map((_, idx) => {
             // when path is from novel detail to anywhere, mark Novel in the NavBar
             // but for other path, path is the same name in the Nav
@@ -107,22 +98,7 @@ export function NavPC({ pathname }: Props) {
               <NavContent
                 key={_[0]}
                 onClick={() => {
-                  // 리스트 필터 초기화
-                  // 페이지네이션에서 불필요
-                  // * but 무한스크롤 <-> 페이지네이션 전환 버튼 고려 중
-                  // *  이 경우 전체 코드에서 검색 필터(from client state) 설정 부분을
-                  // *  useMultipleSearchFilters or useSearchFilter 사용하도록 바꿀 필요 있음
-                  if ([0, 1].includes(idx)) {
-                    dispatch(selectGenre("All"));
-                    dispatch(selectSearchType("Title"));
-                    dispatch(setSearchWord(""));
-                    dispatch(setPageNo(1));
-                    dispatch(sortWriting("작성일New"));
-
-                    navigate(_[1]);
-                  } else {
-                    navigate(_[1]);
-                  }
+                  navigate(_[1]);
                 }}
                 isCurrentPath={isPath}
               >
@@ -239,9 +215,9 @@ export function NavMobileMainTop() {
 export function NavMobileMainBottom({ pathname }: Props) {
   const theme = {};
 
-  const dispatch = useAppDispatch();
-
   const navigate = useNavigate();
+
+  const { setFilters } = useMultipleSearchFilters();
 
   return (
     <ThemeProvider theme={theme}>
@@ -249,27 +225,30 @@ export function NavMobileMainBottom({ pathname }: Props) {
       <NavContentBoxMobile isMainBottom>
         {/* [category name, route path] */}
         {[
-          ["FreeTalk", "/talk-list", freeTalk, freeTalkActive],
-          ["Recommend", "/recommend-list", recommend, recommendActive],
-          ["AddWriting", "/add-writing", addWriting, addWritingActive], // 추후 라우팅 필요
-          ["Novel", "/novel-list", novel, novelActive],
-          ["Message", "/message-list", message, messageActive],
+          ["FreeTalk", TALK_LIST, freeTalk, freeTalkActive],
+          ["Recommend", RECOMMEND_LIST, recommend, recommendActive],
+          ["AddWriting", ADD_WRITING, addWriting, addWritingActive], // 추후 라우팅 필요
+          ["Novel", NOVEL_LIST, novel, novelActive],
+          ["Message", MESSAGE_LIST, message, messageActive],
         ].map((_, idx) => (
           <NavContent
             key={_[0]}
             onClick={() => {
               // 리스트 필터 초기화
               if ([0, 1].includes(idx)) {
-                dispatch(selectGenre("All"));
-                dispatch(selectSearchType("Title"));
-                dispatch(setSearchWord(""));
-                dispatch(setPageNo(1));
-                dispatch(sortWriting("작성일New"));
-
-                navigate(_[1]);
-              } else {
-                navigate(_[1]);
+                setFilters(
+                  {
+                    genre: "All",
+                    searchType: "Title",
+                    searchWord: "",
+                    sortType: "작성일New",
+                    pageNo: 1,
+                  },
+                  _[1],
+                );
               }
+
+              navigate(_[1]);
             }}
           >
             {/* not clicked or clicked element */}
@@ -363,7 +342,6 @@ export function NavMobileDetail({ parameter, pathname, handleMsgList }: DetailPr
             <HomeIconBox
               onClick={() => {
                 navigate("/");
-                dispatch(sortWriting("작성일New")); // reset category for sorting writings
                 dispatch(filterContent("Novel")); // reset category for filtering content
               }}
             >
