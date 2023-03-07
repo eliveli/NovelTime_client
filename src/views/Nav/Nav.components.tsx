@@ -19,6 +19,7 @@ import {
 import Icon from "assets/Icon";
 import { useMultipleSearchFilters } from "utils";
 import { ADD_WRITING, MESSAGE_LIST, NOVEL_LIST, RECOMMEND_LIST, TALK_LIST } from "utils/pathname";
+import { setTalkList } from "store/clientSlices/filterSlice";
 import { filterContent, openModal, setLikeNovel } from "../../store/clientSlices/modalSlice";
 import { handleWritingSubmit } from "../../store/clientSlices/writingSlice";
 import { useAppSelector, useAppDispatch } from "../../store/hooks";
@@ -217,7 +218,7 @@ export function NavMobileMainBottom({ pathname }: Props) {
 
   const navigate = useNavigate();
 
-  const { setFilters } = useMultipleSearchFilters();
+  const dispatch = useAppDispatch();
 
   return (
     <ThemeProvider theme={theme}>
@@ -236,16 +237,20 @@ export function NavMobileMainBottom({ pathname }: Props) {
             onClick={() => {
               // 리스트 필터 초기화
               if ([0, 1].includes(idx)) {
-                setFilters(
-                  {
-                    genre: "All",
-                    searchType: "Title",
-                    searchWord: "",
-                    sortType: "작성일New",
-                    pageNo: 1,
-                  },
-                  _[1],
-                );
+                const initialFilters = {
+                  genre: "All",
+                  searchType: "Title",
+                  searchWord: "",
+                  sortType: "작성일New",
+                  pageNo: 1,
+                };
+
+                if (idx === 0) {
+                  dispatch(setTalkList({ filters: initialFilters, list: "reset" }));
+                }
+                if (idx === 1) {
+                  // dispatch for recommend list
+                }
               }
 
               navigate(_[1]);

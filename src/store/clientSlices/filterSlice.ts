@@ -43,7 +43,7 @@ export type IsFilterState = {
   // to treat back page
   talk: {
     filters: TalkFilters;
-    list: any[];
+    list?: any[];
   };
   // recommend: { filters: Filters; list: any[] };
   // novel: { filters: Filters; list: any[] };
@@ -71,7 +71,7 @@ const initialState: IsFilterState = {
       sortType: "작성일New",
       pageNo: 1,
     },
-    list: [],
+    list: undefined,
   },
   // recommend: { filters: {}, list: [] },
   // novel: { filters: {}, list: [] },
@@ -119,7 +119,7 @@ export const filterSlice = createSlice({
       state,
       action: PayloadAction<{
         filters?: { [key: string]: string | number };
-        list?: any[];
+        list?: any[] | "reset";
       }>,
     ) => {
       const { filters, list } = action.payload;
@@ -127,7 +127,10 @@ export const filterSlice = createSlice({
       if (filters) {
         state.talk.filters = { ...state.talk.filters, ...filters };
       }
-      if (list) {
+
+      if (list === "reset") {
+        state.talk.list = undefined;
+      } else if (list) {
         state.talk.list = list;
       }
     },

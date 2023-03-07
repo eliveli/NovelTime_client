@@ -1,4 +1,5 @@
-import { closeModal, SortTypeFromFilter } from "store/clientSlices/modalSlice";
+import { SortTypeFromFilter } from "store/clientSlices/filterSlice";
+import { closeModal } from "store/clientSlices/modalSlice";
 import { useMultipleSearchFilters } from "utils";
 import { useAppDispatch } from "../../store/hooks";
 

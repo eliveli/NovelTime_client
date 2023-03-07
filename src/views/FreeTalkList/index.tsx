@@ -3,12 +3,13 @@ import Filter from "components/Filter";
 import { useGetWritingsFilteredQuery } from "store/serverAPIs/novelTime";
 import { TalkList, WritingList } from "store/serverAPIs/types";
 import {
-  useWritingsWithInfntScroll,
+  useSearchListWithInfntScroll,
   useResetFiltersFromUrl,
   useMultipleSearchFilters,
   matchFilterNames,
 } from "utils";
 import PageNOs from "components/PageNOs";
+import { useAppSelector } from "store/hooks";
 import FreeTalk from "./FreeTalkList.components";
 
 export default function FreeTalkList() {
@@ -42,7 +43,9 @@ export default function FreeTalkList() {
     pageNo: Number(currentPageNo),
   });
 
-  const writingsForInfntScroll = useWritingsWithInfntScroll({
+  const { list: listForInfntScroll } = useAppSelector((state) => state.filter.talk);
+
+  useSearchListWithInfntScroll({
     isForPagination,
     isFetching,
     data,
@@ -67,12 +70,15 @@ export default function FreeTalkList() {
     },
   ];
 
+  // *list가 []일 때 콘텐트 없다는 컴포넌트 표시
+  // ㄴ페이지네이션 여부에 따라 list 다름
+  // ㄴundefined 일 때도 콘텐트 없음 표시?
+
   return (
     <MainBG>
       <Filter />
-      {writingsForInfntScroll?.map((talk) => (
-        <FreeTalk key={talk.talkId} talk={talk} />
-      ))}
+      {!isForPagination &&
+        listForInfntScroll?.map((talk) => <FreeTalk key={talk.talkId} talk={talk} />)}
 
       {/* for tablet and pc */}
       {isForPagination && data?.talks?.map((talk) => <FreeTalk key={talk.talkId} talk={talk} />)}

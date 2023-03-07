@@ -16,12 +16,12 @@ import {
 } from "./matchName";
 import checkIsNearBottom from "./checkIsNearBottom";
 import { useSearchFilter, useMultipleSearchFilters } from "./useSearchFilter";
-import useWritingsWithInfntScroll from "./useWritingsWithInfntScroll";
+import useSearchListWithInfntScroll from "./useSearchListWithInfntScroll";
 import useResetFiltersFromUrl from "./useResetFiltersFromUrl";
 
 export {
   useResetFiltersFromUrl,
-  useWritingsWithInfntScroll,
+  useSearchListWithInfntScroll,
   checkIsNearBottom,
   useSearchFilter,
   useMultipleSearchFilters,

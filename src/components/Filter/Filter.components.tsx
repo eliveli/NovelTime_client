@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { useCloseOutsideClick, useMultipleSearchFilters, useSearchFilter } from "utils";
-import { GenresFromFilter, setPageNo } from "store/clientSlices/filterSlice";
-import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { openModal, SortTypeFromFilter, sortWriting } from "../../store/clientSlices/modalSlice";
+import { GenresFromFilter, SortTypeFromFilter } from "store/clientSlices/filterSlice";
+import { useAppDispatch } from "../../store/hooks";
+import { openModal } from "../../store/clientSlices/modalSlice";
 import {
   SortMobileContainer,
   SortTabletContainer,
