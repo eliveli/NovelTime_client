@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSearchFilter } from "utils";
 import Search from "../Search";
 import { SearchBtn, Genres, SortMobile, SortTablet } from "./Filter.components";
@@ -20,6 +20,13 @@ export default function Filter() {
   // show or not search component
   const [isSearch, handleSearch] = useState(!!currentSearchWord);
   // ㄴ뒤로가기로 search list 복귀 시 검색어가 존재한다면 인풋 보이기(!!currentSearchWord as initial value)
+
+  // 현재 활성화된 카테고리(i.e.프리톡리스트)를 다시 눌러 필터 초기화할 때 검색 인풋 지우기
+  useEffect(() => {
+    if (currentSearchWord === "") {
+      handleSearch(false);
+    }
+  }, [currentSearchWord]);
 
   // // which category will be shown : novel or writing
   // const [selectedCategory, handleCategory] = useState("Novel");
