@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useSearchFilter } from "utils";
 import Search from "../Search";
 import { SearchBtn, Genres, SortMobile, SortTablet } from "./Filter.components";
 import {
@@ -13,8 +14,13 @@ export default function Filter() {
   // get writing name
   const { pathname } = window.location;
   const writing = pathname.includes("talk") ? "FreeTalk" : "Recommend";
+
+  const { currentFilter: currentSearchWord } = useSearchFilter("searchWord");
+
   // show or not search component
-  const [isSearch, handleSearch] = useState(false);
+  const [isSearch, handleSearch] = useState(!!currentSearchWord);
+  // ㄴ뒤로가기로 search list 복귀 시 검색어가 존재한다면 인풋 보이기(!!currentSearchWord as initial value)
+
   // // which category will be shown : novel or writing
   // const [selectedCategory, handleCategory] = useState("Novel");
 

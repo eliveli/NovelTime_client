@@ -309,9 +309,10 @@ export function SearchFilter({ searchWordRef }: { searchWordRef: React.MutableRe
 }
 
 export default function Search() {
-  const [isSearchFilter, handleSearchFilter] = useState(false);
-
   const { currentFilter: currentSearchWord } = useSearchFilter("searchWord");
+
+  const [isSearchFilter, handleSearchFilter] = useState(!!currentSearchWord);
+  // ㄴ뒤로가기로 search list 복귀 시 현재 검색 필터 보이기(!!currentSearchWord as initial value)
 
   const searchWordRef = useRef(currentSearchWord);
   // ㄴ입력하는 검색어를 기억해두고 submit 할 때만 서버 요청
