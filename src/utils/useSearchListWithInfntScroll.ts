@@ -101,11 +101,26 @@ function useSearchListWithInfntScroll({
   useEffect(() => {
     if (isForPagination) return;
 
-    if (isBackPageRef.current && currentList !== undefined) {
-      // . 저장된 리스트가 존재하면 뒤로가기 직후 list 재설정 안 함
+    const { prevGenre, prevSrchType, prevSearchWord, prevSortType, prevPageNo } = prevFilters;
+
+    if (
+      isBackPageRef.current &&
+      currentList !== undefined &&
+      prevGenre === genre &&
+      prevSrchType === searchType &&
+      prevSearchWord === searchWord &&
+      prevSortType === sortType &&
+      prevPageNo === pageNo
+    ) {
+      // . 뒤로가기 직후 아무 동작 안 함 (list 재설정 X. 저장된 것 사용)
+      // . 직후 필터 변경 시 새로운 리스트로 교체 (아래 다른 조건문 참고)
       // . 이후 스크롤을 내려 새로운 list 요청할 때 isBackPageRef.current가 false로 바뀜
       //    그러면 이 조건문 패스, 이후 코드 라인에서 list 재설정
-      // . 뒤로가기 후 새로고침하면 뒤로가기로 분류되나 currentList는 undefined (이 조건문 만족X)
+      // . 뒤로가기 후 새로고침하면 currentList는 undefined (이 조건문 만족X)
+      //  __조건문 관련__
+      //   . 컴포넌트 새로 불러오면서 prev 필터가 현재 필터와 같아짐
+      //    ㄴ필터 동일성 체크를 하지 않으면 뒤로가기 후 필터 변경 시 리스트를 새로 저장하지 못함
+      //   . 저장된 리스트 존재
       return;
     }
 
@@ -116,9 +131,6 @@ function useSearchListWithInfntScroll({
       setNextList([]);
       return;
     }
-
-    const { prevGenre, prevSrchType, prevSearchWord, prevSortType, prevPageNo } = prevFilters;
-
     // * 다른 search list 적용 필요
     if (data && data.talks) {
       const { talks: talksFromServer } = data;
@@ -134,19 +146,16 @@ function useSearchListWithInfntScroll({
           prevSrchType: searchType,
           prevSearchWord: searchWord,
           prevSortType: sortType,
-          prevPageNo: pageNo, // 리듀서에서 이미 1로 교체
+          prevPageNo: pageNo,
         });
       } else if (
-        // - 다른 필터 유지하고 페이지번호만 증가할 때
+        // - 다른 필터 유지하고 페이지번호만 증가할 때 list 이어 붙임
         prevGenre === genre &&
         prevSrchType === searchType &&
         prevSearchWord === searchWord &&
         prevSortType === sortType &&
         currentList !== undefined &&
-        (prevPageNo === pageNo - 1 || // <- 이미 writings 존재, 다음 페이지 요청할 때
-          (prevPageNo === 1 && pageNo === 1)) // <- 최초 writings 요청 시
-        // ㄴstate 재설정에 따라 컴포넌트가 한 번에 연이어 리렌더링될 수 있음
-        // ㄴ이 때 allPageWritings에 새로운 writing을 한 번만 추가하기 위해 pageNo 확인 필요
+        prevPageNo === pageNo - 1
       ) {
         setNextList([...currentList, ...talksFromServer]);
         // * change later for other writing list not for TalkList only
@@ -156,7 +165,7 @@ function useSearchListWithInfntScroll({
           prevPageNo: pageNo,
         }));
       } else {
-        // 직전과 필터가 다르면 writings 교체
+        // - 직전과 필터가 다르면 list 교체
         setNextList(talksFromServer);
         // * change later for other writing list not for TalkList only
 
