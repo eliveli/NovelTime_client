@@ -165,8 +165,13 @@ export function useSearchFilter(filterType: FilterType) {
   let currentFilter = "";
 
   const getFilterFromState = () => {
-    if ([TALK_LIST, RECOMMEND_LIST].includes(pathname)) {
+    if (TALK_LIST === pathname) {
       currentFilter = String(talkFiltersFromState[filterType]);
+      return;
+    }
+    if (RECOMMEND_LIST === pathname) {
+      currentFilter = String(recommendFiltersFromState[filterType]);
+      return;
     }
 
     if (currentFilter === "undefined") {
