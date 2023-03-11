@@ -23,7 +23,10 @@ import {
 } from "./Filter.styles";
 
 export function Genres() {
-  const { currentFilter: currentGenre, setFilter: setGenre } = useSearchFilter("genre");
+  const {
+    currentFilters: { currentGenre },
+    setFilters,
+  } = useMultipleSearchFilters();
 
   const genres: GenresFromFilter[] = [
     "All",
@@ -47,7 +50,7 @@ export function Genres() {
           genreName={_}
           selectedGenre={currentGenre}
           onClick={() => {
-            setGenre(_);
+            setFilters({ genre: _, pageNo: 1 });
           }}
         >
           {_}

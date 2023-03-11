@@ -60,12 +60,12 @@ export function SearchBar({
     e.preventDefault();
     if (currentSearchType === "no" && searchWordRef.current !== "") {
       // 직전 검색 타입이 없으나 현재 주어진 검색어가 있을 때
-      setFilters({ searchType: "Title", searchWord: searchWordRef.current });
+      setFilters({ searchType: "Title", searchWord: searchWordRef.current, pageNo: 1 });
     } else if (searchWordRef.current === "") {
       // 주어진 검색어가 없을 때
-      setFilters({ searchType: "no", searchWord: searchWordRef.current });
+      setFilters({ searchType: "no", searchWord: searchWordRef.current, pageNo: 1 });
     } else {
-      setFilters({ searchWord: searchWordRef.current });
+      setFilters({ searchWord: searchWordRef.current, pageNo: 1 });
     }
 
     // show search-filter-component
@@ -249,7 +249,7 @@ export function SearchFilter({ searchWordRef }: { searchWordRef: React.MutableRe
             contentName={_}
             selectedContent={currentSearchType}
             onClick={() => {
-              setFilters({ searchType: _, searchWord: searchWordRef.current });
+              setFilters({ searchType: _, searchWord: searchWordRef.current, pageNo: 1 });
               // ㄴ새로 타이핑한 검색어 함께 변경 - 그렇지 않으면 이전 검색어를 필터로 사용함
 
               dispatch(setSearchContentCtgr(_));
