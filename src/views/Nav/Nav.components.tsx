@@ -19,7 +19,7 @@ import {
 import Icon from "assets/Icon";
 import { useMultipleSearchFilters } from "utils";
 import { ADD_WRITING, MESSAGE_LIST, NOVEL_LIST, RECOMMEND_LIST, TALK_LIST } from "utils/pathname";
-import { setTalkList } from "store/clientSlices/filterSlice";
+import { setListType, setSearchList } from "store/clientSlices/filterSlice";
 import { filterContent, openModal, setLikeNovel } from "../../store/clientSlices/modalSlice";
 import { handleWritingSubmit } from "../../store/clientSlices/writingSlice";
 import { useAppSelector, useAppDispatch } from "../../store/hooks";
@@ -83,7 +83,10 @@ export function NavPC({ pathname }: Props) {
               "FreeTalk",
               `${TALK_LIST}?genre=All&searchType=no&searchWord=&sortType=작성일New&pageNo=1`,
             ],
-            ["Recommend", RECOMMEND_LIST],
+            [
+              "Recommend",
+              `${RECOMMEND_LIST}?genre=All&searchType=no&searchWord=&sortType=작성일New&pageNo=1`,
+            ],
             ["Novel", NOVEL_LIST],
             ["Message", MESSAGE_LIST],
           ].map((_, idx) => {
@@ -245,12 +248,9 @@ export function NavMobileMainBottom({ pathname }: Props) {
                   pageNo: 1,
                 };
 
-                if (idx === 0) {
-                  dispatch(setTalkList({ filters: initialFilters, list: "reset" }));
-                }
-                if (idx === 1) {
-                  // dispatch for recommend list
-                }
+                const listType = setListType(_[1]);
+
+                dispatch(setSearchList({ listType, filters: initialFilters, list: "reset" }));
               }
 
               navigate(_[1]);

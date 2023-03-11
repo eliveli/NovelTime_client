@@ -1,10 +1,10 @@
 import { useState, useEffect, useRef } from "react";
 import { useLocation, useNavigationType } from "react-router-dom";
-import { setTalkList } from "store/clientSlices/filterSlice";
+import { setListType, setSearchList } from "store/clientSlices/filterSlice";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { TalkList, WritingList } from "store/serverAPIs/types";
 import checkIsNearBottom from "./checkIsNearBottom";
-import { TALK_LIST } from "./pathname";
+import { RECOMMEND_LIST, TALK_LIST } from "./pathname";
 
 function useSearchListWithInfntScroll({
   isForPagination,
@@ -20,17 +20,28 @@ function useSearchListWithInfntScroll({
 
   const { pathname } = window.location;
 
+  const listType = setListType(pathname);
+
   const dispatch = useAppDispatch();
 
   const isBackPageRef = useRef(false);
 
   const { filters: talkFilters, list: talkList } = useAppSelector((state) => state.filter.talk);
+  const { filters: recommendFilters, list: recommendList } = useAppSelector(
+    (state) => state.filter.recommend,
+  );
 
   const getCurrentFiltersAndList = () => {
     if (pathname === TALK_LIST) {
       return {
         currentFilters: talkFilters,
         currentList: talkList,
+      };
+    }
+    if (pathname === RECOMMEND_LIST) {
+      return {
+        currentFilters: recommendFilters,
+        currentList: recommendList,
       };
     }
 
@@ -51,21 +62,11 @@ function useSearchListWithInfntScroll({
   });
 
   const setNextPageNo = () => {
-    if (pathname === TALK_LIST) {
-      dispatch(setTalkList({ filters: { pageNo: pageNo + 1 } }));
-      return;
-    }
-
-    throw Error("pathname was not matched for infinite scroll");
+    dispatch(setSearchList({ listType, filters: { pageNo: pageNo + 1 } }));
   };
 
   const setNextList = (searchList: any[]) => {
-    if (pathname === TALK_LIST) {
-      dispatch(setTalkList({ list: searchList }));
-      return;
-    }
-
-    throw Error("pathname was not matched for infinite scroll");
+    dispatch(setSearchList({ listType, list: searchList }));
   };
 
   // for infinite scroll
@@ -132,12 +133,13 @@ function useSearchListWithInfntScroll({
       return;
     }
     // * 다른 search list 적용 필요
-    if (data && data.talks) {
-      const { talks: talksFromServer } = data;
+    if (data) {
+      const { talks, recommends } = data;
+      const listFromServer = talks ?? recommends ?? [];
 
       // - 최초 writings 요청할 때
       if (currentList === undefined && pageNo === 1) {
-        setNextList(talksFromServer);
+        setNextList(listFromServer);
         // * change later for other writing list not for TalkList only
 
         // 현재 필터로 교체
@@ -157,7 +159,7 @@ function useSearchListWithInfntScroll({
         currentList !== undefined &&
         prevPageNo === pageNo - 1
       ) {
-        setNextList([...currentList, ...talksFromServer]);
+        setNextList([...currentList, ...listFromServer]);
         // * change later for other writing list not for TalkList only
 
         setPrevFilters((prev) => ({
@@ -166,7 +168,7 @@ function useSearchListWithInfntScroll({
         }));
       } else {
         // - 직전과 필터가 다르면 list 교체
-        setNextList(talksFromServer);
+        setNextList(listFromServer);
         // * change later for other writing list not for TalkList only
 
         // 현재 필터로 교체

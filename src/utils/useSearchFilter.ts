@@ -1,7 +1,7 @@
 import { useSearchParams } from "react-router-dom";
-import { setTalkList } from "store/clientSlices/filterSlice";
+import { setListType, setSearchList } from "store/clientSlices/filterSlice";
 import { useAppDispatch, useAppSelector } from "store/hooks";
-import { TALK_LIST } from "./pathname";
+import { RECOMMEND_LIST, TALK_LIST } from "./pathname";
 
 type FilterType = "genre" | "searchType" | "searchWord" | "sortType" | "pageNo";
 
@@ -20,9 +20,12 @@ type FiltersInState = { [key in FilterType]: string | number };
 export function useMultipleSearchFilters() {
   const { pathname, search } = window.location;
 
+  const listType = setListType(pathname);
+
   const isForPagination = search !== "";
 
   const talkFiltersFromState = useAppSelector((state) => state.filter.talk.filters);
+  const recommendFiltersFromState = useAppSelector((state) => state.filter.recommend.filters);
 
   const dispatch = useAppDispatch();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -62,14 +65,15 @@ export function useMultipleSearchFilters() {
     });
   };
 
-  if (pathname === TALK_LIST) {
+  if ([TALK_LIST, RECOMMEND_LIST].includes(pathname)) {
     if (isForPagination) {
       getFiltersFromUrl(["genre", "searchType", "searchWord", "sortType", "pageNo"]);
-    } else {
+    } else if (TALK_LIST === pathname) {
       getFiltersFromState(talkFiltersFromState);
+    } else if (RECOMMEND_LIST === pathname) {
+      getFiltersFromState(recommendFiltersFromState);
     }
   }
-
   // set next filters //
   const setFilterForPagi = (filter: string, nextValue: any) => {
     searchParams.set(filter, String(nextValue));
@@ -77,19 +81,17 @@ export function useMultipleSearchFilters() {
 
   const checkForFilterInCertainPath = (filter: string, pathForInfntScroll?: string) => {
     // if pathForInfntScroll exists then check for it
-    if (pathForInfntScroll === TALK_LIST) {
+    if ([TALK_LIST, RECOMMEND_LIST].includes(String(pathForInfntScroll))) {
       return ["genre", "searchType", "searchWord", "sortType", "pageNo"].includes(filter);
     }
 
-    if (pathname === TALK_LIST) {
+    if ([TALK_LIST, RECOMMEND_LIST].includes(pathname)) {
       return ["genre", "searchType", "searchWord", "sortType", "pageNo"].includes(filter);
     }
   };
 
   const setFilterForInfntScroll = (nextFiltersToSet: { [key: string]: any }) => {
-    if (pathname === TALK_LIST) {
-      dispatch(setTalkList({ filters: nextFiltersToSet }));
-    }
+    dispatch(setSearchList({ listType, filters: nextFiltersToSet }));
   };
 
   const setFilters = (
@@ -140,15 +142,18 @@ export function useMultipleSearchFilters() {
 export function useSearchFilter(filterType: FilterType) {
   const { pathname, search } = window.location;
 
+  const listType = setListType(pathname);
+
   const isForPagination = search !== "";
 
   const talkFiltersFromState = useAppSelector((state) => state.filter.talk.filters);
+  const recommendFiltersFromState = useAppSelector((state) => state.filter.recommend.filters);
 
   const dispatch = useAppDispatch();
   const [searchParams, setSearchParams] = useSearchParams();
 
   // check whether the filter is correct in current path
-  if (pathname === TALK_LIST) {
+  if ([TALK_LIST, RECOMMEND_LIST].includes(pathname)) {
     const isCorrectFilter = ["genre", "searchType", "searchWord", "sortType", "pageNo"].includes(
       filterType,
     );
@@ -160,7 +165,7 @@ export function useSearchFilter(filterType: FilterType) {
   let currentFilter = "";
 
   const getFilterFromState = () => {
-    if (pathname === TALK_LIST) {
+    if ([TALK_LIST, RECOMMEND_LIST].includes(pathname)) {
       currentFilter = String(talkFiltersFromState[filterType]);
     }
 
@@ -190,9 +195,7 @@ export function useSearchFilter(filterType: FilterType) {
   };
 
   const setFilterForInfntScroll = (nextValue: string | number) => {
-    if (pathname === TALK_LIST) {
-      dispatch(setTalkList({ filters: { [filterType]: nextValue } }));
-    }
+    dispatch(setSearchList({ listType, filters: { [filterType]: nextValue } }));
   };
 
   const setFilter = (nextValue: string | number) => {

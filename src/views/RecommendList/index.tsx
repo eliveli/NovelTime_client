@@ -1,82 +1,68 @@
 import React from "react";
 import MainBG from "components/MainBG";
 import Filter from "components/Filter";
-
+import { useGetWritingsFilteredQuery } from "store/serverAPIs/novelTime";
+import {
+  useSearchListWithInfntScroll,
+  useResetFiltersFromUrl,
+  useMultipleSearchFilters,
+  matchFilterNames,
+} from "utils";
+import PageNOs from "components/PageNOs";
+import { useAppSelector } from "store/hooks";
 import Recommend from "./RecommendList.components";
 
 export default function RecommendList() {
-  const dataFromServer = [
-    {
-      recommend: {
-        recommendId: "abcd", // 좋아요 누르거나 코멘트 작성 시 talkId로 서버 요청
+  const isForPagination = useResetFiltersFromUrl();
 
-        userName: "나나나",
-        userImg: "https://cdn.pixabay.com/photo/2018/08/31/08/35/toys-3644073_960_720.png",
-        createDate: "22.03.03",
-
-        likeNO: 5,
-
-        recommendTitle: "이 소설 강추",
-      },
-      novel: {
-        novelImg:
-          "https://comicthumb-phinf.pstatic.net/20220126_148/pocket_16431735084292970r_JPEG/%C5%A9%B8%AE%BD%BA%C5%BB%BE%C6%B0%A1%BE%BE%B4%C2%B3%B2%C0%DA%B4%D9-%C0%CF%B7%AF%BD%BA%C6%AE%C7%A5%C1%F61.jpg?type=m260", // 시리즈
-        novelTitle: "헌터와 매드 사이언티스트",
-        novelAuthor: "델마르",
-        novelGenre: "로판",
-        isEnd: false,
-      },
+  // get filters from url for pagination or them from state for infinite scroll
+  const {
+    currentFilters: {
+      currentGenre,
+      currentSearchType,
+      currentSearchWord,
+      currentSortType,
+      currentPageNo,
     },
-    {
-      recommend: {
-        recommendId: "abcd", // 좋아요 누르거나 코멘트 작성 시 talkId로 서버 요청
+  } = useMultipleSearchFilters();
 
-        userName: "나나나",
-        userImg: "https://cdn.pixabay.com/photo/2018/08/31/08/35/toys-3644073_960_720.png",
-        createDate: "22.03.03",
+  const { genreMatched, searchTypeMatched, sortTypeMatched } = matchFilterNames({
+    genre: currentGenre,
+    searchType: currentSearchType,
+    sortType: currentSortType,
+  });
 
-        likeNO: 5,
+  const { isLoading, isFetching, isError, data } = useGetWritingsFilteredQuery({
+    listType: "R",
+    novelGenre: genreMatched,
+    searchType: currentSearchWord === "" ? "no" : searchTypeMatched,
+    searchWord: currentSearchWord || "undefined",
+    sortBy: sortTypeMatched,
+    pageNo: Number(currentPageNo),
+  });
 
-        recommendTitle: "이 소설 강추",
-      },
-      novel: {
-        novelImg:
-          "https://comicthumb-phinf.pstatic.net/20220126_148/pocket_16431735084292970r_JPEG/%C5%A9%B8%AE%BD%BA%C5%BB%BE%C6%B0%A1%BE%BE%B4%C2%B3%B2%C0%DA%B4%D9-%C0%CF%B7%AF%BD%BA%C6%AE%C7%A5%C1%F61.jpg?type=m260", // 시리즈
-        novelTitle: "헌터와 매드 사이언티스트",
-        novelAuthor: "델마르",
-        novelGenre: "로판",
-        isEnd: false,
-      },
-    },
-    {
-      recommend: {
-        recommendId: "abcd", // 좋아요 누르거나 코멘트 작성 시 talkId로 서버 요청
+  const { list: listForInfntScroll } = useAppSelector((state) => state.filter.recommend);
 
-        userName: "나나나",
-        userImg: "https://cdn.pixabay.com/photo/2018/08/31/08/35/toys-3644073_960_720.png",
-        createDate: "22.03.03",
-
-        likeNO: 5,
-
-        recommendTitle: "이 소설 강추",
-      },
-      novel: {
-        novelImg:
-          "https://comicthumb-phinf.pstatic.net/20220126_148/pocket_16431735084292970r_JPEG/%C5%A9%B8%AE%BD%BA%C5%BB%BE%C6%B0%A1%BE%BE%B4%C2%B3%B2%C0%DA%B4%D9-%C0%CF%B7%AF%BD%BA%C6%AE%C7%A5%C1%F61.jpg?type=m260", // 시리즈
-        novelTitle: "헌터와 매드 사이언티스트",
-        novelAuthor: "델마르",
-        novelGenre: "로판",
-        isEnd: false,
-      },
-    },
-  ];
+  useSearchListWithInfntScroll({
+    isForPagination,
+    isFetching,
+    data,
+  });
 
   return (
     <MainBG>
       <Filter />
-      {dataFromServer.map((recommendInfo) => (
-        <Recommend recommendInfo={recommendInfo} />
-      ))}
+
+      {!isForPagination &&
+        listForInfntScroll?.map((recommendInfo) => <Recommend recommendInfo={recommendInfo} />)}
+
+      {/* for tablet and pc */}
+      {isForPagination &&
+        data?.recommends?.map((recommendInfo) => <Recommend recommendInfo={recommendInfo} />)}
+
+      {isForPagination && data && (
+        <PageNOs selectedNo={Number(currentPageNo)} lastNo={data.lastPageNo} />
+      )}
     </MainBG>
   );
 }

@@ -51,25 +51,6 @@ export default function FreeTalkList() {
     data,
   });
 
-  // 서버에서 데이터 받아올 때 구성
-  const dataFromServer = [
-    {
-      talkId: "abcd", // 좋아요 누르거나 코멘트 작성 시 talkId로 서버 요청
-
-      userName: "나나나",
-      userImg: "https://cdn.pixabay.com/photo/2018/08/31/08/35/toys-3644073_960_720.png",
-      createDate: "22.03.03",
-
-      likeNO: 5,
-      commentNO: 7,
-
-      talkTitle: "이 소설 강추",
-      talkImg: "", // it can be empty string
-
-      novelTitle: "헌터와 매드 사이언티스트",
-    },
-  ];
-
   // *list가 []일 때 콘텐트 없다는 컴포넌트 표시
   // ㄴ페이지네이션 여부에 따라 list 다름
   // ㄴundefined 일 때도 콘텐트 없음 표시?

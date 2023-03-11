@@ -1,5 +1,12 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { RECOMMEND_LIST, TALK_LIST } from "utils/pathname";
+
+export const setListType = (pathname: string) => {
+  if (pathname === TALK_LIST) return "talk";
+  if (pathname === RECOMMEND_LIST) return "recommend";
+  throw Error("pathname error");
+};
 
 export type GenresFromFilter =
   | "All"
@@ -26,7 +33,7 @@ export type SortTypeFromFilter =
 
 type FilterType = "genre" | "searchType" | "searchWord" | "sortType" | "pageNo";
 
-type TalkFilters = {
+type Filters = {
   genre: GenresFromFilter;
   searchType: SearchTypeFromFilter;
   searchWord: string;
@@ -42,13 +49,15 @@ export type IsFilterState = {
 
   // to treat back page
   talk: {
-    filters: TalkFilters;
+    filters: Filters;
     list?: any[];
   };
-  // recommend: { filters: Filters; list: any[] };
-  // novel: { filters: Filters; list: any[] };
-  // sortOnly: { filters: Filters; list: any[] }; // let's talk and play in 소설 상세 페이지
-  // all: { filters: Filters; list: any[] }; // search for writings or novels in nav
+  recommend: { filters: Filters; list?: any[] };
+
+  // need to change
+  novel: { filters: Filters; list?: any[] };
+  sortOnly: { filters: Filters; list?: any[] }; // let's talk and play in 소설 상세 페이지
+  all: { filters: Filters; list?: any[] }; // search for writings or novels in nav
   //
 
   searchTextCtgr: string;
@@ -73,10 +82,48 @@ const initialState: IsFilterState = {
     },
     list: undefined,
   },
-  // recommend: { filters: {}, list: [] },
-  // novel: { filters: {}, list: [] },
-  // sortOnly: { filters: {}, list: [] },
-  // all: { filters: {}, list: [] },
+  recommend: {
+    filters: {
+      genre: "All",
+      searchType: "Title",
+      searchWord: "",
+      sortType: "작성일New",
+      pageNo: 1,
+    },
+    list: undefined,
+  },
+
+  // need to change
+  novel: {
+    filters: {
+      genre: "All",
+      searchType: "Title",
+      searchWord: "",
+      sortType: "작성일New",
+      pageNo: 1,
+    },
+    list: undefined,
+  },
+  sortOnly: {
+    filters: {
+      genre: "All",
+      searchType: "Title",
+      searchWord: "",
+      sortType: "작성일New",
+      pageNo: 1,
+    },
+    list: undefined,
+  },
+  all: {
+    filters: {
+      genre: "All",
+      searchType: "Title",
+      searchWord: "",
+      sortType: "작성일New",
+      pageNo: 1,
+    },
+    list: undefined,
+  },
   //
 
   searchTextCtgr: "",
@@ -115,23 +162,24 @@ export const filterSlice = createSlice({
       state.pageNo = action.payload;
     },
 
-    setTalkList: (
+    setSearchList: (
       state,
       action: PayloadAction<{
+        listType: "talk" | "recommend" | "novel" | "sortOnly" | "all";
         filters?: { [key: string]: string | number };
         list?: any[] | "reset";
       }>,
     ) => {
-      const { filters, list } = action.payload;
+      const { listType, filters, list } = action.payload;
 
       if (filters) {
-        state.talk.filters = { ...state.talk.filters, ...filters };
+        state[listType].filters = { ...state[listType].filters, ...filters };
       }
 
       if (list === "reset") {
-        state.talk.list = undefined;
+        state[listType].list = undefined;
       } else if (list) {
-        state.talk.list = list;
+        state[listType].list = list;
       }
     },
 
@@ -163,7 +211,7 @@ export const {
   setSearchWord,
   setPageNo,
 
-  setTalkList,
+  setSearchList,
 
   setSearchTextCtgr,
   setSearchContentCtgr,
