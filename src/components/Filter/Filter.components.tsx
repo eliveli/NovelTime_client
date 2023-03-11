@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useCloseOutsideClick, useMultipleSearchFilters, useSearchFilter } from "utils";
-import { GenresFromFilter, SortTypeFromFilter } from "store/clientSlices/filterSlice";
+import { GenresFromFilter, setSortTypes } from "store/clientSlices/filterSlice";
 import { useAppDispatch } from "../../store/hooks";
 import { openModal } from "../../store/clientSlices/modalSlice";
 import {
@@ -97,6 +97,7 @@ export function SortMobile({ borderOpacity }: { borderOpacity?: number }) {
     </SortMobileContainer>
   );
 }
+
 export function SortTablet({
   isSearch,
   borderOpacity,
@@ -110,14 +111,7 @@ export function SortTablet({
   } = useMultipleSearchFilters();
   // * I am considering a button to exchange modes between pagination and infinite scroll
 
-  const sortTypes: SortTypeFromFilter[] = [
-    "작성일New",
-    "작성일Old",
-    "댓글Up",
-    "댓글Down",
-    "좋아요Up",
-    "좋아요Down",
-  ];
+  const sortTypes = setSortTypes();
 
   // open or close all list
   const [isCategoryList, handleCategoryList] = useState(false);

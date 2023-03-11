@@ -20,7 +20,7 @@ function useSearchListWithInfntScroll({
 
   const { pathname } = window.location;
 
-  const listType = setListType(pathname);
+  const listType = setListType();
 
   const dispatch = useAppDispatch();
 

@@ -2,10 +2,22 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RECOMMEND_LIST, TALK_LIST } from "utils/pathname";
 
-export const setListType = (pathname: string) => {
+export const setListType = () => {
+  const { pathname } = window.location;
   if (pathname === TALK_LIST) return "talk";
   if (pathname === RECOMMEND_LIST) return "recommend";
-  throw Error("pathname error");
+  throw Error("pathname error when setting list type");
+};
+
+export const setSortTypes = () => {
+  const { pathname } = window.location;
+
+  if (pathname === TALK_LIST) {
+    return ["작성일New", "작성일Old", "댓글Up", "댓글Down", "좋아요Up", "좋아요Down"];
+  }
+  if (pathname === RECOMMEND_LIST) return ["작성일New", "작성일Old", "좋아요Up", "좋아요Down"];
+
+  throw Error("pathname error when setting sort type");
 };
 
 export type GenresFromFilter =

@@ -20,7 +20,7 @@ type FiltersInState = { [key in FilterType]: string | number };
 export function useMultipleSearchFilters() {
   const { pathname, search } = window.location;
 
-  const listType = setListType(pathname);
+  const listType = setListType();
 
   const isForPagination = search !== "";
 
@@ -142,7 +142,7 @@ export function useMultipleSearchFilters() {
 export function useSearchFilter(filterType: FilterType) {
   const { pathname, search } = window.location;
 
-  const listType = setListType(pathname);
+  const listType = setListType();
 
   const isForPagination = search !== "";
 

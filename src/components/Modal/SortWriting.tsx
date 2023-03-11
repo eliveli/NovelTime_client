@@ -1,4 +1,4 @@
-import { SortTypeFromFilter } from "store/clientSlices/filterSlice";
+import { setSortTypes } from "store/clientSlices/filterSlice";
 import { closeModal } from "store/clientSlices/modalSlice";
 import { useMultipleSearchFilters } from "utils";
 import { useAppDispatch } from "../../store/hooks";
@@ -13,15 +13,7 @@ export default function SortWriting() {
     setFilters,
   } = useMultipleSearchFilters();
 
-  const sortTypes: SortTypeFromFilter[] = [
-    "작성일New",
-    "작성일Old",
-    "댓글Up",
-    "댓글Down",
-    "좋아요Up",
-    "좋아요Down",
-  ];
-
+  const sortTypes = setSortTypes();
   return (
     <MobileBG>
       <SortBox>
