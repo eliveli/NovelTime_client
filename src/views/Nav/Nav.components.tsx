@@ -248,7 +248,7 @@ export function NavMobileMainBottom({ pathname }: Props) {
                   pageNo: 1,
                 };
 
-                const listType = setListType(_[1]);
+                const listType = setListType();
 
                 dispatch(setSearchList({ listType, filters: initialFilters, list: "reset" }));
               }

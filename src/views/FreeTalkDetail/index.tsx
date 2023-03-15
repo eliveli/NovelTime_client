@@ -11,19 +11,35 @@ import {
   WriteComment,
 } from "components/Writing";
 import { ContentAnimation } from "views/RecommendDetail/RecommendDetail.styles";
+import { useGetTalkDetailQuery } from "store/serverAPIs/novelTime";
 
 // server request by talkID
 
 export default function FreeTalkDetail() {
   const { talkId, commentId } = useParams();
 
+  const sortTypeForComments = "old"; // * 설정 필요
+
+  const { isLoading, isFetching, isError, data } = useGetTalkDetailQuery({
+    writingType: "T",
+    writingId: talkId as string,
+    sortType: sortTypeForComments,
+  });
+
+  if (!talkId || isError || !data) return <div>***에러 페이지 띄우기</div>;
+
   // 서버에서 데이터 받아올 때 구성 // dataFromServer = { talk, novel }
   const dataFromServer = {
     talk: {
       talkId: "asdsasdssa", // 좋아요 누르거나 코멘트 작성 시 talkId로 서버 요청
 
+      userId: "sssss",
+      // it is necessary to divide whether login user is its writer
+      // if yes, login user can remove or edit this content
       userName: "나나나",
       userImg: "",
+      // change this to { src : "", position : ""}
+
       createDate: "22.03.03",
 
       likeNO: 5,
@@ -74,13 +90,21 @@ export default function FreeTalkDetail() {
     {
       commentId: "zzzabc",
       userName: "리리리",
-      userImg: "https://cdn.pixabay.com/photo/2018/08/31/08/35/toys-3644073_960_720.png",
+      userImg: {
+        src: "https://cdn.pixabay.com/photo/2018/08/31/08/35/toys-3644073_960_720.png",
+        position: "",
+      },
+      // * ㄴ컴포넌트에서 변경 필요 from  userImg : string
       commentContent: "코멘트 작성 중",
       createDate: "22.01.05",
       reComment: [
         {
           commentId: "zzabssssscde",
-          reCommentUserName: "lala",
+          parentCommentId: "zzzabc",
+          // * ㄴ새로 추가한 것
+          // * ㄴ리코멘트 클릭 시 원본 코멘/리코멘 표시
+          parentCommentUserName: "lala",
+          // * ㄴ변수명 변경 from reCommentUserName
           userName: "fff",
           userImg: "https://cdn.pixabay.com/photo/2018/08/31/08/35/toys-3644073_960_720.png",
           commentContent: "그러하오",
@@ -136,12 +160,12 @@ export default function FreeTalkDetail() {
     <MainBG isWritingDetail>
       <WritingDetailContainer>
         <BoardMark>Let's Free Talk about Novel!</BoardMark>
-        <TalkDetail detailTalk={dataFromServer.talk} />
-        <NovelInWriting novel={dataFromServer.novel} />
-        <LikeAndShare isLike={dataFromServer.talk.isLike} likeNO={dataFromServer.talk.likeNO} />
+        <TalkDetail detailTalk={data.talk} />
+        <NovelInWriting novel={data.novel} />
+        <LikeAndShare isLike={data.talk.isLike} likeNO={data.talk.likeNO} />
       </WritingDetailContainer>
       <ContentAnimation isTalkComnt>
-        <CommentList commentList={commentList} commentIdForScroll={commentId} />
+        <CommentList commentList={data.commentList} commentIdForScroll={commentId} />
         <WriteComment />
       </ContentAnimation>
     </MainBG>

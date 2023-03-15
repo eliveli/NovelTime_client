@@ -33,7 +33,7 @@ export default function FreeTalkList() {
   });
 
   const { isLoading, isFetching, isError, data } = useGetWritingsFilteredQuery({
-    listType: "T",
+    writingType: "T",
     novelGenre: genreMatched,
     searchType: currentSearchWord === "" ? "no" : searchTypeMatched,
     searchWord: currentSearchWord || "undefined",

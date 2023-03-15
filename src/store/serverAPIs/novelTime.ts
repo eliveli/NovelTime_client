@@ -25,6 +25,8 @@ import {
   ParamForNovelListByCategory,
   WritingList,
   ParamForGettingWritings,
+  ParamForGettingWriting,
+  TalkDetail,
 } from "./types";
 import type { RootState } from "../index";
 
@@ -90,10 +92,15 @@ export const novelTimeApi = createApi({
       query: (novelId) => `/novels/detail/${novelId}`,
     }),
 
-    // at writing list and search page
+    // in writing list or search page
     getWritingsFiltered: builder.query<WritingList, ParamForGettingWritings>({
       query: (params) =>
-        `/writing/${params.listType}/${params.novelGenre}/${params.searchType}/${params.searchWord}/${params.sortBy}/${params.pageNo}`,
+        `/writing/${params.writingType}/${params.novelGenre}/${params.searchType}/${params.searchWord}/${params.sortBy}/${params.pageNo}`,
+    }),
+
+    // in talk-detail page
+    getTalkDetail: builder.query<TalkDetail, ParamForGettingWriting>({
+      query: (params) => `/writing/${params.writingType}/${params.writingId}/${params.sortType}`,
     }),
 
     getLoginOauthServer: builder.query<UserAndToken, OauthData>({
@@ -194,6 +201,7 @@ export const {
   useGetNovelListByCategoryQuery,
   useGetNovelByIdQuery,
   useGetWritingsFilteredQuery,
+  useGetTalkDetailQuery,
   useGetLoginOauthServerQuery,
   useGetLogoutQuery,
   useGetAccessTokenQuery,

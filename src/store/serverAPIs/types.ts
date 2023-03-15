@@ -65,13 +65,64 @@ export type NovelGenre =
   | "BL"
   | "미스터리"
   | "extra";
+
 export type ParamForGettingWritings = {
-  listType: "T" | "R";
+  writingType: "T" | "R";
   novelGenre: NovelGenre;
   searchType: "writingTitle" | "writingDesc" | "userName" | "novelTitle" | "no";
   searchWord: string; // note. it can't be empty string
   sortBy: "newDate" | "oldDate" | "manyComments" | "fewComments" | "manyLikes" | "fewLikes";
   pageNo: number;
+};
+
+export type ParamForGettingWriting = {
+  writingType: "T" | "R";
+  writingId: string;
+  sortType: "new" | "old";
+};
+
+type NovelDetail = {
+  novelId: string;
+  novelImg: string;
+  novelTitle: string;
+  novelAuthor: string;
+  novelGenre: string;
+  novelDesc: string;
+};
+
+type TalkInDetailPage = {
+  talkId: string;
+  userId: string;
+  userName: string;
+  userImg: {
+    src: string;
+    position: string;
+  };
+  createDate: string;
+  likeNO: number;
+  commentNO: number;
+  isLike: boolean;
+  talkTitle: string;
+  talkDesc: string;
+  talkImg: string;
+};
+
+type Comment = {
+  commentId: string;
+  userName: string;
+  userImg: {
+    src: string;
+    position: string;
+  };
+  commentContent: string;
+  createDate: string;
+  reComment: any[];
+};
+
+export type TalkDetail = {
+  talk: TalkInDetailPage;
+  novel: NovelDetail;
+  commentList: Comment[];
 };
 
 export interface HomeData {
