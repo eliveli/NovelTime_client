@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Icon from "assets/Icon";
+import { Img } from "store/serverAPIs/types";
 import {
   CreateDate,
   UserImg,
@@ -21,7 +22,7 @@ interface TalkProps {
     talkId: string;
 
     userName: string;
-    userImg: string;
+    userImg: Img;
     createDate: string;
 
     likeNO: number;
@@ -38,7 +39,7 @@ interface RecommendProps {
     recommendId: string;
 
     userName: string;
-    userImg: string;
+    userImg: Img;
     createDate: string;
 
     likeNO: number;

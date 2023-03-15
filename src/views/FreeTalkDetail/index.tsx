@@ -33,10 +33,8 @@ export default function FreeTalkDetail() {
     talk: {
       talkId: "asdsasdssa", // 좋아요 누르거나 코멘트 작성 시 talkId로 서버 요청
 
-      userId: "sssss",
-      // it is necessary to divide whether login user is its writer
-      // if yes, login user can remove or edit this content
       userName: "나나나",
+      // if login user name is the same with this, login user can remove or edit this content
       userImg: "",
       // change this to { src : "", position : ""}
 
@@ -50,6 +48,7 @@ export default function FreeTalkDetail() {
       talkDesc: `나는 이 부분이 정말 재미있었어. 주인공이 위기 상황을 모면하기 위해 이렇게 행동하는데,
     그게 오히려 개그 요소로 작용해.... 그래서.... `,
       talkImg: "",
+      // its type is string. not {src:"", position:""}
     },
 
     novel: {
@@ -106,7 +105,11 @@ export default function FreeTalkDetail() {
           parentCommentUserName: "lala",
           // * ㄴ변수명 변경 from reCommentUserName
           userName: "fff",
-          userImg: "https://cdn.pixabay.com/photo/2018/08/31/08/35/toys-3644073_960_720.png",
+          userImg: {
+            src: "https://cdn.pixabay.com/photo/2018/08/31/08/35/toys-3644073_960_720.png",
+            position: "",
+          },
+          // ㄴ its type was changed
           commentContent: "그러하오",
           createDate: "22.01.05",
         },

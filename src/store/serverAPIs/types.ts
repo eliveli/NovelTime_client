@@ -92,7 +92,6 @@ type NovelDetail = {
 
 type TalkInDetailPage = {
   talkId: string;
-  userId: string;
   userName: string;
   userImg: {
     src: string;

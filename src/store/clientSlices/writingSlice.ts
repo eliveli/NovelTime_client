@@ -2,16 +2,16 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export type IsWritingState = {
-  reCommentUser: {
-    reCommentId: string;
-    reCommentUserName: string;
+  parentComment: {
+    parentCommentId: string;
+    parentCommentUserName: string;
   };
   handlePrevReComnt: React.Dispatch<React.SetStateAction<boolean>>;
   isWritingSubmit: boolean;
 };
 
 const initialState: IsWritingState = {
-  reCommentUser: { reCommentId: "", reCommentUserName: "" },
+  parentComment: { parentCommentId: "", parentCommentUserName: "" },
   handlePrevReComnt: () => {},
   isWritingSubmit: false,
 };
@@ -20,14 +20,14 @@ export const writingSlice = createSlice({
   name: "writing",
   initialState,
   reducers: {
-    setReComment: (
+    setParentComment: (
       state,
       action: PayloadAction<{
-        reCommentId: string;
-        reCommentUserName: string;
+        parentCommentId: string;
+        parentCommentUserName: string;
       }>,
     ) => {
-      state.reCommentUser = action.payload;
+      state.parentComment = action.payload;
     },
     getClosingReComnt: (
       state,
@@ -48,6 +48,6 @@ export const writingSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { setReComment, getClosingReComnt, handleWritingSubmit } = writingSlice.actions;
+export const { setParentComment, getClosingReComnt, handleWritingSubmit } = writingSlice.actions;
 
 export default writingSlice.reducer;

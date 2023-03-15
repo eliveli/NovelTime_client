@@ -1,236 +1,33 @@
-/* eslint-disable max-len */
-// import { CommentListContainer, CommentContainer } from "./FreeTalkDetail.styles";
-
-import theme, { styled } from "assets/styles/theme";
 import Icon from "assets/Icon";
 import { useRef, useState, useCallback, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { setReComment, getClosingReComnt } from "../../store/clientSlices/writingSlice";
-
-export const CommentListContainer = styled.div<{ isFixedComment: boolean }>`
-  border-radius: 20px;
-  border: 1px solid lightgray;
-  margin-top: 10px;
-  padding: 14px 0 2px;
-  ${({ isFixedComment }) => isFixedComment && "margin-bottom: 78px;"}
-`;
-export const CommentMarkContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid rgba(100, 100, 100, 0.1);
-  /* border-bottom: 1px dotted rgba(0, 0, 0, 0.1); */
-  padding-bottom: 7px;
-  padding-left: 20px;
-  padding-right: 20px;
-  ${theme.media.mobile(`
-    padding: 0 16px;
-  `)}/* padding: 0 0 10px 0; */
-`;
-export const CommentMark = styled.span``;
-export const CommentContainer = styled.div<{
-  isReComment?: true;
-  isWriteReComnt: boolean;
-}>`
-  display: flex;
-  padding: 12px 20px 6px;
-  ${theme.media.mobile(`
-    padding: 10px 12px 6px;
-  `)}
-  border-bottom: 1px dotted rgba(0, 0, 0, 0.1);
-  &:last-child {
-    border-bottom: 0;
-    ${({ isReComment }) =>
-      !isReComment &&
-      `padding-bottom: 12px;
-    `}
-  }
-
-  ${({ isReComment }) =>
-    isReComment &&
-    `padding: 0;
-    padding-top: 10px;
-    margin-top: 5px;
-    border-top: 1px dotted rgba(0, 0, 0, 0.1);
-    border-bottom: 0;
-  `}
-  ${({ isWriteReComnt }) => isWriteReComnt && `border: 8px double rgba(200,200,200,0.2);`}
-`;
-export const UserNameContainer = styled.div`
-  display: flex;
-`;
-export const UserImgBox = styled.div`
-  min-width: 30px;
-`;
-export const UserImg = styled.div<{ userImg: string }>`
-  border-radius: 50%;
-  padding-top: 100%;
-  background-image: url(${({ userImg }) => userImg});
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-`;
-export const CreateDate = styled.span`
-  margin-left: 10px;
-`;
-export const CommentContent = styled.p`
-  margin: 0 0 3px;
-`;
-
-export const NextToImgContainer = styled.div`
-  width: 100%;
-  margin-left: 10px;
-`;
-export const UserName = styled.span``;
-export const CommentSortContainer = styled.div`
-  display: flex;
-  gap: 10px;
-`;
-export const CommentSort = styled.span``;
-export const ReCommentMarkContainer = styled.div`
-  display: flex;
-  justify-content: flex-start;
-  align-items: flex-start;
-`;
-export const ReCommentMark = styled.span`
-  margin-left: 5px;
-  color: rgba(0, 0, 0, 0.4);
-  font-weight: 500;
-  font-size: 14px;
-`;
-export const ReCommentUser = styled.span`
-  font-weight: 700;
-  color: rgba(0, 0, 0, 0.5);
-`;
-// export const ReCommentContainer = styled.div`
-//   margin-left: -20px;
-//   margin-bottom: -12px;
-// `;
-export const WriteCommentContainer = styled.div<{
-  isReComment?: true;
-  isFixedComment?: boolean;
-  isMessage?: true;
-}>`
-  display: flex;
-  align-items: center;
-  border-radius: 20px;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  margin-top: 10px;
-
-  /* padding: 14px 20px; */
-  padding: 15px;
-  padding-right: 13px;
-  ${({ isReComment }) => isReComment && "margin-left:-40px;"}
-
-  // html width <= 820px,   fix comment component to bottom
-  ${({ isFixedComment }) =>
-    isFixedComment &&
-    `position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    border-radius: 0;
-    background-color: rgba(255,255,255,1);
-    z-index: 1;`}
-
-// for message room component
-  ${({ isMessage }) =>
-    isMessage &&
-    `
-    position: relative;
-    
-    border-radius: 0;
-    background-color: rgba(255,255,255,1);
-    z-index: 1;
-    
-    border-left: 0; border-right: 0; border-bottom: 0;
-  `}
-`;
-export const WriteTextCntnr = styled.div`
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  /* border-radius: 20px; */
-  border-radius: 14px;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  padding: 8px 14px;
-`;
-
-export const WriteText = styled.textarea`
-  width: 100%;
-  border: 0;
-  resize: none;
-  ${theme.hideScrollBar}
-  outline: none;
-
-  font-size: 16px;
-  height: 28px;
-  line-height: 1.5;
-
-  color: rgba(0, 0, 0, 0.6);
-  font-weight: 500;
-
-  font-family: "Californian FB", D2Coding, Arial, sans-serif;
-`;
-export const EmojiCntnr = styled(Icon.IconBox)`
-  display: flex;
-  align-items: center;
-`;
-export const EmojiIcon = styled(Icon.Emoji)``;
-export const WriteCommentSubmit = styled.button`
-  min-width: 46px;
-  height: 46px;
-  border-radius: 14px;
-  /* min-width: 30px; */
-  /* height: 34px; */
-  /* border-radius: 20px; */
-  background-color: transparent;
-  white-space: nowrap;
-  margin-left: 10px;
-  display: flex;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  align-items: center;
-  justify-content: center;
-
-  color: rgba(0, 0, 0, 0.6);
-  font-weight: 500;
-`;
-type ReComment = {
-  commentId: string;
-  reCommentUserName: string;
-  userName: string;
-  userImg: string;
-  commentContent: string;
-  createDate: string;
-};
-type Comment = {
-  commentId: string;
-  userName: string;
-  userImg: string;
-  commentContent: string;
-  createDate: string;
-  reComment: ReComment[];
-};
-interface CommentListProps {
-  commentList: Comment[];
-  commentIdForScroll?: string;
-}
-
-type CommentProps = {
-  comment: {
-    commentId: string;
-    userName: string;
-    userImg: string;
-    commentContent: string;
-    createDate: string;
-    reComment?: ReComment[];
-    reCommentUserName?: string; // when re-comment is props for CommentWritten
-  };
-  // when re-comment is props for CommentWritten
-  isReComment?: true;
-  commentIdForScroll?: string;
-};
+import { setParentComment, getClosingReComnt } from "../../store/clientSlices/writingSlice";
+import {
+  CommentContainer,
+  CommentContent,
+  CommentListContainer,
+  CommentListProps,
+  CommentMark,
+  CommentMarkContainer,
+  CommentProps,
+  CommentSort,
+  CommentSortContainer,
+  CreateDate,
+  EmojiCntnr,
+  EmojiIcon,
+  NextToImgContainer,
+  ReCommentMark,
+  ReCommentMarkContainer,
+  ReCommentUser,
+  UserImg,
+  UserImgBox,
+  UserName,
+  UserNameContainer,
+  WriteCommentContainer,
+  WriteCommentSubmit,
+  WriteText,
+  WriteTextCntnr,
+} from "./CommentList.styles";
 
 const htmlWidth = document.documentElement.offsetWidth;
 const isTablet = htmlWidth >= 768;
@@ -261,13 +58,16 @@ export function WriteComment({ isReComment, isMessage }: { isReComment?: true; i
 
   // for mobile and tablet, get reComment ID and userName
   // then show reCommentID in textarea
-  const { reCommentId, reCommentUserName } = useAppSelector((state) => state.writing.reCommentUser);
+  const parentComment = useAppSelector((state) => state.writing.parentComment);
+
+  const { parentCommentId, parentCommentUserName } = parentComment;
+
   useEffect(() => {
     if (!textRef.current) return;
-    if (!isPC && reCommentUserName) {
-      textRef.current.value = `@${reCommentUserName} `;
+    if (!isPC && parentCommentUserName) {
+      textRef.current.value = `@${parentCommentUserName} `;
     }
-  }, [reCommentUserName]);
+  }, [parentCommentUserName]);
   const handleSubmit = () => {
     // server request 1 : provide comment to server
     // server request 2 : provide message to server : use variable of isMessage
@@ -290,8 +90,20 @@ export function WriteComment({ isReComment, isMessage }: { isReComment?: true; i
 }
 
 function CommentWritten({ isReComment, comment, commentIdForScroll }: CommentProps) {
-  const { commentId, userName, userImg, commentContent, createDate, reComment, reCommentUserName } =
-    comment;
+  const {
+    commentId,
+    userName,
+    userImg,
+    commentContent,
+    createDate,
+    reComment,
+    parentCommentId, // to mark parent comment when clicking its reComment
+    parentCommentUserName,
+  } = comment;
+  // * first ancestor comment id, parent comment id, parent comment user name 필요
+  // * first ancestor comment id는 isReComment가 true일 때 원본인 코멘트의 commentId 넣기
+  // ㄴ isReComment가 undefined일 때는 first ancestor comment id도 undefined 또는 넘겨주지 않음
+  // * reCommentUserName -> parent comment user name
 
   // reComment one by one : can not set two reComment at once ---------------- //
   //
@@ -299,7 +111,7 @@ function CommentWritten({ isReComment, comment, commentIdForScroll }: CommentPro
   const [isWriteReComnt, handleWriteReComnt] = useState(false);
   const dispatch = useAppDispatch();
   const handlePrevReComnt = useAppSelector((state) => state.writing.handlePrevReComnt);
-  const { reCommentId } = useAppSelector((state) => state.writing.reCommentUser);
+  const parentComment = useAppSelector((state) => state.writing.parentComment);
 
   // clicking "답글", then
   const handleReComment = () => {
@@ -309,7 +121,7 @@ function CommentWritten({ isReComment, comment, commentIdForScroll }: CommentPro
     // open or close the current component for writing reComment
     handleWriteReComnt(!isWriteReComnt);
     // if you click the same "답글" twice, setState do work once, because of 비동기 logic (maybe yes)
-    if (reCommentId) {
+    if (parentComment.parentCommentId) {
       //   alert(
       //     `작성 중인 답글이 존재해요! 이전 답글을 삭제할까요?
       //      - how do I know that? At least previous comment is empty? when and how do I get the state? do not add this feature? If yes, maybe many things necessary`,
@@ -318,7 +130,7 @@ function CommentWritten({ isReComment, comment, commentIdForScroll }: CommentPro
 
     // for mobile & tablet, get userName that will be shown in textarea to write re-comment
     // for all devices, store info and after writing comment, send them to the server
-    dispatch(setReComment({ reCommentId: commentId, reCommentUserName: userName }));
+    dispatch(setParentComment({ parentCommentId: commentId, parentCommentUserName: userName }));
     // get function to close the component to write reComment next time
     dispatch(getClosingReComnt({ handleWriteReComnt }));
   };
@@ -348,7 +160,7 @@ function CommentWritten({ isReComment, comment, commentIdForScroll }: CommentPro
           <CreateDate>{createDate}</CreateDate>
         </UserNameContainer>
         <CommentContent>
-          {isReComment && <ReCommentUser>{`@${reCommentUserName as string} `}</ReCommentUser>}
+          {isReComment && <ReCommentUser>{`@${parentCommentUserName as string} `}</ReCommentUser>}
           {commentContent}
         </CommentContent>
         <ReCommentMarkContainer>
