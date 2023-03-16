@@ -11,7 +11,7 @@ import {
   WriteComment,
 } from "components/Writing";
 import { ContentAnimation } from "views/RecommendDetail/RecommendDetail.styles";
-import { useGetTalkDetailQuery } from "store/serverAPIs/novelTime";
+import { useGetCommentsInTalkDetailQuery, useGetTalkDetailQuery } from "store/serverAPIs/novelTime";
 
 // server request by talkID
 
@@ -20,13 +20,18 @@ export default function FreeTalkDetail() {
 
   const sortTypeForComments = "old"; // * 설정 필요
 
-  const { isLoading, isFetching, isError, data } = useGetTalkDetailQuery({
+  const talk = useGetTalkDetailQuery({
     writingType: "T",
     writingId: talkId as string,
-    sortType: sortTypeForComments,
   });
 
-  if (!talkId || isError || !data) return <div>***에러 페이지 띄우기</div>;
+  const comment = useGetCommentsInTalkDetailQuery({
+    talkId: talkId as string,
+    sortType: sortTypeForComments,
+  });
+  // - isLoading, isFetching, isError, data in comment
+
+  if (!talkId || talk.isError || !talk.data) return <div>***에러 페이지 띄우기</div>;
 
   // 서버에서 데이터 받아올 때 구성 // dataFromServer = { talk, novel }
   const dataFromServer = {
@@ -163,12 +168,14 @@ export default function FreeTalkDetail() {
     <MainBG isWritingDetail>
       <WritingDetailContainer>
         <BoardMark>Let's Free Talk about Novel!</BoardMark>
-        <TalkDetail detailTalk={data.talk} />
-        <NovelInWriting novel={data.novel} />
-        <LikeAndShare isLike={data.talk.isLike} likeNO={data.talk.likeNO} />
+        <TalkDetail detailTalk={talk.data.talk} />
+        <NovelInWriting novel={talk.data.novel} />
+        <LikeAndShare isLike={talk.data.talk.isLike} likeNO={talk.data.talk.likeNO} />
       </WritingDetailContainer>
       <ContentAnimation isTalkComnt>
-        <CommentList commentList={data.commentList} commentIdForScroll={commentId} />
+        {!!comment.data?.commentList.length && (
+          <CommentList commentList={comment.data.commentList} commentIdForScroll={commentId} />
+        )}
         <WriteComment />
       </ContentAnimation>
     </MainBG>

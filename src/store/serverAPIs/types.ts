@@ -78,6 +78,10 @@ export type ParamForGettingWritings = {
 export type ParamForGettingWriting = {
   writingType: "T" | "R";
   writingId: string;
+};
+
+export type ParamForCommentsInTalkDetail = {
+  talkId: string;
   sortType: "new" | "old";
 };
 
@@ -118,10 +122,11 @@ type Comment = {
   reComment: any[];
 };
 
+export type CommentList = { commentList: Comment[] };
+
 export type TalkDetail = {
   talk: TalkInDetailPage;
   novel: NovelDetail;
-  commentList: Comment[];
 };
 
 export interface HomeData {

@@ -27,6 +27,8 @@ import {
   ParamForGettingWritings,
   ParamForGettingWriting,
   TalkDetail,
+  ParamForCommentsInTalkDetail,
+  CommentList,
 } from "./types";
 import type { RootState } from "../index";
 
@@ -100,7 +102,10 @@ export const novelTimeApi = createApi({
 
     // in talk-detail page
     getTalkDetail: builder.query<TalkDetail, ParamForGettingWriting>({
-      query: (params) => `/writing/${params.writingType}/${params.writingId}/${params.sortType}`,
+      query: (params) => `/writing/${params.writingType}/${params.writingId}`,
+    }),
+    getCommentsInTalkDetail: builder.query<CommentList, ParamForCommentsInTalkDetail>({
+      query: (params) => `/comment/${params.talkId}/${params.sortType}`,
     }),
 
     getLoginOauthServer: builder.query<UserAndToken, OauthData>({
@@ -202,6 +207,7 @@ export const {
   useGetNovelByIdQuery,
   useGetWritingsFilteredQuery,
   useGetTalkDetailQuery,
+  useGetCommentsInTalkDetailQuery,
   useGetLoginOauthServerQuery,
   useGetLogoutQuery,
   useGetAccessTokenQuery,
