@@ -15,7 +15,9 @@ import {
   CreateDate,
   EmojiCntnr,
   EmojiIcon,
+  MarkParentComment,
   NextToImgContainer,
+  ReCommentButtonsContainer,
   ReCommentMark,
   ReCommentMarkContainer,
   ReCommentUser,
@@ -189,17 +191,22 @@ function CommentWritten({
           {isReComment && <ReCommentUser>{`@${parentCommentUserName as string} `}</ReCommentUser>}
           {commentContent}
         </CommentContent>
-        <ReCommentMarkContainer>
-          <Icon.IconBox size={15}>
-            <Icon.Comment />
-          </Icon.IconBox>
-          {!isWriteReComnt && <ReCommentMark onClick={handleReComment}>답글</ReCommentMark>}
-          {isWriteReComnt && <ReCommentMark onClick={handleReComment}>답글 취소</ReCommentMark>}
-        </ReCommentMarkContainer>
 
-        {isReComment && parentCommentId && (
-          <span onClick={() => setParentToMark(parentCommentId)}>원댓글보기</span>
-        )}
+        <ReCommentButtonsContainer>
+          <ReCommentMarkContainer>
+            <Icon.IconBox size={15}>
+              <Icon.Comment />
+            </Icon.IconBox>
+            {!isWriteReComnt && <ReCommentMark onClick={handleReComment}>답글</ReCommentMark>}
+            {isWriteReComnt && <ReCommentMark onClick={handleReComment}>답글 취소</ReCommentMark>}
+          </ReCommentMarkContainer>
+
+          {isReComment && parentCommentId && (
+            <MarkParentComment onClick={() => setParentToMark(parentCommentId)}>
+              원댓글보기
+            </MarkParentComment>
+          )}
+        </ReCommentButtonsContainer>
 
         {/* write re-comment component : comment(X) re-comment(O) : isReComment true -> set the same layout */}
         {isPC && isWriteReComnt && (

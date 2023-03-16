@@ -86,11 +86,25 @@ export const CommentSortContainer = styled.div`
   gap: 10px;
 `;
 export const CommentSort = styled.span``;
+
 export const ReCommentMarkContainer = styled.div`
   display: flex;
   justify-content: flex-start;
   align-items: flex-start;
 `;
+
+export const ReCommentButtonsContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+`;
+
+export const MarkParentComment = styled.span`
+  color: rgba(0, 0, 0, 0.4);
+  font-weight: 500;
+  font-size: 14px;
+`;
+
 export const ReCommentMark = styled.span`
   margin-left: 5px;
   color: rgba(0, 0, 0, 0.4);
