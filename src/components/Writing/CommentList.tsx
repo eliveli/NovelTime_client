@@ -1,7 +1,7 @@
 import Icon from "assets/Icon";
 import { useRef, useState, useCallback, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { setParentComment, getClosingReComnt } from "../../store/clientSlices/writingSlice";
+import { getClosingReComnt } from "../../store/clientSlices/writingSlice";
 import {
   CommentContainer,
   CommentContent,
@@ -34,7 +34,15 @@ const isTablet = htmlWidth >= 768;
 const isPC = htmlWidth >= 1024;
 const isFixedComment = htmlWidth <= 820;
 
-export function WriteComment({ isReComment, isMessage }: { isReComment?: true; isMessage?: true }) {
+export function WriteComment({
+  isReComment,
+  parentUserNameForNewReComment,
+  isMessage,
+}: {
+  isReComment?: true;
+  parentUserNameForNewReComment?: string;
+  isMessage?: true;
+}) {
   const textRef = useRef<HTMLTextAreaElement>(null);
 
   const [comment, setComment] = useState("");
@@ -58,16 +66,13 @@ export function WriteComment({ isReComment, isMessage }: { isReComment?: true; i
 
   // for mobile and tablet, get reComment ID and userName
   // then show reCommentID in textarea
-  const parentComment = useAppSelector((state) => state.writing.parentComment);
-
-  const { parentCommentId, parentCommentUserName } = parentComment;
 
   useEffect(() => {
     if (!textRef.current) return;
-    if (!isPC && parentCommentUserName) {
-      textRef.current.value = `@${parentCommentUserName} `;
+    if (!isPC && parentUserNameForNewReComment) {
+      textRef.current.value = `@${parentUserNameForNewReComment} `;
     }
-  }, [parentCommentUserName]);
+  }, [parentUserNameForNewReComment]);
   const handleSubmit = () => {
     // server request 1 : provide comment to server
     // server request 2 : provide message to server : use variable of isMessage
@@ -89,7 +94,12 @@ export function WriteComment({ isReComment, isMessage }: { isReComment?: true; i
   );
 }
 
-function CommentWritten({ isReComment, comment, commentIdForScroll }: CommentProps) {
+function CommentWritten({
+  isReComment,
+  comment,
+  commentIdForScroll,
+  parentCommentForNewReComment: { parentForNewReComment, setParentForNewReComment },
+}: CommentProps) {
   const {
     commentId,
     userName,
@@ -97,7 +107,8 @@ function CommentWritten({ isReComment, comment, commentIdForScroll }: CommentPro
     commentContent,
     createDate,
     reComment,
-    parentCommentId, // to mark parent comment when clicking its reComment
+    parentCommentId, // * to mark parent comment when clicking its reComment
+    firstAncestorCommentId, // * 리코멘트 작성 시 서버에 넘겨주기
     parentCommentUserName,
   } = comment;
   // * first ancestor comment id, parent comment id, parent comment user name 필요
@@ -111,7 +122,6 @@ function CommentWritten({ isReComment, comment, commentIdForScroll }: CommentPro
   const [isWriteReComnt, handleWriteReComnt] = useState(false);
   const dispatch = useAppDispatch();
   const handlePrevReComnt = useAppSelector((state) => state.writing.handlePrevReComnt);
-  const parentComment = useAppSelector((state) => state.writing.parentComment);
 
   // clicking "답글", then
   const handleReComment = () => {
@@ -121,7 +131,7 @@ function CommentWritten({ isReComment, comment, commentIdForScroll }: CommentPro
     // open or close the current component for writing reComment
     handleWriteReComnt(!isWriteReComnt);
     // if you click the same "답글" twice, setState do work once, because of 비동기 logic (maybe yes)
-    if (parentComment.parentCommentId) {
+    if (parentForNewReComment.parentCommentId) {
       //   alert(
       //     `작성 중인 답글이 존재해요! 이전 답글을 삭제할까요?
       //      - how do I know that? At least previous comment is empty? when and how do I get the state? do not add this feature? If yes, maybe many things necessary`,
@@ -130,7 +140,7 @@ function CommentWritten({ isReComment, comment, commentIdForScroll }: CommentPro
 
     // for mobile & tablet, get userName that will be shown in textarea to write re-comment
     // for all devices, store info and after writing comment, send them to the server
-    dispatch(setParentComment({ parentCommentId: commentId, parentCommentUserName: userName }));
+    setParentForNewReComment({ parentCommentId: commentId, parentCommentUserName: userName });
     // get function to close the component to write reComment next time
     dispatch(getClosingReComnt({ handleWriteReComnt }));
   };
@@ -171,15 +181,18 @@ function CommentWritten({ isReComment, comment, commentIdForScroll }: CommentPro
           {isWriteReComnt && <ReCommentMark onClick={handleReComment}>답글 취소</ReCommentMark>}
         </ReCommentMarkContainer>
         {/* write re-comment component : comment(X) re-comment(O) : isReComment true -> set the same layout */}
-        {isPC && isWriteReComnt && <WriteComment isReComment={isReComment} />}
+        {isPC && isWriteReComnt && (
+          <WriteComment isReComment={isReComment} parentUserNameForNewReComment={userName} />
+        )}
 
-        {reComment?.length &&
+        {!!reComment?.length &&
           reComment.map((_) => (
             <CommentWritten
               key={_.commentId}
               isReComment
-              comment={_}
+              comment={{ ..._, firstAncestorCommentId: commentId }}
               commentIdForScroll={commentIdForScroll}
+              parentCommentForNewReComment={{ parentForNewReComment, setParentForNewReComment }}
             />
           ))}
       </NextToImgContainer>
@@ -206,6 +219,11 @@ function CommentWritten({ isReComment, comment, commentIdForScroll }: CommentPro
 export function CommentList({ commentList, commentIdForScroll }: CommentListProps) {
   // when write-comment component is fixed to screen bottom, give comment-list-component margin-bottom
 
+  const [parentForNewReComment, setParentForNewReComment] = useState({
+    parentCommentId: "",
+    parentCommentUserName: "",
+  });
+
   return (
     <CommentListContainer isFixedComment={isFixedComment}>
       <CommentMarkContainer>
@@ -214,10 +232,16 @@ export function CommentList({ commentList, commentIdForScroll }: CommentListProp
           {["NEW", "OLD"].map((_) => (
             <CommentSort key={_}>{_}</CommentSort>
           ))}
+          {/* 클릭 시 서버 요청 필요 : 댓글 개수 제한? */}
         </CommentSortContainer>
       </CommentMarkContainer>
       {commentList.map((_) => (
-        <CommentWritten key={_.commentId} comment={_} commentIdForScroll={commentIdForScroll} />
+        <CommentWritten
+          key={_.commentId}
+          comment={_}
+          commentIdForScroll={commentIdForScroll}
+          parentCommentForNewReComment={{ parentForNewReComment, setParentForNewReComment }}
+        />
       ))}
     </CommentListContainer>
   );

@@ -194,6 +194,7 @@ export const WriteCommentSubmit = styled.button`
 export type ReComment = {
   commentId: string;
   parentCommentId: string;
+  firstAncestorCommentId: string;
   parentCommentUserName: string;
   userName: string;
   userImg: Img;
@@ -221,11 +222,25 @@ export type CommentProps = {
     commentContent: string;
     createDate: string;
     reComment?: ReComment[]; // it is undefined when re-comment is props for CommentWritten
-    // following two is used when reComment is not empty for CommentWritten
+    // following three is used when reComment is not empty for CommentWritten
     parentCommentId?: string;
+    firstAncestorCommentId?: string;
     parentCommentUserName?: string;
   };
   // when reComment is props for CommentWritten
   isReComment?: true;
   commentIdForScroll?: string;
+
+  parentCommentForNewReComment: {
+    parentForNewReComment: {
+      parentCommentId: string;
+      parentCommentUserName: string;
+    };
+    setParentForNewReComment: React.Dispatch<
+      React.SetStateAction<{
+        parentCommentId: string;
+        parentCommentUserName: string;
+      }>
+    >;
+  };
 };
