@@ -99,6 +99,7 @@ function CommentWritten({
   comment,
   commentIdForScroll,
   parentCommentForNewReComment: { parentForNewReComment, setParentForNewReComment },
+  parentCommentToMark: { parentToMark, setParentToMark },
 }: CommentProps) {
   const {
     commentId,
@@ -145,8 +146,18 @@ function CommentWritten({
     dispatch(getClosingReComnt({ handleWriteReComnt }));
   };
 
-  // scroll to exact comment component when clicking the comment in user page
   const commentRef = useRef<HTMLDivElement>(null);
+
+  const isParentToMark = parentToMark === commentId;
+
+  // scroll to the parent comment of its reComment when clicking "원댓글보기"
+  useEffect(() => {
+    if (isParentToMark) {
+      commentRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  }, [isParentToMark]);
+
+  // scroll to exact comment component when clicking the comment in user page
   useEffect(() => {
     if (commentRef.current && commentIdForScroll === commentId) {
       // first useEffect in ScrollToTop executes after rendering nav component : see the App.tsx
@@ -160,7 +171,12 @@ function CommentWritten({
   }, []);
 
   return (
-    <CommentContainer ref={commentRef} isWriteReComnt={isWriteReComnt} isReComment={isReComment}>
+    <CommentContainer
+      ref={commentRef}
+      isWriteReComnt={isWriteReComnt}
+      isReComment={isReComment}
+      isParentToMark={isParentToMark}
+    >
       <UserImgBox>
         <UserImg userImg={userImg} />
       </UserImgBox>
@@ -180,6 +196,11 @@ function CommentWritten({
           {!isWriteReComnt && <ReCommentMark onClick={handleReComment}>답글</ReCommentMark>}
           {isWriteReComnt && <ReCommentMark onClick={handleReComment}>답글 취소</ReCommentMark>}
         </ReCommentMarkContainer>
+
+        {isReComment && parentCommentId && (
+          <span onClick={() => setParentToMark(parentCommentId)}>원댓글보기</span>
+        )}
+
         {/* write re-comment component : comment(X) re-comment(O) : isReComment true -> set the same layout */}
         {isPC && isWriteReComnt && (
           <WriteComment isReComment={isReComment} parentUserNameForNewReComment={userName} />
@@ -193,6 +214,7 @@ function CommentWritten({
               comment={{ ..._, firstAncestorCommentId: commentId }}
               commentIdForScroll={commentIdForScroll}
               parentCommentForNewReComment={{ parentForNewReComment, setParentForNewReComment }}
+              parentCommentToMark={{ parentToMark, setParentToMark }}
             />
           ))}
       </NextToImgContainer>
@@ -224,6 +246,8 @@ export function CommentList({ commentList, commentIdForScroll }: CommentListProp
     parentCommentUserName: "",
   });
 
+  const [parentToMark, setParentToMark] = useState("");
+
   return (
     <CommentListContainer isFixedComment={isFixedComment}>
       <CommentMarkContainer>
@@ -241,6 +265,7 @@ export function CommentList({ commentList, commentIdForScroll }: CommentListProp
           comment={_}
           commentIdForScroll={commentIdForScroll}
           parentCommentForNewReComment={{ parentForNewReComment, setParentForNewReComment }}
+          parentCommentToMark={{ parentToMark, setParentToMark }}
         />
       ))}
     </CommentListContainer>
