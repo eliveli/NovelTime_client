@@ -33,7 +33,7 @@ export default function RecommendList() {
   });
 
   const { isLoading, isFetching, isError, data } = useGetWritingsFilteredQuery({
-    listType: "R",
+    writingType: "R",
     novelGenre: genreMatched,
     searchType: currentSearchWord === "" ? "no" : searchTypeMatched,
     searchWord: currentSearchWord || "undefined",
