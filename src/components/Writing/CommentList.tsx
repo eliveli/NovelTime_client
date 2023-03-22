@@ -245,7 +245,7 @@ function CommentWritten({
 // 4. ps : well, although there is better UI design, something important is go to next step - making next page..
 //    detail will be set later. (and from now, I have changed various things that I had worked hard...)
 //    many things is best at that time, but time is gone, it is not...
-export function CommentList({ commentList, commentIdForScroll }: CommentListProps) {
+export function CommentList({ commentList, commentIdForScroll, commentSort }: CommentListProps) {
   // when write-comment component is fixed to screen bottom, give comment-list-component margin-bottom
 
   const [parentForNewReComment, setParentForNewReComment] = useState({
@@ -261,7 +261,13 @@ export function CommentList({ commentList, commentIdForScroll }: CommentListProp
         <CommentMark>댓글</CommentMark>
         <CommentSortContainer>
           {["NEW", "OLD"].map((_) => (
-            <CommentSort key={_}>{_}</CommentSort>
+            <CommentSort
+              key={_}
+              isSelected={commentSort.sortTypeForComments.toUpperCase() === _}
+              onClick={() => commentSort.setSortTypeForComments(_.toLowerCase() as "new" | "old")}
+            >
+              {_}
+            </CommentSort>
           ))}
           {/* 클릭 시 서버 요청 필요 : 댓글 개수 제한? */}
         </CommentSortContainer>

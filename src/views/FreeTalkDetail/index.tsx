@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import MainBG from "components/MainBG";
 import {
@@ -18,7 +18,7 @@ import { useGetCommentsInTalkDetailQuery, useGetTalkDetailQuery } from "store/se
 export default function FreeTalkDetail() {
   const { talkId, commentId } = useParams();
 
-  const sortTypeForComments = "old"; // * 설정 필요
+  const [sortTypeForComments, setSortTypeForComments] = useState<"old" | "new">("old");
 
   const talk = useGetTalkDetailQuery({
     writingType: "T",
@@ -174,7 +174,11 @@ export default function FreeTalkDetail() {
       </WritingDetailContainer>
       <ContentAnimation isTalkComnt>
         {!!comment.data?.commentList.length && (
-          <CommentList commentList={comment.data.commentList} commentIdForScroll={commentId} />
+          <CommentList
+            commentList={comment.data.commentList}
+            commentIdForScroll={commentId}
+            commentSort={{ sortTypeForComments, setSortTypeForComments }}
+          />
         )}
         <WriteComment />
       </ContentAnimation>

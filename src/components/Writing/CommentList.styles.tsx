@@ -85,7 +85,13 @@ export const CommentSortContainer = styled.div`
   display: flex;
   gap: 10px;
 `;
-export const CommentSort = styled.span``;
+export const CommentSort = styled.span<{ isSelected: boolean }>`
+  ${({ isSelected }) =>
+    !!isSelected &&
+    `
+    color: ${theme.color.main}
+  `}
+`;
 
 export const ReCommentMarkContainer = styled.div`
   display: flex;
@@ -230,6 +236,10 @@ export type Comment = {
 export interface CommentListProps {
   commentList: Comment[];
   commentIdForScroll?: string;
+  commentSort: {
+    sortTypeForComments: "new" | "old";
+    setSortTypeForComments: React.Dispatch<React.SetStateAction<"new" | "old">>;
+  };
 }
 
 export type CommentProps = {
