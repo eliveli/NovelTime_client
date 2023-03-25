@@ -10,9 +10,10 @@ import {
   useGetContentOfUserOthersWritingQuery,
 } from "store/serverAPIs/novelTime";
 import { ContentOfUserWriting } from "store/serverAPIs/types";
+import ShowMoreContent from "assets/ShowMoreContent";
 import { TalkOrRecommend, CommentUserCreated } from "../../store/serverAPIs/types";
 import { Writing, Comment, WritingFilter, NoContent } from "./UserPage.components";
-import { NextContentBtn, ShareIconBox, WritingSection } from "./UserPage.styles";
+import { ShareIconBox, WritingSection } from "./UserPage.styles";
 import contentMark from "./utils/contentMark";
 
 export type ContentInfo = {
@@ -297,20 +298,15 @@ export default function UserWriting({ isMyWriting }: { isMyWriting: boolean }) {
           ))}
       </WritingSection>
       {currentContentRef.current.isNextOrder && (
-        <NextContentBtn
-          onClick={() => {
+        <ShowMoreContent
+          _onClick={() => {
             setParamsForRequest({
               ...paramsForRequest,
               contentType: currentContentRef.current.type,
               order: currentContentRef.current.currentOrder + 1,
             });
           }}
-        >
-          <Icon.IconBox noPointer>
-            <Icon.SmallDown />
-          </Icon.IconBox>
-          더보기
-        </NextContentBtn>
+        />
       )}
     </MainBG>
   );

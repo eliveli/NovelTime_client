@@ -21,6 +21,7 @@ import { SimpleNovel } from "store/serverAPIs/types";
 import { useComponentScrollWidth, useComponentHeight } from "utils";
 import MetaTag from "utils/MetaTag";
 import useCallbackComponentWidth from "utils/useCallbackComponentWidth";
+import ShowMoreContent from "assets/ShowMoreContent";
 import {
   ContainerWidth,
   ListTitleLimitHeightContnr,
@@ -35,7 +36,6 @@ import {
   ShareIconBox,
   UserImg,
   OthersTitleContnr,
-  NextContentBtn,
 } from "./UserPage.styles";
 import contentMark from "./utils/contentMark";
 
@@ -357,17 +357,12 @@ export default function UserNovelList({ isMyList }: { isMyList: boolean }) {
       </NovelListContnr>
 
       {currentNovelListInfo.isNextOrder && (
-        <NextContentBtn
-          onClick={() => {
+        <ShowMoreContent
+          _onClick={() => {
             setOrderNumber((currentOrder) => currentOrder + 1);
             novelsAsPreviousOrder.current = novels;
           }}
-        >
-          <Icon.IconBox noPointer>
-            <Icon.SmallDown />
-          </Icon.IconBox>
-          더보기
-        </NextContentBtn>
+        />
       )}
     </MainBG>
   );
