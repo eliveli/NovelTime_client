@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import MainBG from "components/MainBG";
 import {
@@ -12,6 +12,8 @@ import {
 } from "components/Writing";
 import { ContentAnimation } from "views/RecommendDetail/RecommendDetail.styles";
 import { useGetCommentsInTalkDetailQuery, useGetTalkDetailQuery } from "store/serverAPIs/novelTime";
+import ShowMoreContent from "assets/ShowMoreContent";
+import { Comment } from "store/serverAPIs/types";
 
 // server request by talkID
 
@@ -25,11 +27,34 @@ export default function FreeTalkDetail() {
     writingId: talkId as string,
   });
 
-  const comment = useGetCommentsInTalkDetailQuery({
+  const commentPageNoRef = useRef(1);
+  const set1ofCommentPageNo = () => {
+    commentPageNoRef.current = 1;
+  };
+
+  const commentPerPage = useGetCommentsInTalkDetailQuery({
     talkId: talkId as string,
-    sortType: sortTypeForComments,
+    commentSortType: sortTypeForComments,
+    commentPageNo: commentPageNoRef.current,
   });
   // - isLoading, isFetching, isError, data in comment
+
+  const [allComment, setAllComment] = useState<Comment[]>([]);
+
+  useEffect(() => {
+    const commentList = commentPerPage.data?.commentList;
+
+    if (!commentList || !commentList?.length) return;
+
+    // exchange comment when comment page is 1
+    if (commentPageNoRef.current === 1 && commentList) {
+      setAllComment(commentList);
+      return;
+    }
+
+    // add comment
+    setAllComment((prev) => ({ ...prev, commentList }));
+  }, [commentPerPage.data]);
 
   if (!talkId || talk.isError || !talk.data) return <div>***에러 페이지 띄우기</div>;
 
@@ -173,13 +198,24 @@ export default function FreeTalkDetail() {
         <LikeAndShare isLike={talk.data.talk.isLike} likeNO={talk.data.talk.likeNO} />
       </WritingDetailContainer>
       <ContentAnimation isTalkComnt>
-        {!!comment.data?.commentList.length && (
+        {!!allComment.length && (
           <CommentList
-            commentList={comment.data.commentList}
+            commentList={allComment}
             commentIdForScroll={commentId}
             commentSort={{ sortTypeForComments, setSortTypeForComments }}
+            set1ofCommentPageNo={set1ofCommentPageNo}
           />
         )}
+
+        {!!commentPerPage.data?.isNext && (
+          // * 서버 쪽 데이터 추가 : isNext
+          <ShowMoreContent
+            _onClick={() => {
+              commentPageNoRef.current += 1;
+            }}
+          />
+        )}
+
         <WriteComment />
       </ContentAnimation>
     </MainBG>

@@ -240,6 +240,7 @@ export interface CommentListProps {
     sortTypeForComments: "new" | "old";
     setSortTypeForComments: React.Dispatch<React.SetStateAction<"new" | "old">>;
   };
+  set1ofCommentPageNo: () => void;
 }
 
 export type CommentProps = {

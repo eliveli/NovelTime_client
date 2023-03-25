@@ -105,7 +105,8 @@ export const novelTimeApi = createApi({
       query: (params) => `/writing/${params.writingType}/${params.writingId}`,
     }),
     getCommentsInTalkDetail: builder.query<CommentList, ParamForCommentsInTalkDetail>({
-      query: (params) => `/comment/${params.talkId}/${params.sortType}`,
+      query: (params) =>
+        `/comment/${params.talkId}/${params.commentSortType}/${params.commentPageNo}`,
     }),
 
     getLoginOauthServer: builder.query<UserAndToken, OauthData>({

@@ -82,7 +82,8 @@ export type ParamForGettingWriting = {
 
 export type ParamForCommentsInTalkDetail = {
   talkId: string;
-  sortType: "new" | "old";
+  commentSortType: "new" | "old";
+  commentPageNo: number;
 };
 
 type NovelDetail = {
@@ -110,7 +111,7 @@ type TalkInDetailPage = {
   talkImg: string;
 };
 
-type Comment = {
+export type Comment = {
   commentId: string;
   userName: string;
   userImg: {
@@ -122,7 +123,7 @@ type Comment = {
   reComment: any[];
 };
 
-export type CommentList = { commentList: Comment[] };
+export type CommentList = { commentList: Comment[]; isNext: boolean };
 
 export type TalkDetail = {
   talk: TalkInDetailPage;
