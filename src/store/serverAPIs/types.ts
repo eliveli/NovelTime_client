@@ -80,10 +80,15 @@ export type ParamForGettingWriting = {
   writingId: string;
 };
 
-export type ParamForCommentsInTalkDetail = {
+export type ParamForRootComments = {
   talkId: string;
   commentSortType: "new" | "old";
   commentPageNo: number;
+};
+
+export type ParamForReComments = {
+  rootCommentId: string;
+  commentSortType: "new" | "old";
 };
 
 type NovelDetail = {
@@ -120,10 +125,30 @@ export type Comment = {
   };
   commentContent: string;
   createDate: string;
-  reComment: any[];
+  reCommentNo: number;
+  // only root comments have this property
+  // it is necessary to divide between root comment and reComment
+  reComment?: any[];
+  // it is undefined when getting root comments from server
+  // used when getting reComments and setting them
 };
 
-export type CommentList = { commentList: Comment[]; isNext: boolean };
+type ReComment = {
+  commentId: string;
+  userName: string;
+  userImg: {
+    src: string;
+    position: string;
+  };
+  commentContent: string;
+  createDate: string;
+  parentCommentId: string;
+  parentCommentUserName: string;
+};
+
+export type CommentList = { commentList: Comment[]; hasNext: boolean };
+
+export type ReCommentList = ReComment[];
 
 export type TalkDetail = {
   talk: TalkInDetailPage;

@@ -27,8 +27,10 @@ import {
   ParamForGettingWritings,
   ParamForGettingWriting,
   TalkDetail,
-  ParamForCommentsInTalkDetail,
+  ParamForRootComments,
   CommentList,
+  ParamForReComments,
+  ReCommentList,
 } from "./types";
 import type { RootState } from "../index";
 
@@ -104,9 +106,12 @@ export const novelTimeApi = createApi({
     getTalkDetail: builder.query<TalkDetail, ParamForGettingWriting>({
       query: (params) => `/writing/${params.writingType}/${params.writingId}`,
     }),
-    getCommentsInTalkDetail: builder.query<CommentList, ParamForCommentsInTalkDetail>({
+    getRootComments: builder.query<CommentList, ParamForRootComments>({
       query: (params) =>
         `/comment/${params.talkId}/${params.commentSortType}/${params.commentPageNo}`,
+    }),
+    getReComments: builder.query<ReCommentList, ParamForReComments>({
+      query: (params) => `/comment/${params.rootCommentId}/${params.commentSortType}`,
     }),
 
     getLoginOauthServer: builder.query<UserAndToken, OauthData>({
@@ -208,7 +213,8 @@ export const {
   useGetNovelByIdQuery,
   useGetWritingsFilteredQuery,
   useGetTalkDetailQuery,
-  useGetCommentsInTalkDetailQuery,
+  useGetRootCommentsQuery,
+  useGetReCommentsQuery,
   useGetLoginOauthServerQuery,
   useGetLogoutQuery,
   useGetAccessTokenQuery,
