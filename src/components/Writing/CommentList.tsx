@@ -102,6 +102,7 @@ function CommentWritten({
   commentIdForScroll,
   parentCommentForNewReComment: { parentForNewReComment, setParentForNewReComment },
   parentCommentToMark: { parentToMark, setParentToMark },
+  setReComments,
 }: CommentProps) {
   const {
     commentId,
@@ -109,10 +110,18 @@ function CommentWritten({
     userImg,
     commentContent,
     createDate,
+    reCommentNo, // * undefined in root comment
+
     reComment,
+    // * ㄴundefined in rootComment before getting its reComment
+    // * ㄴundefined in reComment
     parentCommentId, // * to mark parent comment when clicking its reComment
-    firstAncestorCommentId, // * 리코멘트 작성 시 서버에 넘겨주기
+    // * undefined in rootComment
     parentCommentUserName,
+    // * undefined in rootComment
+
+    firstAncestorCommentId, // * 리코멘트 작성 시 서버에 넘겨주기
+    // * how to treat this?
   } = comment;
   // * first ancestor comment id, parent comment id, parent comment user name 필요
   // * first ancestor comment id는 isReComment가 true일 때 원본인 코멘트의 commentId 넣기
@@ -197,7 +206,18 @@ function CommentWritten({
             <Icon.IconBox size={15}>
               <Icon.Comment />
             </Icon.IconBox>
-            {!isWriteReComnt && <ReCommentMark onClick={handleReComment}>답글</ReCommentMark>}
+            {!isWriteReComnt && (
+              <ReCommentMark
+                onClick={async () => {
+                  if (setReComments) {
+                    await setReComments(commentId);
+                    // handleReComment; // * needed to fix
+                  }
+                }}
+              >
+                {comment.reCommentNo ? `답글 ${comment.reCommentNo}` : "답글 쓰기"}
+              </ReCommentMark>
+            )}
             {isWriteReComnt && <ReCommentMark onClick={handleReComment}>답글 취소</ReCommentMark>}
           </ReCommentMarkContainer>
 
@@ -250,6 +270,7 @@ export function CommentList({
   commentIdForScroll,
   commentSort,
   set1ofCommentPageNo,
+  setReComments,
 }: CommentListProps) {
   // when write-comment component is fixed to screen bottom, give comment-list-component margin-bottom
 
@@ -293,6 +314,7 @@ export function CommentList({
           commentIdForScroll={commentIdForScroll}
           parentCommentForNewReComment={{ parentForNewReComment, setParentForNewReComment }}
           parentCommentToMark={{ parentToMark, setParentToMark }}
+          setReComments={setReComments}
         />
       ))}
     </CommentListContainer>

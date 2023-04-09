@@ -231,7 +231,7 @@ export type Comment = {
   userImg: Img;
   commentContent: string;
   createDate: string;
-  reComment: ReComment[];
+  reComment?: ReComment[];
 };
 export interface CommentListProps {
   commentList: Comment[];
@@ -241,6 +241,7 @@ export interface CommentListProps {
     setSortTypeForComments: React.Dispatch<React.SetStateAction<"new" | "old">>;
   };
   set1ofCommentPageNo: () => void;
+  setReComments: (rootCommentId: string) => Promise<void>;
 }
 
 export type CommentProps = {
@@ -250,6 +251,7 @@ export type CommentProps = {
     userImg: Img;
     commentContent: string;
     createDate: string;
+    reCommentNo?: number;
     reComment?: ReComment[]; // it is undefined when re-comment is props for CommentWritten
     // following three is used when reComment is not empty for CommentWritten
     parentCommentId?: string;
@@ -277,4 +279,6 @@ export type CommentProps = {
     parentToMark: string;
     setParentToMark: React.Dispatch<React.SetStateAction<string>>;
   };
+
+  setReComments?: (rootCommentId: string) => Promise<void>;
 };

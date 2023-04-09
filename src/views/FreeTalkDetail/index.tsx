@@ -11,7 +11,11 @@ import {
   WriteComment,
 } from "components/Writing";
 import { ContentAnimation } from "views/RecommendDetail/RecommendDetail.styles";
-import { useGetCommentsInTalkDetailQuery, useGetTalkDetailQuery } from "store/serverAPIs/novelTime";
+import {
+  useGetReCommentsMutation,
+  useGetRootCommentsQuery,
+  useGetTalkDetailQuery,
+} from "store/serverAPIs/novelTime";
 import ShowMoreContent from "assets/ShowMoreContent";
 import { Comment } from "store/serverAPIs/types";
 
@@ -32,7 +36,7 @@ export default function FreeTalkDetail() {
     commentPageNoRef.current = 1;
   };
 
-  const commentPerPage = useGetCommentsInTalkDetailQuery({
+  const commentPerPage = useGetRootCommentsQuery({
     talkId: talkId as string,
     commentSortType: sortTypeForComments,
     commentPageNo: commentPageNoRef.current,
@@ -41,6 +45,25 @@ export default function FreeTalkDetail() {
 
   const [allComment, setAllComment] = useState<Comment[]>([]);
 
+  const [GetReCommentsOfRootComment] = useGetReCommentsMutation();
+
+  const setReComments = async (rootCommentId: string) => {
+    const reCommentsFromServer = await GetReCommentsOfRootComment({
+      rootCommentId,
+      commentSortType: sortTypeForComments,
+    }).unwrap();
+
+    setAllComment((_) => {
+      const comments = _.map((__) => {
+        const rootComment = __;
+        if (rootComment.commentId === rootCommentId) {
+          rootComment.reComment = reCommentsFromServer;
+        }
+        return rootComment;
+      });
+      return comments;
+    });
+  };
   useEffect(() => {
     const commentList = commentPerPage.data?.commentList;
 
@@ -123,23 +146,23 @@ export default function FreeTalkDetail() {
         src: "https://cdn.pixabay.com/photo/2018/08/31/08/35/toys-3644073_960_720.png",
         position: "",
       },
-      // * ㄴ컴포넌트에서 변경 필요 from  userImg : string
       commentContent: "코멘트 작성 중",
       createDate: "22.01.05",
+      reCommentNo: 2,
+      // * ㄴit was added for root comments
       reComment: [
+        // * 처음 루트코멘트만 받아오면 이 속성이 undefined
+        // * 답글 보는 버튼을 눌러 답글을 서버에서 받아온 후
+        // * 해당 루트 코멘트에 reComment 속성으로 넣어주고 사용
         {
           commentId: "zzabssssscde",
           parentCommentId: "zzzabc",
-          // * ㄴ새로 추가한 것
-          // * ㄴ리코멘트 클릭 시 원본 코멘/리코멘 표시
           parentCommentUserName: "lala",
-          // * ㄴ변수명 변경 from reCommentUserName
           userName: "fff",
           userImg: {
             src: "https://cdn.pixabay.com/photo/2018/08/31/08/35/toys-3644073_960_720.png",
             position: "",
           },
-          // ㄴ its type was changed
           commentContent: "그러하오",
           createDate: "22.01.05",
         },
@@ -204,11 +227,11 @@ export default function FreeTalkDetail() {
             commentIdForScroll={commentId}
             commentSort={{ sortTypeForComments, setSortTypeForComments }}
             set1ofCommentPageNo={set1ofCommentPageNo}
+            setReComments={setReComments}
           />
         )}
 
-        {!!commentPerPage.data?.isNext && (
-          // * 서버 쪽 데이터 추가 : isNext
+        {!!commentPerPage.data?.hasNext && (
           <ShowMoreContent
             _onClick={() => {
               commentPageNoRef.current += 1;

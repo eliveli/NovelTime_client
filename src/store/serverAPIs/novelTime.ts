@@ -110,8 +110,11 @@ export const novelTimeApi = createApi({
       query: (params) =>
         `/comment/${params.talkId}/${params.commentSortType}/${params.commentPageNo}`,
     }),
-    getReComments: builder.query<ReCommentList, ParamForReComments>({
-      query: (params) => `/comment/${params.rootCommentId}/${params.commentSortType}`,
+    getReComments: builder.mutation<ReCommentList, ParamForReComments>({
+      query: (params) => ({
+        url: `/comment/${params.rootCommentId}/${params.commentSortType}`,
+        method: "GET",
+      }),
     }),
 
     getLoginOauthServer: builder.query<UserAndToken, OauthData>({
@@ -214,7 +217,7 @@ export const {
   useGetWritingsFilteredQuery,
   useGetTalkDetailQuery,
   useGetRootCommentsQuery,
-  useGetReCommentsQuery,
+  useGetReCommentsMutation,
   useGetLoginOauthServerQuery,
   useGetLogoutQuery,
   useGetAccessTokenQuery,
