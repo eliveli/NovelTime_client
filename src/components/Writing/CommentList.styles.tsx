@@ -255,8 +255,8 @@ export type CommentProps = {
     commentContent: string;
     createDate: string;
     reCommentNo?: number;
-    reComment?: ReComment[]; // it is undefined when re-comment is props for CommentWritten
-    // following three is used when reComment is not empty for CommentWritten
+
+    // for reComment (not for rootComment)
     parentCommentId?: string;
     firstAncestorCommentId?: string;
     parentCommentUserName?: string;

@@ -128,9 +128,6 @@ export type Comment = {
   reCommentNo: number;
   // only root comments have this property
   // it is necessary to divide between root comment and reComment
-  reComment?: any[];
-  // it is undefined when getting root comments from server
-  // used when getting reComments and setting them
 };
 
 type ReComment = {

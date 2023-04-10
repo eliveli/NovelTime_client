@@ -113,9 +113,6 @@ function CommentWritten({
     createDate,
     reCommentNo, // * undefined in root comment
 
-    reComment, // * remove this in both front and back
-    // * ㄴundefined in rootComment before getting its reComment
-    // * ㄴundefined in reComment
     parentCommentId, // * to mark parent comment when clicking its reComment
     // * undefined in rootComment
     parentCommentUserName,
@@ -216,7 +213,7 @@ function CommentWritten({
                   }
                 }}
               >
-                {comment.reCommentNo ? `답글 ${comment.reCommentNo}` : "답글 쓰기"}
+                {reCommentNo ? `답글 ${reCommentNo}` : "답글 쓰기"}
               </ReCommentMark>
             )}
             {isWriteReComnt && <ReCommentMark onClick={handleReComment}>답글 취소</ReCommentMark>}
@@ -306,7 +303,6 @@ export function CommentList({
               </CommentSort>
             );
           })}
-          {/* 클릭 시 서버 요청 필요 : 댓글 개수 제한? */}
         </CommentSortContainer>
       </CommentMarkContainer>
       {commentList.map((_) => (
