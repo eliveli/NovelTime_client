@@ -102,8 +102,8 @@ function CommentWritten({
   commentIdForScroll,
   parentCommentForNewReComment: { parentForNewReComment, setParentForNewReComment },
   parentCommentToMark: { parentToMark, setParentToMark },
-  setReComments,
-  reCommentOfRootComment,
+  getReComments,
+  reCommentsOfRootComments,
 }: CommentProps) {
   const {
     commentId,
@@ -113,7 +113,7 @@ function CommentWritten({
     createDate,
     reCommentNo, // * undefined in root comment
 
-    reComment, // * remove this!!!!!!!!!!!!!!!!!!!!!
+    reComment, // * remove this in both front and back
     // * ㄴundefined in rootComment before getting its reComment
     // * ㄴundefined in reComment
     parentCommentId, // * to mark parent comment when clicking its reComment
@@ -210,8 +210,8 @@ function CommentWritten({
             {!isWriteReComnt && (
               <ReCommentMark
                 onClick={async () => {
-                  if (setReComments) {
-                    await setReComments(commentId);
+                  if (getReComments) {
+                    await getReComments(commentId);
                     // handleReComment; // * needed to fix
                   }
                 }}
@@ -234,8 +234,8 @@ function CommentWritten({
           <WriteComment isReComment={isReComment} parentUserNameForNewReComment={userName} />
         )}
 
-        {!!reCommentOfRootComment?.length &&
-          reCommentOfRootComment.map((_) => (
+        {!!reCommentsOfRootComments?.length &&
+          reCommentsOfRootComments.map((_) => (
             <CommentWritten
               key={_.commentId}
               isReComment
@@ -271,8 +271,8 @@ export function CommentList({
   commentIdForScroll,
   commentSort,
   set1ofCommentPageNo,
-  setReComments,
-  reComment,
+  getReComments,
+  reComments,
 }: CommentListProps) {
   // when write-comment component is fixed to screen bottom, give comment-list-component margin-bottom
 
@@ -316,8 +316,8 @@ export function CommentList({
           commentIdForScroll={commentIdForScroll}
           parentCommentForNewReComment={{ parentForNewReComment, setParentForNewReComment }}
           parentCommentToMark={{ parentToMark, setParentToMark }}
-          setReComments={setReComments}
-          reCommentOfRootComment={reComment[_.commentId]}
+          getReComments={getReComments}
+          reCommentsOfRootComments={reComments[_.commentId]}
         />
       ))}
     </CommentListContainer>

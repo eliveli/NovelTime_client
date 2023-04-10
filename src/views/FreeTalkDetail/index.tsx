@@ -43,19 +43,19 @@ export default function FreeTalkDetail() {
   });
   // - isLoading, isFetching, isError, data in comment
 
-  const [allComment, setAllComment] = useState<Comment[]>([]);
+  const [rootComments, setRootComments] = useState<Comment[]>([]);
 
-  const [reComment, addReComment] = useState<{ [rootCommentId: string]: ReCommentList }>({});
+  const [reComments, addReComments] = useState<{ [rootCommentId: string]: ReCommentList }>({});
 
   const [GetReCommentsOfRootComment] = useGetReCommentsMutation();
 
-  const setReComments = async (rootCommentId: string) => {
+  const getReComments = async (rootCommentId: string) => {
     const reCommentsFromServer = await GetReCommentsOfRootComment({
       rootCommentId,
       commentSortType: sortTypeForComments,
     }).unwrap();
 
-    addReComment((_) => ({ ..._, [rootCommentId]: reCommentsFromServer }));
+    addReComments((_) => ({ ..._, [rootCommentId]: reCommentsFromServer }));
   };
   useEffect(() => {
     const commentList = commentPerPage.data?.commentList;
@@ -64,12 +64,12 @@ export default function FreeTalkDetail() {
 
     // exchange comment when comment page is 1
     if (commentPageNoRef.current === 1 && commentList) {
-      setAllComment(commentList);
+      setRootComments(commentList);
       return;
     }
 
     // add comment
-    setAllComment((prev) => ({ ...prev, commentList }));
+    setRootComments((prev) => ({ ...prev, commentList }));
   }, [commentPerPage.data]);
 
   if (!talkId || talk.isError || !talk.data) return <div>***에러 페이지 띄우기</div>;
@@ -143,10 +143,10 @@ export default function FreeTalkDetail() {
       createDate: "22.01.05",
       reCommentNo: 2,
       // * ㄴit was added for root comments
-      reComment: [
+      reComments: [
         // * 처음 루트코멘트만 받아오면 이 속성이 undefined
         // * 답글 보는 버튼을 눌러 답글을 서버에서 받아온 후
-        // * 해당 루트 코멘트에 reComment 속성으로 넣어주고 사용
+        // * 해당 루트 코멘트에 reComments 속성으로 넣어주고 사용
         {
           commentId: "zzabssssscde",
           parentCommentId: "zzzabc",
@@ -175,7 +175,7 @@ export default function FreeTalkDetail() {
       userImg: "https://cdn.pixabay.com/photo/2018/08/31/08/35/toys-3644073_960_720.png",
       commentContent: "코멘트 작성 중",
       createDate: "22.01.05",
-      reComment: [
+      reComments: [
         {
           commentId: "assssbcerede",
           reCommentUserName: "lala",
@@ -197,7 +197,7 @@ export default function FreeTalkDetail() {
   ];
   // 답글은 어떻게?
   // - comment : comment 테이블에서 같은 talkID의 코멘트 리스트 가져오기
-  // - reCommentID : if it is not "", it is reComment for it - commentID
+  // - reCommentID : if it is not "", it is reComments for it - commentID
   // - re-re-comment : reCommentID is not "", reReCommentUserID is not ""
   // in comment table : talkID, commentID, reCommentID, reReCommentUserID
   //                    - reCommentID, reReCommentUserID can be ""
@@ -214,14 +214,14 @@ export default function FreeTalkDetail() {
         <LikeAndShare isLike={talk.data.talk.isLike} likeNO={talk.data.talk.likeNO} />
       </WritingDetailContainer>
       <ContentAnimation isTalkComnt>
-        {!!allComment.length && (
+        {!!rootComments.length && (
           <CommentList
-            commentList={allComment}
+            commentList={rootComments}
             commentIdForScroll={commentId}
             commentSort={{ sortTypeForComments, setSortTypeForComments }}
             set1ofCommentPageNo={set1ofCommentPageNo}
-            setReComments={setReComments}
-            reComment={reComment}
+            getReComments={getReComments}
+            reComments={reComments}
           />
         )}
 

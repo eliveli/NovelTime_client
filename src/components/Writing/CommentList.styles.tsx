@@ -241,8 +241,8 @@ export interface CommentListProps {
     setSortTypeForComments: React.Dispatch<React.SetStateAction<"new" | "old">>;
   };
   set1ofCommentPageNo: () => void;
-  setReComments: (rootCommentId: string) => Promise<void>;
-  reComment: {
+  getReComments: (rootCommentId: string) => Promise<void>;
+  reComments: {
     [rootCommentId: string]: ReCommentList;
   };
 }
@@ -283,7 +283,7 @@ export type CommentProps = {
     setParentToMark: React.Dispatch<React.SetStateAction<string>>;
   };
 
-  setReComments?: (rootCommentId: string) => Promise<void>;
+  getReComments?: (rootCommentId: string) => Promise<void>;
 
-  reCommentOfRootComment?: ReCommentList;
+  reCommentsOfRootComments?: ReCommentList;
 };
