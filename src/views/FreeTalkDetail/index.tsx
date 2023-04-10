@@ -19,8 +19,6 @@ import {
 import ShowMoreContent from "assets/ShowMoreContent";
 import { Comment, ReCommentList } from "store/serverAPIs/types";
 
-// server request by talkID
-
 export default function FreeTalkDetail() {
   const { talkId, commentId } = useParams();
 
@@ -45,7 +43,7 @@ export default function FreeTalkDetail() {
 
   const [rootComments, setRootComments] = useState<Comment[]>([]);
 
-  const [reComments, addReComments] = useState<{ [rootCommentId: string]: ReCommentList }>({});
+  const [reComments, setReComments] = useState<{ [rootCommentId: string]: ReCommentList }>({});
 
   const [GetReCommentsOfRootComment] = useGetReCommentsMutation();
 
@@ -55,7 +53,7 @@ export default function FreeTalkDetail() {
       commentSortType: sortTypeForComments,
     }).unwrap();
 
-    addReComments((_) => ({ ..._, [rootCommentId]: reCommentsFromServer }));
+    setReComments((_) => ({ ..._, [rootCommentId]: reCommentsFromServer }));
   };
   useEffect(() => {
     const commentList = commentPerPage.data?.commentList;
@@ -63,8 +61,12 @@ export default function FreeTalkDetail() {
     if (!commentList || !commentList?.length) return;
 
     // exchange comment when comment page is 1
+    // . case 1 : when getting comments at first
+    // . case 2 : when sorting comments
     if (commentPageNoRef.current === 1 && commentList) {
       setRootComments(commentList);
+      setReComments({});
+      // ㄴremove reComments to get them sorted and updated when getting rootComments later
       return;
     }
 
