@@ -1,6 +1,6 @@
 import theme, { styled } from "assets/styles/theme";
 import Icon from "assets/Icon";
-import { Img } from "store/serverAPIs/types";
+import { Img, ReCommentList } from "store/serverAPIs/types";
 
 export const CommentListContainer = styled.div<{ isFixedComment: boolean }>`
   border-radius: 20px;
@@ -242,6 +242,9 @@ export interface CommentListProps {
   };
   set1ofCommentPageNo: () => void;
   setReComments: (rootCommentId: string) => Promise<void>;
+  reComment: {
+    [rootCommentId: string]: ReCommentList;
+  };
 }
 
 export type CommentProps = {
@@ -281,4 +284,6 @@ export type CommentProps = {
   };
 
   setReComments?: (rootCommentId: string) => Promise<void>;
+
+  reCommentOfRootComment?: ReCommentList;
 };

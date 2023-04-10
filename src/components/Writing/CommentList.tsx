@@ -103,6 +103,7 @@ function CommentWritten({
   parentCommentForNewReComment: { parentForNewReComment, setParentForNewReComment },
   parentCommentToMark: { parentToMark, setParentToMark },
   setReComments,
+  reCommentOfRootComment,
 }: CommentProps) {
   const {
     commentId,
@@ -112,7 +113,7 @@ function CommentWritten({
     createDate,
     reCommentNo, // * undefined in root comment
 
-    reComment,
+    reComment, // * remove this!!!!!!!!!!!!!!!!!!!!!
     // * ㄴundefined in rootComment before getting its reComment
     // * ㄴundefined in reComment
     parentCommentId, // * to mark parent comment when clicking its reComment
@@ -233,8 +234,8 @@ function CommentWritten({
           <WriteComment isReComment={isReComment} parentUserNameForNewReComment={userName} />
         )}
 
-        {!!reComment?.length &&
-          reComment.map((_) => (
+        {!!reCommentOfRootComment?.length &&
+          reCommentOfRootComment.map((_) => (
             <CommentWritten
               key={_.commentId}
               isReComment
@@ -271,6 +272,7 @@ export function CommentList({
   commentSort,
   set1ofCommentPageNo,
   setReComments,
+  reComment,
 }: CommentListProps) {
   // when write-comment component is fixed to screen bottom, give comment-list-component margin-bottom
 
@@ -315,6 +317,7 @@ export function CommentList({
           parentCommentForNewReComment={{ parentForNewReComment, setParentForNewReComment }}
           parentCommentToMark={{ parentToMark, setParentToMark }}
           setReComments={setReComments}
+          reCommentOfRootComment={reComment[_.commentId]}
         />
       ))}
     </CommentListContainer>

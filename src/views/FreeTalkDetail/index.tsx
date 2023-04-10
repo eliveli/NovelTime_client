@@ -17,7 +17,7 @@ import {
   useGetTalkDetailQuery,
 } from "store/serverAPIs/novelTime";
 import ShowMoreContent from "assets/ShowMoreContent";
-import { Comment } from "store/serverAPIs/types";
+import { Comment, ReCommentList } from "store/serverAPIs/types";
 
 // server request by talkID
 
@@ -45,6 +45,8 @@ export default function FreeTalkDetail() {
 
   const [allComment, setAllComment] = useState<Comment[]>([]);
 
+  const [reComment, addReComment] = useState<{ [rootCommentId: string]: ReCommentList }>({});
+
   const [GetReCommentsOfRootComment] = useGetReCommentsMutation();
 
   const setReComments = async (rootCommentId: string) => {
@@ -53,16 +55,7 @@ export default function FreeTalkDetail() {
       commentSortType: sortTypeForComments,
     }).unwrap();
 
-    setAllComment((_) => {
-      const comments = _.map((__) => {
-        const rootComment = __;
-        if (rootComment.commentId === rootCommentId) {
-          rootComment.reComment = reCommentsFromServer;
-        }
-        return rootComment;
-      });
-      return comments;
-    });
+    addReComment((_) => ({ ..._, [rootCommentId]: reCommentsFromServer }));
   };
   useEffect(() => {
     const commentList = commentPerPage.data?.commentList;
@@ -228,6 +221,7 @@ export default function FreeTalkDetail() {
             commentSort={{ sortTypeForComments, setSortTypeForComments }}
             set1ofCommentPageNo={set1ofCommentPageNo}
             setReComments={setReComments}
+            reComment={reComment}
           />
         )}
 
