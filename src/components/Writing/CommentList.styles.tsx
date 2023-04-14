@@ -286,7 +286,7 @@ export type CommentProps = {
     setParentToMark: React.Dispatch<React.SetStateAction<string>>;
   };
 
-  reCommentsOfRootComments?: ReCommentList;
+  reCommentsOfRootComment?: ReCommentList;
 
   rootCommentSelected?: {
     rootCommentIdToShowReComments: string;

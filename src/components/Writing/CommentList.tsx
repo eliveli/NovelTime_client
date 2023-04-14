@@ -102,7 +102,7 @@ function CommentWritten({
   commentIdForScroll,
   parentCommentForNewReComment: { parentForNewReComment, setParentForNewReComment },
   parentCommentToMark: { parentToMark, setParentToMark },
-  reCommentsOfRootComments,
+  reCommentsOfRootComment,
   rootCommentSelected,
 }: CommentProps) {
   const {
@@ -129,7 +129,7 @@ function CommentWritten({
   // reComment one by one : can not set two reComment at once ---------------- //
   //
   // go writing reComment
-  const [isWriteReComnt, handleWriteReComnt] = useState(!!reCommentsOfRootComments?.length);
+  const [isWriteReComnt, handleWriteReComnt] = useState(!!reCommentsOfRootComment?.length);
   const dispatch = useAppDispatch();
   const handlePrevReComnt = useAppSelector((state) => state.writing.handlePrevReComnt);
 
@@ -204,10 +204,11 @@ function CommentWritten({
             <Icon.IconBox size={15}>
               <Icon.Comment />
             </Icon.IconBox>
-            {!isWriteReComnt && (
+            {!isReComment && rootCommentSelected?.rootCommentIdToShowReComments !== commentId && (
               <ReCommentMark
                 onClick={() => {
-                  if (rootCommentSelected) {
+                  if (!isReComment && rootCommentSelected) {
+                    // display reComments of this root comment
                     rootCommentSelected.setRootCommentIdToShowReComments(commentId);
                   }
                   // handleReComment(); // * needed to fix
@@ -216,8 +217,30 @@ function CommentWritten({
                 {reCommentNo ? `답글 ${reCommentNo}` : "답글 쓰기"}
               </ReCommentMark>
             )}
-            {/* 답글 취소 버튼 지우기 */}
-            {/* {isWriteReComnt && <ReCommentMark onClick={handleReComment}>답글 취소</ReCommentMark>} */}
+
+            {!isReComment && rootCommentSelected?.rootCommentIdToShowReComments === commentId && (
+              <ReCommentMark
+                onClick={() => {
+                  if (rootCommentSelected) {
+                    rootCommentSelected.setRootCommentIdToShowReComments("");
+                  }
+                  // handleReComment();
+                }}
+              >
+                답글 접기
+              </ReCommentMark>
+            )}
+
+            {isReComment && (
+              <ReCommentMark
+                onClick={() => {
+                  // * set parent to write its reComment
+                  // handleReComment();
+                }}
+              >
+                답글 쓰기
+              </ReCommentMark>
+            )}
           </ReCommentMarkContainer>
 
           {isReComment && parentCommentId && (
@@ -232,8 +255,8 @@ function CommentWritten({
           <WriteComment isReComment={isReComment} parentUserNameForNewReComment={userName} />
         )}
 
-        {!!reCommentsOfRootComments?.length &&
-          reCommentsOfRootComments.map((_) => (
+        {!!reCommentsOfRootComment?.length &&
+          reCommentsOfRootComment.map((_) => (
             <CommentWritten
               key={_.commentId}
               isReComment
@@ -313,7 +336,11 @@ export function CommentList({
           commentIdForScroll={commentIdForScroll}
           parentCommentForNewReComment={{ parentForNewReComment, setParentForNewReComment }}
           parentCommentToMark={{ parentToMark, setParentToMark }}
-          reCommentsOfRootComments={reComments[_.commentId]}
+          reCommentsOfRootComment={
+            rootCommentSelected.rootCommentIdToShowReComments === _.commentId
+              ? reComments[_.commentId]
+              : undefined
+          }
           rootCommentSelected={rootCommentSelected}
         />
       ))}
