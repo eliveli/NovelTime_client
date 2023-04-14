@@ -12,7 +12,7 @@ import {
 } from "components/Writing";
 import { ContentAnimation } from "views/RecommendDetail/RecommendDetail.styles";
 import {
-  useGetReCommentsMutation,
+  useGetReCommentsQuery,
   useGetRootCommentsQuery,
   useGetTalkDetailQuery,
 } from "store/serverAPIs/novelTime";
@@ -43,18 +43,24 @@ export default function FreeTalkDetail() {
 
   const [rootComments, setRootComments] = useState<Comment[]>([]);
 
+  const [rootCommentIdToShowReComments, setRootCommentIdToShowReComments] = useState<string>("");
+
   const [reComments, setReComments] = useState<{ [rootCommentId: string]: ReCommentList }>({});
 
-  const [GetReCommentsOfRootComment] = useGetReCommentsMutation();
-
-  const getReComments = async (rootCommentId: string) => {
-    const reCommentsFromServer = await GetReCommentsOfRootComment({
-      rootCommentId,
+  const reCommentsFromServer = useGetReCommentsQuery(
+    {
+      rootCommentId: rootCommentIdToShowReComments,
       commentSortType: sortTypeForComments,
-    }).unwrap();
+    },
+    { skip: !rootCommentIdToShowReComments },
+  );
 
-    setReComments((_) => ({ ..._, [rootCommentId]: reCommentsFromServer }));
-  };
+  useEffect(() => {
+    if (!reCommentsFromServer.data) return;
+
+    setReComments((_) => ({ ..._, [rootCommentIdToShowReComments]: reCommentsFromServer.data }));
+  }, [reCommentsFromServer.data]);
+
   useEffect(() => {
     const commentList = commentPerPage.data?.commentList;
 
@@ -222,8 +228,11 @@ export default function FreeTalkDetail() {
             commentIdForScroll={commentId}
             commentSort={{ sortTypeForComments, setSortTypeForComments }}
             set1ofCommentPageNo={set1ofCommentPageNo}
-            getReComments={getReComments}
             reComments={reComments}
+            rootCommentSelected={{
+              rootCommentIdToShowReComments,
+              setRootCommentIdToShowReComments,
+            }}
           />
         )}
 

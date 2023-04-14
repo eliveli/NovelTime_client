@@ -241,9 +241,12 @@ export interface CommentListProps {
     setSortTypeForComments: React.Dispatch<React.SetStateAction<"new" | "old">>;
   };
   set1ofCommentPageNo: () => void;
-  getReComments: (rootCommentId: string) => Promise<void>;
   reComments: {
     [rootCommentId: string]: ReCommentList;
+  };
+  rootCommentSelected: {
+    rootCommentIdToShowReComments: string;
+    setRootCommentIdToShowReComments: React.Dispatch<React.SetStateAction<string>>;
   };
 }
 
@@ -254,7 +257,7 @@ export type CommentProps = {
     userImg: Img;
     commentContent: string;
     createDate: string;
-    reCommentNo?: number;
+    reCommentNo?: number; // in rootComment
 
     // for reComment (not for rootComment)
     parentCommentId?: string;
@@ -283,7 +286,10 @@ export type CommentProps = {
     setParentToMark: React.Dispatch<React.SetStateAction<string>>;
   };
 
-  getReComments?: (rootCommentId: string) => Promise<void>;
-
   reCommentsOfRootComments?: ReCommentList;
+
+  rootCommentSelected?: {
+    rootCommentIdToShowReComments: string;
+    setRootCommentIdToShowReComments: React.Dispatch<React.SetStateAction<string>>;
+  };
 };

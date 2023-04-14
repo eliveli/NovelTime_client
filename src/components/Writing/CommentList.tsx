@@ -102,8 +102,8 @@ function CommentWritten({
   commentIdForScroll,
   parentCommentForNewReComment: { parentForNewReComment, setParentForNewReComment },
   parentCommentToMark: { parentToMark, setParentToMark },
-  getReComments,
   reCommentsOfRootComments,
+  rootCommentSelected,
 }: CommentProps) {
   const {
     commentId,
@@ -111,7 +111,7 @@ function CommentWritten({
     userImg,
     commentContent,
     createDate,
-    reCommentNo, // * undefined in root comment
+    reCommentNo, // * undefined in reComment
 
     parentCommentId, // * to mark parent comment when clicking its reComment
     // * undefined in rootComment
@@ -129,7 +129,7 @@ function CommentWritten({
   // reComment one by one : can not set two reComment at once ---------------- //
   //
   // go writing reComment
-  const [isWriteReComnt, handleWriteReComnt] = useState(false);
+  const [isWriteReComnt, handleWriteReComnt] = useState(!!reCommentsOfRootComments?.length);
   const dispatch = useAppDispatch();
   const handlePrevReComnt = useAppSelector((state) => state.writing.handlePrevReComnt);
 
@@ -206,17 +206,18 @@ function CommentWritten({
             </Icon.IconBox>
             {!isWriteReComnt && (
               <ReCommentMark
-                onClick={async () => {
-                  if (getReComments) {
-                    await getReComments(commentId);
-                    // handleReComment; // * needed to fix
+                onClick={() => {
+                  if (rootCommentSelected) {
+                    rootCommentSelected.setRootCommentIdToShowReComments(commentId);
                   }
+                  // handleReComment(); // * needed to fix
                 }}
               >
                 {reCommentNo ? `답글 ${reCommentNo}` : "답글 쓰기"}
               </ReCommentMark>
             )}
-            {isWriteReComnt && <ReCommentMark onClick={handleReComment}>답글 취소</ReCommentMark>}
+            {/* 답글 취소 버튼 지우기 */}
+            {/* {isWriteReComnt && <ReCommentMark onClick={handleReComment}>답글 취소</ReCommentMark>} */}
           </ReCommentMarkContainer>
 
           {isReComment && parentCommentId && (
@@ -268,17 +269,17 @@ export function CommentList({
   commentIdForScroll,
   commentSort,
   set1ofCommentPageNo,
-  getReComments,
   reComments,
+  rootCommentSelected,
 }: CommentListProps) {
   // when write-comment component is fixed to screen bottom, give comment-list-component margin-bottom
 
   const [parentForNewReComment, setParentForNewReComment] = useState({
     parentCommentId: "",
     parentCommentUserName: "",
-  });
+  }); // parent comment of new reComment to write
 
-  const [parentToMark, setParentToMark] = useState("");
+  const [parentToMark, setParentToMark] = useState(""); // parent comment of selected reComment
 
   return (
     <CommentListContainer isFixedComment={isFixedComment}>
@@ -312,8 +313,8 @@ export function CommentList({
           commentIdForScroll={commentIdForScroll}
           parentCommentForNewReComment={{ parentForNewReComment, setParentForNewReComment }}
           parentCommentToMark={{ parentToMark, setParentToMark }}
-          getReComments={getReComments}
           reCommentsOfRootComments={reComments[_.commentId]}
+          rootCommentSelected={rootCommentSelected}
         />
       ))}
     </CommentListContainer>
