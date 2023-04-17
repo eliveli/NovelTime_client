@@ -71,7 +71,7 @@ export function WriteComment({
 
   useEffect(() => {
     if (!textRef.current) return;
-    if (!isPC && parentUserNameForNewReComment) {
+    if (parentUserNameForNewReComment) {
       textRef.current.value = `@${parentUserNameForNewReComment} `;
     }
   }, [parentUserNameForNewReComment]);
@@ -204,38 +204,46 @@ function CommentWritten({
             <Icon.IconBox size={15}>
               <Icon.Comment />
             </Icon.IconBox>
-            {!isReComment && rootCommentSelected?.rootCommentIdToShowReComments !== commentId && (
-              <ReCommentMark
-                onClick={() => {
-                  if (!isReComment && rootCommentSelected) {
+            {rootCommentSelected &&
+              rootCommentSelected.rootCommentIdToShowReComments !== commentId && (
+                <ReCommentMark
+                  onClick={() => {
                     // display reComments of this root comment
                     rootCommentSelected.setRootCommentIdToShowReComments(commentId);
-                  }
-                  // handleReComment(); // * needed to fix
-                }}
-              >
-                {reCommentNo ? `답글 ${reCommentNo}` : "답글 쓰기"}
-              </ReCommentMark>
-            )}
 
-            {!isReComment && rootCommentSelected?.rootCommentIdToShowReComments === commentId && (
-              <ReCommentMark
-                onClick={() => {
-                  if (rootCommentSelected) {
+                    setParentForNewReComment({
+                      parentCommentId: commentId,
+                      parentCommentUserName: userName,
+                    });
+                  }}
+                >
+                  {reCommentNo ? `답글 ${reCommentNo}` : "답글 쓰기"}
+                </ReCommentMark>
+              )}
+
+            {rootCommentSelected &&
+              rootCommentSelected.rootCommentIdToShowReComments === commentId && (
+                <ReCommentMark
+                  onClick={() => {
                     rootCommentSelected.setRootCommentIdToShowReComments("");
-                  }
-                  // handleReComment();
-                }}
-              >
-                답글 접기
-              </ReCommentMark>
-            )}
+
+                    setParentForNewReComment({
+                      parentCommentId: "",
+                      parentCommentUserName: "",
+                    });
+                  }}
+                >
+                  답글 접기
+                </ReCommentMark>
+              )}
 
             {isReComment && (
               <ReCommentMark
                 onClick={() => {
-                  // * set parent to write its reComment
-                  // handleReComment();
+                  setParentForNewReComment({
+                    parentCommentId: commentId,
+                    parentCommentUserName: userName,
+                  });
                 }}
               >
                 답글 쓰기
@@ -250,11 +258,6 @@ function CommentWritten({
           )}
         </ReCommentButtonsContainer>
 
-        {/* write re-comment component : comment(X) re-comment(O) : isReComment true -> set the same layout */}
-        {isPC && isWriteReComnt && (
-          <WriteComment isReComment={isReComment} parentUserNameForNewReComment={userName} />
-        )}
-
         {!!reCommentsOfRootComment?.length &&
           reCommentsOfRootComment.map((_) => (
             <CommentWritten
@@ -266,6 +269,14 @@ function CommentWritten({
               parentCommentToMark={{ parentToMark, setParentToMark }}
             />
           ))}
+
+        {/* write reComment */}
+        {isPC && rootCommentSelected?.rootCommentIdToShowReComments === commentId && (
+          <WriteComment
+            isReComment={isReComment}
+            parentUserNameForNewReComment={parentForNewReComment.parentCommentUserName}
+          />
+        )}
       </NextToImgContainer>
     </CommentContainer>
   );
