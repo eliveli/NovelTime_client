@@ -25,7 +25,6 @@ export const CommentMarkContainer = styled.div`
 export const CommentMark = styled.span``;
 export const CommentContainer = styled.div<{
   isReComment?: true;
-  isWriteReComnt: boolean;
   isParentToMark: boolean;
 }>`
   display: flex;
@@ -50,8 +49,6 @@ export const CommentContainer = styled.div<{
     border-top: 1px dotted rgba(0, 0, 0, 0.1);
     border-bottom: 0;
   `}
-
-  ${({ isWriteReComnt }) => isWriteReComnt && `border: 8px double rgba(200,200,200,0.2);`}
 
   ${({ isParentToMark }) => isParentToMark && `box-shadow: 0 0 5px ${theme.color.main}`}
 `;

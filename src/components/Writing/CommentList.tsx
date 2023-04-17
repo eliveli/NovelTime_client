@@ -1,7 +1,6 @@
 import Icon from "assets/Icon";
 import { useRef, useState, useCallback, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { getClosingReComnt } from "../../store/clientSlices/writingSlice";
 import {
   CommentContainer,
   CommentContent,
@@ -128,32 +127,6 @@ function CommentWritten({
 
   // reComment one by one : can not set two reComment at once ---------------- //
   //
-  // go writing reComment
-  const [isWriteReComnt, handleWriteReComnt] = useState(!!reCommentsOfRootComment?.length);
-  const dispatch = useAppDispatch();
-  const handlePrevReComnt = useAppSelector((state) => state.writing.handlePrevReComnt);
-
-  // clicking "답글", then
-  const handleReComment = () => {
-    // close the previous component for writing re-comment
-    handlePrevReComnt(false);
-
-    // open or close the current component for writing reComment
-    handleWriteReComnt(!isWriteReComnt);
-    // if you click the same "답글" twice, setState do work once, because of 비동기 logic (maybe yes)
-    if (parentForNewReComment.parentCommentId) {
-      //   alert(
-      //     `작성 중인 답글이 존재해요! 이전 답글을 삭제할까요?
-      //      - how do I know that? At least previous comment is empty? when and how do I get the state? do not add this feature? If yes, maybe many things necessary`,
-      //   );
-    }
-
-    // for mobile & tablet, get userName that will be shown in textarea to write re-comment
-    // for all devices, store info and after writing comment, send them to the server
-    setParentForNewReComment({ parentCommentId: commentId, parentCommentUserName: userName });
-    // get function to close the component to write reComment next time
-    dispatch(getClosingReComnt({ handleWriteReComnt }));
-  };
 
   const commentRef = useRef<HTMLDivElement>(null);
 
@@ -180,12 +153,7 @@ function CommentWritten({
   }, []);
 
   return (
-    <CommentContainer
-      ref={commentRef}
-      isWriteReComnt={isWriteReComnt}
-      isReComment={isReComment}
-      isParentToMark={isParentToMark}
-    >
+    <CommentContainer ref={commentRef} isReComment={isReComment} isParentToMark={isParentToMark}>
       <UserImgBox>
         <UserImg userImg={userImg} />
       </UserImgBox>
