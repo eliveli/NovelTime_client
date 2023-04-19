@@ -159,7 +159,9 @@ function CommentWritten({
       </UserImgBox>
       <NextToImgContainer>
         <UserNameContainer>
-          <UserName>{userName}</UserName>
+          <UserName isParentToWriteReComment={commentId === parentForNewReComment.parentCommentId}>
+            {userName}
+          </UserName>
           <CreateDate>{createDate}</CreateDate>
         </UserNameContainer>
         <CommentContent>

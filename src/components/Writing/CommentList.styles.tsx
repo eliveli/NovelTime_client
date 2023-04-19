@@ -77,7 +77,9 @@ export const NextToImgContainer = styled.div`
   width: 100%;
   margin-left: 10px;
 `;
-export const UserName = styled.span``;
+export const UserName = styled.span<{ isParentToWriteReComment: boolean }>`
+  ${({ isParentToWriteReComment }) => isParentToWriteReComment && "color: rgba(3, 199, 90, 0.6);"}
+`;
 export const CommentSortContainer = styled.div`
   display: flex;
   gap: 10px;
