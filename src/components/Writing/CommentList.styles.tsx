@@ -173,9 +173,20 @@ export const WriteTextCntnr = styled.div`
   border-radius: 14px;
   border: 1px solid rgba(0, 0, 0, 0.1);
   padding: 8px 14px;
+
+  position: relative;
 `;
 
-export const WriteText = styled.textarea`
+export const SpaceForUserNameOnTextArea = styled.span`
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin-top: 10px;
+  margin-left: 11px;
+  color: rgba(3, 199, 90, 0.6);
+`;
+
+export const WriteText = styled.textarea<{ spaceForUserName: number }>`
   width: 100%;
   border: 0;
   resize: none;
@@ -185,6 +196,8 @@ export const WriteText = styled.textarea`
   font-size: 16px;
   height: 28px;
   line-height: 1.5;
+
+  ${({ spaceForUserName }) => `text-indent: ${spaceForUserName}px;`}
 
   color: rgba(0, 0, 0, 0.6);
   font-weight: 500;

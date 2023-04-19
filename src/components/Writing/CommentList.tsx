@@ -1,5 +1,6 @@
 import Icon from "assets/Icon";
 import { useRef, useState, useCallback, useEffect } from "react";
+import { useComponentWidth } from "utils";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import {
   CommentContainer,
@@ -28,6 +29,7 @@ import {
   WriteCommentSubmit,
   WriteText,
   WriteTextCntnr,
+  SpaceForUserNameOnTextArea,
 } from "./CommentList.styles";
 
 const htmlWidth = document.documentElement.offsetWidth;
@@ -65,15 +67,18 @@ export function WriteComment({
     textRef.current.style.height = `${textHeight <= 124 ? textRef.current.scrollHeight : 124}px`;
   }, []);
 
+  const userNameOnTextAreaRef = useRef<HTMLSpanElement>(null);
+  const userNameWidth = useComponentWidth(userNameOnTextAreaRef);
+
   // for mobile and tablet, get reComment ID and userName
   // then show reCommentID in textarea
 
-  useEffect(() => {
-    if (!textRef.current) return;
-    if (parentUserNameForNewReComment) {
-      textRef.current.value = `@${parentUserNameForNewReComment} `;
-    }
-  }, [parentUserNameForNewReComment]);
+  // useEffect(() => {
+  //   if (!textRef.current) return;
+  //   if (parentUserNameForNewReComment) {
+  //     textRef.current.value = `@${parentUserNameForNewReComment} `;
+  //   }
+  // }, [parentUserNameForNewReComment]);
   const handleSubmit = () => {
     // server request 1 : provide comment to server
     // server request 2 : provide message to server : use variable of isMessage
@@ -85,7 +90,17 @@ export function WriteComment({
       isReComment={isReComment}
     >
       <WriteTextCntnr>
-        <WriteText ref={textRef} onChange={writeComment} placeholder="Write your comment!" />
+        {parentUserNameForNewReComment && (
+          <SpaceForUserNameOnTextArea ref={userNameOnTextAreaRef}>
+            {`@${parentUserNameForNewReComment}`}
+          </SpaceForUserNameOnTextArea>
+        )}
+        <WriteText
+          ref={textRef}
+          onChange={writeComment}
+          placeholder="Write your comment!"
+          spaceForUserName={userNameWidth}
+        />
         <EmojiCntnr size={20}>
           <EmojiIcon />
         </EmojiCntnr>
