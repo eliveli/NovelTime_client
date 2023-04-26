@@ -35,7 +35,6 @@ import {
 const htmlWidth = document.documentElement.offsetWidth;
 const isTablet = htmlWidth >= 768;
 const isPC = htmlWidth >= 1024;
-const isFixedComment = htmlWidth <= 820;
 
 export function WriteComment({
   isReComment,
@@ -73,22 +72,12 @@ export function WriteComment({
   // for mobile and tablet, get reComment ID and userName
   // then show reCommentID in textarea
 
-  // useEffect(() => {
-  //   if (!textRef.current) return;
-  //   if (parentUserNameForNewReComment) {
-  //     textRef.current.value = `@${parentUserNameForNewReComment} `;
-  //   }
-  // }, [parentUserNameForNewReComment]);
   const handleSubmit = () => {
     // server request 1 : provide comment to server
     // server request 2 : provide message to server : use variable of isMessage
   };
   return (
-    <WriteCommentContainer
-      isFixedComment={isFixedComment}
-      isMessage={isMessage}
-      isReComment={isReComment}
-    >
+    <WriteCommentContainer isMessage={isMessage} isReComment={isReComment}>
       <WriteTextCntnr>
         {parentUserNameForNewReComment && (
           <SpaceForUserNameOnTextArea ref={userNameOnTextAreaRef}>
@@ -301,7 +290,7 @@ export function CommentList({
   const [parentToMark, setParentToMark] = useState(""); // parent comment of selected reComment
 
   return (
-    <CommentListContainer isFixedComment={isFixedComment}>
+    <CommentListContainer>
       <CommentMarkContainer>
         <CommentMark>댓글</CommentMark>
         <CommentSortContainer>

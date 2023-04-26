@@ -2,12 +2,15 @@ import theme, { styled } from "assets/styles/theme";
 import Icon from "assets/Icon";
 import { Img, ReCommentList } from "store/serverAPIs/types";
 
-export const CommentListContainer = styled.div<{ isFixedComment: boolean }>`
+export const CommentListContainer = styled.div`
   border-radius: 20px;
   border: 1px solid lightgray;
   margin-top: 10px;
   padding: 14px 0 2px;
-  ${({ isFixedComment }) => isFixedComment && "margin-bottom: 78px;"}
+
+  @media (max-width: 820px) {
+    margin-bottom: 78px;
+  }
 `;
 export const CommentMarkContainer = styled.div`
   display: flex;
@@ -126,7 +129,6 @@ export const ReCommentUser = styled.span`
 // `;
 export const WriteCommentContainer = styled.div<{
   isReComment?: true;
-  isFixedComment?: boolean;
   isMessage?: true;
 }>`
   display: flex;
@@ -141,17 +143,17 @@ export const WriteCommentContainer = styled.div<{
   ${({ isReComment }) => isReComment && "margin-left:-40px;"}
 
   // html width <= 820px,   fix comment component to bottom
-  ${({ isFixedComment }) =>
-    isFixedComment &&
-    `position: fixed;
+  @media (max-width: 820px) {
+    position: fixed;
     bottom: 0;
     left: 0;
     width: 100%;
     border-radius: 0;
-    background-color: rgba(255,255,255,1);
-    z-index: 1;`}
+    background-color: rgba(255, 255, 255, 1);
+    z-index: 1;
+  }
 
-// for message room component
+  // for message room component
   ${({ isMessage }) =>
     isMessage &&
     `
