@@ -144,7 +144,12 @@ export const WriteCommentContainer = styled.div<{
 
   // html width <= 820px,   fix comment component to bottom
   @media (max-width: 820px) {
-    position: fixed;
+    position: sticky;
+    // o 문제 : y스크롤 없을 때 또는 y스크롤 최하단에서 컴포넌트가 가려짐
+    // o 세부 상황 : 직접적으로 넣은 적 없는 canvas 요소가 html의 첫번째 child로 나타나고
+    //          canvas의 'position : fixed' 자동 적용, canvas가 html보다 height이 큼
+    // o 대처 : fix -> sticky
+
     bottom: 0;
     left: 0;
     width: 100%;
