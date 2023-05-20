@@ -192,6 +192,8 @@ function CommentWritten({
                       parentCommentId: commentId,
                       parentCommentUserName: userName,
                     });
+
+                    setParentAndChildToMark({ parent: "", child: "" });
                   }}
                 >
                   {reCommentNo ? `답글 ${reCommentNo}` : "답글 쓰기"}
@@ -208,6 +210,8 @@ function CommentWritten({
                       parentCommentId: "",
                       parentCommentUserName: "",
                     });
+
+                    setParentAndChildToMark({ parent: "", child: "" });
                   }}
                 >
                   답글 접기
@@ -221,6 +225,8 @@ function CommentWritten({
                     parentCommentId: commentId,
                     parentCommentUserName: userName,
                   });
+
+                  setParentAndChildToMark({ parent: "", child: "" });
                 }}
               >
                 답글 쓰기
