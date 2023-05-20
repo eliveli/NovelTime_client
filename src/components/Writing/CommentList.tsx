@@ -76,8 +76,17 @@ export function WriteComment({
     // server request 1 : provide comment to server
     // server request 2 : provide message to server : use variable of isMessage
   };
+
+  const writeCommentRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (parentUserNameForNewReComment) {
+      writeCommentRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  });
+
   return (
-    <WriteCommentContainer isMessage={isMessage} isReComment={isReComment}>
+    <WriteCommentContainer ref={writeCommentRef} isMessage={isMessage} isReComment={isReComment}>
       <WriteTextCntnr>
         {parentUserNameForNewReComment && (
           <SpaceForUserNameOnTextArea ref={userNameOnTextAreaRef}>
