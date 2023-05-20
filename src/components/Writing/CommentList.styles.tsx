@@ -107,8 +107,13 @@ export const ReCommentButtonsContainer = styled.div`
   align-items: flex-start;
 `;
 
-export const MarkParentComment = styled.span`
-  color: rgba(0, 0, 0, 0.4);
+export const MarkParentAndChildComment = styled.span<{
+  childComment: string;
+  currentComment: string;
+}>`
+  color: ${({ childComment, currentComment }) =>
+    childComment === currentComment ? theme.color.mainLight : "rgba(0, 0, 0, 0.4)"};
+
   font-weight: 500;
   font-size: 14px;
 `;

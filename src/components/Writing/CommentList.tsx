@@ -15,7 +15,7 @@ import {
   CreateDate,
   EmojiCntnr,
   EmojiIcon,
-  MarkParentComment,
+  MarkParentAndChildComment,
   NextToImgContainer,
   ReCommentButtonsContainer,
   ReCommentMark,
@@ -229,11 +229,13 @@ function CommentWritten({
           </ReCommentMarkContainer>
 
           {isReComment && parentCommentId && (
-            <MarkParentComment
+            <MarkParentAndChildComment
+              childComment={parentAndChildToMark.child}
+              currentComment={commentId}
               onClick={() => setParentAndChildToMark({ parent: parentCommentId, child: commentId })}
             >
               원댓글보기
-            </MarkParentComment>
+            </MarkParentAndChildComment>
           )}
         </ReCommentButtonsContainer>
 
