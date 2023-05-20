@@ -300,9 +300,17 @@ export type CommentProps = {
     >;
   };
 
-  parentCommentToMark: {
-    parentToMark: string;
-    setParentToMark: React.Dispatch<React.SetStateAction<string>>;
+  parentAndChildCommentToMark: {
+    parentAndChildToMark: {
+      parent: string;
+      child: string;
+    };
+    setParentAndChildToMark: React.Dispatch<
+      React.SetStateAction<{
+        parent: string;
+        child: string;
+      }>
+    >;
   };
 
   reCommentsOfRootComment?: ReCommentList;

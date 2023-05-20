@@ -103,8 +103,11 @@ function CommentWritten({
   isReComment,
   comment,
   commentIdForScroll,
+
   parentCommentForNewReComment: { parentForNewReComment, setParentForNewReComment },
-  parentCommentToMark: { parentToMark, setParentToMark },
+
+  parentAndChildCommentToMark: { parentAndChildToMark, setParentAndChildToMark },
+
   reCommentsOfRootComment,
   rootCommentSelected,
 }: CommentProps) {
@@ -134,7 +137,7 @@ function CommentWritten({
 
   const commentRef = useRef<HTMLDivElement>(null);
 
-  const isParentToMark = parentToMark === commentId;
+  const isParentToMark = parentAndChildToMark.parent === commentId;
 
   // scroll to the parent comment of its reComment when clicking "원댓글보기"
   useEffect(() => {
@@ -226,7 +229,9 @@ function CommentWritten({
           </ReCommentMarkContainer>
 
           {isReComment && parentCommentId && (
-            <MarkParentComment onClick={() => setParentToMark(parentCommentId)}>
+            <MarkParentComment
+              onClick={() => setParentAndChildToMark({ parent: parentCommentId, child: commentId })}
+            >
               원댓글보기
             </MarkParentComment>
           )}
@@ -240,7 +245,7 @@ function CommentWritten({
               comment={{ ..._, firstAncestorCommentId: commentId }}
               commentIdForScroll={commentIdForScroll}
               parentCommentForNewReComment={{ parentForNewReComment, setParentForNewReComment }}
-              parentCommentToMark={{ parentToMark, setParentToMark }}
+              parentAndChildCommentToMark={{ parentAndChildToMark, setParentAndChildToMark }}
             />
           ))}
 
@@ -287,7 +292,7 @@ export function CommentList({
     parentCommentUserName: "",
   }); // parent comment of new reComment to write
 
-  const [parentToMark, setParentToMark] = useState(""); // parent comment of selected reComment
+  const [parentAndChildToMark, setParentAndChildToMark] = useState({ parent: "", child: "" }); // parent comment of selected reComment
 
   return (
     <CommentListContainer>
@@ -320,7 +325,7 @@ export function CommentList({
           comment={_}
           commentIdForScroll={commentIdForScroll}
           parentCommentForNewReComment={{ parentForNewReComment, setParentForNewReComment }}
-          parentCommentToMark={{ parentToMark, setParentToMark }}
+          parentAndChildCommentToMark={{ parentAndChildToMark, setParentAndChildToMark }}
           reCommentsOfRootComment={
             rootCommentSelected.rootCommentIdToShowReComments === _.commentId
               ? reComments[_.commentId]
