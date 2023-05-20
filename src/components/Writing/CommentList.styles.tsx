@@ -28,7 +28,6 @@ export const CommentMarkContainer = styled.div`
 export const CommentMark = styled.span``;
 export const CommentContainer = styled.div<{
   isReComment?: true;
-  isParentToMark: boolean;
 }>`
   display: flex;
   padding: 12px 20px 6px;
@@ -52,8 +51,6 @@ export const CommentContainer = styled.div<{
     border-top: 1px dotted rgba(0, 0, 0, 0.1);
     border-bottom: 0;
   `}
-
-  ${({ isParentToMark }) => isParentToMark && `box-shadow: 0 0 5px ${theme.color.main}`}
 `;
 export const UserNameContainer = styled.div`
   display: flex;
@@ -72,8 +69,11 @@ export const UserImg = styled.div<{ userImg: Img }>`
 export const CreateDate = styled.span`
   margin-left: 10px;
 `;
-export const CommentContent = styled.p`
+export const CommentContent = styled.p<{ isParentToMark: boolean }>`
   margin: 0 0 3px;
+
+  ${({ isParentToMark }) =>
+    isParentToMark && `border: 1px solid ${theme.color.mainLight}; padding: 0 5px;`}
 `;
 
 export const NextToImgContainer = styled.div`

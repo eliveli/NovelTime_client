@@ -136,13 +136,14 @@ function CommentWritten({
   //
 
   const commentRef = useRef<HTMLDivElement>(null);
+  const commentContentRef = useRef<HTMLParagraphElement>(null);
 
   const isParentToMark = parentAndChildToMark.parent === commentId;
 
   // scroll to the parent comment of its reComment when clicking "원댓글보기"
   useEffect(() => {
     if (isParentToMark) {
-      commentRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+      commentContentRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
     }
   }, [isParentToMark]);
 
@@ -160,7 +161,7 @@ function CommentWritten({
   }, []);
 
   return (
-    <CommentContainer ref={commentRef} isReComment={isReComment} isParentToMark={isParentToMark}>
+    <CommentContainer ref={commentRef} isReComment={isReComment}>
       <UserImgBox>
         <UserImg userImg={userImg} />
       </UserImgBox>
@@ -171,7 +172,7 @@ function CommentWritten({
           </UserName>
           <CreateDate>{createDate}</CreateDate>
         </UserNameContainer>
-        <CommentContent>
+        <CommentContent ref={commentContentRef} isParentToMark={isParentToMark}>
           {isReComment && <ReCommentUser>{`@${parentCommentUserName as string} `}</ReCommentUser>}
           {commentContent}
         </CommentContent>
