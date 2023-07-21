@@ -39,10 +39,16 @@ const isPC = htmlWidth >= 1024;
 export function WriteComment({
   isReComment,
   parentUserNameForNewReComment,
-  isMessage,
+  talkId,
+  novelTitle,
+
+  isMessage, // for message page. not for comment
 }: {
   isReComment?: true;
   parentUserNameForNewReComment?: string;
+  talkId?: string;
+  novelTitle?: string;
+
   isMessage?: true;
 }) {
   const textRef = useRef<HTMLTextAreaElement>(null);
@@ -103,6 +109,13 @@ export function WriteComment({
           <EmojiIcon />
         </EmojiCntnr>
       </WriteTextCntnr>
+      {/* 1. check that the user logged in
+          2. if yes, - give these to server
+                        : talkId, novelTitle, commentContent
+
+                     - also, get comments automatically with provideTags in serverAPIs
+             if not, open popup that says that the user needs to login
+       */}
       <WriteCommentSubmit onClick={handleSubmit}>작성</WriteCommentSubmit>
     </WriteCommentContainer>
   );
@@ -119,6 +132,9 @@ function CommentWritten({
 
   reCommentsOfRootComment,
   rootCommentSelected,
+
+  talkId,
+  novelTitle,
 }: CommentProps) {
   const {
     commentId,
@@ -264,6 +280,8 @@ function CommentWritten({
               commentIdForScroll={commentIdForScroll}
               parentCommentForNewReComment={{ parentForNewReComment, setParentForNewReComment }}
               parentAndChildCommentToMark={{ parentAndChildToMark, setParentAndChildToMark }}
+              talkId={talkId}
+              novelTitle={novelTitle}
             />
           ))}
 
@@ -272,6 +290,8 @@ function CommentWritten({
           <WriteComment
             isReComment={isReComment}
             parentUserNameForNewReComment={parentForNewReComment.parentCommentUserName}
+            talkId={talkId}
+            novelTitle={novelTitle}
           />
         )}
       </NextToImgContainer>
@@ -302,6 +322,9 @@ export function CommentList({
   set1ofCommentPageNo,
   reComments,
   rootCommentSelected,
+
+  talkId,
+  novelTitle,
 }: CommentListProps) {
   // when write-comment component is fixed to screen bottom, give comment-list-component margin-bottom
 
@@ -350,6 +373,8 @@ export function CommentList({
               : undefined
           }
           rootCommentSelected={rootCommentSelected}
+          talkId={talkId}
+          novelTitle={novelTitle}
         />
       ))}
     </CommentListContainer>

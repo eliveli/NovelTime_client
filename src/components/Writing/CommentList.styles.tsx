@@ -272,6 +272,9 @@ export interface CommentListProps {
     rootCommentIdToShowReComments: string;
     setRootCommentIdToShowReComments: React.Dispatch<React.SetStateAction<string>>;
   };
+
+  talkId?: string;
+  novelTitle?: string;
 }
 
 export type CommentProps = {
@@ -324,4 +327,7 @@ export type CommentProps = {
     rootCommentIdToShowReComments: string;
     setRootCommentIdToShowReComments: React.Dispatch<React.SetStateAction<string>>;
   };
+
+  talkId?: string;
+  novelTitle?: string;
 };

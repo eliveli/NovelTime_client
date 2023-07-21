@@ -233,6 +233,9 @@ export default function FreeTalkDetail() {
               rootCommentIdToShowReComments,
               setRootCommentIdToShowReComments,
             }}
+            // for creating reComment
+            talkId={talk.data.talk.talkId}
+            novelTitle={talk.data.novel.novelTitle}
           />
         )}
 
@@ -244,7 +247,7 @@ export default function FreeTalkDetail() {
           />
         )}
 
-        <WriteComment />
+        <WriteComment talkId={talk.data.talk.talkId} novelTitle={talk.data.novel.novelTitle} />
       </ContentAnimation>
     </MainBG>
   );
