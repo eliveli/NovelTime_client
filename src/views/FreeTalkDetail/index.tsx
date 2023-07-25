@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import MainBG from "components/MainBG";
 import {
@@ -44,7 +44,6 @@ export default function FreeTalkDetail() {
   const [rootComments, setRootComments] = useState<Comment[]>([]);
 
   const [rootCommentIdToShowReComments, setRootCommentIdToShowReComments] = useState<string>("");
-
   const [reComments, setReComments] = useState<{ [rootCommentId: string]: ReCommentList }>({});
 
   const reCommentsFromServer = useGetReCommentsQuery(
@@ -58,6 +57,7 @@ export default function FreeTalkDetail() {
   useEffect(() => {
     if (!reCommentsFromServer.data) return;
 
+    // accumulate reComments of a certain rootComment into the reComment list
     setReComments((_) => ({ ..._, [rootCommentIdToShowReComments]: reCommentsFromServer.data }));
   }, [reCommentsFromServer.data]);
 
@@ -65,18 +65,25 @@ export default function FreeTalkDetail() {
     const commentList = commentPerPage.data?.commentList;
 
     if (!commentList || !commentList?.length) return;
-
     // exchange comment when comment page is 1
     // . case 1 : when getting comments at first
     // . case 2 : when sorting comments
+    // . case 3 : when updating comments after adding a new one and the comment page number is 1
     if (commentPageNoRef.current === 1 && commentList) {
       setRootComments(commentList);
       setReComments({});
       // ㄴremove reComments to get them sorted and updated when getting rootComments later
+
+      // initialize for when adding a root comment and updating comments
+      setRootCommentIdToShowReComments("");
+
       return;
     }
 
-    // add comment
+    // initialize for when adding a root comment and updating comments
+    setRootCommentIdToShowReComments("");
+
+    // accumulate root comments
     setRootComments((prev) => ({ ...prev, commentList }));
   }, [commentPerPage.data]);
 
