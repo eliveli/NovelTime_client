@@ -1,6 +1,7 @@
 import Icon from "assets/Icon";
 import { useRef, useState, useCallback, useEffect } from "react";
 import { useComponentWidth } from "utils";
+import { useAddRootCommentMutation } from "store/serverAPIs/novelTime";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import {
   CommentContainer,
@@ -51,6 +52,10 @@ export function WriteComment({
 
   isMessage?: true;
 }) {
+  const [addRootComment, addRootCommentResult] = useAddRootCommentMutation();
+
+  const loginUserId = useAppSelector((state) => state.user.loginUserInfo.userId);
+
   const textRef = useRef<HTMLTextAreaElement>(null);
 
   const [comment, setComment] = useState("");
@@ -78,8 +83,32 @@ export function WriteComment({
   // for mobile and tablet, get reComment ID and userName
   // then show reCommentID in textarea
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     // server request 1 : provide comment to server
+
+    if (!isMessage) {
+      if (!loginUserId) {
+        alert("먼저 로그인을 해 주세요");
+        return;
+      }
+
+      if (!talkId || !novelTitle) {
+        alert("코멘트를 추가할 수 없습니다");
+        return;
+      }
+
+      if (!textRef.current?.value) return; // when comment content is empty
+
+      if (addRootCommentResult.isLoading) return; // prevent click while loading for prev request
+
+      await addRootComment({ talkId, novelTitle, commentContent: textRef.current?.value });
+
+      if (addRootCommentResult.isError) {
+        alert("코멘트를 추가할 수 없습니다");
+      }
+
+      // return; // * uncomment when working on message below
+    }
     // server request 2 : provide message to server : use variable of isMessage
   };
 
@@ -109,13 +138,7 @@ export function WriteComment({
           <EmojiIcon />
         </EmojiCntnr>
       </WriteTextCntnr>
-      {/* 1. check that the user logged in
-          2. if yes, - give these to server
-                        : talkId, novelTitle, commentContent
 
-                     - also, get comments automatically with provideTags in serverAPIs
-             if not, open popup that says that the user needs to login
-       */}
       <WriteCommentSubmit onClick={handleSubmit}>작성</WriteCommentSubmit>
     </WriteCommentContainer>
   );

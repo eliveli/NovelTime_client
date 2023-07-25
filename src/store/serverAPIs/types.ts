@@ -91,6 +91,12 @@ export type ParamForReComments = {
   commentSortType: "new" | "old";
 };
 
+export type ParamForNewRootComment = {
+  talkId: string;
+  novelTitle: string;
+  commentContent: string;
+};
+
 type NovelDetail = {
   novelId: string;
   novelImg: string;

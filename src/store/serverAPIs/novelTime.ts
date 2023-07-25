@@ -31,6 +31,7 @@ import {
   CommentList,
   ParamForReComments,
   ReCommentList,
+  ParamForNewRootComment,
 } from "./types";
 import type { RootState } from "../index";
 
@@ -71,7 +72,12 @@ export const novelTimeApi = createApi({
       return headers;
     },
   }) as BaseQueryFn<string | FetchArgs, unknown, CustomError, {}>,
-  tagTypes: ["ContentUpdatedInHome", "ListTitlesUpdated", "ContentUpdatedInNovelList"],
+  tagTypes: [
+    "ContentUpdatedInHome",
+    "ListTitlesUpdated",
+    "ContentUpdatedInNovelList",
+    "CommentsUpdated",
+  ],
   endpoints: (builder) => ({
     // at home page
     getHomeData: builder.query<HomeData, undefined>({
@@ -109,9 +115,19 @@ export const novelTimeApi = createApi({
     getRootComments: builder.query<CommentList, ParamForRootComments>({
       query: (params) =>
         `/comment/${params.talkId}/${params.commentSortType}/${params.commentPageNo}`,
+      providesTags: ["CommentsUpdated"],
     }),
     getReComments: builder.query<ReCommentList, ParamForReComments>({
       query: (params) => `/comment/${params.rootCommentId}/${params.commentSortType}`,
+    }),
+
+    addRootComment: builder.mutation<string, ParamForNewRootComment>({
+      query: ({ talkId, novelTitle, commentContent }) => ({
+        url: "/comment/rootComment",
+        method: "POST",
+        body: { talkId, novelTitle, commentContent },
+      }),
+      invalidatesTags: ["CommentsUpdated"], // update comments after adding a new comment
     }),
 
     getLoginOauthServer: builder.query<UserAndToken, OauthData>({
@@ -215,6 +231,7 @@ export const {
   useGetTalkDetailQuery,
   useGetRootCommentsQuery,
   useGetReCommentsQuery,
+  useAddRootCommentMutation,
   useGetLoginOauthServerQuery,
   useGetLogoutQuery,
   useGetAccessTokenQuery,
