@@ -44,7 +44,6 @@ export default function FreeTalkDetail() {
   const [rootComments, setRootComments] = useState<Comment[]>([]);
 
   const [rootCommentIdToShowReComments, setRootCommentIdToShowReComments] = useState<string>("");
-  const [reComments, setReComments] = useState<{ [rootCommentId: string]: ReCommentList }>({});
 
   const reCommentsFromServer = useGetReCommentsQuery(
     {
@@ -53,13 +52,6 @@ export default function FreeTalkDetail() {
     },
     { skip: !rootCommentIdToShowReComments },
   );
-
-  useEffect(() => {
-    if (!reCommentsFromServer.data) return;
-
-    // accumulate reComments of a certain rootComment into the reComment list
-    setReComments((_) => ({ ..._, [rootCommentIdToShowReComments]: reCommentsFromServer.data }));
-  }, [reCommentsFromServer.data]);
 
   useEffect(() => {
     const commentList = commentPerPage.data?.commentList;
@@ -71,8 +63,6 @@ export default function FreeTalkDetail() {
     // . case 3 : when updating comments after adding a new one and the comment page number is 1
     if (commentPageNoRef.current === 1 && commentList) {
       setRootComments(commentList);
-      setReComments({});
-      // ㄴremove reComments to get them sorted and updated when getting rootComments later
 
       // initialize for when adding a root comment and updating comments
       setRootCommentIdToShowReComments("");
@@ -235,7 +225,7 @@ export default function FreeTalkDetail() {
             commentIdForScroll={commentId}
             commentSort={{ sortTypeForComments, setSortTypeForComments }}
             set1ofCommentPageNo={set1ofCommentPageNo}
-            reComments={reComments}
+            reComments={reCommentsFromServer.data}
             rootCommentSelected={{
               rootCommentIdToShowReComments,
               setRootCommentIdToShowReComments,

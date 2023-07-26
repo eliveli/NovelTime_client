@@ -399,7 +399,7 @@ export function CommentList({
           parentAndChildCommentToMark={{ parentAndChildToMark, setParentAndChildToMark }}
           reCommentsOfRootComment={
             rootCommentSelected.rootCommentIdToShowReComments === _.commentId
-              ? reComments[_.commentId]
+              ? reComments
               : undefined
           }
           rootCommentSelected={rootCommentSelected}
