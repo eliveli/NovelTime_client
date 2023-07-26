@@ -42,6 +42,8 @@ export function WriteComment({
   parentUserNameForNewReComment,
   talkId,
   novelTitle,
+  handleCommentUpdated,
+  set1inCommentPageNo,
 
   isMessage, // for message page. not for comment
 }: {
@@ -49,6 +51,8 @@ export function WriteComment({
   parentUserNameForNewReComment?: string;
   talkId?: string;
   novelTitle?: string;
+  handleCommentUpdated?: React.Dispatch<React.SetStateAction<boolean>>;
+  set1inCommentPageNo?: () => void;
 
   isMessage?: true;
 }) {
@@ -86,7 +90,7 @@ export function WriteComment({
   const handleSubmit = async () => {
     // server request 1 : provide comment to server
 
-    if (!isMessage) {
+    if (!isMessage && !!handleCommentUpdated && !!set1inCommentPageNo) {
       if (!loginUserId) {
         alert("먼저 로그인을 해 주세요");
         return;
@@ -108,7 +112,12 @@ export function WriteComment({
         return;
       }
 
-      textRef.current.value = ""; // initialize comment content
+      // initialize comment input
+      textRef.current.value = "";
+      textRef.current.style.height = "28px";
+
+      handleCommentUpdated(true);
+      set1inCommentPageNo();
 
       // return; // * uncomment when working on message below
     }

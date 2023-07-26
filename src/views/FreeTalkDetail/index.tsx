@@ -54,30 +54,83 @@ export default function FreeTalkDetail() {
     { skip: !rootCommentIdToShowReComments },
   );
 
+  // it is needed to run useEffect always when updating comments
+  const [isCommentUpdated, handleCommentUpdated] = useState(false);
+
   useEffect(() => {
     const commentList = commentPerPage.data?.commentList;
 
     if (!commentList || !commentList?.length) return;
 
+    // after adding a new root comment,
+    // get the commentPerPage with the page number 1
+    //  if sort type is new, first page has the new comment
+    //               is old, last page has it. so get the all pages from 1 to the last
+    if (isCommentUpdated) {
+      // first, the comment page number was set to 1 right after updating comments
+
+      if (
+        commentPageNo === 1 &&
+        (sortTypeForComments === "new" ||
+          (sortTypeForComments === "old" && commentPerPage.data?.hasNext === false))
+      ) {
+        // page 1 has the new comment that was just created before comments was updated
+
+        handleCommentUpdated(false);
+        // after running this, useEffect will be run again by changing the isCommentUpdated
+        //  root comments will be replaced in the code below where if condition is of page 1
+
+        return;
+      }
+
+      // when page sort is old, continue getting comments
+      //  until the comment page is the last that has the new comment that was just created
+      if (sortTypeForComments === "old" && commentPerPage.data?.hasNext === true) {
+        setRootCommentIdToShowReComments("");
+
+        // accumulate root comments
+        setRootComments((prev) => [...prev, ...commentList]);
+
+        setCommentPageNo((prev) => prev + 1);
+
+        return;
+      }
+      if (sortTypeForComments === "old" && commentPerPage.data?.hasNext === false) {
+        // the last comment page has the new comment that was just created
+
+        handleCommentUpdated(false);
+        // after running this, useEffect will be run again by changing the isCommentUpdated
+        //  next root comments will be accumulated in this time
+
+        return;
+      }
+    }
+
+    // after changing isCommentUpdated to false, following code also will be run //
+
     // exchange comment when comment page is 1
     // . case 1 : when getting comments at first
     // . case 2 : when sorting comments
-    // . case 3 : when updating comments after adding a new one and the comment page number is 1
     if (commentPageNo === 1 && commentList) {
       setRootComments(commentList);
 
-      // initialize for when adding a root comment and updating comments
+      // initialize for when adding a root comment
       setRootCommentIdToShowReComments("");
 
       return;
     }
 
-    // initialize for when adding a root comment and updating comments
+    // initialize for when adding a root comment
     setRootCommentIdToShowReComments("");
 
     // accumulate root comments
     setRootComments((prev) => [...prev, ...commentList]);
-  }, [commentPerPage.data]);
+  }, [commentPerPage.data, isCommentUpdated]);
+  // after adding a new root comment,
+  // "isCommentUpdated" in useEffect deps is needed to run useEffect always.
+  //   useEffect can't be triggered with only commentPerPage.data or related things in deps
+  //    when the comment page is not the last and the sort type is old
+  //     and the new commentPerPage is the same with the previous one
 
   if (!talkId || talk.isError || !talk.data) return <div>***에러 페이지 띄우기</div>;
 
@@ -237,12 +290,16 @@ export default function FreeTalkDetail() {
             novelTitle={talk.data.novel.novelTitle}
           />
         )}
-
         {!!commentPerPage.data?.hasNext && (
           <ShowMoreContent _onClick={() => setCommentPageNo((prev) => prev + 1)} />
         )}
 
-        <WriteComment talkId={talk.data.talk.talkId} novelTitle={talk.data.novel.novelTitle} />
+        <WriteComment
+          talkId={talk.data.talk.talkId}
+          novelTitle={talk.data.novel.novelTitle}
+          handleCommentUpdated={handleCommentUpdated}
+          set1inCommentPageNo={set1inCommentPageNo}
+        />
       </ContentAnimation>
     </MainBG>
   );
