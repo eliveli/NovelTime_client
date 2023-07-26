@@ -29,15 +29,16 @@ export default function FreeTalkDetail() {
     writingId: talkId as string,
   });
 
-  const commentPageNoRef = useRef(1);
-  const set1ofCommentPageNo = () => {
-    commentPageNoRef.current = 1;
+  const [commentPageNo, setCommentPageNo] = useState(1);
+
+  const set1inCommentPageNo = () => {
+    setCommentPageNo(1);
   };
 
   const commentPerPage = useGetRootCommentsQuery({
     talkId: talkId as string,
     commentSortType: sortTypeForComments,
-    commentPageNo: commentPageNoRef.current,
+    commentPageNo,
   });
   // - isLoading, isFetching, isError, data in comment
 
@@ -57,11 +58,12 @@ export default function FreeTalkDetail() {
     const commentList = commentPerPage.data?.commentList;
 
     if (!commentList || !commentList?.length) return;
+
     // exchange comment when comment page is 1
     // . case 1 : when getting comments at first
     // . case 2 : when sorting comments
     // . case 3 : when updating comments after adding a new one and the comment page number is 1
-    if (commentPageNoRef.current === 1 && commentList) {
+    if (commentPageNo === 1 && commentList) {
       setRootComments(commentList);
 
       // initialize for when adding a root comment and updating comments
@@ -74,7 +76,7 @@ export default function FreeTalkDetail() {
     setRootCommentIdToShowReComments("");
 
     // accumulate root comments
-    setRootComments((prev) => ({ ...prev, commentList }));
+    setRootComments((prev) => [...prev, ...commentList]);
   }, [commentPerPage.data]);
 
   if (!talkId || talk.isError || !talk.data) return <div>***에러 페이지 띄우기</div>;
@@ -224,7 +226,7 @@ export default function FreeTalkDetail() {
             commentList={rootComments}
             commentIdForScroll={commentId}
             commentSort={{ sortTypeForComments, setSortTypeForComments }}
-            set1ofCommentPageNo={set1ofCommentPageNo}
+            set1inCommentPageNo={set1inCommentPageNo}
             reComments={reCommentsFromServer?.data}
             rootCommentSelected={{
               rootCommentIdToShowReComments,
@@ -237,11 +239,7 @@ export default function FreeTalkDetail() {
         )}
 
         {!!commentPerPage.data?.hasNext && (
-          <ShowMoreContent
-            _onClick={() => {
-              commentPageNoRef.current += 1;
-            }}
-          />
+          <ShowMoreContent _onClick={() => setCommentPageNo((prev) => prev + 1)} />
         )}
 
         <WriteComment talkId={talk.data.talk.talkId} novelTitle={talk.data.novel.novelTitle} />

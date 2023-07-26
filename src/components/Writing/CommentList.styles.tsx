@@ -264,7 +264,7 @@ export interface CommentListProps {
     sortTypeForComments: "new" | "old";
     setSortTypeForComments: React.Dispatch<React.SetStateAction<"new" | "old">>;
   };
-  set1ofCommentPageNo: () => void;
+  set1inCommentPageNo: () => void;
   reComments?: ReCommentList;
 
   rootCommentSelected: {
