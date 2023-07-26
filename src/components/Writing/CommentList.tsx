@@ -358,6 +358,13 @@ export function CommentList({
 
   const [parentAndChildToMark, setParentAndChildToMark] = useState({ parent: "", child: "" }); // parent comment of selected reComment
 
+  // not to color parent user name after adding a new root comment and updating comments
+  useEffect(() => {
+    if (!rootCommentSelected.rootCommentIdToShowReComments) {
+      setParentForNewReComment({ parentCommentId: "", parentCommentUserName: "" });
+    }
+  }, [rootCommentSelected.rootCommentIdToShowReComments]);
+
   return (
     <CommentListContainer>
       <CommentMarkContainer>
