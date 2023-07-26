@@ -225,7 +225,7 @@ export default function FreeTalkDetail() {
             commentIdForScroll={commentId}
             commentSort={{ sortTypeForComments, setSortTypeForComments }}
             set1ofCommentPageNo={set1ofCommentPageNo}
-            reComments={reCommentsFromServer.data}
+            reComments={reCommentsFromServer?.data}
             rootCommentSelected={{
               rootCommentIdToShowReComments,
               setRootCommentIdToShowReComments,

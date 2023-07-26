@@ -2,7 +2,7 @@ import Icon from "assets/Icon";
 import { useRef, useState, useCallback, useEffect } from "react";
 import { useComponentWidth } from "utils";
 import { useAddRootCommentMutation } from "store/serverAPIs/novelTime";
-import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { useAppSelector } from "../../store/hooks";
 import {
   CommentContainer,
   CommentContent,
@@ -93,7 +93,7 @@ export function WriteComment({
       }
 
       if (!talkId || !novelTitle) {
-        alert("코멘트를 추가할 수 없습니다");
+        alert("코멘트를 추가할 수 없습니다. 새로고침 후 다시 시도해 보세요");
         return;
       }
 
@@ -104,8 +104,11 @@ export function WriteComment({
       await addRootComment({ talkId, novelTitle, commentContent: textRef.current?.value });
 
       if (addRootCommentResult.isError) {
-        alert("코멘트를 추가할 수 없습니다");
+        alert("코멘트를 추가할 수 없습니다. 새로고침 후 다시 시도해 보세요");
+        return;
       }
+
+      textRef.current.value = ""; // initialize comment content
 
       // return; // * uncomment when working on message below
     }
