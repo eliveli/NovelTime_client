@@ -58,6 +58,8 @@ export default function FreeTalkDetail() {
   const [isCommentUpdated, handleCommentUpdated] = useState(false);
 
   useEffect(() => {
+    if (commentPerPage.isLoading) return;
+
     const commentList = commentPerPage.data?.commentList;
 
     if (!commentList || !commentList?.length) return;
@@ -69,25 +71,51 @@ export default function FreeTalkDetail() {
     if (isCommentUpdated) {
       // first, the comment page number was set to 1 right after updating comments
 
-      if (
-        commentPageNo === 1 &&
-        (sortTypeForComments === "new" ||
-          (sortTypeForComments === "old" && commentPerPage.data?.hasNext === false))
-      ) {
+      if (commentPageNo === 1 && sortTypeForComments === "new") {
         // page 1 has the new comment that was just created before comments was updated
 
         handleCommentUpdated(false);
-        // after running this, useEffect will be run again by changing the isCommentUpdated
-        //  root comments will be replaced in the code below where if condition is of page 1
+        // useEffect will be run again by changing this
+        //  then, root comments will be replaced where if-condition is with page 1
 
         return;
       }
 
-      // when page sort is old, continue getting comments
-      //  until the comment page is the last that has the new comment that was just created
-      if (sortTypeForComments === "old" && commentPerPage.data?.hasNext === true) {
+      if (
+        commentPageNo === 1 &&
+        sortTypeForComments === "old" &&
+        commentPerPage.data?.hasNext === false
+      ) {
+        // page 1 has the new comment that was just created before comments was updated
+
+        handleCommentUpdated(false);
+        // useEffect will be run again by changing this
+        //  then, root comments will be replaced where if-condition is with page 1
+
+        return;
+      }
+
+      // when page sort is old and page 1 is not the last,
+      //  continue getting comments pages from 1 to the last
+      if (
+        commentPageNo === 1 &&
+        sortTypeForComments === "old" &&
+        commentPerPage.data?.hasNext === true
+      ) {
+        // replace rootComments with the new in page 1 and get the next page
+        setRootComments(commentList);
         setRootCommentIdToShowReComments("");
 
+        setCommentPageNo((prev) => prev + 1);
+
+        return;
+      }
+
+      if (
+        commentPageNo > 1 &&
+        sortTypeForComments === "old" &&
+        commentPerPage.data?.hasNext === true
+      ) {
         // accumulate root comments
         setRootComments((prev) => [...prev, ...commentList]);
 
@@ -95,7 +123,11 @@ export default function FreeTalkDetail() {
 
         return;
       }
-      if (sortTypeForComments === "old" && commentPerPage.data?.hasNext === false) {
+      if (
+        commentPageNo > 1 &&
+        sortTypeForComments === "old" &&
+        commentPerPage.data?.hasNext === false
+      ) {
         // the last comment page has the new comment that was just created
 
         handleCommentUpdated(false);
@@ -129,8 +161,8 @@ export default function FreeTalkDetail() {
   // after adding a new root comment,
   // "isCommentUpdated" in useEffect deps is needed to run useEffect always.
   //   useEffect can't be triggered with only commentPerPage.data or related things in deps
-  //    when the comment page is not the last and the sort type is old
-  //     and the new commentPerPage is the same with the previous one
+  //    because the new commentPerPage is the same with the previous one
+  //            when the comment page is not the last and the sort type is old
 
   if (!talkId || talk.isError || !talk.data) return <div>***에러 페이지 띄우기</div>;
 

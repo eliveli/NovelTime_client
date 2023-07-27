@@ -105,6 +105,8 @@ export function WriteComment({
 
       if (addRootCommentResult.isLoading) return; // prevent click while loading for prev request
 
+      set1inCommentPageNo();
+
       await addRootComment({ talkId, novelTitle, commentContent: textRef.current?.value });
 
       if (addRootCommentResult.isError) {
@@ -117,7 +119,6 @@ export function WriteComment({
       textRef.current.style.height = "28px";
 
       handleCommentUpdated(true);
-      set1inCommentPageNo();
 
       // return; // * uncomment when working on message below
     }
@@ -361,6 +362,7 @@ export function CommentList({
   talkId,
   novelTitle,
 }: CommentListProps) {
+  console.log("commentList 2 :", commentList);
   // when write-comment component is fixed to screen bottom, give comment-list-component margin-bottom
 
   const [parentForNewReComment, setParentForNewReComment] = useState({
