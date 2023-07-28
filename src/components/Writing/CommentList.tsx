@@ -42,8 +42,7 @@ export function WriteComment({
   parentUserNameForNewReComment,
   talkId,
   novelTitle,
-  handleCommentUpdated,
-  set1inCommentPageNo,
+  getAllCommentPages,
 
   isMessage, // for message page. not for comment
 }: {
@@ -51,8 +50,7 @@ export function WriteComment({
   parentUserNameForNewReComment?: string;
   talkId?: string;
   novelTitle?: string;
-  handleCommentUpdated?: React.Dispatch<React.SetStateAction<boolean>>;
-  set1inCommentPageNo?: () => void;
+  getAllCommentPages?: () => void;
 
   isMessage?: true;
 }) {
@@ -90,7 +88,7 @@ export function WriteComment({
   const handleSubmit = async () => {
     // server request 1 : provide comment to server
 
-    if (!isMessage && !!handleCommentUpdated && !!set1inCommentPageNo) {
+    if (!isMessage && getAllCommentPages) {
       if (!loginUserId) {
         alert("먼저 로그인을 해 주세요");
         return;
@@ -104,9 +102,6 @@ export function WriteComment({
       if (!textRef.current?.value) return; // when comment content is empty
 
       if (addRootCommentResult.isLoading) return; // prevent click while loading for prev request
-
-      set1inCommentPageNo();
-
       await addRootComment({ talkId, novelTitle, commentContent: textRef.current?.value });
 
       if (addRootCommentResult.isError) {
@@ -118,7 +113,7 @@ export function WriteComment({
       textRef.current.value = "";
       textRef.current.style.height = "28px";
 
-      handleCommentUpdated(true);
+      getAllCommentPages();
 
       // return; // * uncomment when working on message below
     }

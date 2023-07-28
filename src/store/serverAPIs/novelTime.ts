@@ -72,12 +72,7 @@ export const novelTimeApi = createApi({
       return headers;
     },
   }) as BaseQueryFn<string | FetchArgs, unknown, CustomError, {}>,
-  tagTypes: [
-    "ContentUpdatedInHome",
-    "ListTitlesUpdated",
-    "ContentUpdatedInNovelList",
-    "CommentsUpdated",
-  ],
+  tagTypes: ["ContentUpdatedInHome", "ListTitlesUpdated", "ContentUpdatedInNovelList"],
   endpoints: (builder) => ({
     // at home page
     getHomeData: builder.query<HomeData, undefined>({
@@ -115,7 +110,6 @@ export const novelTimeApi = createApi({
     getRootComments: builder.query<CommentList, ParamForRootComments>({
       query: (params) =>
         `/comment/${params.talkId}/${params.commentSortType}/${params.commentPageNo}`,
-      providesTags: ["CommentsUpdated"],
     }),
     getReComments: builder.query<ReCommentList, ParamForReComments>({
       query: (params) => `/comment/${params.rootCommentId}/${params.commentSortType}`,
@@ -127,7 +121,6 @@ export const novelTimeApi = createApi({
         method: "POST",
         body: { talkId, novelTitle, commentContent },
       }),
-      invalidatesTags: ["CommentsUpdated"], // update comments after adding a new comment
     }),
 
     getLoginOauthServer: builder.query<UserAndToken, OauthData>({

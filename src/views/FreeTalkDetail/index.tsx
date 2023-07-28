@@ -28,12 +28,7 @@ export default function FreeTalkDetail() {
     writingType: "T",
     writingId: talkId as string,
   });
-
   const [commentPageNo, setCommentPageNo] = useState(1);
-
-  const set1inCommentPageNo = () => {
-    setCommentPageNo(1);
-  };
 
   const commentPerPage = useGetRootCommentsQuery({
     talkId: talkId as string,
@@ -42,6 +37,36 @@ export default function FreeTalkDetail() {
   });
   // - isLoading, isFetching, isError, data in comment
 
+  const set1inCommentPageNo = () => {
+    setCommentPageNo(1);
+  };
+
+  const getAllCommentPages = () => {
+    if (commentPageNo === 0) {
+      commentPerPage.refetch();
+    } else {
+      setCommentPageNo(0);
+    }
+  };
+
+  // simple way to update comments after adding a root comment //
+  // - request comments manually. don't do automatically by using provide and invalidate tags
+  //    => to avoid unnecessary api calls several times with different args
+  //       in the way that didn't direct and tidy and sometimes led in the wrong direction
+  // - make it possible to get all comments in all comment pages at once (by changing server code)
+  //     - when page number is 0, refetch
+  //     - when page number is not 0, just set 0 and fetch
+  //    => . to avoid the situation that useEffect would not run
+  //         because the data just received from server would possibly be the same with the previous
+  //         sometimes when comment page number is 1 and sort type is old
+  //                       and hasNext of data is false and the comments data were not changed,
+  //         so commentPerPage.data in the useEffect deps couldn't trigger to run the useEffect
+  //       ㄴ but in the new way I wrote above, useEffect can always run
+  //          because the whole comments will always different and new after adding a comment
+  //          in previous code, it was not possible because I just could get comments in one page
+  //      .  to avoid quite segmented and continuous situations
+  //            where the things kept going on in long and complex way
+  //            as getting comments from page 1 to the last in order (in the previous way)
   const [rootComments, setRootComments] = useState<Comment[]>([]);
 
   const [rootCommentIdToShowReComments, setRootCommentIdToShowReComments] = useState<string>("");
@@ -53,116 +78,28 @@ export default function FreeTalkDetail() {
     },
     { skip: !rootCommentIdToShowReComments },
   );
-
-  // it is needed to run useEffect always when updating comments
-  const [isCommentUpdated, handleCommentUpdated] = useState(false);
-
   useEffect(() => {
-    if (commentPerPage.isLoading) return;
-
     const commentList = commentPerPage.data?.commentList;
 
     if (!commentList || !commentList?.length) return;
 
-    // after adding a new root comment,
-    // get the commentPerPage with the page number 1
-    //  if sort type is new, first page has the new comment
-    //               is old, last page has it. so get the all pages from 1 to the last
-    if (isCommentUpdated) {
-      // first, the comment page number was set to 1 right after updating comments
+    // exchange comment
+    //  . when comment page is 0 updating root comments right after adding one
+    //  . when comment page is 1 getting comments at first or sorting comments
 
-      if (commentPageNo === 1 && sortTypeForComments === "new") {
-        // page 1 has the new comment that was just created before comments was updated
-
-        handleCommentUpdated(false);
-        // useEffect will be run again by changing this
-        //  then, root comments will be replaced where if-condition is with page 1
-
-        return;
-      }
-
-      if (
-        commentPageNo === 1 &&
-        sortTypeForComments === "old" &&
-        commentPerPage.data?.hasNext === false
-      ) {
-        // page 1 has the new comment that was just created before comments was updated
-
-        handleCommentUpdated(false);
-        // useEffect will be run again by changing this
-        //  then, root comments will be replaced where if-condition is with page 1
-
-        return;
-      }
-
-      // when page sort is old and page 1 is not the last,
-      //  continue getting comments pages from 1 to the last
-      if (
-        commentPageNo === 1 &&
-        sortTypeForComments === "old" &&
-        commentPerPage.data?.hasNext === true
-      ) {
-        // replace rootComments with the new in page 1 and get the next page
-        setRootComments(commentList);
-        setRootCommentIdToShowReComments("");
-
-        setCommentPageNo((prev) => prev + 1);
-
-        return;
-      }
-
-      if (
-        commentPageNo > 1 &&
-        sortTypeForComments === "old" &&
-        commentPerPage.data?.hasNext === true
-      ) {
-        // accumulate root comments
-        setRootComments((prev) => [...prev, ...commentList]);
-
-        setCommentPageNo((prev) => prev + 1);
-
-        return;
-      }
-      if (
-        commentPageNo > 1 &&
-        sortTypeForComments === "old" &&
-        commentPerPage.data?.hasNext === false
-      ) {
-        // the last comment page has the new comment that was just created
-
-        handleCommentUpdated(false);
-        // after running this, useEffect will be run again by changing the isCommentUpdated
-        //  next root comments will be accumulated in this time
-
-        return;
-      }
-    }
-
-    // after changing isCommentUpdated to false, following code also will be run //
-
-    // exchange comment when comment page is 1
-    // . case 1 : when getting comments at first
-    // . case 2 : when sorting comments
-    if (commentPageNo === 1 && commentList) {
+    if ([0, 1].includes(commentPageNo) && commentList) {
       setRootComments(commentList);
 
-      // initialize for when adding a root comment
       setRootCommentIdToShowReComments("");
 
       return;
     }
 
-    // initialize for when adding a root comment
     setRootCommentIdToShowReComments("");
 
     // accumulate root comments
     setRootComments((prev) => [...prev, ...commentList]);
-  }, [commentPerPage.data, isCommentUpdated]);
-  // after adding a new root comment,
-  // "isCommentUpdated" in useEffect deps is needed to run useEffect always.
-  //   useEffect can't be triggered with only commentPerPage.data or related things in deps
-  //    because the new commentPerPage is the same with the previous one
-  //            when the comment page is not the last and the sort type is old
+  }, [commentPerPage.data]);
 
   if (!talkId || talk.isError || !talk.data) return <div>***에러 페이지 띄우기</div>;
 
@@ -325,12 +262,10 @@ export default function FreeTalkDetail() {
         {!!commentPerPage.data?.hasNext && (
           <ShowMoreContent _onClick={() => setCommentPageNo((prev) => prev + 1)} />
         )}
-
         <WriteComment
           talkId={talk.data.talk.talkId}
           novelTitle={talk.data.novel.novelTitle}
-          handleCommentUpdated={handleCommentUpdated}
-          set1inCommentPageNo={set1inCommentPageNo}
+          getAllCommentPages={getAllCommentPages}
         />
       </ContentAnimation>
     </MainBG>
