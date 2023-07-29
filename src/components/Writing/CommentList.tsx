@@ -1,6 +1,6 @@
 import Icon from "assets/Icon";
 import { useRef, useState, useCallback, useEffect } from "react";
-import { useComponentWidth } from "utils";
+import { adjustCreateDate, useComponentWidth } from "utils";
 import { useAddRootCommentMutation } from "store/serverAPIs/novelTime";
 import { useAppSelector } from "../../store/hooks";
 import {
@@ -200,6 +200,8 @@ function CommentWritten({
 
   const isParentToMark = parentAndChildToMark.parent === commentId;
 
+  const dateToShow = adjustCreateDate(createDate);
+
   // scroll to the parent comment of its reComment when clicking "원댓글보기"
   useEffect(() => {
     if (isParentToMark) {
@@ -228,7 +230,7 @@ function CommentWritten({
 
     if (commentSortType === "new" && isFirstComment === true) {
       commentRef.current?.scrollIntoView({
-        behavior: "instant",
+        behavior: "instant" as ScrollBehavior,
         block: "center",
       });
       return;
@@ -236,7 +238,7 @@ function CommentWritten({
 
     if (commentSortType === "old" && commentRef.current?.nextSibling === null) {
       commentRef.current?.scrollIntoView({
-        behavior: "instant",
+        behavior: "instant" as ScrollBehavior,
         block: "start",
       });
     }
@@ -252,7 +254,7 @@ function CommentWritten({
           <UserName isParentToWriteReComment={commentId === parentForNewReComment.parentCommentId}>
             {userName}
           </UserName>
-          <CreateDate>{createDate}</CreateDate>
+          <CreateDate>{dateToShow}</CreateDate>
         </UserNameContainer>
         <CommentContent ref={commentContentRef} isParentToMark={isParentToMark}>
           {isReComment && <ReCommentUser>{`@${parentCommentUserName as string} `}</ReCommentUser>}
@@ -384,7 +386,6 @@ export function CommentList({
   talkId,
   novelTitle,
 }: CommentListProps) {
-  console.log("commentList 2 :", commentList);
   // when write-comment component is fixed to screen bottom, give comment-list-component margin-bottom
 
   const [parentForNewReComment, setParentForNewReComment] = useState({
