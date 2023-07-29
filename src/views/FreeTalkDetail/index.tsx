@@ -52,21 +52,21 @@ export default function FreeTalkDetail() {
   // simple way to update comments after adding a root comment //
   // - request comments manually. don't do automatically by using provide and invalidate tags
   //    => to avoid unnecessary api calls several times with different args
-  //       in the way that didn't direct and tidy and sometimes led in the wrong direction
-  // - make it possible to get all comments in all comment pages at once (by changing server code)
+  //       in the way that didn't direct and tidy and sometimes led to the wrong result
+  // - make it possible to get all comments in all comment pages at once
   //     - when page number is 0, refetch
   //     - when page number is not 0, just set 0 and fetch
-  //    => . to avoid the situation that useEffect would not run
-  //         because the data just received from server would possibly be the same with the previous
-  //         sometimes when comment page number is 1 and sort type is old
-  //                       and hasNext of data is false and the comments data were not changed,
-  //         so commentPerPage.data in the useEffect deps couldn't trigger to run the useEffect
-  //       ㄴ but in the new way I wrote above, useEffect can always run
-  //          because the whole comments will always different and new after adding a comment
-  //          in previous code, it was not possible because I just could get comments in one page
-  //      .  to avoid quite segmented and continuous situations
-  //            where the things kept going on in long and complex way
-  //            as getting comments from page 1 to the last in order (in the previous way)
+  //    => to make code simple to treat
+  //        : when I try to get all comments from page 1 to the last in order continuously
+  //           code was so much prolonged and segmented with different args and results of the api
+  //    => to always run the useEffect
+  //        : previously it could not run
+  //          because comments of page 1 that was just given from server
+  //                                     would possibly be the same with the previous
+  //              and commentPerPage.data in useEffect deps couldn't trigger to run the useEffect
+  //          but now it can as the whole comments without being separated in each pages
+  //                                               will be always different from the previous
+
   const [rootComments, setRootComments] = useState<Comment[]>([]);
 
   const [rootCommentIdToShowReComments, setRootCommentIdToShowReComments] = useState<string>("");
@@ -78,6 +78,7 @@ export default function FreeTalkDetail() {
     },
     { skip: !rootCommentIdToShowReComments },
   );
+
   useEffect(() => {
     const commentList = commentPerPage.data?.commentList;
 
@@ -254,6 +255,7 @@ export default function FreeTalkDetail() {
               rootCommentIdToShowReComments,
               setRootCommentIdToShowReComments,
             }}
+            commentPageNo={commentPageNo}
             // for creating reComment
             talkId={talk.data.talk.talkId}
             novelTitle={talk.data.novel.novelTitle}

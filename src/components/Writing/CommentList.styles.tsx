@@ -272,11 +272,17 @@ export interface CommentListProps {
     setRootCommentIdToShowReComments: React.Dispatch<React.SetStateAction<string>>;
   };
 
+  commentPageNo: number;
+
   talkId?: string;
   novelTitle?: string;
 }
 
 export type CommentProps = {
+  isFirstComment?: boolean;
+  commentPageNo?: number;
+  commentSortType?: "new" | "old";
+
   comment: {
     commentId: string;
     userName: string;

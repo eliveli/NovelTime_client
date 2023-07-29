@@ -153,6 +153,10 @@ export function WriteComment({
 }
 
 function CommentWritten({
+  isFirstComment,
+  commentPageNo,
+  commentSortType,
+
   isReComment,
   comment,
   commentIdForScroll,
@@ -215,6 +219,28 @@ function CommentWritten({
       });
     }
   }, []);
+
+  useEffect(() => {
+    // after adding a comment,
+    // scroll to the comment that the user just created
+
+    if (commentPageNo !== 0) return;
+
+    if (commentSortType === "new" && isFirstComment === true) {
+      commentRef.current?.scrollIntoView({
+        behavior: "instant",
+        block: "center",
+      });
+      return;
+    }
+
+    if (commentSortType === "old" && commentRef.current?.nextSibling === null) {
+      commentRef.current?.scrollIntoView({
+        behavior: "instant",
+        block: "start",
+      });
+    }
+  }, [commentPageNo]);
 
   return (
     <CommentContainer ref={commentRef} isReComment={isReComment}>
@@ -353,6 +379,7 @@ export function CommentList({
   set1inCommentPageNo,
   reComments,
   rootCommentSelected,
+  commentPageNo,
 
   talkId,
   novelTitle,
@@ -399,10 +426,13 @@ export function CommentList({
           })}
         </CommentSortContainer>
       </CommentMarkContainer>
-      {commentList.map((_) => (
+      {commentList.map((_, idx) => (
         <CommentWritten
           key={_.commentId}
           comment={_}
+          isFirstComment={idx === 0}
+          commentPageNo={commentPageNo}
+          commentSortType={commentSort.sortTypeForComments}
           commentIdForScroll={commentIdForScroll}
           parentCommentForNewReComment={{ parentForNewReComment, setParentForNewReComment }}
           parentAndChildCommentToMark={{ parentAndChildToMark, setParentAndChildToMark }}
