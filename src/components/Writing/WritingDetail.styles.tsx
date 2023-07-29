@@ -90,4 +90,6 @@ export const WritingDesc = styled.p`
     padding: 0 12px;
     margin-bottom: 14px;
   `)}
+
+  white-space: pre-wrap; // allow the line break
 `;

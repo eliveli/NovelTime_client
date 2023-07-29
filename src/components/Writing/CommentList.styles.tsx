@@ -72,6 +72,8 @@ export const CreateDate = styled.span`
 export const CommentContent = styled.p<{ isParentToMark: boolean }>`
   margin: 0 0 3px;
 
+  white-space: pre-wrap; // allow the line break
+
   ${({ isParentToMark }) =>
     isParentToMark && `border: 1px solid ${theme.color.mainLight}; padding: 0 5px;`}
 `;
