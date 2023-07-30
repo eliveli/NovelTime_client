@@ -138,6 +138,8 @@ export const WriteCommentContainer = styled.div<{
   isReComment?: true;
   isMessage?: true;
 }>`
+  // when device is tablet or pc,
+  //  the comment input for root comment is located in the bottom of the webpage
   display: flex;
   align-items: center;
   border-radius: 20px;
@@ -147,10 +149,20 @@ export const WriteCommentContainer = styled.div<{
   /* padding: 14px 20px; */
   padding: 15px;
   padding-right: 13px;
-  ${({ isReComment }) => isReComment && "margin-left:-40px;"}
 
-  // html width <= 820px,   fix comment component to bottom
-  @media (max-width: 820px) {
+  // when device is tablet or pc,
+  //  the comment input for writing reComment exists under its root comment
+
+  // when device is mobile
+  @media (max-width: 767px) {
+    // when writing reComment,
+    // do not use comment input under the root comment
+    // only one comment input fixed to the bottom of screen will be used
+    //  for both root comment and reComment
+    //   by distinguish them with adding parent user name in front of the comment text
+    //    when it is for reComment
+    ${({ isReComment }) => isReComment && "display: none;"}
+
     position: sticky;
     // o 문제 : y스크롤 없을 때 또는 y스크롤 최하단에서 컴포넌트가 가려짐
     // o 세부 상황 : 직접적으로 넣은 적 없는 canvas 요소가 html의 첫번째 child로 나타나고
@@ -191,13 +203,17 @@ export const WriteTextCntnr = styled.div`
   position: relative;
 `;
 
-export const SpaceForUserNameOnTextArea = styled.span`
+export const SpaceForUserNameOnTextArea = styled.span<{ isRootCommentInput?: true }>`
   position: absolute;
   top: 0;
   left: 0;
   margin-top: 10px;
   margin-left: 11px;
   color: rgba(3, 199, 90, 0.6);
+
+  @media (min-width: 768px) {
+    ${(isRootCommentInput) => isRootCommentInput && `display: none;`}
+  } ;
 `;
 
 export const WriteText = styled.textarea<{ spaceForUserName: number }>`
@@ -272,6 +288,19 @@ export interface CommentListProps {
   rootCommentSelected: {
     rootCommentIdToShowReComments: string;
     setRootCommentIdToShowReComments: React.Dispatch<React.SetStateAction<string>>;
+  };
+
+  parentCommentForNewReComment: {
+    parentForNewReComment: {
+      parentCommentId: string;
+      parentCommentUserName: string;
+    };
+    setParentForNewReComment: React.Dispatch<
+      React.SetStateAction<{
+        parentCommentId: string;
+        parentCommentUserName: string;
+      }>
+    >;
   };
 
   commentPageNo: number;

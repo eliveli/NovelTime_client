@@ -35,19 +35,33 @@ import {
 
 const htmlWidth = document.documentElement.offsetWidth;
 const isTablet = htmlWidth >= 768;
-const isPC = htmlWidth >= 1024;
 
 export function WriteComment({
+  isRootCommentInput,
+
   isReComment,
-  parentUserNameForNewReComment,
+
+  // for tablet or pc when comment inputs are divided into root comment and reComment
+  parentForNewReCommentOnPC,
+  // for mobile when comment input is one for both root comment and reComment
+  parentForNewReCommentOnMobile,
+
   talkId,
   novelTitle,
   getAllCommentPages,
 
   isMessage, // for message page. not for comment
 }: {
+  isRootCommentInput?: true;
   isReComment?: true;
-  parentUserNameForNewReComment?: string;
+  parentForNewReCommentOnPC?: {
+    parentCommentId: string;
+    parentCommentUserName: string;
+  };
+  parentForNewReCommentOnMobile?: {
+    parentCommentId: string;
+    parentCommentUserName: string;
+  };
   talkId?: string;
   novelTitle?: string;
   getAllCommentPages?: () => void;
@@ -122,24 +136,35 @@ export function WriteComment({
 
   const writeCommentRef = useRef<HTMLDivElement>(null);
 
+  // when device is mobile, reComment input under its root comment won't be displayed
+  //  instead, the root comment input will be used for reComment
+  const parentForNewReComment = parentForNewReCommentOnPC || parentForNewReCommentOnMobile;
+
+  // for tablet or pc when reComment input is located under the root comment
   useEffect(() => {
-    if (parentUserNameForNewReComment) {
+    if (parentForNewReCommentOnPC) {
       writeCommentRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
     }
   });
 
+  console.log("isReComment:", isReComment);
+
   return (
     <WriteCommentContainer ref={writeCommentRef} isMessage={isMessage} isReComment={isReComment}>
       <WriteTextCntnr>
-        {parentUserNameForNewReComment && (
-          <SpaceForUserNameOnTextArea ref={userNameOnTextAreaRef}>
-            {`@${parentUserNameForNewReComment}`}
+        {parentForNewReComment?.parentCommentUserName && (
+          <SpaceForUserNameOnTextArea
+            ref={userNameOnTextAreaRef}
+            isRootCommentInput={isRootCommentInput}
+            // not to display reComment user name when this is a root comment input and device is pc
+          >
+            {`@${parentForNewReComment.parentCommentUserName}`}
           </SpaceForUserNameOnTextArea>
         )}
         <WriteText
           ref={textRef}
           onChange={writeComment}
-          placeholder="Write your comment!"
+          placeholder={parentForNewReComment?.parentCommentUserName ? "" : "Write your comment!"}
           spaceForUserName={userNameWidth}
         />
         <EmojiCntnr size={20}>
@@ -244,6 +269,8 @@ function CommentWritten({
     }
   }, [commentPageNo]);
 
+  console.log("isReComment in commentWrittne : ", isReComment);
+
   return (
     <CommentContainer ref={commentRef} isReComment={isReComment}>
       <UserImgBox>
@@ -345,10 +372,10 @@ function CommentWritten({
           ))}
 
         {/* write reComment */}
-        {isPC && rootCommentSelected?.rootCommentIdToShowReComments === commentId && (
+        {rootCommentSelected?.rootCommentIdToShowReComments === commentId && (
           <WriteComment
-            isReComment={isReComment}
-            parentUserNameForNewReComment={parentForNewReComment.parentCommentUserName}
+            isReComment
+            parentForNewReCommentOnPC={{ ...parentForNewReComment }}
             talkId={talkId}
             novelTitle={novelTitle}
           />
@@ -381,27 +408,14 @@ export function CommentList({
   set1inCommentPageNo,
   reComments,
   rootCommentSelected,
+  parentCommentForNewReComment,
   commentPageNo,
 
   talkId,
   novelTitle,
 }: CommentListProps) {
   // when write-comment component is fixed to screen bottom, give comment-list-component margin-bottom
-
-  const [parentForNewReComment, setParentForNewReComment] = useState({
-    parentCommentId: "",
-    parentCommentUserName: "",
-  }); // parent comment of new reComment to write
-
   const [parentAndChildToMark, setParentAndChildToMark] = useState({ parent: "", child: "" }); // parent comment of selected reComment
-
-  // not to color parent user name after adding a new root comment and updating comments
-  useEffect(() => {
-    if (!rootCommentSelected.rootCommentIdToShowReComments) {
-      setParentForNewReComment({ parentCommentId: "", parentCommentUserName: "" });
-    }
-  }, [rootCommentSelected.rootCommentIdToShowReComments]);
-
   return (
     <CommentListContainer>
       <CommentMarkContainer>
@@ -435,7 +449,7 @@ export function CommentList({
           commentPageNo={commentPageNo}
           commentSortType={commentSort.sortTypeForComments}
           commentIdForScroll={commentIdForScroll}
-          parentCommentForNewReComment={{ parentForNewReComment, setParentForNewReComment }}
+          parentCommentForNewReComment={{ ...parentCommentForNewReComment }}
           parentAndChildCommentToMark={{ parentAndChildToMark, setParentAndChildToMark }}
           reCommentsOfRootComment={
             rootCommentSelected.rootCommentIdToShowReComments === _.commentId
