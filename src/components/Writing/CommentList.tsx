@@ -1,6 +1,6 @@
 import Icon from "assets/Icon";
 import { useRef, useState, useCallback, useEffect } from "react";
-import { adjustCreateDate, useComponentWidth } from "utils";
+import { adjustCreateDate, useComponentWidth, useWhetherItIsMobile } from "utils";
 import { useAddRootCommentMutation } from "store/serverAPIs/novelTime";
 import { useAppSelector } from "../../store/hooks";
 import {
@@ -32,6 +32,8 @@ import {
   WriteTextCntnr,
   SpaceForUserNameOnTextArea,
 } from "./CommentList.styles";
+import { ReCommentInputOnTablet } from "./CommentInput";
+
 
 const htmlWidth = document.documentElement.offsetWidth;
 const isTablet = htmlWidth >= 768;
@@ -177,6 +179,7 @@ export function WriteComment({
   );
 }
 
+
 function CommentWritten({
   isFirstComment,
   commentPageNo,
@@ -227,6 +230,8 @@ function CommentWritten({
 
   const dateToShow = adjustCreateDate(createDate);
 
+  const isTablet = !useWhetherItIsMobile();
+
   // scroll to the parent comment of its reComment when clicking "원댓글보기"
   useEffect(() => {
     if (isParentToMark) {
@@ -268,8 +273,6 @@ function CommentWritten({
       });
     }
   }, [commentPageNo]);
-
-  console.log("isReComment in commentWrittne : ", isReComment);
 
   return (
     <CommentContainer ref={commentRef} isReComment={isReComment}>
@@ -372,10 +375,9 @@ function CommentWritten({
           ))}
 
         {/* write reComment */}
-        {rootCommentSelected?.rootCommentIdToShowReComments === commentId && (
-          <WriteComment
-            isReComment
-            parentForNewReCommentOnPC={{ ...parentForNewReComment }}
+        {isTablet && rootCommentSelected?.rootCommentIdToShowReComments === commentId && (
+          <ReCommentInputOnTablet
+            parentForNewReComment={{ ...parentForNewReComment }}
             talkId={talkId}
             novelTitle={novelTitle}
           />

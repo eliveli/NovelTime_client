@@ -19,6 +19,8 @@ import { useSearchFilter, useMultipleSearchFilters } from "./useSearchFilter";
 import useSearchListWithInfntScroll from "./useSearchListWithInfntScroll";
 import useResetFiltersFromUrl from "./useResetFiltersFromUrl";
 import adjustCreateDate from "./adjustCreateDate";
+import useWhetherItIsMobile from "./useWhetherItIsMobile";
+import writeText from "./writeText";
 
 export {
   useResetFiltersFromUrl,
@@ -41,4 +43,6 @@ export {
   usePreventScroll,
   useAsyncStateNumber,
   adjustCreateDate,
+  useWhetherItIsMobile,
+  writeText,
 };

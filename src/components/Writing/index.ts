@@ -6,6 +6,11 @@ import BoardMark from "./BoardMark";
 import { WritingDetailContainer } from "./WritingDetail.styles";
 import LikeAndShare from "./LikeAndShare";
 import { CommentList, WriteComment } from "./CommentList";
+import {
+  ReCommentInputOnTablet,
+  CommentInputOnMobile,
+  RootCommentInputOnTablet,
+} from "./CommentInput";
 
 export {
   WritingDetailContainer,
@@ -18,4 +23,7 @@ export {
   LikeAndShare,
   CommentList,
   WriteComment,
+  ReCommentInputOnTablet,
+  CommentInputOnMobile,
+  RootCommentInputOnTablet,
 };

@@ -8,7 +8,8 @@ import {
   BoardMark,
   LikeAndShare,
   CommentList,
-  WriteComment,
+  CommentInputOnMobile,
+  RootCommentInputOnTablet,
 } from "components/Writing";
 import { ContentAnimation } from "views/RecommendDetail/RecommendDetail.styles";
 import {
@@ -17,7 +18,8 @@ import {
   useGetTalkDetailQuery,
 } from "store/serverAPIs/novelTime";
 import ShowMoreContent from "assets/ShowMoreContent";
-import { Comment, ReCommentList } from "store/serverAPIs/types";
+import { Comment } from "store/serverAPIs/types";
+import { useWhetherItIsMobile } from "utils";
 
 export default function FreeTalkDetail() {
   const { talkId, commentId } = useParams();
@@ -84,7 +86,7 @@ export default function FreeTalkDetail() {
 
     if (!commentList || !commentList?.length) return;
 
-    // exchange comment
+    // replace comment
     //  . when comment page is 0 updating root comments right after adding one
     //  . when comment page is 1 getting comments at first or sorting comments
 
@@ -108,12 +110,15 @@ export default function FreeTalkDetail() {
     parentCommentUserName: "",
   });
 
-  // not to color parent user name after adding a new root comment and updating comments
+  // not to color parent user name when updating root comments
   useEffect(() => {
     if (!rootCommentIdToShowReComments) {
       setParentForNewReComment({ parentCommentId: "", parentCommentUserName: "" });
     }
   }, [rootCommentIdToShowReComments]);
+
+  const isMobile = useWhetherItIsMobile();
+
   if (!talkId || talk.isError || !talk.data) return <div>***에러 페이지 띄우기</div>;
 
   // 서버에서 데이터 받아올 때 구성 // dataFromServer = { talk, novel }
@@ -277,14 +282,21 @@ export default function FreeTalkDetail() {
         {!!commentPerPage.data?.hasNext && (
           <ShowMoreContent _onClick={() => setCommentPageNo((prev) => prev + 1)} />
         )}
-        <WriteComment
-          isRootCommentInput
-          // for mobile when comment input is the same for both root comment and reComment
-          parentForNewReCommentOnMobile={parentForNewReComment}
-          talkId={talk.data.talk.talkId}
-          novelTitle={talk.data.novel.novelTitle}
-          getAllCommentPages={getAllCommentPages}
-        />
+
+        {isMobile ? (
+          <CommentInputOnMobile
+            talkId={talk.data.talk.talkId}
+            novelTitle={talk.data.novel.novelTitle}
+            parentForNewReComment={parentForNewReComment}
+            getAllCommentPages={getAllCommentPages}
+          />
+        ) : (
+          <RootCommentInputOnTablet
+            talkId={talk.data.talk.talkId}
+            novelTitle={talk.data.novel.novelTitle}
+            getAllCommentPages={getAllCommentPages}
+          />
+        )}
       </ContentAnimation>
     </MainBG>
   );

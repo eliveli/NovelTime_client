@@ -134,12 +134,11 @@ export const ReCommentUser = styled.span`
 //   margin-left: -20px;
 //   margin-bottom: -12px;
 // `;
+
+// * it have to be fixed when working on message component
 export const WriteCommentContainer = styled.div<{
-  isReComment?: true;
   isMessage?: true;
 }>`
-  // when device is tablet or pc,
-  //  the comment input for root comment is located in the bottom of the webpage
   display: flex;
   align-items: center;
   border-radius: 20px;
@@ -150,25 +149,9 @@ export const WriteCommentContainer = styled.div<{
   padding: 15px;
   padding-right: 13px;
 
-  // when device is tablet or pc,
-  //  the comment input for writing reComment exists under its root comment
-
   // when device is mobile
   @media (max-width: 767px) {
-    // when writing reComment,
-    // do not use comment input under the root comment
-    // only one comment input fixed to the bottom of screen will be used
-    //  for both root comment and reComment
-    //   by distinguish them with adding parent user name in front of the comment text
-    //    when it is for reComment
-    ${({ isReComment }) => isReComment && "display: none;"}
-
     position: sticky;
-    // o 문제 : y스크롤 없을 때 또는 y스크롤 최하단에서 컴포넌트가 가려짐
-    // o 세부 상황 : 직접적으로 넣은 적 없는 canvas 요소가 html의 첫번째 child로 나타나고
-    //          canvas의 'position : fixed' 자동 적용, canvas가 html보다 height이 큼
-    // o 대처 : fix -> sticky
-
     bottom: 0;
     left: 0;
     width: 100%;
@@ -190,6 +173,42 @@ export const WriteCommentContainer = styled.div<{
     border-left: 0; border-right: 0; border-bottom: 0;
   `}
 `;
+
+export const CommentInputContainerOnMobile = styled.div<{ isRootCommentInput: boolean }>`
+  display: flex;
+  align-items: center;
+
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  margin-top: 10px;
+
+  padding: 15px;
+  padding-right: 13px;
+
+  position: sticky;
+  // o 문제 : y스크롤 없을 때 또는 y스크롤 최하단에서 컴포넌트가 가려짐
+  // o 세부 상황 : 직접적으로 넣은 적 없는 canvas 요소가 html의 첫번째 child로 나타나고
+  //          canvas의 'position : fixed' 자동 적용, canvas가 html보다 height이 큼
+  // o 대처 : fix -> sticky
+
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  border-radius: 0;
+  background-color: rgba(255, 255, 255, 1);
+  z-index: 1;
+`;
+
+export const CommentInputContainerOnTablet = styled.div`
+  display: flex;
+  align-items: center;
+  border-radius: 20px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  margin-top: 10px;
+
+  padding: 15px;
+  padding-right: 13px;
+`;
+
 export const WriteTextCntnr = styled.div`
   width: 100%;
   display: flex;
@@ -203,17 +222,13 @@ export const WriteTextCntnr = styled.div`
   position: relative;
 `;
 
-export const SpaceForUserNameOnTextArea = styled.span<{ isRootCommentInput?: true }>`
+export const SpaceForUserNameOnTextArea = styled.span`
   position: absolute;
   top: 0;
   left: 0;
   margin-top: 10px;
   margin-left: 11px;
   color: rgba(3, 199, 90, 0.6);
-
-  @media (min-width: 768px) {
-    ${(isRootCommentInput) => isRootCommentInput && `display: none;`}
-  } ;
 `;
 
 export const WriteText = styled.textarea<{ spaceForUserName: number }>`
@@ -305,8 +320,8 @@ export interface CommentListProps {
 
   commentPageNo: number;
 
-  talkId?: string;
-  novelTitle?: string;
+  talkId: string;
+  novelTitle: string;
 }
 
 export type CommentProps = {
@@ -364,6 +379,6 @@ export type CommentProps = {
     setRootCommentIdToShowReComments: React.Dispatch<React.SetStateAction<string>>;
   };
 
-  talkId?: string;
-  novelTitle?: string;
+  talkId: string;
+  novelTitle: string;
 };
