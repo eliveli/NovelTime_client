@@ -300,7 +300,6 @@ export type CommentProps = {
 
     // for reComment (not for rootComment)
     parentCommentId?: string;
-    firstAncestorCommentId?: string;
     parentCommentUserName?: string;
   };
   // when reComment is props for CommentWritten

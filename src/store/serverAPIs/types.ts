@@ -97,6 +97,13 @@ export type ParamForNewRootComment = {
   commentContent: string;
 };
 
+export type ParamForNewReComment = {
+  talkId: string;
+  novelTitle: string;
+  commentContent: string;
+  parentCommentId: string;
+};
+
 type NovelDetail = {
   novelId: string;
   novelImg: string;

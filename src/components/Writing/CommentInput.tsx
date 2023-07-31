@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect } from "react";
 import { useComponentWidth, useWhetherItIsMobile, writeText } from "utils";
-import { useAddRootCommentMutation } from "store/serverAPIs/novelTime";
+import { useAddReCommentMutation, useAddRootCommentMutation } from "store/serverAPIs/novelTime";
 import { useAppSelector } from "../../store/hooks";
 import {
   EmojiCntnr,
@@ -27,7 +27,7 @@ export function ReCommentInputOnTablet({
   talkId: string;
   novelTitle: string;
 }) {
-  const [addRootComment, addRootCommentResult] = useAddRootCommentMutation();
+  const [addReComment, addReCommentResult] = useAddReCommentMutation();
 
   const loginUserId = useAppSelector((state) => state.user.loginUserInfo.userId);
 
@@ -47,12 +47,18 @@ export function ReCommentInputOnTablet({
 
     if (!textRef.current?.value) return; // when comment content is empty
 
-    if (addRootCommentResult.isLoading) return; // prevent click while loading for prev request
+    if (addReCommentResult.isLoading) return; // prevent click while loading for prev request
 
-    // * this will be changed for reComment
-    await addRootComment({ talkId, novelTitle, commentContent: textRef.current?.value });
+    await addReComment({
+      talkId,
+      novelTitle,
+      commentContent: textRef.current?.value,
+      parentCommentId: parentForNewReComment.parentCommentId,
+    });
 
-    if (addRootCommentResult.isError) {
+    // and update reComments automatically with the invalidate and provide tags
+
+    if (addReCommentResult.isError) {
       alert("코멘트를 추가할 수 없습니다. 새로고침 후 다시 시도해 보세요");
       return;
     }
@@ -98,11 +104,11 @@ export function RootCommentInputOnTablet({
   talkId,
   novelTitle,
 
-  getAllCommentPages,
+  getAllRootCommentPages,
 }: {
   talkId: string;
   novelTitle: string;
-  getAllCommentPages: () => void;
+  getAllRootCommentPages: () => void;
 }) {
   const [addRootComment, addRootCommentResult] = useAddRootCommentMutation();
 
@@ -135,7 +141,7 @@ export function RootCommentInputOnTablet({
     textRef.current.value = "";
     textRef.current.style.height = "28px";
 
-    getAllCommentPages();
+    getAllRootCommentPages();
   };
 
   const writeCommentRef = useRef<HTMLDivElement>(null);
@@ -165,7 +171,7 @@ export function CommentInputOnMobile({
   talkId,
   novelTitle,
 
-  getAllCommentPages, // it exists when this is a root comment input
+  getAllRootCommentPages,
 }: {
   parentForNewReComment: {
     parentCommentId: string;
@@ -173,9 +179,10 @@ export function CommentInputOnMobile({
   };
   talkId: string;
   novelTitle: string;
-  getAllCommentPages?: () => void;
+  getAllRootCommentPages: () => void;
 }) {
   const isRootCommentInput = !parentForNewReComment.parentCommentId;
+  const [addReComment, addReCommentResult] = useAddReCommentMutation();
 
   const [addRootComment, addRootCommentResult] = useAddRootCommentMutation();
 
@@ -187,18 +194,17 @@ export function CommentInputOnMobile({
   const isTablet = !useWhetherItIsMobile();
   const userNameOnTextAreaRef = useRef<HTMLSpanElement>(null);
   const userNameWidth = useComponentWidth(userNameOnTextAreaRef, isRootCommentInput);
+
   const handleSubmit = async () => {
-    // server request 1 : provide a root comment to server
+    // provide a rootComment or reComment to server
+    if (!loginUserId) {
+      alert("먼저 로그인을 해 주세요");
+      return;
+    }
 
-    // when it is used as a root comment input
-    if (getAllCommentPages) {
-      if (!loginUserId) {
-        alert("먼저 로그인을 해 주세요");
-        return;
-      }
+    if (!textRef.current?.value) return; // when comment content is empty
 
-      if (!textRef.current?.value) return; // when comment content is empty
-
+    if (isRootCommentInput) {
       if (addRootCommentResult.isLoading) return; // prevent click while loading for prev request
       await addRootComment({ talkId, novelTitle, commentContent: textRef.current?.value });
 
@@ -207,12 +213,27 @@ export function CommentInputOnMobile({
         return;
       }
 
-      // initialize comment input
-      textRef.current.value = "";
-      textRef.current.style.height = "28px";
+      getAllRootCommentPages();
+    } else {
+      if (addReCommentResult.isLoading) return; // prevent click while loading for prev request
 
-      getAllCommentPages();
+      await addReComment({
+        talkId,
+        novelTitle,
+        commentContent: textRef.current?.value,
+        parentCommentId: parentForNewReComment.parentCommentId,
+      });
+      // and update reComments automatically with the invalidate and provide tags
+
+      if (addReCommentResult.isError) {
+        alert("코멘트를 추가할 수 없습니다. 새로고침 후 다시 시도해 보세요");
+        return;
+      }
     }
+
+    // initialize comment input
+    textRef.current.value = "";
+    textRef.current.style.height = "28px";
   };
 
   const writeCommentRef = useRef<HTMLDivElement>(null);

@@ -43,7 +43,7 @@ export default function FreeTalkDetail() {
     setCommentPageNo(1);
   };
 
-  const getAllCommentPages = () => {
+  const getAllRootCommentPages = () => {
     if (commentPageNo === 0) {
       commentPerPage.refetch();
     } else {
@@ -288,13 +288,13 @@ export default function FreeTalkDetail() {
             talkId={talk.data.talk.talkId}
             novelTitle={talk.data.novel.novelTitle}
             parentForNewReComment={parentForNewReComment}
-            getAllCommentPages={getAllCommentPages}
+            getAllRootCommentPages={getAllRootCommentPages}
           />
         ) : (
           <RootCommentInputOnTablet
             talkId={talk.data.talk.talkId}
             novelTitle={talk.data.novel.novelTitle}
-            getAllCommentPages={getAllCommentPages}
+            getAllRootCommentPages={getAllRootCommentPages}
           />
         )}
       </ContentAnimation>

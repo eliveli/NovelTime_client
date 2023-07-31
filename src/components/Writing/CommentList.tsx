@@ -51,23 +51,13 @@ function CommentWritten({
     userImg,
     commentContent,
     createDate,
-    reCommentNo, // * undefined in reComment
+    reCommentNo, // only for rootComment. it is undefined in reComment
 
-    parentCommentId, // * to mark parent comment when clicking its reComment
-    // * undefined in rootComment
+    // only for reComment. below are undefined in rootComment
+    parentCommentId, // to mark parent comment when clicking its reComment
     parentCommentUserName,
-    // * undefined in rootComment
-
-    firstAncestorCommentId, // * 리코멘트 작성 시 서버에 넘겨주기
-    // * how to treat this?
   } = comment;
-  // * first ancestor comment id, parent comment id, parent comment user name 필요
-  // * first ancestor comment id는 isReComment가 true일 때 원본인 코멘트의 commentId 넣기
-  // ㄴ isReComment가 undefined일 때는 first ancestor comment id도 undefined 또는 넘겨주지 않음
-  // * reCommentUserName -> parent comment user name
-
-  // reComment one by one : can not set two reComment at once ---------------- //
-  //
+  // reComment one by one : can not set two reComment at once
 
   const commentRef = useRef<HTMLDivElement>(null);
   const commentContentRef = useRef<HTMLParagraphElement>(null);
@@ -211,7 +201,7 @@ function CommentWritten({
             <CommentWritten
               key={_.commentId}
               isReComment
-              comment={{ ..._, firstAncestorCommentId: commentId }}
+              comment={{ ..._ }}
               commentIdForScroll={commentIdForScroll}
               parentCommentForNewReComment={{ parentForNewReComment, setParentForNewReComment }}
               parentAndChildCommentToMark={{ parentAndChildToMark, setParentAndChildToMark }}
