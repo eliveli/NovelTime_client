@@ -39,9 +39,6 @@ export function ReCommentInputOnTablet({
   const userNameOnTextAreaRef = useRef<HTMLSpanElement>(null);
   const userNameWidth = useComponentWidth(userNameOnTextAreaRef);
 
-  // for mobile and tablet, get reComment ID and userName
-  // then show reCommentID in textarea
-
   const handleSubmit = async () => {
     if (!loginUserId) {
       alert("먼저 로그인을 해 주세요");
@@ -115,11 +112,6 @@ export function RootCommentInputOnTablet({
 
   const [comment, setComment] = useState("");
   const isTablet = !useWhetherItIsMobile();
-  const userNameOnTextAreaRef = useRef<HTMLSpanElement>(null);
-  const userNameWidth = useComponentWidth(userNameOnTextAreaRef);
-
-  // for mobile and tablet, get reComment ID and userName
-  // then show reCommentID in textarea
 
   const handleSubmit = async () => {
     // server request 1 : provide comment to server
@@ -155,7 +147,6 @@ export function RootCommentInputOnTablet({
           ref={textRef}
           onChange={(e) => writeText(e, textRef, setComment, isTablet)}
           placeholder="Write your comment!"
-          spaceForUserName={userNameWidth}
         />
         <EmojiCntnr size={20}>
           <EmojiIcon />
@@ -195,11 +186,7 @@ export function CommentInputOnMobile({
   const [comment, setComment] = useState("");
   const isTablet = !useWhetherItIsMobile();
   const userNameOnTextAreaRef = useRef<HTMLSpanElement>(null);
-  const userNameWidth = useComponentWidth(userNameOnTextAreaRef);
-
-  // for mobile and tablet, get reComment ID and userName
-  // then show reCommentID in textarea
-
+  const userNameWidth = useComponentWidth(userNameOnTextAreaRef, isRootCommentInput);
   const handleSubmit = async () => {
     // server request 1 : provide a root comment to server
 
@@ -238,7 +225,6 @@ export function CommentInputOnMobile({
             ref={textRef}
             onChange={(e) => writeText(e, textRef, setComment, isTablet)}
             placeholder="Write your comment!"
-            spaceForUserName={userNameWidth}
           />
         ) : (
           <>
