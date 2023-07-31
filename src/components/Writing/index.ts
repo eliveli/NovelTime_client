@@ -5,7 +5,7 @@ import NovelInWriting from "./NovelInWriting";
 import BoardMark from "./BoardMark";
 import { WritingDetailContainer } from "./WritingDetail.styles";
 import LikeAndShare from "./LikeAndShare";
-import { CommentList, WriteComment } from "./CommentList";
+import CommentList from "./CommentList";
 import {
   ReCommentInputOnTablet,
   CommentInputOnMobile,
@@ -22,7 +22,6 @@ export {
   BoardMark,
   LikeAndShare,
   CommentList,
-  WriteComment,
   ReCommentInputOnTablet,
   CommentInputOnMobile,
   RootCommentInputOnTablet,

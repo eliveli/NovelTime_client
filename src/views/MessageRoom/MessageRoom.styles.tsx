@@ -142,3 +142,88 @@ export const LastWatchMark = styled.span`
   font-weight: 500;
   font-size: 15px;
 `;
+
+export const WriteTextCntnr = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* border-radius: 20px; */
+  border-radius: 14px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  padding: 8px 14px;
+
+  position: relative;
+`;
+export const WriteText = styled.textarea<{ spaceForUserName: number }>`
+  width: 100%;
+  border: 0;
+  resize: none;
+  ${theme.hideScrollBar}
+  outline: none;
+
+  font-size: 16px;
+  height: 28px;
+  line-height: 1.5;
+
+  ${({ spaceForUserName }) => `text-indent: ${spaceForUserName}px;`}
+
+  color: rgba(0, 0, 0, 0.6);
+  font-weight: 500;
+
+  font-family: "Californian FB", D2Coding, Arial, sans-serif;
+`;
+
+export const EmojiCntnr = styled(Icon.IconBox)`
+  display: flex;
+  align-items: center;
+`;
+export const EmojiIcon = styled(Icon.Emoji)``;
+export const WriteCommentSubmit = styled.button`
+  min-width: 46px;
+  height: 46px;
+  border-radius: 14px;
+  /* min-width: 30px; */
+  /* height: 34px; */
+  /* border-radius: 20px; */
+  background-color: transparent;
+  white-space: nowrap;
+  margin-left: 10px;
+  display: flex;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  align-items: center;
+  justify-content: center;
+
+  color: rgba(0, 0, 0, 0.6);
+  font-weight: 500;
+`;
+
+export const WriteTextContainer = styled.div`
+  display: flex;
+  align-items: center;
+
+  /* padding: 14px 20px; */
+  padding: 15px;
+  padding-right: 13px;
+  margin-top: 10px;
+
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 0;
+  border-left: 0;
+  border-right: 0;
+  border-bottom: 0;
+
+  background-color: rgba(255, 255, 255, 1);
+
+  position: relative;
+
+  z-index: 1;
+
+  // when device is mobile
+  @media (max-width: 767px) {
+    position: sticky;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+  }
+`;

@@ -5,7 +5,6 @@ import { useEffect, useRef, useState } from "react";
 import { io } from "socket.io-client";
 import MainBG from "components/MainBG";
 import { useParams } from "react-router-dom";
-import { WriteComment } from "components/Writing";
 import {
   MsgRoomContnr,
   MessageContainer,
@@ -19,6 +18,7 @@ import {
   LastWatchMark,
   ResizingFromMobile,
 } from "./MessageRoom.styles";
+import { WriteTextMessage } from "./MessageRoom.components";
 
 // server request with (roomIdMobile || roomIdTablet) //
 
@@ -367,7 +367,7 @@ export default function MessageRoom({ roomIdTablet }: { roomIdTablet?: string })
 
         <button onClick={testMessage}>testMessage</button>
       </MsgRoomContnr>
-      <WriteComment isMessage />
+      <WriteTextMessage />
     </ResizingFromMobile>
   );
 }

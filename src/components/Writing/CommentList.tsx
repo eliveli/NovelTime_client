@@ -1,8 +1,7 @@
 import Icon from "assets/Icon";
-import { useRef, useState, useCallback, useEffect } from "react";
-import { adjustCreateDate, useComponentWidth, useWhetherItIsMobile } from "utils";
-import { useAddRootCommentMutation } from "store/serverAPIs/novelTime";
-import { useAppSelector } from "../../store/hooks";
+import { useRef, useState, useEffect } from "react";
+import { adjustCreateDate, useWhetherItIsMobile } from "utils";
+
 import {
   CommentContainer,
   CommentContent,
@@ -14,8 +13,6 @@ import {
   CommentSort,
   CommentSortContainer,
   CreateDate,
-  EmojiCntnr,
-  EmojiIcon,
   MarkParentAndChildComment,
   NextToImgContainer,
   ReCommentButtonsContainer,
@@ -26,159 +23,8 @@ import {
   UserImgBox,
   UserName,
   UserNameContainer,
-  WriteCommentContainer,
-  WriteCommentSubmit,
-  WriteText,
-  WriteTextCntnr,
-  SpaceForUserNameOnTextArea,
 } from "./CommentList.styles";
 import { ReCommentInputOnTablet } from "./CommentInput";
-
-
-const htmlWidth = document.documentElement.offsetWidth;
-const isTablet = htmlWidth >= 768;
-
-export function WriteComment({
-  isRootCommentInput,
-
-  isReComment,
-
-  // for tablet or pc when comment inputs are divided into root comment and reComment
-  parentForNewReCommentOnPC,
-  // for mobile when comment input is one for both root comment and reComment
-  parentForNewReCommentOnMobile,
-
-  talkId,
-  novelTitle,
-  getAllCommentPages,
-
-  isMessage, // for message page. not for comment
-}: {
-  isRootCommentInput?: true;
-  isReComment?: true;
-  parentForNewReCommentOnPC?: {
-    parentCommentId: string;
-    parentCommentUserName: string;
-  };
-  parentForNewReCommentOnMobile?: {
-    parentCommentId: string;
-    parentCommentUserName: string;
-  };
-  talkId?: string;
-  novelTitle?: string;
-  getAllCommentPages?: () => void;
-
-  isMessage?: true;
-}) {
-  const [addRootComment, addRootCommentResult] = useAddRootCommentMutation();
-
-  const loginUserId = useAppSelector((state) => state.user.loginUserInfo.userId);
-
-  const textRef = useRef<HTMLTextAreaElement>(null);
-
-  const [comment, setComment] = useState("");
-
-  // learn more about useCallback!
-  const writeComment = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    if (!textRef.current) return;
-
-    setComment(e.target.value); // store content of comment
-    textRef.current.style.height = "28px"; // Default: height of 1 line
-    const textHeight = textRef.current.scrollHeight; // current scroll height
-
-    // max-height : 15 lines of 364px - for Tablet, Desktop
-    if (isTablet) {
-      textRef.current.style.height = `${textHeight <= 364 ? textRef.current.scrollHeight : 364}px`;
-      return;
-    }
-    // max-height : 5 lines of 124px - for Mobile
-    textRef.current.style.height = `${textHeight <= 124 ? textRef.current.scrollHeight : 124}px`;
-  }, []);
-
-  const userNameOnTextAreaRef = useRef<HTMLSpanElement>(null);
-  const userNameWidth = useComponentWidth(userNameOnTextAreaRef);
-
-  // for mobile and tablet, get reComment ID and userName
-  // then show reCommentID in textarea
-
-  const handleSubmit = async () => {
-    // server request 1 : provide comment to server
-
-    if (!isMessage && getAllCommentPages) {
-      if (!loginUserId) {
-        alert("먼저 로그인을 해 주세요");
-        return;
-      }
-
-      if (!talkId || !novelTitle) {
-        alert("코멘트를 추가할 수 없습니다. 새로고침 후 다시 시도해 보세요");
-        return;
-      }
-
-      if (!textRef.current?.value) return; // when comment content is empty
-
-      if (addRootCommentResult.isLoading) return; // prevent click while loading for prev request
-      await addRootComment({ talkId, novelTitle, commentContent: textRef.current?.value });
-
-      if (addRootCommentResult.isError) {
-        alert("코멘트를 추가할 수 없습니다. 새로고침 후 다시 시도해 보세요");
-        return;
-      }
-
-      // initialize comment input
-      textRef.current.value = "";
-      textRef.current.style.height = "28px";
-
-      getAllCommentPages();
-
-      // return; // * uncomment when working on message below
-    }
-    // server request 2 : provide message to server : use variable of isMessage
-  };
-
-  const writeCommentRef = useRef<HTMLDivElement>(null);
-
-  // when device is mobile, reComment input under its root comment won't be displayed
-  //  instead, the root comment input will be used for reComment
-  const parentForNewReComment = parentForNewReCommentOnPC || parentForNewReCommentOnMobile;
-
-  // for tablet or pc when reComment input is located under the root comment
-  useEffect(() => {
-    if (parentForNewReCommentOnPC) {
-      writeCommentRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
-    }
-  });
-
-  console.log("isReComment:", isReComment);
-
-  return (
-    <WriteCommentContainer ref={writeCommentRef} isMessage={isMessage} isReComment={isReComment}>
-      <WriteTextCntnr>
-        {parentForNewReComment?.parentCommentUserName && (
-          <SpaceForUserNameOnTextArea
-            ref={userNameOnTextAreaRef}
-            isRootCommentInput={isRootCommentInput}
-            // not to display reComment user name when this is a root comment input and device is pc
-          >
-            {`@${parentForNewReComment.parentCommentUserName}`}
-          </SpaceForUserNameOnTextArea>
-        )}
-        <WriteText
-          ref={textRef}
-          onChange={writeComment}
-          placeholder={parentForNewReComment?.parentCommentUserName ? "" : "Write your comment!"}
-          spaceForUserName={userNameWidth}
-        />
-        <EmojiCntnr size={20}>
-          <EmojiIcon />
-        </EmojiCntnr>
-      </WriteTextCntnr>
-
-      <WriteCommentSubmit onClick={handleSubmit}>작성</WriteCommentSubmit>
-    </WriteCommentContainer>
-  );
-}
-
 
 function CommentWritten({
   isFirstComment,
@@ -403,7 +249,7 @@ function CommentWritten({
 // 4. ps : well, although there is better UI design, something important is go to next step - making next page..
 //    detail will be set later. (and from now, I have changed various things that I had worked hard...)
 //    many things is best at that time, but time is gone, it is not...
-export function CommentList({
+export default function CommentList({
   commentList,
   commentIdForScroll,
   commentSort,

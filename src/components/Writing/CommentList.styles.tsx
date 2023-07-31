@@ -135,52 +135,14 @@ export const ReCommentUser = styled.span`
 //   margin-bottom: -12px;
 // `;
 
-// * it have to be fixed when working on message component
-export const WriteCommentContainer = styled.div<{
-  isMessage?: true;
-}>`
-  display: flex;
-  align-items: center;
-  border-radius: 20px;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  margin-top: 10px;
-
-  /* padding: 14px 20px; */
-  padding: 15px;
-  padding-right: 13px;
-
-  // when device is mobile
-  @media (max-width: 767px) {
-    position: sticky;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    border-radius: 0;
-    background-color: rgba(255, 255, 255, 1);
-    z-index: 1;
-  }
-
-  // for message room component
-  ${({ isMessage }) =>
-    isMessage &&
-    `
-    position: relative;
-    
-    border-radius: 0;
-    background-color: rgba(255,255,255,1);
-    z-index: 1;
-    
-    border-left: 0; border-right: 0; border-bottom: 0;
-  `}
-`;
-
 export const CommentInputContainerOnMobile = styled.div<{ isRootCommentInput: boolean }>`
   display: flex;
   align-items: center;
 
   border: 1px solid rgba(0, 0, 0, 0.1);
-  margin-top: 10px;
+  border-radius: 0;
 
+  margin-top: 10px;
   padding: 15px;
   padding-right: 13px;
 
@@ -193,7 +155,6 @@ export const CommentInputContainerOnMobile = styled.div<{ isRootCommentInput: bo
   bottom: 0;
   left: 0;
   width: 100%;
-  border-radius: 0;
   background-color: rgba(255, 255, 255, 1);
   z-index: 1;
 `;
