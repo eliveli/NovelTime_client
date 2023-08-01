@@ -270,6 +270,8 @@ export default function CommentList({
                   if (currentSortType !== _) {
                     commentSort.setSortTypeForComments(_.toLowerCase() as "new" | "old");
                     set1inCommentPageNo();
+
+                    rootCommentSelected.setRootCommentIdToShowReComments("");
                   }
                 }}
               >

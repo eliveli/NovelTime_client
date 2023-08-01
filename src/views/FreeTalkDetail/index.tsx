@@ -117,6 +117,39 @@ export default function FreeTalkDetail() {
     }
   }, [rootCommentIdToShowReComments]);
 
+  // change reComment number of its root comment after adding a reComment
+  //  it can run when getting reComments without adding new one
+  //   but any won't change
+  useEffect(() => {
+    if (!reCommentsFromServer.data || !reCommentsFromServer.data.length) {
+      // * treat later after deleting reComment(not sure if-statement is exact)
+      return;
+    }
+
+    const reCommentNo = reCommentsFromServer.data.length;
+
+    for (let i = 0; i < rootComments.length; i += 1) {
+      const rootComment = rootComments[i];
+
+      if (rootComment.commentId === rootCommentIdToShowReComments) {
+        // replace reCommentNo of current rootComment to show reComments
+        // when reCommentNo is different from previous one
+        if (rootComment.reCommentNo !== reCommentNo) {
+          const beforeTargetComment = rootComments.slice(0, i);
+          const afterTargetComment = rootComments.slice(i + 1);
+
+          setRootComments([
+            ...beforeTargetComment,
+            { ...rootComment, reCommentNo },
+            ...afterTargetComment,
+          ]);
+        }
+
+        break;
+      }
+    }
+  }, [reCommentsFromServer.data]);
+
   const isMobile = useWhetherItIsMobile();
 
   if (!talkId || talk.isError || !talk.data) return <div>***에러 페이지 띄우기</div>;
