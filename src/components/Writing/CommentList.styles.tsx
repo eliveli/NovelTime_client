@@ -52,6 +52,11 @@ export const CommentContainer = styled.div<{
     border-bottom: 0;
   `}
 `;
+
+export const UserNameAndEditContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
 export const UserNameContainer = styled.div`
   display: flex;
 `;
@@ -68,6 +73,7 @@ export const UserImg = styled.div<{ userImg: Img }>`
 `;
 export const CreateDate = styled.span`
   margin-left: 10px;
+  font-size: 14px;
 `;
 export const CommentContent = styled.p<{ isParentToMark: boolean }>`
   margin: 0 0 3px;

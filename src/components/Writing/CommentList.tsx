@@ -22,9 +22,11 @@ import {
   UserImg,
   UserImgBox,
   UserName,
+  UserNameAndEditContainer,
   UserNameContainer,
 } from "./CommentList.styles";
 import { ReCommentInputOnTablet } from "./CommentInput";
+import EditAndDelete from "./EditAndDelete";
 
 function CommentWritten({
   isFirstComment,
@@ -116,12 +118,17 @@ function CommentWritten({
         <UserImg userImg={userImg} />
       </UserImgBox>
       <NextToImgContainer>
-        <UserNameContainer>
-          <UserName isParentToWriteReComment={commentId === parentForNewReComment.parentCommentId}>
-            {userName}
-          </UserName>
-          <CreateDate>{dateToShow}</CreateDate>
-        </UserNameContainer>
+        <UserNameAndEditContainer>
+          <UserNameContainer>
+            <UserName
+              isParentToWriteReComment={commentId === parentForNewReComment.parentCommentId}
+            >
+              {userName}
+            </UserName>
+            <CreateDate>{dateToShow}</CreateDate>
+          </UserNameContainer>
+          <EditAndDelete clickToEdit={() => {}} clickToDelete={() => {}} />
+        </UserNameAndEditContainer>
         <CommentContent ref={commentContentRef} isParentToMark={isParentToMark}>
           {isReComment && <ReCommentUser>{`@${parentCommentUserName as string} `}</ReCommentUser>}
           {commentContent}
