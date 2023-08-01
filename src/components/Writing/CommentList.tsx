@@ -252,8 +252,8 @@ export default function CommentList({
   talkId,
   novelTitle,
 }: CommentListProps) {
-  // when write-comment component is fixed to screen bottom, give comment-list-component margin-bottom
   const [parentAndChildToMark, setParentAndChildToMark] = useState({ parent: "", child: "" }); // parent comment of selected reComment
+
   return (
     <CommentListContainer>
       <CommentMarkContainer>
@@ -270,8 +270,6 @@ export default function CommentList({
                   if (currentSortType !== _) {
                     commentSort.setSortTypeForComments(_.toLowerCase() as "new" | "old");
                     set1inCommentPageNo();
-
-                    rootCommentSelected.setRootCommentIdToShowReComments("");
                   }
                 }}
               >

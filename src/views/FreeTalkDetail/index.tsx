@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import MainBG from "components/MainBG";
 import {
@@ -87,10 +87,16 @@ export default function FreeTalkDetail() {
     if (!commentList || !commentList?.length) return;
 
     // replace comment
-    //  . when comment page is 0 updating root comments right after adding one
-    //  . when comment page is 1 getting comments at first or sorting comments
+    //  . when comment page is 0 it's updating root comments right after adding one
+    //  . when comment page is 1 it's getting comments at first or getting with other sort type
 
     if ([0, 1].includes(commentPageNo) && commentList) {
+      if (commentPageNo === 1 && !!rootComments.length) {
+        // refetch comments when changing comment sort type
+        //  because the cache data may exist if user got comments with this sort type previously
+        commentPerPage.refetch();
+      }
+
       setRootComments(commentList);
 
       setRootCommentIdToShowReComments("");
