@@ -75,13 +75,20 @@ export const CreateDate = styled.span`
   margin-left: 10px;
   font-size: 14px;
 `;
-export const CommentContent = styled.p<{ isParentToMark: boolean }>`
+export const CommentContent = styled.p<{ isParentToMark: boolean; isEdit?: true }>`
   margin: 0 0 3px;
 
   white-space: pre-wrap; // allow the line break
 
   ${({ isParentToMark }) =>
     isParentToMark && `border: 1px solid ${theme.color.mainLight}; padding: 0 5px;`}
+
+  ${(isEdit) =>
+    isEdit &&
+    `
+    border: none;
+    border-radius: 5px;
+    background-color: whitesmoke;`}
 `;
 
 export const NextToImgContainer = styled.div`
@@ -343,6 +350,11 @@ export type CommentProps = {
   rootCommentSelected?: {
     rootCommentIdToShowReComments: string;
     setRootCommentIdToShowReComments: React.Dispatch<React.SetStateAction<string>>;
+  };
+
+  edit: {
+    editingCommentId: string;
+    handleEditingCommentId: React.Dispatch<React.SetStateAction<string>>;
   };
 
   talkId: string;

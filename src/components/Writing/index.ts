@@ -11,7 +11,7 @@ import {
   CommentInputOnMobile,
   RootCommentInputOnTablet,
 } from "./CommentInput";
-import EditAndDelete from "./EditAndDelete";
+import { EditAndDelete, CancelWhenEditing } from "./EditAndDelete";
 
 export {
   WritingDetailContainer,
@@ -27,4 +27,5 @@ export {
   CommentInputOnMobile,
   RootCommentInputOnTablet,
   EditAndDelete,
+  CancelWhenEditing,
 };

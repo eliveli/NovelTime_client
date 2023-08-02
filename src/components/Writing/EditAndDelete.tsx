@@ -1,5 +1,4 @@
-import theme, { styled } from "assets/styles/theme";
-import Icon from "assets/Icon";
+import { styled } from "assets/styles/theme";
 
 const EditAndDeleteContainer = styled.div`
   display: flex;
@@ -16,7 +15,7 @@ const Button = styled.button`
   font-size: 14px;
 `;
 
-export default function EditAndDelete({
+export function EditAndDelete({
   clickToEdit,
   clickToDelete,
 }: {
@@ -27,6 +26,14 @@ export default function EditAndDelete({
     <EditAndDeleteContainer>
       <Button onClick={clickToEdit}>수정</Button>
       <Button onClick={clickToDelete}>삭제</Button>
+    </EditAndDeleteContainer>
+  );
+}
+
+export function CancelWhenEditing({ clickToCancel }: { clickToCancel: () => void }) {
+  return (
+    <EditAndDeleteContainer>
+      <Button onClick={clickToCancel}>취소</Button>
     </EditAndDeleteContainer>
   );
 }

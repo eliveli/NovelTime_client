@@ -2,6 +2,7 @@ import Icon from "assets/Icon";
 import { useRef, useState, useEffect } from "react";
 import { adjustCreateDate, useWhetherItIsMobile } from "utils";
 
+import { useAppSelector } from "store/hooks";
 import {
   CommentContainer,
   CommentContent,
@@ -25,8 +26,8 @@ import {
   UserNameAndEditContainer,
   UserNameContainer,
 } from "./CommentList.styles";
-import { ReCommentInputOnTablet } from "./CommentInput";
-import EditAndDelete from "./EditAndDelete";
+import { ReCommentInputOnTablet, RootCommentInputOnTablet } from "./CommentInput";
+import { CancelWhenEditing, EditAndDelete } from "./EditAndDelete";
 
 function CommentWritten({
   isFirstComment,
@@ -43,6 +44,8 @@ function CommentWritten({
 
   reCommentsOfRootComment,
   rootCommentSelected,
+
+  edit: { editingCommentId, handleEditingCommentId },
 
   talkId,
   novelTitle,
@@ -68,7 +71,12 @@ function CommentWritten({
 
   const dateToShow = adjustCreateDate(createDate);
 
-  const isTablet = !useWhetherItIsMobile();
+  const isMobile = useWhetherItIsMobile();
+
+  const loginUserName = useAppSelector((state) => state.user.loginUserInfo.userName);
+
+  const isWriter = loginUserName === userName;
+  const isEdit = editingCommentId === commentId;
 
   // scroll to the parent comment of its reComment when clicking "원댓글보기"
   useEffect(() => {
@@ -76,6 +84,13 @@ function CommentWritten({
       commentContentRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
     }
   }, [isParentToMark]);
+
+  // remove the mark when editing a comment
+  useEffect(() => {
+    if (isEdit) {
+      setParentAndChildToMark({ parent: "", child: "" });
+    }
+  }, [editingCommentId]);
 
   // scroll to exact comment component when clicking the comment in user page
   useEffect(() => {
@@ -127,12 +142,34 @@ function CommentWritten({
             </UserName>
             <CreateDate>{dateToShow}</CreateDate>
           </UserNameContainer>
-          <EditAndDelete clickToEdit={() => {}} clickToDelete={() => {}} />
+          {isWriter && !isEdit && (
+            <EditAndDelete
+              clickToEdit={() => {
+                handleEditingCommentId(commentId);
+              }}
+              clickToDelete={() => {}}
+            />
+          )}
+          {isWriter && isEdit && (
+            <CancelWhenEditing clickToCancel={() => handleEditingCommentId("")} />
+          )}
         </UserNameAndEditContainer>
-        <CommentContent ref={commentContentRef} isParentToMark={isParentToMark}>
-          {isReComment && <ReCommentUser>{`@${parentCommentUserName as string} `}</ReCommentUser>}
-          {commentContent}
-        </CommentContent>
+
+        {isEdit && isMobile && (
+          <CommentContent ref={commentContentRef} isParentToMark={isParentToMark} isEdit={isEdit}>
+            {isReComment && <ReCommentUser>{`@${parentCommentUserName as string} `}</ReCommentUser>}
+            {commentContent}
+          </CommentContent>
+        )}
+        {isEdit && !isMobile && (
+          <RootCommentInputOnTablet talkId="" novelTitle="" getAllRootCommentPages={() => {}} />
+        )}
+        {!isEdit && (
+          <CommentContent ref={commentContentRef} isParentToMark={isParentToMark}>
+            {isReComment && <ReCommentUser>{`@${parentCommentUserName as string} `}</ReCommentUser>}
+            {commentContent}
+          </CommentContent>
+        )}
 
         <ReCommentButtonsContainer>
           <ReCommentMarkContainer>
@@ -212,13 +249,14 @@ function CommentWritten({
               commentIdForScroll={commentIdForScroll}
               parentCommentForNewReComment={{ parentForNewReComment, setParentForNewReComment }}
               parentAndChildCommentToMark={{ parentAndChildToMark, setParentAndChildToMark }}
+              edit={{ editingCommentId, handleEditingCommentId }}
               talkId={talkId}
               novelTitle={novelTitle}
             />
           ))}
 
         {/* write reComment */}
-        {isTablet && rootCommentSelected?.rootCommentIdToShowReComments === commentId && (
+        {!isMobile && rootCommentSelected?.rootCommentIdToShowReComments === commentId && (
           <ReCommentInputOnTablet
             parentForNewReComment={{ ...parentForNewReComment }}
             talkId={talkId}
@@ -259,6 +297,8 @@ export default function CommentList({
   talkId,
   novelTitle,
 }: CommentListProps) {
+  const [editingCommentId, handleEditingCommentId] = useState("");
+
   const [parentAndChildToMark, setParentAndChildToMark] = useState({ parent: "", child: "" }); // parent comment of selected reComment
 
   return (
@@ -302,6 +342,7 @@ export default function CommentList({
               : undefined
           }
           rootCommentSelected={rootCommentSelected}
+          edit={{ editingCommentId, handleEditingCommentId }}
           talkId={talkId}
           novelTitle={novelTitle}
         />
