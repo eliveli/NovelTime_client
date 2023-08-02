@@ -6,6 +6,7 @@ import { useAppSelector } from "store/hooks";
 import {
   CommentContainer,
   CommentContent,
+  CommentContentToEdit,
   CommentListContainer,
   CommentListProps,
   CommentMark,
@@ -155,20 +156,20 @@ function CommentWritten({
           )}
         </UserNameAndEditContainer>
 
-        {isEdit && isMobile && (
-          <CommentContent ref={commentContentRef} isParentToMark={isParentToMark} isEdit={isEdit}>
-            {isReComment && <ReCommentUser>{`@${parentCommentUserName as string} `}</ReCommentUser>}
-            {commentContent}
-          </CommentContent>
-        )}
-        {isEdit && !isMobile && (
-          <RootCommentInputOnTablet talkId="" novelTitle="" getAllRootCommentPages={() => {}} />
-        )}
         {!isEdit && (
           <CommentContent ref={commentContentRef} isParentToMark={isParentToMark}>
             {isReComment && <ReCommentUser>{`@${parentCommentUserName as string} `}</ReCommentUser>}
             {commentContent}
           </CommentContent>
+        )}
+        {isWriter && isEdit && isMobile && (
+          <CommentContentToEdit ref={commentContentRef} isParentToMark={isParentToMark}>
+            {isReComment && <ReCommentUser>{`@${parentCommentUserName as string} `}</ReCommentUser>}
+            {commentContent}
+          </CommentContentToEdit>
+        )}
+        {isWriter && isEdit && !isMobile && (
+          <RootCommentInputOnTablet talkId="" novelTitle="" getAllRootCommentPages={() => {}} />
         )}
 
         <ReCommentButtonsContainer>

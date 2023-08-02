@@ -75,7 +75,7 @@ export const CreateDate = styled.span`
   margin-left: 10px;
   font-size: 14px;
 `;
-export const CommentContent = styled.p<{ isParentToMark: boolean; isEdit?: true }>`
+export const CommentContentToEdit = styled.p<{ isParentToMark: boolean }>`
   margin: 0 0 3px;
 
   white-space: pre-wrap; // allow the line break
@@ -83,12 +83,18 @@ export const CommentContent = styled.p<{ isParentToMark: boolean; isEdit?: true 
   ${({ isParentToMark }) =>
     isParentToMark && `border: 1px solid ${theme.color.mainLight}; padding: 0 5px;`}
 
-  ${(isEdit) =>
-    isEdit &&
-    `
-    border: none;
-    border-radius: 5px;
-    background-color: whitesmoke;`}
+  border: none;
+  border-radius: 5px;
+  background-color: whitesmoke;
+`;
+
+export const CommentContent = styled.p<{ isParentToMark: boolean }>`
+  margin: 0 0 3px;
+
+  white-space: pre-wrap; // allow the line break
+
+  ${({ isParentToMark }) =>
+    isParentToMark && `border: 1px solid ${theme.color.mainLight}; padding: 0 5px;`}
 `;
 
 export const NextToImgContainer = styled.div`
