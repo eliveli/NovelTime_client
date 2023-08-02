@@ -33,7 +33,6 @@ export function ReCommentInputOnTablet({
 
   const textRef = useRef<HTMLTextAreaElement>(null);
 
-  const [comment, setComment] = useState("");
   const isTablet = !useWhetherItIsMobile();
 
   const userNameOnTextAreaRef = useRef<HTMLSpanElement>(null);
@@ -87,7 +86,7 @@ export function ReCommentInputOnTablet({
 
         <WriteText
           ref={textRef}
-          onChange={(e) => writeText(e, textRef, setComment, isTablet)}
+          onChange={(e) => writeText(e, textRef, isTablet)}
           spaceForUserName={userNameWidth}
         />
         <EmojiCntnr size={20}>
@@ -116,7 +115,6 @@ export function RootCommentInputOnTablet({
 
   const textRef = useRef<HTMLTextAreaElement>(null);
 
-  const [comment, setComment] = useState("");
   const isTablet = !useWhetherItIsMobile();
 
   const handleSubmit = async () => {
@@ -151,7 +149,7 @@ export function RootCommentInputOnTablet({
       <WriteTextCntnr>
         <WriteText
           ref={textRef}
-          onChange={(e) => writeText(e, textRef, setComment, isTablet)}
+          onChange={(e) => writeText(e, textRef, isTablet)}
           placeholder="Write your comment!"
         />
         <EmojiCntnr size={20}>
@@ -190,10 +188,11 @@ export function CommentInputOnMobile({
 
   const textRef = useRef<HTMLTextAreaElement>(null);
 
-  const [comment, setComment] = useState("");
   const isTablet = !useWhetherItIsMobile();
   const userNameOnTextAreaRef = useRef<HTMLSpanElement>(null);
   const userNameWidth = useComponentWidth(userNameOnTextAreaRef, isRootCommentInput);
+
+  const textToEdit = useAppSelector((state) => state.comment.textToEdit);
 
   const handleSubmit = async () => {
     // provide a rootComment or reComment to server
@@ -238,13 +237,37 @@ export function CommentInputOnMobile({
 
   const writeCommentRef = useRef<HTMLDivElement>(null);
 
+  useEffect(() => {
+    if (!textRef.current) return;
+
+    textRef.current.style.height = "28px"; // Default: height of 1 line
+
+    // initialize when finishing or canceling editing comment //
+    if (textToEdit === "") {
+      textRef.current.value = "";
+      return;
+    }
+
+    // reset to fit in the comment to edit //
+
+    textRef.current.value = textToEdit;
+
+    const textHeight = textRef.current.scrollHeight; // current scroll height
+    // max-height : 15 lines of 364px - for Tablet, Desktop
+    if (isTablet) {
+      textRef.current.style.height = `${textHeight <= 364 ? textRef.current.scrollHeight : 364}px`;
+      return;
+    }
+    // max-height : 5 lines of 124px - for Mobile
+    textRef.current.style.height = `${textHeight <= 124 ? textRef.current.scrollHeight : 124}px`;
+  }, [textToEdit]);
   return (
     <CommentInputContainerOnMobile ref={writeCommentRef} isRootCommentInput={isRootCommentInput}>
       <WriteTextCntnr>
         {isRootCommentInput ? (
           <WriteText
             ref={textRef}
-            onChange={(e) => writeText(e, textRef, setComment, isTablet)}
+            onChange={(e) => writeText(e, textRef, isTablet)}
             placeholder="Write your comment!"
           />
         ) : (
@@ -254,7 +277,7 @@ export function CommentInputOnMobile({
             </SpaceForUserNameOnTextArea>
             <WriteText
               ref={textRef}
-              onChange={(e) => writeText(e, textRef, setComment, isTablet)}
+              onChange={(e) => writeText(e, textRef, isTablet)}
               spaceForUserName={userNameWidth}
             />
           </>

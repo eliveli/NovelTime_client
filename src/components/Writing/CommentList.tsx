@@ -2,7 +2,8 @@ import Icon from "assets/Icon";
 import { useRef, useState, useEffect } from "react";
 import { adjustCreateDate, useWhetherItIsMobile } from "utils";
 
-import { useAppSelector } from "store/hooks";
+import { useAppDispatch, useAppSelector } from "store/hooks";
+import { setTextToEdit } from "store/clientSlices/commentSlice";
 import {
   CommentContainer,
   CommentContent,
@@ -79,6 +80,20 @@ function CommentWritten({
   const isWriter = loginUserName === userName;
   const isEdit = editingCommentId === commentId;
 
+  const dispatch = useAppDispatch();
+
+  const handleEdit = () => {
+    handleEditingCommentId(commentId);
+
+    dispatch(setTextToEdit(commentContent));
+  };
+
+  const handleCancelEdit = () => {
+    handleEditingCommentId("");
+
+    dispatch(setTextToEdit(""));
+  };
+
   // scroll to the parent comment of its reComment when clicking "원댓글보기"
   useEffect(() => {
     if (isParentToMark) {
@@ -144,18 +159,10 @@ function CommentWritten({
             <CreateDate>{dateToShow}</CreateDate>
           </UserNameContainer>
           {isWriter && !isEdit && (
-            <EditAndDelete
-              clickToEdit={() => {
-                handleEditingCommentId(commentId);
-              }}
-              clickToDelete={() => {}}
-            />
+            <EditAndDelete clickToEdit={handleEdit} clickToDelete={() => {}} />
           )}
-          {isWriter && isEdit && (
-            <CancelWhenEditing clickToCancel={() => handleEditingCommentId("")} />
-          )}
+          {isWriter && isEdit && <CancelWhenEditing clickToCancel={handleCancelEdit} />}
         </UserNameAndEditContainer>
-
         {!isEdit && (
           <CommentContent ref={commentContentRef} isParentToMark={isParentToMark}>
             {isReComment && <ReCommentUser>{`@${parentCommentUserName as string} `}</ReCommentUser>}

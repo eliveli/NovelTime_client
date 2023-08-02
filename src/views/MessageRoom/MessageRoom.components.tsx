@@ -16,8 +16,6 @@ export function WriteTextMessage() {
 
   const textRef = useRef<HTMLTextAreaElement>(null);
 
-  const [text, setText] = useState("");
-
   const isTablet = !useWhetherItIsMobile();
 
   const userNameOnTextAreaRef = useRef<HTMLSpanElement>(null);
@@ -44,7 +42,7 @@ export function WriteTextMessage() {
       <WriteTextCntnr>
         <WriteText
           ref={textRef}
-          onChange={(e) => writeText(e, textRef, setText, isTablet)}
+          onChange={(e) => writeText(e, textRef, isTablet)}
           placeholder="Write your text!"
           spaceForUserName={userNameWidth}
         />

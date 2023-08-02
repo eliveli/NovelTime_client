@@ -6,6 +6,7 @@ import modalReducer from "./clientSlices/modalSlice";
 import writingReducer from "./clientSlices/writingSlice";
 import filterReducer from "./clientSlices/filterSlice";
 import userReducer from "./clientSlices/userSlice";
+import commentReducer from "./clientSlices/commentSlice";
 
 import { novelTimeApi } from "./serverAPIs/novelTime";
 import { imageHostingApi } from "./serverAPIs/imageHosting";
@@ -18,6 +19,7 @@ const store = configureStore({
     writing: writingReducer,
     filter: filterReducer,
     user: userReducer,
+    comment: commentReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
