@@ -3,7 +3,7 @@ import { useRef, useState, useEffect } from "react";
 import { adjustCreateDate, useWhetherItIsMobile } from "utils";
 
 import { useAppDispatch, useAppSelector } from "store/hooks";
-import { setTextToEdit } from "store/clientSlices/commentSlice";
+import { setCommentIdToEditComment, setTextToEdit } from "store/clientSlices/commentSlice";
 import {
   CommentContainer,
   CommentContent,
@@ -47,8 +47,6 @@ function CommentWritten({
   reCommentsOfRootComment,
   rootCommentSelected,
 
-  edit: { editingCommentId, handleEditingCommentId },
-
   talkId,
   novelTitle,
 }: CommentProps) {
@@ -76,20 +74,21 @@ function CommentWritten({
   const isMobile = useWhetherItIsMobile();
 
   const loginUserName = useAppSelector((state) => state.user.loginUserInfo.userName);
+  const commentIdToEditComment = useAppSelector((state) => state.comment.commentIdToEditComment);
 
   const isWriter = loginUserName === userName;
-  const isEdit = editingCommentId === commentId;
+  const isEdit = commentIdToEditComment === commentId;
 
   const dispatch = useAppDispatch();
 
   const handleEdit = () => {
-    handleEditingCommentId(commentId);
+    dispatch(setCommentIdToEditComment(commentId));
 
     dispatch(setTextToEdit(commentContent));
   };
 
   const handleCancelEdit = () => {
-    handleEditingCommentId("");
+    dispatch(setCommentIdToEditComment(""));
 
     dispatch(setTextToEdit(""));
   };
@@ -106,7 +105,7 @@ function CommentWritten({
     if (isEdit) {
       setParentAndChildToMark({ parent: "", child: "" });
     }
-  }, [editingCommentId]);
+  }, [commentIdToEditComment]);
 
   // scroll to exact comment component when clicking the comment in user page
   useEffect(() => {
@@ -257,7 +256,6 @@ function CommentWritten({
               commentIdForScroll={commentIdForScroll}
               parentCommentForNewReComment={{ parentForNewReComment, setParentForNewReComment }}
               parentAndChildCommentToMark={{ parentAndChildToMark, setParentAndChildToMark }}
-              edit={{ editingCommentId, handleEditingCommentId }}
               talkId={talkId}
               novelTitle={novelTitle}
             />
@@ -305,8 +303,6 @@ export default function CommentList({
   talkId,
   novelTitle,
 }: CommentListProps) {
-  const [editingCommentId, handleEditingCommentId] = useState("");
-
   const [parentAndChildToMark, setParentAndChildToMark] = useState({ parent: "", child: "" }); // parent comment of selected reComment
 
   return (
@@ -350,7 +346,6 @@ export default function CommentList({
               : undefined
           }
           rootCommentSelected={rootCommentSelected}
-          edit={{ editingCommentId, handleEditingCommentId }}
           talkId={talkId}
           novelTitle={novelTitle}
         />

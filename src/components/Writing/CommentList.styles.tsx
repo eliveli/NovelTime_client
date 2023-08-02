@@ -357,12 +357,6 @@ export type CommentProps = {
     rootCommentIdToShowReComments: string;
     setRootCommentIdToShowReComments: React.Dispatch<React.SetStateAction<string>>;
   };
-
-  edit: {
-    editingCommentId: string;
-    handleEditingCommentId: React.Dispatch<React.SetStateAction<string>>;
-  };
-
   talkId: string;
   novelTitle: string;
 };
