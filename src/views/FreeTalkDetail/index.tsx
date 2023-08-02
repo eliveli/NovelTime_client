@@ -9,7 +9,7 @@ import {
   LikeAndShare,
   CommentList,
   CommentInputOnMobile,
-  RootCommentInputOnTablet,
+  RootCommentInputToCreateOnTablet,
 } from "components/Writing";
 import { ContentAnimation } from "views/RecommendDetail/RecommendDetail.styles";
 import {
@@ -123,7 +123,7 @@ export default function FreeTalkDetail() {
     }
   }, [rootCommentIdToShowReComments]);
 
-  // change reComment number of its root comment after adding a reComment
+  // change reComment number of its root comment after adding/editing/deleting one
   //  it can run when getting reComments without adding new one
   //   but any won't change
   useEffect(() => {
@@ -185,6 +185,7 @@ export default function FreeTalkDetail() {
             }}
             parentCommentForNewReComment={{ parentForNewReComment, setParentForNewReComment }}
             commentPageNo={commentPageNo}
+            getAllRootCommentPages={getAllRootCommentPages}
             // for creating reComment
             talkId={talk.data.talk.talkId}
             novelTitle={talk.data.novel.novelTitle}
@@ -202,7 +203,7 @@ export default function FreeTalkDetail() {
             getAllRootCommentPages={getAllRootCommentPages}
           />
         ) : (
-          <RootCommentInputOnTablet
+          <RootCommentInputToCreateOnTablet
             talkId={talk.data.talk.talkId}
             novelTitle={talk.data.novel.novelTitle}
             getAllRootCommentPages={getAllRootCommentPages}

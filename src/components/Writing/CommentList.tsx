@@ -31,13 +31,14 @@ import {
 import {
   ReCommentInputToCreateOnTablet,
   ReCommentInputToEditOnTablet,
-  RootCommentInputOnTablet,
+  RootCommentInputToEditOnTablet,
 } from "./CommentInput";
 import { CancelWhenEditing, EditAndDelete } from "./EditAndDelete";
 
 function CommentWritten({
   isFirstComment,
   commentPageNo,
+  getAllRootCommentPages,
   commentSortType,
 
   isReComment,
@@ -168,21 +169,24 @@ function CommentWritten({
           )}
           {isWriter && isEdit && <CancelWhenEditing clickToCancel={handleCancelEdit} />}
         </UserNameAndEditContainer>
+
         {!isEdit && (
           <CommentContent ref={commentContentRef} isParentToMark={isParentToMark}>
             {isReComment && <ReCommentUser>{`@${parentCommentUserName as string} `}</ReCommentUser>}
             {commentContent}
           </CommentContent>
         )}
+
         {isEdit && isMobile && (
           <CommentContentToEdit ref={commentContentRef} isParentToMark={isParentToMark}>
             {isReComment && <ReCommentUser>{`@${parentCommentUserName as string} `}</ReCommentUser>}
             {commentContent}
           </CommentContentToEdit>
         )}
+
         {isEdit && isReComment && !isMobile && <ReCommentInputToEditOnTablet />}
-        {isEdit && !isReComment && !isMobile && (
-          <RootCommentInputOnTablet talkId="" novelTitle="" getAllRootCommentPages={() => {}} />
+        {isEdit && !isReComment && !isMobile && getAllRootCommentPages && (
+          <RootCommentInputToEditOnTablet getAllRootCommentPages={getAllRootCommentPages} />
         )}
 
         <ReCommentButtonsContainer>
@@ -306,6 +310,7 @@ export default function CommentList({
   rootCommentSelected,
   parentCommentForNewReComment,
   commentPageNo,
+  getAllRootCommentPages,
 
   talkId,
   novelTitle,
@@ -353,6 +358,7 @@ export default function CommentList({
               : undefined
           }
           rootCommentSelected={rootCommentSelected}
+          getAllRootCommentPages={getAllRootCommentPages}
           talkId={talkId}
           novelTitle={novelTitle}
         />

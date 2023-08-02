@@ -33,7 +33,7 @@ export function EditAndDelete({
 export function CancelWhenEditing({ clickToCancel }: { clickToCancel: () => void }) {
   return (
     <EditAndDeleteContainer>
-      <Button onClick={clickToCancel}>취소</Button>
+      <Button onClick={clickToCancel}>수정 취소</Button>
     </EditAndDeleteContainer>
   );
 }

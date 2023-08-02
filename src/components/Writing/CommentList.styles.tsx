@@ -299,6 +299,7 @@ export interface CommentListProps {
   };
 
   commentPageNo: number;
+  getAllRootCommentPages: () => void;
 
   talkId: string;
   novelTitle: string;
@@ -307,6 +308,7 @@ export interface CommentListProps {
 export type CommentProps = {
   isFirstComment?: boolean;
   commentPageNo?: number;
+  getAllRootCommentPages?: () => void;
   commentSortType?: "new" | "old";
 
   comment: {

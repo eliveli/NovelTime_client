@@ -10,7 +10,8 @@ import {
   ReCommentInputToCreateOnTablet,
   ReCommentInputToEditOnTablet,
   CommentInputOnMobile,
-  RootCommentInputOnTablet,
+  RootCommentInputToCreateOnTablet,
+  RootCommentInputToEditOnTablet,
 } from "./CommentInput";
 import { EditAndDelete, CancelWhenEditing } from "./EditAndDelete";
 
@@ -27,7 +28,8 @@ export {
   ReCommentInputToCreateOnTablet,
   ReCommentInputToEditOnTablet,
   CommentInputOnMobile,
-  RootCommentInputOnTablet,
+  RootCommentInputToCreateOnTablet,
+  RootCommentInputToEditOnTablet,
   EditAndDelete,
   CancelWhenEditing,
 };

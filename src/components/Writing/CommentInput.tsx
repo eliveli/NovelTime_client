@@ -197,7 +197,7 @@ export function ReCommentInputToEditOnTablet() {
   );
 }
 
-export function RootCommentInputOnTablet({
+export function RootCommentInputToCreateOnTablet({
   talkId,
   novelTitle,
 
@@ -215,9 +215,7 @@ export function RootCommentInputOnTablet({
 
   const isTablet = !useWhetherItIsMobile();
 
-  const handleSubmit = async () => {
-    // server request 1 : provide comment to server
-
+  const handleSubmitToCreate = async () => {
     if (!loginUserId) {
       alert("먼저 로그인을 해 주세요");
       return;
@@ -255,7 +253,101 @@ export function RootCommentInputOnTablet({
         </EmojiCntnr>
       </WriteTextCntnr>
 
-      <WriteCommentSubmit onClick={handleSubmit}>작성</WriteCommentSubmit>
+      <WriteCommentSubmit onClick={handleSubmitToCreate}>작성</WriteCommentSubmit>
+    </CommentInputContainerOnTablet>
+  );
+}
+
+export function RootCommentInputToEditOnTablet({
+  getAllRootCommentPages,
+}: {
+  getAllRootCommentPages: () => void;
+}) {
+  const [editComment, editCommentResult] = useEditCommentMutation();
+
+  const loginUserId = useAppSelector((state) => state.user.loginUserInfo.userId);
+
+  const textRef = useRef<HTMLTextAreaElement>(null);
+
+  const isTablet = !useWhetherItIsMobile();
+
+  const commentToEdit = useAppSelector((state) => state.comment.commentToEdit);
+  const textToEdit = commentToEdit.commentContent;
+
+  const dispatch = useAppDispatch();
+
+  const handleSubmitToEdit = async () => {
+    if (!loginUserId) {
+      alert("먼저 로그인을 해 주세요");
+      return;
+    }
+
+    if (!textRef.current?.value) {
+      alert("내용을 입력해 주세요");
+      return; // when comment content is empty
+    }
+
+    if (editCommentResult.isLoading) return; // prevent click while loading for prev request
+
+    await editComment({
+      commentId: commentToEdit.commentId,
+      commentContent: textRef.current?.value,
+      isReComment: !!commentToEdit.parentUserName,
+    });
+
+    if (editCommentResult.isError) {
+      alert("코멘트를 수정할 수 없습니다. 새로고침 후 다시 시도해 보세요");
+      return;
+    }
+
+    getAllRootCommentPages();
+
+    // initialize comment input
+    textRef.current.value = "";
+    textRef.current.style.height = "28px";
+
+    getAllRootCommentPages();
+
+    // initialize states for editing comment
+    dispatch(setCommentToEdit({ commentId: "", commentContent: "", parentUserName: "" }));
+  };
+
+  const writeCommentRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!textRef.current) return;
+
+    textRef.current.style.height = "28px"; // Default: height of 1 line
+
+    // initialize when finishing or canceling editing comment //
+    if (textToEdit === "") {
+      textRef.current.value = "";
+      return;
+    }
+
+    // reset to fit in the comment to edit //
+
+    textRef.current.value = textToEdit;
+
+    const textHeight = textRef.current.scrollHeight; // current scroll height
+    // max-height : 15 lines of 364px - for Tablet, Desktop
+    textRef.current.style.height = `${textHeight <= 364 ? textRef.current.scrollHeight : 364}px`;
+  }, [textToEdit]);
+
+  return (
+    <CommentInputContainerOnTablet ref={writeCommentRef}>
+      <WriteTextCntnr>
+        <WriteText
+          ref={textRef}
+          onChange={(e) => writeText(e, textRef, isTablet)}
+          placeholder="Write your comment!"
+        />
+        <EmojiCntnr size={20}>
+          <EmojiIcon />
+        </EmojiCntnr>
+      </WriteTextCntnr>
+
+      <WriteCommentSubmit onClick={handleSubmitToEdit}>수정</WriteCommentSubmit>
     </CommentInputContainerOnTablet>
   );
 }
