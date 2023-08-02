@@ -7,7 +7,8 @@ import { WritingDetailContainer } from "./WritingDetail.styles";
 import LikeAndShare from "./LikeAndShare";
 import CommentList from "./CommentList";
 import {
-  ReCommentInputOnTablet,
+  ReCommentInputToCreateOnTablet,
+  ReCommentInputToEditOnTablet,
   CommentInputOnMobile,
   RootCommentInputOnTablet,
 } from "./CommentInput";
@@ -23,7 +24,8 @@ export {
   BoardMark,
   LikeAndShare,
   CommentList,
-  ReCommentInputOnTablet,
+  ReCommentInputToCreateOnTablet,
+  ReCommentInputToEditOnTablet,
   CommentInputOnMobile,
   RootCommentInputOnTablet,
   EditAndDelete,

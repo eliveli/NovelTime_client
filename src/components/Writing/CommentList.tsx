@@ -28,7 +28,11 @@ import {
   UserNameAndEditContainer,
   UserNameContainer,
 } from "./CommentList.styles";
-import { ReCommentInputOnTablet, RootCommentInputOnTablet } from "./CommentInput";
+import {
+  ReCommentInputToCreateOnTablet,
+  ReCommentInputToEditOnTablet,
+  RootCommentInputOnTablet,
+} from "./CommentInput";
 import { CancelWhenEditing, EditAndDelete } from "./EditAndDelete";
 
 function CommentWritten({
@@ -170,13 +174,14 @@ function CommentWritten({
             {commentContent}
           </CommentContent>
         )}
-        {isWriter && isEdit && isMobile && (
+        {isEdit && isMobile && (
           <CommentContentToEdit ref={commentContentRef} isParentToMark={isParentToMark}>
             {isReComment && <ReCommentUser>{`@${parentCommentUserName as string} `}</ReCommentUser>}
             {commentContent}
           </CommentContentToEdit>
         )}
-        {isWriter && isEdit && !isMobile && (
+        {isEdit && isReComment && !isMobile && <ReCommentInputToEditOnTablet />}
+        {isEdit && !isReComment && !isMobile && (
           <RootCommentInputOnTablet talkId="" novelTitle="" getAllRootCommentPages={() => {}} />
         )}
 
@@ -265,7 +270,7 @@ function CommentWritten({
 
         {/* write reComment */}
         {!isMobile && rootCommentSelected?.rootCommentIdToShowReComments === commentId && (
-          <ReCommentInputOnTablet
+          <ReCommentInputToCreateOnTablet
             parentForNewReComment={{ ...parentForNewReComment }}
             talkId={talkId}
             novelTitle={novelTitle}
