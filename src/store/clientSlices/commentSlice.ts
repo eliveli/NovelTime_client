@@ -2,24 +2,31 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export type IsCommentState = {
-  textToEdit: string;
-  commentIdToEditComment: string;
+  commentToEdit: {
+    commentId: string;
+    commentContent: string;
+    parentUserName: string;
+  };
 };
 
 const initialState: IsCommentState = {
-  textToEdit: "",
-  commentIdToEditComment: "",
+  commentToEdit: {
+    commentId: "",
+    commentContent: "",
+    parentUserName: "",
+    // it can be empty string when comment is root comment
+  },
 };
 
 export const commentSlice = createSlice({
   name: "comment",
   initialState,
   reducers: {
-    setTextToEdit: (state, action: PayloadAction<string>) => {
-      state.textToEdit = action.payload;
-    },
-    setCommentIdToEditComment: (state, action: PayloadAction<string>) => {
-      state.commentIdToEditComment = action.payload;
+    setCommentToEdit: (
+      state,
+      action: PayloadAction<{ commentId: string; commentContent: string; parentUserName: string }>,
+    ) => {
+      state.commentToEdit = action.payload;
     },
     // Redux Toolkit allows us to write "mutating" logic in reducers. It
     // doesn't actually mutate the state because it uses the Immer library,
@@ -29,6 +36,6 @@ export const commentSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { setTextToEdit, setCommentIdToEditComment } = commentSlice.actions;
+export const { setCommentToEdit } = commentSlice.actions;
 
 export default commentSlice.reducer;

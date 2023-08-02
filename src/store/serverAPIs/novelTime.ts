@@ -33,6 +33,7 @@ import {
   ReCommentList,
   ParamForNewRootComment,
   ParamForNewReComment,
+  ParamToEditComment,
 } from "./types";
 import type { RootState } from "../index";
 
@@ -73,7 +74,12 @@ export const novelTimeApi = createApi({
       return headers;
     },
   }) as BaseQueryFn<string | FetchArgs, unknown, CustomError, {}>,
-  tagTypes: ["ContentUpdatedInHome", "ListTitlesUpdated", "ContentUpdatedInNovelList", "reCommentsUpdated"],
+  tagTypes: [
+    "ContentUpdatedInHome",
+    "ListTitlesUpdated",
+    "ContentUpdatedInNovelList",
+    "reCommentsUpdated",
+  ],
   endpoints: (builder) => ({
     // at home page
     getHomeData: builder.query<HomeData, undefined>({
@@ -115,7 +121,6 @@ export const novelTimeApi = createApi({
     getReComments: builder.query<ReCommentList, ParamForReComments>({
       query: (params) => `/comment/${params.rootCommentId}/${params.commentSortType}`,
       providesTags: ["reCommentsUpdated"],
-
     }),
 
     addRootComment: builder.mutation<string, ParamForNewRootComment>({
@@ -137,6 +142,17 @@ export const novelTimeApi = createApi({
         },
       }),
       invalidatesTags: ["reCommentsUpdated"],
+    }),
+    editComment: builder.mutation<string, ParamToEditComment>({
+      query: ({ commentId, commentContent }) => ({
+        url: "/comment/comment",
+        method: "PUT",
+        body: {
+          commentId,
+          commentContent,
+        },
+      }),
+      invalidatesTags: (result, error, arg) => (arg.isReComment ? ["reCommentsUpdated"] : []),
     }),
 
     getLoginOauthServer: builder.query<UserAndToken, OauthData>({
@@ -242,6 +258,7 @@ export const {
   useGetReCommentsQuery,
   useAddRootCommentMutation,
   useAddReCommentMutation,
+  useEditCommentMutation,
   useGetLoginOauthServerQuery,
   useGetLogoutQuery,
   useGetAccessTokenQuery,

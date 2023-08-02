@@ -104,6 +104,12 @@ export type ParamForNewReComment = {
   parentCommentId: string;
 };
 
+export type ParamToEditComment = {
+  commentId: string;
+  commentContent: string;
+  isReComment: boolean;
+};
+
 type NovelDetail = {
   novelId: string;
   novelImg: string;

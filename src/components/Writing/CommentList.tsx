@@ -3,7 +3,7 @@ import { useRef, useState, useEffect } from "react";
 import { adjustCreateDate, useWhetherItIsMobile } from "utils";
 
 import { useAppDispatch, useAppSelector } from "store/hooks";
-import { setCommentIdToEditComment, setTextToEdit } from "store/clientSlices/commentSlice";
+import { setCommentToEdit } from "store/clientSlices/commentSlice";
 import {
   CommentContainer,
   CommentContent,
@@ -74,23 +74,32 @@ function CommentWritten({
   const isMobile = useWhetherItIsMobile();
 
   const loginUserName = useAppSelector((state) => state.user.loginUserInfo.userName);
-  const commentIdToEditComment = useAppSelector((state) => state.comment.commentIdToEditComment);
+  const commentToEdit = useAppSelector((state) => state.comment.commentToEdit);
 
   const isWriter = loginUserName === userName;
-  const isEdit = commentIdToEditComment === commentId;
+  const isEdit = commentToEdit.commentId === commentId;
 
   const dispatch = useAppDispatch();
 
   const handleEdit = () => {
-    dispatch(setCommentIdToEditComment(commentId));
-
-    dispatch(setTextToEdit(commentContent));
+    dispatch(
+      setCommentToEdit({
+        commentId,
+        commentContent,
+        parentUserName: parentCommentUserName || "",
+        // "" -> when it is root comment
+      }),
+    );
   };
 
   const handleCancelEdit = () => {
-    dispatch(setCommentIdToEditComment(""));
-
-    dispatch(setTextToEdit(""));
+    dispatch(
+      setCommentToEdit({
+        commentId: "",
+        commentContent: "",
+        parentUserName: "",
+      }),
+    );
   };
 
   // scroll to the parent comment of its reComment when clicking "원댓글보기"
@@ -99,13 +108,6 @@ function CommentWritten({
       commentContentRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
     }
   }, [isParentToMark]);
-
-  // remove the mark when editing a comment
-  useEffect(() => {
-    if (isEdit) {
-      setParentAndChildToMark({ parent: "", child: "" });
-    }
-  }, [commentIdToEditComment]);
 
   // scroll to exact comment component when clicking the comment in user page
   useEffect(() => {

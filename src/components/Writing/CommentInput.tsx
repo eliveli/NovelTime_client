@@ -1,7 +1,12 @@
 import { useRef, useState, useEffect } from "react";
 import { useComponentWidth, useWhetherItIsMobile, writeText } from "utils";
-import { useAddReCommentMutation, useAddRootCommentMutation } from "store/serverAPIs/novelTime";
-import { useAppSelector } from "../../store/hooks";
+import {
+  useAddReCommentMutation,
+  useAddRootCommentMutation,
+  useEditCommentMutation,
+} from "store/serverAPIs/novelTime";
+import { setCommentToEdit } from "store/clientSlices/commentSlice";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import {
   EmojiCntnr,
   EmojiIcon,
@@ -180,9 +185,12 @@ export function CommentInputOnMobile({
   getAllRootCommentPages: () => void;
 }) {
   const isRootCommentInput = !parentForNewReComment.parentCommentId;
+
   const [addReComment, addReCommentResult] = useAddReCommentMutation();
 
   const [addRootComment, addRootCommentResult] = useAddRootCommentMutation();
+
+  const [editComment, editCommentResult] = useEditCommentMutation();
 
   const loginUserId = useAppSelector((state) => state.user.loginUserInfo.userId);
 
@@ -192,9 +200,12 @@ export function CommentInputOnMobile({
   const userNameOnTextAreaRef = useRef<HTMLSpanElement>(null);
   const userNameWidth = useComponentWidth(userNameOnTextAreaRef, isRootCommentInput);
 
-  const textToEdit = useAppSelector((state) => state.comment.textToEdit);
+  const commentToEdit = useAppSelector((state) => state.comment.commentToEdit);
+  const textToEdit = commentToEdit.commentContent;
 
-  const handleSubmit = async () => {
+  const dispatch = useAppDispatch();
+
+  const handleSubmitToCreate = async () => {
     // provide a rootComment or reComment to server
     if (!loginUserId) {
       alert("먼저 로그인을 해 주세요");
@@ -235,6 +246,43 @@ export function CommentInputOnMobile({
     textRef.current.style.height = "28px";
   };
 
+  const handleSubmitToEdit = async () => {
+    // provide a rootComment or reComment to server
+    if (!loginUserId) {
+      alert("먼저 로그인을 해 주세요");
+      return;
+    }
+
+    if (!textRef.current?.value) {
+      alert("내용을 입력해 주세요");
+      return; // when comment content is empty
+    }
+
+    if (editCommentResult.isLoading) return; // prevent click while loading for prev request
+
+    await editComment({
+      commentId: commentToEdit.commentId,
+      commentContent: textRef.current?.value,
+      isReComment: !!commentToEdit.parentUserName,
+    });
+
+    if (editCommentResult.isError) {
+      alert("코멘트를 수정할 수 없습니다. 새로고침 후 다시 시도해 보세요");
+      return;
+    }
+
+    // comments will be updated depending on whether it is root comment or reComment //
+    //  when it is root comment
+    if (!commentToEdit.parentUserName) {
+      getAllRootCommentPages();
+    }
+    //  when it is reComment,
+    //  the list will be updated automatically with the invalidate and provide tags
+
+    // initialize states for editing comment
+    dispatch(setCommentToEdit({ commentId: "", commentContent: "", parentUserName: "" }));
+  };
+
   const writeCommentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -261,6 +309,7 @@ export function CommentInputOnMobile({
     // max-height : 5 lines of 124px - for Mobile
     textRef.current.style.height = `${textHeight <= 124 ? textRef.current.scrollHeight : 124}px`;
   }, [textToEdit]);
+
   return (
     <CommentInputContainerOnMobile ref={writeCommentRef} isRootCommentInput={isRootCommentInput}>
       <WriteTextCntnr>
@@ -287,7 +336,9 @@ export function CommentInputOnMobile({
         </EmojiCntnr>
       </WriteTextCntnr>
 
-      <WriteCommentSubmit onClick={handleSubmit}>작성</WriteCommentSubmit>
+      <WriteCommentSubmit onClick={textToEdit ? handleSubmitToEdit : handleSubmitToCreate}>
+        {textToEdit ? "수정" : "작성"}
+      </WriteCommentSubmit>
     </CommentInputContainerOnMobile>
   );
 }
