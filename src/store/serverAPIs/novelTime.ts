@@ -34,6 +34,7 @@ import {
   ParamForNewRootComment,
   ParamForNewReComment,
   ParamToEditComment,
+  ParamToDeleteComment,
 } from "./types";
 import type { RootState } from "../index";
 
@@ -154,6 +155,16 @@ export const novelTimeApi = createApi({
       }),
       invalidatesTags: (result, error, arg) => (arg.isReComment ? ["reCommentsUpdated"] : []),
     }),
+    deleteComment: builder.mutation<string, ParamToDeleteComment>({
+      query: ({ commentId }) => ({
+        url: "/comment/comment",
+        method: "DELETE",
+        body: {
+          commentId,
+        },
+      }),
+      invalidatesTags: (result, error, arg) => (arg.isReComment ? ["reCommentsUpdated"] : []),
+    }),
 
     getLoginOauthServer: builder.query<UserAndToken, OauthData>({
       query: (oauthData) => `/user/login/${oauthData.oauthServer}?data=${oauthData.oauthInfo}`,
@@ -259,6 +270,7 @@ export const {
   useAddRootCommentMutation,
   useAddReCommentMutation,
   useEditCommentMutation,
+  useDeleteCommentMutation,
   useGetLoginOauthServerQuery,
   useGetLogoutQuery,
   useGetAccessTokenQuery,

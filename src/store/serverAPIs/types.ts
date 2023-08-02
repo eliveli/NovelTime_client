@@ -110,6 +110,11 @@ export type ParamToEditComment = {
   isReComment: boolean;
 };
 
+export type ParamToDeleteComment = {
+  commentId: string;
+  isReComment: boolean;
+};
+
 type NovelDetail = {
   novelId: string;
   novelImg: string;

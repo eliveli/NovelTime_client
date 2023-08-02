@@ -299,9 +299,6 @@ export function RootCommentInputToEditOnTablet({
       alert("코멘트를 수정할 수 없습니다. 새로고침 후 다시 시도해 보세요");
       return;
     }
-
-    getAllRootCommentPages();
-
     // initialize comment input
     textRef.current.value = "";
     textRef.current.style.height = "28px";

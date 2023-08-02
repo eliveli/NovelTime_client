@@ -4,6 +4,7 @@ import { adjustCreateDate, useWhetherItIsMobile } from "utils";
 
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { setCommentToEdit } from "store/clientSlices/commentSlice";
+import { useDeleteCommentMutation } from "store/serverAPIs/novelTime";
 import {
   CommentContainer,
   CommentContent,
@@ -69,6 +70,8 @@ function CommentWritten({
   } = comment;
   // reComment one by one : can not set two reComment at once
 
+  const [deleteComment, deleteCommentResult] = useDeleteCommentMutation();
+
   const commentRef = useRef<HTMLDivElement>(null);
   const commentContentRef = useRef<HTMLParagraphElement>(null);
 
@@ -106,6 +109,26 @@ function CommentWritten({
       }),
     );
   };
+
+  async function handleDelete() {
+    // * ask whether you really want to delete the comment
+    // * change this after making the modal
+    if (deleteCommentResult.isLoading) return; // prevent click while loading for prev request
+
+    await deleteComment({
+      commentId,
+      isReComment: isReComment || false,
+    });
+
+    if (deleteCommentResult.isError) {
+      alert("코멘트를 삭제할 수 없습니다. 새로고침 후 다시 시도해 보세요");
+      return;
+    }
+
+    if (getAllRootCommentPages) {
+      getAllRootCommentPages(); // when deleting a root comment
+    }
+  }
 
   // scroll to the parent comment of its reComment when clicking "원댓글보기"
   useEffect(() => {
@@ -165,7 +188,7 @@ function CommentWritten({
             <CreateDate>{dateToShow}</CreateDate>
           </UserNameContainer>
           {isWriter && !isEdit && (
-            <EditAndDelete clickToEdit={handleEdit} clickToDelete={() => {}} />
+            <EditAndDelete clickToEdit={handleEdit} clickToDelete={async () => handleDelete()} />
           )}
           {isWriter && isEdit && <CancelWhenEditing clickToCancel={handleCancelEdit} />}
         </UserNameAndEditContainer>
