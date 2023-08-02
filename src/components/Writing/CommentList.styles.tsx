@@ -80,12 +80,12 @@ export const CommentContentToEdit = styled.p<{ isParentToMark: boolean }>`
 
   white-space: pre-wrap; // allow the line break
 
-  ${({ isParentToMark }) =>
-    isParentToMark && `border: 1px solid ${theme.color.mainLight}; padding: 0 5px;`}
-
   border: none;
   border-radius: 5px;
   background-color: whitesmoke;
+
+  ${({ isParentToMark }) =>
+    isParentToMark && `border: 1px solid ${theme.color.mainLight}; padding: 0 5px;`}
 `;
 
 export const CommentContent = styled.p<{ isParentToMark: boolean }>`
