@@ -17,6 +17,7 @@ import {
   CommentSort,
   CommentSortContainer,
   CreateDate,
+  DeletedComment,
   MarkParentAndChildComment,
   NextToImgContainer,
   ReCommentButtonsContainer,
@@ -67,6 +68,8 @@ function CommentWritten({
     // only for reComment. below are undefined in rootComment
     parentCommentId, // to mark parent comment when clicking its reComment
     parentCommentUserName,
+
+    isDeleted,
   } = comment;
   // reComment one by one : can not set two reComment at once
 
@@ -172,6 +175,14 @@ function CommentWritten({
     }
   }, [commentPageNo]);
 
+  if (isDeleted === 1) {
+    return (
+      <CommentContainer ref={commentRef} isReComment={isReComment}>
+        <DeletedComment isParentToMark={isParentToMark}>삭제된 코멘트입니다</DeletedComment>
+      </CommentContainer>
+    );
+  }
+
   return (
     <CommentContainer ref={commentRef} isReComment={isReComment}>
       <UserImgBox>
@@ -217,6 +228,7 @@ function CommentWritten({
             <Icon.IconBox size={15}>
               <Icon.Comment />
             </Icon.IconBox>
+
             {rootCommentSelected &&
               rootCommentSelected.rootCommentIdToShowReComments !== commentId && (
                 <ReCommentMark

@@ -34,7 +34,11 @@ export const CommentContainer = styled.div<{
   ${theme.media.mobile(`
     padding: 10px 12px 6px;
   `)}
+
   border-bottom: 1px dotted rgba(0, 0, 0, 0.1);
+
+  font-size: 15px;
+
   &:last-child {
     border-bottom: 0;
     ${({ isReComment }) =>
@@ -51,6 +55,18 @@ export const CommentContainer = styled.div<{
     border-top: 1px dotted rgba(0, 0, 0, 0.1);
     border-bottom: 0;
   `}
+`;
+
+export const DeletedComment = styled.div<{ isParentToMark: boolean }>`
+  width: 100%;
+  margin-top: 0px;
+  margin-bottom: 5px;
+  margin-left: 40px;
+  padding: 4px 6px 2px;
+
+  border-radius: 3px;
+
+  ${({ isParentToMark }) => isParentToMark && `border: 1px solid ${theme.color.mainLight};`}
 `;
 
 export const UserNameAndEditContainer = styled.div`
@@ -268,6 +284,7 @@ export type Comment = {
   userImg: Img;
   commentContent: string;
   createDate: string;
+  isDeleted: 0 | 1;
   reComment?: ReComment[];
 };
 export interface CommentListProps {
@@ -322,6 +339,8 @@ export type CommentProps = {
     // for reComment (not for rootComment)
     parentCommentId?: string;
     parentCommentUserName?: string;
+
+    isDeleted: 0 | 1;
   };
   // when reComment is props for CommentWritten
   isReComment?: true;
