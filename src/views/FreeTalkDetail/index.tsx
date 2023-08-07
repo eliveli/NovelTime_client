@@ -125,14 +125,9 @@ export default function FreeTalkDetail() {
 
   // change reComment number of its root comment after adding/editing/deleting one
   //  it can run when getting reComments without adding new one
-  //   but any won't change
+  //    then any won't change
   useEffect(() => {
-    if (!reCommentsFromServer.data || !reCommentsFromServer.data.length) {
-      // * treat later after deleting reComment(not sure if-statement is exact)
-      return;
-    }
-
-    const reCommentNo = reCommentsFromServer.data.length;
+    const reCommentNo = reCommentsFromServer.data?.length || 0;
 
     for (let i = 0; i < rootComments.length; i += 1) {
       const rootComment = rootComments[i];

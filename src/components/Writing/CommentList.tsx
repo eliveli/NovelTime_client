@@ -22,6 +22,7 @@ import {
   DeletedCommentFirstLineContainer,
   DeletedCommentNumberContainer,
   LeftSpaceOfDeletedComment,
+  MarkForEdited,
   MarkParentAndChildComment,
   NextToImgContainer,
   ReCommentButtonsContainer,
@@ -79,6 +80,7 @@ function CommentWritten({
     parentCommentUserName,
 
     isDeleted,
+    isEdited,
   } = comment;
   // reComment one by one : can not set two reComment at once
 
@@ -276,6 +278,7 @@ function CommentWritten({
             <CommentContent ref={commentContentRef} isParentToMark={isParentToMark}>
               <ReCommentUser>{`@${parentCommentUserName as string} `}</ReCommentUser>
               {commentContent}
+              {!!isEdited && <MarkForEdited>수정됨</MarkForEdited>}
             </CommentContent>
           )}
 
@@ -353,6 +356,7 @@ function CommentWritten({
         {!isEdit && (
           <CommentContent ref={commentContentRef} isParentToMark={isParentToMark}>
             {commentContent}
+            {isEdited === 1 && <MarkForEdited>수정됨</MarkForEdited>}
           </CommentContent>
         )}
 

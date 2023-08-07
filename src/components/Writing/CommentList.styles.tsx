@@ -138,6 +138,13 @@ export const CreateDate = styled.span`
   margin-left: 10px;
   font-size: 14px;
 `;
+
+export const MarkForEdited = styled.span`
+  margin-left: 10px;
+  font-size: 14px;
+  color: darkgray;
+`;
+
 export const CommentContentToEdit = styled.p<{ isParentToMark: boolean }>`
   margin: 0 0 3px;
 
@@ -332,6 +339,7 @@ export type Comment = {
   commentContent: string;
   createDate: string;
   isDeleted: 0 | 1;
+  isEdited: 0 | 1;
   reComment?: ReComment[];
 };
 export interface CommentListProps {
@@ -388,6 +396,7 @@ export type CommentProps = {
     parentCommentUserName?: string;
 
     isDeleted: 0 | 1;
+    isEdited: 0 | 1;
   };
   // when reComment is props for CommentWritten
   isReComment?: true;

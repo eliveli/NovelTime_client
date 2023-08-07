@@ -153,6 +153,7 @@ export type Comment = {
   // only root comments have this property
   // it is necessary to divide between root comment and reComment
   isDeleted: 0 | 1;
+  isEdited: 0 | 1;
 };
 
 type ReComment = {
@@ -167,6 +168,7 @@ type ReComment = {
   parentCommentId: string;
   parentCommentUserName: string;
   isDeleted: 0 | 1;
+  isEdited: 0 | 1;
 };
 
 export type CommentList = { commentList: Comment[]; hasNext: boolean };
