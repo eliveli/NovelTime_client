@@ -19,7 +19,9 @@ import {
   CreateDate,
   DeletedComment,
   DeletedCommentContainer,
+  DeletedCommentFirstLineContainer,
   DeletedCommentNumberContainer,
+  LeftSpaceOfDeletedComment,
   MarkParentAndChildComment,
   NextToImgContainer,
   ReCommentButtonsContainer,
@@ -180,7 +182,12 @@ function CommentWritten({
   if (isDeleted === 1) {
     return (
       <DeletedCommentContainer ref={commentRef} isReComment={isReComment}>
-        <DeletedComment isParentToMark={isParentToMark}>삭제된 코멘트입니다</DeletedComment>
+        <DeletedCommentFirstLineContainer>
+          <LeftSpaceOfDeletedComment />
+          <DeletedComment isParentToMark={isParentToMark} hasReComment={!!reCommentNo}>
+            삭제된 코멘트입니다
+          </DeletedComment>
+        </DeletedCommentFirstLineContainer>
 
         {!!reCommentNo && (
           <DeletedCommentNumberContainer>

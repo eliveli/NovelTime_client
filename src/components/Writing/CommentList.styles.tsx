@@ -89,16 +89,27 @@ export const DeletedCommentContainer = styled.div<{
   `}
 `;
 
-export const DeletedComment = styled.div<{ isParentToMark: boolean }>`
+export const DeletedCommentFirstLineContainer = styled.div`
+  display: flex;
+`;
+
+export const LeftSpaceOfDeletedComment = styled.div`
+  width: 40px;
+`;
+
+export const DeletedComment = styled.div<{ isParentToMark: boolean; hasReComment: boolean }>`
   width: 100%;
-  margin-top: 0px;
-  margin-bottom: 1px;
-  margin-left: 40px;
+
   padding: 4px 6px 2px;
 
   border-radius: 3px;
 
+  ${({ hasReComment }) => hasReComment && `padding: 4px 6px 4px;`}
+
   ${({ isParentToMark }) => isParentToMark && `border: 1px solid ${theme.color.mainLight};`}
+  
+
+  ${theme.media.tablet(`margin-top: -5px;`)}
 `;
 
 export const DeletedCommentNumberContainer = styled.div`
