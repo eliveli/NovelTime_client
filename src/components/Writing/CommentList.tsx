@@ -42,24 +42,29 @@ import {
 import { CancelWhenEditing, EditAndDelete } from "./EditAndDelete";
 
 function CommentWritten({
-  isFirstComment,
+  comment, // it includes both root comment and reComment
+  reCommentsOfRootComment,
+
+  isReComment,
+  itsRootCommentWasDeleted, // a reComment's root comment was deleted
+
+  // for displaying reComments when clicking "답글 보기(or 몇 개)" in their root comment
+  rootCommentSelected,
+  // for writing a new reComment
+  parentCommentForNewReComment: { parentForNewReComment, setParentForNewReComment },
+  // for clicking "원댓글보기" that matches a reComment with its parent
+  parentAndChildCommentToMark: { parentAndChildToMark, setParentAndChildToMark },
+  //   note. the parent might be a root comment or reComment in a root comment
+
+  // when adding a comment //
+  talkId,
+  novelTitle,
   commentPageNo,
+  isFirstComment,
   getAllRootCommentPages,
   commentSortType,
 
-  isReComment,
-  comment,
-  commentIdForScroll,
-
-  parentCommentForNewReComment: { parentForNewReComment, setParentForNewReComment },
-
-  parentAndChildCommentToMark: { parentAndChildToMark, setParentAndChildToMark },
-
-  reCommentsOfRootComment,
-  rootCommentSelected,
-
-  talkId,
-  novelTitle,
+  commentIdForScroll, // when going to the talk with comment page from user page
 }: CommentProps) {
   const {
     commentId,
@@ -245,6 +250,85 @@ function CommentWritten({
     );
   }
 
+  if (isReComment) {
+    return (
+      <CommentContainer ref={commentRef} isReComment={isReComment}>
+        <UserImgBox>
+          <UserImg userImg={userImg} />
+        </UserImgBox>
+        <NextToImgContainer>
+          <UserNameAndEditContainer>
+            <UserNameContainer>
+              <UserName
+                isParentToWriteReComment={commentId === parentForNewReComment.parentCommentId}
+              >
+                {userName}
+              </UserName>
+              <CreateDate>{dateToShow}</CreateDate>
+            </UserNameContainer>
+            {isWriter && !isEdit && (
+              <EditAndDelete clickToEdit={handleEdit} clickToDelete={async () => handleDelete()} />
+            )}
+            {isWriter && isEdit && <CancelWhenEditing clickToCancel={handleCancelEdit} />}
+          </UserNameAndEditContainer>
+
+          {!isEdit && (
+            <CommentContent ref={commentContentRef} isParentToMark={isParentToMark}>
+              <ReCommentUser>{`@${parentCommentUserName as string} `}</ReCommentUser>
+              {commentContent}
+            </CommentContent>
+          )}
+
+          {isEdit && isMobile && (
+            <CommentContentToEdit ref={commentContentRef} isParentToMark={isParentToMark}>
+              <ReCommentUser>{`@${parentCommentUserName as string} `}</ReCommentUser>
+              {commentContent}
+            </CommentContentToEdit>
+          )}
+
+          {isEdit && !isMobile && <ReCommentInputToEditOnTablet />}
+
+          <ReCommentButtonsContainer>
+            <ReCommentMarkContainer>
+              {/* not allow to write reComment when its root comment was deleted */}
+              {itsRootCommentWasDeleted === false && (
+                <>
+                  <Icon.IconBox size={15}>
+                    <Icon.Comment />
+                  </Icon.IconBox>
+                  <ReCommentMark
+                    onClick={() => {
+                      setParentForNewReComment({
+                        parentCommentId: commentId,
+                        parentCommentUserName: userName,
+                      });
+
+                      setParentAndChildToMark({ parent: "", child: "" });
+                    }}
+                  >
+                    답글 쓰기
+                  </ReCommentMark>
+                </>
+              )}
+            </ReCommentMarkContainer>
+
+            {isReComment && parentCommentId && (
+              <MarkParentAndChildComment
+                childComment={parentAndChildToMark.child}
+                currentComment={commentId}
+                onClick={() =>
+                  setParentAndChildToMark({ parent: parentCommentId, child: commentId })
+                }
+              >
+                원댓글보기
+              </MarkParentAndChildComment>
+            )}
+          </ReCommentButtonsContainer>
+        </NextToImgContainer>
+      </CommentContainer>
+    );
+  }
+
   return (
     <CommentContainer ref={commentRef} isReComment={isReComment}>
       <UserImgBox>
@@ -268,20 +352,17 @@ function CommentWritten({
 
         {!isEdit && (
           <CommentContent ref={commentContentRef} isParentToMark={isParentToMark}>
-            {isReComment && <ReCommentUser>{`@${parentCommentUserName as string} `}</ReCommentUser>}
             {commentContent}
           </CommentContent>
         )}
 
         {isEdit && isMobile && (
           <CommentContentToEdit ref={commentContentRef} isParentToMark={isParentToMark}>
-            {isReComment && <ReCommentUser>{`@${parentCommentUserName as string} `}</ReCommentUser>}
             {commentContent}
           </CommentContentToEdit>
         )}
 
-        {isEdit && isReComment && !isMobile && <ReCommentInputToEditOnTablet />}
-        {isEdit && !isReComment && !isMobile && getAllRootCommentPages && (
+        {isEdit && !isMobile && getAllRootCommentPages && (
           <RootCommentInputToEditOnTablet getAllRootCommentPages={getAllRootCommentPages} />
         )}
 
@@ -327,32 +408,7 @@ function CommentWritten({
                   답글 접기
                 </ReCommentMark>
               )}
-
-            {isReComment && (
-              <ReCommentMark
-                onClick={() => {
-                  setParentForNewReComment({
-                    parentCommentId: commentId,
-                    parentCommentUserName: userName,
-                  });
-
-                  setParentAndChildToMark({ parent: "", child: "" });
-                }}
-              >
-                답글 쓰기
-              </ReCommentMark>
-            )}
           </ReCommentMarkContainer>
-
-          {isReComment && parentCommentId && (
-            <MarkParentAndChildComment
-              childComment={parentAndChildToMark.child}
-              currentComment={commentId}
-              onClick={() => setParentAndChildToMark({ parent: parentCommentId, child: commentId })}
-            >
-              원댓글보기
-            </MarkParentAndChildComment>
-          )}
         </ReCommentButtonsContainer>
 
         {!!reCommentsOfRootComment?.length &&
@@ -364,6 +420,7 @@ function CommentWritten({
               commentIdForScroll={commentIdForScroll}
               parentCommentForNewReComment={{ parentForNewReComment, setParentForNewReComment }}
               parentAndChildCommentToMark={{ parentAndChildToMark, setParentAndChildToMark }}
+              itsRootCommentWasDeleted={!!isDeleted}
               talkId={talkId}
               novelTitle={novelTitle}
             />

@@ -425,6 +425,9 @@ export type CommentProps = {
     rootCommentIdToShowReComments: string;
     setRootCommentIdToShowReComments: React.Dispatch<React.SetStateAction<string>>;
   };
+
+  itsRootCommentWasDeleted?: boolean;
+
   talkId: string;
   novelTitle: string;
 };
