@@ -18,6 +18,8 @@ import {
   CommentSortContainer,
   CreateDate,
   DeletedComment,
+  DeletedCommentContainer,
+  DeletedCommentNumberContainer,
   MarkParentAndChildComment,
   NextToImgContainer,
   ReCommentButtonsContainer,
@@ -177,9 +179,72 @@ function CommentWritten({
 
   if (isDeleted === 1) {
     return (
-      <CommentContainer ref={commentRef} isReComment={isReComment}>
+      <DeletedCommentContainer ref={commentRef} isReComment={isReComment}>
         <DeletedComment isParentToMark={isParentToMark}>삭제된 코멘트입니다</DeletedComment>
-      </CommentContainer>
+
+        {!!reCommentNo && (
+          <DeletedCommentNumberContainer>
+            <ReCommentButtonsContainer>
+              <ReCommentMarkContainer>
+                <Icon.IconBox size={15}>
+                  <Icon.Comment />
+                </Icon.IconBox>
+
+                {rootCommentSelected &&
+                  rootCommentSelected.rootCommentIdToShowReComments !== commentId && (
+                    <ReCommentMark
+                      onClick={() => {
+                        // display reComments of this root comment
+                        rootCommentSelected.setRootCommentIdToShowReComments(commentId);
+
+                        setParentForNewReComment({
+                          parentCommentId: commentId,
+                          parentCommentUserName: userName,
+                        });
+
+                        setParentAndChildToMark({ parent: "", child: "" });
+                      }}
+                    >
+                      {`답글 ${reCommentNo}`}
+                    </ReCommentMark>
+                  )}
+
+                {rootCommentSelected &&
+                  rootCommentSelected.rootCommentIdToShowReComments === commentId && (
+                    <ReCommentMark
+                      onClick={() => {
+                        rootCommentSelected.setRootCommentIdToShowReComments("");
+
+                        setParentForNewReComment({
+                          parentCommentId: "",
+                          parentCommentUserName: "",
+                        });
+
+                        setParentAndChildToMark({ parent: "", child: "" });
+                      }}
+                    >
+                      답글 접기
+                    </ReCommentMark>
+                  )}
+              </ReCommentMarkContainer>
+            </ReCommentButtonsContainer>
+
+            {!!reCommentsOfRootComment?.length &&
+              reCommentsOfRootComment.map((_) => (
+                <CommentWritten
+                  key={_.commentId}
+                  isReComment
+                  comment={{ ..._ }}
+                  commentIdForScroll={commentIdForScroll}
+                  parentCommentForNewReComment={{ parentForNewReComment, setParentForNewReComment }}
+                  parentAndChildCommentToMark={{ parentAndChildToMark, setParentAndChildToMark }}
+                  talkId={talkId}
+                  novelTitle={novelTitle}
+                />
+              ))}
+          </DeletedCommentNumberContainer>
+        )}
+      </DeletedCommentContainer>
     );
   }
 
