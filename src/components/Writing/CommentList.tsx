@@ -204,11 +204,6 @@ function CommentWritten({
                         // display reComments of this root comment
                         rootCommentSelected.setRootCommentIdToShowReComments(commentId);
 
-                        setParentForNewReComment({
-                          parentCommentId: commentId,
-                          parentCommentUserName: userName,
-                        });
-
                         setParentAndChildToMark({ parent: "", child: "" });
                       }}
                     >
@@ -221,11 +216,6 @@ function CommentWritten({
                     <ReCommentMark
                       onClick={() => {
                         rootCommentSelected.setRootCommentIdToShowReComments("");
-
-                        setParentForNewReComment({
-                          parentCommentId: "",
-                          parentCommentUserName: "",
-                        });
 
                         setParentAndChildToMark({ parent: "", child: "" });
                       }}
