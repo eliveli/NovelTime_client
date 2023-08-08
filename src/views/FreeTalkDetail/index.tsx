@@ -164,7 +164,11 @@ export default function FreeTalkDetail() {
         <BoardMark>Let's Free Talk about Novel!</BoardMark>
         <TalkDetail detailTalk={talk.data.talk} />
         <NovelInWriting novel={talk.data.novel} />
-        <LikeAndShare isLike={talk.data.talk.isLike} likeNO={talk.data.talk.likeNO} />
+        <LikeAndShare
+          isLike={talk.data.talk.isLike}
+          likeNO={talk.data.talk.likeNO}
+          writingId={talk.data.talk.talkId}
+        />
       </WritingDetailContainer>
       <ContentAnimation isTalkComnt>
         {!!rootComments.length && (

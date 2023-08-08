@@ -433,8 +433,9 @@ export interface ParamsOfUserNovelList {
 export interface ContentOfLike {
   contentType: "writing" | "novelList";
   contentId: string;
-  isOthersListOfLoginUser: boolean;
+  isOthersListOfLoginUser?: boolean;
 }
 export interface IsLike {
-  isLike: boolean;
+  isLike: boolean; // for both writing and novelList
+  likeNo?: number; // only for writing content
 }

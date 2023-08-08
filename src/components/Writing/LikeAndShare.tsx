@@ -1,16 +1,14 @@
 import theme, { styled } from "assets/styles/theme";
 import Icon from "assets/Icon";
+import { useToggleLikeMutation } from "store/serverAPIs/novelTime";
+import { useAppSelector } from "store/hooks";
 
 type Props = React.PropsWithChildren<{
   isLike: boolean;
   likeNO: number;
+  writingId: string;
 }>;
-// when with NovelInfo
-const Container = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
+
 const IconContainer = styled.div`
   display: flex;
   align-items: flex-end;
@@ -32,14 +30,44 @@ const LikeNumber = styled.span`
   margin-right: 20px;
   margin-left: 5px;
 `;
-export default function LikeAndShare({ isLike, likeNO }: Props) {
+export default function LikeAndShare({ isLike, likeNO, writingId }: Props) {
+  const loginUserId = useAppSelector((state) => state.user.loginUserInfo.userId);
+
+  const [toggleLike, toggleLikeResult] = useToggleLikeMutation();
+
+  const isLikeSet = toggleLikeResult.data?.isLike || isLike;
+  const likeNoSet =
+    toggleLikeResult.data?.likeNo !== undefined ? toggleLikeResult.data.likeNo : likeNO;
+
+  const toggleLikeRequest = async () => {
+    try {
+      if (!loginUserId) {
+        alert("좋아요를 누르려면 로그인을 해 주세요.");
+        return;
+      }
+
+      if (toggleLikeResult.isLoading) return; // prevent click event as loading
+
+      await toggleLike({
+        contentType: "writing",
+        contentId: writingId,
+      });
+    } catch (error) {
+      console.log("Failed to toggle LIKE:", error);
+    }
+  };
+
   return (
     <IconContainer>
-      <IconBox>
-        {isLike && <FillHeartIcon />}
-        {!isLike && <HeartIcon />}
+      <IconBox
+        onClick={async () => {
+          await toggleLikeRequest();
+        }}
+      >
+        {isLikeSet && <FillHeartIcon />}
+        {!isLikeSet && <HeartIcon />}
       </IconBox>
-      <LikeNumber>{likeNO}</LikeNumber>
+      <LikeNumber>{likeNoSet}</LikeNumber>
       <IconBox size={23}>
         <ShareIcon />
       </IconBox>

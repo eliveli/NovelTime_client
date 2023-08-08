@@ -213,11 +213,15 @@ export const novelTimeApi = createApi({
       providesTags: ["ListTitlesUpdated"],
     }),
     toggleLike: builder.mutation<IsLike, ContentOfLike>({
-      query: (contentForLike) => ({
-        // /userContent/   << should I add this in front of the following url?
-        url: `/toggleLike/${contentForLike.contentType}/${contentForLike.contentId}`,
-        method: "PUT",
-      }),
+      query: (contentForLike) => {
+        const routeName = contentForLike.contentType === "writing" ? "writing" : "userContent";
+
+        return {
+          url: `${routeName}/toggleLike/${contentForLike.contentType}/${contentForLike.contentId}`,
+
+          method: "PUT",
+        };
+      },
       invalidatesTags: (result, error, arg) => {
         if (arg.isOthersListOfLoginUser) {
           // do not invalidate tag of "contentUpdatedInNovelList" not to refetch current list
