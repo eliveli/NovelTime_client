@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { useCloseOutsideClick, useMultipleSearchFilters, useSearchFilter } from "utils";
+import { useCloseOutsideClick } from "utils";
+import { useSearchFilter, useMultipleSearchFilters } from "utils/useSearchFilterForWriting";
 import { GenresFromFilter, setSortTypes } from "store/clientSlices/filterSlice";
 import { useAppDispatch } from "../../store/hooks";
 import { openModal } from "../../store/clientSlices/modalSlice";

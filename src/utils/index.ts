@@ -15,7 +15,6 @@ import {
   matchFilterNames,
 } from "./matchName";
 import checkIsNearBottom from "./checkIsNearBottom";
-import { useSearchFilter, useMultipleSearchFilters } from "./useSearchFilter";
 import useSearchListWithInfntScroll from "./useSearchListWithInfntScroll";
 import useResetFiltersFromUrl from "./useResetFiltersFromUrl";
 import adjustCreateDate from "./adjustCreateDate";
@@ -26,8 +25,6 @@ export {
   useResetFiltersFromUrl,
   useSearchListWithInfntScroll,
   checkIsNearBottom,
-  useSearchFilter,
-  useMultipleSearchFilters,
   matchPlatformName,
   matchGenreName,
   matchSortTypeName,

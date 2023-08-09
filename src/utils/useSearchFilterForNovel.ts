@@ -1,41 +1,29 @@
 import { useSearchParams } from "react-router-dom";
-import { setListType, setSearchList } from "store/clientSlices/filterSlice";
+import { setSearchList } from "store/clientSlices/filterSlice";
 import { useAppDispatch, useAppSelector } from "store/hooks";
-import { RECOMMEND_LIST, TALK_LIST } from "./pathname";
+import { SEARCH_NOVEL } from "./pathname";
 
-type FilterType = "genre" | "searchType" | "searchWord" | "sortType" | "pageNo";
+type FilterType = "searchType" | "searchWord" | "pageNo";
 
-type KeyOfFilters =
-  | "currentGenre"
-  | "currentSearchType"
-  | "currentSearchWord"
-  | "currentSortType"
-  | "currentPageNo";
+type KeyOfFilters = "currentSearchType" | "currentSearchWord" | "currentPageNo";
 
 type CurrentFilters = { [key in KeyOfFilters]: string };
-
-type FiltersInState = { [key in FilterType]: string | number };
 
 // treat multiple search filter at once for both pagination and infinite scroll
 export function useMultipleSearchFilters() {
   const { pathname, search } = window.location;
 
-  const listType = setListType();
-
   const isForPagination = search !== "";
 
-  const talkFiltersFromState = useAppSelector((state) => state.filter.talk.filters);
-  const recommendFiltersFromState = useAppSelector((state) => state.filter.recommend.filters);
+  const novelFiltersFromState = useAppSelector((state) => state.filter.novel.filters);
 
   const dispatch = useAppDispatch();
   const [searchParams, setSearchParams] = useSearchParams();
 
   // get current filters //
   const currentFilters: CurrentFilters = {
-    currentGenre: "",
     currentSearchType: "",
     currentSearchWord: "",
-    currentSortType: "",
     currentPageNo: "0",
   };
 
@@ -65,15 +53,14 @@ export function useMultipleSearchFilters() {
     });
   };
 
-  if ([TALK_LIST, RECOMMEND_LIST].includes(pathname)) {
+  if (pathname === SEARCH_NOVEL) {
     if (isForPagination) {
-      getFiltersFromUrl(["genre", "searchType", "searchWord", "sortType", "pageNo"]);
-    } else if (TALK_LIST === pathname) {
-      getFiltersFromState(talkFiltersFromState);
-    } else if (RECOMMEND_LIST === pathname) {
-      getFiltersFromState(recommendFiltersFromState);
+      getFiltersFromUrl(["searchType", "searchWord", "pageNo"]);
+    } else {
+      getFiltersFromState(novelFiltersFromState);
     }
   }
+
   // set next filters //
   const setFilterForPagi = (filter: string, nextValue: any) => {
     searchParams.set(filter, String(nextValue));
@@ -81,25 +68,23 @@ export function useMultipleSearchFilters() {
 
   const checkForFilterInCertainPath = (filter: string, pathForInfntScroll?: string) => {
     // if pathForInfntScroll exists then check for it
-    if ([TALK_LIST, RECOMMEND_LIST].includes(String(pathForInfntScroll))) {
-      return ["genre", "searchType", "searchWord", "sortType", "pageNo"].includes(filter);
+    if (SEARCH_NOVEL === String(pathForInfntScroll)) {
+      return ["searchType", "searchWord", "pageNo"].includes(filter);
     }
 
-    if ([TALK_LIST, RECOMMEND_LIST].includes(pathname)) {
-      return ["genre", "searchType", "searchWord", "sortType", "pageNo"].includes(filter);
+    if (SEARCH_NOVEL === pathname) {
+      return ["searchType", "searchWord", "pageNo"].includes(filter);
     }
   };
 
   const setFilterForInfntScroll = (nextFiltersToSet: { [key: string]: any }) => {
-    dispatch(setSearchList({ listType, filters: nextFiltersToSet }));
+    dispatch(setSearchList({ listType: "novel", filters: nextFiltersToSet }));
   };
 
   const setFilters = (
     filtersToSet: {
-      genre?: string;
       searchType?: string;
       searchWord?: string;
-      sortType?: string;
       pageNo?: number;
     },
     pathForInfntScroll?: string,
@@ -142,21 +127,16 @@ export function useMultipleSearchFilters() {
 export function useSearchFilter(filterType: FilterType) {
   const { pathname, search } = window.location;
 
-  const listType = setListType();
-
   const isForPagination = search !== "";
 
-  const talkFiltersFromState = useAppSelector((state) => state.filter.talk.filters);
-  const recommendFiltersFromState = useAppSelector((state) => state.filter.recommend.filters);
+  const novelFiltersFromState = useAppSelector((state) => state.filter.novel.filters);
 
   const dispatch = useAppDispatch();
   const [searchParams, setSearchParams] = useSearchParams();
 
   // check whether the filter is correct in current path
-  if ([TALK_LIST, RECOMMEND_LIST].includes(pathname)) {
-    const isCorrectFilter = ["genre", "searchType", "searchWord", "sortType", "pageNo"].includes(
-      filterType,
-    );
+  if (SEARCH_NOVEL === pathname) {
+    const isCorrectFilter = ["searchType", "searchWord", "pageNo"].includes(filterType);
 
     if (!isCorrectFilter) throw Error("incorrect filter in current search list");
   }
@@ -165,12 +145,8 @@ export function useSearchFilter(filterType: FilterType) {
   let currentFilter = "";
 
   const getFilterFromState = () => {
-    if (TALK_LIST === pathname) {
-      currentFilter = String(talkFiltersFromState[filterType]);
-      return;
-    }
-    if (RECOMMEND_LIST === pathname) {
-      currentFilter = String(recommendFiltersFromState[filterType]);
+    if (pathname === SEARCH_NOVEL) {
+      currentFilter = String(novelFiltersFromState[filterType]);
       return;
     }
 
@@ -200,7 +176,7 @@ export function useSearchFilter(filterType: FilterType) {
   };
 
   const setFilterForInfntScroll = (nextValue: string | number) => {
-    dispatch(setSearchList({ listType, filters: { [filterType]: nextValue } }));
+    dispatch(setSearchList({ listType: "novel", filters: { [filterType]: nextValue } }));
   };
 
   const setFilter = (nextValue: string | number) => {

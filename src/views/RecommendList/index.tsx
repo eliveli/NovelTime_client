@@ -2,12 +2,9 @@ import React from "react";
 import MainBG from "components/MainBG";
 import Filter from "components/Filter";
 import { useGetWritingsFilteredQuery } from "store/serverAPIs/novelTime";
-import {
-  useSearchListWithInfntScroll,
-  useResetFiltersFromUrl,
-  useMultipleSearchFilters,
-  matchFilterNames,
-} from "utils";
+import { useSearchListWithInfntScroll, useResetFiltersFromUrl, matchFilterNames } from "utils";
+import { useMultipleSearchFilters } from "utils/useSearchFilterForWriting";
+
 import PageNOs from "components/PageNOs";
 import { useAppSelector } from "store/hooks";
 import Recommend from "./RecommendList.components";

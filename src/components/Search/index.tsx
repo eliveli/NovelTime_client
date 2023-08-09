@@ -1,6 +1,6 @@
-// import {} from "./Search.components";
 import { useEffect, useRef, useState } from "react";
-import { useCloseOutsideClick, useMultipleSearchFilters, useSearchFilter } from "utils";
+import { useCloseOutsideClick } from "utils";
+import { useSearchFilter, useMultipleSearchFilters } from "utils/useSearchFilterForWriting";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import {
   setSearchTextCtgr,

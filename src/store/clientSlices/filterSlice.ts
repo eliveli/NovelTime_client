@@ -6,6 +6,7 @@ export const setListType = () => {
   const { pathname } = window.location;
   if (pathname === TALK_LIST) return "talk";
   if (pathname === RECOMMEND_LIST) return "recommend";
+
   throw Error("pathname error when setting list type");
 };
 
@@ -43,8 +44,6 @@ export type SortTypeFromFilter =
   | "좋아요Up"
   | "좋아요Down";
 
-type FilterType = "genre" | "searchType" | "searchWord" | "sortType" | "pageNo";
-
 type Filters = {
   genre: GenresFromFilter;
   searchType: SearchTypeFromFilter;
@@ -53,12 +52,20 @@ type Filters = {
   pageNo: number;
 };
 
-export type IsFilterState = {
-  genre: GenresFromFilter;
-  searchType: SearchTypeFromFilter;
+type FiltersForSearchNovel = {
+  searchType: "Title" | "Desc" | "Author";
   searchWord: string;
   pageNo: number;
+};
 
+type FiltersForSearchAll = {
+  searchCategory: "Novel" | "Talk" | "Recommend";
+  searchType: "Title" | "Desc" | "Author" | "Text" | "Writer";
+  searchWord: string;
+  pageNo: number;
+};
+
+export type IsFilterState = {
   // to treat back page
   talk: {
     filters: Filters;
@@ -66,10 +73,12 @@ export type IsFilterState = {
   };
   recommend: { filters: Filters; list?: any[] };
 
+  novel: { filters: FiltersForSearchNovel; list?: any[] };
+
+  searchAll: { filters: FiltersForSearchAll; list?: any[] };
+
   // need to change
-  novel: { filters: Filters; list?: any[] };
   sortOnly: { filters: Filters; list?: any[] }; // let's talk and play in 소설 상세 페이지
-  all: { filters: Filters; list?: any[] }; // search for writings or novels in nav
   //
 
   searchTextCtgr: string;
@@ -78,12 +87,6 @@ export type IsFilterState = {
 };
 
 const initialState: IsFilterState = {
-  genre: "All",
-  searchType: "Title",
-  searchWord: "",
-  pageNo: 1,
-
-  //
   talk: {
     filters: {
       genre: "All",
@@ -104,29 +107,26 @@ const initialState: IsFilterState = {
     },
     list: undefined,
   },
-
-  // need to change
   novel: {
     filters: {
-      genre: "All",
       searchType: "Title",
       searchWord: "",
-      sortType: "작성일New",
       pageNo: 1,
     },
     list: undefined,
   },
-  sortOnly: {
+  searchAll: {
     filters: {
-      genre: "All",
+      searchCategory: "Novel",
       searchType: "Title",
       searchWord: "",
-      sortType: "작성일New",
       pageNo: 1,
     },
     list: undefined,
   },
-  all: {
+
+  // need to change
+  sortOnly: {
     filters: {
       genre: "All",
       searchType: "Title",
@@ -148,36 +148,10 @@ export const filterSlice = createSlice({
   name: "filter",
   initialState,
   reducers: {
-    selectGenre: (state, action: PayloadAction<GenresFromFilter>) => {
-      // 현재와 다른 필터를 눌렀을 때만 페이지넘버 1로 리셋
-      if (state.genre !== action.payload) {
-        state.pageNo = 1;
-      }
-
-      state.genre = action.payload;
-    },
-    selectSearchType: (state, action: PayloadAction<SearchTypeFromFilter>) => {
-      if (state.searchType !== action.payload) {
-        state.pageNo = 1;
-      }
-
-      state.searchType = action.payload;
-    },
-    setSearchWord: (state, action: PayloadAction<string>) => {
-      if (state.searchWord !== action.payload) {
-        state.pageNo = 1;
-      }
-
-      state.searchWord = action.payload;
-    },
-    setPageNo: (state, action: PayloadAction<number>) => {
-      state.pageNo = action.payload;
-    },
-
     setSearchList: (
       state,
       action: PayloadAction<{
-        listType: "talk" | "recommend" | "novel" | "sortOnly" | "all";
+        listType: "talk" | "recommend" | "novel" | "searchAll" | "sortOnly";
         filters?: { [key: string]: string | number };
         list?: any[] | "reset";
       }>,
@@ -201,14 +175,6 @@ export const filterSlice = createSlice({
     setSearchContentCtgr: (state, action: PayloadAction<string>) => {
       state.searchContentCtgr = action.payload;
     },
-    // now this is not necessary
-    getNovelBySearch: (
-      state,
-      action: PayloadAction<{ srchNovelId: string; srchNovelTitle: string }>,
-    ) => {
-      state.searchNovel = action.payload;
-    },
-
     // Redux Toolkit allows us to write "mutating" logic in reducers. It
     // doesn't actually mutate the state because it uses the Immer library,
     // which detects changes to a "draft state" and produces a brand new
@@ -218,16 +184,10 @@ export const filterSlice = createSlice({
 
 // Action creators are generated for each case reducer function
 export const {
-  selectGenre,
-  selectSearchType,
-  setSearchWord,
-  setPageNo,
-
   setSearchList,
 
   setSearchTextCtgr,
   setSearchContentCtgr,
-  getNovelBySearch,
 } = filterSlice.actions;
 
 export default filterSlice.reducer;

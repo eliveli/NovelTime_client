@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useSearchFilter } from "utils";
+import { useSearchFilter } from "utils/useSearchFilterForWriting";
 import Search from "../Search";
 import { SearchBtn, Genres, SortMobile, SortTablet } from "./Filter.components";
 import {

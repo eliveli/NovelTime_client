@@ -17,7 +17,8 @@ import {
   logoPC,
 } from "assets/images";
 import Icon from "assets/Icon";
-import { useMultipleSearchFilters } from "utils";
+import { useMultipleSearchFilters } from "utils/useSearchFilterForWriting";
+
 import { ADD_WRITING, MESSAGE_LIST, NOVEL_LIST, RECOMMEND_LIST, TALK_LIST } from "utils/pathname";
 import { setListType, setSearchList } from "store/clientSlices/filterSlice";
 import { filterContent, openModal, setLikeNovel } from "../../store/clientSlices/modalSlice";

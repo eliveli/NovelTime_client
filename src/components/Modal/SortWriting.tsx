@@ -1,6 +1,7 @@
 import { setSortTypes } from "store/clientSlices/filterSlice";
 import { closeModal } from "store/clientSlices/modalSlice";
-import { useMultipleSearchFilters } from "utils";
+import { useMultipleSearchFilters } from "utils/useSearchFilterForWriting";
+
 import { useAppDispatch } from "../../store/hooks";
 
 import { MobileBG, SortBox, SortText, ClosingSpace } from "./Modal.styles";

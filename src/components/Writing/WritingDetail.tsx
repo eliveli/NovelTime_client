@@ -50,7 +50,6 @@ interface RecommendProps {
     recommendImg: string;
   };
 }
-function Comment() {}
 
 export function TalkDetail({ detailTalk }: TalkProps) {
   const {
