@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useSearchFilter } from "utils";
 import Search from "../Search";
 import { SearchBtn, Genres, SortMobile, SortTablet } from "./Filter.components";
@@ -10,7 +10,7 @@ import {
   FilterBG,
 } from "./Filter.styles";
 
-export default function Filter() {
+export default function Filter({ children }: { children?: React.ReactNode }) {
   // get writing name
   const { pathname } = window.location;
   const writing = pathname.includes("talk") ? "FreeTalk" : "Recommend";
@@ -45,10 +45,12 @@ export default function Filter() {
   return (
     <FilterBG>
       <Genres />
+
       {/* sort with search-button */}
       <ContainerWithSrchAlarm isSearch={isSearch}>
         {isSearch && <SearchAlarm>{`Search for ${writing} about Novel!`}</SearchAlarm>}
         <ContainerWithSrchBtn>
+          {children}
           <SortMobile />
           <SortTablet isSearch={isSearch} />
           <SearchBtn isSearch={isSearch} handleSearch={handleSearch} />

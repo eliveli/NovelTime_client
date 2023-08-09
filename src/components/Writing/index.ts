@@ -14,6 +14,7 @@ import {
   RootCommentInputToEditOnTablet,
 } from "./CommentInput";
 import { EditAndDelete, CancelWhenEditing } from "./EditAndDelete";
+import WritingButton from "./WritingButton";
 
 export {
   WritingDetailContainer,
@@ -32,4 +33,5 @@ export {
   RootCommentInputToEditOnTablet,
   EditAndDelete,
   CancelWhenEditing,
+  WritingButton,
 };

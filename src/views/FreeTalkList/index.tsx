@@ -10,6 +10,7 @@ import {
 } from "utils";
 import PageNOs from "components/PageNOs";
 import { useAppSelector } from "store/hooks";
+import { WritingButton } from "components/Writing";
 import FreeTalk from "./FreeTalkList.components";
 
 export default function FreeTalkList() {
@@ -57,13 +58,13 @@ export default function FreeTalkList() {
 
   return (
     <MainBG>
-      <Filter />
+      <Filter>
+        <WritingButton />
+      </Filter>
       {!isForPagination &&
         listForInfntScroll?.map((talk) => <FreeTalk key={talk.talkId} talk={talk} />)}
-
       {/* for tablet and pc */}
       {isForPagination && data?.talks?.map((talk) => <FreeTalk key={talk.talkId} talk={talk} />)}
-
       {isForPagination && data && (
         <PageNOs selectedNo={Number(currentPageNo)} lastNo={data.lastPageNo} />
       )}

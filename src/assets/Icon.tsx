@@ -6,6 +6,7 @@ import {
   FaRegComment,
   FaRegHandPointer,
   FaTwitterSquare,
+  FaPencilAlt,
 } from "react-icons/fa";
 import {
   BiBookReader,
@@ -110,6 +111,9 @@ const Icon = {
   IconBox,
   Write: styled(BsPencilSquare)`
     ${iconStyle()};
+  `,
+  Write2: styled(FaPencilAlt)`
+    ${iconStyleHover()};
   `,
   NovelList: styled(ImBooks)`
     ${iconStyle()};
