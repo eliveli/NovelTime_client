@@ -15,15 +15,16 @@ import {
   matchFilterNames,
 } from "./matchName";
 import checkIsNearBottom from "./checkIsNearBottom";
-import useSearchListWithInfntScroll from "./useSearchListWithInfntScroll";
-import useResetFiltersFromUrl from "./useResetFiltersFromUrl";
+import useSearchListWithInfntScrollForWriting from "./useSearchListWithInfntScrollForWriting";
+import useResetFiltersFromUrlForWriting from "./useResetFiltersFromUrlForWriting";
 import adjustCreateDate from "./adjustCreateDate";
 import useWhetherItIsMobile from "./useWhetherItIsMobile";
+import useWhetherItIsDesktop from "./useWhetherItIsDesktop";
 import writeText from "./writeText";
 
 export {
-  useResetFiltersFromUrl,
-  useSearchListWithInfntScroll,
+  useResetFiltersFromUrlForWriting,
+  useSearchListWithInfntScrollForWriting,
   checkIsNearBottom,
   matchPlatformName,
   matchGenreName,
@@ -41,5 +42,6 @@ export {
   useAsyncStateNumber,
   adjustCreateDate,
   useWhetherItIsMobile,
+  useWhetherItIsDesktop,
   writeText,
 };

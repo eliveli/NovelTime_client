@@ -1,30 +1,14 @@
 import { useEffect } from "react";
 
 import { useSearchParams } from "react-router-dom";
-import { RECOMMEND_LIST, TALK_LIST } from "./pathname";
+import { SEARCH_NOVEL } from "./pathname";
 
-type FilterType = "genre" | "searchType" | "searchWord" | "sortType" | "pageNo";
+type FilterType = "searchType" | "searchWord" | "pageNo";
 
-const genres = [
-  "All",
-  "로판",
-  "판타지",
-  "로맨스",
-  "현판",
-  "무협",
-  "패러디",
-  "라이트노벨",
-  "미스터리",
-  "BL",
-  "그 외",
-];
-
-const searchTypes = ["no", "Title", "Desc", "Writer", "Novel"];
-
-const sortTypes = ["작성일New", "작성일Old", "댓글Up", "댓글Down", "좋아요Up", "좋아요Down"];
+const searchTypes = ["no", "Title", "Desc", "Author"];
 
 // reset filters for pagination when they are not correct
-export default function useResetFiltersFromUrl() {
+export default function useResetFiltersFromUrlForNovel() {
   const { pathname, search } = window.location;
 
   const [searchParams, setSearchParams] = useSearchParams();
@@ -36,13 +20,7 @@ export default function useResetFiltersFromUrl() {
 
     filters.map((filterType) => {
       const filterValue = searchParams.get(filterType); // it can be null
-
-      if (filterType === "genre") {
-        if (filterValue === null || !genres.includes(filterValue)) {
-          searchParams.set("genre", "All");
-          isFilterChanged = true;
-        }
-      } else if (filterType === "searchType") {
+      if (filterType === "searchType") {
         if (filterValue === null || !searchTypes.includes(filterValue)) {
           searchParams.set("searchType", "no");
           isFilterChanged = true;
@@ -51,11 +29,6 @@ export default function useResetFiltersFromUrl() {
         if (filterValue === null) {
           // note. empty string is okay
           searchParams.set("searchWord", "");
-          isFilterChanged = true;
-        }
-      } else if (filterType === "sortType") {
-        if (filterValue === null || !sortTypes.includes(filterValue)) {
-          searchParams.set("sortType", "작성일New");
           isFilterChanged = true;
         }
       } else if (filterType === "pageNo") {
@@ -78,8 +51,8 @@ export default function useResetFiltersFromUrl() {
   useEffect(() => {
     if (!isForPagination) return;
 
-    if ([TALK_LIST, RECOMMEND_LIST].includes(pathname)) {
-      resetFiltersFromUrl(["genre", "searchType", "searchWord", "sortType", "pageNo"]);
+    if (SEARCH_NOVEL === pathname) {
+      resetFiltersFromUrl(["searchType", "searchWord", "pageNo"]);
     }
   }, [isForPagination, pathname]);
 

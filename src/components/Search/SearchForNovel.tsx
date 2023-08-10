@@ -12,11 +12,9 @@ import {
 } from "./Search.styles";
 
 export function SearchBar({
-  handleSearchFilter,
   typeSearchWord,
   searchWordRef,
 }: {
-  handleSearchFilter: React.Dispatch<React.SetStateAction<boolean>>;
   typeSearchWord: (newWord: string) => void;
   // ㄴ don't : searchWordRef.current = someValue
   //     to avoid warning : Assignment to property of function parameter 'searchWordRef'
@@ -44,9 +42,6 @@ export function SearchBar({
     } else {
       setFilters({ searchWord: searchWordRef.current, pageNo: 1 });
     }
-
-    // show search-filter-component
-    handleSearchFilter(true);
   };
 
   // when press "Enter", submit
@@ -99,9 +94,6 @@ export function SearchFilter({ searchWordRef }: { searchWordRef: React.MutableRe
 export default function SearchForNovel() {
   const { currentFilter: currentSearchWord } = useSearchFilter("searchWord");
 
-  const [isSearchFilter, handleSearchFilter] = useState(!!currentSearchWord);
-  // ㄴ뒤로가기로 search list 복귀 시 현재 검색 필터 보이기(!!currentSearchWord as initial value)
-
   const searchWordRef = useRef(currentSearchWord);
   // ㄴ입력하는 검색어를 기억해두고 submit 할 때만 서버 요청
 
@@ -111,12 +103,8 @@ export default function SearchForNovel() {
 
   return (
     <SearchContainer>
-      <SearchBar
-        searchWordRef={searchWordRef}
-        typeSearchWord={typeSearchWord}
-        handleSearchFilter={handleSearchFilter}
-      />
-      {isSearchFilter && <SearchFilter searchWordRef={searchWordRef} />}
+      <SearchBar searchWordRef={searchWordRef} typeSearchWord={typeSearchWord} />
+      <SearchFilter searchWordRef={searchWordRef} />
     </SearchContainer>
   );
 }

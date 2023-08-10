@@ -2,7 +2,11 @@ import React from "react";
 import MainBG from "components/MainBG";
 import Filter from "components/FilterForWriting";
 import { useGetWritingsFilteredQuery } from "store/serverAPIs/novelTime";
-import { useSearchListWithInfntScroll, useResetFiltersFromUrl, matchFilterNames } from "utils";
+import {
+  useSearchListWithInfntScrollForWriting,
+  useResetFiltersFromUrlForWriting,
+  matchFilterNames,
+} from "utils";
 import { useMultipleSearchFilters } from "utils/useSearchFilterForWriting";
 
 import PageNOs from "components/PageNOs";
@@ -10,7 +14,7 @@ import { useAppSelector } from "store/hooks";
 import Recommend from "./RecommendList.components";
 
 export default function RecommendList() {
-  const isForPagination = useResetFiltersFromUrl();
+  const isForPagination = useResetFiltersFromUrlForWriting();
 
   // get filters from url for pagination or them from state for infinite scroll
   const {
@@ -40,7 +44,7 @@ export default function RecommendList() {
 
   const { list: listForInfntScroll } = useAppSelector((state) => state.filter.recommend);
 
-  useSearchListWithInfntScroll({
+  useSearchListWithInfntScrollForWriting({
     isForPagination,
     isFetching,
     data,

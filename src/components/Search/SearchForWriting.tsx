@@ -79,7 +79,7 @@ function SearchFilter({ searchWordRef }: { searchWordRef: React.MutableRefObject
   const searchTypes: SearchTypeFromFilter[] = ["Title", "Desc", "Writer", "Novel"];
 
   return (
-    <SearchFilterContainer isCategoryList={false}>
+    <SearchFilterContainer>
       {searchTypes.map((_) => (
         <SearchFilterText
           key={_}

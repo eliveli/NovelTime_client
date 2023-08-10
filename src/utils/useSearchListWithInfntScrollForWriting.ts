@@ -6,7 +6,7 @@ import { TalkList, WritingList } from "store/serverAPIs/types";
 import checkIsNearBottom from "./checkIsNearBottom";
 import { RECOMMEND_LIST, TALK_LIST } from "./pathname";
 
-function useSearchListWithInfntScroll({
+export default function useSearchListWithInfntScrollForWriting({
   isForPagination,
   isFetching,
   data,
@@ -132,7 +132,7 @@ function useSearchListWithInfntScroll({
       setNextList([]);
       return;
     }
-    // * 다른 search list 적용 필요
+
     if (data) {
       const { talks, recommends } = data;
       const listFromServer = talks ?? recommends ?? [];
@@ -160,7 +160,6 @@ function useSearchListWithInfntScroll({
         prevPageNo === pageNo - 1
       ) {
         setNextList([...currentList, ...listFromServer]);
-        // * change later for other writing list not for TalkList only
 
         setPrevFilters((prev) => ({
           ...prev,
@@ -185,5 +184,3 @@ function useSearchListWithInfntScroll({
   // data 값이 변할 때만 실행하기 위해 useEffect 활용
   // 그렇지 않으면 한 번 data 받아온 후 리렌더링 몇 차례 되면서 서로 다른 조건문이 연이어 실행됨
 }
-
-export default useSearchListWithInfntScroll;
