@@ -1,20 +1,22 @@
 import MainBG from "components/MainBG";
-import Filter from "components/Filter";
+import Filter from "components/FilterForWriting";
 import { useGetWritingsFilteredQuery } from "store/serverAPIs/novelTime";
-import { TalkList, WritingList } from "store/serverAPIs/types";
 import {
-  useSearchListWithInfntScroll,
-  useResetFiltersFromUrl,
-  useMultipleSearchFilters,
+  useSearchListWithInfntScrollForWriting,
+  useResetFiltersFromUrlForWriting,
   matchFilterNames,
 } from "utils";
+import { useMultipleSearchFilters } from "utils/useSearchFilterForWriting";
+
 import PageNOs from "components/PageNOs";
 import { useAppSelector } from "store/hooks";
 import { WritingButton } from "components/Writing";
+import { useNavigate } from "react-router-dom";
+import { ADD_WRITING } from "utils/pathname";
 import FreeTalk from "./FreeTalkList.components";
 
 export default function FreeTalkList() {
-  const isForPagination = useResetFiltersFromUrl();
+  const isForPagination = useResetFiltersFromUrlForWriting();
 
   // get filters from url for pagination or them from state for infinite scroll
   const {
@@ -46,11 +48,13 @@ export default function FreeTalkList() {
 
   const { list: listForInfntScroll } = useAppSelector((state) => state.filter.talk);
 
-  useSearchListWithInfntScroll({
+  useSearchListWithInfntScrollForWriting({
     isForPagination,
     isFetching,
     data,
   });
+
+  const navigate = useNavigate();
 
   // *list가 []일 때 콘텐트 없다는 컴포넌트 표시
   // ㄴ페이지네이션 여부에 따라 list 다름
@@ -59,10 +63,16 @@ export default function FreeTalkList() {
   return (
     <MainBG>
       <Filter>
-        <WritingButton />
+        <WritingButton
+          clickToWrite={() => {
+            navigate(ADD_WRITING);
+          }}
+        />
       </Filter>
+
       {!isForPagination &&
         listForInfntScroll?.map((talk) => <FreeTalk key={talk.talkId} talk={talk} />)}
+
       {/* for tablet and pc */}
       {isForPagination && data?.talks?.map((talk) => <FreeTalk key={talk.talkId} talk={talk} />)}
       {isForPagination && data && (

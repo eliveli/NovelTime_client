@@ -20,9 +20,9 @@ const WritingText = styled.span`
   margin-top: 1px;
 `;
 
-export default function WritingButton() {
+export default function WritingButton({ clickToWrite }: { clickToWrite: () => void }) {
   return (
-    <WritingPostContainer>
+    <WritingPostContainer onClick={clickToWrite}>
       <Icon.IconBox>
         <Icon.Write2 />
       </Icon.IconBox>
