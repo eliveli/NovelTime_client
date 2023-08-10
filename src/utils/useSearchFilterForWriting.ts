@@ -17,9 +17,6 @@ type CurrentFilters = { [key in KeyOfFilters]: string };
 // treat multiple search filter at once for both pagination and infinite scroll
 export function useMultipleSearchFilters() {
   const { pathname, search } = window.location;
-
-  const listType = setListType();
-
   const isForPagination = search !== "";
 
   const talkFiltersFromState = useAppSelector((state) => state.filter.talk.filters);
@@ -90,6 +87,8 @@ export function useMultipleSearchFilters() {
   };
 
   const setFilterForInfntScroll = (nextFiltersToSet: { [key: string]: any }) => {
+    const listType = setListType();
+
     dispatch(setSearchList({ listType, filters: nextFiltersToSet }));
   };
 
@@ -102,7 +101,7 @@ export function useMultipleSearchFilters() {
       pageNo?: number;
     },
     pathForInfntScroll?: string,
-    // set filters for search list in this path
+    // set filters for search list in this path to use later
     // if it is undefined, set filters for current path
   ) => {
     const filterEntriesWithUndefined = Object.entries(filtersToSet);
@@ -140,8 +139,6 @@ export function useMultipleSearchFilters() {
 
 export function useSearchFilter(filterType: FilterType) {
   const { pathname, search } = window.location;
-
-  const listType = setListType();
 
   const isForPagination = search !== "";
 
@@ -199,6 +196,8 @@ export function useSearchFilter(filterType: FilterType) {
   };
 
   const setFilterForInfntScroll = (nextValue: string | number) => {
+    const listType = setListType();
+
     dispatch(setSearchList({ listType, filters: { [filterType]: nextValue } }));
   };
 

@@ -1,7 +1,7 @@
 import React, { useLayoutEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import MainBG from "components/MainBG";
-import { SortOnly } from "components/Filter";
+import { SortOnly } from "components/FilterForWriting";
 import { useAppDispatch } from "../../store/hooks";
 import { getNovelTitle } from "../../store/clientSlices/modalSlice";
 
