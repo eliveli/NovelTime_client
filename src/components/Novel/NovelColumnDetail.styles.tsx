@@ -18,14 +18,6 @@ export const NovelLink = styled(Link)`
     color: rgba(100, 100, 100, 0.8);`,
   )}/* opacity: 0.7; */ //from hover
 `;
-export const NovelInfoBox = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin-left: 10px;
-  justify-content: space-evenly;
-
-  position: relative;
-`;
 
 export const NovelImg = styled.div<{
   screenWidth: number;
@@ -43,6 +35,23 @@ export const NovelImg = styled.div<{
 
   ${({ recomDtlImgWidth }) => recomDtlImgWidth && recomDtlImgWidth}
 `;
+
+export const NovelInfoBox = styled.div<{ containerWidth: number; screenWidth: number }>`
+  display: flex;
+  flex-direction: column;
+  margin-left: 10px;
+  justify-content: space-evenly;
+
+  position: relative;
+
+  // (컨테이너 width) - (이미지 width) - (10px of 'margin-left')
+  width: ${({ screenWidth, containerWidth }) => {
+    const imgWidth = screenWidth < 500 ? 59 : 70;
+    const widthSet = containerWidth - imgWidth - 10;
+    return `${widthSet}px`;
+  }};
+`;
+
 export const NovelTitle = styled.div<{ infoWidth: number }>`
   font-weight: 500;
 
@@ -57,6 +66,8 @@ export const NovelSubInfoBox = styled.div`
   color: ${(props) => props.theme.color.textGray};
   font-weight: 500;
   font-size: 14px;
+
+  width: 100%;
 `;
 export const NovelAuthor = styled.div`
   line-height: 1.9;
@@ -64,6 +75,8 @@ export const NovelAuthor = styled.div`
 export const NovelDescBox = styled.div`
   display: flex;
   align-items: flex-end;
+
+  width: 100%;
 `;
 export const NovelDesc = styled.div<{ recomDtlTextHeight: string }>`
   //2줄 넘어가는 텍스트 ...표시
@@ -79,6 +92,8 @@ export const NovelDesc = styled.div<{ recomDtlTextHeight: string }>`
   word-wrap: break-word;
 
   ${({ recomDtlTextHeight }) => recomDtlTextHeight && recomDtlTextHeight}
+
+  width: 100%;
 `;
 export const DownIconBox = styled.div`
   z-index: 1;

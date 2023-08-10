@@ -115,17 +115,16 @@ function DescModal({
 // <ModalContainer key={Math.random()} isShowOn={isShowOn}>
 export default function NovelColumnDetail({ recommendDetail, novel }: MyComponentProps) {
   // props or default props
-  const {
-    novelId = "",
-    novelImg = "https://comicthumb-phinf.pstatic.net/20220126_148/pocket_16431735084292970r_JPEG/%C5%A9%B8%AE%BD%BA%C5%BB%BE%C6%B0%A1%BE%BE%B4%C2%B3%B2%C0%DA%B4%D9-%C0%CF%B7%AF%BD%BA%C6%AE%C7%A5%C1%F61.jpg?type=m260", // 시리즈
-    // "//dn-img-page.kakao.com/download/resource?kid=1Opki/hzmU0W8saq/pEkrur7BcK1FgYESJqDyXK", // 카카페
-    // "https://img.ridicdn.net/cover/372009713/xxlarge#1", // 리디북스
-    novelTitle = "제목",
-    novelAuthor = "작가",
-    novelGenre = "장르",
-    novelDesc = "작품소개",
-  } = novel;
+  const { novelId, novelImg, novelTitle, novelAuthor, novelGenre, novelDesc } = novel;
   const theme = {};
+
+  // calculate and gave the correct width to NovelInfoBox
+  // and set "width : 100%" in its child and descendant components
+  // as the result, arrow-button always can be placed in the end of the box
+  //  in previous code, the arrow button couldn't be in the end when desc is shorter than the width of box
+  const containerRef = useRef<HTMLAnchorElement>(null);
+  const containerWidth = useComponentWidth(containerRef);
+
   const infoRef = useRef<HTMLDivElement>(null);
   const infoWidth = useComponentWidth(infoRef); // 인포컨테이너 width 받아와 제목 엘립시스에 적용
 
@@ -144,13 +143,13 @@ export default function NovelColumnDetail({ recommendDetail, novel }: MyComponen
   };
   return (
     <ThemeProvider theme={theme}>
-      <NovelLink to={`/novel-detail/${novelId}`}>
+      <NovelLink to={`/novel-detail/${novelId}`} ref={containerRef}>
         <NovelImg
           screenWidth={screenWidth}
           novelImg={novelImg}
           recomDtlImgWidth={recommendDetail?.recomDtlImgWidth as string}
         />
-        <NovelInfoBox>
+        <NovelInfoBox containerWidth={containerWidth} screenWidth={screenWidth}>
           <NovelTitle infoWidth={infoWidth}>{`[${novelGenre}] ${novelTitle}`}</NovelTitle>
           <NovelSubInfoBox ref={infoRef}>
             <NovelAuthor>{novelAuthor}</NovelAuthor>
