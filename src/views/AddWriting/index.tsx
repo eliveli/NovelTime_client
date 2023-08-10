@@ -253,7 +253,7 @@ export default function AddWriting() {
           novel. Because I don't scrape the free novel even if it is only a info not a content
           <SrchGuideText
             onClick={() => {
-              changePlatform("/search/novel/iframe");
+              changePlatform("/search/novel");
               showPlatform(false);
               markIfrmPlfm("시리즈"); // reset mark when closing the iframe
               markTabPlfm(""); // reset mark when closing the iframe
@@ -264,7 +264,8 @@ export default function AddWriting() {
         </>
       )}
       {/* search for novel with iframe */}
-      {!novelId && isIframeSrch && <Iframe ref={iframeRef} src="/search/novel/iframe" />}
+      {/* use infinite scroll without search params */}
+      {!novelId && isIframeSrch && <Iframe ref={iframeRef} src="/search/novel" />}
 
       {/* show this after setting false of isIframeSrch */}
       {/* or when entering here from novel detail page */}

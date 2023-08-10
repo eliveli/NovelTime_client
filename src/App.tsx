@@ -19,7 +19,8 @@ import {
   NotFound,
   MainListNav,
   DetailNav,
-  SearchPage,
+  SearchNovelPage,
+  SearchAllPage,
   BeforeSearch,
   AfterSearch,
   NovelListByCategory,
@@ -182,9 +183,8 @@ function App() {
           <Route path="/add-writing" element={<AddWriting />} />
           <Route path="/add-writing/:novelId/:novelTitle" element={<AddWriting />} />
 
-          <Route path="/search" element={<SearchPage />} />
-          <Route path="/search/novel" element={<SearchPage />} />
-          <Route path="/search/novel/iframe" element={<SearchPage />} />
+          <Route path="/search" element={<SearchAllPage />} />
+          <Route path="/search/novel" element={<SearchNovelPage />} />
           {/* 검색 전 예시 작품 보여주기 */}
 
           <Route path="/message-list" element={<MessageList />} />

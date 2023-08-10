@@ -19,7 +19,7 @@ export const SearchInput = styled.input`
 export const SearchSubmit = styled.button`
   white-space: nowrap;
 `;
-export const SearchFilterContainer = styled.div<{ isCategoryList: boolean }>`
+export const SearchFilterContainer = styled.div<{ isCategoryList?: boolean }>`
   display: flex;
   height: 38px;
   margin-top: 5px;

@@ -44,7 +44,7 @@ export type SortTypeFromFilter =
   | "좋아요Up"
   | "좋아요Down";
 
-type Filters = {
+type FiltersForWriting = {
   genre: GenresFromFilter;
   searchType: SearchTypeFromFilter;
   searchWord: string;
@@ -68,10 +68,10 @@ type FiltersForSearchAll = {
 export type IsFilterState = {
   // to treat back page
   talk: {
-    filters: Filters;
+    filters: FiltersForWriting;
     list?: any[];
   };
-  recommend: { filters: Filters; list?: any[] };
+  recommend: { filters: FiltersForWriting; list?: any[] };
 
   novel: { filters: FiltersForSearchNovel; list?: any[] };
 
@@ -80,10 +80,6 @@ export type IsFilterState = {
   // need to change
   sortOnly: { filters: Filters; list?: any[] }; // let's talk and play in 소설 상세 페이지
   //
-
-  searchTextCtgr: string;
-  searchContentCtgr: string;
-  searchNovel: { srchNovelId: string; srchNovelTitle: string };
 };
 
 const initialState: IsFilterState = {
@@ -136,11 +132,6 @@ const initialState: IsFilterState = {
     },
     list: undefined,
   },
-  //
-
-  searchTextCtgr: "",
-  searchContentCtgr: "",
-  searchNovel: { srchNovelId: "", srchNovelTitle: "title" },
 };
 
 // all filters for infinite scroll
@@ -169,12 +160,6 @@ export const filterSlice = createSlice({
       }
     },
 
-    setSearchTextCtgr: (state, action: PayloadAction<string>) => {
-      state.searchTextCtgr = action.payload;
-    },
-    setSearchContentCtgr: (state, action: PayloadAction<string>) => {
-      state.searchContentCtgr = action.payload;
-    },
     // Redux Toolkit allows us to write "mutating" logic in reducers. It
     // doesn't actually mutate the state because it uses the Immer library,
     // which detects changes to a "draft state" and produces a brand new
@@ -183,11 +168,6 @@ export const filterSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const {
-  setSearchList,
-
-  setSearchTextCtgr,
-  setSearchContentCtgr,
-} = filterSlice.actions;
+export const { setSearchList } = filterSlice.actions;
 
 export default filterSlice.reducer;

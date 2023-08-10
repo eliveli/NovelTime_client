@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
-import { useSearchFilter, useMultipleSearchFilters } from "utils/useSearchFilterForWriting";
-import { SearchTypeFromFilter } from "../../store/clientSlices/filterSlice";
+import { useSearchFilter, useMultipleSearchFilters } from "utils/useSearchFilterForNovel";
+
 import {
   SearchBarContainer,
   SearchFilterContainer,
@@ -11,7 +11,7 @@ import {
   SearchFilterText,
 } from "./Search.styles";
 
-function SearchBar({
+export function SearchBar({
   handleSearchFilter,
   typeSearchWord,
   searchWordRef,
@@ -70,16 +70,16 @@ function SearchBar({
   );
 }
 
-function SearchFilter({ searchWordRef }: { searchWordRef: React.MutableRefObject<string> }) {
+export function SearchFilter({ searchWordRef }: { searchWordRef: React.MutableRefObject<string> }) {
   const {
     currentFilters: { currentSearchType },
     setFilters,
   } = useMultipleSearchFilters();
 
-  const searchTypes: SearchTypeFromFilter[] = ["Title", "Desc", "Writer", "Novel"];
+  const searchTypes = ["Title", "Desc", "Author"];
 
   return (
-    <SearchFilterContainer isCategoryList={false}>
+    <SearchFilterContainer>
       {searchTypes.map((_) => (
         <SearchFilterText
           key={_}
@@ -87,7 +87,6 @@ function SearchFilter({ searchWordRef }: { searchWordRef: React.MutableRefObject
           selectedContent={currentSearchType}
           onClick={() => {
             setFilters({ searchType: _, searchWord: searchWordRef.current, pageNo: 1 });
-            // ㄴ새로 타이핑한 검색어 함께 변경 - 그렇지 않으면 이전 검색어를 필터로 사용함
           }}
         >
           {_}
@@ -97,7 +96,7 @@ function SearchFilter({ searchWordRef }: { searchWordRef: React.MutableRefObject
   );
 }
 
-export default function SearchForWriting() {
+export default function SearchForNovel() {
   const { currentFilter: currentSearchWord } = useSearchFilter("searchWord");
 
   const [isSearchFilter, handleSearchFilter] = useState(!!currentSearchWord);

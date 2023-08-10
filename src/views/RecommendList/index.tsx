@@ -1,6 +1,6 @@
 import React from "react";
 import MainBG from "components/MainBG";
-import Filter from "components/Filter";
+import Filter from "components/FilterForWriting";
 import { useGetWritingsFilteredQuery } from "store/serverAPIs/novelTime";
 import { useSearchListWithInfntScroll, useResetFiltersFromUrl, matchFilterNames } from "utils";
 import { useMultipleSearchFilters } from "utils/useSearchFilterForWriting";

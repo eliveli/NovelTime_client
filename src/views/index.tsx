@@ -10,7 +10,8 @@ import RecommendDetail from "./RecommendDetail";
 import { UserHome, UserNovelList, UserParent, UserWriting } from "./UserPage";
 import NotFound from "./NotFound";
 import { MainListNav, DetailNav } from "./Nav";
-import SearchPage from "./SearchPage";
+import SearchNovelPage from "./SearchNovelPage";
+import SearchAllPage from "./SearchAllPage";
 import BeforeSearch from "./BeforeSearch";
 import AfterSearch from "./AfterSearch";
 import NovelListByCategory from "./NovelListByCategory";
@@ -40,7 +41,8 @@ export {
   UserWriting,
   MainListNav,
   DetailNav,
-  SearchPage,
+  SearchAllPage,
+  SearchNovelPage,
   BeforeSearch,
   AfterSearch,
   NovelListByCategory,

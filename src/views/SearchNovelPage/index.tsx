@@ -4,32 +4,9 @@ import { NovelColumn, NovelColumnDetail, NovelRow } from "../../components/Novel
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { GoToBtn, GoToText } from "./SearchPage.styles";
 
-import Search from "../../components/Search";
+import SearchForNovel from "../../components/Search/SearchForNovel";
 
 export default function SearchPage() {
-  const searchWord = useAppSelector((state) => state.filter.searchWord);
-  const searchTextCtgr = useAppSelector((state) => state.filter.searchTextCtgr);
-  const searchContentCtgr = useAppSelector((state) => state.filter.searchContentCtgr);
-
-  // is it right to use useEffect for RTK query...?
-
-  // when changed client state, request api
-  useEffect(() => {
-    // search word
-    // like this, server request
-    // const { data, error, isLoading } = useGetNovelByIdQuery("20220227200633023");
-  }, [searchWord]);
-  useEffect(() => {
-    // search word
-    // like this, server request
-    // const { data, error, isLoading } = useGetNovelByIdQuery("20220227200633023");
-  }, [searchTextCtgr]);
-  useEffect(() => {
-    // search word
-    // like this, server request
-    // const { data, error, isLoading } = useGetNovelByIdQuery("20220227200633023");
-  }, [searchContentCtgr]);
-
   const novelInfo = {
     novelId: "20220225082010201",
     novelImg:
@@ -54,17 +31,13 @@ export default function SearchPage() {
   };
   const novels = [novelInfo, novelInfo2];
 
-  // when this is iframe
-  const isIframe = window.location.pathname.includes("iframe");
   //  pass novel info to parent
   const goToPlatform = () => {
     window.parent.postMessage({ sign: "goToPlatform" }, "*");
   };
   return (
     <MainBG>
-      <Search />
-      {/* at all-search page: novel, writing */}
-      {/* at novel-search page: novel */}
+      <SearchForNovel />
       {/* if there is no novel for search-keyword */}
       <GoToText>찾으시는 소설이 없나요? 소설 플랫폼에서 찾아보세요!</GoToText>
       <GoToBtn onClick={goToPlatform}>찾으러가기</GoToBtn>

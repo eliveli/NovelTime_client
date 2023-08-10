@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSearchFilter } from "utils/useSearchFilterForWriting";
-import Search from "../Search/SearchForWriting";
+import SearchForWriting from "../Search/SearchForWriting";
 import { SearchBtn, Genres, SortMobile, SortTablet } from "./Filter.components";
 import {
   ContainerOnlySort,
@@ -28,20 +28,6 @@ export default function Filter({ children }: { children?: React.ReactNode }) {
     }
   }, [currentSearchWord]);
 
-  // // which category will be shown : novel or writing
-  // const [selectedCategory, handleCategory] = useState("Novel");
-
-  // // in category, which type of content will be shown : title or desc or author
-  // const [content, selectContent] = useState("Title");
-
-  // // props to search Component
-  // const searchProps = {
-  //   writing,
-  //   selectedCategory,
-  //   handleCategory,
-  //   content,
-  //   selectContent,
-  // };
   return (
     <FilterBG>
       <Genres />
@@ -58,7 +44,7 @@ export default function Filter({ children }: { children?: React.ReactNode }) {
       </ContainerWithSrchAlarm>
 
       {/* search : after clicking search icon */}
-      {isSearch && <Search />}
+      {isSearch && <SearchForWriting />}
     </FilterBG>
   );
 }
