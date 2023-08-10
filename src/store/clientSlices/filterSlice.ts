@@ -53,7 +53,7 @@ type FiltersForWriting = {
 };
 
 type FiltersForSearchNovel = {
-  searchType: "Title" | "Desc" | "Author";
+  searchType: "Title" | "Desc" | "Author" | "sample";
   searchWord: string;
   pageNo: number;
 };
@@ -105,7 +105,7 @@ const initialState: IsFilterState = {
   },
   novel: {
     filters: {
-      searchType: "Title",
+      searchType: "sample",
       searchWord: "",
       pageNo: 1,
     },
@@ -155,7 +155,36 @@ export const filterSlice = createSlice({
 
       if (list === "reset") {
         state[listType].list = undefined;
-      } else if (list) {
+
+        if (["talk", "recommend"].includes(listType)) {
+          state[listType].filters = {
+            genre: "All",
+            searchType: "Title",
+            searchWord: "",
+            sortType: "작성일New",
+            pageNo: 1,
+          };
+        } else if (listType === "novel") {
+          state[listType].filters = {
+            searchType: "sample",
+            searchWord: "",
+            pageNo: 1,
+          };
+        } else if (listType === "searchAll") {
+          state[listType].filters = {
+            searchCategory: "Novel",
+            searchType: "Title",
+            searchWord: "",
+            pageNo: 1,
+          };
+        } else if (listType === "sortOnly") {
+          // fix later
+          // state[listType].filters = { },
+        }
+        return;
+      }
+
+      if (list) {
         state[listType].list = list;
       }
     },

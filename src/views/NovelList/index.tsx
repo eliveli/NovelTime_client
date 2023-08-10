@@ -4,12 +4,15 @@ import MainBG from "components/MainBG";
 import Icon from "assets/Icon";
 import { useWhetherItIsDesktop } from "utils";
 import { SEARCH_NOVEL } from "utils/pathname";
+import { setSearchList } from "store/clientSlices/filterSlice";
+import { useAppDispatch } from "store/hooks";
 import { SearchIconBox, IconContainer } from "./NovelList.styles";
 import { ColumnList, ColumnDetailList, RowSlide } from "../../components/NovelListFrame";
 import { NovelColumn, NovelColumnDetail, NovelRow } from "../../components/Novel";
 
 export default function NovelList() {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
   const dataFromServer = {
     simpleNovelInfo: [
@@ -225,9 +228,17 @@ export default function NovelList() {
         <SearchIconBox
           onClick={() => {
             if (isDeskTop) {
-              navigate(`${SEARCH_NOVEL}?searchType=no&searchWord=&pageNo=1`);
+              navigate(`${SEARCH_NOVEL}?searchType=sample&searchWord=&pageNo=1`);
               return;
             }
+
+            // initialize search filters
+            dispatch(
+              setSearchList({
+                listType: "novel",
+                list: "reset",
+              }),
+            );
 
             navigate(SEARCH_NOVEL);
           }}

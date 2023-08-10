@@ -1,9 +1,10 @@
 /* eslint-disable max-len */
 import MainBG from "components/MainBG";
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import Icon from "assets/Icon";
 import { SEARCH_NOVEL } from "utils/pathname";
+import { setSearchList } from "store/clientSlices/filterSlice";
 import { handleWritingSubmit } from "../../store/clientSlices/writingSlice";
 import { useAppSelector, useAppDispatch } from "../../store/hooks";
 
@@ -173,6 +174,18 @@ export default function AddWriting() {
   };
 
   // -------------------------------------------------------------------------------------------//
+
+  // initialize search filters when searching for novel with iframe
+  useEffect(() => {
+    if (!novelId && isIframeSrch) {
+      dispatch(
+        setSearchList({
+          listType: "novel",
+          list: "reset",
+        }),
+      );
+    }
+  }, [novelId, isIframeSrch]);
 
   return (
     <MainBG>
