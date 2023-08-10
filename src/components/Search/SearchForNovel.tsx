@@ -33,12 +33,12 @@ export function SearchBar({
     e: React.MouseEvent<HTMLDivElement, MouseEvent> | React.KeyboardEvent<HTMLInputElement>,
   ) => {
     e.preventDefault();
-    if (currentSearchType === "no" && searchWordRef.current !== "") {
+    if (currentSearchType === "sample" && searchWordRef.current !== "") {
       // 직전 검색 타입이 없으나 현재 주어진 검색어가 있을 때
       setFilters({ searchType: "Title", searchWord: searchWordRef.current, pageNo: 1 });
     } else if (searchWordRef.current === "") {
       // 주어진 검색어가 없을 때
-      setFilters({ searchType: "no", searchWord: searchWordRef.current, pageNo: 1 });
+      setFilters({ searchType: "sample", searchWord: searchWordRef.current, pageNo: 1 });
     } else {
       setFilters({ searchWord: searchWordRef.current, pageNo: 1 });
     }

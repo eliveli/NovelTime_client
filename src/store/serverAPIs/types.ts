@@ -115,6 +115,19 @@ export type ParamToDeleteComment = {
   isReComment: boolean;
 };
 
+export type ParamToSearchForNovels = {
+  searchType: "novelTitle" | "novelDesc" | "novelAuthor" | "sample";
+  searchWord: string; // note. it can't be empty string
+  pageNo: number;
+};
+
+export type NovelDetailList =
+  | {
+      novels: NovelDetail[];
+      lastPageNo: number;
+    }
+  | undefined;
+
 type NovelDetail = {
   novelId: string;
   novelImg: string;

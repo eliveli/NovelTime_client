@@ -1,50 +1,92 @@
-import React, { useEffect } from "react";
 import MainBG from "components/MainBG";
-import { NovelColumn, NovelColumnDetail, NovelRow } from "../../components/Novel";
-import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { ColumnDetailList } from "components/NovelListFrame";
+import useResetFiltersFromUrlForNovel from "utils/useResetFiltersFromUrlForNovel";
+import { useMultipleSearchFilters } from "utils/useSearchFilterForNovel";
+import useSearchListWithInfntScrollForNovel from "utils/useSearchListWithInfntScrollForNovel";
+import PageNOs from "components/PageNOs";
+import { useSearchForNovelQuery } from "store/serverAPIs/novelTime";
+import Spinner from "assets/Spinner";
+import { NovelColumnDetail } from "../../components/Novel";
+import { useAppSelector } from "../../store/hooks";
 import { GoToBtn, GoToText } from "./SearchPage.styles";
 
 import SearchForNovel from "../../components/Search/SearchForNovel";
 
+function matchSearchTypeName(searchType: string) {
+  if (searchType === "sample") return searchType; // get several novels at random
+
+  if (searchType === "Title") return "novelTitle";
+  if (searchType === "Desc") return "novelDesc";
+  if (searchType === "Author") return "novelAuthor";
+
+  throw Error("search type name is not correct");
+}
+
 export default function SearchPage() {
-  const novelInfo = {
-    novelId: "20220225082010201",
-    novelImg:
-      // "//dn-img-page.kakao.com/download/resource?kid=1Opki/hzmU0W8saq/pEkrur7BcK1FgYESJqDyXK", // 카카페
-      "https://comicthumb-phinf.pstatic.net/20220126_148/pocket_16431735084292970r_JPEG/%C5%A9%B8%AE%BD%BA%C5%BB%BE%C6%B0%A1%BE%BE%B4%C2%B3%B2%C0%DA%B4%D9-%C0%CF%B7%AF%BD%BA%C6%AE%C7%A5%C1%F61.jpg?type=m260", // 시리즈
-    // "https://img.ridicdn.net/cover/372009713/xxlarge#1", // 리디북스
-    novelTitle: "헌터와 매드 사이언티스트",
-    novelAuthor: "델마르",
-    novelGenre: "로판",
-    novelIsEnd: true,
-  };
-  const novelInfo2 = {
-    novelId: "2022000000201",
-    novelImg:
-      // "//dn-img-page.kakao.com/download/resource?kid=1Opki/hzmU0W8saq/pEkrur7BcK1FgYESJqDyXK", // 카카페
-      "https://comicthumb-phinf.pstatic.net/20220126_148/pocket_16431735084292970r_JPEG/%C5%A9%B8%AE%BD%BA%C5%BB%BE%C6%B0%A1%BE%BE%B4%C2%B3%B2%C0%DA%B4%D9-%C0%CF%B7%AF%BD%BA%C6%AE%C7%A5%C1%F61.jpg?type=m260", // 시리즈
-    // "https://img.ridicdn.net/cover/372009713/xxlarge#1", // 리디북스
-    novelTitle: "헌터와 매드 사이언티스트",
-    novelAuthor: "델마르",
-    novelGenre: "로판",
-    novelIsEnd: true,
-  };
-  const novels = [novelInfo, novelInfo2];
+  const isForPagination = useResetFiltersFromUrlForNovel();
+
+  // get filters from url for pagination or get them from state for infinite scroll
+  const {
+    currentFilters: { currentSearchType, currentSearchWord, currentPageNo },
+  } = useMultipleSearchFilters();
+
+  const searchTypeMatched = matchSearchTypeName(currentSearchType);
+
+  const { isFetching, data } = useSearchForNovelQuery({
+    searchType: !currentSearchWord ? "sample" : searchTypeMatched, // get sample novels when search word is empty
+    searchWord: currentSearchWord || "undefined", // it can't be empty string when passing to server
+    pageNo: Number(currentPageNo),
+  });
+
+  const { list: listForInfntScroll } = useAppSelector((state) => state.filter.novel);
+
+  useSearchListWithInfntScrollForNovel({
+    isForPagination,
+    isFetching,
+    data,
+  });
 
   //  pass novel info to parent
   const goToPlatform = () => {
     window.parent.postMessage({ sign: "goToPlatform" }, "*");
   };
+
   return (
     <MainBG>
+      {isFetching && <Spinner styles="fixed" />}
+
       <SearchForNovel />
-      {/* if there is no novel for search-keyword */}
-      <GoToText>찾으시는 소설이 없나요? 소설 플랫폼에서 찾아보세요!</GoToText>
-      <GoToBtn onClick={goToPlatform}>찾으러가기</GoToBtn>
-      {/* before search, show some examples for novel */}
-      {novels.map((novel) => (
-        <NovelColumn key={novel.novelId} novel={novel} />
-      ))}
+
+      {!isForPagination && !!listForInfntScroll?.length && (
+        <ColumnDetailList
+          categoryText={searchTypeMatched === "sample" ? "작품을 검색해 보세요" : "검색 결과"}
+        >
+          {listForInfntScroll.map((novel) => (
+            <NovelColumnDetail key={novel.novelId} novel={novel} />
+          ))}
+        </ColumnDetailList>
+      )}
+
+      {/* on desktop */}
+      {isForPagination && !!data?.novels?.length && (
+        <ColumnDetailList
+          categoryText={searchTypeMatched === "sample" ? "작품을 검색해 보세요" : "검색 결과"}
+        >
+          {data.novels.map((novel) => (
+            <NovelColumnDetail key={novel.novelId} novel={novel} />
+          ))}
+        </ColumnDetailList>
+      )}
+      {isForPagination && data && (
+        <PageNOs selectedNo={Number(currentPageNo)} lastNo={data.lastPageNo} />
+      )}
+
+      {!data && (
+        <>
+          <GoToText>찾으시는 소설이 없나요? 소설 플랫폼에서 찾아보세요!</GoToText>
+          <GoToBtn onClick={goToPlatform}>찾으러가기</GoToBtn>
+        </>
+      )}
     </MainBG>
   );
 }

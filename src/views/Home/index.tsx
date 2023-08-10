@@ -719,7 +719,7 @@ export default function Home() {
 
   return (
     <MainBG>
-      {homeResult.isLoading && <Spinner styles="fixed" />}
+      {homeResult.isFetching && <Spinner styles="fixed" />}
 
       <CategoryMark categoryText="소설 한담 new" linkPath="talk-list" />
       {homeResult.data?.talkList?.map((talk, idx) => (

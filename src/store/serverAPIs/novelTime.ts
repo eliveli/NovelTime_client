@@ -35,6 +35,8 @@ import {
   ParamForNewReComment,
   ParamToEditComment,
   ParamToDeleteComment,
+  NovelDetailList,
+  ParamToSearchForNovels,
 } from "./types";
 import type { RootState } from "../index";
 
@@ -105,7 +107,12 @@ export const novelTimeApi = createApi({
       query: (novelId) => `/novels/detail/${novelId}`,
     }),
 
-    // in writing list or search page
+    // search for novels
+    searchForNovel: builder.query<NovelDetailList, ParamToSearchForNovels>({
+      query: (params) => `/novels/${params.searchType}/${params.searchWord}/${params.pageNo}`,
+    }),
+
+    // get writing list with search filter
     getWritingsFiltered: builder.query<WritingList, ParamForGettingWritings>({
       query: (params) =>
         `/writing/${params.writingType}/${params.novelGenre}/${params.searchType}/${params.searchWord}/${params.sortBy}/${params.pageNo}`,
@@ -267,6 +274,7 @@ export const {
   useGetWeeklyNovelsFromPlatformQuery,
   useGetNovelListByCategoryQuery,
   useGetNovelByIdQuery,
+  useSearchForNovelQuery,
   useGetWritingsFilteredQuery,
   useGetTalkDetailQuery,
   useGetRootCommentsQuery,

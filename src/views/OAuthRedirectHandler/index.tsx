@@ -68,6 +68,6 @@ export default function OAuthRedirectHandler() {
   //      그럼 다시 로그인하라고 클라이언트 단에 메세지 보낼까?
   return (
     <div>리다이렉트 중 : 스피너 넣기</div>
-    // {isLoading && <Spinner />}
+    // {isFetching && <Spinner />}
   );
 }

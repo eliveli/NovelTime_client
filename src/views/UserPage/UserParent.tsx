@@ -40,7 +40,7 @@ function Profile({ userImg, userName, userBG }: ProfileProps) {
   // userBG when user is changing the BG
   const tempUserBG = useAppSelector((state) => state.user.tempUserBG);
   // after logout remove access token and user info in store
-  const { data, error, isLoading, isUninitialized } = useGetLogoutQuery(undefined, {
+  const { data, error, isFetching, isUninitialized } = useGetLogoutQuery(undefined, {
     skip: !isLogout,
   });
 
@@ -122,7 +122,7 @@ export default function UserParent() {
 
   const isLoginUser = !!userName && userName === loginUserInfo.userName;
 
-  const { data, isError, isLoading } = useGetUserInfoByUserNameQuery(userName as string, {
+  const { data, isError, isFetching } = useGetUserInfoByUserNameQuery(userName as string, {
     skip: isLoginUser,
     // only request by userName when the user didn't login
   });
@@ -151,7 +151,7 @@ export default function UserParent() {
 
   return (
     <>
-      {isLoading && <Spinner styles="fixed" />}
+      {isFetching && <Spinner styles="fixed" />}
       <Profile
         userImg={userInfoForUserPage.userImg}
         userName={userInfoForUserPage.userName}

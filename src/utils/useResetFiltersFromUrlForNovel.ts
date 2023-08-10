@@ -5,7 +5,7 @@ import { SEARCH_NOVEL } from "./pathname";
 
 type FilterType = "searchType" | "searchWord" | "pageNo";
 
-const searchTypes = ["no", "Title", "Desc", "Author"];
+const searchTypes = ["sample", "Title", "Desc", "Author"];
 
 // reset filters for pagination when they are not correct
 export default function useResetFiltersFromUrlForNovel() {
@@ -22,12 +22,11 @@ export default function useResetFiltersFromUrlForNovel() {
       const filterValue = searchParams.get(filterType); // it can be null
       if (filterType === "searchType") {
         if (filterValue === null || !searchTypes.includes(filterValue)) {
-          searchParams.set("searchType", "no");
+          searchParams.set("searchType", "sample");
           isFilterChanged = true;
         }
       } else if (filterType === "searchWord") {
         if (filterValue === null) {
-          // note. empty string is okay
           searchParams.set("searchWord", "");
           isFilterChanged = true;
         }

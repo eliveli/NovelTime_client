@@ -19,7 +19,7 @@ export default function UserHome() {
   const { userName } = useParams();
 
   // server request with userName
-  const { data, isLoading } = useGetContentOfUserHomeQuery(userName as string, {
+  const { data, isFetching } = useGetContentOfUserHomeQuery(userName as string, {
     skip: !userName,
   });
   // I think this error object from the api doesn't required to be handled.
@@ -59,7 +59,7 @@ export default function UserHome() {
 
   return (
     <MainBG>
-      {isLoading && <Spinner styles="fixed" />}
+      {isFetching && <Spinner styles="fixed" />}
       <CategoryMark
         infoFromUserPage={{
           userName: userName as string,

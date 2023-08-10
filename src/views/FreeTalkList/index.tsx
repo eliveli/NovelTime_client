@@ -73,7 +73,7 @@ export default function FreeTalkList() {
       {!isForPagination &&
         listForInfntScroll?.map((talk) => <FreeTalk key={talk.talkId} talk={talk} />)}
 
-      {/* for tablet and pc */}
+      {/* on desktop */}
       {isForPagination && data?.talks?.map((talk) => <FreeTalk key={talk.talkId} talk={talk} />)}
       {isForPagination && data && (
         <PageNOs selectedNo={Number(currentPageNo)} lastNo={data.lastPageNo} />
