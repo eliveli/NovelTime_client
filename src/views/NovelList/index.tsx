@@ -2,6 +2,8 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import MainBG from "components/MainBG";
 import Icon from "assets/Icon";
+import { useWhetherItIsDesktop } from "utils";
+import { SEARCH_NOVEL } from "utils/pathname";
 import { SearchIconBox, IconContainer } from "./NovelList.styles";
 import { ColumnList, ColumnDetailList, RowSlide } from "../../components/NovelListFrame";
 import { NovelColumn, NovelColumnDetail, NovelRow } from "../../components/Novel";
@@ -214,12 +216,20 @@ export default function NovelList() {
       },
     ],
   };
+
+  const isDeskTop = useWhetherItIsDesktop();
+
   return (
     <MainBG>
       <IconContainer>
         <SearchIconBox
           onClick={() => {
-            navigate("/search/novel");
+            if (isDeskTop) {
+              navigate(`${SEARCH_NOVEL}?searchType=no&searchWord=&pageNo=1`);
+              return;
+            }
+
+            navigate(SEARCH_NOVEL);
           }}
         >
           <Icon.Search />

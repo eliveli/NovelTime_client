@@ -38,7 +38,7 @@ export function ReCommentInputToCreateOnTablet({
 
   const textRef = useRef<HTMLTextAreaElement>(null);
 
-  const isTablet = !useWhetherItIsMobile();
+  const isNotMobile = !useWhetherItIsMobile();
 
   const userNameOnTextAreaRef = useRef<HTMLSpanElement>(null);
   const userNameWidth = useComponentWidth(userNameOnTextAreaRef);
@@ -91,7 +91,7 @@ export function ReCommentInputToCreateOnTablet({
 
         <WriteText
           ref={textRef}
-          onChange={(e) => writeText(e, textRef, isTablet)}
+          onChange={(e) => writeText(e, textRef, isNotMobile)}
           spaceForUserName={userNameWidth}
         />
         <EmojiCntnr size={20}>
@@ -111,7 +111,7 @@ export function ReCommentInputToEditOnTablet() {
 
   const textRef = useRef<HTMLTextAreaElement>(null);
 
-  const isTablet = !useWhetherItIsMobile();
+  const isNotMobile = !useWhetherItIsMobile();
 
   const userNameOnTextAreaRef = useRef<HTMLSpanElement>(null);
   const userNameWidth = useComponentWidth(userNameOnTextAreaRef);
@@ -184,7 +184,7 @@ export function ReCommentInputToEditOnTablet() {
 
         <WriteText
           ref={textRef}
-          onChange={(e) => writeText(e, textRef, isTablet)}
+          onChange={(e) => writeText(e, textRef, isNotMobile)}
           spaceForUserName={userNameWidth}
         />
         <EmojiCntnr size={20}>
@@ -213,7 +213,7 @@ export function RootCommentInputToCreateOnTablet({
 
   const textRef = useRef<HTMLTextAreaElement>(null);
 
-  const isTablet = !useWhetherItIsMobile();
+  const isNotMobile = !useWhetherItIsMobile();
 
   const handleSubmitToCreate = async () => {
     if (!loginUserId) {
@@ -245,7 +245,7 @@ export function RootCommentInputToCreateOnTablet({
       <WriteTextCntnr>
         <WriteText
           ref={textRef}
-          onChange={(e) => writeText(e, textRef, isTablet)}
+          onChange={(e) => writeText(e, textRef, isNotMobile)}
           placeholder="Write your comment!"
         />
         <EmojiCntnr size={20}>
@@ -269,7 +269,7 @@ export function RootCommentInputToEditOnTablet({
 
   const textRef = useRef<HTMLTextAreaElement>(null);
 
-  const isTablet = !useWhetherItIsMobile();
+  const isNotMobile = !useWhetherItIsMobile();
 
   const commentToEdit = useAppSelector((state) => state.comment.commentToEdit);
   const textToEdit = commentToEdit.commentContent;
@@ -336,7 +336,7 @@ export function RootCommentInputToEditOnTablet({
       <WriteTextCntnr>
         <WriteText
           ref={textRef}
-          onChange={(e) => writeText(e, textRef, isTablet)}
+          onChange={(e) => writeText(e, textRef, isNotMobile)}
           placeholder="Write your comment!"
         />
         <EmojiCntnr size={20}>
@@ -378,7 +378,7 @@ export function CommentInputOnMobile({
 
   const textRef = useRef<HTMLTextAreaElement>(null);
 
-  const isTablet = !useWhetherItIsMobile();
+  const isNotMobile = !useWhetherItIsMobile();
   const userNameOnTextAreaRef = useRef<HTMLSpanElement>(null);
   const userNameWidth = useComponentWidth(userNameOnTextAreaRef, isRootCommentInput);
 
@@ -484,7 +484,7 @@ export function CommentInputOnMobile({
 
     const textHeight = textRef.current.scrollHeight; // current scroll height
     // max-height : 15 lines of 364px - for Tablet, Desktop
-    if (isTablet) {
+    if (isNotMobile) {
       textRef.current.style.height = `${textHeight <= 364 ? textRef.current.scrollHeight : 364}px`;
       return;
     }
@@ -498,7 +498,7 @@ export function CommentInputOnMobile({
         {isRootCommentInput ? (
           <WriteText
             ref={textRef}
-            onChange={(e) => writeText(e, textRef, isTablet)}
+            onChange={(e) => writeText(e, textRef, isNotMobile)}
             placeholder="Write your comment!"
           />
         ) : (
@@ -508,7 +508,7 @@ export function CommentInputOnMobile({
             </SpaceForUserNameOnTextArea>
             <WriteText
               ref={textRef}
-              onChange={(e) => writeText(e, textRef, isTablet)}
+              onChange={(e) => writeText(e, textRef, isNotMobile)}
               spaceForUserName={userNameWidth}
             />
           </>

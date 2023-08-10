@@ -3,6 +3,7 @@ import MainBG from "components/MainBG";
 import { useCallback, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import Icon from "assets/Icon";
+import { SEARCH_NOVEL } from "utils/pathname";
 import { handleWritingSubmit } from "../../store/clientSlices/writingSlice";
 import { useAppSelector, useAppDispatch } from "../../store/hooks";
 
@@ -253,7 +254,7 @@ export default function AddWriting() {
           novel. Because I don't scrape the free novel even if it is only a info not a content
           <SrchGuideText
             onClick={() => {
-              changePlatform("/search/novel");
+              changePlatform(SEARCH_NOVEL);
               showPlatform(false);
               markIfrmPlfm("시리즈"); // reset mark when closing the iframe
               markTabPlfm(""); // reset mark when closing the iframe
@@ -265,7 +266,7 @@ export default function AddWriting() {
       )}
       {/* search for novel with iframe */}
       {/* use infinite scroll without search params */}
-      {!novelId && isIframeSrch && <Iframe ref={iframeRef} src="/search/novel" />}
+      {!novelId && isIframeSrch && <Iframe ref={iframeRef} src={SEARCH_NOVEL} />}
 
       {/* show this after setting false of isIframeSrch */}
       {/* or when entering here from novel detail page */}
