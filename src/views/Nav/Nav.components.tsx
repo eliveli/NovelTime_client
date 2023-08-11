@@ -220,6 +220,8 @@ export function NavMobileMainTop() {
 export function NavMobileMainBottom({ pathname }: Props) {
   const theme = {};
 
+  const isLoginUser = !!useAppSelector((state) => state.user.loginUserInfo.userId);
+
   const navigate = useNavigate();
 
   const dispatch = useAppDispatch();
@@ -252,6 +254,11 @@ export function NavMobileMainBottom({ pathname }: Props) {
                 const listType = idx === 0 ? "talk" : "recommend";
 
                 dispatch(setSearchList({ listType, filters: initialFilters, list: "reset" }));
+              }
+
+              if ([2, 4].includes(idx) && !isLoginUser) {
+                alert("로그인이 필요합니다");
+                return;
               }
 
               navigate(_[1]);

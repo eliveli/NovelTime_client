@@ -56,6 +56,8 @@ export default function FreeTalkList() {
 
   const navigate = useNavigate();
 
+  const isLoginUser = !!useAppSelector((state) => state.user.loginUserInfo.userId);
+
   // *list가 []일 때 콘텐트 없다는 컴포넌트 표시
   // ㄴ페이지네이션 여부에 따라 list 다름
   // ㄴundefined 일 때도 콘텐트 없음 표시?
@@ -65,6 +67,11 @@ export default function FreeTalkList() {
       <Filter>
         <WritingButton
           clickToWrite={() => {
+            if (!isLoginUser) {
+              alert("로그인이 필요합니다");
+              return;
+            }
+
             navigate(ADD_WRITING);
           }}
         />
