@@ -11,6 +11,7 @@ import { UserHome, UserNovelList, UserParent, UserWriting } from "./UserPage";
 import NotFound from "./NotFound";
 import { MainListNav, DetailNav } from "./Nav";
 import SearchNovelPage from "./SearchNovelPage";
+import SearchNovelIframe from "./SearchNovelIframe";
 import SearchAllPage from "./SearchAllPage";
 import BeforeSearch from "./BeforeSearch";
 import AfterSearch from "./AfterSearch";
@@ -43,6 +44,7 @@ export {
   DetailNav,
   SearchAllPage,
   SearchNovelPage,
+  SearchNovelIframe,
   BeforeSearch,
   AfterSearch,
   NovelListByCategory,

@@ -105,7 +105,7 @@ export default function AddWriting() {
     iframeRef.current.src = platformSrch;
   };
 
-  // get novel info from iframe  // Called sometime after postMessage is called
+  // get novel info from iframe  // Called after postMessage is called
   window.addEventListener(
     "message",
     (event) => {
@@ -279,7 +279,7 @@ export default function AddWriting() {
       )}
       {/* search for novel with iframe */}
       {/* use infinite scroll without search params */}
-      {!novelId && isIframeSrch && <Iframe ref={iframeRef} src={SEARCH_NOVEL} />}
+      {!novelId && isIframeSrch && <Iframe ref={iframeRef} src={`${SEARCH_NOVEL}/iframe`} />}
 
       {/* show this after setting false of isIframeSrch */}
       {/* or when entering here from novel detail page */}

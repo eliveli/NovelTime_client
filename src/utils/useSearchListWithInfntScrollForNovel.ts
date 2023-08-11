@@ -27,13 +27,12 @@ export default function useSearchListWithInfntScrollForNovel({
   const { filters, list } = useAppSelector((state) => state.filter.novel);
 
   const getCurrentFiltersAndList = () => {
-    if (pathname === SEARCH_NOVEL) {
+    if ([SEARCH_NOVEL, `${SEARCH_NOVEL}/iframe`].includes(pathname)) {
       return {
         currentFilters: filters,
         currentList: list,
       };
     }
-
     throw Error("pathname was not matched for infinite scroll");
   };
 

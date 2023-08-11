@@ -1,6 +1,3 @@
-/* eslint-disable max-len */
-// /* eslint-disable */
-// 지금은 뷰 구성에 집중할 것임. 린트 무시하는 주석은 나중에 해제하기
 import React, { useLayoutEffect, useRef } from "react";
 import { ThemeProvider } from "styled-components";
 import { useComponentWidth, useModal } from "utils";
@@ -141,9 +138,25 @@ export default function NovelColumnDetail({ recommendDetail, novel }: MyComponen
   const getModalScroll = () => {
     modalScrollY.current = modalTRef.current?.scrollTop as number;
   };
+
+  // when this is used in iframe
+  const isIframe = window.location.pathname.includes("iframe");
+  //  pass novel info to the parent
+  const sendNovel = () => {
+    window.parent.postMessage({ novelId, novelTitle }, "*");
+  };
+
   return (
     <ThemeProvider theme={theme}>
-      <NovelLink to={`/novel-detail/${novelId}`} ref={containerRef}>
+      <NovelLink
+        to={`/novel-detail/${novelId}`}
+        ref={containerRef}
+        onClick={() => {
+          if (isIframe) {
+            sendNovel();
+          }
+        }}
+      >
         <NovelImg
           screenWidth={screenWidth}
           novelImg={novelImg}

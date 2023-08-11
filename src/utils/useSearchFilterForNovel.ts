@@ -61,6 +61,11 @@ export function useMultipleSearchFilters() {
     }
   }
 
+  // when searching for novels in iframe, add-writing page
+  if (pathname === `${SEARCH_NOVEL}/iframe`) {
+    getFiltersFromState(novelFiltersFromState);
+  }
+
   // set next filters //
   const setFilterForPagi = (filter: string, nextValue: any) => {
     searchParams.set(filter, String(nextValue));
@@ -73,6 +78,10 @@ export function useMultipleSearchFilters() {
     }
 
     if (SEARCH_NOVEL === pathname) {
+      return ["searchType", "searchWord", "pageNo"].includes(filter);
+    }
+
+    if (`${SEARCH_NOVEL}/iframe` === pathname) {
       return ["searchType", "searchWord", "pageNo"].includes(filter);
     }
   };

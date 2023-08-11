@@ -29,6 +29,7 @@ import {
   AddWriting,
   Home,
   OAuthRedirectHandler,
+  SearchNovelIframe,
 } from "views";
 import Modal from "components/Modal";
 import ScrollToTop from "utils/ScrollToTop";
@@ -185,7 +186,7 @@ function App() {
 
           <Route path="/search" element={<SearchAllPage />} />
           <Route path="/search/novel" element={<SearchNovelPage />} />
-          {/* 검색 전 예시 작품 보여주기 */}
+          <Route path="/search/novel/iframe" element={<SearchNovelIframe />} />
 
           <Route path="/message-list" element={<MessageList />} />
 
