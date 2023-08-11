@@ -37,6 +37,7 @@ import {
   ParamToDeleteComment,
   NovelDetailList,
   ParamToSearchForNovels,
+  NovelIdAndTitle,
 } from "./types";
 import type { RootState } from "../index";
 
@@ -110,6 +111,15 @@ export const novelTimeApi = createApi({
     // search for novels
     searchForNovel: builder.query<NovelDetailList, ParamToSearchForNovels>({
       query: (params) => `/novels/${params.searchType}/${params.searchWord}/${params.pageNo}`,
+    }),
+
+    // add a novel into db and get the novel id and novel title when user gives the novel url
+    addNovelWithURL: builder.mutation<NovelIdAndTitle, string>({
+      query: (novelURL) => ({
+        url: "/novels/addNovelWithURL",
+        method: "POST",
+        body: { novelURL },
+      }),
     }),
 
     // get writing list with search filter
@@ -275,6 +285,7 @@ export const {
   useGetNovelListByCategoryQuery,
   useGetNovelByIdQuery,
   useSearchForNovelQuery,
+  useAddNovelWithURLMutation,
   useGetWritingsFilteredQuery,
   useGetTalkDetailQuery,
   useGetRootCommentsQuery,

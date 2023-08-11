@@ -5,6 +5,8 @@ import { useParams } from "react-router-dom";
 import Icon from "assets/Icon";
 import { SEARCH_NOVEL } from "utils/pathname";
 import { setSearchList } from "store/clientSlices/filterSlice";
+import { useAddNovelWithURLMutation } from "store/serverAPIs/novelTime";
+import Spinner from "assets/Spinner";
 import { handleWritingSubmit } from "../../store/clientSlices/writingSlice";
 import { useAppSelector, useAppDispatch } from "../../store/hooks";
 
@@ -39,9 +41,6 @@ import {
 } from "./AddWriting.styles";
 
 export default function AddWriting() {
-  // get novelInfo from params : when entering this page from novel detail page
-  const { novelId, novelTitle } = useParams();
-
   // server request for submit----------------------------
   const handleSubmit = () => {
     // server request : submit writing info //
@@ -54,14 +53,6 @@ export default function AddWriting() {
     handleSubmit();
     dispatch(handleWritingSubmit(false)); // reset writing-submit state
   }
-
-  // ----------------------------------------------------//
-
-  // handle title of novel --------------------------------
-  const [novel, setNovel] = useState({ novelId, novelTitle });
-
-  // ----------------------------------------------------//
-
   // handle title of writing ------------------------------
   const titleRef = useRef<HTMLTextAreaElement>(null);
   const [title, setTitle] = useState("");
@@ -91,8 +82,13 @@ export default function AddWriting() {
   const [board, setBoard] = useState("FreeTalk");
   // ----------------------------------------------------//
 
-  // search novel : when entering this page with clicking add-writing ---------------------------//
+  const [addNovel, addNovelResult] = useAddNovelWithURLMutation();
 
+  // set novel from params when entering from novel detail page
+  const { novelId, novelTitle } = useParams();
+  const [novel, setNovel] = useState({ novelId, novelTitle });
+
+  // search novel when entering as clicking add-writing
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const [isIframeSrch, showIframeSrch] = useState(true); // show or not iframe of search
   const [isPlatform, showPlatform] = useState(false); // show or not elements for novel platform to get novel info
@@ -105,7 +101,7 @@ export default function AddWriting() {
     iframeRef.current.src = platformSrch;
   };
 
-  // get novel info from iframe  // Called after postMessage is called
+  // get novel info passed from iframe  // Called whenever postMessage is called
   window.addEventListener(
     "message",
     (event) => {
@@ -115,7 +111,6 @@ export default function AddWriting() {
 
       // get novel info from my website
       if (iframeRef.current && (event.data.novelId as string)) {
-        console.log("outside iframe: ", event.data);
         setNovel({ novelId: event.data.novelId, novelTitle: event.data.novelTitle });
         showIframeSrch(false); // close iframe element
         // iframeRef.current.style.display = "none"; // don't show iframe element
@@ -130,15 +125,11 @@ export default function AddWriting() {
     false,
   );
 
-  // set novel url from novel platform to get novel info
   const novelUrlRef = useRef<HTMLTextAreaElement>(null);
-  const [novelUrl, setNovelUrl] = useState("");
 
-  // auto-set height of novelUrl element
-  const putNovelUrl = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
+  const adjustHeightOfNovelUrlElement = useCallback(() => {
     if (!novelUrlRef.current) return;
 
-    setNovelUrl(e.target.value); // store content of novelUrl
     novelUrlRef.current.style.height = "28px"; // Default: height of 1 line
     const novelUrlHeight = novelUrlRef.current.scrollHeight; // current scroll height
 
@@ -148,32 +139,46 @@ export default function AddWriting() {
     }px`;
   }, []);
 
-  // close elements of iframe and something else, if novel info is set
-  const closeIframe = () => {
-    if (!novel.novelTitle) {
-      // change this to modal
-      alert("소설을 선택해 주세요");
+  const submitToAddNovel = async () => {
+    // give novel url to server and get the novel id and novel title
+    if (!novelUrlRef.current) return;
+
+    if (!novelUrlRef.current.value) {
+      alert("작품 url을 넣어주세요");
       return;
     }
+
+    if (addNovelResult.isLoading) return;
+
+    await addNovel(novelUrlRef.current.value);
+
+    if (addNovelResult.isError) {
+      alert("작품 url을 확인해 주세요");
+    }
+  };
+
+  useEffect(() => {
+    if (!addNovelResult.data) return;
+    if (!addNovelResult.data.novelId || !addNovelResult.data.novelTitle) {
+      alert("작품 url을 확인해 주세요");
+      return;
+    }
+
+    setNovel({
+      novelId: addNovelResult.data.novelId,
+      novelTitle: addNovelResult.data.novelTitle,
+    });
+
+    // close iframe and initialize related things
     showIframeSrch(false);
     showPlatform(false);
-    markIfrmPlfm("시리즈"); // reset mark when closing the iframe
-    markTabPlfm(""); // reset mark when closing the iframe
-  };
-  const sendNovelUrl = () => {
-    // server request : send novel url, get response of novel id and novel title//
-    // if it is success, show alarm modal like "소설 정보가 성공적으로 등록되었어요"
-    // then set the novel info of novel id and novel title
-
-    // close elements of iframe and something else
-    closeIframe();
-  };
+    markIfrmPlfm("시리즈");
+    markTabPlfm("");
+  }, [addNovelResult.data]);
 
   const showHowTo = () => {
-    // show images that guide how to get link from novel platform
+    // show images that guide to get the link from novel platform
   };
-
-  // -------------------------------------------------------------------------------------------//
 
   // initialize search filters when searching for novel with iframe
   useEffect(() => {
@@ -189,6 +194,8 @@ export default function AddWriting() {
 
   return (
     <MainBG>
+      {addNovelResult.isLoading && <Spinner styles="fixed" />}
+
       <NovelTitleContainer>
         <NovelTitle>{novel.novelTitle ? novel.novelTitle : "소설제목"}</NovelTitle>
         {!novelTitle && !isIframeSrch && (
@@ -204,10 +211,10 @@ export default function AddWriting() {
           <NovelUrlContnr>
             <NovelUrl
               ref={novelUrlRef}
-              placeholder="작품별 공유링크(or URL)를 넣어주세요"
-              onChange={putNovelUrl}
+              placeholder="작품 URL을 넣어주세요"
+              onChange={adjustHeightOfNovelUrlElement}
             />
-            <SelectPlatform onClick={sendNovelUrl}>선택</SelectPlatform>
+            <SelectPlatform onClick={submitToAddNovel}>선택</SelectPlatform>
           </NovelUrlContnr>
           <AllPlatformContnr>
             <PlatformContnrFirst>
@@ -234,7 +241,7 @@ export default function AddWriting() {
               </PlatformBtnContnr>
             </PlatformContnrFirst>
             <PlatformContnrSecond>
-              <GuideText>작품 URL 찾기</GuideText>
+              <GuideText>플랫폼에서 찾아오기</GuideText>
               <PlatformBtnContnr isNewTab>
                 {[
                   ["카카페", "https://page.kakao.com/search"],
@@ -263,8 +270,9 @@ export default function AddWriting() {
               <Icon.More />
             </MoreIconBox>
           </HowToGetLink>
-          if you want to review the novel of JOARA, you should get the url or shared link for the
-          novel. Because I don't scrape the free novel even if it is only a info not a content
+          **성인작품은 가져올 수 없어요** if you want to review the novel of JOARA, you should get
+          the url or shared link for the novel. Because I don't scrape the free novel even if it is
+          only a info not a content
           <SrchGuideText
             onClick={() => {
               changePlatform(SEARCH_NOVEL);

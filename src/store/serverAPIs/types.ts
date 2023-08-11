@@ -120,13 +120,14 @@ export type ParamToSearchForNovels = {
   searchWord: string; // note. it can't be empty string
   pageNo: number;
 };
-
 export type NovelDetailList =
   | {
       novels: NovelDetail[];
       lastPageNo: number;
     }
   | undefined;
+
+export type NovelIdAndTitle = { novelId: string; novelTitle: string };
 
 type NovelDetail = {
   novelId: string;
