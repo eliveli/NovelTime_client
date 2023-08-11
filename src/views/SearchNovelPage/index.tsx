@@ -8,7 +8,6 @@ import { useSearchForNovelQuery } from "store/serverAPIs/novelTime";
 import Spinner from "assets/Spinner";
 import { NovelColumnDetail } from "../../components/Novel";
 import { useAppSelector } from "../../store/hooks";
-import { GoToBtn, GoToText } from "./SearchPage.styles";
 
 import SearchForNovel from "../../components/Search/SearchForNovel";
 
@@ -45,12 +44,6 @@ export default function SearchPage() {
     isFetching,
     data,
   });
-
-  //  pass novel info to parent
-  const goToPlatform = () => {
-    window.parent.postMessage({ sign: "goToPlatform" }, "*");
-  };
-
   return (
     <MainBG>
       {isFetching && <Spinner styles="fixed" />}
@@ -79,13 +72,6 @@ export default function SearchPage() {
       )}
       {isForPagination && data && (
         <PageNOs selectedNo={Number(currentPageNo)} lastNo={data.lastPageNo} />
-      )}
-
-      {!data && (
-        <>
-          <GoToText>찾으시는 소설이 없나요? 소설 플랫폼에서 찾아보세요!</GoToText>
-          <GoToBtn onClick={goToPlatform}>찾으러가기</GoToBtn>
-        </>
       )}
     </MainBG>
   );

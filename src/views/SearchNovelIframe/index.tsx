@@ -6,7 +6,7 @@ import Spinner from "assets/Spinner";
 import { useMultipleSearchFilters } from "utils/useSearchFilterForNovel";
 import { NovelColumnDetail } from "../../components/Novel";
 import { useAppSelector } from "../../store/hooks";
-import { GoToBtn, GoToText } from "./SearchPage.styles";
+import { BtnToGoTo, ContainerToGoTo, TextToGoTo } from "./SearchPage.styles";
 
 import SearchForNovel from "../../components/Search/SearchForNovel";
 
@@ -64,10 +64,10 @@ export default function SearchPage() {
       )}
 
       {!data && (
-        <>
-          <GoToText>찾으시는 소설이 없나요? 소설 플랫폼에서 찾아보세요!</GoToText>
-          <GoToBtn onClick={goToPlatform}>찾으러가기</GoToBtn>
-        </>
+        <ContainerToGoTo>
+          <TextToGoTo>찾으시는 소설이 없나요?</TextToGoTo>
+          <BtnToGoTo onClick={goToPlatform}>소설 플랫폼에서 찾기</BtnToGoTo>
+        </ContainerToGoTo>
       )}
     </MainBG>
   );
