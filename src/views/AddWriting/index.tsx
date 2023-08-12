@@ -7,6 +7,7 @@ import { SEARCH_NOVEL } from "utils/pathname";
 import { setSearchList } from "store/clientSlices/filterSlice";
 import { useAddNovelWithURLMutation } from "store/serverAPIs/novelTime";
 import Spinner from "assets/Spinner";
+import { openModal } from "store/clientSlices/modalSlice";
 import { handleWritingSubmit } from "../../store/clientSlices/writingSlice";
 import { useAppSelector, useAppDispatch } from "../../store/hooks";
 
@@ -203,17 +204,28 @@ export default function AddWriting() {
             <Icon.Search onClick={() => showIframeSrch(true)} />
           </Icon.IconBox>
         )}
+        {/* 소설 다시 선택하는 경우 기존에 선택된 소설 제목 옆에 취소용 버튼 (위쪽 화살표?) 추가 */}
       </NovelTitleContainer>
 
       {/* search for novel from novel platform */}
       {!novelId && isIframeSrch && isPlatform && (
         <>
           <NovelUrlContnr>
+            <SrchGuideText
+              isHowTo
+              onClick={() => {
+                dispatch(openModal("getNovelURL"));
+                showHowTo();
+              }}
+            >
+              &nbsp;&nbsp;어떻게 주소를 찾나요?&nbsp;&nbsp;
+            </SrchGuideText>
             <NovelUrl
               ref={novelUrlRef}
-              placeholder="작품 URL을 넣어주세요"
+              placeholder="작품 주소를 넣어주세요"
               onChange={adjustHeightOfNovelUrlElement}
             />
+
             <SelectPlatform onClick={submitToAddNovel}>선택</SelectPlatform>
           </NovelUrlContnr>
           <AllPlatformContnr>
@@ -241,7 +253,7 @@ export default function AddWriting() {
               </PlatformBtnContnr>
             </PlatformContnrFirst>
             <PlatformContnrSecond>
-              <GuideText>플랫폼에서 찾아오기</GuideText>
+              <GuideText>주소 직접 찾기</GuideText>
               <PlatformBtnContnr isNewTab>
                 {[
                   ["카카페", "https://page.kakao.com/search"],
@@ -262,17 +274,7 @@ export default function AddWriting() {
               </PlatformBtnContnr>
             </PlatformContnrSecond>
           </AllPlatformContnr>
-          <HowToGetLink>
-            <SrchGuideText isHowTo onClick={showHowTo}>
-              &nbsp;&nbsp;어떻게 하나요?(그냥 페이지 진입 직후 이미지 보여줄까?)&nbsp;&nbsp;
-            </SrchGuideText>
-            <MoreIconBox>
-              <Icon.More />
-            </MoreIconBox>
-          </HowToGetLink>
-          **성인작품은 가져올 수 없어요** if you want to review the novel of JOARA, you should get
-          the url or shared link for the novel. Because I don't scrape the free novel even if it is
-          only a info not a content
+
           <SrchGuideText
             onClick={() => {
               changePlatform(SEARCH_NOVEL);

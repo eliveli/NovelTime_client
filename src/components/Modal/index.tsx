@@ -6,6 +6,7 @@ import FilterContent from "./FilterContent";
 import Login from "./Login";
 import EditProfile from "./EditProfile";
 import Share from "./Share";
+import GetNovelURL from "./GetNovelURL";
 
 export default function Modal() {
   const modalCategory = useAppSelector((state) => state.modal.modalCategory);
@@ -29,6 +30,8 @@ export default function Modal() {
             return <EditProfile />;
           case "share":
             return <Share />;
+          case "getNovelURL":
+            return <GetNovelURL />;
 
           case "none":
             // eslint-disable-next-line react/jsx-no-useless-fragment

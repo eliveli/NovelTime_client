@@ -284,6 +284,39 @@ export const SocialCategory = styled.button<{
   ${({ isLink }) =>
     isLink && `color: rgb(96 96 96 / 65%); box-shadow: 0 0 4px rgb(96 96 96 / 75%); `};
 `;
+
+export const SelectHowToContiner = styled.div`
+  display: flex;
+  gap: 10px;
+`;
+export const SelectHowTo = styled.div<{
+  category: "WithShareLink" | "Directly";
+  selected: "WithShareLink" | "Directly";
+}>`
+  border-radius: 20px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  background-color: white;
+  color: rgba(0, 0, 0, 0.6);
+  padding: 7px 10px;
+  font-size: 16px;
+  font-weight: 500;
+
+  ${({ category, selected }) =>
+    category === selected &&
+    `background-color: white; color: ${theme.color.main}; border-block-color:  ${theme.color.mainLight};`}
+`;
+export const GuideImgContainer = styled.div``;
+
+export const GuideImg = styled.div<{ src: string }>`
+  /* width: 300px; // * need to fix */
+  /* height: 500px; // * need to fix */
+
+  background-image: url(${({ src }) => src});
+
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+`;
 export const ModalTitle = styled.h3`
   margin: 0;
   text-align: center;

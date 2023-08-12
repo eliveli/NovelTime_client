@@ -28,20 +28,8 @@ export const SrchGuideText = styled.span<{ isHowTo?: true }>`
   display: inline-block;
   margin-bottom: 10px;
 
-  ${({ isHowTo }) => isHowTo && `margin-bottom: 0;`}
-`;
-export const MoreIconBox = styled(Icon.IconBox)`
-  /* border: 1px solid rgba(100, 100, 100, 0.4);
-  border-radius: 50%; */
-  color: rgba(100, 100, 100, 0.4);
-  margin-left: 0px;
-  border: 0;
-`;
-export const HowToGetLink = styled.div`
-  display: flex;
-  align-items: center;
-
-  /* border-bottom: 1px dotted rgba(0, 0, 0, 0.1); */
+  ${({ isHowTo }) =>
+    isHowTo && `margin-bottom: 0; position: absolute; right: 0; top: -21px; border-bottom: 0px;`}
 `;
 export const Iframe = styled.iframe`
   width: 100%;
@@ -211,6 +199,7 @@ export const PlatformContnrSecond = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+
   /* margin: 10px 0px; */
 
   @media screen and (min-width: 700px) {
@@ -299,6 +288,8 @@ export const NovelUrlContnr = styled.div`
   border: 1px solid rgba(100, 100, 100, 0.1);
   border-radius: 10px;
   padding: 5px 8px;
+
+  position: relative;
 `;
 export const NovelUrl = styled.textarea`
   border: 0;

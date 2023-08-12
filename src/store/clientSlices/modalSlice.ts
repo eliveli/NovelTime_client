@@ -20,6 +20,7 @@ export interface IsModalState {
     | "login"
     | "editProfile"
     | "share"
+    | "getNovelURL"
     | "none";
   novelImage: string;
   filteringContent: string;
@@ -54,7 +55,14 @@ export const modalSlice = createSlice({
     openModal: (
       state,
       action: PayloadAction<
-        "novelImage" | "sortWriting" | "filterContent" | "login" | "editProfile" | "share" | "none"
+        | "novelImage"
+        | "sortWriting"
+        | "filterContent"
+        | "login"
+        | "editProfile"
+        | "share"
+        | "getNovelURL"
+        | "none"
       >,
     ) => {
       state.modalCategory = action.payload;
