@@ -119,7 +119,9 @@ const Icon = {
     ${iconStyle()};
   `,
   ListRight: styled(FaChevronRight)``,
-  BigDown: FaChevronDown,
+  BigDown: styled(FaChevronDown)`
+    ${iconStyle()};
+  `,
   BigUp: FaChevronUp,
   BigRight: styled(HiOutlineChevronRight)`
     ${iconStyle()};

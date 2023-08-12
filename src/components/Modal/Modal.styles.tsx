@@ -285,7 +285,7 @@ export const SocialCategory = styled.button<{
     isLink && `color: rgb(96 96 96 / 65%); box-shadow: 0 0 4px rgb(96 96 96 / 75%); `};
 `;
 
-export const SelectHowToContiner = styled.div`
+export const SelectHowToContainer = styled.div`
   display: flex;
   gap: 10px;
 `;
@@ -305,22 +305,58 @@ export const SelectHowTo = styled.div<{
     category === selected &&
     `background-color: white; color: ${theme.color.main}; border-block-color:  ${theme.color.mainLight};`}
 `;
-export const GuideImgContainer = styled.div``;
+
+export const GuideImgAlbumContainer = styled.div`
+  margin-top: 20px;
+  height: 450px;
+
+  overflow: scroll;
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+`;
+
+export const GuideImgAlbum = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  gap: 20px;
+`;
 
 export const GuideImg = styled.div<{ src: string }>`
-  /* width: 300px; // * need to fix */
-  /* height: 500px; // * need to fix */
+  width: 300px; // same with the actual image size
+  height: 540px; // same with the actual image size
 
   background-image: url(${({ src }) => src});
 
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
+
+  border: 1px solid #a9a9a95e;
+  border-radius: 3px;
 `;
-export const ModalTitle = styled.h3`
+
+export const ArrowBox = styled.div`
+  border-radius: 50%;
+  background-color: white;
+  box-shadow: 0 0 2px rgb(0 0 0 / 60%);
+
+  width: 30px;
+  height: 30px;
+
+  color: rgba(100, 100, 100, 0.4);
+
+  padding: 2px 7px 0px;
+`;
+
+export const ModalTitle = styled.h3<{ marginBottom?: number }>`
   margin: 0;
   text-align: center;
-  margin-bottom: 30px;
+  margin-bottom: ${({ marginBottom }) => marginBottom || 30}px;
   color: rgba(100, 100, 100, 0.8);
   font-weight: 500;
 `;
