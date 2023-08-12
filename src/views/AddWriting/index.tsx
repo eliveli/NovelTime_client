@@ -83,26 +83,35 @@ export default function AddWriting() {
   const [board, setBoard] = useState("FreeTalk");
   // ----------------------------------------------------//
 
-  const [addNovel, addNovelResult] = useAddNovelWithURLMutation();
+  const [addNovelWithURL, addNovelWithURLResult] = useAddNovelWithURLMutation();
 
   // set novel from params when entering from novel detail page
   const { novelId, novelTitle } = useParams();
-  const [novel, setNovel] = useState({ novelId, novelTitle });
+  const [novelForReview, setNovelForReview] = useState({ novelId, novelTitle });
 
-  // search novel when entering as clicking add-writing
+  // how to get the novel to write its review //
+  //  - way to search just to select
+  //  - way to get the novel url from the novel platform
+  //    . with share-link through iframe
+  //    . directly through new tab opened
   const iframeRef = useRef<HTMLIFrameElement>(null);
-  const [isIframeSrch, showIframeSrch] = useState(true); // show or not iframe of search
-  const [isPlatform, showPlatform] = useState(false); // show or not elements for novel platform to get novel info
 
-  const [iframePlatform, markIfrmPlfm] = useState("시리즈"); // mark selected platform
-  const [newTabPlatform, markTabPlfm] = useState(""); // mark selected platform
+  // when searching for novels to select one without getting its url : entirely true, inGettingURL false
+  // when getting novel url to get novel : entirely true, inGettingURL true
+  // when finishing the process : entirely false, inGettingURL false
+  const [isGettingNovel, handleGettingNovel] = useState({ entirely: false, inGettingURL: false });
 
-  const changePlatform = (platformSrch: string) => {
+  const [platformToGetURL, setPlatformToGetURL] = useState({
+    withSharedLink: "시리즈",
+    inNewTab: "",
+  });
+
+  const setIframeAddress = (platformToSearch: string) => {
     if (!iframeRef.current) return;
-    iframeRef.current.src = platformSrch;
+    iframeRef.current.src = platformToSearch;
   };
 
-  // get novel info passed from iframe  // Called whenever postMessage is called
+  // get the novel through iframe whenever calling with postMessage
   window.addEventListener(
     "message",
     (event) => {
@@ -110,17 +119,17 @@ export default function AddWriting() {
         return;
       }
 
-      // get novel info from my website
-      if (iframeRef.current && (event.data.novelId as string)) {
-        setNovel({ novelId: event.data.novelId, novelTitle: event.data.novelTitle });
-        showIframeSrch(false); // close iframe element
-        // iframeRef.current.style.display = "none"; // don't show iframe element
+      // write review directly after selecting novel through iframe
+      if (iframeRef.current && !!event.data.novelId) {
+        setNovelForReview({ novelId: event.data.novelId, novelTitle: event.data.novelTitle });
+        handleGettingNovel({ entirely: false, inGettingURL: false });
       }
 
-      // show component of novel platform to search novel info
-      if (iframeRef.current && (event.data.sign as string)) {
-        showPlatform(true);
-        changePlatform("https://m.series.naver.com/search/search.series?t=novel&fs=default&q=");
+      // go to get the novel url to get a novel
+      if (iframeRef.current && !!event.data.sign) {
+        handleGettingNovel({ entirely: true, inGettingURL: true });
+
+        setIframeAddress("https://m.series.naver.com/search/search.series?t=novel&fs=default&q=");
       }
     },
     false,
@@ -149,73 +158,56 @@ export default function AddWriting() {
       return;
     }
 
-    if (addNovelResult.isLoading) return;
+    if (addNovelWithURLResult.isLoading) return;
 
-    await addNovel(novelUrlRef.current.value);
+    await addNovelWithURL(novelUrlRef.current.value);
 
-    if (addNovelResult.isError) {
+    if (addNovelWithURLResult.isError) {
       alert("작품 url을 확인해 주세요");
     }
   };
 
   useEffect(() => {
-    if (!addNovelResult.data) return;
-    if (!addNovelResult.data.novelId || !addNovelResult.data.novelTitle) {
+    if (!addNovelWithURLResult.data) return;
+    if (!addNovelWithURLResult.data.novelId || !addNovelWithURLResult.data.novelTitle) {
       alert("작품 url을 확인해 주세요");
       return;
     }
 
-    setNovel({
-      novelId: addNovelResult.data.novelId,
-      novelTitle: addNovelResult.data.novelTitle,
+    setNovelForReview({
+      novelId: addNovelWithURLResult.data.novelId,
+      novelTitle: addNovelWithURLResult.data.novelTitle,
     });
 
     // close iframe and initialize related things
-    showIframeSrch(false);
-    showPlatform(false);
-    markIfrmPlfm("시리즈");
-    markTabPlfm("");
-  }, [addNovelResult.data]);
-
-  const showHowTo = () => {
-    // show images that guide to get the link from novel platform
-  };
-
-  // initialize search filters when searching for novel with iframe
-  useEffect(() => {
-    if (!novelId && isIframeSrch) {
-      dispatch(
-        setSearchList({
-          listType: "novel",
-          list: "reset",
-        }),
-      );
-    }
-  }, [novelId, isIframeSrch]);
+    handleGettingNovel({ entirely: false, inGettingURL: false });
+    setPlatformToGetURL({ withSharedLink: "시리즈", inNewTab: "" });
+  }, [addNovelWithURLResult.data]);
 
   return (
     <MainBG>
-      {addNovelResult.isLoading && <Spinner styles="fixed" />}
+      {addNovelWithURLResult.isLoading && <Spinner styles="fixed" />}
 
       <NovelTitleContainer>
-        <NovelTitle>{novel.novelTitle ? novel.novelTitle : "소설제목"}</NovelTitle>
-        {!novelTitle && !isIframeSrch && (
+        <NovelTitle>{novelForReview.novelTitle || "소설제목"}</NovelTitle>
+        {!novelForReview.novelTitle && !isGettingNovel.entirely && (
           <Icon.IconBox>
-            <Icon.Search onClick={() => showIframeSrch(true)} />
+            <Icon.Search
+              onClick={() => handleGettingNovel({ entirely: true, inGettingURL: false })}
+            />
           </Icon.IconBox>
         )}
         {/* 소설 다시 선택하는 경우 기존에 선택된 소설 제목 옆에 취소용 버튼 (위쪽 화살표?) 추가 */}
       </NovelTitleContainer>
 
-      {/* search for novel from novel platform */}
-      {!novelId && isIframeSrch && isPlatform && (
+      {/* get a novel by getting its url */}
+      {isGettingNovel.entirely && isGettingNovel.inGettingURL && (
         <>
           <NovelUrlContnr>
             <SrchGuideText
               isHowTo
               onClick={() => {
                 dispatch(openModal("getNovelURL"));
-                showHowTo();
               }}
             >
               &nbsp;&nbsp;어떻게 주소를 찾나요?&nbsp;&nbsp;
@@ -240,11 +232,11 @@ export default function AddWriting() {
                   ["조아라", "https://www.joara.com/search"],
                 ].map((_) => (
                   <PlatformBtn
-                    selectedPlatform={iframePlatform}
+                    selectedPlatform={platformToGetURL.withSharedLink}
                     platform={_[0]}
                     onClick={() => {
-                      changePlatform(_[1]);
-                      markIfrmPlfm(_[0]);
+                      setIframeAddress(_[1]);
+                      setPlatformToGetURL({ inNewTab: "", withSharedLink: _[0] });
                     }}
                   >
                     {_[0]}
@@ -256,15 +248,17 @@ export default function AddWriting() {
               <GuideText>주소 직접 찾기</GuideText>
               <PlatformBtnContnr isNewTab>
                 {[
-                  ["카카페", "https://page.kakao.com/search"],
+                  ["카카페", "https://page.kakao.com/search/result?keyword="],
                   ["리디북스", "https://ridibooks.com/search?q=&adult_exclude=n"],
                   ["시리즈", "https://series.naver.com/search/search.series?t=novel&fs=default&q="],
                   ["조아라", "https://www.joara.com/search"],
                 ].map((_) => (
                   <PlatformNewTab href={_[1]} target="_blank">
                     <PlatformBtn
-                      onClick={() => markTabPlfm(_[0])}
-                      selectedPlatform={newTabPlatform}
+                      onClick={() => {
+                        setPlatformToGetURL({ inNewTab: _[0], withSharedLink: "" });
+                      }}
+                      selectedPlatform={platformToGetURL.inNewTab}
                       platform={_[0]}
                     >
                       {_[0]}
@@ -277,23 +271,21 @@ export default function AddWriting() {
 
           <SrchGuideText
             onClick={() => {
-              changePlatform(SEARCH_NOVEL);
-              showPlatform(false);
-              markIfrmPlfm("시리즈"); // reset mark when closing the iframe
-              markTabPlfm(""); // reset mark when closing the iframe
+              handleGettingNovel({ entirely: true, inGettingURL: false });
+              setIframeAddress(`${SEARCH_NOVEL}/iframe`);
+              setPlatformToGetURL({ withSharedLink: "시리즈", inNewTab: "" }); // initialize
             }}
           >
             &nbsp;&nbsp;다시 노블타임에서 찾아보기&nbsp;&nbsp;
           </SrchGuideText>
         </>
       )}
-      {/* search for novel with iframe */}
-      {/* use infinite scroll without search params */}
-      {!novelId && isIframeSrch && <Iframe ref={iframeRef} src={`${SEARCH_NOVEL}/iframe`} />}
 
-      {/* show this after setting false of isIframeSrch */}
-      {/* or when entering here from novel detail page */}
-      {(!isIframeSrch || novelTitle) && (
+      {/* get a novel by searching or getting its url through iframe */}
+      {isGettingNovel.entirely && <Iframe ref={iframeRef} src={`${SEARCH_NOVEL}/iframe`} />}
+
+      {/* write a review */}
+      {!isGettingNovel.entirely && (
         <>
           <BoardContainer>
             <Board

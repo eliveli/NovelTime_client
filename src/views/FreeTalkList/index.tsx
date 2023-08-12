@@ -9,10 +9,11 @@ import {
 import { useMultipleSearchFilters } from "utils/useSearchFilterForWriting";
 
 import PageNOs from "components/PageNOs";
-import { useAppSelector } from "store/hooks";
+import { useAppDispatch, useAppSelector } from "store/hooks";
 import { WritingButton } from "components/Writing";
 import { useNavigate } from "react-router-dom";
 import { ADD_WRITING } from "utils/pathname";
+import { setSearchList } from "store/clientSlices/filterSlice";
 import FreeTalk from "./FreeTalkList.components";
 
 export default function FreeTalkList() {
@@ -56,6 +57,8 @@ export default function FreeTalkList() {
 
   const navigate = useNavigate();
 
+  const dispatch = useAppDispatch();
+
   const isLoginUser = !!useAppSelector((state) => state.user.loginUserInfo.userId);
 
   // *list가 []일 때 콘텐트 없다는 컴포넌트 표시
@@ -71,6 +74,13 @@ export default function FreeTalkList() {
               alert("로그인이 필요합니다");
               return;
             }
+
+            dispatch(
+              setSearchList({
+                listType: "novel",
+                list: "reset",
+              }),
+            );
 
             navigate(ADD_WRITING);
           }}

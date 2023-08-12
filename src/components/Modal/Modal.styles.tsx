@@ -329,6 +329,10 @@ export const GuideImg = styled.img`
   width: 300px; // same with the actual image width
   height: auto; // to get the original height among images that have different heights
 
+  @media (max-width: 330px) {
+    width: 280px;
+  }
+
   border: 1px solid #a9a9a95e;
   border-radius: 3px;
 `;

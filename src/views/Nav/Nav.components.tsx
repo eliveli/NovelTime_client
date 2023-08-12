@@ -261,6 +261,15 @@ export function NavMobileMainBottom({ pathname }: Props) {
                 return;
               }
 
+              if (idx === 2) {
+                dispatch(
+                  setSearchList({
+                    listType: "novel",
+                    list: "reset",
+                  }),
+                );
+              }
+
               navigate(_[1]);
             }}
           >

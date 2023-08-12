@@ -41,8 +41,7 @@ export default function SearchPage() {
     data,
   });
 
-  //  pass novel info to parent
-  // * it can be deleted later
+  //  pass novel info to the parent
   const goToPlatform = () => {
     window.parent.postMessage({ sign: "goToPlatform" }, "*");
   };
