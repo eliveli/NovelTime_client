@@ -325,16 +325,9 @@ export const GuideImgAlbum = styled.div`
 
   gap: 20px;
 `;
-
-export const GuideImg = styled.div<{ src: string }>`
-  width: 300px; // same with the actual image size
-  height: 540px; // same with the actual image size
-
-  background-image: url(${({ src }) => src});
-
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
+export const GuideImg = styled.img`
+  width: 300px; // same with the actual image width
+  height: auto; // to get the original height among images that have different heights
 
   border: 1px solid #a9a9a95e;
   border-radius: 3px;

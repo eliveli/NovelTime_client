@@ -29,18 +29,18 @@ export default function GetNovelURL() {
   );
 
   const getImagesWithShareLink = [
-    "https://i.imgur.com/6pb9Jdl.jpg",
-    "https://i.imgur.com/xgpE5ci.jpg",
-    "https://i.imgur.com/6ws9Zbk.jpg",
-    "https://i.imgur.com/zC6iduh.jpg",
+    "https://i.imgur.com/fbTkUge.jpg",
+    "https://i.imgur.com/VMtHMiv.jpg",
+    "https://i.imgur.com/hXapj8A.jpg",
+    "https://i.imgur.com/4zkybUu.jpg",
     "https://i.imgur.com/O0s1oK6.jpg",
   ];
   const getImagesDirectly = [
-    "https://i.imgur.com/jn9uNvo.jpg",
-    "https://i.imgur.com/28JgHeR.jpg",
-    "https://i.imgur.com/sF0ZoS2.jpg",
-    "https://i.imgur.com/AuumgUR.jpg",
-    "https://i.imgur.com/2ur6O03.jpg",
+    "https://i.imgur.com/f2Izj4l.jpg",
+    "https://i.imgur.com/riX9T5R.jpg",
+    "https://i.imgur.com/uIxuKZI.jpg",
+    "https://i.imgur.com/hSDSyfz.jpg",
+    "https://i.imgur.com/zyk9Jqs.jpg",
   ];
 
   const getImages = guideToGetURL === "WithShareLink" ? getImagesWithShareLink : getImagesDirectly;
@@ -89,7 +89,7 @@ export default function GetNovelURL() {
             <GuideImgAlbum>
               {getImages.map((img, idx) => (
                 <>
-                  <GuideImg key={img} src={img} />
+                  <GuideImg key={img} src={img} alt="imgToGuide" />
                   {idx !== 4 && (
                     <ArrowBox>
                       <Icon.BigDown />
