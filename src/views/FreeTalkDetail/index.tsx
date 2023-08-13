@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import MainBG from "components/MainBG";
 import {
   WritingDetailContainer,
@@ -10,6 +10,7 @@ import {
   CommentList,
   CommentInputOnMobile,
   RootCommentInputToCreateOnTablet,
+  EditAndDelete,
 } from "components/Writing";
 import { ContentAnimation } from "views/RecommendDetail/RecommendDetail.styles";
 import {
@@ -20,6 +21,10 @@ import {
 import ShowMoreContent from "assets/ShowMoreContent";
 import { Comment } from "store/serverAPIs/types";
 import { useWhetherItIsMobile } from "utils";
+import { EditAndDeleteContainer } from "components/Writing/WritingDetail.styles";
+import { EDIT_WRITING } from "utils/pathname";
+import { useAppDispatch, useAppSelector } from "store/hooks";
+import { handleWritingToEdit } from "store/clientSlices/writingSlice";
 
 export default function FreeTalkDetail() {
   const { talkId, commentId } = useParams();
@@ -153,6 +158,27 @@ export default function FreeTalkDetail() {
 
   const isMobile = useWhetherItIsMobile();
 
+  const loginUserName = useAppSelector((state) => state.user.loginUserInfo.userName);
+  const isWriter = loginUserName && loginUserName === talk.data?.talk.userName;
+
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  const handleEdit = () => {
+    if (!talk.data) return;
+
+    dispatch(
+      handleWritingToEdit({
+        writingId: talk.data.talk.talkId,
+        writingTitle: talk.data.talk.talkTitle,
+        writingDesc: talk.data.talk.talkDesc,
+        writingType: "FreeTalk",
+        novelTitle: talk.data.novel.novelTitle,
+      }),
+    );
+    navigate(EDIT_WRITING);
+  };
+
   if (!talkId || talk.isError || !talk.data) return <div>***에러 페이지 띄우기</div>;
 
   // 댓글은 프리톡만. 리코멘드는 댓글 없고 좋아요만 있음.
@@ -161,6 +187,11 @@ export default function FreeTalkDetail() {
   return (
     <MainBG isWritingDetail>
       <WritingDetailContainer>
+        <EditAndDeleteContainer>
+          {/* reference the CommentList component */}
+          {isWriter && <EditAndDelete clickToEdit={handleEdit} clickToDelete={() => {}} />}
+        </EditAndDeleteContainer>
+
         <BoardMark>Let's Free Talk about Novel!</BoardMark>
         <TalkDetail detailTalk={talk.data.talk} />
         <NovelInWriting novel={talk.data.novel} />

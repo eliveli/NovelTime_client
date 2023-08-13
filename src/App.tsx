@@ -38,6 +38,7 @@ import { setLoginUserInfo, setAccessToken } from "store/clientSlices/userSlice";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { ThemeProvider } from "styled-components";
 import theme from "assets/styles/theme";
+import EditWriting from "views/EditWriting";
 import GlobalStyle from "./assets/styles/GlobalStyle";
 
 function App() {
@@ -139,6 +140,7 @@ function App() {
               "/novel-list/:categoryText/:categoryId/:novelId",
               "/add-writing",
               "/add-writing/:novelId/:novelTitle",
+              "/edit-writing",
               "/search",
               "/search/novel",
               "/message-room/:roomId",
@@ -183,6 +185,7 @@ function App() {
 
           <Route path="/add-writing" element={<AddWriting />} />
           <Route path="/add-writing/:novelId/:novelTitle" element={<AddWriting />} />
+          <Route path="/edit-writing" element={<EditWriting />} />
 
           <Route path="/search" element={<SearchAllPage />} />
           <Route path="/search/novel" element={<SearchNovelPage />} />

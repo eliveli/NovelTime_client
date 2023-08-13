@@ -7,7 +7,7 @@ import { RECOMMEND_LIST, SEARCH_NOVEL, TALK_LIST } from "utils/pathname";
 import { useAddNovelWithURLMutation, useAddWritingMutation } from "store/serverAPIs/novelTime";
 import Spinner from "assets/Spinner";
 import { openModal } from "store/clientSlices/modalSlice";
-import { handleNewWritingOnMobile } from "../../store/clientSlices/writingSlice";
+import { handleWritingToSubmitOnMobile } from "../../store/clientSlices/writingSlice";
 import { useAppSelector, useAppDispatch } from "../../store/hooks";
 
 import {
@@ -36,8 +36,6 @@ import {
   PlatformBtnContnr,
   AllPlatformContnr,
   SrchGuideText,
-  HowToGetLink,
-  MoreIconBox,
   TextToBack,
   Note,
   NoteContainer,
@@ -223,23 +221,25 @@ export default function AddWriting() {
       alert("글을 등록할 수 없습니다. 새로고침 후 다시 시도해 보세요");
     }
 
-    const listToGoTo = board === "FreeTalk" ? TALK_LIST : RECOMMEND_LIST;
-    navigate(listToGoTo); // go to the writing list page
+    const pathToGoTo = board === "FreeTalk" ? TALK_LIST : RECOMMEND_LIST;
+    navigate(pathToGoTo); // go to the writing list page
   };
 
   // when clicking the submit button in nav bar on mobile or tablet
   const dispatch = useAppDispatch();
-  const isNewWritingOnMobile = useAppSelector((state) => state.writing.isNewWritingOnMobile);
+  const isWritingToSubmitOnMobile = useAppSelector(
+    (state) => state.writing.isWritingToSubmitOnMobile,
+  );
 
   useEffect(() => {
     async function submitOnMobile() {
-      if (isNewWritingOnMobile) {
+      if (isWritingToSubmitOnMobile) {
         await submitToAddWriting();
-        dispatch(handleNewWritingOnMobile(false)); // initialize
+        dispatch(handleWritingToSubmitOnMobile(false)); // initialize
       }
     }
     submitOnMobile();
-  }, [isNewWritingOnMobile]);
+  }, [isWritingToSubmitOnMobile]);
 
   //
   const checkToChangeNovel = () => {
@@ -258,7 +258,8 @@ export default function AddWriting() {
         }
       }}
     >
-      {addNovelWithURLResult.isLoading && <Spinner styles="fixed" />}
+      {addNovelWithURLResult.isLoading ||
+        (addWritingResult.isLoading && <Spinner styles="fixed" />)}
 
       <NovelTitleContainer>
         <NovelTitle>
@@ -393,7 +394,8 @@ export default function AddWriting() {
             />
           </WritingTitleContanr>
 
-          <ContentPlusCotnrPC>사진/간단텍스트설정/이모지</ContentPlusCotnrPC>
+          {/* treat later */}
+          {/* <ContentPlusCotnrPC>사진/간단텍스트설정/이모지</ContentPlusCotnrPC> */}
 
           <WritingContentContnr>
             <WritingContent ref={contentRef} placeholder="글 내용을 입력하세요" />
@@ -403,9 +405,9 @@ export default function AddWriting() {
             <SubmitBtnPC onClick={submitToAddWriting}>작성</SubmitBtnPC>
           </SubmitBtnContnr>
 
-          <ContentPlusContnrMobile>
+          {/* <ContentPlusContnrMobile>
             <ContentPlusAlignMobile>사진/간단텍스트설정/이모지</ContentPlusAlignMobile>
-          </ContentPlusContnrMobile>
+          </ContentPlusContnrMobile> */}
         </>
       )}
     </MainBG>

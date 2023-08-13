@@ -39,6 +39,7 @@ import {
   ParamToSearchForNovels,
   NovelIdAndTitle,
   ParamForNewWriting,
+  ParamToEditWriting,
 } from "./types";
 import type { RootState } from "../index";
 
@@ -135,6 +136,8 @@ export const novelTimeApi = createApi({
 
     getTalkDetail: builder.query<TalkDetail, ParamForGettingWriting>({
       query: (params) => `/writing/${params.writingType}/${params.writingId}`,
+      providesTags: (result, error, arg) =>
+        arg.writingType === "T" ? ["talkUpdated"] : ["recommendUpdated"],
     }),
     addWriting: builder.mutation<string, ParamForNewWriting>({
       query: ({ novelId, writingType, writingTitle, writingDesc, writingImg }) => ({
@@ -143,6 +146,20 @@ export const novelTimeApi = createApi({
         body: {
           novelId,
           writingType,
+          writingTitle,
+          writingDesc,
+          writingImg,
+        },
+      }),
+      invalidatesTags: (result, error, arg) =>
+        arg.writingType === "T" ? ["talkUpdated"] : ["recommendUpdated"],
+    }),
+    editWriting: builder.mutation<string, ParamToEditWriting>({
+      query: ({ writingId, writingTitle, writingDesc, writingImg }) => ({
+        url: "/writing",
+        method: "PUT",
+        body: {
+          writingId,
           writingTitle,
           writingDesc,
           writingImg,
@@ -309,6 +326,7 @@ export const {
   useGetWritingsFilteredQuery,
   useGetTalkDetailQuery,
   useAddWritingMutation,
+  useEditWritingMutation,
   useGetRootCommentsQuery,
   useGetReCommentsQuery,
   useAddRootCommentMutation,

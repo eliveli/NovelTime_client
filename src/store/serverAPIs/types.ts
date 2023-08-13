@@ -99,6 +99,14 @@ export type ParamForNewWriting = {
   writingImg?: string;
 };
 
+export type ParamToEditWriting = {
+  writingId: string;
+  writingTitle: string;
+  writingDesc: string;
+  writingImg?: string;
+  writingType: "T" | "R";
+};
+
 export type ParamForNewRootComment = {
   talkId: string;
   novelTitle: string;

@@ -8,7 +8,15 @@ export const WritingDetailContainer = styled.div`
   /* margin-top: 10px; */
   padding: 10px 0;
   /* padding: 10px 20px 20px 20px; */
+
+  position: relative;
 `;
+export const EditAndDeleteContainer = styled.div`
+  position: absolute;
+  top: 9px;
+  right: 14px;
+`;
+
 export const Writing = styled.div`
   width: 100%;
   display: flex;
