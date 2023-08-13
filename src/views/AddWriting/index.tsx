@@ -1,14 +1,13 @@
 /* eslint-disable max-len */
 import MainBG from "components/MainBG";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Icon from "assets/Icon";
-import { SEARCH_NOVEL } from "utils/pathname";
-import { setSearchList } from "store/clientSlices/filterSlice";
-import { useAddNovelWithURLMutation } from "store/serverAPIs/novelTime";
+import { RECOMMEND_LIST, SEARCH_NOVEL, TALK_LIST } from "utils/pathname";
+import { useAddNovelWithURLMutation, useAddWritingMutation } from "store/serverAPIs/novelTime";
 import Spinner from "assets/Spinner";
 import { openModal } from "store/clientSlices/modalSlice";
-import { handleWritingSubmit } from "../../store/clientSlices/writingSlice";
+import { handleNewWritingOnMobile } from "../../store/clientSlices/writingSlice";
 import { useAppSelector, useAppDispatch } from "../../store/hooks";
 
 import {
@@ -45,46 +44,7 @@ import {
 } from "./AddWriting.styles";
 
 export default function AddWriting() {
-  // server request for submit----------------------------
-  const handleSubmit = () => {
-    // server request : submit writing info //
-    // - novelId, boardCategory, writingTitle, writingContent, userId(or userName), etc... //
-  };
-  // for mobile and tablet : when clicked submit button at the top navigation
-  const dispatch = useAppDispatch();
-  const isWritingSubmit = useAppSelector((state) => state.writing.isWritingSubmit);
-  if (isWritingSubmit) {
-    handleSubmit();
-    dispatch(handleWritingSubmit(false)); // reset writing-submit state
-  }
-  // handle title of writing ------------------------------
-  const titleRef = useRef<HTMLTextAreaElement>(null);
-  const [title, setTitle] = useState("");
-
-  // auto-set height of title element
-  const writeTitle = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    if (!titleRef.current) return;
-
-    setTitle(e.target.value); // store content of Title
-    titleRef.current.style.height = "28px"; // Default: height of 1 line
-    const titleHeight = titleRef.current.scrollHeight; // current scroll height
-
-    // max-height : 5 lines of 124px
-    titleRef.current.style.height = `${titleHeight <= 124 ? titleRef.current.scrollHeight : 124}px`;
-  }, []);
-  // ----------------------------------------------------//
-
-  // handle content of writing ----------------------------
-  const contentRef = useRef("");
-  const writeContent = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    contentRef.current = e.target.value;
-  };
-  // ----------------------------------------------------//
-
-  // handle board -----------------------------------------
-  type Board = "FreeTalk" | "Recommend";
-  const [board, setBoard] = useState("FreeTalk");
-  // ----------------------------------------------------//
+  // handle novel ------------- //
 
   const [addNovelWithURL, addNovelWithURLResult] = useAddNovelWithURLMutation();
 
@@ -193,6 +153,103 @@ export default function AddWriting() {
 
   const [isToolTipOpened, handleToolTip] = useState(false);
 
+  // handle writing ------------- //
+
+  const titleRef = useRef<HTMLTextAreaElement>(null);
+  const contentRef = useRef<HTMLTextAreaElement>(null);
+
+  const setHeightOfTitle = useCallback(() => {
+    if (!titleRef.current) return;
+
+    titleRef.current.style.height = "28px"; // Default: height of 1 line
+    const titleHeight = titleRef.current.scrollHeight; // current scroll height
+
+    // max-height : 5 lines of 124px
+    titleRef.current.style.height = `${titleHeight <= 124 ? titleRef.current.scrollHeight : 124}px`;
+  }, []);
+
+  const [board, setBoard] = useState<"FreeTalk" | "Recommend">("FreeTalk");
+
+  useEffect(() => {
+    const { search } = window.location;
+    // * set the search like below to the writing button in the recommend-list later
+    if (search === "?board=Recommend") {
+      setBoard("Recommend");
+    }
+  }, []);
+
+  const [addWriting, addWritingResult] = useAddWritingMutation();
+
+  const loginUserId = useAppSelector((state) => state.user.loginUserInfo.userId);
+
+  const navigate = useNavigate();
+
+  const submitToAddWriting = async () => {
+    if (!loginUserId) {
+      alert("먼저 로그인을 해 주세요");
+      return;
+    }
+    if (!novelForReview.novelId) {
+      alert("소설을 선택해 주세요");
+      return;
+    }
+
+    if (!board) {
+      alert("게시판 종류를 선택해 주세요");
+      return;
+    }
+
+    if (!titleRef.current?.value) {
+      alert("제목을 입력해 주세요");
+      return;
+    }
+
+    if (!contentRef.current?.value) {
+      alert("내용을 입력해 주세요");
+      return;
+    }
+
+    if (addWritingResult.isLoading) return;
+
+    await addWriting({
+      novelId: novelForReview.novelId,
+      writingType: board === "FreeTalk" ? "T" : "R",
+      writingTitle: titleRef.current.value,
+      writingDesc: contentRef.current.value,
+      writingImg: undefined, // treat this later
+    });
+
+    if (addWritingResult.isError) {
+      alert("글을 등록할 수 없습니다. 새로고침 후 다시 시도해 보세요");
+    }
+
+    const listToGoTo = board === "FreeTalk" ? TALK_LIST : RECOMMEND_LIST;
+    navigate(listToGoTo); // go to the writing list page
+  };
+
+  // when clicking the submit button in nav bar on mobile or tablet
+  const dispatch = useAppDispatch();
+  const isNewWritingOnMobile = useAppSelector((state) => state.writing.isNewWritingOnMobile);
+
+  useEffect(() => {
+    async function submitOnMobile() {
+      if (isNewWritingOnMobile) {
+        await submitToAddWriting();
+        dispatch(handleNewWritingOnMobile(false)); // initialize
+      }
+    }
+    submitOnMobile();
+  }, [isNewWritingOnMobile]);
+
+  //
+  const checkToChangeNovel = () => {
+    if (titleRef.current?.value || contentRef.current?.value) {
+      // * 추후 yes or no 선택 모달 넣기
+      alert("작성 중인 내용이 지워집니다. 소설을 바꾸시겠어요?");
+    }
+    handleGettingNovel({ onGoing: true, inGettingURL: false });
+  };
+
   return (
     <MainBG
       onClick={() => {
@@ -210,9 +267,7 @@ export default function AddWriting() {
 
         {!isGettingNovel.onGoing ? (
           <Icon.IconBox>
-            <Icon.Search
-              onClick={() => handleGettingNovel({ onGoing: true, inGettingURL: false })}
-            />
+            <Icon.Search onClick={checkToChangeNovel} />
           </Icon.IconBox>
         ) : (
           <TextToBack onClick={() => handleGettingNovel({ onGoing: false, inGettingURL: false })}>
@@ -315,39 +370,37 @@ export default function AddWriting() {
         </>
       )}
 
-      {/* get a novel by searching or getting its url through iframe */}
+      {/* get a novel by searching for it or getting its url through iframe */}
       {isGettingNovel.onGoing && <Iframe ref={iframeRef} src={`${SEARCH_NOVEL}/iframe`} />}
 
       {/* write a review */}
       {!isGettingNovel.onGoing && (
         <>
           <BoardContainer>
-            <Board
-              category="FreeTalk"
-              selected={board as Board}
-              onClick={() => setBoard("FreeTalk")}
-            >
+            <Board category="FreeTalk" selected={board} onClick={() => setBoard("FreeTalk")}>
               FreeTalk
             </Board>
-            <Board
-              category="Recommend"
-              selected={board as Board}
-              onClick={() => setBoard("Recommend")}
-            >
+            <Board category="Recommend" selected={board} onClick={() => setBoard("Recommend")}>
               Recommend
             </Board>
           </BoardContainer>
+
           <WritingTitleContanr>
-            <WritingTitle ref={titleRef} placeholder="글 제목을 입력하세요" onChange={writeTitle} />
+            <WritingTitle
+              ref={titleRef}
+              placeholder="글 제목을 입력하세요"
+              onChange={setHeightOfTitle}
+            />
           </WritingTitleContanr>
 
           <ContentPlusCotnrPC>사진/간단텍스트설정/이모지</ContentPlusCotnrPC>
+
           <WritingContentContnr>
-            <WritingContent placeholder="글 내용을 입력하세요" onChange={writeContent} />
+            <WritingContent ref={contentRef} placeholder="글 내용을 입력하세요" />
           </WritingContentContnr>
 
           <SubmitBtnContnr>
-            <SubmitBtnPC onClick={handleSubmit}>작성</SubmitBtnPC>
+            <SubmitBtnPC onClick={submitToAddWriting}>작성</SubmitBtnPC>
           </SubmitBtnContnr>
 
           <ContentPlusContnrMobile>

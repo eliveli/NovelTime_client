@@ -91,6 +91,14 @@ export type ParamForReComments = {
   commentSortType: "new" | "old";
 };
 
+export type ParamForNewWriting = {
+  novelId: string;
+  writingType: "T" | "R";
+  writingTitle: string;
+  writingDesc: string;
+  writingImg?: string;
+};
+
 export type ParamForNewRootComment = {
   talkId: string;
   novelTitle: string;

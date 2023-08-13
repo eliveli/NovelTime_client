@@ -38,6 +38,7 @@ import {
   NovelDetailList,
   ParamToSearchForNovels,
   NovelIdAndTitle,
+  ParamForNewWriting,
 } from "./types";
 import type { RootState } from "../index";
 
@@ -83,6 +84,8 @@ export const novelTimeApi = createApi({
     "ListTitlesUpdated",
     "ContentUpdatedInNovelList",
     "reCommentsUpdated",
+    "talkUpdated",
+    "recommendUpdated",
   ],
   endpoints: (builder) => ({
     // at home page
@@ -126,12 +129,29 @@ export const novelTimeApi = createApi({
     getWritingsFiltered: builder.query<WritingList, ParamForGettingWritings>({
       query: (params) =>
         `/writing/${params.writingType}/${params.novelGenre}/${params.searchType}/${params.searchWord}/${params.sortBy}/${params.pageNo}`,
+      providesTags: (result, error, arg) =>
+        arg.writingType === "T" ? ["talkUpdated"] : ["recommendUpdated"],
     }),
 
-    // in talk-detail page
     getTalkDetail: builder.query<TalkDetail, ParamForGettingWriting>({
       query: (params) => `/writing/${params.writingType}/${params.writingId}`,
     }),
+    addWriting: builder.mutation<string, ParamForNewWriting>({
+      query: ({ novelId, writingType, writingTitle, writingDesc, writingImg }) => ({
+        url: "/writing",
+        method: "POST",
+        body: {
+          novelId,
+          writingType,
+          writingTitle,
+          writingDesc,
+          writingImg,
+        },
+      }),
+      invalidatesTags: (result, error, arg) =>
+        arg.writingType === "T" ? ["talkUpdated"] : ["recommendUpdated"],
+    }),
+
     getRootComments: builder.query<CommentList, ParamForRootComments>({
       query: (params) =>
         `/comment/${params.talkId}/${params.commentSortType}/${params.commentPageNo}`,
@@ -288,6 +308,7 @@ export const {
   useAddNovelWithURLMutation,
   useGetWritingsFilteredQuery,
   useGetTalkDetailQuery,
+  useAddWritingMutation,
   useGetRootCommentsQuery,
   useGetReCommentsQuery,
   useAddRootCommentMutation,

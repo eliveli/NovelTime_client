@@ -22,7 +22,7 @@ import { useMultipleSearchFilters } from "utils/useSearchFilterForWriting";
 import { ADD_WRITING, MESSAGE_LIST, NOVEL_LIST, RECOMMEND_LIST, TALK_LIST } from "utils/pathname";
 import { setListType, setSearchList } from "store/clientSlices/filterSlice";
 import { filterContent, openModal, setLikeNovel } from "../../store/clientSlices/modalSlice";
-import { handleWritingSubmit } from "../../store/clientSlices/writingSlice";
+import { handleNewWritingOnMobile } from "../../store/clientSlices/writingSlice";
 import { useAppSelector, useAppDispatch } from "../../store/hooks";
 
 import {
@@ -429,7 +429,7 @@ export function NavMobileDetail({ parameter, pathname, handleMsgList }: DetailPr
           )}
           {/* submit writing */}
           {pathname?.includes("add-writing") && (
-            <SubmitBtn onClick={() => dispatch(handleWritingSubmit(true))}>작성</SubmitBtn>
+            <SubmitBtn onClick={() => dispatch(handleNewWritingOnMobile(true))}>작성</SubmitBtn>
           )}
           {/* user page : my page button for tablet size */}
           {pathname.includes("user-page") && loginUserInfo.userName && (
