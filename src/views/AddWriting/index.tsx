@@ -39,6 +39,7 @@ import {
   SrchGuideText,
   HowToGetLink,
   MoreIconBox,
+  TextToBack,
   Note,
   NoteContainer,
 } from "./AddWriting.styles";
@@ -207,9 +208,17 @@ export default function AddWriting() {
           {(!isGettingNovel.onGoing && novelForReview.novelTitle) || "소설제목"}
         </NovelTitle>
 
-        <Icon.IconBox>
-          <Icon.Search onClick={() => handleGettingNovel({ onGoing: true, inGettingURL: false })} />
-        </Icon.IconBox>
+        {!isGettingNovel.onGoing ? (
+          <Icon.IconBox>
+            <Icon.Search
+              onClick={() => handleGettingNovel({ onGoing: true, inGettingURL: false })}
+            />
+          </Icon.IconBox>
+        ) : (
+          <TextToBack onClick={() => handleGettingNovel({ onGoing: false, inGettingURL: false })}>
+            이전으로
+          </TextToBack>
+        )}
       </NovelTitleContainer>
 
       {/* get a novel by getting its url */}

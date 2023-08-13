@@ -19,6 +19,11 @@ export const NovelTitle = styled.button`
   color: ${theme.color.main};
   border: 1px solid ${theme.color.mainLight};
 `;
+export const TextToBack = styled.span`
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(100, 100, 100, 0.5);
+`;
 
 export const NoteContainer = styled.div`
   display: flex;
