@@ -39,6 +39,8 @@ import {
   SrchGuideText,
   HowToGetLink,
   MoreIconBox,
+  Note,
+  NoteContainer,
 } from "./AddWriting.styles";
 
 export default function AddWriting() {
@@ -94,12 +96,16 @@ export default function AddWriting() {
   //  - way to get the novel url from the novel platform
   //    . with share-link through iframe
   //    . directly through new tab opened
+
+  // : if there is no novel to find in my website,
+  //    user can get one by getting the novel url from novel platform
+  //                     and giving it to the server
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
-  // when searching for novels to select one without getting its url : entirely true, inGettingURL false
-  // when getting novel url to get novel : entirely true, inGettingURL true
-  // when finishing the process : entirely false, inGettingURL false
-  const [isGettingNovel, handleGettingNovel] = useState({ entirely: false, inGettingURL: false });
+  // when searching for novels to select one without getting its url : onGoing true, inGettingURL false
+  // when getting novel url to get novel : onGoing true, inGettingURL true
+  // when finishing the process : onGoing false, inGettingURL false
+  const [isGettingNovel, handleGettingNovel] = useState({ onGoing: false, inGettingURL: false });
 
   const [platformToGetURL, setPlatformToGetURL] = useState({
     withSharedLink: "시리즈",
@@ -122,12 +128,12 @@ export default function AddWriting() {
       // write review directly after selecting novel through iframe
       if (iframeRef.current && !!event.data.novelId) {
         setNovelForReview({ novelId: event.data.novelId, novelTitle: event.data.novelTitle });
-        handleGettingNovel({ entirely: false, inGettingURL: false });
+        handleGettingNovel({ onGoing: false, inGettingURL: false });
       }
 
       // go to get the novel url to get a novel
       if (iframeRef.current && !!event.data.sign) {
-        handleGettingNovel({ entirely: true, inGettingURL: true });
+        handleGettingNovel({ onGoing: true, inGettingURL: true });
 
         setIframeAddress("https://m.series.naver.com/search/search.series?t=novel&fs=default&q=");
       }
@@ -180,28 +186,34 @@ export default function AddWriting() {
     });
 
     // close iframe and initialize related things
-    handleGettingNovel({ entirely: false, inGettingURL: false });
+    handleGettingNovel({ onGoing: false, inGettingURL: false });
     setPlatformToGetURL({ withSharedLink: "시리즈", inNewTab: "" });
   }, [addNovelWithURLResult.data]);
 
+  const [isToolTipOpened, handleToolTip] = useState(false);
+
   return (
-    <MainBG>
+    <MainBG
+      onClick={() => {
+        if (isToolTipOpened) {
+          handleToolTip(false);
+        }
+      }}
+    >
       {addNovelWithURLResult.isLoading && <Spinner styles="fixed" />}
 
       <NovelTitleContainer>
-        <NovelTitle>{novelForReview.novelTitle || "소설제목"}</NovelTitle>
-        {!novelForReview.novelTitle && !isGettingNovel.entirely && (
-          <Icon.IconBox>
-            <Icon.Search
-              onClick={() => handleGettingNovel({ entirely: true, inGettingURL: false })}
-            />
-          </Icon.IconBox>
-        )}
-        {/* 소설 다시 선택하는 경우 기존에 선택된 소설 제목 옆에 취소용 버튼 (위쪽 화살표?) 추가 */}
+        <NovelTitle>
+          {(!isGettingNovel.onGoing && novelForReview.novelTitle) || "소설제목"}
+        </NovelTitle>
+
+        <Icon.IconBox>
+          <Icon.Search onClick={() => handleGettingNovel({ onGoing: true, inGettingURL: false })} />
+        </Icon.IconBox>
       </NovelTitleContainer>
 
       {/* get a novel by getting its url */}
-      {isGettingNovel.entirely && isGettingNovel.inGettingURL && (
+      {isGettingNovel.onGoing && isGettingNovel.inGettingURL && (
         <>
           <NovelUrlContnr>
             <SrchGuideText
@@ -269,23 +281,36 @@ export default function AddWriting() {
             </PlatformContnrSecond>
           </AllPlatformContnr>
 
-          <SrchGuideText
-            onClick={() => {
-              handleGettingNovel({ entirely: true, inGettingURL: false });
-              setIframeAddress(`${SEARCH_NOVEL}/iframe`);
-              setPlatformToGetURL({ withSharedLink: "시리즈", inNewTab: "" }); // initialize
-            }}
-          >
-            &nbsp;&nbsp;다시 노블타임에서 찾아보기&nbsp;&nbsp;
-          </SrchGuideText>
+          <NoteContainer>
+            <SrchGuideText
+              onClick={() => {
+                handleGettingNovel({ onGoing: true, inGettingURL: false });
+                setIframeAddress(`${SEARCH_NOVEL}/iframe`);
+                setPlatformToGetURL({ withSharedLink: "시리즈", inNewTab: "" }); // initialize
+              }}
+            >
+              &nbsp;&nbsp;다시 노블타임에서 찾아보기&nbsp;&nbsp;
+            </SrchGuideText>
+
+            <SrchGuideText onClick={() => handleToolTip(true)}>유의사항</SrchGuideText>
+            {isToolTipOpened && (
+              <Note>
+                * 성인 작품은 리뷰할 수 없습니다
+                <br />
+                * 조아라 작품은 작품 주소를 찾아와야 합니다
+                <br />
+                (작품 정보의 변동이 많아 미리 저장해두지 않습니다)
+              </Note>
+            )}
+          </NoteContainer>
         </>
       )}
 
       {/* get a novel by searching or getting its url through iframe */}
-      {isGettingNovel.entirely && <Iframe ref={iframeRef} src={`${SEARCH_NOVEL}/iframe`} />}
+      {isGettingNovel.onGoing && <Iframe ref={iframeRef} src={`${SEARCH_NOVEL}/iframe`} />}
 
       {/* write a review */}
-      {!isGettingNovel.entirely && (
+      {!isGettingNovel.onGoing && (
         <>
           <BoardContainer>
             <Board

@@ -19,6 +19,29 @@ export const NovelTitle = styled.button`
   color: ${theme.color.main};
   border: 1px solid ${theme.color.mainLight};
 `;
+
+export const NoteContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+`;
+
+export const Note = styled.div`
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.4);
+  font-size: 13px;
+  border-radius: 3px;
+  background-color: white;
+  margin-bottom: 10px;
+  position: absolute;
+  text-align: right;
+
+  right: 9px;
+  bottom: 24px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  padding: 4px;
+`;
+
 export const SrchGuideText = styled.span<{ isHowTo?: true }>`
   font-weight: 500;
   color: rgba(0, 0, 0, 0.4);
@@ -27,6 +50,13 @@ export const SrchGuideText = styled.span<{ isHowTo?: true }>`
 
   display: inline-block;
   margin-bottom: 10px;
+
+  ${theme.media.hover(`
+    cursor: pointer;
+    opacity: 0.7;
+    font-weight: 500;
+    color: rgba(100, 100, 100, 0.8);
+  `)}
 
   ${({ isHowTo }) =>
     isHowTo && `margin-bottom: 0; position: absolute; right: 0; top: -21px; border-bottom: 0px;`}
