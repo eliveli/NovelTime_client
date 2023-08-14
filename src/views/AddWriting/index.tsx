@@ -228,7 +228,9 @@ export default function AddWriting() {
     // go to the list page
     const pathToGoTo = board === "FreeTalk" ? TALK_LIST : RECOMMEND_LIST;
     if (isDesktop) {
-      navigate(`${pathToGoTo}?genre=All&searchType=no&searchWord=&sortType=작성일New&pageNo=1`);
+      navigate(`${pathToGoTo}?genre=All&searchType=no&searchWord=&sortType=작성일New&pageNo=1`, {
+        replace: true,
+      });
     } else if (board === "FreeTalk") {
       dispatch(
         setSearchList({
@@ -237,7 +239,7 @@ export default function AddWriting() {
         }),
       );
 
-      navigate(TALK_LIST);
+      navigate(TALK_LIST, { replace: true });
     } else if (board === "Recommend") {
       dispatch(
         setSearchList({
@@ -246,7 +248,7 @@ export default function AddWriting() {
         }),
       );
 
-      navigate(TALK_LIST);
+      navigate(TALK_LIST, { replace: true });
     }
   };
 

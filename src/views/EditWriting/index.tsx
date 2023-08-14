@@ -77,11 +77,11 @@ export default function EditWriting() {
     });
 
     if (editWritingResult.isError) {
-      alert("글을 등록할 수 없습니다. 새로고침 후 다시 시도해 보세요");
+      alert("글을 수정할 수 없습니다. 새로고침 후 다시 시도해 보세요");
     }
 
     const pathToGoTo = writingType === "FreeTalk" ? TALK_DETAIL : RECOMMEND_DETAIL;
-    navigate(`${pathToGoTo}/${writingId}`); // go to the writing detail page
+    navigate(`${pathToGoTo}/${writingId}`, { replace: true }); // go to the writing detail page
 
     dispatch(
       handleWritingToEdit({
@@ -116,7 +116,7 @@ export default function EditWriting() {
     submitOnMobile();
   }, [isWritingToSubmitOnMobile]);
 
-  // when this page was refreshed or user went back here
+  // when this page was refreshed
   useEffect(() => {
     if (!writingId) {
       const pathToGoTo = writingType === "FreeTalk" ? TALK_LIST : RECOMMEND_LIST;

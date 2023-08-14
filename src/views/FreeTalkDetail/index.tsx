@@ -203,7 +203,9 @@ export default function FreeTalkDetail() {
 
     // go to the talk list page
     if (isDesktop) {
-      navigate(`${TALK_LIST}?genre=All&searchType=no&searchWord=&sortType=작성일New&pageNo=1`);
+      navigate(`${TALK_LIST}?genre=All&searchType=no&searchWord=&sortType=작성일New&pageNo=1`, {
+        replace: true,
+      });
     } else {
       dispatch(
         setSearchList({
@@ -212,7 +214,7 @@ export default function FreeTalkDetail() {
         }),
       );
 
-      navigate(TALK_LIST);
+      navigate(TALK_LIST, { replace: true });
     }
   }
 
