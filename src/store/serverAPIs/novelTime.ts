@@ -40,6 +40,7 @@ import {
   NovelIdAndTitle,
   ParamForNewWriting,
   ParamToEditWriting,
+  ParamToDeleteWriting,
 } from "./types";
 import type { RootState } from "../index";
 
@@ -163,6 +164,17 @@ export const novelTimeApi = createApi({
           writingTitle,
           writingDesc,
           writingImg,
+        },
+      }),
+      invalidatesTags: (result, error, arg) =>
+        arg.writingType === "T" ? ["talkUpdated"] : ["recommendUpdated"],
+    }),
+    deleteWriting: builder.mutation<string, ParamToDeleteWriting>({
+      query: ({ writingId }) => ({
+        url: "/writing",
+        method: "DELETE",
+        body: {
+          writingId,
         },
       }),
       invalidatesTags: (result, error, arg) =>
@@ -327,6 +339,7 @@ export const {
   useGetTalkDetailQuery,
   useAddWritingMutation,
   useEditWritingMutation,
+  useDeleteWritingMutation,
   useGetRootCommentsQuery,
   useGetReCommentsQuery,
   useAddRootCommentMutation,

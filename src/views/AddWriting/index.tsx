@@ -7,6 +7,8 @@ import { RECOMMEND_LIST, SEARCH_NOVEL, TALK_LIST } from "utils/pathname";
 import { useAddNovelWithURLMutation, useAddWritingMutation } from "store/serverAPIs/novelTime";
 import Spinner from "assets/Spinner";
 import { openModal } from "store/clientSlices/modalSlice";
+import { useWhetherItIsDesktop } from "utils";
+import { setSearchList } from "store/clientSlices/filterSlice";
 import { handleWritingToSubmitOnMobile } from "../../store/clientSlices/writingSlice";
 import { useAppSelector, useAppDispatch } from "../../store/hooks";
 
@@ -181,6 +183,8 @@ export default function AddWriting() {
   const loginUserId = useAppSelector((state) => state.user.loginUserInfo.userId);
 
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const isDesktop = useWhetherItIsDesktop();
 
   const submitToAddWriting = async () => {
     if (!loginUserId) {
@@ -221,12 +225,32 @@ export default function AddWriting() {
       alert("글을 등록할 수 없습니다. 새로고침 후 다시 시도해 보세요");
     }
 
+    // go to the list page
     const pathToGoTo = board === "FreeTalk" ? TALK_LIST : RECOMMEND_LIST;
-    navigate(pathToGoTo); // go to the writing list page
+    if (isDesktop) {
+      navigate(`${pathToGoTo}?genre=All&searchType=no&searchWord=&sortType=작성일New&pageNo=1`);
+    } else if (board === "FreeTalk") {
+      dispatch(
+        setSearchList({
+          listType: "talk",
+          list: "reset",
+        }),
+      );
+
+      navigate(TALK_LIST);
+    } else if (board === "Recommend") {
+      dispatch(
+        setSearchList({
+          listType: "recommend",
+          list: "reset",
+        }),
+      );
+
+      navigate(TALK_LIST);
+    }
   };
 
   // when clicking the submit button in nav bar on mobile or tablet
-  const dispatch = useAppDispatch();
   const isWritingToSubmitOnMobile = useAppSelector(
     (state) => state.writing.isWritingToSubmitOnMobile,
   );

@@ -106,6 +106,10 @@ export type ParamToEditWriting = {
   writingImg?: string;
   writingType: "T" | "R";
 };
+export type ParamToDeleteWriting = {
+  writingId: string;
+  writingType: "T" | "R";
+};
 
 export type ParamForNewRootComment = {
   talkId: string;

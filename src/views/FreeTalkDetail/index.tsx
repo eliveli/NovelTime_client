@@ -14,17 +14,19 @@ import {
 } from "components/Writing";
 import { ContentAnimation } from "views/RecommendDetail/RecommendDetail.styles";
 import {
+  useDeleteWritingMutation,
   useGetReCommentsQuery,
   useGetRootCommentsQuery,
   useGetTalkDetailQuery,
 } from "store/serverAPIs/novelTime";
 import ShowMoreContent from "assets/ShowMoreContent";
 import { Comment } from "store/serverAPIs/types";
-import { useWhetherItIsMobile } from "utils";
+import { useWhetherItIsDesktop, useWhetherItIsMobile } from "utils";
 import { EditAndDeleteContainer } from "components/Writing/WritingDetail.styles";
-import { EDIT_WRITING } from "utils/pathname";
+import { EDIT_WRITING, TALK_LIST } from "utils/pathname";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { handleWritingToEdit } from "store/clientSlices/writingSlice";
+import { setSearchList } from "store/clientSlices/filterSlice";
 
 export default function FreeTalkDetail() {
   const { talkId, commentId } = useParams();
@@ -179,6 +181,41 @@ export default function FreeTalkDetail() {
     navigate(EDIT_WRITING);
   };
 
+  const isDesktop = useWhetherItIsDesktop();
+
+  const [deleteWriting, deleteWritingResult] = useDeleteWritingMutation();
+
+  async function handleDelete() {
+    if (!talk.data) return;
+
+    // * ask whether you really want to delete the comment
+    // * change this after making the modal
+    if (deleteWritingResult.isLoading) return; // prevent click while loading for prev request
+
+    await deleteWriting({
+      writingId: talk.data.talk.talkId,
+      writingType: "T",
+    });
+
+    if (deleteWritingResult.isError) {
+      alert("글을 삭제할 수 없습니다. 새로고침 후 다시 시도해 보세요");
+    }
+
+    // go to the talk list page
+    if (isDesktop) {
+      navigate(`${TALK_LIST}?genre=All&searchType=no&searchWord=&sortType=작성일New&pageNo=1`);
+    } else {
+      dispatch(
+        setSearchList({
+          listType: "talk",
+          list: "reset",
+        }),
+      );
+
+      navigate(TALK_LIST);
+    }
+  }
+
   if (!talkId || talk.isError || !talk.data) return <div>***에러 페이지 띄우기</div>;
 
   // 댓글은 프리톡만. 리코멘드는 댓글 없고 좋아요만 있음.
@@ -189,7 +226,9 @@ export default function FreeTalkDetail() {
       <WritingDetailContainer>
         <EditAndDeleteContainer>
           {/* reference the CommentList component */}
-          {isWriter && <EditAndDelete clickToEdit={handleEdit} clickToDelete={() => {}} />}
+          {isWriter && (
+            <EditAndDelete clickToEdit={handleEdit} clickToDelete={async () => handleDelete()} />
+          )}
         </EditAndDeleteContainer>
 
         <BoardMark>Let's Free Talk about Novel!</BoardMark>
