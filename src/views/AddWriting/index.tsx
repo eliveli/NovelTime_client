@@ -158,15 +158,34 @@ export default function AddWriting() {
   const titleRef = useRef<HTMLTextAreaElement>(null);
   const contentRef = useRef<HTMLTextAreaElement>(null);
 
-  const setHeightOfTitle = useCallback(() => {
+  const titleChanged = useRef("");
+  const contentChanged = useRef("");
+
+  const writeTitle = useCallback(() => {
     if (!titleRef.current) return;
 
+    titleChanged.current = titleRef.current.value;
+
+    // set the height of title automatically
     titleRef.current.style.height = "28px"; // Default: height of 1 line
     const titleHeight = titleRef.current.scrollHeight; // current scroll height
 
     // max-height : 5 lines of 124px
     titleRef.current.style.height = `${titleHeight <= 124 ? titleRef.current.scrollHeight : 124}px`;
   }, []);
+
+  const writeContent = () => {
+    if (!contentRef.current) return;
+    contentChanged.current = contentRef.current?.value;
+  };
+
+  // after changing a novel, set the previous title and content again
+  useEffect(() => {
+    if (isGettingNovel.onGoing || !titleRef.current || !contentRef.current) return;
+
+    titleRef.current.value = titleChanged.current;
+    contentRef.current.value = contentChanged.current;
+  }, [isGettingNovel.onGoing]);
 
   const [board, setBoard] = useState<"FreeTalk" | "Recommend">("FreeTalk");
 
@@ -216,8 +235,8 @@ export default function AddWriting() {
     await addWriting({
       novelId: novelForReview.novelId,
       writingType: board === "FreeTalk" ? "T" : "R",
-      writingTitle: titleRef.current.value,
-      writingDesc: contentRef.current.value,
+      writingTitle: titleChanged.current,
+      writingDesc: contentChanged.current,
       writingImg: undefined, // treat this later
     });
 
@@ -267,15 +286,6 @@ export default function AddWriting() {
     submitOnMobile();
   }, [isWritingToSubmitOnMobile]);
 
-  //
-  const checkToChangeNovel = () => {
-    if (titleRef.current?.value || contentRef.current?.value) {
-      // * 추후 yes or no 선택 모달 넣기
-      alert("작성 중인 내용이 지워집니다. 소설을 바꾸시겠어요?");
-    }
-    handleGettingNovel({ onGoing: true, inGettingURL: false });
-  };
-
   return (
     <MainBG
       onClick={() => {
@@ -294,7 +304,9 @@ export default function AddWriting() {
 
         {!isGettingNovel.onGoing ? (
           <Icon.IconBox>
-            <Icon.Search onClick={checkToChangeNovel} />
+            <Icon.Search
+              onClick={() => handleGettingNovel({ onGoing: true, inGettingURL: false })}
+            />
           </Icon.IconBox>
         ) : (
           <TextToBack onClick={() => handleGettingNovel({ onGoing: false, inGettingURL: false })}>
@@ -413,18 +425,18 @@ export default function AddWriting() {
           </BoardContainer>
 
           <WritingTitleContanr>
-            <WritingTitle
-              ref={titleRef}
-              placeholder="글 제목을 입력하세요"
-              onChange={setHeightOfTitle}
-            />
+            <WritingTitle ref={titleRef} placeholder="글 제목을 입력하세요" onChange={writeTitle} />
           </WritingTitleContanr>
 
           {/* treat later */}
           {/* <ContentPlusCotnrPC>사진/간단텍스트설정/이모지</ContentPlusCotnrPC> */}
 
           <WritingContentContnr>
-            <WritingContent ref={contentRef} placeholder="글 내용을 입력하세요" />
+            <WritingContent
+              ref={contentRef}
+              placeholder="글 내용을 입력하세요"
+              onChange={writeContent}
+            />
           </WritingContentContnr>
 
           <SubmitBtnContnr>
