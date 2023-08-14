@@ -1,4 +1,3 @@
-import React from "react";
 import MainBG from "components/MainBG";
 import Filter from "components/FilterForWriting";
 import { useGetWritingsFilteredQuery } from "store/serverAPIs/novelTime";
@@ -10,7 +9,11 @@ import {
 import { useMultipleSearchFilters } from "utils/useSearchFilterForWriting";
 
 import PageNOs from "components/PageNOs";
-import { useAppSelector } from "store/hooks";
+import { useAppDispatch, useAppSelector } from "store/hooks";
+import { setSearchList } from "store/clientSlices/filterSlice";
+import { WritingButton } from "components/Writing";
+import { useNavigate } from "react-router-dom";
+import { ADD_WRITING } from "utils/pathname";
 import Recommend from "./RecommendList.components";
 
 export default function RecommendList() {
@@ -50,9 +53,32 @@ export default function RecommendList() {
     data,
   });
 
+  const isLoginUser = !!useAppSelector((state) => state.user.loginUserInfo.userId);
+
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+
   return (
     <MainBG>
-      <Filter />
+      <Filter>
+        <WritingButton
+          clickToWrite={() => {
+            if (!isLoginUser) {
+              alert("로그인이 필요합니다");
+              return;
+            }
+
+            dispatch(
+              setSearchList({
+                listType: "novel",
+                list: "reset",
+              }),
+            );
+
+            navigate(`${ADD_WRITING}?board=Recommend`);
+          }}
+        />
+      </Filter>
 
       {!isForPagination &&
         listForInfntScroll?.map((recommendInfo) => <Recommend recommendInfo={recommendInfo} />)}

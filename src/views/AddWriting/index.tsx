@@ -191,7 +191,7 @@ export default function AddWriting() {
 
   useEffect(() => {
     const { search } = window.location;
-    // * set the search like below to the writing button in the recommend-list later
+
     if (search === "?board=Recommend") {
       setBoard("Recommend");
     }
@@ -246,29 +246,24 @@ export default function AddWriting() {
 
     // go to the list page
     const pathToGoTo = board === "FreeTalk" ? TALK_LIST : RECOMMEND_LIST;
+
     if (isDesktop) {
       navigate(`${pathToGoTo}?genre=All&searchType=no&searchWord=&sortType=작성일New&pageNo=1`, {
         replace: true,
       });
-    } else if (board === "FreeTalk") {
-      dispatch(
-        setSearchList({
-          listType: "talk",
-          list: "reset",
-        }),
-      );
-
-      navigate(TALK_LIST, { replace: true });
-    } else if (board === "Recommend") {
-      dispatch(
-        setSearchList({
-          listType: "recommend",
-          list: "reset",
-        }),
-      );
-
-      navigate(TALK_LIST, { replace: true });
+      return;
     }
+
+    const listType = board === "FreeTalk" ? "talk" : "recommend";
+
+    dispatch(
+      setSearchList({
+        listType,
+        list: "reset",
+      }),
+    );
+
+    navigate(pathToGoTo, { replace: true });
   };
 
   // when clicking the submit button in nav bar on mobile or tablet
