@@ -85,7 +85,7 @@ export const novelTimeApi = createApi({
     "ContentUpdatedInHome",
     "ListTitlesUpdated",
     "ContentUpdatedInNovelList",
-    "reCommentsUpdated",
+    "commentsUpdated",
     "talkUpdated",
     "recommendUpdated",
   ],
@@ -184,10 +184,11 @@ export const novelTimeApi = createApi({
     getRootComments: builder.query<CommentList, ParamForRootComments>({
       query: (params) =>
         `/comment/${params.talkId}/${params.commentSortType}/${params.commentPageNo}`,
+      providesTags: ["commentsUpdated"],
     }),
     getReComments: builder.query<ReCommentList, ParamForReComments>({
       query: (params) => `/comment/${params.rootCommentId}/${params.commentSortType}`,
-      providesTags: ["reCommentsUpdated"],
+      providesTags: ["commentsUpdated"],
     }),
 
     addRootComment: builder.mutation<string, ParamForNewRootComment>({
@@ -196,6 +197,7 @@ export const novelTimeApi = createApi({
         method: "POST",
         body: { talkId, novelTitle, commentContent },
       }),
+      invalidatesTags: ["commentsUpdated", "talkUpdated"],
     }),
     addReComment: builder.mutation<string, ParamForNewReComment>({
       query: ({ talkId, novelTitle, commentContent, parentCommentId }) => ({
@@ -208,7 +210,7 @@ export const novelTimeApi = createApi({
           parentCommentId,
         },
       }),
-      invalidatesTags: ["reCommentsUpdated"],
+      invalidatesTags: ["commentsUpdated", "talkUpdated"],
     }),
     editComment: builder.mutation<string, ParamToEditComment>({
       query: ({ commentId, commentContent }) => ({
@@ -219,7 +221,7 @@ export const novelTimeApi = createApi({
           commentContent,
         },
       }),
-      invalidatesTags: (result, error, arg) => (arg.isReComment ? ["reCommentsUpdated"] : []),
+      invalidatesTags: ["commentsUpdated", "talkUpdated"],
     }),
     deleteComment: builder.mutation<string, ParamToDeleteComment>({
       query: ({ commentId }) => ({
@@ -229,7 +231,7 @@ export const novelTimeApi = createApi({
           commentId,
         },
       }),
-      invalidatesTags: (result, error, arg) => (arg.isReComment ? ["reCommentsUpdated"] : []),
+      invalidatesTags: ["commentsUpdated", "talkUpdated"],
     }),
 
     getLoginOauthServer: builder.query<UserAndToken, OauthData>({
@@ -289,6 +291,9 @@ export const novelTimeApi = createApi({
         };
       },
       invalidatesTags: (result, error, arg) => {
+        if (arg.writingType === "T") return ["talkUpdated"];
+        if (arg.writingType === "R") return ["recommendUpdated"];
+
         if (arg.isOthersListOfLoginUser) {
           // do not invalidate tag of "contentUpdatedInNovelList" not to refetch current list
           // next list will be fetched

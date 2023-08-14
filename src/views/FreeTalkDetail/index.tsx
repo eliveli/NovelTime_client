@@ -27,6 +27,7 @@ import { EDIT_WRITING, TALK_LIST } from "utils/pathname";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { handleWritingToEdit } from "store/clientSlices/writingSlice";
 import { setSearchList } from "store/clientSlices/filterSlice";
+import Spinner from "assets/Spinner";
 
 export default function FreeTalkDetail() {
   const { talkId, commentId } = useParams();
@@ -218,69 +219,78 @@ export default function FreeTalkDetail() {
     }
   }
 
-  if (!talkId || talk.isError || !talk.data) return <div>***에러 페이지 띄우기</div>;
+  if (!talkId || talk.isError) return <div>***에러 페이지 띄우기</div>;
 
   // 댓글은 프리톡만. 리코멘드는 댓글 없고 좋아요만 있음.
   //                - 대신 유저 그레이드 점수 반영은 리코멘드가 더 높음
 
   return (
-    <MainBG isWritingDetail>
-      <WritingDetailContainer>
-        <EditAndDeleteContainer>
-          {/* reference the CommentList component */}
-          {isWriter && (
-            <EditAndDelete clickToEdit={handleEdit} clickToDelete={async () => handleDelete()} />
-          )}
-        </EditAndDeleteContainer>
+    <>
+      {talk.isLoading && <Spinner styles="fixed" />}
+      {talk.data && (
+        <MainBG isWritingDetail>
+          <WritingDetailContainer>
+            <EditAndDeleteContainer>
+              {/* reference the CommentList component */}
+              {isWriter && (
+                <EditAndDelete
+                  clickToEdit={handleEdit}
+                  clickToDelete={async () => handleDelete()}
+                />
+              )}
+            </EditAndDeleteContainer>
 
-        <BoardMark>Let's Free Talk about Novel!</BoardMark>
-        <TalkDetail detailTalk={talk.data.talk} />
-        <NovelInWriting novel={talk.data.novel} />
-        <LikeAndShare
-          isLike={talk.data.talk.isLike}
-          likeNO={talk.data.talk.likeNO}
-          writingId={talk.data.talk.talkId}
-        />
-      </WritingDetailContainer>
-      <ContentAnimation isTalkComnt>
-        {!!rootComments.length && (
-          <CommentList
-            commentList={rootComments}
-            commentIdForScroll={commentId}
-            commentSort={{ sortTypeForComments, setSortTypeForComments }}
-            set1inCommentPageNo={set1inCommentPageNo}
-            reComments={reCommentsFromServer?.data}
-            rootCommentSelected={{
-              rootCommentIdToShowReComments,
-              setRootCommentIdToShowReComments,
-            }}
-            parentCommentForNewReComment={{ parentForNewReComment, setParentForNewReComment }}
-            commentPageNo={commentPageNo}
-            getAllRootCommentPages={getAllRootCommentPages}
-            // for creating reComment
-            talkId={talk.data.talk.talkId}
-            novelTitle={talk.data.novel.novelTitle}
-          />
-        )}
-        {!!commentPerPage.data?.hasNext && (
-          <ShowMoreContent _onClick={() => setCommentPageNo((prev) => prev + 1)} />
-        )}
+            <BoardMark>Let's Free Talk about Novel!</BoardMark>
+            <TalkDetail detailTalk={talk.data.talk} />
+            <NovelInWriting novel={talk.data.novel} />
+            <LikeAndShare
+              isLike={talk.data.talk.isLike}
+              likeNO={talk.data.talk.likeNO}
+              writingId={talk.data.talk.talkId}
+              writingType="T"
+            />
+          </WritingDetailContainer>
+          <ContentAnimation isTalkComnt>
+            {!!rootComments.length && (
+              <CommentList
+                commentList={rootComments}
+                commentIdForScroll={commentId}
+                commentSort={{ sortTypeForComments, setSortTypeForComments }}
+                set1inCommentPageNo={set1inCommentPageNo}
+                reComments={reCommentsFromServer?.data}
+                rootCommentSelected={{
+                  rootCommentIdToShowReComments,
+                  setRootCommentIdToShowReComments,
+                }}
+                parentCommentForNewReComment={{ parentForNewReComment, setParentForNewReComment }}
+                commentPageNo={commentPageNo}
+                getAllRootCommentPages={getAllRootCommentPages}
+                // for creating reComment
+                talkId={talk.data.talk.talkId}
+                novelTitle={talk.data.novel.novelTitle}
+              />
+            )}
+            {!!commentPerPage.data?.hasNext && (
+              <ShowMoreContent _onClick={() => setCommentPageNo((prev) => prev + 1)} />
+            )}
 
-        {isMobile ? (
-          <CommentInputOnMobile
-            talkId={talk.data.talk.talkId}
-            novelTitle={talk.data.novel.novelTitle}
-            parentForNewReComment={parentForNewReComment}
-            getAllRootCommentPages={getAllRootCommentPages}
-          />
-        ) : (
-          <RootCommentInputToCreateOnTablet
-            talkId={talk.data.talk.talkId}
-            novelTitle={talk.data.novel.novelTitle}
-            getAllRootCommentPages={getAllRootCommentPages}
-          />
-        )}
-      </ContentAnimation>
-    </MainBG>
+            {isMobile ? (
+              <CommentInputOnMobile
+                talkId={talk.data.talk.talkId}
+                novelTitle={talk.data.novel.novelTitle}
+                parentForNewReComment={parentForNewReComment}
+                getAllRootCommentPages={getAllRootCommentPages}
+              />
+            ) : (
+              <RootCommentInputToCreateOnTablet
+                talkId={talk.data.talk.talkId}
+                novelTitle={talk.data.novel.novelTitle}
+                getAllRootCommentPages={getAllRootCommentPages}
+              />
+            )}
+          </ContentAnimation>
+        </MainBG>
+      )}
+    </>
   );
 }

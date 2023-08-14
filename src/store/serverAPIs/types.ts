@@ -127,12 +127,10 @@ export type ParamForNewReComment = {
 export type ParamToEditComment = {
   commentId: string;
   commentContent: string;
-  isReComment: boolean;
 };
 
 export type ParamToDeleteComment = {
   commentId: string;
-  isReComment: boolean;
 };
 
 export type ParamToSearchForNovels = {
@@ -467,6 +465,7 @@ export interface ParamsOfUserNovelList {
 export interface ContentOfLike {
   contentType: "writing" | "novelList";
   contentId: string;
+  writingType?: "T" | "R";
   isOthersListOfLoginUser?: boolean;
 }
 export interface IsLike {

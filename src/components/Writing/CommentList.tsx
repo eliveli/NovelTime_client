@@ -131,7 +131,6 @@ function CommentWritten({
 
     await deleteComment({
       commentId,
-      isReComment: isReComment || false,
     });
 
     if (deleteCommentResult.isError) {

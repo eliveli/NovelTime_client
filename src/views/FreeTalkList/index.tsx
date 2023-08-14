@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import MainBG from "components/MainBG";
 import Filter from "components/FilterForWriting";
 import { useGetWritingsFilteredQuery } from "store/serverAPIs/novelTime";
@@ -11,7 +12,7 @@ import { useMultipleSearchFilters } from "utils/useSearchFilterForWriting";
 import PageNOs from "components/PageNOs";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { WritingButton } from "components/Writing";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { ADD_WRITING } from "utils/pathname";
 import { setSearchList } from "store/clientSlices/filterSlice";
 import FreeTalk from "./FreeTalkList.components";
@@ -60,6 +61,14 @@ export default function FreeTalkList() {
   const dispatch = useAppDispatch();
 
   const isLoginUser = !!useAppSelector((state) => state.user.loginUserInfo.userId);
+
+  const location = useLocation();
+
+  // initialize the list when leaving this page on mobile
+  //  it's necessary to set the new list when going back to this page after some change
+  useEffect(() => {
+    dispatch(setSearchList({ listType: "talk", list: "reset" }));
+  }, [location]);
 
   // *list가 []일 때 콘텐트 없다는 컴포넌트 표시
   // ㄴ페이지네이션 여부에 따라 list 다름

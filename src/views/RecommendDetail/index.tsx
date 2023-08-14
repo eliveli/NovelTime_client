@@ -80,6 +80,8 @@ export default function NovelDetailRecommend() {
           <LikeAndShare
             isLike={dataFromServer.recommend.isLike}
             likeNO={dataFromServer.recommend.likeNO}
+            writingId={dataFromServer.recommend.recommendId}
+            writingType="R"
           />
         </WritingDetailContainer>
       </ContentAnimation>

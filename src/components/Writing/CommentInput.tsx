@@ -138,7 +138,6 @@ export function ReCommentInputToEditOnTablet() {
     await editComment({
       commentId: commentToEdit.commentId,
       commentContent: textRef.current?.value,
-      isReComment: true,
     });
 
     if (editCommentResult.isError) {
@@ -292,7 +291,6 @@ export function RootCommentInputToEditOnTablet({
     await editComment({
       commentId: commentToEdit.commentId,
       commentContent: textRef.current?.value,
-      isReComment: !!commentToEdit.parentUserName,
     });
 
     if (editCommentResult.isError) {
@@ -445,7 +443,6 @@ export function CommentInputOnMobile({
     await editComment({
       commentId: commentToEdit.commentId,
       commentContent: textRef.current?.value,
-      isReComment: !!commentToEdit.parentUserName,
     });
 
     if (editCommentResult.isError) {
