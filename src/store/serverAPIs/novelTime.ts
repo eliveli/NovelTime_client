@@ -88,6 +88,8 @@ export const novelTimeApi = createApi({
     "commentsUpdated",
     "talkUpdated",
     "recommendUpdated",
+    "talkListUpdated",
+    "recommendListUpdated",
   ],
   endpoints: (builder) => ({
     // at home page
@@ -132,7 +134,14 @@ export const novelTimeApi = createApi({
       query: (params) =>
         `/writing/${params.writingType}/${params.novelGenre}/${params.searchType}/${params.searchWord}/${params.sortBy}/${params.pageNo}`,
       providesTags: (result, error, arg) =>
-        arg.writingType === "T" ? ["talkUpdated"] : ["recommendUpdated"],
+        arg.writingType === "T" ? ["talkListUpdated"] : ["recommendListUpdated"],
+      // list is updated and user goes here automatically when adding or deleting a post
+      // in other cases, it doesn't
+      //   to maintain the scroll position and the accumulated list with infinite-scroll
+      //     when back to the list page.
+      //   then some previous data might maintain,
+      //     but I couldn't find a better way to treat the case above
+      //     (also I checked that some popular website had the same problem)
     }),
 
     getTalkDetail: builder.query<TalkDetail, ParamForGettingWriting>({
@@ -153,7 +162,7 @@ export const novelTimeApi = createApi({
         },
       }),
       invalidatesTags: (result, error, arg) =>
-        arg.writingType === "T" ? ["talkUpdated"] : ["recommendUpdated"],
+        arg.writingType === "T" ? ["talkListUpdated"] : ["recommendListUpdated"],
     }),
     editWriting: builder.mutation<string, ParamToEditWriting>({
       query: ({ writingId, writingTitle, writingDesc, writingImg }) => ({
@@ -166,6 +175,7 @@ export const novelTimeApi = createApi({
           writingImg,
         },
       }),
+
       invalidatesTags: (result, error, arg) =>
         arg.writingType === "T" ? ["talkUpdated"] : ["recommendUpdated"],
     }),
@@ -178,7 +188,7 @@ export const novelTimeApi = createApi({
         },
       }),
       invalidatesTags: (result, error, arg) =>
-        arg.writingType === "T" ? ["talkUpdated"] : ["recommendUpdated"],
+        arg.writingType === "T" ? ["talkListUpdated"] : ["recommendListUpdated"],
     }),
 
     getRootComments: builder.query<CommentList, ParamForRootComments>({
@@ -197,7 +207,7 @@ export const novelTimeApi = createApi({
         method: "POST",
         body: { talkId, novelTitle, commentContent },
       }),
-      invalidatesTags: ["commentsUpdated", "talkUpdated"],
+      invalidatesTags: ["commentsUpdated"],
     }),
     addReComment: builder.mutation<string, ParamForNewReComment>({
       query: ({ talkId, novelTitle, commentContent, parentCommentId }) => ({
@@ -210,7 +220,7 @@ export const novelTimeApi = createApi({
           parentCommentId,
         },
       }),
-      invalidatesTags: ["commentsUpdated", "talkUpdated"],
+      invalidatesTags: ["commentsUpdated"],
     }),
     editComment: builder.mutation<string, ParamToEditComment>({
       query: ({ commentId, commentContent }) => ({
@@ -221,7 +231,7 @@ export const novelTimeApi = createApi({
           commentContent,
         },
       }),
-      invalidatesTags: ["commentsUpdated", "talkUpdated"],
+      invalidatesTags: ["commentsUpdated"],
     }),
     deleteComment: builder.mutation<string, ParamToDeleteComment>({
       query: ({ commentId }) => ({
@@ -231,7 +241,7 @@ export const novelTimeApi = createApi({
           commentId,
         },
       }),
-      invalidatesTags: ["commentsUpdated", "talkUpdated"],
+      invalidatesTags: ["commentsUpdated"],
     }),
 
     getLoginOauthServer: builder.query<UserAndToken, OauthData>({

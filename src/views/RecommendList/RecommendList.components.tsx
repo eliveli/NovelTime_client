@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import { ThemeProvider } from "styled-components";
 import { useNavigate } from "react-router-dom";
-import { useComponentWidth } from "utils";
+import { adjustCreateDate, useComponentWidth } from "utils";
 import { Img } from "store/serverAPIs/types";
 import Icon from "../../assets/Icon";
 
@@ -76,6 +76,9 @@ export default function Recommend({ recommendInfo, isLast }: RecommendProps) {
   const contnrWidth = useComponentWidth(contnrRef); // 인포컨테이너 width 받아와 제목 엘립시스에 적용
 
   const navigate = useNavigate();
+
+  const dateToShow = adjustCreateDate(createDate);
+
   return (
     <ThemeProvider theme={theme}>
       <Text
@@ -108,7 +111,7 @@ export default function Recommend({ recommendInfo, isLast }: RecommendProps) {
             <UserNameBox>
               <UserImg />
               <UserName>{userName}</UserName>
-              <CreateDate>{createDate}</CreateDate>
+              <CreateDate>{dateToShow}</CreateDate>
             </UserNameBox>
             <IconBox>
               <Icon.IconBox noPointer size={20}>

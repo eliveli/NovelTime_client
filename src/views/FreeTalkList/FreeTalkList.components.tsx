@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Img } from "store/serverAPIs/types";
-import { useComponentHeight, useComponentWidth } from "utils";
+import { adjustCreateDate, useComponentHeight, useComponentWidth } from "utils";
 
 import Icon from "../../assets/Icon";
 import {
@@ -69,6 +69,8 @@ function TalkTablet({ talk }: { talk: TalkProps }) {
   const titleHeightRef = useRef<HTMLDivElement>(null);
   const titleHeight = useComponentHeight(titleHeightRef);
 
+  const dateToShow = adjustCreateDate(createDate);
+
   return (
     <TalkTabletContnr>
       <TalkMainInfoContnr>
@@ -105,7 +107,7 @@ function TalkTablet({ talk }: { talk: TalkProps }) {
         </TalkInfoContnrTablet>
       </TalkMainInfoContnr>
       {/* </UserNameBox> */}
-      <CreateDate>{createDate}</CreateDate>
+      <CreateDate>{dateToShow}</CreateDate>
 
       <IconsBox>
         <IconContainer>
@@ -146,6 +148,8 @@ function TalkMobile({ talk }: { talk: TalkProps }) {
   const imgWidthRef = useRef<HTMLDivElement>(null);
   const imgWidth = useComponentWidth(imgWidthRef);
 
+  const dateToShow = adjustCreateDate(createDate);
+
   return (
     <TalkMobileContnr>
       <UserImg
@@ -166,7 +170,7 @@ function TalkMobile({ talk }: { talk: TalkProps }) {
             >
               {userName}
             </UserName>
-            <CreateDate>{createDate}</CreateDate>
+            <CreateDate>{dateToShow}</CreateDate>
           </UserNameBox>
           <IconsBox>
             <IconContainer>
