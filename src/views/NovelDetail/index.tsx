@@ -48,12 +48,14 @@ export default function NovelDetail() {
           <RowSlide
             novelId={novelId}
             categoryId="novelPublishedByTheAuthor"
-            categoryText="작가의 작품"
+            categoryText="작가의 다른 작품"
             novelNO={novelInDetail.data.novelsPublishedByTheAuthor.length}
           >
-            {novelInDetail.data.novelsPublishedByTheAuthor.map((novel) => (
-              <NovelRow key={novel.novelId} novel={novel} />
-            ))}
+            {novelInDetail.data.novelsPublishedByTheAuthor.map((novel) => {
+              if (novel.novelId !== novelInDetail.data.novel.novelId) {
+                return <NovelRow key={novel.novelId} novel={novel} isFromSameAuthor />;
+              }
+            })}
           </RowSlide>
         </MainBG>
       )}
