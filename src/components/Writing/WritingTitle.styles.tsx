@@ -5,7 +5,7 @@ import { styled } from "assets/styles/theme";
 // interface Props {
 //   theme: { userImg: string; talkImg: string };
 // }
-export const TalkBG = styled.article`
+export const WritingBG = styled.article`
   /* 모바일 */
   width: 100%;
   margin: 0 auto;
@@ -22,7 +22,7 @@ export const TalkBG = styled.article`
   }
 `;
 
-export const Talk = styled.div`
+export const Writing = styled.div`
   width: 100%;
   display: flex;
   align-items: center;
@@ -74,7 +74,7 @@ export const CreateDate = styled.p`
   margin: 0;
   padding-left: 12px;
 `;
-export const TalkPreview = styled.div`
+export const WritingPreview = styled.div`
   padding-left: 12px;
   padding-top: 5px;
   padding-bottom: 5px;
@@ -83,11 +83,11 @@ export const TalkPreview = styled.div`
   justify-content: space-between;
   align-items: center;
 `;
-export const TalkImgBox = styled.div`
+export const WritingImgBox = styled.div`
   min-width: 40px;
 `;
 
-export const TalkImg = styled.div<{ img?: string }>`
+export const WritingImg = styled.div<{ img?: string }>`
   padding-top: 100%;
 
   background-image: url(${({ img }) => img});
@@ -111,7 +111,7 @@ export const IconNO = styled.span`
   font-size: 17px;
 `;
 
-export const TalkTitle = styled.div<{ titleWidth: number }>`
+export const WritingTitleToShow = styled.div<{ titleWidth: number }>`
   font-weight: 500;
   font-size: 16px;
 

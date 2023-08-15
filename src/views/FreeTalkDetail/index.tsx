@@ -224,7 +224,7 @@ export default function FreeTalkDetail() {
 
   return (
     <>
-      {talk.isLoading && <Spinner styles="fixed" />}
+      {talk.isFetching && <Spinner styles="fixed" />}
       {talk.data && (
         <MainBG isWritingDetail>
           <WritingDetailContainer>

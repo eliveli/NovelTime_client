@@ -21,7 +21,7 @@ type MyComponentProps = React.PropsWithChildren<{
     novelTitle: string;
     novelAuthor: string;
     novelGenre: string;
-    novelIsEnd: boolean;
+    novelAge: string;
   };
   isWidth100?: true;
   isNotSubInfo?: true;
@@ -36,7 +36,7 @@ const NovelRow = React.memo(({ novel, isWidth100, isNotSubInfo }: MyComponentPro
     novelTitle = "제목",
     novelAuthor = "작가",
     novelGenre = "장르",
-    novelIsEnd = false,
+    novelAge = "",
   } = novel;
   const theme = {};
 
@@ -53,7 +53,7 @@ const NovelRow = React.memo(({ novel, isWidth100, isNotSubInfo }: MyComponentPro
           {!isNotSubInfo && (
             <NovelSubInfoBox>
               <NovelInfoLineHeight>{novelAuthor}</NovelInfoLineHeight>
-              <NovelInfo>{`${novelGenre} | ${novelIsEnd ? "완결" : "미완"}`}</NovelInfo>
+              <NovelInfo>{`${novelGenre} | ${novelAge}`}</NovelInfo>
             </NovelSubInfoBox>
           )}
         </NovelInfoBox>

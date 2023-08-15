@@ -1,7 +1,6 @@
 // Need to use the React-specific entry point to import createApi
 import { createApi, fetchBaseQuery, BaseQueryFn } from "@reduxjs/toolkit/query/react";
 import {
-  NovelInfo,
   UserAndToken,
   OauthData,
   ChangedUserInfo,
@@ -41,6 +40,7 @@ import {
   ParamToEditWriting,
   ParamToDeleteWriting,
   RecommendDetail,
+  NovelInDetailAndRelatedThings,
 } from "./types";
 import type { RootState } from "../index";
 
@@ -111,10 +111,6 @@ export const novelTimeApi = createApi({
       // ㄴempty string "" can't be used in url that can cause 404 error
     }),
 
-    getNovelById: builder.query<NovelInfo, string>({
-      query: (novelId) => `/novels/detail/${novelId}`,
-    }),
-
     // search for novels
     searchForNovel: builder.query<NovelDetailList, ParamToSearchForNovels>({
       query: (params) => `/novels/${params.searchType}/${params.searchWord}/${params.pageNo}`,
@@ -127,6 +123,10 @@ export const novelTimeApi = createApi({
         method: "POST",
         body: { novelURL },
       }),
+    }),
+
+    getNovelInDetail: builder.query<NovelInDetailAndRelatedThings, string>({
+      query: (novelId) => `/novels/detail/${novelId}`,
     }),
 
     // get writing list with search filter
@@ -350,9 +350,9 @@ export const {
   useLazyGetUserNovelListAtRandomQuery,
   useGetWeeklyNovelsFromPlatformQuery,
   useGetNovelListByCategoryQuery,
-  useGetNovelByIdQuery,
   useSearchForNovelQuery,
   useAddNovelWithURLMutation,
+  useGetNovelInDetailQuery,
   useGetWritingsFilteredQuery,
   useGetTalkDetailQuery,
   useGetRecommendDetailQuery,

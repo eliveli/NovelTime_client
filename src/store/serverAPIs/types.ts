@@ -24,7 +24,6 @@ export interface SimpleNovelWithoutId {
   novelGenre: string;
   novelIsEnd: boolean;
 }
-
 export type TalkList = {
   talkId: string;
   userName: string;
@@ -141,6 +140,56 @@ export type NovelDetailList =
   | undefined;
 
 export type NovelIdAndTitle = { novelId: string; novelTitle: string };
+export interface NovelInDetailPage {
+  novelId: string;
+  novelImg: string;
+  novelTitle: string;
+  novelDesc: string;
+  novelAuthor: string;
+  novelAge: string;
+  novelGenre: string;
+  novelIsEnd: boolean;
+  novelPlatform: string;
+  novelPlatform2: string;
+  novelPlatform3: string;
+  novelUrl: string;
+  novelUrl2: string;
+  novelUrl3: string;
+  writingNo: number;
+}
+export type Novel = {
+  novelId: string;
+  novelImg: string;
+  novelTitle: string;
+  novelAuthor: string;
+  novelAge: string;
+  novelGenre: string;
+};
+
+export type WritingWithoutGenre = {
+  writingId: string;
+  userId: string;
+  userName: string;
+  userImg: {
+    src: string;
+    position: string;
+  };
+  createDate: string;
+  writingTitle: string;
+  writingImg: string;
+  writingDesc: string;
+  novelId: string;
+  likeNO: number;
+  commentNO?: number;
+  talkOrRecommend: "T" | "R";
+};
+
+export type NovelInDetailAndRelatedThings = {
+  novel: NovelInDetailPage;
+  novelsPublishedByTheAuthor: Novel[];
+  talks: WritingWithoutGenre[];
+  recommends: WritingWithoutGenre[];
+};
 
 type NovelDetail = {
   novelId: string;
@@ -283,24 +332,6 @@ export type ParamForNovelListByCategory = {
   novelId?: string;
 };
 
-export interface NovelInfo {
-  novelId: string;
-  novelImg: string;
-  novelTitle: string;
-  novelDesc: string;
-  novelAuthor: string;
-  novelAge: string;
-  novelGenre: string;
-  novelIsEnd: boolean;
-  novelPlatform: string;
-  novelPlatform2: string;
-  novelPlatform3: string;
-  novelUrl: string;
-  novelUrl2: string;
-  novelUrl3: string;
-  isRecommendation: boolean;
-  isFreeTalk: boolean;
-}
 export interface UserAndToken {
   accessToken: string;
   userInfo: {

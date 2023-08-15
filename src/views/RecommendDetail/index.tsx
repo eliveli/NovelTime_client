@@ -96,7 +96,7 @@ export default function NovelDetailRecommend() {
 
   return (
     <>
-      {recommend.isLoading && <Spinner styles="fixed" />}
+      {recommend.isFetching && <Spinner styles="fixed" />}
       {recommend.data && (
         <MainBG isWritingDetail>
           <NovelInWriting recommendDetail={recommendDetail} novel={recommend.data.novel} />

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { ThemeProvider } from "styled-components";
 // import { useComponentWidth } from "utils";
+import { NovelInDetailPage } from "store/serverAPIs/types";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 // import { setLikeNovel } from "../../store/clientSlices/modalSlice";
 import { showBigImage, setLikeNovel } from "../../store/clientSlices/modalSlice";
@@ -44,54 +45,25 @@ import {
   PlatformBorder,
 } from "./NovelDetail.styles";
 
-type NovelProps = React.PropsWithChildren<{
-  novel: {
-    novelId: string;
-    novelImg: string;
-    novelTitle: string;
-    novelAuthor: string;
-    novelGenre: string;
-    novelIsEnd: boolean;
-    novelAge: string;
-    novelDesc: string;
-    novelPlatform: string;
-    novelPlatform2?: string;
-    novelPlatform3?: string;
-    novelUrl: string;
-    novelUrl2?: string;
-    novelUrl3?: string;
-
-    writingNO: number;
-    likeNO: number;
-
-    isLike: boolean;
-  };
-}>;
-
-export default function NovelDetailInfo({ novel }: NovelProps) {
+export default function NovelDetailInfo({ novel }: { novel: NovelInDetailPage }) {
   // props or default props
   const {
     novelId,
-    novelImg = "https://comicthumb-phinf.pstatic.net/20220126_148/pocket_16431735084292970r_JPEG/%C5%A9%B8%AE%BD%BA%C5%BB%BE%C6%B0%A1%BE%BE%B4%C2%B3%B2%C0%DA%B4%D9-%C0%CF%B7%AF%BD%BA%C6%AE%C7%A5%C1%F61.jpg?type=m260", // 시리즈
-    // "//dn-img-page.kakao.com/download/resource?kid=1Opki/hzmU0W8saq/pEkrur7BcK1FgYESJqDyXK", // 카카페
-    // "https://img.ridicdn.net/cover/372009713/xxlarge#1", // 리디북스
-    novelTitle = "제목",
-    novelAuthor = "작가",
-    novelGenre = "장르",
+    novelImg,
+    novelTitle,
+    novelAuthor,
+    novelGenre,
     novelIsEnd,
-    novelAge = "이용가능연령",
-    novelDesc = `작품소개`,
+    novelAge,
+    novelDesc,
     novelPlatform,
     novelPlatform2,
-    novelPlatform3, // 없을 경우 백엔드에서 제외해 가져오기
+    novelPlatform3,
     novelUrl,
     novelUrl2,
-    novelUrl3, // 없을 경우 백엔드에서 제외해 가져오기
+    novelUrl3,
 
-    writingNO = 0, // 백엔드 - talk, recommend 테이블에서 가져오기
-    likeNO = 0, // 백엔드 - talk, recommend 테이블에서 가져오기
-
-    isLike,
+    writingNo,
   } = novel;
   const theme = {
     novelImg,
@@ -102,17 +74,6 @@ export default function NovelDetailInfo({ novel }: NovelProps) {
   const [isShowAll, handleShowAll] = useState(false);
 
   const dispatch = useAppDispatch();
-  // const { isLikeNovel } = useAppSelector((state) => state.modal.novelLike);
-  // useEffect(() => {
-  // 최초 서버스테이트 받아올 때 글로벌 하트여부 설정
-  // if (isLikeNovel === undefined) {
-  // setLikeNovel({ novelId, isLike });
-  // }
-  // 아래 [] 안에 넣어야 되나?
-  // }, []);
-
-  // 좋아요 수 설정 : 최초 받아온 값 저장 & 이후 버튼 클릭 시
-  const [likeNumber, setLikeNumber] = useState(novel.likeNO);
 
   const requestHeart = () => {
     // 하트 클릭 시
@@ -152,18 +113,8 @@ export default function NovelDetailInfo({ novel }: NovelProps) {
                 <InfoIconBox>
                   <TextIconBox>
                     <TextIcon />
-                    <IconNumber>{writingNO}</IconNumber>
+                    <IconNumber>{writingNo}</IconNumber>
                   </TextIconBox>
-                  <LikeIconBox onClick={requestHeart}>
-                    <LikeIcon />
-                    {/* {isLikeNovel && (
-                        <LikeIcon />
-                    )}
-                    {!isLikeNovel && (
-                        <LikeIcon />
-                    )} */}
-                    <IconNumber>{likeNumber}</IconNumber>
-                  </LikeIconBox>
                 </InfoIconBox>
               </NovelSubInfoBox>
             </NovelUpDescBox>
@@ -200,14 +151,14 @@ export default function NovelDetailInfo({ novel }: NovelProps) {
                 { platform: novelPlatform2, url: novelUrl2 },
                 { platform: novelPlatform3, url: novelUrl3 },
               ].map((_) => {
-                if (_.platform !== undefined) {
+                if (_.platform) {
                   return (
                     <PlatformText
                       key={_.platform}
                       platform={
                         _.platform as "카카오페이지" | "네이버 시리즈" | "리디북스" | "조아라"
                       }
-                      href={_.url}
+                      href={_.url.includes("https://") ? _.url : `https://${_.url}`}
                       target="_blank"
                     >
                       {(() => {

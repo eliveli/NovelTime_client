@@ -1,55 +1,33 @@
-/* eslint-disable import/prefer-default-export */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useRef } from "react";
 import { ThemeProvider } from "styled-components";
 import { useComponentWidth } from "utils";
+import { Img, WritingWithoutGenre } from "store/serverAPIs/types";
 import Icon from "../../assets/Icon";
 import {
   CreateDate,
   FirstLineContainer,
   UserImg,
   UserName,
-  TalkBG,
-  Talk,
+  WritingBG,
+  Writing,
   UserNameBox,
   IconsBox,
   IconBox,
-  TalkTitle,
-  TalkImg,
+  WritingTitleToShow,
+  WritingImg,
   IconNO,
-  TalkPreview,
+  WritingPreview,
   BesideImgContainer,
-  TalkImgBox,
+  WritingImgBox,
   // setImgUrl,
 } from "./WritingTitle.styles";
 
-interface WritingProps {
-  talkId?: string;
-  talkTitle?: string;
-  recommendId?: string;
-  recommendTitle?: string;
-
-  talkPhoto?: string;
-  recommendPhoto?: string;
-
-  userId: string;
-  userName: string;
-  userImg: string;
-  createDate: string;
-  likeNO: number;
-
-  commentNO?: number;
-}
-
-export default function WritingTitle({ writing }: { writing: WritingProps }) {
+export default function WritingTitle({ writing }: { writing: WritingWithoutGenre }) {
   // props or default props
   const {
-    talkId, // 프리톡 상세페이지 요청 시 필요
-    talkTitle,
-    recommendId, // 레코멘드 상세페이지 요청 시 필요
-    recommendTitle,
-    talkPhoto,
-    recommendPhoto,
+    writingId, // 글 상세페이지 요청 시 필요
+    writingTitle,
+    writingImg,
 
     userId, // 유저 상세페이지 요청 시 필요
     userName,
@@ -57,7 +35,9 @@ export default function WritingTitle({ writing }: { writing: WritingProps }) {
     createDate,
     likeNO,
 
-    commentNO, // default value (X) : 없을 때 undefined 필요
+    commentNO,
+
+    talkOrRecommend,
   } = writing;
   const theme = {};
 
@@ -68,8 +48,8 @@ export default function WritingTitle({ writing }: { writing: WritingProps }) {
 
   return (
     <ThemeProvider theme={theme}>
-      <TalkBG>
-        <Talk>
+      <WritingBG>
+        <Writing>
           <UserImg userImg={userImg} />
           <BesideImgContainer>
             <FirstLineContainer ref={titleWidthRef}>
@@ -84,7 +64,7 @@ export default function WritingTitle({ writing }: { writing: WritingProps }) {
                   </Icon.IconBox>
                   <IconNO>{likeNO}</IconNO>
                 </IconBox>
-                {commentNO && (
+                {talkOrRecommend === "T" && (
                   <IconBox>
                     <Icon.IconBox noPointer size={20}>
                       <Icon.Comment />
@@ -95,19 +75,18 @@ export default function WritingTitle({ writing }: { writing: WritingProps }) {
               </IconsBox>
             </FirstLineContainer>
 
-            <TalkPreview>
-              <TalkTitle titleWidth={titleWidth}>{talkTitle || recommendTitle}</TalkTitle>
+            <WritingPreview>
+              <WritingTitleToShow titleWidth={titleWidth}>{writingTitle}</WritingTitleToShow>
 
-              {/* 사진이 있을 경우: 기본 사진 이미지? 또는 글에 쓰인 사진?  */}
-              {(talkPhoto ?? recommendPhoto) && (
-                <TalkImgBox>
-                  <TalkImg img={talkPhoto ?? recommendPhoto} />
-                </TalkImgBox>
+              {writingImg && (
+                <WritingImgBox>
+                  <WritingImg img={writingImg} />
+                </WritingImgBox>
               )}
-            </TalkPreview>
+            </WritingPreview>
           </BesideImgContainer>
-        </Talk>
-      </TalkBG>
+        </Writing>
+      </WritingBG>
     </ThemeProvider>
   );
 }
