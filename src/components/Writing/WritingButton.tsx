@@ -1,7 +1,7 @@
 import Icon from "assets/Icon";
 import { styled } from "assets/styles/theme";
 
-const WritingPostContainer = styled.div`
+const WritingPostContainer = styled.div<{ styles?: string }>`
   height: 40px;
   border-radius: 11px;
   border: 1px solid rgba(0, 0, 0, 0.2);
@@ -12,6 +12,8 @@ const WritingPostContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+
+  ${({ styles }) => styles && styles}
 `;
 const WritingText = styled.span`
   color: #808080c4;
@@ -20,9 +22,15 @@ const WritingText = styled.span`
   margin-top: 1px;
 `;
 
-export default function WritingButton({ clickToWrite }: { clickToWrite: () => void }) {
+export default function WritingButton({
+  clickToWrite,
+  styles,
+}: {
+  clickToWrite: () => void;
+  styles?: string;
+}) {
   return (
-    <WritingPostContainer onClick={clickToWrite}>
+    <WritingPostContainer onClick={clickToWrite} styles={styles}>
       <Icon.IconBox>
         <Icon.Write2 />
       </Icon.IconBox>

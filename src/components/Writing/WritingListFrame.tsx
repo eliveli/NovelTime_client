@@ -1,14 +1,12 @@
 import { useNavigate } from "react-router-dom";
 import { CategoryMark } from "components/CategoryMark";
-import { addWritingInPage } from "assets/images";
+import WritingButton from "./WritingButton";
 import {
   ColumnBG,
   ColumnListContainer,
   WritingTabContainer,
   WritingTab,
   WritingTabText,
-  AddWritingContainer,
-  AddWriting,
 } from "./WritingListFrame.styles";
 
 type Props = React.PropsWithChildren<{
@@ -35,6 +33,16 @@ export default function WritingListFrame({
 }: Props) {
   const navigate = useNavigate();
 
+  const stylesForWritingButton = `
+    height: 34px;
+    border: 1px solid rgba(0,0,0,0.1);
+    align-items: flex-end;
+    padding: 4px 7px;
+    position: absolute;
+    top: 17px;
+    left: 162px;
+  `;
+
   return (
     <ColumnBG>
       <CategoryMark
@@ -44,13 +52,14 @@ export default function WritingListFrame({
         novelId={novelId}
         fontSize={fontSize}
       />
-      <AddWritingContainer
-        onClick={() => {
+
+      <WritingButton
+        styles={stylesForWritingButton}
+        clickToWrite={() => {
           navigate(`/add-writing/${novelId}/${novelTitle}`);
         }}
-      >
-        <AddWriting src={addWritingInPage} alt="addWriting" />
-      </AddWritingContainer>
+      />
+
       <WritingTabContainer>
         <WritingTab isTalk={isTalk} onClick={() => handleTalk(true)}>
           <WritingTabText>FreeTalk</WritingTabText>

@@ -20,15 +20,6 @@ export const ColumnListContainer = styled.div`
   // (: NovelRow 컴포넌트의 NovelContainer 좌우 양끝 6px 고려한 것)
   // 하위 컴포넌트인 ColumnBG에 좌우 6px padding 추가
 `;
-export const AddWritingContainer = styled.div`
-  position: absolute;
-  top: 14px;
-  left: 162px;
-`;
-export const AddWriting = styled.img`
-  width: 35px;
-  height: 35px;
-`;
 export const WritingTabContainer = styled.div`
   display: flex;
   justify-content: space-between;
