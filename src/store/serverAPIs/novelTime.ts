@@ -25,7 +25,6 @@ import {
   ParamForNovelListByCategory,
   WritingList,
   ParamForGettingWritings,
-  ParamForGettingWriting,
   TalkDetail,
   ParamForRootComments,
   CommentList,
@@ -41,6 +40,7 @@ import {
   ParamForNewWriting,
   ParamToEditWriting,
   ParamToDeleteWriting,
+  RecommendDetail,
 } from "./types";
 import type { RootState } from "../index";
 
@@ -144,10 +144,13 @@ export const novelTimeApi = createApi({
       //     (also I checked that some popular website had the same problem)
     }),
 
-    getTalkDetail: builder.query<TalkDetail, ParamForGettingWriting>({
-      query: (params) => `/writing/${params.writingType}/${params.writingId}`,
-      providesTags: (result, error, arg) =>
-        arg.writingType === "T" ? ["talkUpdated"] : ["recommendUpdated"],
+    getTalkDetail: builder.query<TalkDetail, string>({
+      query: (writingId) => `/writing/T/${writingId}`,
+      providesTags: ["talkUpdated"],
+    }),
+    getRecommendDetail: builder.query<RecommendDetail, string>({
+      query: (writingId) => `/writing/R/${writingId}`,
+      providesTags: ["recommendUpdated"],
     }),
     addWriting: builder.mutation<string, ParamForNewWriting>({
       query: ({ novelId, writingType, writingTitle, writingDesc, writingImg }) => ({
@@ -352,6 +355,7 @@ export const {
   useAddNovelWithURLMutation,
   useGetWritingsFilteredQuery,
   useGetTalkDetailQuery,
+  useGetRecommendDetailQuery,
   useAddWritingMutation,
   useEditWritingMutation,
   useDeleteWritingMutation,

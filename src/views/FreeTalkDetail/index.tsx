@@ -34,10 +34,8 @@ export default function FreeTalkDetail() {
 
   const [sortTypeForComments, setSortTypeForComments] = useState<"old" | "new">("old");
 
-  const talk = useGetTalkDetailQuery({
-    writingType: "T",
-    writingId: talkId as string,
-  });
+  const talk = useGetTalkDetailQuery(talkId as string);
+
   const [commentPageNo, setCommentPageNo] = useState(1);
 
   const commentPerPage = useGetRootCommentsQuery({
@@ -231,7 +229,6 @@ export default function FreeTalkDetail() {
         <MainBG isWritingDetail>
           <WritingDetailContainer>
             <EditAndDeleteContainer>
-              {/* reference the CommentList component */}
               {isWriter && (
                 <EditAndDelete
                   clickToEdit={handleEdit}

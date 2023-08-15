@@ -75,11 +75,6 @@ export type ParamForGettingWritings = {
   pageNo: number;
 };
 
-export type ParamForGettingWriting = {
-  writingType: "T" | "R";
-  writingId: string;
-};
-
 export type ParamForRootComments = {
   talkId: string;
   commentSortType: "new" | "old";
@@ -212,6 +207,22 @@ export type TalkDetail = {
   novel: NovelDetail;
 };
 
+type Recommend = {
+  recommendId: string;
+  userName: string;
+  userImg: Img;
+  createDate: string;
+  likeNO: number;
+  isLike: boolean;
+  recommendTitle: string;
+  recommendDesc: string;
+  recommendImg: string;
+};
+
+export type RecommendDetail = {
+  recommend: Recommend;
+  novel: NovelDetail;
+};
 export interface HomeData {
   talkList: TalkList;
 
