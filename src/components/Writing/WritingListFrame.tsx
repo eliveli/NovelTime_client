@@ -1,5 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import { CategoryMark } from "components/CategoryMark";
+import { setSearchList } from "store/clientSlices/filterSlice";
+import { useAppDispatch, useAppSelector } from "store/hooks";
+import { ADD_WRITING } from "utils/pathname";
 import WritingButton from "./WritingButton";
 import {
   ColumnBG,
@@ -32,6 +35,9 @@ export default function WritingListFrame({
   fontSize,
 }: Props) {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+
+  const isLoginUser = !!useAppSelector((state) => state.user.loginUserInfo.userId);
 
   const stylesForWritingButton = `
     height: 34px;
@@ -56,7 +62,19 @@ export default function WritingListFrame({
       <WritingButton
         styles={stylesForWritingButton}
         clickToWrite={() => {
-          navigate(`/add-writing/${novelId}/${novelTitle}`);
+          if (!isLoginUser) {
+            alert("로그인이 필요합니다");
+            return;
+          }
+
+          dispatch(
+            setSearchList({
+              listType: "novel",
+              list: "reset",
+            }),
+          );
+
+          navigate(`${ADD_WRITING}?novelId=${novelId}&novelTitle=${novelTitle}`);
         }}
       />
 

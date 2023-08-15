@@ -1,9 +1,9 @@
 /* eslint-disable max-len */
 import MainBG from "components/MainBG";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import Icon from "assets/Icon";
-import { RECOMMEND_LIST, SEARCH_NOVEL, TALK_LIST } from "utils/pathname";
+import { NOVEL_DETAIL, RECOMMEND_LIST, SEARCH_NOVEL, TALK_LIST } from "utils/pathname";
 import { useAddNovelWithURLMutation, useAddWritingMutation } from "store/serverAPIs/novelTime";
 import Spinner from "assets/Spinner";
 import { openModal } from "store/clientSlices/modalSlice";
@@ -48,9 +48,18 @@ export default function AddWriting() {
 
   const [addNovelWithURL, addNovelWithURLResult] = useAddNovelWithURLMutation();
 
-  // set novel from params when entering from novel detail page
-  const { novelId, novelTitle } = useParams();
-  const [novelForReview, setNovelForReview] = useState({ novelId, novelTitle });
+  const [novelForReview, setNovelForReview] = useState({ novelId: "", novelTitle: "" });
+
+  const [searchParams] = useSearchParams();
+
+  // set novel id and novel title directly when entering from novel-detail page
+  const novelIdInSearchParam = searchParams.get("novelId");
+  const novelTitleInSearchParam = searchParams.get("novelTitle");
+  useEffect(() => {
+    if (novelIdInSearchParam && novelTitleInSearchParam) {
+      setNovelForReview({ novelId: novelIdInSearchParam, novelTitle: novelTitleInSearchParam });
+    }
+  }, []);
 
   // how to get the novel to write its review //
   //  - way to search just to select
@@ -189,11 +198,12 @@ export default function AddWriting() {
 
   const [board, setBoard] = useState<"FreeTalk" | "Recommend">("FreeTalk");
 
+  // set the board to "Recommend" directly when entering from recommend-list
   useEffect(() => {
-    const { search } = window.location;
+    const boardType = searchParams.get("board");
 
-    if (search === "?board=Recommend") {
-      setBoard("Recommend");
+    if (boardType === "Recommend") {
+      setBoard(boardType);
     }
   }, []);
 
@@ -244,9 +254,16 @@ export default function AddWriting() {
       alert("글을 등록할 수 없습니다. 새로고침 후 다시 시도해 보세요");
     }
 
+    // go to the novel-detail page
+    if (novelIdInSearchParam && novelTitleInSearchParam) {
+      navigate(`${NOVEL_DETAIL}/${novelIdInSearchParam}`, { replace: true });
+      return;
+    }
+
     // go to the list page
     const pathToGoTo = board === "FreeTalk" ? TALK_LIST : RECOMMEND_LIST;
 
+    // navigate with search params on desktop
     if (isDesktop) {
       navigate(`${pathToGoTo}?genre=All&searchType=no&searchWord=&sortType=작성일New&pageNo=1`, {
         replace: true,
@@ -254,6 +271,7 @@ export default function AddWriting() {
       return;
     }
 
+    // navigate on mobile
     const listType = board === "FreeTalk" ? "talk" : "recommend";
 
     dispatch(
@@ -297,7 +315,7 @@ export default function AddWriting() {
           {(!isGettingNovel.onGoing && novelForReview.novelTitle) || "소설제목"}
         </NovelTitle>
 
-        {!isGettingNovel.onGoing ? (
+        {!novelIdInSearchParam && !isGettingNovel.onGoing ? (
           <Icon.IconBox>
             <Icon.Search
               onClick={() => handleGettingNovel({ onGoing: true, inGettingURL: false })}

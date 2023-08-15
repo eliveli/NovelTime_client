@@ -184,7 +184,6 @@ function App() {
           <Route path="/recommend-detail/:recommendId" element={<RecommendDetail />} />
 
           <Route path="/add-writing" element={<AddWriting />} />
-          <Route path="/add-writing/:novelId/:novelTitle" element={<AddWriting />} />
           <Route path="/edit-writing" element={<EditWriting />} />
 
           <Route path="/search" element={<SearchAllPage />} />
