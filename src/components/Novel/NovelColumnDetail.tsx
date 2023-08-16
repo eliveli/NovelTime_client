@@ -1,7 +1,6 @@
 import React, { useLayoutEffect, useRef } from "react";
 import { ThemeProvider } from "styled-components";
 import { useComponentWidth, useModal } from "utils";
-// import Icon from "../assets/Icon";
 
 import {
   NovelImg,

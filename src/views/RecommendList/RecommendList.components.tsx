@@ -53,7 +53,6 @@ interface RecommendProps {
 }
 
 export default function Recommend({ recommendInfo, isLast }: RecommendProps) {
-  // props or default props
   const { recommend, novel } = recommendInfo;
   const {
     recommendId,
@@ -94,7 +93,11 @@ export default function Recommend({ recommendInfo, isLast }: RecommendProps) {
             <NovelTitle contnrWidth={contnrWidth}>{novelTitle}</NovelTitle>
             <NovelSubInfoBox>
               <NovelInfoLineHeight>{novelAuthor}</NovelInfoLineHeight>
-              <NovelInfo>{`${novelGenre} | ${novelIsEnd ? "완결" : "미완"}`}</NovelInfo>
+              {novelIsEnd ? (
+                <NovelInfo>{`${novelGenre} | 완결`}</NovelInfo>
+              ) : (
+                <NovelInfo>{novelGenre}</NovelInfo>
+              )}
             </NovelSubInfoBox>
           </NovelInfoBox>
         </NovelContainer>

@@ -23,19 +23,15 @@ type MyComponentProps = React.PropsWithChildren<{
     novelAuthor: string;
     novelGenre: string;
     novelIsEnd: boolean;
+    // ㄴ only display this when it is true
+    //    when this is false, this info can be wrong info
+    //     because I couldn't get this whenever it had changed in the platform
+    //     also even in the novel platform this info often doesn't change after the novel is end
   };
 }>;
 
 export default function NovelColumn({ novel }: MyComponentProps) {
-  // props or default props
-  const {
-    novelId,
-    novelImg,
-    novelTitle,
-    novelAuthor,
-    novelGenre,
-    novelIsEnd,
-  } = novel;
+  const { novelId, novelImg, novelTitle, novelAuthor, novelGenre, novelIsEnd } = novel;
   const theme = {};
   const infoRef = useRef<HTMLDivElement>(null);
   const infoWidth = useComponentWidth(infoRef); // 인포컨테이너 width 받아와 제목 엘립시스에 적용
@@ -54,7 +50,11 @@ export default function NovelColumn({ novel }: MyComponentProps) {
           <NovelTitle infoWidth={infoWidth}>{novelTitle}</NovelTitle>
           <NovelSubInfoBox>
             <NovelInfoLineHeight>{novelAuthor}</NovelInfoLineHeight>
-            <NovelInfo>{`${novelGenre} | ${novelIsEnd ? "완결" : "미완"}`}</NovelInfo>
+            {novelIsEnd ? (
+              <NovelInfo>{`${novelGenre} | 완결`}</NovelInfo>
+            ) : (
+              <NovelInfo>{novelGenre}</NovelInfo>
+            )}
           </NovelSubInfoBox>
         </NovelInfoBox>
       </NovelLink>

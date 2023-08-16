@@ -46,7 +46,6 @@ import {
 } from "./NovelDetail.styles";
 
 export default function NovelDetailInfo({ novel }: { novel: NovelInDetailPage }) {
-  // props or default props
   const {
     novelId,
     novelImg,
@@ -75,15 +74,6 @@ export default function NovelDetailInfo({ novel }: { novel: NovelInDetailPage })
 
   const dispatch = useAppDispatch();
 
-  const requestHeart = () => {
-    // 하트 클릭 시
-    // 1. server api request 서버에 요청, 하트 수 받아오기
-    //  --좋아요 토글 후 해당 시점의 좋아요 수 받아오는 쿼리
-    // const { data, error, isLoading } = useSetLikelByNovelIdQuery("20220227200633023");
-    // setLikeNumber(data.likeNO);
-    // 2. global state 하트 여부 변경
-    // dispatch(setLikeNovel({ novelId, isLike: !isLikeNovel }));
-  };
   return (
     <ThemeProvider theme={theme}>
       <NovelContainer>
@@ -102,11 +92,13 @@ export default function NovelDetailInfo({ novel }: { novel: NovelInDetailPage })
                 <NovelInfoAuthorBox>
                   <NovelInfoAuthor>{novelAuthor}</NovelInfoAuthor>
                   <NovelInfoTablet>
-                    {`${novelGenre} | ${novelIsEnd ? "완결" : "미완"} | ${novelAge}`}
+                    {novelIsEnd
+                      ? `${novelGenre} | 완결 | ${novelAge}`
+                      : `${novelGenre} | ${novelAge}`}
                   </NovelInfoTablet>
 
                   <NovelInfoMobile>
-                    {`${novelGenre} | ${novelIsEnd ? "완결" : "미완"}`}
+                    {novelIsEnd ? `${novelGenre} | 완결` : `${novelGenre}`}
                   </NovelInfoMobile>
                   <NovelInfoMobileAge>{novelAge}</NovelInfoMobileAge>
                 </NovelInfoAuthorBox>

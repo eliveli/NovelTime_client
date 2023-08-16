@@ -21,7 +21,7 @@ type MyComponentProps = React.PropsWithChildren<{
     novelTitle: string;
     novelAuthor: string;
     novelGenre: string;
-    novelAge: string;
+    novelAge?: string;
   };
   isFromSameAuthor?: true;
   isWidth100?: true;
@@ -44,8 +44,10 @@ const NovelRow = React.memo(
             </NovelTitleBox>
             {!isNotSubInfo && (
               <NovelSubInfoBox>
-                {!isFromSameAuthor && <NovelInfoLineHeight>{novelAuthor}</NovelInfoLineHeight>}
-                <NovelInfo>{novelGenre}</NovelInfo>
+                {isFromSameAuthor && <NovelInfo>{novelGenre}</NovelInfo>}
+                {!isFromSameAuthor && (
+                  <NovelInfoLineHeight>{`${novelGenre} | ${novelAuthor}`}</NovelInfoLineHeight>
+                )}
               </NovelSubInfoBox>
             )}
           </NovelInfoBox>
