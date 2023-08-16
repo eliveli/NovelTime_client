@@ -5,7 +5,7 @@ import { SortOnly } from "components/FilterForWriting";
 import { useAppDispatch } from "../../store/hooks";
 import { getNovelTitle } from "../../store/clientSlices/modalSlice";
 
-import { WritingListFrame, WritingTitle } from "../../components/Writing";
+import { WritingListFrame, WritingInNovelDetail } from "../../components/Writing";
 
 // 컴포넌트에서 api 요청 : novelId 이용 (see under the two lines)
 
@@ -78,10 +78,11 @@ export default function WritingList() {
         novelTitle={novelTitle}
         writing
       >
-        {isTalk && arrayInfoTalk.map((talk) => <WritingTitle key={talk.talkId} writing={talk} />)}
+        {isTalk &&
+          arrayInfoTalk.map((talk) => <WritingInNovelDetail key={talk.talkId} writing={talk} />)}
         {!isTalk &&
           arrayInfoRecommend.map((recommend) => (
-            <WritingTitle key={recommend.recommendId} writing={recommend} />
+            <WritingInNovelDetail key={recommend.recommendId} writing={recommend} />
           ))}
       </WritingListFrame>
     </MainBG>

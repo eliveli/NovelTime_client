@@ -412,3 +412,18 @@ export const NovelUpDescBox = styled.div`
     padding: 0px 4px 3px 2px;
   `)}
 `;
+
+export const NoContent = styled.div<{ isForOtherNovels?: true }>`
+  border: 1px solid rgba(50, 50, 50, 0.1);
+  border-radius: 9px;
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  ${({ isForOtherNovels }) => isForOtherNovels && `margin-top: 12px;`}
+
+  ${theme.media.tablet(`
+    padding: 17px;
+  `)}
+`;

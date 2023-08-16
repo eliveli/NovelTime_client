@@ -20,10 +20,9 @@ import {
   BesideImgContainer,
   WritingImgBox,
   // setImgUrl,
-} from "./WritingTitle.styles";
+} from "./WritingInNovelDetail.styles";
 
-export default function WritingTitle({ writing }: { writing: WritingWithoutGenre }) {
-  // props or default props
+export default function WritingInNovelDetail({ writing }: { writing: WritingWithoutGenre }) {
   const {
     writingId, // 글 상세페이지 요청 시 필요
     writingTitle,

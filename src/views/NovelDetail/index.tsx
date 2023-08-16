@@ -1,14 +1,13 @@
-import React, { useState, useEffect, useLayoutEffect } from "react";
-import { useParams, useOutletContext } from "react-router-dom";
+import React, { useState } from "react";
+import { useParams } from "react-router-dom";
 import MainBG from "components/MainBG";
 import { useGetNovelInDetailQuery } from "store/serverAPIs/novelTime";
 import Spinner from "assets/Spinner";
-import { useAppDispatch } from "../../store/hooks";
-import { getNovelTitle } from "../../store/clientSlices/modalSlice";
 import { RowSlide } from "../../components/NovelListFrame";
-import { WritingListFrame, WritingTitle } from "../../components/Writing";
+import { WritingListFrame, WritingInNovelDetail } from "../../components/Writing";
 import { NovelRow } from "../../components/Novel";
 import NovelDetailInfo from "./NovelDetail.components";
+import { NoContent } from "./NovelDetail.styles";
 
 export default function NovelDetail() {
   const { novelId } = useParams();
@@ -18,6 +17,7 @@ export default function NovelDetail() {
   const [isTalk, handleTalk] = useState(true);
 
   if (!novelId || novelInDetail.isError) return <div>***에러 페이지 띄우기</div>;
+
   return (
     <>
       {novelInDetail.isFetching && <Spinner styles="fixed" />}
@@ -36,12 +36,21 @@ export default function NovelDetail() {
             isShowAllMark
           >
             {isTalk &&
-              novelInDetail.data.talks.map((talk) => (
-                <WritingTitle key={talk.writingId} writing={talk} />
+              (novelInDetail.data.talks.length ? (
+                novelInDetail.data.talks.map((talk) => (
+                  <WritingInNovelDetail key={talk.writingId} writing={talk} />
+                ))
+              ) : (
+                <NoContent>작성된 게시글이 없어요</NoContent>
               ))}
+
             {!isTalk &&
-              novelInDetail.data.recommends.map((recommend) => (
-                <WritingTitle key={recommend.writingId} writing={recommend} />
+              (novelInDetail.data.recommends.length ? (
+                novelInDetail.data.recommends.map((recommend) => (
+                  <WritingInNovelDetail key={recommend.writingId} writing={recommend} />
+                ))
+              ) : (
+                <NoContent>작성된 게시글이 없어요</NoContent>
               ))}
           </WritingListFrame>
 
@@ -51,12 +60,17 @@ export default function NovelDetail() {
             categoryText="작가의 다른 작품"
             novelNO={novelInDetail.data.novelsPublishedByTheAuthor.length}
           >
-            {novelInDetail.data.novelsPublishedByTheAuthor.map((novel) => {
-              if (novel.novelId !== novelInDetail.data.novel.novelId) {
-                return <NovelRow key={novel.novelId} novel={novel} isFromSameAuthor />;
-              }
-            })}
+            {novelInDetail.data.novelsPublishedByTheAuthor.length > 1 &&
+              novelInDetail.data.novelsPublishedByTheAuthor.map((novel) => {
+                if (novel.novelId !== novelInDetail.data.novel.novelId) {
+                  return <NovelRow key={novel.novelId} novel={novel} isFromSameAuthor />;
+                }
+              })}
           </RowSlide>
+
+          {novelInDetail.data.novelsPublishedByTheAuthor.length === 1 && (
+            <NoContent isForOtherNovels>작가의 다른 작품이 없어요</NoContent>
+          )}
         </MainBG>
       )}
     </>

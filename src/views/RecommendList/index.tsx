@@ -11,10 +11,11 @@ import { useMultipleSearchFilters } from "utils/useSearchFilterForWriting";
 import PageNOs from "components/PageNOs";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { setSearchList } from "store/clientSlices/filterSlice";
-import { WritingButton } from "components/Writing";
+import { NoContent, WritingButton } from "components/Writing";
 import { useNavigate } from "react-router-dom";
 import { ADD_WRITING } from "utils/pathname";
 import { useEffect } from "react";
+import Spinner from "assets/Spinner";
 import Recommend from "./RecommendList.components";
 
 export default function RecommendList() {
@@ -37,7 +38,7 @@ export default function RecommendList() {
     sortType: currentSortType,
   });
 
-  const { isLoading, isFetching, isError, data } = useGetWritingsFilteredQuery({
+  const { isFetching, isError, data } = useGetWritingsFilteredQuery({
     writingType: "R",
     novelGenre: genreMatched,
     searchType: currentSearchWord === "" ? "no" : searchTypeMatched,
@@ -61,11 +62,12 @@ export default function RecommendList() {
 
   // 유저가 서치 필터 작동하기 전 기존 필터 설정값으로 리스트 불러오기
   useEffect(() => {
-    dispatch(setSearchList({ listType: "talk", isSettingTheList: true }));
+    dispatch(setSearchList({ listType: "recommend", isSettingTheList: true }));
   }, []);
 
   return (
     <MainBG>
+      {isFetching && <Spinner styles="fixed" />}
       <Filter>
         <WritingButton
           clickToWrite={() => {
@@ -86,10 +88,15 @@ export default function RecommendList() {
         />
       </Filter>
 
-      {!isForPagination &&
-        listForInfntScroll?.map((recommendInfo) => <Recommend recommendInfo={recommendInfo} />)}
+      {((!isForPagination && listForInfntScroll?.length === 0) || (isForPagination && !data)) && (
+        <NoContent />
+      )}
 
-      {/* for tablet and pc */}
+      {listForInfntScroll?.map((recommendInfo) => (
+        <Recommend recommendInfo={recommendInfo} />
+      ))}
+
+      {/* on desktop */}
       {isForPagination &&
         data?.recommends?.map((recommendInfo) => <Recommend recommendInfo={recommendInfo} />)}
 

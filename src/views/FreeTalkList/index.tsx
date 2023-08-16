@@ -9,10 +9,11 @@ import {
 import { useMultipleSearchFilters } from "utils/useSearchFilterForWriting";
 import PageNOs from "components/PageNOs";
 import { useAppDispatch, useAppSelector } from "store/hooks";
-import { WritingButton } from "components/Writing";
+import { NoContent, WritingButton } from "components/Writing";
 import { useNavigate } from "react-router-dom";
 import { ADD_WRITING } from "utils/pathname";
 import { setSearchList } from "store/clientSlices/filterSlice";
+import Spinner from "assets/Spinner";
 import { useEffect } from "react";
 import FreeTalk from "./FreeTalkList.components";
 
@@ -36,7 +37,7 @@ export default function FreeTalkList() {
     sortType: currentSortType,
   });
 
-  const { isLoading, isFetching, isError, data } = useGetWritingsFilteredQuery({
+  const { isFetching, isError, data } = useGetWritingsFilteredQuery({
     writingType: "T",
     novelGenre: genreMatched,
     searchType: currentSearchWord === "" ? "no" : searchTypeMatched,
@@ -56,6 +57,7 @@ export default function FreeTalkList() {
   });
 
   const isLoginUser = !!useAppSelector((state) => state.user.loginUserInfo.userId);
+
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
@@ -63,8 +65,10 @@ export default function FreeTalkList() {
   useEffect(() => {
     dispatch(setSearchList({ listType: "talk", isSettingTheList: true }));
   }, []);
+
   return (
     <MainBG>
+      {isFetching && <Spinner styles="fixed" />}
       <Filter>
         <WritingButton
           clickToWrite={() => {
@@ -85,8 +89,13 @@ export default function FreeTalkList() {
         />
       </Filter>
 
-      {!isForPagination &&
-        listForInfntScroll?.map((talk) => <FreeTalk key={talk.talkId} talk={talk} />)}
+      {((!isForPagination && listForInfntScroll?.length === 0) || (isForPagination && !data)) && (
+        <NoContent />
+      )}
+
+      {listForInfntScroll?.map((talk) => (
+        <FreeTalk key={talk.talkId} talk={talk} />
+      ))}
 
       {/* on desktop */}
       {isForPagination && data?.talks?.map((talk) => <FreeTalk key={talk.talkId} talk={talk} />)}

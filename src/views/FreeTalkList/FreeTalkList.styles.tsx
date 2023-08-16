@@ -1,5 +1,3 @@
-// /* eslint-disable */
-
 import { keyframes } from "styled-components";
 import theme, { styled } from "assets/styles/theme";
 import Icon from "assets/Icon";

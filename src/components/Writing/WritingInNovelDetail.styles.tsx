@@ -1,5 +1,3 @@
-// /* eslint-disable */
-
 import { styled } from "assets/styles/theme";
 
 // interface Props {

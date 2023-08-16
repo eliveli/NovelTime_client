@@ -1,5 +1,5 @@
 import WritingListFrame from "./WritingListFrame";
-import WritingTitle from "./WritingTitle";
+import WritingInNovelDetail from "./WritingInNovelDetail";
 import { TalkDetail, RecommendDetail } from "./WritingDetail";
 import NovelInWriting from "./NovelInWriting";
 import BoardMark from "./BoardMark";
@@ -15,11 +15,12 @@ import {
 } from "./CommentInput";
 import { EditAndDelete, CancelWhenEditing } from "./EditAndDelete";
 import WritingButton from "./WritingButton";
+import NoContent from "./NoContent";
 
 export {
   WritingDetailContainer,
   WritingListFrame,
-  WritingTitle,
+  WritingInNovelDetail,
   TalkDetail,
   RecommendDetail,
   NovelInWriting,
@@ -34,4 +35,5 @@ export {
   EditAndDelete,
   CancelWhenEditing,
   WritingButton,
+  NoContent,
 };
