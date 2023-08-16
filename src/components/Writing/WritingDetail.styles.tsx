@@ -1,5 +1,4 @@
 import theme, { styled } from "assets/styles/theme";
-import Icon from "assets/Icon";
 import { Img } from "store/serverAPIs/types";
 
 export const WritingDetailContainer = styled.div`
@@ -44,9 +43,11 @@ export const UserImg = styled.div<{ userImg: Img }>`
   border-radius: 50%;
   min-width: 50px;
   height: 50px;
-  background-image: url(${({ userImg }) =>
-    userImg.src || "https://cdn.pixabay.com/photo/2017/02/01/09/52/animal-2029245_960_720.png"});
 
+  // when image doesn't exist
+  ${({ userImg }) => !userImg.src && `border: 1px solid #e5e5e5;`};
+
+  background-image: url(${({ userImg }) => userImg.src});
   background-position: ${({ userImg }) => userImg.position || "center"};
   background-repeat: no-repeat;
   background-size: cover;

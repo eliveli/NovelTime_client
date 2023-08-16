@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import { ThemeProvider } from "styled-components";
 import { useComponentWidth } from "utils";
-import { Img, WritingWithoutGenre } from "store/serverAPIs/types";
+import { WritingWithoutGenre } from "store/serverAPIs/types";
 import Icon from "../../assets/Icon";
 import {
   CreateDate,
@@ -19,7 +19,6 @@ import {
   WritingPreview,
   BesideImgContainer,
   WritingImgBox,
-  // setImgUrl,
 } from "./WritingInNovelDetail.styles";
 
 export default function WritingInNovelDetail({ writing }: { writing: WritingWithoutGenre }) {

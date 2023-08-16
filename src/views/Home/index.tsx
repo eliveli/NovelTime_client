@@ -643,7 +643,7 @@ function UserRankSection({ category, rankList }: UserRankSectionProps) {
     <RankSectionContnr ref={contnrRef}>
       <SectionMark>
         <SectionTitle>
-          <TitleNormalStyle> {category} - </TitleNormalStyle>
+          <TitleNormalStyle>{`${category} - `}</TitleNormalStyle>
           <TitleEmphasis>유저 활동</TitleEmphasis>
         </SectionTitle>
         <FilterContnr>

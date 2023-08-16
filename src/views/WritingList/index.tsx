@@ -9,6 +9,8 @@ import { WritingListFrame, WritingInNovelDetail } from "../../components/Writing
 
 // 컴포넌트에서 api 요청 : novelId 이용 (see under the two lines)
 
+// * this component is not used now
+
 export default function WritingList() {
   const { novelId } = useParams(); // for server request
 
@@ -78,12 +80,14 @@ export default function WritingList() {
         novelTitle={novelTitle}
         writing
       >
+        {/*
         {isTalk &&
           arrayInfoTalk.map((talk) => <WritingInNovelDetail key={talk.talkId} writing={talk} />)}
         {!isTalk &&
           arrayInfoRecommend.map((recommend) => (
             <WritingInNovelDetail key={recommend.recommendId} writing={recommend} />
           ))}
+        */}
       </WritingListFrame>
     </MainBG>
   );

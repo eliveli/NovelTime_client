@@ -1,4 +1,5 @@
 import { styled } from "assets/styles/theme";
+import { Img } from "store/serverAPIs/types";
 
 // interface Props {
 //   theme: { userImg: string; talkImg: string };
@@ -49,15 +50,18 @@ export const BesideImgContainer = styled.div`
 //   imgUrl = img;
 // }
 // let imgUrl = "https://cdn.pixabay.com/photo/2018/08/31/08/35/toys-3644073_960_720.png";
-export const UserImg = styled.div<{ userImg: string }>`
+
+export const UserImg = styled.div<{ userImg: Img }>`
   border-radius: 50%;
   min-width: 55px;
   height: 55px;
   margin-top: -4px;
-  background-image: url(${({ userImg }) =>
-    userImg || "https://cdn.pixabay.com/photo/2017/02/01/09/52/animal-2029245_960_720.png"});
 
-  background-position: center;
+  // when image doesn't exist
+  ${({ userImg }) => !userImg.src && `border: 1px solid #e5e5e5;`};
+
+  background-image: url(${({ userImg }) => userImg.src});
+  background-position: ${({ userImg }) => userImg.position || "center"};
   background-repeat: no-repeat;
   background-size: cover;
 `;

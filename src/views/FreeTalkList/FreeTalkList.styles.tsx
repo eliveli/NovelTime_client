@@ -78,19 +78,20 @@ export const FirstLineContainer = styled.div`
 export const BesideImgContainer = styled.div`
   width: 100%;
 `;
-// export function setImgUrl(img: string) {
-//   imgUrl = img;
-// }
-// let imgUrl = "https://cdn.pixabay.com/photo/2018/08/31/08/35/toys-3644073_960_720.png";
+
 export const UserImg = styled.div<{ userImg: Img }>`
   border-radius: 50%;
   min-width: 43px;
   height: 43px;
-  background-image: url(${({ userImg }) =>
-    userImg.src || "https://cdn.pixabay.com/photo/2018/08/31/08/35/toys-3644073_960_720.png"});
+
+  // when image doesn't exist
+  ${({ userImg }) => !userImg.src && `border: 1px solid #e5e5e5;`};
+
+  background-image: url(${({ userImg }) => userImg.src});
   background-position: ${({ userImg }) => userImg.position} || center;
   background-repeat: no-repeat;
   background-size: cover;
+
   @media screen and (min-width: 600px) {
     min-width: 30px;
     height: 30px;
