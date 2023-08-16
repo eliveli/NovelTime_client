@@ -4,7 +4,6 @@ import { setSearchList } from "store/clientSlices/filterSlice";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { NovelDetailList } from "store/serverAPIs/types";
 import checkIsNearBottom from "./checkIsNearBottom";
-import { SEARCH_NOVEL } from "./pathname";
 
 export default function useSearchListWithInfntScrollForNovel({
   isForPagination,
@@ -18,28 +17,15 @@ export default function useSearchListWithInfntScrollForNovel({
   const location = useLocation();
   const navigationType = useNavigationType();
 
-  const { pathname } = window.location;
-
   const dispatch = useAppDispatch();
 
   const isBackPageRef = useRef(false);
 
-  const { filters, list } = useAppSelector((state) => state.filter.novel);
-
-  const getCurrentFiltersAndList = () => {
-    if ([SEARCH_NOVEL, `${SEARCH_NOVEL}/iframe`].includes(pathname)) {
-      return {
-        currentFilters: filters,
-        currentList: list,
-      };
-    }
-    throw Error("pathname was not matched for infinite scroll");
-  };
-
   const {
-    currentFilters: { searchType, searchWord, pageNo },
-    currentList,
-  } = getCurrentFiltersAndList();
+    filters: { searchType, searchWord, pageNo },
+    list: currentList,
+    isSettingTheList,
+  } = useAppSelector((state) => state.filter.novel);
 
   const [prevFilters, setPrevFilters] = useState({
     prevSrchType: searchType,
@@ -52,7 +38,7 @@ export default function useSearchListWithInfntScrollForNovel({
   };
 
   const setNextList = (searchList: any[]) => {
-    dispatch(setSearchList({ listType: "novel", list: searchList }));
+    dispatch(setSearchList({ listType: "novel", list: searchList, isSettingTheList: false }));
   };
 
   // for infinite scroll
@@ -95,24 +81,17 @@ export default function useSearchListWithInfntScrollForNovel({
       currentList !== undefined &&
       prevSrchType === searchType &&
       prevSearchWord === searchWord &&
-      prevPageNo === pageNo
+      prevPageNo === pageNo &&
+      isSettingTheList === false
     ) {
-      // . 뒤로가기 직후 아무 동작 안 함 (list 재설정 X. 저장된 것 사용)
-      // . 직후 필터 변경 시 새로운 리스트로 교체 (아래 다른 조건문 참고)
-      // . 이후 스크롤을 내려 새로운 list 요청할 때 isBackPageRef.current가 false로 바뀜
-      //    그러면 이 조건문 패스, 이후 코드 라인에서 list 재설정
-      // . 뒤로가기 후 새로고침하면 currentList는 undefined (이 조건문 만족X)
-      //  __조건문 관련__
-      //   . 컴포넌트 새로 불러오면서 prev 필터가 현재 필터와 같아짐
-      //    ㄴ필터 동일성 체크를 하지 않으면 뒤로가기 후 필터 변경 시 리스트를 새로 저장하지 못함
-      //   . 저장된 리스트 존재
       return;
     }
+
+    if (!isSettingTheList) return;
 
     if (isFetching) return;
 
     if (!data) {
-      // data is null
       setNextList([]);
       return;
     }

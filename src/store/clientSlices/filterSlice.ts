@@ -70,16 +70,13 @@ export type IsFilterState = {
   talk: {
     filters: FiltersForWriting;
     list?: any[];
+    isSettingTheList: boolean;
   };
-  recommend: { filters: FiltersForWriting; list?: any[] };
+  recommend: { filters: FiltersForWriting; list?: any[]; isSettingTheList: boolean };
 
-  novel: { filters: FiltersForSearchNovel; list?: any[] };
+  novel: { filters: FiltersForSearchNovel; list?: any[]; isSettingTheList: boolean };
 
-  searchAll: { filters: FiltersForSearchAll; list?: any[] };
-
-  // need to change
-  sortOnly: { filters: Filters; list?: any[] }; // let's talk and play in 소설 상세 페이지
-  //
+  searchAll: { filters: FiltersForSearchAll; list?: any[]; isSettingTheList: boolean };
 };
 
 const initialState: IsFilterState = {
@@ -92,6 +89,7 @@ const initialState: IsFilterState = {
       pageNo: 1,
     },
     list: undefined,
+    isSettingTheList: false,
   },
   recommend: {
     filters: {
@@ -102,6 +100,7 @@ const initialState: IsFilterState = {
       pageNo: 1,
     },
     list: undefined,
+    isSettingTheList: false,
   },
   novel: {
     filters: {
@@ -110,6 +109,7 @@ const initialState: IsFilterState = {
       pageNo: 1,
     },
     list: undefined,
+    isSettingTheList: false,
   },
   searchAll: {
     filters: {
@@ -119,18 +119,7 @@ const initialState: IsFilterState = {
       pageNo: 1,
     },
     list: undefined,
-  },
-
-  // need to change
-  sortOnly: {
-    filters: {
-      genre: "All",
-      searchType: "Title",
-      searchWord: "",
-      sortType: "작성일New",
-      pageNo: 1,
-    },
-    list: undefined,
+    isSettingTheList: false,
   },
 };
 
@@ -142,15 +131,20 @@ export const filterSlice = createSlice({
     setSearchList: (
       state,
       action: PayloadAction<{
-        listType: "talk" | "recommend" | "novel" | "searchAll" | "sortOnly";
+        listType: "talk" | "recommend" | "novel" | "searchAll";
         filters?: { [key: string]: string | number };
         list?: any[] | "reset";
+        isSettingTheList?: boolean;
       }>,
     ) => {
-      const { listType, filters, list } = action.payload;
+      const { listType, filters, list, isSettingTheList } = action.payload;
 
       if (filters) {
         state[listType].filters = { ...state[listType].filters, ...filters };
+      }
+
+      if (isSettingTheList) {
+        state[listType].isSettingTheList = isSettingTheList;
       }
 
       if (list === "reset") {
@@ -177,9 +171,6 @@ export const filterSlice = createSlice({
             searchWord: "",
             pageNo: 1,
           };
-        } else if (listType === "sortOnly") {
-          // fix later
-          // state[listType].filters = { },
         }
         return;
       }

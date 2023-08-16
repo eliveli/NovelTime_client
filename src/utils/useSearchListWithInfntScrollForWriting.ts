@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { useLocation, useNavigationType } from "react-router-dom";
 import { setListType, setSearchList } from "store/clientSlices/filterSlice";
 import { useAppDispatch, useAppSelector } from "store/hooks";
-import { TalkList, WritingList } from "store/serverAPIs/types";
+import { WritingList } from "store/serverAPIs/types";
 import checkIsNearBottom from "./checkIsNearBottom";
 import { RECOMMEND_LIST, TALK_LIST } from "./pathname";
 
@@ -26,22 +26,30 @@ export default function useSearchListWithInfntScrollForWriting({
 
   const isBackPageRef = useRef(false);
 
-  const { filters: talkFilters, list: talkList } = useAppSelector((state) => state.filter.talk);
-  const { filters: recommendFilters, list: recommendList } = useAppSelector(
-    (state) => state.filter.recommend,
-  );
+  const {
+    filters: talkFilters,
+    list: talkList,
+    isSettingTheList: isSettingTheListForTalk,
+  } = useAppSelector((state) => state.filter.talk);
+  const {
+    filters: recommendFilters,
+    list: recommendList,
+    isSettingTheList: isSettingTheListForRecommend,
+  } = useAppSelector((state) => state.filter.recommend);
 
   const getCurrentFiltersAndList = () => {
     if (pathname === TALK_LIST) {
       return {
         currentFilters: talkFilters,
         currentList: talkList,
+        isSettingTheList: isSettingTheListForTalk,
       };
     }
     if (pathname === RECOMMEND_LIST) {
       return {
         currentFilters: recommendFilters,
         currentList: recommendList,
+        isSettingTheList: isSettingTheListForRecommend,
       };
     }
 
@@ -51,6 +59,7 @@ export default function useSearchListWithInfntScrollForWriting({
   const {
     currentFilters: { genre, searchType, searchWord, sortType, pageNo },
     currentList,
+    isSettingTheList,
   } = getCurrentFiltersAndList();
 
   const [prevFilters, setPrevFilters] = useState({
@@ -66,7 +75,13 @@ export default function useSearchListWithInfntScrollForWriting({
   };
 
   const setNextList = (searchList: any[]) => {
-    dispatch(setSearchList({ listType, list: searchList }));
+    dispatch(
+      setSearchList({
+        listType,
+        list: searchList,
+        isSettingTheList: false,
+      }),
+    );
   };
 
   // for infinite scroll
@@ -111,7 +126,11 @@ export default function useSearchListWithInfntScrollForWriting({
       prevSrchType === searchType &&
       prevSearchWord === searchWord &&
       prevSortType === sortType &&
-      prevPageNo === pageNo
+      prevPageNo === pageNo &&
+      isSettingTheList === false
+      // ㄴ when going back and adjusting searching filter again,
+      //    it will be true and this if-statement won't run
+      //      without this, the new list can't be set and displayed
     ) {
       // . 뒤로가기 직후 아무 동작 안 함 (list 재설정 X. 저장된 것 사용)
       // . 직후 필터 변경 시 새로운 리스트로 교체 (아래 다른 조건문 참고)
@@ -125,10 +144,12 @@ export default function useSearchListWithInfntScrollForWriting({
       return;
     }
 
+    if (!isSettingTheList) return;
+
     if (isFetching) return;
 
     if (!data) {
-      // data is null
+      // data doesn't exist
       setNextList([]);
       return;
     }
@@ -140,7 +161,6 @@ export default function useSearchListWithInfntScrollForWriting({
       // - 최초 writings 요청할 때
       if (currentList === undefined && pageNo === 1) {
         setNextList(listFromServer);
-        // * change later for other writing list not for TalkList only
 
         // 현재 필터로 교체
         setPrevFilters({

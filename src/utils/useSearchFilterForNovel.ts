@@ -87,7 +87,9 @@ export function useMultipleSearchFilters() {
   };
 
   const setFilterForInfntScroll = (nextFiltersToSet: { [key: string]: any }) => {
-    dispatch(setSearchList({ listType: "novel", filters: nextFiltersToSet }));
+    dispatch(
+      setSearchList({ listType: "novel", filters: nextFiltersToSet, isSettingTheList: true }),
+    );
   };
 
   const setFilters = (
@@ -185,7 +187,13 @@ export function useSearchFilter(filterType: FilterType) {
   };
 
   const setFilterForInfntScroll = (nextValue: string | number) => {
-    dispatch(setSearchList({ listType: "novel", filters: { [filterType]: nextValue } }));
+    dispatch(
+      setSearchList({
+        listType: "novel",
+        filters: { [filterType]: nextValue },
+        isSettingTheList: true,
+      }),
+    );
   };
 
   const setFilter = (nextValue: string | number) => {

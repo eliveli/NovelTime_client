@@ -7,13 +7,13 @@ import {
   matchFilterNames,
 } from "utils";
 import { useMultipleSearchFilters } from "utils/useSearchFilterForWriting";
-
 import PageNOs from "components/PageNOs";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { WritingButton } from "components/Writing";
 import { useNavigate } from "react-router-dom";
 import { ADD_WRITING } from "utils/pathname";
 import { setSearchList } from "store/clientSlices/filterSlice";
+import { useEffect } from "react";
 import FreeTalk from "./FreeTalkList.components";
 
 export default function FreeTalkList() {
@@ -54,15 +54,15 @@ export default function FreeTalkList() {
     isFetching,
     data,
   });
-  const isLoginUser = !!useAppSelector((state) => state.user.loginUserInfo.userId);
 
+  const isLoginUser = !!useAppSelector((state) => state.user.loginUserInfo.userId);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  // *list가 []일 때 콘텐트 없다는 컴포넌트 표시
-  // ㄴ페이지네이션 여부에 따라 list 다름
-  // ㄴundefined 일 때도 콘텐트 없음 표시?
-
+  // 유저가 서치 필터 작동하기 전 기존 필터 설정값으로 리스트 불러오기
+  useEffect(() => {
+    dispatch(setSearchList({ listType: "talk", isSettingTheList: true }));
+  }, []);
   return (
     <MainBG>
       <Filter>

@@ -89,7 +89,7 @@ export function useMultipleSearchFilters() {
   const setFilterForInfntScroll = (nextFiltersToSet: { [key: string]: any }) => {
     const listType = setListType();
 
-    dispatch(setSearchList({ listType, filters: nextFiltersToSet }));
+    dispatch(setSearchList({ listType, filters: nextFiltersToSet, isSettingTheList: true }));
   };
 
   const setFilters = (
@@ -198,7 +198,9 @@ export function useSearchFilter(filterType: FilterType) {
   const setFilterForInfntScroll = (nextValue: string | number) => {
     const listType = setListType();
 
-    dispatch(setSearchList({ listType, filters: { [filterType]: nextValue } }));
+    dispatch(
+      setSearchList({ listType, filters: { [filterType]: nextValue }, isSettingTheList: true }),
+    );
   };
 
   const setFilter = (nextValue: string | number) => {

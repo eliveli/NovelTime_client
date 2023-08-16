@@ -14,6 +14,7 @@ import { setSearchList } from "store/clientSlices/filterSlice";
 import { WritingButton } from "components/Writing";
 import { useNavigate } from "react-router-dom";
 import { ADD_WRITING } from "utils/pathname";
+import { useEffect } from "react";
 import Recommend from "./RecommendList.components";
 
 export default function RecommendList() {
@@ -57,6 +58,11 @@ export default function RecommendList() {
 
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+
+  // 유저가 서치 필터 작동하기 전 기존 필터 설정값으로 리스트 불러오기
+  useEffect(() => {
+    dispatch(setSearchList({ listType: "talk", isSettingTheList: true }));
+  }, []);
 
   return (
     <MainBG>
