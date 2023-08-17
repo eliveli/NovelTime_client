@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import MainBG from "components/MainBG";
 import {
   WritingDetailContainer,
@@ -28,34 +28,41 @@ import { useAppDispatch, useAppSelector } from "store/hooks";
 import { handleWritingToEdit } from "store/clientSlices/writingSlice";
 import { setSearchList } from "store/clientSlices/filterSlice";
 import Spinner from "assets/Spinner";
+import {
+  initializeCommentStates,
+  setArgsForApis,
+  setCommentIdFromUserPageForScroll,
+  setCommentPageNo,
+  setParentToWriteReComment,
+  setRootCommentIdToShowReComments,
+} from "store/clientSlices/commentSlice";
 
 export default function FreeTalkDetail() {
   const { talkId, commentId } = useParams();
 
-  const [sortTypeForComments, setSortTypeForComments] = useState<"old" | "new">("old");
+  const commentSortType = useAppSelector((state) => state.comment.commentSortType);
+  const commentPageNo = useAppSelector((state) => state.comment.commentPageNo);
+  const rootCommentIdToShowReComments = useAppSelector(
+    (state) => state.comment.rootCommentIdToShowReComments,
+  );
+  const argsForApis = useAppSelector((state) => state.comment.argsForApis);
 
+  //
   const talk = useGetTalkDetailQuery(talkId as string);
-
-  const [commentPageNo, setCommentPageNo] = useState(1);
 
   const commentPerPage = useGetRootCommentsQuery({
     talkId: talkId as string,
-    commentSortType: sortTypeForComments,
+    commentSortType,
     commentPageNo,
   });
-  // - isLoading, isFetching, isError, data in comment
 
-  const set1inCommentPageNo = () => {
-    setCommentPageNo(1);
-  };
-
-  const getAllRootCommentPages = () => {
-    if (commentPageNo === 0) {
-      commentPerPage.refetch();
-    } else {
-      setCommentPageNo(0);
-    }
-  };
+  const reCommentsFromServer = useGetReCommentsQuery(
+    {
+      rootCommentId: rootCommentIdToShowReComments,
+      commentSortType,
+    },
+    { skip: !rootCommentIdToShowReComments },
+  );
 
   // simple way to update comments after adding a root comment //
   // - request comments manually. don't do automatically by using provide and invalidate tags
@@ -75,18 +82,40 @@ export default function FreeTalkDetail() {
   //          but now it can as the whole comments without being separated in each pages
   //                                               will be always different from the previous
 
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  const getAllRootCommentPages = () => {
+    if (commentPageNo === 0) {
+      commentPerPage.refetch();
+    } else {
+      dispatch(setCommentPageNo(0));
+    }
+  };
+
   const [rootComments, setRootComments] = useState<Comment[]>([]);
 
-  const [rootCommentIdToShowReComments, setRootCommentIdToShowReComments] = useState<string>("");
+  // set values into global state //
 
-  const reCommentsFromServer = useGetReCommentsQuery(
-    {
-      rootCommentId: rootCommentIdToShowReComments,
-      commentSortType: sortTypeForComments,
-    },
-    { skip: !rootCommentIdToShowReComments },
-  );
+  useEffect(() => {
+    dispatch(setCommentIdFromUserPageForScroll(commentId));
+  }, []);
 
+  useEffect(() => {
+    if (!talkId || !talk.data) return;
+
+    if (argsForApis.novelId) return;
+
+    dispatch(
+      setArgsForApis({
+        talkId,
+        novelId: talk.data.novel.novelId,
+        novelTitle: talk.data.novel.novelTitle,
+      }),
+    );
+  }, [talk.data]);
+
+  //
   useEffect(() => {
     const commentList = commentPerPage.data?.commentList;
 
@@ -105,27 +134,21 @@ export default function FreeTalkDetail() {
 
       setRootComments(commentList);
 
-      setRootCommentIdToShowReComments("");
+      dispatch(setRootCommentIdToShowReComments(""));
 
       return;
     }
 
-    setRootCommentIdToShowReComments("");
+    dispatch(setRootCommentIdToShowReComments(""));
 
     // accumulate root comments
     setRootComments((prev) => [...prev, ...commentList]);
   }, [commentPerPage.data]);
 
-  // parent comment to write its reComment
-  const [parentForNewReComment, setParentForNewReComment] = useState({
-    parentCommentId: "",
-    parentCommentUserName: "",
-  });
-
   // not to color parent user name when updating root comments
   useEffect(() => {
     if (!rootCommentIdToShowReComments) {
-      setParentForNewReComment({ parentCommentId: "", parentCommentUserName: "" });
+      dispatch(setParentToWriteReComment({ parentCommentId: "", parentCommentUserName: "" }));
     }
   }, [rootCommentIdToShowReComments]);
 
@@ -161,9 +184,6 @@ export default function FreeTalkDetail() {
 
   const loginUserName = useAppSelector((state) => state.user.loginUserInfo.userName);
   const isWriter = loginUserName && loginUserName === talk.data?.talk.userName;
-
-  const dispatch = useAppDispatch();
-  const navigate = useNavigate();
 
   const handleEdit = () => {
     if (!talk.data) return;
@@ -226,6 +246,12 @@ export default function FreeTalkDetail() {
     );
     navigate(TALK_LIST, { replace: true });
   }
+  const location = useLocation();
+
+  useEffect(() => {
+    // initialize comment related things as location change
+    dispatch(initializeCommentStates());
+  }, [location]);
 
   if (!talkId || talk.isError) return <div>***에러 페이지 띄우기</div>;
 
@@ -261,43 +287,19 @@ export default function FreeTalkDetail() {
           <ContentAnimation isTalkComnt>
             {!!rootComments.length && (
               <CommentList
-                commentList={rootComments}
-                commentIdForScroll={commentId}
-                commentSort={{ sortTypeForComments, setSortTypeForComments }}
-                set1inCommentPageNo={set1inCommentPageNo}
-                reComments={reCommentsFromServer?.data}
-                rootCommentSelected={{
-                  rootCommentIdToShowReComments,
-                  setRootCommentIdToShowReComments,
-                }}
-                parentCommentForNewReComment={{ parentForNewReComment, setParentForNewReComment }}
-                commentPageNo={commentPageNo}
+                rootComments={rootComments}
+                reComments={reCommentsFromServer.data}
                 getAllRootCommentPages={getAllRootCommentPages}
-                // for creating reComment
-                talkId={talk.data.talk.talkId}
-                novelId={talk.data.novel.novelId}
-                novelTitle={talk.data.novel.novelTitle}
               />
             )}
             {!!commentPerPage.data?.hasNext && (
-              <ShowMoreContent _onClick={() => setCommentPageNo((prev) => prev + 1)} />
+              <ShowMoreContent _onClick={() => dispatch(setCommentPageNo(commentPageNo + 1))} />
             )}
 
             {isMobile ? (
-              <CommentInputOnMobile
-                talkId={talk.data.talk.talkId}
-                novelId={talk.data.novel.novelId}
-                novelTitle={talk.data.novel.novelTitle}
-                parentForNewReComment={parentForNewReComment}
-                getAllRootCommentPages={getAllRootCommentPages}
-              />
+              <CommentInputOnMobile getAllRootCommentPages={getAllRootCommentPages} />
             ) : (
-              <RootCommentInputToCreateOnTablet
-                talkId={talk.data.talk.talkId}
-                novelId={talk.data.novel.novelId}
-                novelTitle={talk.data.novel.novelTitle}
-                getAllRootCommentPages={getAllRootCommentPages}
-              />
+              <RootCommentInputToCreateOnTablet getAllRootCommentPages={getAllRootCommentPages} />
             )}
           </ContentAnimation>
         </MainBG>

@@ -245,7 +245,7 @@ export type Comment = {
   isEdited: 0 | 1;
 };
 
-type ReComment = {
+export type ReComment = {
   commentId: string;
   userName: string;
   userImg: {

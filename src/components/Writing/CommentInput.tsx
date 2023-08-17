@@ -18,22 +18,12 @@ import {
   SpaceForUserNameOnTextArea,
 } from "./CommentList.styles";
 
-export function ReCommentInputToCreateOnTablet({
-  parentForNewReComment,
+export function ReCommentInputToCreateOnTablet() {
+  const { talkId, novelId, novelTitle } = useAppSelector((state) => state.comment.argsForApis);
+  const { parentCommentId, parentCommentUserName } = useAppSelector(
+    (state) => state.comment.parentToWriteReComment,
+  );
 
-  talkId,
-  novelId,
-  novelTitle,
-}: {
-  parentForNewReComment: {
-    parentCommentId: string;
-    parentCommentUserName: string;
-  };
-
-  talkId: string;
-  novelId: string;
-  novelTitle: string;
-}) {
   const [addReComment, addReCommentResult] = useAddReCommentMutation();
 
   const loginUserId = useAppSelector((state) => state.user.loginUserInfo.userId);
@@ -60,7 +50,7 @@ export function ReCommentInputToCreateOnTablet({
       novelId,
       novelTitle,
       commentContent: textRef.current?.value,
-      parentCommentId: parentForNewReComment.parentCommentId,
+      parentCommentId,
     });
 
     // and update reComments automatically with the invalidate and provide tags
@@ -83,13 +73,13 @@ export function ReCommentInputToCreateOnTablet({
   // scroll to the reComment input that is located under the reComments or just under the parent comment
   useEffect(() => {
     writeCommentRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
-  }, [parentForNewReComment.parentCommentUserName]);
+  }, [parentCommentUserName]);
 
   return (
     <CommentInputContainerOnTablet ref={writeCommentRef}>
       <WriteTextCntnr>
         <SpaceForUserNameOnTextArea ref={userNameOnTextAreaRef}>
-          {`@${parentForNewReComment.parentCommentUserName}`}
+          {`@${parentCommentUserName}`}
         </SpaceForUserNameOnTextArea>
 
         <WriteText
@@ -200,17 +190,12 @@ export function ReCommentInputToEditOnTablet() {
 }
 
 export function RootCommentInputToCreateOnTablet({
-  talkId,
-  novelId,
-  novelTitle,
-
   getAllRootCommentPages,
 }: {
-  talkId: string;
-  novelId: string;
-  novelTitle: string;
   getAllRootCommentPages: () => void;
 }) {
+  const { talkId, novelId, novelTitle } = useAppSelector((state) => state.comment.argsForApis);
+
   const [addRootComment, addRootCommentResult] = useAddRootCommentMutation();
 
   const loginUserId = useAppSelector((state) => state.user.loginUserInfo.userId);
@@ -359,24 +344,15 @@ export function RootCommentInputToEditOnTablet({
 
 // this is used for both root comment and reComment input
 export function CommentInputOnMobile({
-  parentForNewReComment,
-
-  talkId,
-  novelId,
-  novelTitle,
-
   getAllRootCommentPages,
 }: {
-  parentForNewReComment: {
-    parentCommentId: string;
-    parentCommentUserName: string;
-  };
-  talkId: string;
-  novelId: string;
-  novelTitle: string;
   getAllRootCommentPages: () => void;
 }) {
-  const isRootCommentInput = !parentForNewReComment.parentCommentId;
+  const { talkId, novelId, novelTitle } = useAppSelector((state) => state.comment.argsForApis);
+
+  const parentToWriteReComment = useAppSelector((state) => state.comment.parentToWriteReComment);
+
+  const isRootCommentInput = !parentToWriteReComment.parentCommentId;
 
   const [addReComment, addReCommentResult] = useAddReCommentMutation();
 
@@ -408,6 +384,7 @@ export function CommentInputOnMobile({
 
     if (isRootCommentInput) {
       if (addRootCommentResult.isLoading) return; // prevent click while loading for prev request
+
       await addRootComment({
         talkId,
         novelId,
@@ -429,7 +406,7 @@ export function CommentInputOnMobile({
         novelId,
         novelTitle,
         commentContent: textRef.current?.value,
-        parentCommentId: parentForNewReComment.parentCommentId,
+        parentCommentId: parentToWriteReComment.parentCommentId,
       });
       // and update reComments automatically with the invalidate and provide tags
 
@@ -519,7 +496,7 @@ export function CommentInputOnMobile({
         ) : (
           <>
             <SpaceForUserNameOnTextArea ref={userNameOnTextAreaRef}>
-              {`@${commentToEdit.parentUserName || parentForNewReComment.parentCommentUserName}`}
+              {`@${commentToEdit.parentUserName || parentToWriteReComment.parentCommentUserName}`}
             </SpaceForUserNameOnTextArea>
             <WriteText
               ref={textRef}

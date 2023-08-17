@@ -1,19 +1,25 @@
 import Icon from "assets/Icon";
-import { useRef, useState, useEffect } from "react";
+import { useRef, useEffect } from "react";
 import { adjustCreateDate, useWhetherItIsMobile } from "utils";
 
 import { useAppDispatch, useAppSelector } from "store/hooks";
-import { setCommentToEdit } from "store/clientSlices/commentSlice";
+import {
+  setCommentPageNo,
+  setCommentSortType,
+  setCommentToEdit,
+  setParentAndChildConnected,
+  setParentToWriteReComment,
+  setRootCommentIdToShowReComments,
+} from "store/clientSlices/commentSlice";
 import { useDeleteCommentMutation } from "store/serverAPIs/novelTime";
+import { Comment, Img, ReCommentList } from "store/serverAPIs/types";
 import {
   CommentContainer,
   CommentContent,
   CommentContentToEdit,
   CommentListContainer,
-  CommentListProps,
   CommentMark,
   CommentMarkContainer,
-  CommentProps,
   CommentSort,
   CommentSortContainer,
   CreateDate,
@@ -43,54 +49,70 @@ import {
 import { CancelWhenEditing, EditAndDelete } from "./EditAndDelete";
 
 function CommentWritten({
-  comment, // it includes both root comment and reComment
-  reCommentsOfRootComment,
+  comment, // used for both root comment and reComment
 
+  // used for root comment
+  isFirstComment,
+  reCommentsOfRootComment,
+  getAllRootCommentPages,
+
+  // used for reComment
   isReComment,
   itsRootCommentWasDeleted, // a reComment's root comment was deleted
+}: {
+  comment: {
+    commentId: string;
+    userName: string;
+    userImg: Img;
+    commentContent: string;
+    createDate: string;
+    isDeleted: 0 | 1;
+    isEdited: 0 | 1;
 
-  // for displaying reComments when clicking "답글 보기(or 몇 개)" in their root comment
-  rootCommentSelected,
-  // for writing a new reComment
-  parentCommentForNewReComment: { parentForNewReComment, setParentForNewReComment },
-  // for clicking "원댓글보기" that matches a reComment with its parent
-  parentAndChildCommentToMark: { parentAndChildToMark, setParentAndChildToMark },
-  //   note. the parent might be a root comment or reComment in a root comment
+    reCommentNo?: number; // for rootComment
+    parentCommentId?: string; // for reComment
+    parentCommentUserName?: string; // for reComment
+  };
 
-  // when adding a comment //
-  talkId,
-  novelId,
-  novelTitle,
-  commentPageNo,
-  isFirstComment,
-  getAllRootCommentPages,
-  commentSortType,
+  isFirstComment?: boolean;
+  reCommentsOfRootComment?: ReCommentList;
+  getAllRootCommentPages?: () => void;
 
-  commentIdForScroll, // when going to the talk with comment page from user page
-}: CommentProps) {
+  isReComment?: true;
+  itsRootCommentWasDeleted?: boolean;
+}) {
   const {
     commentId,
     userName,
     userImg,
     commentContent,
     createDate,
-    reCommentNo, // only for rootComment. it is undefined in reComment
-
-    // only for reComment. below are undefined in rootComment
-    parentCommentId, // to mark parent comment when clicking its reComment
-    parentCommentUserName,
-
     isDeleted,
     isEdited,
+    reCommentNo,
+    parentCommentId, // to highlight parent comment when clicking its reComment
+    parentCommentUserName,
   } = comment;
-  // reComment one by one : can not set two reComment at once
+  // can not set two reComment at once
+
+  const commentSortType = useAppSelector((state) => state.comment.commentSortType);
+  const commentPageNo = useAppSelector((state) => state.comment.commentPageNo);
+  const commentIdFromUserPageForScroll = useAppSelector(
+    (state) => state.comment.commentIdFromUserPageForScroll,
+  );
+  const parentToWriteReComment = useAppSelector((state) => state.comment.parentToWriteReComment);
+  const parentAndChildConnected = useAppSelector((state) => state.comment.parentAndChildConnected);
+  const rootCommentIdToShowReComments = useAppSelector(
+    (state) => state.comment.rootCommentIdToShowReComments,
+  );
+  const argsForApis = useAppSelector((state) => state.comment.argsForApis);
 
   const [deleteComment, deleteCommentResult] = useDeleteCommentMutation();
 
   const commentRef = useRef<HTMLDivElement>(null);
   const commentContentRef = useRef<HTMLParagraphElement>(null);
 
-  const isParentToMark = parentAndChildToMark.parent === commentId;
+  const isParentToMark = parentAndChildConnected.parent === commentId;
 
   const dateToShow = adjustCreateDate(createDate);
 
@@ -130,7 +152,7 @@ function CommentWritten({
     // * change this after making the modal
     if (deleteCommentResult.isLoading) return; // prevent click while loading for prev request
 
-    await deleteComment({ commentId, novelId });
+    await deleteComment({ commentId, novelId: argsForApis.novelId });
 
     if (deleteCommentResult.isError) {
       alert("코멘트를 삭제할 수 없습니다. 새로고침 후 다시 시도해 보세요");
@@ -151,7 +173,7 @@ function CommentWritten({
 
   // scroll to exact comment component when clicking the comment in user page
   useEffect(() => {
-    if (commentRef.current && commentIdForScroll === commentId) {
+    if (commentRef.current && commentIdFromUserPageForScroll === commentId) {
       // first useEffect in ScrollToTop executes after rendering nav component : see the App.tsx
       // and page renders
       // if you clicked the comment from user page,
@@ -202,48 +224,36 @@ function CommentWritten({
                   <Icon.Comment />
                 </Icon.IconBox>
 
-                {rootCommentSelected &&
-                  rootCommentSelected.rootCommentIdToShowReComments !== commentId && (
-                    <ReCommentMark
-                      onClick={() => {
-                        // display reComments of this root comment
-                        rootCommentSelected.setRootCommentIdToShowReComments(commentId);
+                {rootCommentIdToShowReComments !== commentId && (
+                  <ReCommentMark
+                    onClick={() => {
+                      // display reComments of this root comment
+                      dispatch(setRootCommentIdToShowReComments(commentId));
 
-                        setParentAndChildToMark({ parent: "", child: "" });
-                      }}
-                    >
-                      {`답글 ${reCommentNo}`}
-                    </ReCommentMark>
-                  )}
+                      dispatch(setParentAndChildConnected({ parent: "", child: "" }));
+                    }}
+                  >
+                    {`답글 ${reCommentNo}`}
+                  </ReCommentMark>
+                )}
 
-                {rootCommentSelected &&
-                  rootCommentSelected.rootCommentIdToShowReComments === commentId && (
-                    <ReCommentMark
-                      onClick={() => {
-                        rootCommentSelected.setRootCommentIdToShowReComments("");
+                {rootCommentIdToShowReComments === commentId && (
+                  <ReCommentMark
+                    onClick={() => {
+                      dispatch(setRootCommentIdToShowReComments(""));
 
-                        setParentAndChildToMark({ parent: "", child: "" });
-                      }}
-                    >
-                      답글 접기
-                    </ReCommentMark>
-                  )}
+                      dispatch(setParentAndChildConnected({ parent: "", child: "" }));
+                    }}
+                  >
+                    답글 접기
+                  </ReCommentMark>
+                )}
               </ReCommentMarkContainer>
             </ReCommentButtonsContainer>
 
             {!!reCommentsOfRootComment?.length &&
               reCommentsOfRootComment.map((_) => (
-                <CommentWritten
-                  key={_.commentId}
-                  isReComment
-                  comment={{ ..._ }}
-                  commentIdForScroll={commentIdForScroll}
-                  parentCommentForNewReComment={{ parentForNewReComment, setParentForNewReComment }}
-                  parentAndChildCommentToMark={{ parentAndChildToMark, setParentAndChildToMark }}
-                  talkId={talkId}
-                  novelId={novelId}
-                  novelTitle={novelTitle}
-                />
+                <CommentWritten key={_.commentId} isReComment comment={{ ..._ }} />
               ))}
           </DeletedCommentNumberContainer>
         )}
@@ -251,7 +261,7 @@ function CommentWritten({
     );
   }
 
-  if (isReComment) {
+  if (isReComment && parentCommentUserName) {
     return (
       <CommentContainer ref={commentRef} isReComment={isReComment}>
         <UserImgBox>
@@ -261,7 +271,7 @@ function CommentWritten({
           <UserNameAndEditContainer>
             <UserNameContainer>
               <UserName
-                isParentToWriteReComment={commentId === parentForNewReComment.parentCommentId}
+                isParentToWriteReComment={commentId === parentToWriteReComment.parentCommentId}
               >
                 {userName}
               </UserName>
@@ -275,7 +285,7 @@ function CommentWritten({
 
           {!isEdit && (
             <CommentContent ref={commentContentRef} isParentToMark={isParentToMark}>
-              <ReCommentUser>{`@${parentCommentUserName as string} `}</ReCommentUser>
+              <ReCommentUser>{`@${parentCommentUserName} `}</ReCommentUser>
               {commentContent}
               {!!isEdited && <MarkForEdited>수정됨</MarkForEdited>}
             </CommentContent>
@@ -283,7 +293,7 @@ function CommentWritten({
 
           {isEdit && isMobile && (
             <CommentContentToEdit ref={commentContentRef} isParentToMark={isParentToMark}>
-              <ReCommentUser>{`@${parentCommentUserName as string} `}</ReCommentUser>
+              <ReCommentUser>{`@${parentCommentUserName} `}</ReCommentUser>
               {commentContent}
             </CommentContentToEdit>
           )}
@@ -300,12 +310,14 @@ function CommentWritten({
                   </Icon.IconBox>
                   <ReCommentMark
                     onClick={() => {
-                      setParentForNewReComment({
-                        parentCommentId: commentId,
-                        parentCommentUserName: userName,
-                      });
+                      dispatch(
+                        setParentToWriteReComment({
+                          parentCommentId: commentId,
+                          parentCommentUserName: userName,
+                        }),
+                      );
 
-                      setParentAndChildToMark({ parent: "", child: "" });
+                      dispatch(setParentAndChildConnected({ parent: "", child: "" }));
                     }}
                   >
                     답글 쓰기
@@ -316,10 +328,12 @@ function CommentWritten({
 
             {isReComment && parentCommentId && (
               <MarkParentAndChildComment
-                childComment={parentAndChildToMark.child}
+                childComment={parentAndChildConnected.child}
                 currentComment={commentId}
                 onClick={() =>
-                  setParentAndChildToMark({ parent: parentCommentId, child: commentId })
+                  dispatch(
+                    setParentAndChildConnected({ parent: parentCommentId, child: commentId }),
+                  )
                 }
               >
                 원댓글보기
@@ -340,7 +354,7 @@ function CommentWritten({
         <UserNameAndEditContainer>
           <UserNameContainer>
             <UserName
-              isParentToWriteReComment={commentId === parentForNewReComment.parentCommentId}
+              isParentToWriteReComment={commentId === parentToWriteReComment.parentCommentId}
             >
               {userName}
             </UserName>
@@ -375,42 +389,44 @@ function CommentWritten({
               <Icon.Comment />
             </Icon.IconBox>
 
-            {rootCommentSelected &&
-              rootCommentSelected.rootCommentIdToShowReComments !== commentId && (
-                <ReCommentMark
-                  onClick={() => {
-                    // display reComments of this root comment
-                    rootCommentSelected.setRootCommentIdToShowReComments(commentId);
+            {rootCommentIdToShowReComments !== commentId && (
+              <ReCommentMark
+                onClick={() => {
+                  // display reComments of this root comment
+                  dispatch(setRootCommentIdToShowReComments(commentId));
 
-                    setParentForNewReComment({
+                  dispatch(
+                    setParentToWriteReComment({
                       parentCommentId: commentId,
                       parentCommentUserName: userName,
-                    });
+                    }),
+                  );
 
-                    setParentAndChildToMark({ parent: "", child: "" });
-                  }}
-                >
-                  {reCommentNo ? `답글 ${reCommentNo}` : "답글 쓰기"}
-                </ReCommentMark>
-              )}
+                  dispatch(setParentAndChildConnected({ parent: "", child: "" }));
+                }}
+              >
+                {reCommentNo ? `답글 ${reCommentNo}` : "답글 쓰기"}
+              </ReCommentMark>
+            )}
 
-            {rootCommentSelected &&
-              rootCommentSelected.rootCommentIdToShowReComments === commentId && (
-                <ReCommentMark
-                  onClick={() => {
-                    rootCommentSelected.setRootCommentIdToShowReComments("");
+            {rootCommentIdToShowReComments === commentId && (
+              <ReCommentMark
+                onClick={() => {
+                  dispatch(setRootCommentIdToShowReComments(""));
 
-                    setParentForNewReComment({
+                  dispatch(
+                    setParentToWriteReComment({
                       parentCommentId: "",
                       parentCommentUserName: "",
-                    });
+                    }),
+                  );
 
-                    setParentAndChildToMark({ parent: "", child: "" });
-                  }}
-                >
-                  답글 접기
-                </ReCommentMark>
-              )}
+                  dispatch(setParentAndChildConnected({ parent: "", child: "" }));
+                }}
+              >
+                답글 접기
+              </ReCommentMark>
+            )}
           </ReCommentMarkContainer>
         </ReCommentButtonsContainer>
 
@@ -420,24 +436,13 @@ function CommentWritten({
               key={_.commentId}
               isReComment
               comment={{ ..._ }}
-              commentIdForScroll={commentIdForScroll}
-              parentCommentForNewReComment={{ parentForNewReComment, setParentForNewReComment }}
-              parentAndChildCommentToMark={{ parentAndChildToMark, setParentAndChildToMark }}
               itsRootCommentWasDeleted={!!isDeleted}
-              talkId={talkId}
-              novelId={novelId}
-              novelTitle={novelTitle}
             />
           ))}
 
         {/* write reComment */}
-        {!isMobile && rootCommentSelected?.rootCommentIdToShowReComments === commentId && (
-          <ReCommentInputToCreateOnTablet
-            parentForNewReComment={{ ...parentForNewReComment }}
-            talkId={talkId}
-            novelId={novelId}
-            novelTitle={novelTitle}
-          />
+        {!isMobile && rootCommentIdToShowReComments === commentId && (
+          <ReCommentInputToCreateOnTablet />
         )}
       </NextToImgContainer>
     </CommentContainer>
@@ -461,21 +466,20 @@ function CommentWritten({
 //    detail will be set later. (and from now, I have changed various things that I had worked hard...)
 //    many things is best at that time, but time is gone, it is not...
 export default function CommentList({
-  commentList,
-  commentIdForScroll,
-  commentSort,
-  set1inCommentPageNo,
+  rootComments,
   reComments,
-  rootCommentSelected,
-  parentCommentForNewReComment,
-  commentPageNo,
   getAllRootCommentPages,
+}: {
+  rootComments: Comment[];
+  reComments?: ReCommentList;
+  getAllRootCommentPages: () => void;
+}) {
+  const commentSortType = useAppSelector((state) => state.comment.commentSortType);
+  const rootCommentIdToShowReComments = useAppSelector(
+    (state) => state.comment.rootCommentIdToShowReComments,
+  );
 
-  talkId,
-  novelId,
-  novelTitle,
-}: CommentListProps) {
-  const [parentAndChildToMark, setParentAndChildToMark] = useState({ parent: "", child: "" }); // parent comment of selected reComment
+  const dispatch = useAppDispatch();
 
   return (
     <CommentListContainer>
@@ -483,16 +487,16 @@ export default function CommentList({
         <CommentMark>댓글</CommentMark>
         <CommentSortContainer>
           {["NEW", "OLD"].map((_) => {
-            const currentSortType = commentSort.sortTypeForComments.toUpperCase();
+            const commentSortTypeWithUpperCase = commentSortType.toUpperCase();
 
             return (
               <CommentSort
                 key={_}
-                isSelected={currentSortType === _}
+                isSelected={commentSortTypeWithUpperCase === _}
                 onClick={() => {
-                  if (currentSortType !== _) {
-                    commentSort.setSortTypeForComments(_.toLowerCase() as "new" | "old");
-                    set1inCommentPageNo();
+                  if (commentSortTypeWithUpperCase !== _) {
+                    dispatch(setCommentSortType(_.toLowerCase() as "new" | "old"));
+                    dispatch(setCommentPageNo(1));
                   }
                 }}
               >
@@ -502,26 +506,15 @@ export default function CommentList({
           })}
         </CommentSortContainer>
       </CommentMarkContainer>
-      {commentList.map((_, idx) => (
+      {rootComments.map((_, idx) => (
         <CommentWritten
           key={_.commentId}
           comment={_}
           isFirstComment={idx === 0}
-          commentPageNo={commentPageNo}
-          commentSortType={commentSort.sortTypeForComments}
-          commentIdForScroll={commentIdForScroll}
-          parentCommentForNewReComment={{ ...parentCommentForNewReComment }}
-          parentAndChildCommentToMark={{ parentAndChildToMark, setParentAndChildToMark }}
           reCommentsOfRootComment={
-            rootCommentSelected.rootCommentIdToShowReComments === _.commentId
-              ? reComments
-              : undefined
+            rootCommentIdToShowReComments === _.commentId ? reComments : undefined
           }
-          rootCommentSelected={rootCommentSelected}
           getAllRootCommentPages={getAllRootCommentPages}
-          talkId={talkId}
-          novelId={novelId}
-          novelTitle={novelTitle}
         />
       ))}
     </CommentListContainer>

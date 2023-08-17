@@ -126,7 +126,7 @@ function App() {
         <ScrollToTop>
           <Routes>
             {["/", "/talk-list", "/recommend-list", "/novel-list", "/message-list"].map((path) => (
-              <Route path={path} element={<MainListNav />} />
+              <Route key={path} path={path} element={<MainListNav />} />
             ))}
             {[
               "/novel-detail/:novelId",
@@ -152,7 +152,7 @@ function App() {
               "/user-page/:userName/others-list/:listId",
               "*",
             ].map((path) => (
-              <Route path={path} element={<DetailNav />} />
+              <Route key={path} path={path} element={<DetailNav />} />
             ))}
 
             {/* 모바일 버전은 화면 최하단에 고정, PC 버전은 최상단에 스크롤 따라 보이기/감추기 */}
