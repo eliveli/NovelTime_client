@@ -40,7 +40,9 @@ import {
   ParamToEditWriting,
   ParamToDeleteWriting,
   RecommendDetail,
-  NovelInDetailAndRelatedThings,
+  NovelInDetail,
+  WritingOfNovel,
+  ParamForWritingsOfNovel,
 } from "./types";
 import type { RootState } from "../index";
 
@@ -125,8 +127,12 @@ export const novelTimeApi = createApi({
       }),
     }),
 
-    getNovelInDetail: builder.query<NovelInDetailAndRelatedThings, string>({
+    getNovelInDetail: builder.query<NovelInDetail, string>({
       query: (novelId) => `/novels/detail/${novelId}`,
+    }),
+    getWritingsOfNovel: builder.query<WritingOfNovel, ParamForWritingsOfNovel>({
+      query: ({ novelId, writingType, pageNo }) =>
+        `/novels/detail/${novelId}/${writingType}/${pageNo}`,
     }),
 
     // get writing list with search filter
@@ -353,6 +359,7 @@ export const {
   useSearchForNovelQuery,
   useAddNovelWithURLMutation,
   useGetNovelInDetailQuery,
+  useGetWritingsOfNovelQuery,
   useGetWritingsFilteredQuery,
   useGetTalkDetailQuery,
   useGetRecommendDetailQuery,

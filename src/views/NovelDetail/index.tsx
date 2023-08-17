@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import MainBG from "components/MainBG";
-import { useGetNovelInDetailQuery } from "store/serverAPIs/novelTime";
+import { useGetNovelInDetailQuery, useGetWritingsOfNovelQuery } from "store/serverAPIs/novelTime";
 import Spinner from "assets/Spinner";
+import ShowMoreContent from "assets/ShowMoreContent";
+import { WritingWithoutGenre } from "store/serverAPIs/types";
 import { RowSlide } from "../../components/NovelListFrame";
 import { WritingListFrame, WritingInNovelDetail } from "../../components/Writing";
 import { NovelRow } from "../../components/Novel";
@@ -14,13 +16,52 @@ export default function NovelDetail() {
 
   const novelInDetail = useGetNovelInDetailQuery(novelId as string);
 
-  const [isTalk, handleTalk] = useState(true);
+  //
+  const [writingOption, handleWritingOption] = useState<{ type: "T" | "R"; pageNo: number }>({
+    type: "T",
+    pageNo: 1,
+  });
+
+  const selectWritingType = (writingType: "T" | "R") => {
+    if (writingType === "T") {
+      handleWritingOption({ type: "T", pageNo: 1 });
+      return;
+    }
+
+    handleWritingOption({ type: "R", pageNo: 1 });
+  };
+
+  const writingsOfNovel = useGetWritingsOfNovelQuery({
+    novelId: novelId as string,
+    writingType: writingOption.type,
+    pageNo: writingOption.pageNo,
+  });
+
+  const [writings, handleWritings] = useState<WritingWithoutGenre[]>([]);
+
+  useEffect(() => {
+    if (!writingsOfNovel.data) return;
+
+    // replace writings
+    if (writingOption.pageNo === 1) {
+      handleWritings(writingsOfNovel.data.writings);
+      return;
+    }
+
+    // add writings
+    const writingsToSet = writingsOfNovel.data.writings;
+    handleWritings((prev) => [...prev, ...writingsToSet]);
+  }, [writingsOfNovel.data]);
+
+  //
+  const isOtherNovelsOfTheAuthor =
+    novelInDetail.data && novelInDetail.data.novelsPublishedByTheAuthor.length > 1;
 
   if (!novelId || novelInDetail.isError) return <div>***에러 페이지 띄우기</div>;
 
   return (
     <>
-      {novelInDetail.isFetching && <Spinner styles="fixed" />}
+      {(novelInDetail.isFetching || writingsOfNovel.isFetching) && <Spinner styles="fixed" />}
       {novelInDetail.data && (
         <MainBG>
           <NovelDetailInfo novel={novelInDetail.data.novel} />
@@ -28,31 +69,27 @@ export default function NovelDetail() {
           <WritingListFrame
             fontSize={20}
             categoryText="Let's talk and play!"
-            isTalk={isTalk}
-            handleTalk={handleTalk}
+            isTalk={writingOption.type === "T"}
+            selectWritingType={selectWritingType}
             novelId={novelId}
             novelTitle={novelInDetail.data.novel.novelTitle}
             writing
             isShowAllMark
           >
-            {isTalk &&
-              (novelInDetail.data.talks.length ? (
-                novelInDetail.data.talks.map((talk) => (
-                  <WritingInNovelDetail key={talk.writingId} writing={talk} />
-                ))
-              ) : (
-                <NoContent>작성된 게시글이 없어요</NoContent>
-              ))}
-
-            {!isTalk &&
-              (novelInDetail.data.recommends.length ? (
-                novelInDetail.data.recommends.map((recommend) => (
-                  <WritingInNovelDetail key={recommend.writingId} writing={recommend} />
-                ))
-              ) : (
-                <NoContent>작성된 게시글이 없어요</NoContent>
-              ))}
+            {writings.length ? (
+              writings.map((writing) => (
+                <WritingInNovelDetail key={writing.writingId} writing={writing} />
+              ))
+            ) : (
+              <NoContent>작성된 게시글이 없어요</NoContent>
+            )}
           </WritingListFrame>
+
+          {!!writingsOfNovel.data?.hasNext && (
+            <ShowMoreContent
+              _onClick={() => handleWritingOption((prev) => ({ ...prev, pageNo: prev.pageNo + 1 }))}
+            />
+          )}
 
           <RowSlide
             novelId={novelId}
@@ -60,15 +97,14 @@ export default function NovelDetail() {
             categoryText="작가의 다른 작품"
             novelNO={novelInDetail.data.novelsPublishedByTheAuthor.length}
           >
-            {novelInDetail.data.novelsPublishedByTheAuthor.length > 1 &&
+            {isOtherNovelsOfTheAuthor &&
               novelInDetail.data.novelsPublishedByTheAuthor.map((novel) => {
                 if (novel.novelId !== novelInDetail.data.novel.novelId) {
                   return <NovelRow key={novel.novelId} novel={novel} isFromSameAuthor />;
                 }
               })}
           </RowSlide>
-
-          {novelInDetail.data.novelsPublishedByTheAuthor.length === 1 && (
+          {!isOtherNovelsOfTheAuthor && (
             <NoContent isForOtherNovels>작가의 다른 작품이 없어요</NoContent>
           )}
         </MainBG>

@@ -14,7 +14,7 @@ import {
 
 type Props = React.PropsWithChildren<{
   isTalk: boolean;
-  handleTalk: React.Dispatch<React.SetStateAction<boolean>>;
+  selectWritingType: (writingType: "T" | "R") => void;
   isShowAllMark?: boolean;
   categoryText: string;
   novelId: string;
@@ -28,7 +28,7 @@ export default function WritingListFrame({
   novelTitle,
   categoryText,
   isTalk,
-  handleTalk,
+  selectWritingType,
   children,
   writing,
   isShowAllMark,
@@ -79,10 +79,10 @@ export default function WritingListFrame({
       />
 
       <WritingTabContainer>
-        <WritingTab isTalk={isTalk} onClick={() => handleTalk(true)}>
+        <WritingTab isTalk={isTalk} onClick={() => selectWritingType("T")}>
           <WritingTabText>FreeTalk</WritingTabText>
         </WritingTab>
-        <WritingTab isTalk={!isTalk} onClick={() => handleTalk(false)}>
+        <WritingTab isTalk={!isTalk} onClick={() => selectWritingType("R")}>
           <WritingTabText>Recommend</WritingTabText>
         </WritingTab>
       </WritingTabContainer>

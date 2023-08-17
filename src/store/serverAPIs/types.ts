@@ -183,12 +183,21 @@ export type WritingWithoutGenre = {
   commentNO?: number;
   talkOrRecommend: "T" | "R";
 };
-
-export type NovelInDetailAndRelatedThings = {
+export type NovelInDetail = {
   novel: NovelInDetailPage;
   novelsPublishedByTheAuthor: Novel[];
-  talks: WritingWithoutGenre[];
-  recommends: WritingWithoutGenre[];
+  writingNo: number;
+};
+
+export type WritingOfNovel = {
+  writings: WritingWithoutGenre[];
+  hasNext: boolean;
+};
+
+export type ParamForWritingsOfNovel = {
+  novelId: string;
+  writingType: "T" | "R";
+  pageNo: number;
 };
 
 type NovelDetail = {
