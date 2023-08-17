@@ -185,12 +185,12 @@ export type WritingWithoutGenre = {
 export type NovelInDetail = {
   novel: NovelInDetailPage;
   novelsPublishedByTheAuthor: Novel[];
-  writingNo: number;
 };
 
 export type WritingOfNovel = {
   writings: WritingWithoutGenre[];
   hasNext: boolean;
+  writingNoWithAllType: number;
 };
 
 export type ParamForWritingsOfNovel = {

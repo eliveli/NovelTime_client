@@ -47,10 +47,10 @@ import {
 
 export default function NovelDetailInfo({
   novel,
-  writingNo,
+  writingNoWithAllType,
 }: {
   novel: NovelInDetailPage;
-  writingNo: number;
+  writingNoWithAllType?: number;
 }) {
   const {
     novelId,
@@ -106,12 +106,14 @@ export default function NovelDetailInfo({
                   </NovelInfoMobile>
                   <NovelInfoMobileAge>{novelAge}</NovelInfoMobileAge>
                 </NovelInfoAuthorBox>
-                <InfoIconBox>
-                  <TextIconBox>
-                    <TextIcon />
-                  </TextIconBox>
-                  <IconNumber>{writingNo}</IconNumber>
-                </InfoIconBox>
+                {writingNoWithAllType && (
+                  <InfoIconBox>
+                    <TextIconBox>
+                      <TextIcon />
+                    </TextIconBox>
+                    <IconNumber>{writingNoWithAllType}</IconNumber>
+                  </InfoIconBox>
+                )}
               </NovelSubInfoBox>
             </NovelUpDescBox>
 

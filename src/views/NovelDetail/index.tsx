@@ -66,7 +66,7 @@ export default function NovelDetail() {
         <MainBG>
           <NovelDetailInfo
             novel={novelInDetail.data.novel}
-            writingNo={novelInDetail.data.writingNo}
+            writingNoWithAllType={writingsOfNovel.data?.writingNoWithAllType}
           />
 
           <WritingListFrame
