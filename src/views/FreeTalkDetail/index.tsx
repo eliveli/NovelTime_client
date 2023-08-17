@@ -23,7 +23,7 @@ import ShowMoreContent from "assets/ShowMoreContent";
 import { Comment } from "store/serverAPIs/types";
 import { useWhetherItIsDesktop, useWhetherItIsMobile } from "utils";
 import { EditAndDeleteContainer } from "components/Writing/WritingDetail.styles";
-import { EDIT_WRITING, TALK_LIST } from "utils/pathname";
+import { EDIT_WRITING, NOVEL_DETAIL, TALK_LIST } from "utils/pathname";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { handleWritingToEdit } from "store/clientSlices/writingSlice";
 import { setSearchList } from "store/clientSlices/filterSlice";
@@ -202,21 +202,29 @@ export default function FreeTalkDetail() {
       alert("글을 삭제할 수 없습니다. 새로고침 후 다시 시도해 보세요");
     }
 
-    // go to the talk list page
+    // back to the novel-detail page
+    const { search } = window.location;
+    if (search === "?is-from-novel-detail=true") {
+      navigate(`${NOVEL_DETAIL}/${talk.data.novel.novelId}`, { replace: true });
+      return;
+    }
+
+    // back to the talk list page
     if (isDesktop) {
       navigate(`${TALK_LIST}?genre=All&searchType=no&searchWord=&sortType=작성일New&pageNo=1`, {
         replace: true,
       });
-    } else {
-      dispatch(
-        setSearchList({
-          listType: "talk",
-          list: "reset",
-        }),
-      );
-
-      navigate(TALK_LIST, { replace: true });
+      return;
     }
+
+    // on mobile
+    dispatch(
+      setSearchList({
+        listType: "talk",
+        list: "reset",
+      }),
+    );
+    navigate(TALK_LIST, { replace: true });
   }
 
   if (!talkId || talk.isError) return <div>***에러 페이지 띄우기</div>;

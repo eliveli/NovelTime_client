@@ -46,9 +46,9 @@ export default function WritingInNovelDetail({ writing }: { writing: WritingWith
 
   const goToWritingPage = () => {
     if (talkOrRecommend === "T") {
-      navigate(`${TALK_DETAIL}/${writingId}`);
+      navigate(`${TALK_DETAIL}/${writingId}?is-from-novel-detail=true`);
     } else {
-      navigate(`${RECOMMEND_DETAIL}/${writingId}`);
+      navigate(`${RECOMMEND_DETAIL}/${writingId}?is-from-novel-detail=true`);
     }
   };
 

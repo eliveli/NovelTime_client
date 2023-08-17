@@ -74,7 +74,7 @@ export default function WritingListFrame({
             }),
           );
 
-          navigate(`${ADD_WRITING}?novelId=${novelId}&novelTitle=${novelTitle}`);
+          navigate(`${ADD_WRITING}?novel-id=${novelId}&novel-title=${novelTitle}`);
         }}
       />
 

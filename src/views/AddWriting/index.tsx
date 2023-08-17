@@ -53,8 +53,8 @@ export default function AddWriting() {
   const [searchParams] = useSearchParams();
 
   // set novel id and novel title directly when entering from novel-detail page
-  const novelIdInSearchParam = searchParams.get("novelId");
-  const novelTitleInSearchParam = searchParams.get("novelTitle");
+  const novelIdInSearchParam = searchParams.get("novel-id");
+  const novelTitleInSearchParam = searchParams.get("novel-title");
   useEffect(() => {
     if (novelIdInSearchParam && novelTitleInSearchParam) {
       setNovelForReview({ novelId: novelIdInSearchParam, novelTitle: novelTitleInSearchParam });
@@ -254,16 +254,16 @@ export default function AddWriting() {
       alert("글을 등록할 수 없습니다. 새로고침 후 다시 시도해 보세요");
     }
 
-    // go to the novel-detail page
+    // back to the novel-detail page
     if (novelIdInSearchParam && novelTitleInSearchParam) {
       navigate(`${NOVEL_DETAIL}/${novelIdInSearchParam}`, { replace: true });
       return;
     }
 
-    // go to the list page
+    // back to the list page
     const pathToGoTo = board === "FreeTalk" ? TALK_LIST : RECOMMEND_LIST;
 
-    // navigate with search params on desktop
+    // with search params on desktop
     if (isDesktop) {
       navigate(`${pathToGoTo}?genre=All&searchType=no&searchWord=&sortType=작성일New&pageNo=1`, {
         replace: true,
@@ -271,7 +271,7 @@ export default function AddWriting() {
       return;
     }
 
-    // navigate on mobile
+    // on mobile
     const listType = board === "FreeTalk" ? "talk" : "recommend";
 
     dispatch(
