@@ -15,10 +15,10 @@ export const TextIconBox = styled.div`
   background-color: white;
   color: rgba(100, 100, 100, 0.6);
 
-  min-width: 35px;
-  max-width: 35px;
-  min-height: 35px;
-  max-height: 35px;
+  min-width: 20px;
+  max-width: 20px;
+  min-height: 20px;
+  max-height: 20px;
 `;
 export const TextIcon = styled(Icon.Text)``;
 export const LikeIconBox = styled.div`
@@ -111,8 +111,8 @@ export const ReaderIcon = styled(Icon.Reader)``;
 
 export const InfoIconBox = styled.div`
   display: flex;
-  gap: 10px;
-  margin-bottom: -2px;
+  align-items: center;
+  gap: 0px;
   ${theme.media.tablet(`
     margin-bottom: 0;
   `)}

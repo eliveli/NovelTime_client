@@ -155,7 +155,6 @@ export interface NovelInDetailPage {
   novelUrl: string;
   novelUrl2: string;
   novelUrl3: string;
-  writingNo: number;
 }
 export type Novel = {
   novelId: string;

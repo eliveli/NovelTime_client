@@ -45,7 +45,13 @@ import {
   PlatformBorder,
 } from "./NovelDetail.styles";
 
-export default function NovelDetailInfo({ novel }: { novel: NovelInDetailPage }) {
+export default function NovelDetailInfo({
+  novel,
+  writingNo,
+}: {
+  novel: NovelInDetailPage;
+  writingNo: number;
+}) {
   const {
     novelId,
     novelImg,
@@ -61,8 +67,6 @@ export default function NovelDetailInfo({ novel }: { novel: NovelInDetailPage })
     novelUrl,
     novelUrl2,
     novelUrl3,
-
-    writingNo,
   } = novel;
   const theme = {
     novelImg,
@@ -105,8 +109,8 @@ export default function NovelDetailInfo({ novel }: { novel: NovelInDetailPage })
                 <InfoIconBox>
                   <TextIconBox>
                     <TextIcon />
-                    <IconNumber>{writingNo}</IconNumber>
                   </TextIconBox>
+                  <IconNumber>{writingNo}</IconNumber>
                 </InfoIconBox>
               </NovelSubInfoBox>
             </NovelUpDescBox>

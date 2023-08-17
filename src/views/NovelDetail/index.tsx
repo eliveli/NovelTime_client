@@ -64,17 +64,19 @@ export default function NovelDetail() {
       {(novelInDetail.isFetching || writingsOfNovel.isFetching) && <Spinner styles="fixed" />}
       {novelInDetail.data && (
         <MainBG>
-          <NovelDetailInfo novel={novelInDetail.data.novel} />
+          <NovelDetailInfo
+            novel={novelInDetail.data.novel}
+            writingNo={novelInDetail.data.writingNo}
+          />
 
           <WritingListFrame
             fontSize={20}
-            categoryText="Let's talk and play!"
+            categoryText="Let's talk about the novel"
             isTalk={writingOption.type === "T"}
             selectWritingType={selectWritingType}
             novelId={novelId}
             novelTitle={novelInDetail.data.novel.novelTitle}
             writing
-            isShowAllMark
           >
             {writings.length ? (
               writings.map((writing) => (

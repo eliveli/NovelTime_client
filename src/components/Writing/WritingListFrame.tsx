@@ -46,7 +46,7 @@ export default function WritingListFrame({
     padding: 4px 7px;
     position: absolute;
     top: 17px;
-    left: 162px;
+    left: 203px;
   `;
 
   return (
