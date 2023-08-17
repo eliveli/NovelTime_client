@@ -88,10 +88,10 @@ export const novelTimeApi = createApi({
     "ListTitlesUpdated",
     "ContentUpdatedInNovelList",
     "commentsUpdated",
-    "talkUpdated",
-    "recommendUpdated",
     "talkListUpdated",
     "recommendListUpdated",
+    "writingUpdated",
+    "writingsOfNovelUpdated",
   ],
   endpoints: (builder) => ({
     // at home page
@@ -133,6 +133,9 @@ export const novelTimeApi = createApi({
     getWritingsOfNovel: builder.query<WritingOfNovel, ParamForWritingsOfNovel>({
       query: ({ novelId, writingType, pageNo }) =>
         `/novels/detail/${novelId}/${writingType}/${pageNo}`,
+      providesTags: (result, error, arg) => [
+        { type: "writingsOfNovelUpdated", id: arg.novelId + arg.writingType },
+      ],
     }),
 
     // get writing list with search filter
@@ -152,11 +155,11 @@ export const novelTimeApi = createApi({
 
     getTalkDetail: builder.query<TalkDetail, string>({
       query: (writingId) => `/writing/T/${writingId}`,
-      providesTags: ["talkUpdated"],
+      providesTags: (result, error, arg) => [{ type: "writingUpdated", id: arg }],
     }),
     getRecommendDetail: builder.query<RecommendDetail, string>({
       query: (writingId) => `/writing/R/${writingId}`,
-      providesTags: ["recommendUpdated"],
+      providesTags: (result, error, arg) => [{ type: "writingUpdated", id: arg }],
     }),
     addWriting: builder.mutation<string, ParamForNewWriting>({
       query: ({ novelId, writingType, writingTitle, writingDesc, writingImg }) => ({
@@ -170,8 +173,11 @@ export const novelTimeApi = createApi({
           writingImg,
         },
       }),
-      invalidatesTags: (result, error, arg) =>
-        arg.writingType === "T" ? ["talkListUpdated"] : ["recommendListUpdated"],
+      invalidatesTags: (result, error, arg) => {
+        const mainList = arg.writingType === "T" ? "talkListUpdated" : "recommendListUpdated";
+
+        return [mainList, { type: "writingsOfNovelUpdated", id: arg.novelId + arg.writingType }];
+      },
     }),
     editWriting: builder.mutation<string, ParamToEditWriting>({
       query: ({ writingId, writingTitle, writingDesc, writingImg }) => ({
@@ -185,8 +191,10 @@ export const novelTimeApi = createApi({
         },
       }),
 
-      invalidatesTags: (result, error, arg) =>
-        arg.writingType === "T" ? ["talkUpdated"] : ["recommendUpdated"],
+      invalidatesTags: (result, error, arg) => [
+        { type: "writingUpdated", id: arg.writingId },
+        { type: "writingsOfNovelUpdated", id: arg.novelId + arg.writingType },
+      ],
     }),
     deleteWriting: builder.mutation<string, ParamToDeleteWriting>({
       query: ({ writingId }) => ({
@@ -196,8 +204,16 @@ export const novelTimeApi = createApi({
           writingId,
         },
       }),
-      invalidatesTags: (result, error, arg) =>
-        arg.writingType === "T" ? ["talkListUpdated"] : ["recommendListUpdated"],
+
+      invalidatesTags: (result, error, arg) => {
+        const mainList = arg.writingType === "T" ? "talkListUpdated" : "recommendListUpdated";
+
+        return [
+          mainList,
+          { type: "writingUpdated", id: arg.writingId },
+          { type: "writingsOfNovelUpdated", id: arg.novelId + arg.writingType },
+        ];
+      },
     }),
 
     getRootComments: builder.query<CommentList, ParamForRootComments>({
@@ -216,7 +232,10 @@ export const novelTimeApi = createApi({
         method: "POST",
         body: { talkId, novelTitle, commentContent },
       }),
-      invalidatesTags: ["commentsUpdated"],
+      invalidatesTags: (result, error, arg) => [
+        "commentsUpdated",
+        { type: "writingsOfNovelUpdated", id: `${arg.novelId}T` },
+      ],
     }),
     addReComment: builder.mutation<string, ParamForNewReComment>({
       query: ({ talkId, novelTitle, commentContent, parentCommentId }) => ({
@@ -229,7 +248,10 @@ export const novelTimeApi = createApi({
           parentCommentId,
         },
       }),
-      invalidatesTags: ["commentsUpdated"],
+      invalidatesTags: (result, error, arg) => [
+        "commentsUpdated",
+        { type: "writingsOfNovelUpdated", id: `${arg.novelId}T` },
+      ],
     }),
     editComment: builder.mutation<string, ParamToEditComment>({
       query: ({ commentId, commentContent }) => ({
@@ -250,7 +272,10 @@ export const novelTimeApi = createApi({
           commentId,
         },
       }),
-      invalidatesTags: ["commentsUpdated"],
+      invalidatesTags: (result, error, arg) => [
+        "commentsUpdated",
+        { type: "writingsOfNovelUpdated", id: `${arg.novelId}T` },
+      ],
     }),
 
     getLoginOauthServer: builder.query<UserAndToken, OauthData>({
@@ -310,8 +335,15 @@ export const novelTimeApi = createApi({
         };
       },
       invalidatesTags: (result, error, arg) => {
-        if (arg.writingType === "T") return ["talkUpdated"];
-        if (arg.writingType === "R") return ["recommendUpdated"];
+        if (arg.contentType === "writing" && arg.forWriting) {
+          return [
+            { type: "writingUpdated", id: arg.contentId },
+            {
+              type: "writingsOfNovelUpdated",
+              id: arg.forWriting.novelId + arg.forWriting.writingType,
+            },
+          ];
+        }
 
         if (arg.isOthersListOfLoginUser) {
           // do not invalidate tag of "contentUpdatedInNovelList" not to refetch current list

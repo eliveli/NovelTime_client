@@ -29,7 +29,7 @@ import { Board } from "./EditWriting.styles";
 export default function EditWriting() {
   const dispatch = useAppDispatch();
 
-  const { writingId, novelTitle, writingType, writingTitle, writingDesc } = useAppSelector(
+  const { writingId, novelId, novelTitle, writingType, writingTitle, writingDesc } = useAppSelector(
     (state) => state.writing.writingToEdit,
   );
 
@@ -74,6 +74,7 @@ export default function EditWriting() {
       writingDesc: contentRef.current.value,
       writingImg: undefined, // treat this later
       writingType: writingType === "FreeTalk" ? "T" : "R",
+      novelId,
     });
 
     if (editWritingResult.isError) {
@@ -89,6 +90,7 @@ export default function EditWriting() {
         writingTitle: "",
         writingDesc: "",
         writingType: "FreeTalk",
+        novelId: "",
         novelTitle: "",
       }),
     );

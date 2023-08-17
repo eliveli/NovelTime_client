@@ -19,7 +19,6 @@ import Spinner from "assets/Spinner";
 import { EditAndDeleteContainer } from "components/Writing/WritingDetail.styles";
 import { DotLine, DotAnimation, ContentAnimation } from "./RecommendDetail.styles";
 
-// server request by recommendId
 export default function NovelDetailRecommend() {
   const { recommendId } = useParams();
 
@@ -40,6 +39,7 @@ export default function NovelDetailRecommend() {
         writingTitle: recommend.data.recommend.recommendTitle,
         writingDesc: recommend.data.recommend.recommendDesc,
         writingType: "Recommend",
+        novelId: recommend.data.novel.novelId,
         novelTitle: recommend.data.novel.novelTitle,
       }),
     );
@@ -61,6 +61,7 @@ export default function NovelDetailRecommend() {
     await deleteWriting({
       writingId: recommend.data.recommend.recommendId,
       writingType: "R",
+      novelId: recommend.data.novel.novelId,
     });
 
     if (deleteWritingResult.isError) {
@@ -121,6 +122,7 @@ export default function NovelDetailRecommend() {
                 likeNO={recommend.data.recommend.likeNO}
                 writingId={recommend.data.recommend.recommendId}
                 writingType="R"
+                novelId={recommend.data.novel.novelId}
               />
             </WritingDetailContainer>
           </ContentAnimation>

@@ -174,6 +174,7 @@ export default function FreeTalkDetail() {
         writingTitle: talk.data.talk.talkTitle,
         writingDesc: talk.data.talk.talkDesc,
         writingType: "FreeTalk",
+        novelId: talk.data.novel.novelId,
         novelTitle: talk.data.novel.novelTitle,
       }),
     );
@@ -194,6 +195,7 @@ export default function FreeTalkDetail() {
     await deleteWriting({
       writingId: talk.data.talk.talkId,
       writingType: "T",
+      novelId: talk.data.novel.novelId,
     });
 
     if (deleteWritingResult.isError) {
@@ -245,6 +247,7 @@ export default function FreeTalkDetail() {
               likeNO={talk.data.talk.likeNO}
               writingId={talk.data.talk.talkId}
               writingType="T"
+              novelId={talk.data.novel.novelId}
             />
           </WritingDetailContainer>
           <ContentAnimation isTalkComnt>
@@ -264,6 +267,7 @@ export default function FreeTalkDetail() {
                 getAllRootCommentPages={getAllRootCommentPages}
                 // for creating reComment
                 talkId={talk.data.talk.talkId}
+                novelId={talk.data.novel.novelId}
                 novelTitle={talk.data.novel.novelTitle}
               />
             )}
@@ -274,6 +278,7 @@ export default function FreeTalkDetail() {
             {isMobile ? (
               <CommentInputOnMobile
                 talkId={talk.data.talk.talkId}
+                novelId={talk.data.novel.novelId}
                 novelTitle={talk.data.novel.novelTitle}
                 parentForNewReComment={parentForNewReComment}
                 getAllRootCommentPages={getAllRootCommentPages}
@@ -281,6 +286,7 @@ export default function FreeTalkDetail() {
             ) : (
               <RootCommentInputToCreateOnTablet
                 talkId={talk.data.talk.talkId}
+                novelId={talk.data.novel.novelId}
                 novelTitle={talk.data.novel.novelTitle}
                 getAllRootCommentPages={getAllRootCommentPages}
               />

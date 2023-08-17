@@ -6,6 +6,8 @@ type WritingToEdit = {
   writingTitle: string;
   writingDesc: string;
   writingType: "FreeTalk" | "Recommend";
+
+  novelId: string;
   novelTitle: string;
 };
 
@@ -23,6 +25,7 @@ const initialState: IsWritingState = {
     writingTitle: "",
     writingDesc: "",
     writingType: "FreeTalk",
+    novelId: "",
     novelTitle: "",
   },
 };

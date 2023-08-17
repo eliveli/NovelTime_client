@@ -59,6 +59,7 @@ function CommentWritten({
 
   // when adding a comment //
   talkId,
+  novelId,
   novelTitle,
   commentPageNo,
   isFirstComment,
@@ -129,9 +130,7 @@ function CommentWritten({
     // * change this after making the modal
     if (deleteCommentResult.isLoading) return; // prevent click while loading for prev request
 
-    await deleteComment({
-      commentId,
-    });
+    await deleteComment({ commentId, novelId });
 
     if (deleteCommentResult.isError) {
       alert("코멘트를 삭제할 수 없습니다. 새로고침 후 다시 시도해 보세요");
@@ -242,6 +241,7 @@ function CommentWritten({
                   parentCommentForNewReComment={{ parentForNewReComment, setParentForNewReComment }}
                   parentAndChildCommentToMark={{ parentAndChildToMark, setParentAndChildToMark }}
                   talkId={talkId}
+                  novelId={novelId}
                   novelTitle={novelTitle}
                 />
               ))}
@@ -425,6 +425,7 @@ function CommentWritten({
               parentAndChildCommentToMark={{ parentAndChildToMark, setParentAndChildToMark }}
               itsRootCommentWasDeleted={!!isDeleted}
               talkId={talkId}
+              novelId={novelId}
               novelTitle={novelTitle}
             />
           ))}
@@ -434,6 +435,7 @@ function CommentWritten({
           <ReCommentInputToCreateOnTablet
             parentForNewReComment={{ ...parentForNewReComment }}
             talkId={talkId}
+            novelId={novelId}
             novelTitle={novelTitle}
           />
         )}
@@ -470,6 +472,7 @@ export default function CommentList({
   getAllRootCommentPages,
 
   talkId,
+  novelId,
   novelTitle,
 }: CommentListProps) {
   const [parentAndChildToMark, setParentAndChildToMark] = useState({ parent: "", child: "" }); // parent comment of selected reComment
@@ -517,6 +520,7 @@ export default function CommentList({
           rootCommentSelected={rootCommentSelected}
           getAllRootCommentPages={getAllRootCommentPages}
           talkId={talkId}
+          novelId={novelId}
           novelTitle={novelTitle}
         />
       ))}

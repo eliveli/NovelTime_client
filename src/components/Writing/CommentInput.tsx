@@ -22,6 +22,7 @@ export function ReCommentInputToCreateOnTablet({
   parentForNewReComment,
 
   talkId,
+  novelId,
   novelTitle,
 }: {
   parentForNewReComment: {
@@ -30,6 +31,7 @@ export function ReCommentInputToCreateOnTablet({
   };
 
   talkId: string;
+  novelId: string;
   novelTitle: string;
 }) {
   const [addReComment, addReCommentResult] = useAddReCommentMutation();
@@ -55,6 +57,7 @@ export function ReCommentInputToCreateOnTablet({
 
     await addReComment({
       talkId,
+      novelId,
       novelTitle,
       commentContent: textRef.current?.value,
       parentCommentId: parentForNewReComment.parentCommentId,
@@ -198,11 +201,13 @@ export function ReCommentInputToEditOnTablet() {
 
 export function RootCommentInputToCreateOnTablet({
   talkId,
+  novelId,
   novelTitle,
 
   getAllRootCommentPages,
 }: {
   talkId: string;
+  novelId: string;
   novelTitle: string;
   getAllRootCommentPages: () => void;
 }) {
@@ -223,7 +228,12 @@ export function RootCommentInputToCreateOnTablet({
     if (!textRef.current?.value) return; // when comment content is empty
 
     if (addRootCommentResult.isLoading) return; // prevent click while loading for prev request
-    await addRootComment({ talkId, novelTitle, commentContent: textRef.current?.value });
+    await addRootComment({
+      talkId,
+      novelId,
+      novelTitle,
+      commentContent: textRef.current?.value,
+    });
 
     if (addRootCommentResult.isError) {
       alert("코멘트를 추가할 수 없습니다. 새로고침 후 다시 시도해 보세요");
@@ -352,6 +362,7 @@ export function CommentInputOnMobile({
   parentForNewReComment,
 
   talkId,
+  novelId,
   novelTitle,
 
   getAllRootCommentPages,
@@ -361,6 +372,7 @@ export function CommentInputOnMobile({
     parentCommentUserName: string;
   };
   talkId: string;
+  novelId: string;
   novelTitle: string;
   getAllRootCommentPages: () => void;
 }) {
@@ -396,7 +408,12 @@ export function CommentInputOnMobile({
 
     if (isRootCommentInput) {
       if (addRootCommentResult.isLoading) return; // prevent click while loading for prev request
-      await addRootComment({ talkId, novelTitle, commentContent: textRef.current?.value });
+      await addRootComment({
+        talkId,
+        novelId,
+        novelTitle,
+        commentContent: textRef.current?.value,
+      });
 
       if (addRootCommentResult.isError) {
         alert("코멘트를 추가할 수 없습니다. 새로고침 후 다시 시도해 보세요");
@@ -409,6 +426,7 @@ export function CommentInputOnMobile({
 
       await addReComment({
         talkId,
+        novelId,
         novelTitle,
         commentContent: textRef.current?.value,
         parentCommentId: parentForNewReComment.parentCommentId,

@@ -8,6 +8,7 @@ type Props = React.PropsWithChildren<{
   likeNO: number;
   writingId: string;
   writingType: "T" | "R";
+  novelId: string;
 }>;
 
 const IconContainer = styled.div`
@@ -31,7 +32,7 @@ const LikeNumber = styled.span`
   margin-right: 20px;
   margin-left: 5px;
 `;
-export default function LikeAndShare({ isLike, likeNO, writingId, writingType }: Props) {
+export default function LikeAndShare({ isLike, likeNO, writingId, writingType, novelId }: Props) {
   const loginUserId = useAppSelector((state) => state.user.loginUserInfo.userId);
 
   const [toggleLike, toggleLikeResult] = useToggleLikeMutation();
@@ -52,7 +53,10 @@ export default function LikeAndShare({ isLike, likeNO, writingId, writingType }:
       await toggleLike({
         contentType: "writing",
         contentId: writingId,
-        writingType,
+        forWriting: {
+          writingType,
+          novelId,
+        },
       });
     } catch (error) {
       console.log("Failed to toggle LIKE:", error);

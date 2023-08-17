@@ -374,6 +374,7 @@ export interface CommentListProps {
   getAllRootCommentPages: () => void;
 
   talkId: string;
+  novelId: string;
   novelTitle: string;
 }
 
@@ -438,5 +439,6 @@ export type CommentProps = {
   itsRootCommentWasDeleted?: boolean;
 
   talkId: string;
+  novelId: string;
   novelTitle: string;
 };

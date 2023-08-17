@@ -99,20 +99,24 @@ export type ParamToEditWriting = {
   writingDesc: string;
   writingImg?: string;
   writingType: "T" | "R";
+  novelId: string;
 };
 export type ParamToDeleteWriting = {
   writingId: string;
   writingType: "T" | "R";
+  novelId: string;
 };
 
 export type ParamForNewRootComment = {
   talkId: string;
+  novelId: string;
   novelTitle: string;
   commentContent: string;
 };
 
 export type ParamForNewReComment = {
   talkId: string;
+  novelId: string;
   novelTitle: string;
   commentContent: string;
   parentCommentId: string;
@@ -124,6 +128,7 @@ export type ParamToEditComment = {
 };
 
 export type ParamToDeleteComment = {
+  novelId: string;
   commentId: string;
 };
 
@@ -515,7 +520,10 @@ export interface ParamsOfUserNovelList {
 export interface ContentOfLike {
   contentType: "writing" | "novelList";
   contentId: string;
-  writingType?: "T" | "R";
+  forWriting?: {
+    writingType: "T" | "R";
+    novelId: string;
+  };
   isOthersListOfLoginUser?: boolean;
 }
 export interface IsLike {
