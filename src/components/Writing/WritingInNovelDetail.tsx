@@ -1,7 +1,9 @@
 import React, { useRef } from "react";
 import { ThemeProvider } from "styled-components";
-import { useComponentWidth } from "utils";
+import { goToUserPage, useComponentWidth } from "utils";
 import { WritingWithoutGenre } from "store/serverAPIs/types";
+import { useNavigate } from "react-router-dom";
+import { RECOMMEND_DETAIL, TALK_DETAIL } from "utils/pathname";
 import Icon from "../../assets/Icon";
 import {
   CreateDate,
@@ -23,18 +25,14 @@ import {
 
 export default function WritingInNovelDetail({ writing }: { writing: WritingWithoutGenre }) {
   const {
-    writingId, // 글 상세페이지 요청 시 필요
+    writingId,
     writingTitle,
     writingImg,
-
-    userId, // 유저 상세페이지 요청 시 필요
     userName,
     userImg,
     createDate,
     likeNO,
-
-    commentNO,
-
+    commentNO, // undefined for recommend
     talkOrRecommend,
   } = writing;
   const theme = {};
@@ -44,15 +42,25 @@ export default function WritingInNovelDetail({ writing }: { writing: WritingWith
   const calcTitleWidth = useComponentWidth(titleWidthRef);
   const titleWidth = calcTitleWidth - 40 - 4; // (component width) - (image width) - (extra)
 
+  const navigate = useNavigate();
+
+  const goToWritingPage = () => {
+    if (talkOrRecommend === "T") {
+      navigate(`${TALK_DETAIL}/${writingId}`);
+    } else {
+      navigate(`${RECOMMEND_DETAIL}/${writingId}`);
+    }
+  };
+
   return (
     <ThemeProvider theme={theme}>
-      <WritingBG>
+      <WritingBG onClick={goToWritingPage}>
         <Writing>
-          <UserImg userImg={userImg} />
+          <UserImg userImg={userImg} onClick={(e) => goToUserPage(navigate, e, userName)} />
           <BesideImgContainer>
             <FirstLineContainer ref={titleWidthRef}>
               <UserNameBox>
-                <UserName>{userName}</UserName>
+                <UserName onClick={(e) => goToUserPage(navigate, e, userName)}>{userName}</UserName>
                 <CreateDate>{createDate}</CreateDate>
               </UserNameBox>
               <IconsBox>

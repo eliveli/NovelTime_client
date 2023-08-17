@@ -1,6 +1,8 @@
 import { useState } from "react";
 import Icon from "assets/Icon";
 import { Img } from "store/serverAPIs/types";
+import { goToUserPage } from "utils";
+import { useNavigate } from "react-router-dom";
 import {
   CreateDate,
   UserImg,
@@ -59,23 +61,21 @@ export function TalkDetail({ detailTalk }: TalkProps) {
     userImg,
     createDate,
 
-    likeNO,
-    commentNO,
-    isLike,
-
     talkTitle,
     talkDesc,
     talkImg,
   } = detailTalk;
 
+  const navigate = useNavigate();
+
   return (
     <Writing>
       <UserContainer>
-        <UserImg userImg={userImg} />
+        <UserImg userImg={userImg} onClick={(e) => goToUserPage(navigate, e, userName)} />
         <NextToImgContainer>
           <WritingTitle>{talkTitle}</WritingTitle>
           <UserNameBox>
-            <UserName>{userName}</UserName>
+            <UserName onClick={(e) => goToUserPage(navigate, e, userName)}>{userName}</UserName>
             <CreateDate>{createDate}</CreateDate>
           </UserNameBox>
         </NextToImgContainer>
@@ -96,22 +96,21 @@ export function RecommendDetail({ detailRecommend }: RecommendProps) {
     userImg,
     createDate,
 
-    likeNO,
-    isLike,
-
     recommendTitle,
     recommendDesc,
     recommendImg,
   } = detailRecommend;
 
+  const navigate = useNavigate();
+
   return (
     <Writing>
       <UserContainer>
-        <UserImg userImg={userImg} />
+        <UserImg userImg={userImg} onClick={(e) => goToUserPage(navigate, e, userName)} />
         <NextToImgContainer>
           <WritingTitle>{recommendTitle}</WritingTitle>
           <UserNameBox>
-            <UserName>{userName}</UserName>
+            <UserName onClick={(e) => goToUserPage(navigate, e, userName)}>{userName}</UserName>
             <CreateDate>{createDate}</CreateDate>
           </UserNameBox>
         </NextToImgContainer>

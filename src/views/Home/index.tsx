@@ -3,8 +3,8 @@ import Icon from "assets/Icon";
 import Spinner from "assets/Spinner";
 import { CategoryMark } from "components/CategoryMark";
 import MainBG from "components/MainBG";
-import { NovelColumn, NovelColumnDetail, NovelRow } from "components/Novel";
-import { ColumnDetailList, ColumnList, RowSlide } from "components/NovelListFrame";
+import { NovelRow } from "components/Novel";
+import { RowSlide } from "components/NovelListFrame";
 import React, { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -14,7 +14,7 @@ import {
   useLazyGetUserNovelListAtRandomQuery,
 } from "store/serverAPIs/novelTime";
 import { Img } from "store/serverAPIs/types";
-import { matchPlatformName, useComponentWidth } from "utils";
+import { goToUserPage, matchPlatformName, useComponentWidth } from "utils";
 import FreeTalk from "views/FreeTalkList/FreeTalkList.components";
 import Recommend from "views/RecommendList/RecommendList.components";
 import {
@@ -99,7 +99,7 @@ function RankUser({ category, info, idx }: RankUserProps) {
   const navigate = useNavigate();
 
   return (
-    <UserContnr onClick={() => navigate(`/user-page/${userName}`)}>
+    <UserContnr onClick={(e) => goToUserPage(navigate, e, userName)}>
       <UserImg userImg={userImg} />
       <UserInfo>
         <UserAct>

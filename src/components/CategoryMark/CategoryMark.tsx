@@ -1,5 +1,6 @@
 /* eslint-disable no-nested-ternary */
 import { useNavigate } from "react-router-dom";
+import { goToUserPage } from "utils";
 import {
   CategoryContainer,
   CategoryDesc,
@@ -115,7 +116,10 @@ export default function CategoryMark({
         {userMark && (
           <CategoryDescContnr>
             <CategoryDescUserContnr>
-              <CategoryDescUserImg userImg={userMark.userImg} />
+              <CategoryDescUserImg
+                userImg={userMark.userImg}
+                onClick={(e) => goToUserPage(navigate, e, userMark.userName)}
+              />
               <CategoryDescUserName>
                 {`${userMark.userName}의 선호 리스트`}
                 &nbsp;

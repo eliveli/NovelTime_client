@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Img } from "store/serverAPIs/types";
-import { adjustCreateDate, useComponentHeight, useComponentWidth } from "utils";
+import { adjustCreateDate, goToUserPage, useComponentHeight, useComponentWidth } from "utils";
 
 import Icon from "../../assets/Icon";
 import {
@@ -75,22 +75,8 @@ function TalkTablet({ talk }: { talk: TalkProps }) {
     <TalkTabletContnr>
       <TalkMainInfoContnr>
         <UserInfoTablet>
-          <UserImg
-            userImg={userImg}
-            onClick={(event: React.MouseEvent<HTMLElement>) => {
-              event.stopPropagation();
-              navigate(`/user-page/${userName}`);
-            }}
-          />
-          {/* <UserNameBox> */}
-          <UserName
-            onClick={(event: React.MouseEvent<HTMLElement>) => {
-              event.stopPropagation();
-              navigate(`/user-page/${userName}`);
-            }}
-          >
-            {userName}
-          </UserName>
+          <UserImg userImg={userImg} onClick={(e) => goToUserPage(navigate, e, userName)} />
+          <UserName onClick={(e) => goToUserPage(navigate, e, userName)}>{userName}</UserName>
         </UserInfoTablet>
 
         <TalkInfoContnrTablet>
@@ -152,24 +138,11 @@ function TalkMobile({ talk }: { talk: TalkProps }) {
 
   return (
     <TalkMobileContnr>
-      <UserImg
-        userImg={userImg}
-        onClick={(event: React.MouseEvent<HTMLElement>) => {
-          event.stopPropagation();
-          navigate(`/user-page/${userName}`);
-        }}
-      />
+      <UserImg userImg={userImg} onClick={(e) => goToUserPage(navigate, e, userName)} />
       <BesideImgContainer>
         <FirstLineContainer>
           <UserNameBox>
-            <UserName
-              onClick={(event: React.MouseEvent<HTMLElement>) => {
-                event.stopPropagation();
-                navigate(`/user-page/${userName}`);
-              }}
-            >
-              {userName}
-            </UserName>
+            <UserName onClick={(e) => goToUserPage(navigate, e, userName)}>{userName}</UserName>
             <CreateDate>{dateToShow}</CreateDate>
           </UserNameBox>
           <IconsBox>

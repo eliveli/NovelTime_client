@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import { ThemeProvider } from "styled-components";
 import { useNavigate } from "react-router-dom";
-import { adjustCreateDate, useComponentWidth } from "utils";
+import { adjustCreateDate, goToUserPage, useComponentWidth } from "utils";
 import { Img } from "store/serverAPIs/types";
 import Icon from "../../assets/Icon";
 
@@ -112,8 +112,8 @@ export default function Recommend({ recommendInfo, isLast }: RecommendProps) {
 
           <LastLineContainer>
             <UserNameBox>
-              <UserImg />
-              <UserName>{userName}</UserName>
+              <UserImg onClick={(e) => goToUserPage(navigate, e, userName)} />
+              <UserName onClick={(e) => goToUserPage(navigate, e, userName)}>{userName}</UserName>
               <CreateDate>{dateToShow}</CreateDate>
             </UserNameBox>
             <IconBox>
