@@ -6,8 +6,10 @@ import useSearchListWithInfntScrollForNovel from "utils/useSearchListWithInfntSc
 import PageNOs from "components/PageNOs";
 import { useSearchForNovelQuery } from "store/serverAPIs/novelTime";
 import Spinner from "assets/Spinner";
+import { setSearchList } from "store/clientSlices/filterSlice";
+import { useEffect } from "react";
 import { NovelColumnDetail } from "../../components/Novel";
-import { useAppSelector } from "../../store/hooks";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
 
 import SearchForNovel from "../../components/Search/SearchForNovel";
 
@@ -31,11 +33,15 @@ export default function SearchPage() {
 
   const searchTypeMatched = matchSearchTypeName(currentSearchType);
 
-  const { isFetching, data } = useSearchForNovelQuery({
-    searchType: !currentSearchWord ? "sample" : searchTypeMatched, // get sample novels when search word is empty
-    searchWord: currentSearchWord || "undefined", // it can't be empty string when passing to server
-    pageNo: Number(currentPageNo),
-  });
+  const isSettingTheList = useAppSelector((state) => state.filter.novel.isSettingTheList);
+  const { isFetching, data } = useSearchForNovelQuery(
+    {
+      searchType: !currentSearchWord ? "sample" : searchTypeMatched, // get sample novels when search word is empty
+      searchWord: currentSearchWord || "undefined", // it can't be empty string when passing to server
+      pageNo: Number(currentPageNo),
+    },
+    { skip: !isSettingTheList },
+  );
 
   const { list: listForInfntScroll } = useAppSelector((state) => state.filter.novel);
 
@@ -44,6 +50,16 @@ export default function SearchPage() {
     isFetching,
     data,
   });
+
+  const dispatch = useAppDispatch();
+
+  // 유저가 서치 필터 작동하기 전 기존 필터 설정값으로 리스트 불러오기
+  useEffect(() => {
+    if (!listForInfntScroll) {
+      dispatch(setSearchList({ listType: "novel", isSettingTheList: true }));
+    }
+  }, []);
+
   return (
     <MainBG>
       {isFetching && <Spinner styles="fixed" />}

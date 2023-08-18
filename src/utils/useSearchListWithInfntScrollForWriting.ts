@@ -188,7 +188,6 @@ export default function useSearchListWithInfntScrollForWriting({
       } else {
         // - 직전과 필터가 다르면 list 교체
         setNextList(listFromServer);
-        // * change later for other writing list not for TalkList only
 
         // 현재 필터로 교체
         setPrevFilters({

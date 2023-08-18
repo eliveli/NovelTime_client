@@ -34,7 +34,9 @@ export default function useSearchListWithInfntScrollForNovel({
   });
 
   const setNextPageNo = () => {
-    dispatch(setSearchList({ listType: "novel", filters: { pageNo: pageNo + 1 } }));
+    dispatch(
+      setSearchList({ listType: "novel", filters: { pageNo: pageNo + 1 }, isSettingTheList: true }),
+    );
   };
 
   const setNextList = (searchList: any[]) => {
