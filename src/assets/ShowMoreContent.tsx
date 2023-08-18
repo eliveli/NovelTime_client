@@ -13,9 +13,11 @@ const NextContentBtn = styled.div`
   box-shadow: 0 0 2px rgb(0 0 0 / 20%);
   color: rgba(0, 0, 0, 0.66);
   font-weight: 300;
+
+  margin-bottom: 10px;
 `;
 
-export default function ShowMoreContent({ _onClick }: { _onClick: () => unknown }) {
+export default function ShowMoreContent({ _onClick }: { _onClick: () => void }) {
   return (
     <NextContentBtn onClick={() => _onClick()}>
       <Icon.IconBox noPointer>

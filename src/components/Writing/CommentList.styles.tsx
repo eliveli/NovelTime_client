@@ -1,6 +1,6 @@
 import theme, { styled } from "assets/styles/theme";
 import Icon from "assets/Icon";
-import { Img, ReCommentList } from "store/serverAPIs/types";
+import { Img } from "store/serverAPIs/types";
 
 export const CommentListContainer = styled.div`
   border-radius: 20px;
@@ -8,9 +8,7 @@ export const CommentListContainer = styled.div`
   margin-top: 10px;
   padding: 14px 0 2px;
 
-  @media (max-width: 820px) {
-    margin-bottom: 78px;
-  }
+  margin-bottom: 10px;
 `;
 export const CommentMarkContainer = styled.div`
   display: flex;

@@ -194,15 +194,12 @@ export function RootCommentInputToCreateOnTablet({
 }: {
   getAllRootCommentPages: () => void;
 }) {
+  const isNotMobile = !useWhetherItIsMobile();
+  const textRef = useRef<HTMLTextAreaElement>(null);
+  const loginUserId = useAppSelector((state) => state.user.loginUserInfo.userId);
   const { talkId, novelId, novelTitle } = useAppSelector((state) => state.comment.argsForApis);
 
   const [addRootComment, addRootCommentResult] = useAddRootCommentMutation();
-
-  const loginUserId = useAppSelector((state) => state.user.loginUserInfo.userId);
-
-  const textRef = useRef<HTMLTextAreaElement>(null);
-
-  const isNotMobile = !useWhetherItIsMobile();
 
   const handleSubmitToCreate = async () => {
     if (!loginUserId) {
@@ -349,22 +346,16 @@ export function CommentInputOnMobile({
   getAllRootCommentPages: () => void;
 }) {
   const { talkId, novelId, novelTitle } = useAppSelector((state) => state.comment.argsForApis);
-
   const parentToWriteReComment = useAppSelector((state) => state.comment.parentToWriteReComment);
-
-  const isRootCommentInput = !parentToWriteReComment.parentCommentId;
-
+  const loginUserId = useAppSelector((state) => state.user.loginUserInfo.userId);
   const [addReComment, addReCommentResult] = useAddReCommentMutation();
-
   const [addRootComment, addRootCommentResult] = useAddRootCommentMutation();
-
   const [editComment, editCommentResult] = useEditCommentMutation();
 
-  const loginUserId = useAppSelector((state) => state.user.loginUserInfo.userId);
+  const isNotMobile = !useWhetherItIsMobile();
+  const isRootCommentInput = !parentToWriteReComment.parentCommentId;
 
   const textRef = useRef<HTMLTextAreaElement>(null);
-
-  const isNotMobile = !useWhetherItIsMobile();
   const userNameOnTextAreaRef = useRef<HTMLSpanElement>(null);
   const userNameWidth = useComponentWidth(userNameOnTextAreaRef, isRootCommentInput);
 
