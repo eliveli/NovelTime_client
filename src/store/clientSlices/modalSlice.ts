@@ -16,14 +16,13 @@ export interface IsModalState {
   modalCategory:
     | "novelImage"
     | "sortWriting"
-    | "filterContent"
+    | "filterContent" // used with searchAll.filters.searchCategory in filterSlice
     | "login"
     | "editProfile"
     | "share"
     | "getNovelURL"
     | "none";
   novelImage: string;
-  filteringContent: string;
   metaTags: MetaTags;
 
   // 아래는 나중에 모듈 분리
@@ -34,7 +33,6 @@ export interface IsModalState {
 const initialState: IsModalState = {
   modalCategory: "none",
   novelImage: "",
-  filteringContent: "Novel",
   metaTags: {
     title: "NovelTime",
     description: "It's time to read novels!",
@@ -74,9 +72,6 @@ export const modalSlice = createSlice({
     closeModal: (state) => {
       state.modalCategory = "none";
     },
-    filterContent: (state, action: PayloadAction<string>) => {
-      state.filteringContent = action.payload;
-    },
     setMetaTags: (state, action: PayloadAction<MetaTags>) => {
       state.metaTags = action.payload;
     },
@@ -103,14 +98,7 @@ export const modalSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const {
-  filterContent,
-  openModal,
-  showBigImage,
-  closeModal,
-  getNovelTitle,
-  setLikeNovel,
-  setMetaTags,
-} = modalSlice.actions;
+export const { openModal, showBigImage, closeModal, getNovelTitle, setLikeNovel, setMetaTags } =
+  modalSlice.actions;
 
 export default modalSlice.reducer;

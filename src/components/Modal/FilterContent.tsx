@@ -1,24 +1,28 @@
-import { closeModal, filterContent } from "store/clientSlices/modalSlice";
-import { useAppDispatch, useAppSelector } from "../../store/hooks";
-
+import { closeModal } from "store/clientSlices/modalSlice";
+import { useMultipleSearchFilters } from "utils/useSearchFilterForSearchAll";
+import { useAppDispatch } from "../../store/hooks";
 import { MobileBG, SortBox, SortText, ClosingSpace } from "./Modal.styles";
 
 export default function FilterContent() {
   const dispatch = useAppDispatch();
 
-  // get selected category text to mark in the list
-  const filteringContent = useAppSelector((state) => state.modal.filteringContent);
+  const {
+    currentFilters: { currentSearchCategory },
+    setFilters,
+  } = useMultipleSearchFilters();
+
+  const searchCategories = ["Novel", "Talk", "Recommend"];
 
   return (
     <MobileBG>
       <SortBox>
-        {["Novel", "FreeTalk", "Recommend"].map((_) => (
+        {searchCategories.map((_) => (
           <SortText
             key={_}
-            selectedCategory={filteringContent}
+            selectedCategory={currentSearchCategory}
             category={_}
             onClick={() => {
-              dispatch(filterContent(_));
+              setFilters({ searchCategory: _, searchType: "Title" });
               dispatch(closeModal());
             }}
           >

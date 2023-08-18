@@ -19,14 +19,18 @@ export const SearchInput = styled.input`
 export const SearchSubmit = styled.button`
   white-space: nowrap;
 `;
-export const SearchFilterContainer = styled.div<{ isCategoryList?: boolean }>`
+export const SearchFilterContainer = styled.div<{ isListOpen?: boolean }>`
   display: flex;
   height: 38px;
   margin-top: 5px;
   border-radius: 11px;
   border: 1px solid rgba(0, 0, 0, 0.2);
 
-  ${({ isCategoryList }) => isCategoryList && "border-left-width: 0px;"}
+  ${({ isListOpen }) => isListOpen && "border-left-width: 0px;"}//
+  // when the search category list opens on tablet device,
+  // the left border of this component is put right left in the list component opened
+  // because the list overlaps this component.
+  // so this style is necessary to remove the left border in this case
 `;
 export const SearchCategorySelected = styled.p`
   width: 100%;

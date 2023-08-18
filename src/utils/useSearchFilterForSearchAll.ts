@@ -83,7 +83,9 @@ export function useMultipleSearchFilters() {
   };
 
   const setFilterForInfntScroll = (nextFiltersToSet: { [key: string]: any }) => {
-    dispatch(setSearchList({ listType: "searchAll", filters: nextFiltersToSet }));
+    dispatch(
+      setSearchList({ listType: "searchAll", filters: nextFiltersToSet, isSettingTheList: true }),
+    );
   };
 
   const setFilters = (
@@ -184,7 +186,13 @@ export function useSearchFilter(filterType: FilterType) {
   };
 
   const setFilterForInfntScroll = (nextValue: string | number) => {
-    dispatch(setSearchList({ listType: "searchAll", filters: { [filterType]: nextValue } }));
+    dispatch(
+      setSearchList({
+        listType: "searchAll",
+        filters: { [filterType]: nextValue },
+        isSettingTheList: true,
+      }),
+    );
   };
 
   const setFilter = (nextValue: string | number) => {

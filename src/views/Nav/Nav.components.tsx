@@ -17,7 +17,6 @@ import {
   logoPC,
 } from "assets/images";
 import Icon from "assets/Icon";
-import { useMultipleSearchFilters } from "utils/useSearchFilterForWriting";
 
 import {
   ADD_WRITING,
@@ -27,8 +26,8 @@ import {
   RECOMMEND_LIST,
   TALK_LIST,
 } from "utils/pathname";
-import { setListType, setSearchList } from "store/clientSlices/filterSlice";
-import { filterContent, openModal, setLikeNovel } from "../../store/clientSlices/modalSlice";
+import { setSearchList } from "store/clientSlices/filterSlice";
+import { openModal } from "../../store/clientSlices/modalSlice";
 import { handleWritingToSubmitOnMobile } from "../../store/clientSlices/writingSlice";
 import { useAppSelector, useAppDispatch } from "../../store/hooks";
 
@@ -123,7 +122,7 @@ export function NavPC({ pathname }: Props) {
         <RightSideContnr>
           <SearchIconBox
             onClick={() => {
-              dispatch(filterContent("Novel")); // 검색 필터 초기화
+              dispatch(setSearchList({ listType: "searchAll", list: "reset" })); // 검색 필터 초기화
               navigate(`/search`);
             }}
           >
@@ -176,7 +175,7 @@ export function NavMobileMainTop() {
         <RightSideContnr>
           <SearchIconBox
             onClick={() => {
-              dispatch(filterContent("Novel")); // 검색 필터 초기화
+              dispatch(setSearchList({ listType: "searchAll", list: "reset" })); // 검색 필터 초기화
               navigate(`/search`);
             }}
           >
@@ -371,7 +370,7 @@ export function NavMobileDetail({ parameter, pathname, handleMsgList }: DetailPr
             <HomeIconBox
               onClick={() => {
                 navigate("/");
-                dispatch(filterContent("Novel")); // reset category for filtering content
+                dispatch(setSearchList({ listType: "searchAll", list: "reset" })); // 검색 필터 초기화
               }}
             >
               <HomeIcon />

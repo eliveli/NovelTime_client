@@ -20,9 +20,6 @@ export default function useCloseOutsideClick(
         )
       ) {
         handleCloseState(false);
-        console.log("inSortCloseOutside");
-        console.log("clickedElement:", clickedElement);
-        console.log("componentRef.current:", componentRef.current);
       }
     };
     window.addEventListener("click", closeList);
