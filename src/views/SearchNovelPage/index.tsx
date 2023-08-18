@@ -14,8 +14,6 @@ import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import SearchForNovel from "../../components/Search/SearchForNovel";
 
 function matchSearchTypeName(searchType: string) {
-  if (searchType === "sample") return searchType; // get several novels at random
-
   if (searchType === "Title") return "novelTitle";
   if (searchType === "Desc") return "novelDesc";
   if (searchType === "Author") return "novelAuthor";
@@ -67,9 +65,7 @@ export default function SearchPage() {
       <SearchForNovel />
 
       {!isForPagination && !!listForInfntScroll?.length && (
-        <ColumnDetailList
-          categoryText={searchTypeMatched === "sample" ? "작품을 검색해 보세요" : "검색 결과"}
-        >
+        <ColumnDetailList categoryText={!currentSearchWord ? "작품을 검색해 보세요" : "검색 결과"}>
           {listForInfntScroll.map((novel) => (
             <NovelColumnDetail key={novel.novelId} novel={novel} />
           ))}
@@ -78,9 +74,7 @@ export default function SearchPage() {
 
       {/* on desktop */}
       {isForPagination && !!data?.novels?.length && (
-        <ColumnDetailList
-          categoryText={searchTypeMatched === "sample" ? "작품을 검색해 보세요" : "검색 결과"}
-        >
+        <ColumnDetailList categoryText={!currentSearchWord ? "작품을 검색해 보세요" : "검색 결과"}>
           {data.novels.map((novel) => (
             <NovelColumnDetail key={novel.novelId} novel={novel} />
           ))}

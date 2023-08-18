@@ -53,14 +53,14 @@ type FiltersForWriting = {
 };
 
 type FiltersForSearchNovel = {
-  searchType: "Title" | "Desc" | "Author" | "sample";
+  searchType: "Title" | "Desc" | "Author";
   searchWord: string;
   pageNo: number;
 };
 
 type FiltersForSearchAll = {
   searchCategory: "Novel" | "Talk" | "Recommend";
-  searchType: "Title" | "Desc" | "Author" | "Text" | "Writer";
+  searchType: "Title" | "Desc" | "Author" | "Content" | "Writer";
   searchWord: string;
   pageNo: number;
 };
@@ -104,7 +104,7 @@ const initialState: IsFilterState = {
   },
   novel: {
     filters: {
-      searchType: "sample",
+      searchType: "Title",
       searchWord: "",
       pageNo: 1,
     },
@@ -160,7 +160,7 @@ export const filterSlice = createSlice({
           };
         } else if (listType === "novel") {
           state[listType].filters = {
-            searchType: "sample",
+            searchType: "Title",
             searchWord: "",
             pageNo: 1,
           };
