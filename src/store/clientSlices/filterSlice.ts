@@ -143,7 +143,7 @@ export const filterSlice = createSlice({
         state[listType].filters = { ...state[listType].filters, ...filters };
       }
 
-      if (isSettingTheList) {
+      if (isSettingTheList !== undefined) {
         state[listType].isSettingTheList = isSettingTheList;
       }
 

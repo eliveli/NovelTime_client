@@ -71,7 +71,7 @@ export default function useSearchListWithInfntScrollForWriting({
   });
 
   const setNextPageNo = () => {
-    dispatch(setSearchList({ listType, filters: { pageNo: pageNo + 1 } }));
+    dispatch(setSearchList({ listType, filters: { pageNo: pageNo + 1 }, isSettingTheList: true }));
   };
 
   const setNextList = (searchList: any[]) => {

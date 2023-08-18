@@ -38,14 +38,18 @@ export default function RecommendList() {
     sortType: currentSortType,
   });
 
-  const { isFetching, isError, data } = useGetWritingsFilteredQuery({
-    writingType: "R",
-    novelGenre: genreMatched,
-    searchType: currentSearchWord === "" ? "no" : searchTypeMatched,
-    searchWord: currentSearchWord || "undefined",
-    sortBy: sortTypeMatched,
-    pageNo: Number(currentPageNo),
-  });
+  const isSettingTheList = useAppSelector((state) => state.filter.talk.isSettingTheList);
+  const { isFetching, isError, data } = useGetWritingsFilteredQuery(
+    {
+      writingType: "R",
+      novelGenre: genreMatched,
+      searchType: currentSearchWord === "" ? "no" : searchTypeMatched,
+      searchWord: currentSearchWord || "undefined",
+      sortBy: sortTypeMatched,
+      pageNo: Number(currentPageNo),
+    },
+    { skip: !isSettingTheList },
+  );
 
   const { list: listForInfntScroll } = useAppSelector((state) => state.filter.recommend);
 
@@ -62,7 +66,9 @@ export default function RecommendList() {
 
   // 유저가 서치 필터 작동하기 전 기존 필터 설정값으로 리스트 불러오기
   useEffect(() => {
-    dispatch(setSearchList({ listType: "recommend", isSettingTheList: true }));
+    if (!listForInfntScroll) {
+      dispatch(setSearchList({ listType: "recommend", isSettingTheList: true }));
+    }
   }, []);
 
   return (
