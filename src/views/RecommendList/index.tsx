@@ -38,7 +38,7 @@ export default function RecommendList() {
     sortType: currentSortType,
   });
 
-  const isSettingTheList = useAppSelector((state) => state.filter.talk.isSettingTheList);
+  const isSettingTheList = useAppSelector((state) => state.filter.recommend.isSettingTheList);
   const { isFetching, isError, data } = useGetWritingsFilteredQuery(
     {
       writingType: "R",
