@@ -22,10 +22,7 @@ function SearchBar({
   //     to avoid warning : Assignment to property of function parameter 'searchWordRef'
   searchWordRef: React.MutableRefObject<string>;
 }) {
-  const {
-    currentFilters: { currentSearchType },
-    setFilters,
-  } = useMultipleSearchFilters();
+  const { setFilters } = useMultipleSearchFilters();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     typeSearchWord(e.target.value); // prevent component rerender as using useRef not useState
@@ -35,15 +32,8 @@ function SearchBar({
     e: React.MouseEvent<HTMLDivElement, MouseEvent> | React.KeyboardEvent<HTMLInputElement>,
   ) => {
     e.preventDefault();
-    if (currentSearchType === "no" && searchWordRef.current !== "") {
-      // 직전 검색 타입이 없으나 현재 주어진 검색어가 있을 때
-      setFilters({ searchType: "Title", searchWord: searchWordRef.current, pageNo: 1 });
-    } else if (searchWordRef.current === "") {
-      // 주어진 검색어가 없을 때
-      setFilters({ searchType: "no", searchWord: searchWordRef.current, pageNo: 1 });
-    } else {
-      setFilters({ searchWord: searchWordRef.current, pageNo: 1 });
-    }
+
+    setFilters({ searchWord: searchWordRef.current, pageNo: 1 });
 
     // show search-filter-component
     handleSearchFilter(true);

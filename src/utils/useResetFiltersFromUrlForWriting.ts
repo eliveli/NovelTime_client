@@ -19,7 +19,7 @@ const genres = [
   "그 외",
 ];
 
-const searchTypes = ["no", "Title", "Desc", "Writer", "Novel"];
+const searchTypes = ["Title", "Desc", "Writer", "Novel"];
 
 const sortTypes = ["작성일New", "작성일Old", "댓글Up", "댓글Down", "좋아요Up", "좋아요Down"];
 
@@ -44,7 +44,7 @@ export default function useResetFiltersFromUrlForWriting() {
         }
       } else if (filterType === "searchType") {
         if (filterValue === null || !searchTypes.includes(filterValue)) {
-          searchParams.set("searchType", "no");
+          searchParams.set("searchType", "Title");
           isFilterChanged = true;
         }
       } else if (filterType === "searchWord") {

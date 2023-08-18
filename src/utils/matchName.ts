@@ -1,6 +1,6 @@
 import { NovelGenre } from "store/serverAPIs/types";
 
-type SearchType = "writingTitle" | "writingDesc" | "userName" | "novelTitle" | "no";
+type SearchType = "writingTitle" | "writingDesc" | "userName" | "novelTitle";
 type SortType = "newDate" | "oldDate" | "manyComments" | "fewComments" | "manyLikes" | "fewLikes";
 
 export function matchPlatformName(platformSelected: string) {
@@ -29,7 +29,6 @@ export function matchGenreName(genre: string) {
 }
 
 export function matchSrchTypeName(searchType: string) {
-  if (searchType === "no") return "no";
   if (searchType === "Title") return "writingTitle";
   if (searchType === "Desc") return "writingDesc";
   if (searchType === "Writer") return "userName";
