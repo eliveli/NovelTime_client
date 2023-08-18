@@ -16,9 +16,8 @@ import SearchForNovel from "../../components/Search/SearchForNovel";
 function matchSearchTypeName(searchType: string) {
   if (searchType === "Title") return "novelTitle";
   if (searchType === "Desc") return "novelDesc";
-  if (searchType === "Author") return "novelAuthor";
-
-  throw Error("search type name is not correct");
+  return "novelAuthor";
+  // search type is set correctly through useResetFiltersFromUrlForNovel if it was wrong
 }
 
 export default function SearchPage() {

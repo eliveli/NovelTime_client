@@ -228,7 +228,7 @@ export default function NovelList() {
         <SearchIconBox
           onClick={() => {
             if (isDeskTop) {
-              navigate(`${SEARCH_NOVEL}?searchType=sample&searchWord=&pageNo=1`);
+              navigate(`${SEARCH_NOVEL}?searchType=Title&searchWord=&pageNo=1`);
               return;
             }
 

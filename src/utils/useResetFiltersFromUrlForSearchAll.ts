@@ -6,6 +6,9 @@ import { SEARCH_ALL } from "./pathname";
 type FilterType = "searchCategory" | "searchType" | "searchWord" | "pageNo";
 
 const searchCategories = ["Novel", "Talk", "Recommend"];
+const searchTypesInNovel = ["Title", "Desc", "Author"];
+const searchTypesInWriting = ["Title", "Content", "Writer"];
+
 const searchTypes = ["Title", "Desc", "Author", "Content", "Writer"];
 
 // reset filters for pagination when they are not correct
@@ -19,6 +22,8 @@ export default function useResetFiltersFromUrlForSearchAll() {
   function resetFiltersFromUrl(filters: FilterType[]) {
     let isFilterChanged = false;
 
+    let searchCategory: string;
+
     filters.map((filterType) => {
       const filterValue = searchParams.get(filterType); // it can be null
 
@@ -26,9 +31,22 @@ export default function useResetFiltersFromUrlForSearchAll() {
         if (filterValue === null || !searchCategories.includes(filterValue)) {
           searchParams.set("searchCategory", "Novel");
           isFilterChanged = true;
+
+          searchCategory = "Novel";
+        } else {
+          searchCategory = filterValue;
         }
       } else if (filterType === "searchType") {
-        if (filterValue === null || !searchTypes.includes(filterValue)) {
+        if (
+          // set "Title" to default
+          //  when the search type is not correct
+          filterValue === null ||
+          !searchTypes.includes(filterValue) ||
+          //  when search category is not connected with search type
+          (searchCategory === "Novel" && !searchTypesInNovel.includes(filterValue)) ||
+          (["Talk", "Recommend"].includes(searchCategory) &&
+            !searchTypesInWriting.includes(filterValue))
+        ) {
           searchParams.set("searchType", "Title");
           isFilterChanged = true;
         }

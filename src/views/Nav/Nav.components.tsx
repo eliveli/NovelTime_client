@@ -24,6 +24,7 @@ import {
   MESSAGE_LIST,
   NOVEL_LIST,
   RECOMMEND_LIST,
+  SEARCH_ALL,
   TALK_LIST,
 } from "utils/pathname";
 import { setSearchList } from "store/clientSlices/filterSlice";
@@ -122,8 +123,7 @@ export function NavPC({ pathname }: Props) {
         <RightSideContnr>
           <SearchIconBox
             onClick={() => {
-              dispatch(setSearchList({ listType: "searchAll", list: "reset" })); // 검색 필터 초기화
-              navigate(`/search`);
+              navigate(`${SEARCH_ALL}?searchCategory=Novel&searchType=Title&searchWord=&pageNo=1`);
             }}
           >
             <Icon.Search />
@@ -176,7 +176,7 @@ export function NavMobileMainTop() {
           <SearchIconBox
             onClick={() => {
               dispatch(setSearchList({ listType: "searchAll", list: "reset" })); // 검색 필터 초기화
-              navigate(`/search`);
+              navigate(SEARCH_ALL);
             }}
           >
             <Icon.Search />
@@ -370,7 +370,6 @@ export function NavMobileDetail({ parameter, pathname, handleMsgList }: DetailPr
             <HomeIconBox
               onClick={() => {
                 navigate("/");
-                dispatch(setSearchList({ listType: "searchAll", list: "reset" })); // 검색 필터 초기화
               }}
             >
               <HomeIcon />
