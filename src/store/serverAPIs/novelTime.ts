@@ -43,6 +43,8 @@ import {
   NovelInDetail,
   WritingOfNovel,
   ParamForWritingsOfNovel,
+  NovelOrWritingList,
+  ParamToSearchForAll,
 } from "./types";
 import type { RootState } from "../index";
 
@@ -136,6 +138,23 @@ export const novelTimeApi = createApi({
       providesTags: (result, error, arg) => [
         { type: "writingsOfNovelUpdated", id: arg.novelId + arg.writingType },
       ],
+    }),
+
+    // use two apis depending on the search category
+    searchForAll: builder.query<NovelOrWritingList, ParamToSearchForAll>({
+      query: ({ searchCategory, searchType, searchWord, pageNo }) => {
+        if (
+          searchCategory === "novel" &&
+          ["novelTitle", "novelDesc", "novelAuthor", "sample"].includes(searchType)
+        ) {
+          return `/novels/${searchType}/${searchWord}/${pageNo}`;
+        }
+
+        if (["writingTitle", "writingDesc", "userName", "no"].includes(searchType)) {
+          return `/writing/${searchCategory}/all/${searchType}/${searchWord}/newDate/${pageNo}`;
+        }
+        return "";
+      },
     }),
 
     // get writing list with search filter
@@ -391,6 +410,7 @@ export const {
   useSearchForNovelQuery,
   useAddNovelWithURLMutation,
   useGetNovelInDetailQuery,
+  useSearchForAllQuery,
   useGetWritingsOfNovelQuery,
   useGetWritingsFilteredQuery,
   useGetTalkDetailQuery,

@@ -144,6 +144,30 @@ export type NovelDetailList =
     }
   | undefined;
 
+export type NovelOrWritingList =
+  | {
+      novels?: NovelDetail[];
+      talks?: TalkList;
+      recommends?: RecommendList;
+      lastPageNo: number;
+    }
+  | undefined;
+
+export type ParamToSearchForAll = {
+  searchCategory: "novel" | "T" | "R";
+  searchType:
+    | "novelTitle"
+    | "novelDesc"
+    | "novelAuthor"
+    | "sample" // for novels by here
+    | "writingTitle"
+    | "writingDesc"
+    | "userName"
+    | "no"; // for writings by here
+  searchWord: string; // note. it can't be empty string
+  pageNo: number;
+};
+
 export type NovelIdAndTitle = { novelId: string; novelTitle: string };
 export interface NovelInDetailPage {
   novelId: string;
@@ -204,7 +228,7 @@ export type ParamForWritingsOfNovel = {
   pageNo: number;
 };
 
-type NovelDetail = {
+export type NovelDetail = {
   novelId: string;
   novelImg: string;
   novelTitle: string;

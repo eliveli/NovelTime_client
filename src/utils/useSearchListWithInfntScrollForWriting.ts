@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { useLocation, useNavigationType } from "react-router-dom";
 import { setListType, setSearchList } from "store/clientSlices/filterSlice";
 import { useAppDispatch, useAppSelector } from "store/hooks";
-import { WritingList } from "store/serverAPIs/types";
+import { RecommendList, TalkList, WritingList } from "store/serverAPIs/types";
 import checkIsNearBottom from "./checkIsNearBottom";
 import { RECOMMEND_LIST, TALK_LIST } from "./pathname";
 
@@ -74,7 +74,7 @@ export default function useSearchListWithInfntScrollForWriting({
     dispatch(setSearchList({ listType, filters: { pageNo: pageNo + 1 }, isSettingTheList: true }));
   };
 
-  const setNextList = (searchList: any[]) => {
+  const setNextList = (searchList: TalkList | RecommendList) => {
     dispatch(
       setSearchList({
         listType,

@@ -45,7 +45,7 @@ export default function FreeTalkList() {
       novelGenre: genreMatched,
       searchType: currentSearchWord === "" ? "no" : searchTypeMatched,
       searchWord: currentSearchWord || "undefined",
-      // ㄴwhen searchType is "no" searchWord is not considered
+      // ㄴwhen searchType is "no", user gets writings regardless of search type.
       // ㄴㄴbut searchWord can't be empty string because parameter in path can't be empty
       sortBy: sortTypeMatched,
       pageNo: Number(currentPageNo),

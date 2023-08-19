@@ -1,10 +1,9 @@
 import { useState, useEffect, useRef } from "react";
 import { useLocation, useNavigationType } from "react-router-dom";
-import { setListType, setSearchList } from "store/clientSlices/filterSlice";
+import { ListOfSearchAll, setSearchList } from "store/clientSlices/filterSlice";
 import { useAppDispatch, useAppSelector } from "store/hooks";
-import { TalkList, WritingList } from "store/serverAPIs/types";
+import { NovelOrWritingList } from "store/serverAPIs/types";
 import checkIsNearBottom from "./checkIsNearBottom";
-import { RECOMMEND_LIST, TALK_LIST } from "./pathname";
 
 export default function useSearchListWithInfntScrollForSearchAll({
   isForPagination,
@@ -13,60 +12,39 @@ export default function useSearchListWithInfntScrollForSearchAll({
 }: {
   isForPagination: boolean;
   isFetching: boolean;
-  data: WritingList;
+  data: NovelOrWritingList;
 }) {
   const location = useLocation();
   const navigationType = useNavigationType();
-
-  const { pathname } = window.location;
-
-  const listType = setListType();
 
   const dispatch = useAppDispatch();
 
   const isBackPageRef = useRef(false);
 
-  const { filters: talkFilters, list: talkList } = useAppSelector((state) => state.filter.talk);
-  const { filters: recommendFilters, list: recommendList } = useAppSelector(
-    (state) => state.filter.recommend,
-  );
-
-  const getCurrentFiltersAndList = () => {
-    if (pathname === TALK_LIST) {
-      return {
-        currentFilters: talkFilters,
-        currentList: talkList,
-      };
-    }
-    if (pathname === RECOMMEND_LIST) {
-      return {
-        currentFilters: recommendFilters,
-        currentList: recommendList,
-      };
-    }
-
-    throw Error("pathname was not matched for infinite scroll");
-  };
-
   const {
-    currentFilters: { genre, searchType, searchWord, sortType, pageNo },
-    currentList,
-  } = getCurrentFiltersAndList();
+    filters: { searchCategory, searchType, searchWord, pageNo },
+    list: currentList,
+    isSettingTheList,
+  } = useAppSelector((state) => state.filter.searchAll);
 
   const [prevFilters, setPrevFilters] = useState({
-    prevGenre: genre,
+    prevSearchCategory: searchCategory,
     prevSrchType: searchType,
     prevSearchWord: searchWord,
-    prevSortType: sortType,
     prevPageNo: pageNo,
   });
 
   const setNextPageNo = () => {
-    dispatch(setSearchList({ listType, filters: { pageNo: pageNo + 1 } }));
+    dispatch(
+      setSearchList({
+        listType: "searchAll",
+        filters: { pageNo: pageNo + 1 },
+        isSettingTheList: true,
+      }),
+    );
   };
-
-  const setNextList = (searchList: any[]) => {
-    dispatch(setSearchList({ listType, list: searchList }));
+  const setNextList = (list: ListOfSearchAll) => {
+    dispatch(setSearchList({ listType: "searchAll", list, isSettingTheList: false }));
   };
 
   // for infinite scroll
@@ -80,6 +58,7 @@ export default function useSearchListWithInfntScrollForSearchAll({
       if (data && data?.lastPageNo !== pageNo && isNearBottom) {
         setNextPageNo();
 
+        console.log("scroll down");
         isBackPageRef.current = false;
       }
     }
@@ -102,65 +81,63 @@ export default function useSearchListWithInfntScrollForSearchAll({
   useEffect(() => {
     if (isForPagination) return;
 
-    const { prevGenre, prevSrchType, prevSearchWord, prevSortType, prevPageNo } = prevFilters;
+    const { prevSearchCategory, prevSrchType, prevSearchWord, prevPageNo } = prevFilters;
 
     if (
       isBackPageRef.current &&
       currentList !== undefined &&
-      prevGenre === genre &&
+      prevSearchCategory === searchCategory &&
       prevSrchType === searchType &&
       prevSearchWord === searchWord &&
-      prevSortType === sortType &&
-      prevPageNo === pageNo
+      prevPageNo === pageNo &&
+      isSettingTheList === false
     ) {
-      // . 뒤로가기 직후 아무 동작 안 함 (list 재설정 X. 저장된 것 사용)
-      // . 직후 필터 변경 시 새로운 리스트로 교체 (아래 다른 조건문 참고)
-      // . 이후 스크롤을 내려 새로운 list 요청할 때 isBackPageRef.current가 false로 바뀜
-      //    그러면 이 조건문 패스, 이후 코드 라인에서 list 재설정
-      // . 뒤로가기 후 새로고침하면 currentList는 undefined (이 조건문 만족X)
-      //  __조건문 관련__
-      //   . 컴포넌트 새로 불러오면서 prev 필터가 현재 필터와 같아짐
-      //    ㄴ필터 동일성 체크를 하지 않으면 뒤로가기 후 필터 변경 시 리스트를 새로 저장하지 못함
-      //   . 저장된 리스트 존재
       return;
     }
+
+    if (!isSettingTheList) return;
 
     if (isFetching) return;
 
     if (!data) {
-      // data is null
-      setNextList([]);
+      setNextList({ novels: undefined, talks: undefined, recommends: undefined });
       return;
     }
-    // * 다른 search list 적용 필요
+
     if (data) {
-      const { talks, recommends } = data;
-      const listFromServer = talks ?? recommends ?? [];
+      const { novels, talks, recommends } = data; // * need to fix
+      const listOfSearchAll = { novels, talks, recommends };
 
       // - 최초 writings 요청할 때
       if (currentList === undefined && pageNo === 1) {
-        setNextList(listFromServer);
-        // * change later for other writing list not for TalkList only
+        setNextList(listOfSearchAll);
 
         // 현재 필터로 교체
         setPrevFilters({
-          prevGenre: genre,
+          prevSearchCategory: searchCategory,
           prevSrchType: searchType,
           prevSearchWord: searchWord,
-          prevSortType: sortType,
           prevPageNo: pageNo,
         });
       } else if (
         // - 다른 필터 유지하고 페이지번호만 증가할 때 list 이어 붙임
-        prevGenre === genre &&
+        prevSearchCategory === searchCategory &&
         prevSrchType === searchType &&
         prevSearchWord === searchWord &&
-        prevSortType === sortType &&
         currentList !== undefined &&
         prevPageNo === pageNo - 1
       ) {
-        setNextList([...currentList, ...listFromServer]);
-        // * change later for other writing list not for TalkList only
+        if (currentList.novels && novels) {
+          listOfSearchAll.novels = [...currentList.novels, ...novels];
+        }
+        if (currentList.talks && talks) {
+          listOfSearchAll.talks = [...currentList.talks, ...talks];
+        }
+        if (currentList.recommends && recommends) {
+          listOfSearchAll.recommends = [...currentList.recommends, ...recommends];
+        }
+
+        setNextList(listOfSearchAll);
 
         setPrevFilters((prev) => ({
           ...prev,
@@ -168,15 +145,13 @@ export default function useSearchListWithInfntScrollForSearchAll({
         }));
       } else {
         // - 직전과 필터가 다르면 list 교체
-        setNextList(listFromServer);
-        // * change later for other writing list not for TalkList only
+        setNextList(listOfSearchAll);
 
         // 현재 필터로 교체
         setPrevFilters({
-          prevGenre: genre,
+          prevSearchCategory: searchCategory,
           prevSrchType: searchType,
           prevSearchWord: searchWord,
-          prevSortType: sortType,
           prevPageNo: pageNo, // 리듀서에서 이미 1로 교체
         });
       }

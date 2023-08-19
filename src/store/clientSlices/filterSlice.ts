@@ -1,5 +1,6 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { NovelDetail, RecommendList, TalkList } from "store/serverAPIs/types";
 import { RECOMMEND_LIST, TALK_LIST } from "utils/pathname";
 
 export const setListType = () => {
@@ -64,19 +65,28 @@ type FiltersForSearchAll = {
   searchWord: string;
   pageNo: number;
 };
+export type ListOfSearchAll = {
+  novels?: NovelDetail[];
+  talks?: TalkList;
+  recommends?: RecommendList;
+};
 
 export type IsFilterState = {
   // to treat back page
   talk: {
     filters: FiltersForWriting;
-    list?: any[];
+    list?: TalkList;
     isSettingTheList: boolean;
   };
-  recommend: { filters: FiltersForWriting; list?: any[]; isSettingTheList: boolean };
+  recommend: { filters: FiltersForWriting; list?: RecommendList; isSettingTheList: boolean };
 
-  novel: { filters: FiltersForSearchNovel; list?: any[]; isSettingTheList: boolean };
+  novel: { filters: FiltersForSearchNovel; list?: NovelDetail[]; isSettingTheList: boolean };
 
-  searchAll: { filters: FiltersForSearchAll; list?: any[]; isSettingTheList: boolean };
+  searchAll: {
+    filters: FiltersForSearchAll;
+    list?: ListOfSearchAll;
+    isSettingTheList: boolean;
+  };
 };
 
 const initialState: IsFilterState = {
@@ -118,6 +128,7 @@ const initialState: IsFilterState = {
       searchWord: "",
       pageNo: 1,
     },
+
     list: undefined,
     isSettingTheList: false,
   },
@@ -133,7 +144,7 @@ export const filterSlice = createSlice({
       action: PayloadAction<{
         listType: "talk" | "recommend" | "novel" | "searchAll";
         filters?: { [key: string]: string | number };
-        list?: any[] | "reset";
+        list?: TalkList | RecommendList | NovelDetail[] | ListOfSearchAll | "reset";
         isSettingTheList?: boolean;
       }>,
     ) => {
