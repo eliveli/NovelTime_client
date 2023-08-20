@@ -63,12 +63,6 @@ export default function SearchPage() {
     { skip: !isSettingTheList },
   );
 
-  console.log(
-    "search all component: currentPageNo:",
-    currentPageNo,
-    ", isSettingTheList:",
-    isSettingTheList,
-  );
   const { list: listForInfntScroll } = useAppSelector((state) => state.filter.searchAll);
 
   useSearchListWithInfntScrollForSearchAll({

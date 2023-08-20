@@ -1,6 +1,7 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { useCloseOutsideClick, useWhetherItIsMobile } from "utils";
 import { useSearchFilter, useMultipleSearchFilters } from "utils/useSearchFilterForSearchAll";
+import { useSearchParams } from "react-router-dom";
 import { useAppDispatch } from "../../store/hooks";
 import { openModal } from "../../store/clientSlices/modalSlice";
 import {
@@ -21,25 +22,45 @@ import {
 } from "./Search.styles";
 
 export function SearchBar({
-  typeSearchWord,
-  searchWordRef,
+  searchWord,
+  setSearchWord,
 }: {
-  typeSearchWord: (newWord: string) => void;
-  // ㄴ don't : searchWordRef.current = someValue
-  //     to avoid warning : Assignment to property of function parameter 'searchWordRef'
-  searchWordRef: React.MutableRefObject<string>;
+  searchWord: string;
+  setSearchWord: React.Dispatch<React.SetStateAction<string>>;
 }) {
+  const searchInputRef = useRef<HTMLInputElement>(null);
+
+  // initialize search input //
+  // if a user searches for something with pagination on desktop
+  //    and clicks "search-all" icon on top nav bar for the page that the user stay now,
+  // search params in url initializes
+  //    but the previous search word remains in input if the following code was not wrote
+  // so following is necessary to initialize the search input in the case
+  const [searchParams] = useSearchParams();
+  const searchWordInURL = searchParams.get("searchWord");
+
+  useEffect(() => {
+    if (
+      searchInputRef.current &&
+      searchWordInURL === "" &&
+      searchInputRef.current.value !== searchWordInURL
+    ) {
+      searchInputRef.current.value = searchWordInURL; // initialize search input to ""
+    }
+  }, [searchWordInURL]);
+
+  //
   const { setFilters } = useMultipleSearchFilters();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    typeSearchWord(e.target.value); // prevent component rerender as using useRef not useState
+    setSearchWord(e.target.value);
   };
 
   const handleSubmit = (
     e: React.MouseEvent<HTMLDivElement, MouseEvent> | React.KeyboardEvent<HTMLInputElement>,
   ) => {
     e.preventDefault();
-    setFilters({ searchWord: searchWordRef.current, pageNo: 1 });
+    setFilters({ searchWord, pageNo: 1 });
   };
 
   // when press "Enter", submit
@@ -51,8 +72,8 @@ export function SearchBar({
   return (
     <SearchBarContainer>
       <SearchInput
-        defaultValue={searchWordRef.current}
-        // ㄴto show the same keywords when closing the search bar and reopening it
+        ref={searchInputRef}
+        defaultValue={searchWord}
         onChange={handleChange}
         onKeyPress={handleKeyPress}
       />
@@ -137,7 +158,7 @@ export function CategoriesToSelectOnTablet({
   );
 }
 
-export function SearchFilter({ searchWordRef }: { searchWordRef: React.MutableRefObject<string> }) {
+export function SearchFilter({ searchWord }: { searchWord: string }) {
   const {
     currentFilters: { currentSearchCategory, currentSearchType },
     setFilters,
@@ -166,7 +187,7 @@ export function SearchFilter({ searchWordRef }: { searchWordRef: React.MutableRe
             contentName={_}
             selectedContent={currentSearchType}
             onClick={() => {
-              setFilters({ searchType: _, searchWord: searchWordRef.current, pageNo: 1 });
+              setFilters({ searchType: _, searchWord, pageNo: 1 });
             }}
           >
             {_}
@@ -180,7 +201,7 @@ export function SearchFilter({ searchWordRef }: { searchWordRef: React.MutableRe
             contentName={_}
             selectedContent={currentSearchType}
             onClick={() => {
-              setFilters({ searchType: _, searchWord: searchWordRef.current, pageNo: 1 });
+              setFilters({ searchType: _, searchWord, pageNo: 1 });
             }}
           >
             {_}
@@ -193,17 +214,12 @@ export function SearchFilter({ searchWordRef }: { searchWordRef: React.MutableRe
 export default function SearchForAll() {
   const { currentFilter: currentSearchWord } = useSearchFilter("searchWord");
 
-  const searchWordRef = useRef(currentSearchWord);
-  // ㄴ입력하는 검색어를 기억해두고 submit 할 때만 서버 요청
-
-  const typeSearchWord = (newWord: string) => {
-    searchWordRef.current = newWord;
-  };
+  const [searchWord, setSearchWord] = useState(currentSearchWord);
 
   return (
     <SearchContainer>
-      <SearchBar searchWordRef={searchWordRef} typeSearchWord={typeSearchWord} />
-      <SearchFilter searchWordRef={searchWordRef} />
+      <SearchBar searchWord={searchWord} setSearchWord={setSearchWord} />
+      <SearchFilter searchWord={searchWord} />
     </SearchContainer>
   );
 }

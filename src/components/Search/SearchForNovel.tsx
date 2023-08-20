@@ -16,14 +16,12 @@ export function SearchBar({
   searchWordRef,
 }: {
   typeSearchWord: (newWord: string) => void;
-  // ㄴ don't : searchWordRef.current = someValue
-  //     to avoid warning : Assignment to property of function parameter 'searchWordRef'
   searchWordRef: React.MutableRefObject<string>;
 }) {
   const { setFilters } = useMultipleSearchFilters();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    typeSearchWord(e.target.value); // prevent component rerender as using useRef not useState
+    typeSearchWord(e.target.value);
   };
 
   const handleSubmit = (
@@ -43,7 +41,6 @@ export function SearchBar({
     <SearchBarContainer>
       <SearchInput
         defaultValue={searchWordRef.current}
-        // ㄴto show the same keywords when closing the search bar and reopening it
         onChange={handleChange}
         onKeyPress={handleKeyPress}
       />
@@ -84,7 +81,6 @@ export default function SearchForNovel() {
   const { currentFilter: currentSearchWord } = useSearchFilter("searchWord");
 
   const searchWordRef = useRef(currentSearchWord);
-  // ㄴ입력하는 검색어를 기억해두고 submit 할 때만 서버 요청
 
   const typeSearchWord = (newWord: string) => {
     searchWordRef.current = newWord;
