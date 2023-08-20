@@ -25,6 +25,7 @@ import {
   NOVEL_LIST,
   RECOMMEND_LIST,
   SEARCH_ALL,
+  SEARCH_NOVEL,
   TALK_LIST,
 } from "utils/pathname";
 import { setSearchList } from "store/clientSlices/filterSlice";
@@ -66,15 +67,13 @@ import {
   MyPageMobile,
 } from "./Nav.styles";
 
-interface Props {
-  pathname: string;
-}
-
-export function NavPC({ pathname }: Props) {
+export function NavPC() {
   const theme = {};
 
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+
+  const { pathname } = window.location;
 
   const loginUserInfo = useAppSelector((state) => state.user.loginUserInfo);
 
@@ -223,8 +222,10 @@ export function NavMobileMainTop() {
     </ThemeProvider>
   );
 }
-export function NavMobileMainBottom({ pathname }: Props) {
+export function NavMobileMainBottom() {
   const theme = {};
+
+  const { pathname } = window.location;
 
   const isLoginUser = !!useAppSelector((state) => state.user.loginUserInfo.userId);
 
@@ -297,49 +298,30 @@ export function NavMobileMainBottom({ pathname }: Props) {
 // from MainList to Detail : FreeTalkDetail, RecommendDetail
 // via useParams: boardTitle is in the center of NavBar
 // share icon, heart icon are in all
-interface DetailProps {
-  pathname: string;
-  //   novelId: string;
-  parameter?: {
-    novelId?: string;
-    talkId?: string;
-    recommendId?: string;
-  };
-  handleMsgList?: {
-    isListOpen: boolean;
-    handleMsgOpen: () => void;
-  };
-}
-
 interface InterfaceUserImg {
   src: string;
   position: string;
 }
 
-export function NavMobileDetail({ parameter, pathname, handleMsgList }: DetailProps) {
+export function NavMobileDetail({
+  handleMsgList,
+}: {
+  handleMsgList?: {
+    isListOpen: boolean;
+    handleMsgOpen: () => void;
+  };
+}) {
   // one nav component: top
+
+  const { pathname } = window.location;
+  const { novelId, talkId, recommendId } = useParams();
 
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const novelTitle = useAppSelector((state) => state.modal.novelTitle);
   const loginUserInfo = useAppSelector((state) => state.user.loginUserInfo);
   const userInfoInUserPage = useAppSelector((state) => state.user.userInfoInUserPage);
-  const { novelId } = useParams(); // when entering add-writing page from novel detail page
 
-  //   const dispatch = useAppDispatch();
-  //   const { novelLike } = useAppSelector((state) => state.modal);
-
-  //   novelLike.
-  //   novelLike.novelId === parameter.novelId
-
-  // server request in two component when clicking heart
-  // in this, Nav :  get user's isHeart
-  // in NovelDetail : user's isHeart, heart number
-
-  //   const [isLike, handleLike] = useState(isLikeNovel);
-
-  // this useState is not required for server request.
-  // just click heart, request sever state, use it.
   const theme = {};
   return (
     <ThemeProvider theme={theme}>
@@ -365,8 +347,10 @@ export function NavMobileDetail({ parameter, pathname, handleMsgList }: DetailPr
               {!handleMsgList.isListOpen && <ForwardIcon />}
             </LeftIconBox>
           )}
-          {/* (from novelDetail to ...) or (from an user's page) : show Home Icon */}
-          {(parameter?.novelId || pathname.includes("user-page")) && (
+          {/* show Home Icon in novel detail, user page, search for novel, search for all page */}
+          {(novelId ||
+            pathname.includes("user-page") ||
+            [SEARCH_NOVEL, SEARCH_ALL].includes(pathname)) && (
             <HomeIconBox
               onClick={() => {
                 navigate("/");
@@ -384,7 +368,7 @@ export function NavMobileDetail({ parameter, pathname, handleMsgList }: DetailPr
           ["message", loginUserInfo.userImg, loginUserInfo.userName],
           ["user-page", userInfoInUserPage.userImg, userInfoInUserPage.userName],
         ].map((_, idx) => {
-          if (idx === 2 && !pathname.includes(_[0] as string) && parameter?.novelId) {
+          if (idx === 2 && !pathname.includes(_[0] as string) && novelId) {
             return <PageTitle>{novelTitle}</PageTitle>;
           }
           if (idx === 2 && pathname.includes(_[0] as string)) {
@@ -413,9 +397,7 @@ export function NavMobileDetail({ parameter, pathname, handleMsgList }: DetailPr
         })}
 
         <IconsBox isRight>
-          {(pathname === `/novel-detail/${parameter?.novelId as string}` ||
-            parameter?.recommendId ||
-            parameter?.talkId) && (
+          {(pathname === `/novel-detail/${novelId as string}` || recommendId || talkId) && (
             <HeartIconBox
               onClick={() => {
                 // handleLike(!isLikeNovel);
@@ -427,7 +409,7 @@ export function NavMobileDetail({ parameter, pathname, handleMsgList }: DetailPr
               {/* {!isLikeNovel && <HeartIcon />} */}
             </HeartIconBox>
           )}
-          {(parameter?.recommendId || parameter?.talkId) && (
+          {(recommendId || talkId) && (
             <ShareIconBox>
               <ShareIcon />
             </ShareIconBox>

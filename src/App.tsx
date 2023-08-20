@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { BrowserRouter as Router, Routes, Route, Outlet } from "react-router-dom";
+import { useState } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import {
   NovelDetailRecommend,
@@ -21,8 +21,6 @@ import {
   DetailNav,
   SearchNovelPage,
   SearchAllPage,
-  BeforeSearch,
-  AfterSearch,
   NovelListByCategory,
   WritingList,
   NovelDetailMark,

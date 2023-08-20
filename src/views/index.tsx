@@ -13,8 +13,6 @@ import { MainListNav, DetailNav } from "./Nav";
 import SearchNovelPage from "./SearchNovelPage";
 import SearchNovelIframe from "./SearchNovelIframe";
 import SearchAllPage from "./SearchAllPage";
-import BeforeSearch from "./BeforeSearch";
-import AfterSearch from "./AfterSearch";
 import NovelListByCategory from "./NovelListByCategory";
 import NovelDetailMark from "./NovelDetailMark";
 import NovelDetailTalk from "./NovelDetailTalk";
@@ -45,8 +43,6 @@ export {
   SearchAllPage,
   SearchNovelPage,
   SearchNovelIframe,
-  BeforeSearch,
-  AfterSearch,
   NovelListByCategory,
   NovelDetailMark,
   AddWriting,
