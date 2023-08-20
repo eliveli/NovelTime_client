@@ -3,6 +3,7 @@ import { useLocation, useNavigationType } from "react-router-dom";
 import { ListOfSearchAll, setSearchList } from "store/clientSlices/filterSlice";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { NovelOrWritingList } from "store/serverAPIs/types";
+import { throttle } from "lodash";
 import checkIsNearBottom from "./checkIsNearBottom";
 import { SEARCH_ALL } from "./pathname";
 
@@ -90,28 +91,27 @@ export default function useSearchListWithInfntScrollForSearchAll({
     return SEARCH_ALL === window.location.pathname;
   }
 
+  const throttledScroll = throttle(() => {
+    const isNearBottom = checkIsNearBottom(50);
+
+    if ((isBackPageRef.current || data) && isNearBottom) {
+      if (!isThisPathSearchAll()) return;
+
+      setNextPageNo();
+
+      isBackPageRef.current = false;
+    }
+  }, 400);
+
   // for infinite scroll
   useEffect(() => {
     if (isForPagination) return;
     if (isFetching) return;
     if (data && data.lastPageNo === pageNo) return;
 
-    function handleScroll() {
-      const isNearBottom = checkIsNearBottom(50);
-
-      if ((isBackPageRef.current || data) && isNearBottom) {
-        if (!isThisPathSearchAll()) return;
-
-        setNextPageNo();
-
-        isBackPageRef.current = false;
-      }
-    }
-    // * 스크롤y값이 변할 때마다 실행해야 함
-    // * throttle 같은 걸로 작동 줄이기?
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", throttledScroll);
     return () => {
-      window.removeEventListener("scroll", handleScroll); // clean up
+      window.removeEventListener("scroll", throttledScroll); // clean up
     };
   }, [data, isFetching, isForPagination]);
 
