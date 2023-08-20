@@ -75,6 +75,7 @@ function SearchFilter({ searchWordRef }: { searchWordRef: React.MutableRefObject
           key={_}
           contentName={_}
           selectedContent={currentSearchType}
+          isLeftRadiusSet
           onClick={() => {
             setFilters({ searchType: _, searchWord: searchWordRef.current, pageNo: 1 });
             // ㄴ새로 타이핑한 검색어 함께 변경 - 그렇지 않으면 이전 검색어를 필터로 사용함

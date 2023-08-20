@@ -80,7 +80,11 @@ export const SearchCategoryLi = styled.li<{ selectedCategory: string; category: 
   ${({ selectedCategory, category }) =>
     selectedCategory === category && `color: ${theme.color.main};`}
 `;
-export const SearchFilterText = styled.p<{ contentName: string; selectedContent: string }>`
+export const SearchFilterText = styled.p<{
+  contentName: string;
+  selectedContent: string;
+  isLeftRadiusSet?: true;
+}>`
   width: 100%;
   height: 100%;
   display: flex;
@@ -88,8 +92,16 @@ export const SearchFilterText = styled.p<{ contentName: string; selectedContent:
   justify-content: center;
   align-items: center;
   border-right: 1px solid rgba(0, 0, 0, 0.2);
+
+  &:first-child {
+    ${({ isLeftRadiusSet }) =>
+      isLeftRadiusSet && "border-bottom-left-radius: 8px;"}// to make the left-end of line bend
+  }
   &:last-child {
     border-right: 0;
+    border-bottom-right-radius: 8px;
+    // ㄴto make the right-end of line bend to fit in the border-radius set of parent component
+    //      when the last component is selected and colored
   }
 
   ${({ contentName, selectedContent }) =>

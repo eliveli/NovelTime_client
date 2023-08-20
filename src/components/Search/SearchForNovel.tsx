@@ -66,6 +66,7 @@ export function SearchFilter({ searchWordRef }: { searchWordRef: React.MutableRe
           key={_}
           contentName={_}
           selectedContent={currentSearchType}
+          isLeftRadiusSet
           onClick={() => {
             setFilters({ searchType: _, searchWord: searchWordRef.current, pageNo: 1 });
           }}
