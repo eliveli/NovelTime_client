@@ -141,10 +141,11 @@ export const SearchIconBox = styled(Icon.IconBox)`
 export const OpenSearchIcon = styled(Icon.Search)``;
 export const CloseSearchIcon = Icon.SmallUp;
 
-export const ContainerWithSrchAlarm = styled.div<{ isSearch: boolean }>`
+export const ContainerWithSrchAlarm = styled.div<{ isSearch: boolean; isNotMobile: boolean }>`
   display: flex;
   align-items: center;
-  justify-content: ${({ isSearch }) => (isSearch ? "space-between" : "flex-end")};
+  justify-content: ${({ isSearch, isNotMobile }) =>
+    isSearch && isNotMobile ? "space-between" : "flex-end"};
 `;
 export const SearchAlarm = styled.p`
   margin: auto;

@@ -1,5 +1,6 @@
 import Icon from "assets/Icon";
 import { styled } from "assets/styles/theme";
+import { useWhetherItIsMobile } from "utils";
 
 const WritingPostContainer = styled.div<{ styles?: string }>`
   height: 40px;
@@ -29,12 +30,14 @@ export default function WritingButton({
   clickToWrite: () => void;
   styles?: string;
 }) {
+  const isNotMobile = !useWhetherItIsMobile();
+
   return (
     <WritingPostContainer onClick={clickToWrite} styles={styles}>
       <Icon.IconBox>
         <Icon.Write2 />
       </Icon.IconBox>
-      <WritingText>글쓰기</WritingText>
+      {isNotMobile && <WritingText>글쓰기</WritingText>}
     </WritingPostContainer>
   );
 }

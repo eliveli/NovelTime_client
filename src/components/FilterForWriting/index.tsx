@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSearchFilter } from "utils/useSearchFilterForWriting";
+import { useWhetherItIsMobile } from "utils";
 import SearchForWriting from "../Search/SearchForWriting";
 import { SearchBtn, Genres, SortMobile, SortTablet } from "./Filter.components";
 import {
@@ -28,13 +29,16 @@ export default function Filter({ children }: { children?: React.ReactNode }) {
     }
   }, [currentSearchWord]);
 
+  const isNotMobile = !useWhetherItIsMobile();
   return (
     <FilterBG>
       <Genres />
 
       {/* sort with search-button */}
-      <ContainerWithSrchAlarm isSearch={isSearch}>
-        {isSearch && <SearchAlarm>{`Search for ${writing} about Novel!`}</SearchAlarm>}
+      <ContainerWithSrchAlarm isSearch={isSearch} isNotMobile={isNotMobile}>
+        {isNotMobile && isSearch && (
+          <SearchAlarm>{`Search for ${writing} about Novel!`}</SearchAlarm>
+        )}
         <ContainerWithSrchBtn>
           {children}
           <SortMobile />
