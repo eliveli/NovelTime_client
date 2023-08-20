@@ -185,7 +185,10 @@ export default function FreeTalk({ talk, isLast }: { talk: TalkProps; isLast?: b
   return (
     <Talk
       isLast={isLast}
-      onClick={() => {
+      onClick={(event: React.MouseEvent<HTMLElement>) => {
+        event.stopPropagation();
+        event.preventDefault();
+
         navigate(`/talk-detail/${talk.talkId}`);
       }}
     >

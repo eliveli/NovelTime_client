@@ -4,6 +4,7 @@ import { ListOfSearchAll, setSearchList } from "store/clientSlices/filterSlice";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { NovelOrWritingList } from "store/serverAPIs/types";
 import checkIsNearBottom from "./checkIsNearBottom";
+import { SEARCH_ALL } from "./pathname";
 
 export default function useSearchListWithInfntScrollForSearchAll({
   isForPagination,
@@ -47,18 +48,62 @@ export default function useSearchListWithInfntScrollForSearchAll({
     dispatch(setSearchList({ listType: "searchAll", list, isSettingTheList: false }));
   };
 
+  const setNoData = () => {
+    if (pageNo === 1) {
+      if (searchCategory === "Novel") {
+        dispatch(
+          setSearchList({
+            listType: "searchAll",
+            list: { novels: [], talks: undefined, recommends: undefined },
+            isSettingTheList: false,
+          }),
+        );
+      } else if (searchCategory === "Talk") {
+        dispatch(
+          setSearchList({
+            listType: "searchAll",
+            list: { novels: undefined, talks: [], recommends: undefined },
+            isSettingTheList: false,
+          }),
+        );
+      } else if (searchCategory === "Recommend") {
+        dispatch(
+          setSearchList({
+            listType: "searchAll",
+            list: { novels: undefined, talks: undefined, recommends: [] },
+            isSettingTheList: false,
+          }),
+        );
+      }
+      return;
+    }
+
+    dispatch(
+      setSearchList({
+        listType: "searchAll",
+        isSettingTheList: false,
+      }),
+    );
+  };
+
+  function isThisPathSearchAll() {
+    return SEARCH_ALL === window.location.pathname;
+  }
+
   // for infinite scroll
   useEffect(() => {
     if (isForPagination) return;
     if (isFetching) return;
-    if (!data) return;
     if (data && data.lastPageNo === pageNo) return;
+
     function handleScroll() {
       const isNearBottom = checkIsNearBottom(50);
-      if (data && data?.lastPageNo !== pageNo && isNearBottom) {
+
+      if ((isBackPageRef.current || data) && isNearBottom) {
+        if (!isThisPathSearchAll()) return;
+
         setNextPageNo();
 
-        console.log("scroll down");
         isBackPageRef.current = false;
       }
     }
@@ -100,12 +145,12 @@ export default function useSearchListWithInfntScrollForSearchAll({
     if (isFetching) return;
 
     if (!data) {
-      setNextList({ novels: undefined, talks: undefined, recommends: undefined });
+      setNoData();
       return;
     }
 
     if (data) {
-      const { novels, talks, recommends } = data; // * need to fix
+      const { novels, talks, recommends } = data;
       const listOfSearchAll = { novels, talks, recommends };
 
       // - 최초 writings 요청할 때

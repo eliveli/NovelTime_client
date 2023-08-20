@@ -65,7 +65,7 @@ export default function SearchPage() {
 
       {!isForPagination && !!listForInfntScroll?.length && (
         <ColumnDetailList categoryText={!currentSearchWord ? "작품을 검색해 보세요" : "검색 결과"}>
-          {listForInfntScroll.map((novel) => (
+          {listForInfntScroll?.map((novel) => (
             <NovelColumnDetail key={novel.novelId} novel={novel} />
           ))}
         </ColumnDetailList>

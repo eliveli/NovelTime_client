@@ -2,6 +2,8 @@ import React, { useLayoutEffect, useRef } from "react";
 import { ThemeProvider } from "styled-components";
 import { useComponentWidth, useModal } from "utils";
 
+import { useNavigate } from "react-router-dom";
+import { NovelDetail } from "store/serverAPIs/types";
 import {
   NovelImg,
   NovelTitle,
@@ -18,18 +20,6 @@ import {
   DownIconBox,
   UpIconBox,
 } from "./NovelColumnDetail.styles";
-
-type MyComponentProps = React.PropsWithChildren<{
-  novel: {
-    novelId: string;
-    novelImg: string;
-    novelTitle: string;
-    novelAuthor: string;
-    novelGenre: string;
-    novelDesc: string;
-  };
-  recommendDetail?: { recomDtlImgWidth?: string; recomDtlTextHeight?: string };
-}>;
 
 // <Trouble shooting>
 // 1-1. problem: component rerendered but animation didn't work.
@@ -109,7 +99,13 @@ function DescModal({
   );
 }
 // <ModalContainer key={Math.random()} isShowOn={isShowOn}>
-export default function NovelColumnDetail({ recommendDetail, novel }: MyComponentProps) {
+export default function NovelColumnDetail({
+  recommendDetail,
+  novel,
+}: {
+  novel: NovelDetail;
+  recommendDetail?: { recomDtlImgWidth?: string; recomDtlTextHeight?: string };
+}) {
   // props or default props
   const { novelId, novelImg, novelTitle, novelAuthor, novelGenre, novelDesc } = novel;
   const theme = {};
@@ -118,7 +114,7 @@ export default function NovelColumnDetail({ recommendDetail, novel }: MyComponen
   // and set "width : 100%" in its child and descendant components
   // as the result, arrow-button always can be placed in the end of the box
   //  in previous code, the arrow button couldn't be in the end when desc is shorter than the width of box
-  const containerRef = useRef<HTMLAnchorElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const containerWidth = useComponentWidth(containerRef);
 
   const infoRef = useRef<HTMLDivElement>(null);
@@ -145,15 +141,21 @@ export default function NovelColumnDetail({ recommendDetail, novel }: MyComponen
     window.parent.postMessage({ novelId, novelTitle }, "*");
   };
 
+  const navigate = useNavigate();
   return (
     <ThemeProvider theme={theme}>
       <NovelLink
-        to={`/novel-detail/${novelId}`}
         ref={containerRef}
-        onClick={() => {
+        onClick={(event: React.MouseEvent<HTMLElement>) => {
+          event.stopPropagation();
+          event.preventDefault();
+
           if (isIframe) {
             sendNovel();
+            return;
           }
+
+          navigate(`/novel-detail/${novelId}`);
         }}
       >
         <NovelImg
@@ -171,8 +173,9 @@ export default function NovelColumnDetail({ recommendDetail, novel }: MyComponen
               </NovelDesc>
               {isModal && (
                 <DownIconBox
-                  onClick={(e) => {
-                    e.preventDefault();
+                  onClick={(event: React.MouseEvent<HTMLElement>) => {
+                    event.stopPropagation();
+                    event.preventDefault();
                     getModalScroll();
                     handleModal();
                   }}
@@ -181,13 +184,14 @@ export default function NovelColumnDetail({ recommendDetail, novel }: MyComponen
                 </DownIconBox>
               )}
               {!isModal && (
-                <UpIconBox>
-                  <UpIcon
-                    onClick={(e) => {
-                      e.preventDefault();
-                      handleModal();
-                    }}
-                  />
+                <UpIconBox
+                  onClick={(event: React.MouseEvent<HTMLElement>) => {
+                    event.stopPropagation();
+                    event.preventDefault();
+                    handleModal();
+                  }}
+                >
+                  <UpIcon />
                 </UpIconBox>
               )}
             </NovelDescBox>

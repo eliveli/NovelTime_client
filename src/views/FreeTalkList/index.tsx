@@ -90,7 +90,7 @@ export default function FreeTalkList() {
               setSearchList({
                 listType: "novel",
                 list: "reset",
-              }),
+              }), // to see the fresh novel list when searching for novels with iframe
             );
 
             navigate(ADD_WRITING);

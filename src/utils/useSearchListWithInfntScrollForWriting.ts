@@ -84,15 +84,42 @@ export default function useSearchListWithInfntScrollForWriting({
     );
   };
 
+  const setNoData = () => {
+    if (pageNo === 1) {
+      dispatch(
+        setSearchList({
+          listType,
+          list: [],
+          isSettingTheList: false,
+        }),
+      );
+      return;
+    }
+
+    dispatch(
+      setSearchList({
+        listType,
+        isSettingTheList: false,
+      }),
+    );
+  };
+
+  function isThisPathWritingList() {
+    return [TALK_LIST, RECOMMEND_LIST].includes(window.location.pathname);
+  }
+
   // for infinite scroll
   useEffect(() => {
     if (isForPagination) return;
     if (isFetching) return;
-    if (!data) return;
     if (data && data.lastPageNo === pageNo) return;
+
     function handleScroll() {
       const isNearBottom = checkIsNearBottom(50);
-      if (data && data?.lastPageNo !== pageNo && isNearBottom) {
+
+      if ((isBackPageRef.current || data) && isNearBottom) {
+        if (!isThisPathWritingList()) return;
+
         setNextPageNo();
 
         isBackPageRef.current = false;
@@ -149,8 +176,7 @@ export default function useSearchListWithInfntScrollForWriting({
     if (isFetching) return;
 
     if (!data) {
-      // data doesn't exist
-      setNextList([]);
+      setNoData();
       return;
     }
 

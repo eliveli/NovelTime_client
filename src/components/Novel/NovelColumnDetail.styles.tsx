@@ -1,9 +1,8 @@
 import theme, { styled } from "assets/styles/theme";
 import { keyframes } from "styled-components";
-import { Link } from "react-router-dom";
 import Icon from "../../assets/Icon";
 
-export const NovelLink = styled(Link)`
+export const NovelLink = styled.div`
   display: flex;
   width: 100%;
 

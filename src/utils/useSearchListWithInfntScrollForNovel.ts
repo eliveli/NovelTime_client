@@ -2,8 +2,9 @@ import { useState, useEffect, useRef } from "react";
 import { useLocation, useNavigationType } from "react-router-dom";
 import { setSearchList } from "store/clientSlices/filterSlice";
 import { useAppDispatch, useAppSelector } from "store/hooks";
-import { NovelDetailList } from "store/serverAPIs/types";
+import { NovelDetail, NovelDetailList } from "store/serverAPIs/types";
 import checkIsNearBottom from "./checkIsNearBottom";
+import { SEARCH_NOVEL } from "./pathname";
 
 export default function useSearchListWithInfntScrollForNovel({
   isForPagination,
@@ -39,26 +40,67 @@ export default function useSearchListWithInfntScrollForNovel({
     );
   };
 
-  const setNextList = (searchList: any[]) => {
-    dispatch(setSearchList({ listType: "novel", list: searchList, isSettingTheList: false }));
+  const setNextList = (searchList: NovelDetail[]) => {
+    dispatch(
+      setSearchList({
+        listType: "novel",
+        list: searchList,
+        isSettingTheList: false,
+      }),
+    );
   };
+
+  const setNoData = () => {
+    if (pageNo === 1) {
+      dispatch(
+        setSearchList({
+          listType: "novel",
+          list: [],
+          isSettingTheList: false,
+        }),
+      );
+      return;
+    }
+
+    // let the list be when the page number is more than 1 but data is undefined
+    dispatch(
+      setSearchList({
+        listType: "novel",
+        isSettingTheList: false,
+      }),
+    );
+  };
+
+  function isThisPathSearchNovel() {
+    return [SEARCH_NOVEL, `${SEARCH_NOVEL}/iframe`].includes(window.location.pathname);
+  }
 
   // for infinite scroll
   useEffect(() => {
     if (isForPagination) return;
     if (isFetching) return;
-    if (!data) return;
     if (data && data.lastPageNo === pageNo) return;
+
     function handleScroll() {
       const isNearBottom = checkIsNearBottom(50);
-      if (data && data?.lastPageNo !== pageNo && isNearBottom) {
+
+      // 페이지 다운으로 리스트의 다음 페이지 요청하는 때
+      // - 뒤로가기 시. 이 때 data는 undefined
+      //   한 번 데이터 요청 후 뒤로가기 상태 false 설정
+      // - 데이터 존재 시.
+      //    페이지 요청 후 데이터가 존재하지 않으면 다음 페이지 요청 불가
+      if ((isBackPageRef.current || data) && isNearBottom) {
+        // 상세 페이지로 이동 시 스크롤 발생,
+        //  path가 서치노블이 아닐 때 다음 코드 실행 막음
+        if (!isThisPathSearchNovel()) return;
         setNextPageNo();
 
         isBackPageRef.current = false;
+        // 뒤로가기 직후 한 번 페이지 요청했으므로 false
+        // 이후부터 data 존재 여부로 다음 페이지 요청 여부 결정
       }
     }
-    // * 스크롤y값이 변할 때마다 실행해야 함
-    // * throttle 같은 걸로 작동 줄이기?
+
     window.addEventListener("scroll", handleScroll);
     return () => {
       window.removeEventListener("scroll", handleScroll); // clean up
@@ -94,7 +136,7 @@ export default function useSearchListWithInfntScrollForNovel({
     if (isFetching) return;
 
     if (!data) {
-      setNextList([]);
+      setNoData();
       return;
     }
 

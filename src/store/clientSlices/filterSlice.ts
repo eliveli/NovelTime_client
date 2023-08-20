@@ -78,9 +78,17 @@ export type IsFilterState = {
     list?: TalkList;
     isSettingTheList: boolean;
   };
-  recommend: { filters: FiltersForWriting; list?: RecommendList; isSettingTheList: boolean };
+  recommend: {
+    filters: FiltersForWriting;
+    list?: RecommendList;
+    isSettingTheList: boolean;
+  };
 
-  novel: { filters: FiltersForSearchNovel; list?: NovelDetail[]; isSettingTheList: boolean };
+  novel: {
+    filters: FiltersForSearchNovel;
+    list?: NovelDetail[];
+    isSettingTheList: boolean;
+  };
 
   searchAll: {
     filters: FiltersForSearchAll;
