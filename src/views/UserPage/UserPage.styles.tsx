@@ -1,4 +1,5 @@
 import theme, { styled } from "assets/styles/theme";
+import { Img } from "store/serverAPIs/types";
 import Icon from "../../assets/Icon";
 
 export const ProfileContnr = styled.div<{ whenBGisNot?: boolean }>`
@@ -9,10 +10,6 @@ export const ProfileContnr = styled.div<{ whenBGisNot?: boolean }>`
     height: 250px;
   `)}
 `;
-interface ProfileImg {
-  src: string;
-  position: string;
-}
 export const ProfileBG = styled.div<{ userBGSrc: string; userBGPosition: string }>`
   height: 100%;
   width: 100%;
@@ -23,7 +20,7 @@ export const ProfileBG = styled.div<{ userBGSrc: string; userBGPosition: string 
   background-position: ${({ userBGPosition }) => userBGPosition};
   background-size: cover; // show full image
 `;
-export const UserImg = styled.div<{ userImg: ProfileImg; isTitle?: true }>`
+export const UserImg = styled.div<{ userImg: Img; isTitle?: true }>`
   border-radius: 50%;
   min-width: 45px;
   height: 45px;
@@ -100,7 +97,7 @@ export const EditProfileBtn = styled.button`
   font-weight: 500;
 `;
 
-export const WritingSection = styled.section<{ isNoContent: boolean }>`
+export const WritingSection = styled.section<{ isNoContent: boolean; isForListAll?: true }>`
   // when there is content in mobile size or there is no content
   display: flex;
   flex-direction: column;
@@ -116,6 +113,8 @@ export const WritingSection = styled.section<{ isNoContent: boolean }>`
     grid-template-columns: repeat(2,1fr);
     grid-gap: 10px;
   `)}
+
+  ${({ isForListAll }) => isForListAll && "margin-top: 12px;"}
 `;
 
 export const WritingContnr = styled.div<{
@@ -134,6 +133,76 @@ export const WritingContnr = styled.div<{
     align-items: center;`
       : theme.media.tablet(`justify-content: space-between;`)}
   ${({ isNovelList }) => isNovelList && `margin: 15px 0 7px;`}
+`;
+
+export const EditAndDeleteContainer = styled.div`
+  position: absolute;
+  top: 9px;
+  right: 14px;
+
+  padding-right: 6px;
+  margin-right: -6px;
+  border-radius: 5px;
+
+  background-color: #ffffffd9;
+  box-shadow: 0 0 7px 7px #ffffffd9;
+  border-radius: 10px;
+`;
+
+export const ListInfoContnr = styled.div`
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 9px;
+  padding: 16px;
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+`;
+export const UserImgContainerForListAll = styled.div`
+  display: flex;
+  gap: 6px;
+  font-size: 16px;
+`;
+export const UserImgForListAll = styled.div<{ userImg: Img }>`
+  border-radius: 50%;
+  min-width: 20px;
+  height: 20px;
+
+  ${({ userImg }) => !userImg.src && `border: 1px solid #e5e5e5;`};
+
+  background-image: url(${({ userImg }) => userImg.src});
+  background-position: ${({ userImg }) => userImg.position};
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+`;
+export const ListInfoSubContainer = styled.div`
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+`;
+export const IconsContnrForListAll = styled.div`
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+`;
+export const NovelImgContainer = styled.div`
+  display: flex;
+`;
+export const NovelImgForListAll = styled.div<{ novelImg: string; idx: number }>`
+  ${({ idx }) => idx === 1 && "width:100px;"}
+  ${({ idx }) => [2, 3].includes(idx) && "width:50px;"}
+  // I did like this because "novelImgs.map" didn't work
+  
+  height: 100px;
+
+  background-color: ${({ novelImg }) => !novelImg && "#f5f5f5cf"};
+
+  border-radius: 5%;
+  background-image: url(${({ novelImg }) => novelImg});
+  background-position: top;
+  background-repeat: no-repeat;
+  background-size: cover;
 `;
 export const NovelImg = styled.div<{ novelImg: string; imgHeight: number }>`
   min-height: 80px;

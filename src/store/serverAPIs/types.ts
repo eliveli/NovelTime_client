@@ -524,6 +524,21 @@ export interface ParamsOfUserWriting {
   contentType: "T" | "R" | "C";
   order: number;
 }
+
+export interface ParamsOfUserNovelListAll {
+  userName: string;
+  isMyList: boolean;
+}
+export interface ListInUserNovelListAll {
+  listId: string;
+  listTitle: string;
+  novelNo: number;
+  likeNo: number;
+  novelImgs: string[];
+  userName?: string; // only for other's list
+  userImg?: { src: string; position: string }; // only for other's list
+}
+
 export interface ContentOfUserNovelList {
   novelList: NovelListSetForMyOrOthersList;
   isNextOrder: boolean;

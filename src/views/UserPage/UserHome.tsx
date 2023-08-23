@@ -11,7 +11,7 @@ import { RowSlide } from "../../components/NovelListFrame";
 import { NovelRow } from "../../components/Novel";
 
 import { WritingSection } from "./UserPage.styles";
-import { Writing, Comment, WritingFilter, NoContent } from "./UserPage.components";
+import { Writing, Comment, WritingFilter, NoContent } from "./UserWriting.components";
 import contentMark from "./utils/contentMark";
 
 export default function UserHome() {
@@ -25,8 +25,6 @@ export default function UserHome() {
   // I think this error object from the api doesn't required to be handled.
   // because if the user doesn't exist in DB the error is handled in UserPageParent component.
   // and if the user's content don't exist it is not an error.
-
-  console.log("userPageHome data:", data);
 
   // get the content mark
   const myWritingMark = contentMark(
@@ -146,7 +144,6 @@ export default function UserHome() {
           path: "my-list",
           list: {
             isMainCategory: true,
-            listId: data?.novelLists.listsUserCreated[0]?.listId as string,
           },
         }}
         categoryText={myListMark}
@@ -180,7 +177,6 @@ export default function UserHome() {
           path: "others-list",
           list: {
             isMainCategory: true,
-            listId: data?.novelLists.listsUserLikes[0]?.listId as string,
           },
         }}
         categoryText={othersListMark}

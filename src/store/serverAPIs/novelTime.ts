@@ -45,6 +45,8 @@ import {
   ParamForWritingsOfNovel,
   NovelOrWritingList,
   ParamToSearchForAll,
+  ParamsOfUserNovelListAll,
+  ListInUserNovelListAll,
 } from "./types";
 import type { RootState } from "../index";
 
@@ -327,6 +329,15 @@ export const novelTimeApi = createApi({
       query: (params) =>
         `/userContent/othersWriting/${params.userName}/${params.contentType}/${params.order}`,
     }),
+
+    // * create apis in server work
+    getContentOfUserListAll: builder.query<ListInUserNovelListAll[], ParamsOfUserNovelListAll>({
+      query: ({ userName, isMyList }) => {
+        if (isMyList) return `/userContent/myList/${userName}`;
+        return `/userContent/othersList/${userName}`;
+      },
+    }),
+
     getContentOfUserMyList: builder.query<ContentOfUserNovelList, ParamsOfUserNovelList>({
       query: (params) => `/userContent/myList/${params.userName}/${params.listId}/${params.order}`,
       keepUnusedDataFor: 120,

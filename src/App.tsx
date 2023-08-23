@@ -37,6 +37,7 @@ import { useAppDispatch, useAppSelector } from "store/hooks";
 import { ThemeProvider } from "styled-components";
 import theme from "assets/styles/theme";
 import EditWriting from "views/EditWriting";
+import { UserNovelListAll } from "views/UserPage";
 import GlobalStyle from "./assets/styles/GlobalStyle";
 
 function App() {
@@ -146,7 +147,9 @@ function App() {
               "/user-page/:userName",
               "/user-page/:userName/my-writing",
               "/user-page/:userName/others-writing",
+              "/user-page/:userName/my-list",
               "/user-page/:userName/my-list/:listId",
+              "/user-page/:userName/others-list",
               "/user-page/:userName/others-list/:listId",
               "*",
             ].map((path) => (
@@ -201,9 +204,14 @@ function App() {
               path="/user-page/:userName/others-writing"
               element={<UserWriting isMyWriting={false} />}
             />
+            <Route path="/user-page/:userName/my-list" element={<UserNovelListAll isMyList />} />
             <Route
               path="/user-page/:userName/my-list/:listId"
               element={<UserNovelList isMyList />}
+            />
+            <Route
+              path="/user-page/:userName/others-list"
+              element={<UserNovelListAll isMyList={false} />}
             />
             <Route
               path="/user-page/:userName/others-list/:listId"

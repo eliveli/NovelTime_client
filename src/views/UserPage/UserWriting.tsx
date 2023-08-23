@@ -12,7 +12,7 @@ import {
 import { ContentOfUserWriting } from "store/serverAPIs/types";
 import ShowMoreContent from "assets/ShowMoreContent";
 import { TalkOrRecommend, CommentUserCreated } from "../../store/serverAPIs/types";
-import { Writing, Comment, WritingFilter, NoContent } from "./UserPage.components";
+import { Writing, Comment, WritingFilter, NoContent } from "./UserWriting.components";
 import { ShareIconBox, WritingSection } from "./UserPage.styles";
 import contentMark from "./utils/contentMark";
 

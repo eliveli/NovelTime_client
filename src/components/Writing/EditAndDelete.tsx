@@ -7,25 +7,32 @@ const EditAndDeleteContainer = styled.div`
   margin-right: -6px;
 `;
 
-const Button = styled.button`
+const Button = styled.button<{ buttonStyles?: string }>`
   background-color: transparent;
   border: none;
   color: rgba(0, 0, 0, 0.4);
   font-weight: 500;
   font-size: 14px;
+  ${({ buttonStyles }) => buttonStyles && buttonStyles}
 `;
 
 export function EditAndDelete({
   clickToEdit,
   clickToDelete,
+  buttonStyles,
 }: {
   clickToEdit: () => void;
   clickToDelete: () => void;
+  buttonStyles?: string;
 }) {
   return (
     <EditAndDeleteContainer>
-      <Button onClick={clickToEdit}>수정</Button>
-      <Button onClick={clickToDelete}>삭제</Button>
+      <Button buttonStyles={buttonStyles} onClick={clickToEdit}>
+        수정
+      </Button>
+      <Button buttonStyles={buttonStyles} onClick={clickToDelete}>
+        삭제
+      </Button>
     </EditAndDeleteContainer>
   );
 }

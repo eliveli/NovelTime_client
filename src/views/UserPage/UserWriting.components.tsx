@@ -1,4 +1,3 @@
-/* eslint-disable no-nested-ternary */
 import Icon from "assets/Icon";
 import React, { useRef } from "react";
 import { useNavigate } from "react-router-dom";

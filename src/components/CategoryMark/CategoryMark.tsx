@@ -50,7 +50,7 @@ export default function CategoryMark({
     list?: {
       isMainCategory: boolean;
       // true when user's all novel list mark, false when user's one novel list mark
-      listId: string;
+      listId?: string;
     };
   };
 
@@ -148,9 +148,15 @@ export default function CategoryMark({
   // category mark for all novel list or writings in user page
   if (infoFromUserPage?.list?.isMainCategory || infoFromUserPage) {
     // writing or novel list
-    const userPagePath = infoFromUserPage.list?.isMainCategory
-      ? `/user-page/${infoFromUserPage.userName}/${infoFromUserPage.path}/${infoFromUserPage.list.listId}`
-      : `/user-page/${infoFromUserPage.userName}/${infoFromUserPage.path}`;
+    const userPagePath = () => {
+      if (infoFromUserPage.list?.isMainCategory && infoFromUserPage.list.listId) {
+        return `/user-page/${infoFromUserPage.userName}/${infoFromUserPage.path}/${infoFromUserPage.list.listId}`;
+      }
+      if (infoFromUserPage.list?.isMainCategory) {
+        return `/user-page/${infoFromUserPage.userName}/${infoFromUserPage.path}`;
+      }
+      return `/user-page/${infoFromUserPage.userName}/${infoFromUserPage.path}`;
+    };
 
     return (
       <CategoryContainer>
@@ -163,7 +169,7 @@ export default function CategoryMark({
                 alert("게시글이 존재하지 않아요.");
                 return;
               }
-              navigate(userPagePath);
+              navigate(userPagePath());
             }}
           >
             {isShowAllButton}
