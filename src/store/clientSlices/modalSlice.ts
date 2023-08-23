@@ -12,6 +12,13 @@ interface MetaTags {
   image: string;
   url: string;
 }
+interface Confirm {
+  question: string;
+  textForYes: string;
+  textForNo: string;
+  functionForYes: () => void;
+  functionForNo: () => void;
+}
 export interface IsModalState {
   modalCategory:
     | "novelImage"
@@ -23,9 +30,13 @@ export interface IsModalState {
     | "getNovelURL"
     | "addToMyNovelList"
     | "editListTitle"
+    | "confirm"
+    | "alert"
     | "none";
   novelImage: string;
   metaTags: MetaTags;
+  confirm: Confirm;
+  alert: string;
 
   // 아래는 나중에 모듈 분리
   novelTitle: string;
@@ -43,6 +54,14 @@ const initialState: IsModalState = {
       "https://photos.google.com/album/AF1QipOy4A30VtN2Afb5ynQYejvDxN_5CVBjYRa_DYX4/photo/AF1QipM-TuRzTrhw9-AH4fdhB9EwS1vxjwdOfdX2svVp",
     url: "",
   },
+  confirm: {
+    question: "",
+    textForYes: "",
+    textForNo: "",
+    functionForYes: () => {},
+    functionForNo: () => {},
+  },
+  alert: "",
   //
   novelTitle: "",
   novelLike: [{ novelId: undefined, isLike: undefined }],
@@ -64,6 +83,8 @@ export const modalSlice = createSlice({
         | "getNovelURL"
         | "addToMyNovelList"
         | "editListTitle"
+        | "confirm"
+        | "alert"
         | "none"
       >,
     ) => {
@@ -78,6 +99,12 @@ export const modalSlice = createSlice({
     },
     setMetaTags: (state, action: PayloadAction<MetaTags>) => {
       state.metaTags = action.payload;
+    },
+    handleConfirm: (state, action: PayloadAction<Confirm>) => {
+      state.confirm = action.payload;
+    },
+    handleAlert: (state, action: PayloadAction<string>) => {
+      state.alert = action.payload;
     },
 
     // 아래 리듀서 모듈 분리
@@ -102,7 +129,15 @@ export const modalSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { openModal, showBigImage, closeModal, getNovelTitle, setLikeNovel, setMetaTags } =
-  modalSlice.actions;
+export const {
+  openModal,
+  showBigImage,
+  closeModal,
+  getNovelTitle,
+  setLikeNovel,
+  setMetaTags,
+  handleConfirm,
+  handleAlert,
+} = modalSlice.actions;
 
 export default modalSlice.reducer;

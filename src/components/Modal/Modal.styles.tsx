@@ -360,7 +360,7 @@ export const ModalTitle = styled.h3<{ marginBottom?: number }>`
   margin: 0;
   text-align: center;
   margin-bottom: ${({ marginBottom }) => marginBottom || 30}px;
-  color: rgba(100, 100, 100, 0.8);
+  color: rgba(100, 100, 100, 0.7); // * changed from (..., 0.8)
   font-weight: 500;
 `;
 export const ContentContnr = styled.div`
@@ -394,7 +394,7 @@ export const ListTitleInput = styled.input`
   font-family: "Californian FB", D2Coding, Arial, sans-serif;
 `;
 
-export const ButtonContainerForEditing = styled.div`
+export const ButtonContainerForAnswer = styled.div`
   display: flex;
   width: 100%;
   border-top: 1px solid rgba(0, 0, 0, 0.1);
@@ -404,18 +404,30 @@ export const ButtonContainerForEditing = styled.div`
   border-bottom-right-radius: 7px;
   border-bottom-left-radius: 7px;
 `;
-export const ButtonForEditing = styled.div`
+export const ButtonForAnswer = styled.div<{ isSingleButton?: true }>`
   width: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
+
   &:last-child {
-    border-left: 1px solid rgba(0, 0, 0, 0.1);
+    ${({ isSingleButton }) => !isSingleButton && "border-left: 1px solid rgba(0, 0, 0, 0.1);"}
   }
 
   color: rgba(100, 100, 100, 0.6);
   font-weight: 500;
 `;
+export const TextForAlertOrConfirm = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 4px;
+
+  color: rgba(100, 100, 100, 0.6);
+  font-weight: 500;
+`;
+
 export const ProfileImgBox = styled.div`
   width: 100%;
   display: flex;

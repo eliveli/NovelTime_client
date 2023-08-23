@@ -7,8 +7,8 @@ import {
   ModalTitle,
   ContentContnr,
   TranslucentBG,
-  ButtonForEditing,
-  ButtonContainerForEditing,
+  ButtonForAnswer,
+  ButtonContainerForAnswer,
   ListTitleInput,
   ListTitleInputContainer,
   BoxForPadding,
@@ -56,7 +56,7 @@ export default function EditListTitle() {
   };
 
   return (
-    <TranslucentBG onClick={() => dispatch(closeModal())}>
+    <TranslucentBG onClick={closeAndInitialize}>
       <ModalBox
         padding="0"
         onClick={(event: React.MouseEvent<HTMLElement>) => {
@@ -72,10 +72,10 @@ export default function EditListTitle() {
             <ListTitleInput ref={titleRef} defaultValue={listTitle} />
           </ListTitleInputContainer>
         </BoxForPadding>
-        <ButtonContainerForEditing>
-          <ButtonForEditing onClick={handleToEdit}>수정</ButtonForEditing>
-          <ButtonForEditing onClick={handleToCancel}>취소</ButtonForEditing>
-        </ButtonContainerForEditing>
+        <ButtonContainerForAnswer>
+          <ButtonForAnswer onClick={handleToEdit}>수정</ButtonForAnswer>
+          <ButtonForAnswer onClick={handleToCancel}>취소</ButtonForAnswer>
+        </ButtonContainerForAnswer>
       </ModalBox>
     </TranslucentBG>
   );

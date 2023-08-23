@@ -4,7 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Img, ListInUserNovelListAll } from "store/serverAPIs/types";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { EditAndDelete } from "components/Writing";
-import { openModal } from "store/clientSlices/modalSlice";
+import { handleConfirm, openModal } from "store/clientSlices/modalSlice";
 import { handleUserNovelListToEdit } from "store/clientSlices/userNovelListSlice";
 import {
   HeartIcon,
@@ -45,16 +45,28 @@ const UserNovelList = React.memo(
     const isWriter = loginUserName && loginUserName === userName;
 
     const handleToEdit = () => {
-      dispatch(openModal("editListTitle"));
-
       dispatch(
         handleUserNovelListToEdit({
           listId,
           listTitle,
         }),
       );
+
+      dispatch(openModal("editListTitle"));
     };
     async function handleToDelete() {
+      dispatch(
+        handleConfirm({
+          question: "리스트를 삭제하시겠습니까?",
+          textForYes: "삭제",
+          textForNo: "취소",
+          functionForYes: () => {}, // * 뮤테이션 함수 보낼 수 있는지 확인 필요
+          functionForNo: () => {},
+        }),
+      );
+
+      dispatch(openModal("confirm"));
+
       // if (!talk.data) return;
       // // * ask whether you really want to delete the comment
       // // * change this after making the modal
