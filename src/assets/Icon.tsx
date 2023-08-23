@@ -37,7 +37,12 @@ import {
   HiOutlineHome,
 } from "react-icons/hi";
 import { RiRunLine, RiShareForward2Fill, RiKakaoTalkFill } from "react-icons/ri";
-import { MdOutlineShare, MdOutlineMoreHoriz } from "react-icons/md";
+import {
+  MdOutlineShare,
+  MdOutlineMoreHoriz,
+  MdCheckBoxOutlineBlank,
+  MdCheckBox,
+} from "react-icons/md";
 import { IoIosSearch, IoMdClose } from "react-icons/io";
 import { AiOutlineUser, AiOutlineMessage, AiOutlineLogout, AiFillFacebook } from "react-icons/ai";
 import { ImBooks } from "react-icons/im";
@@ -245,6 +250,12 @@ const Icon = {
     ${iconStyleHover()};
   `,
   PositionCenter: styled(BsFillRecordFill)`
+    ${iconStyleHover()};
+  `,
+  CheckBoxOutline: styled(MdCheckBoxOutlineBlank)`
+    ${iconStyleHover()};
+  `,
+  CheckBoxSelected: styled(MdCheckBox)`
     ${iconStyleHover()};
   `,
 };

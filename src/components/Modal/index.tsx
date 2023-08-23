@@ -7,6 +7,7 @@ import Login from "./Login";
 import EditProfile from "./EditProfile";
 import Share from "./Share";
 import GetNovelURL from "./GetNovelURL";
+import AddToMyNovelList from "./AddToMyNovelList";
 
 export default function Modal() {
   const modalCategory = useAppSelector((state) => state.modal.modalCategory);
@@ -32,6 +33,8 @@ export default function Modal() {
             return <Share />;
           case "getNovelURL":
             return <GetNovelURL />;
+          case "addToMyNovelList":
+            return <AddToMyNovelList />;
 
           case "none":
             // eslint-disable-next-line react/jsx-no-useless-fragment

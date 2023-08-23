@@ -59,3 +59,42 @@ export const WritingTabText = styled.h3`
     font-size: 20px;
   `)}
 `;
+
+export const ButtonsContainer = styled.div`
+  position: absolute;
+  top: 17px;
+  left: 203px;
+  display: flex;
+  gap: 8px;
+`;
+
+export const ButtonContainer = styled.div<{ isForMyList?: true }>`
+  border-radius: 11px;
+  gap: 5px;
+
+  display: flex;
+  justify-content: center;
+
+  height: 34px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  align-items: flex-end;
+  padding: 4px 7px;
+
+  ${({ isForMyList }) =>
+    isForMyList &&
+    `padding: 4px 7px 4px 3px;  
+  `}
+
+  @media (max-width: 767px) {
+    ${({ isForMyList }) =>
+      isForMyList &&
+      `padding: 4px 3px;
+    `}
+  }
+`;
+export const ButtonText = styled.span`
+  color: #808080c4;
+  font-size: 14px;
+  font-weight: 500;
+  margin-top: 1px;
+`;

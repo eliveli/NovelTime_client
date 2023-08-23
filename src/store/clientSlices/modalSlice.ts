@@ -21,6 +21,7 @@ export interface IsModalState {
     | "editProfile"
     | "share"
     | "getNovelURL"
+    | "addToMyNovelList"
     | "none";
   novelImage: string;
   metaTags: MetaTags;
@@ -60,6 +61,7 @@ export const modalSlice = createSlice({
         | "editProfile"
         | "share"
         | "getNovelURL"
+        | "addToMyNovelList"
         | "none"
       >,
     ) => {

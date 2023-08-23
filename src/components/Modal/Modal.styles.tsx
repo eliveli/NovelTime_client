@@ -488,3 +488,28 @@ export const LogoContnr = styled.div`
   margin-top: 31px;
 `;
 export const Logo = styled.img``;
+
+export const GuideContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  gap: 30px;
+  margin-bottom: 10px;
+`;
+export const ContainerToCreateNewList = styled.div`
+  display: flex;
+`;
+export const GuideText = styled.span`
+  color: #959595b0;
+  font-size: 16px;
+  font-weight: 500;
+`;
+export const MyListsContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+`;
+export const MyList = styled.div`
+  display: flex;
+  gap: 8px;
+`;
+export const ListTitle = styled.span``;

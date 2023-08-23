@@ -3,14 +3,47 @@ import { CategoryMark } from "components/CategoryMark";
 import { setSearchList } from "store/clientSlices/filterSlice";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { ADD_WRITING } from "utils/pathname";
-import WritingButton from "./WritingButton";
+import { openModal } from "store/clientSlices/modalSlice";
+import Icon from "assets/Icon";
+import { useWhetherItIsMobile } from "utils";
 import {
   ColumnBG,
   ColumnListContainer,
   WritingTabContainer,
   WritingTab,
   WritingTabText,
+  ButtonContainer,
+  ButtonText,
+  ButtonsContainer,
 } from "./WritingListFrame.styles";
+
+function ButtonInNovelDetail({
+  isForMyList,
+  _onClick,
+  children,
+}: {
+  isForMyList?: true;
+  _onClick: () => void;
+  children: React.ReactNode;
+}) {
+  const isLoginUser = !!useAppSelector((state) => state.user.loginUserInfo.userId);
+
+  return (
+    <ButtonContainer
+      isForMyList={isForMyList}
+      onClick={() => {
+        if (!isLoginUser) {
+          alert("로그인이 필요합니다");
+          return;
+        }
+
+        _onClick();
+      }}
+    >
+      {children}
+    </ButtonContainer>
+  );
+}
 
 type Props = React.PropsWithChildren<{
   isTalk: boolean;
@@ -37,17 +70,7 @@ export default function WritingListFrame({
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  const isLoginUser = !!useAppSelector((state) => state.user.loginUserInfo.userId);
-
-  const stylesForWritingButton = `
-    height: 34px;
-    border: 1px solid rgba(0,0,0,0.1);
-    align-items: flex-end;
-    padding: 4px 7px;
-    position: absolute;
-    top: 17px;
-    left: 203px;
-  `;
+  const isNotMobile = !useWhetherItIsMobile();
 
   return (
     <ColumnBG>
@@ -59,24 +82,36 @@ export default function WritingListFrame({
         fontSize={fontSize}
       />
 
-      <WritingButton
-        styles={stylesForWritingButton}
-        clickToWrite={() => {
-          if (!isLoginUser) {
-            alert("로그인이 필요합니다");
-            return;
-          }
+      <ButtonsContainer>
+        <ButtonInNovelDetail
+          _onClick={() => {
+            dispatch(
+              setSearchList({
+                listType: "novel",
+                list: "reset",
+              }),
+            );
+            navigate(`${ADD_WRITING}?novel-id=${novelId}&novel-title=${novelTitle}`);
+          }}
+        >
+          <Icon.IconBox>
+            <Icon.Write2 />
+          </Icon.IconBox>
+          {isNotMobile && <ButtonText>글쓰기</ButtonText>}
+        </ButtonInNovelDetail>
 
-          dispatch(
-            setSearchList({
-              listType: "novel",
-              list: "reset",
-            }),
-          );
-
-          navigate(`${ADD_WRITING}?novel-id=${novelId}&novel-title=${novelTitle}`);
-        }}
-      />
+        <ButtonInNovelDetail
+          isForMyList
+          _onClick={() => {
+            dispatch(openModal("addToMyNovelList"));
+          }}
+        >
+          <Icon.IconBox>
+            <Icon.Plus />
+          </Icon.IconBox>
+          {isNotMobile && <ButtonText>담기</ButtonText>}
+        </ButtonInNovelDetail>
+      </ButtonsContainer>
 
       <WritingTabContainer>
         <WritingTab isTalk={isTalk} onClick={() => selectWritingType("T")}>
