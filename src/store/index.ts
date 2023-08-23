@@ -7,6 +7,7 @@ import writingReducer from "./clientSlices/writingSlice";
 import filterReducer from "./clientSlices/filterSlice";
 import userReducer from "./clientSlices/userSlice";
 import commentReducer from "./clientSlices/commentSlice";
+import userNovelListReducer from "./clientSlices/userNovelListSlice";
 
 import { novelTimeApi } from "./serverAPIs/novelTime";
 import { imageHostingApi } from "./serverAPIs/imageHosting";
@@ -20,6 +21,7 @@ const store = configureStore({
     filter: filterReducer,
     user: userReducer,
     comment: commentReducer,
+    userNovelList: userNovelListReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

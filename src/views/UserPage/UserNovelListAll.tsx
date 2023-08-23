@@ -19,12 +19,19 @@ export default function UserNovelListAll({ isMyList }: { isMyList: boolean }) {
 
   const { userName } = useParams();
   const loginUserInfo = useAppSelector((state) => state.user.loginUserInfo);
+
+  // const userListAllResult = useGetContentOfUserListAllQuery({
+  //   userName: userName as string,
+  //   isMyList: boolean, // * select different api with this
+  // });
+
   const metaTags = {
     title: userName + !isMyList ? "님의 리스트" : "님이 좋아하는 리스트",
     description: userName + !isMyList ? "님의 리스트" : "님이 좋아하는 리스트",
     image: `https://photos.google.com/album/AF1QipOy4A30VtN2Afb5ynQYejvDxN_5CVBjYRa_DYX4/photo/AF1QipM-TuRzTrhw9-AH4fdhB9EwS1vxjwdOfdX2svVp`,
     url: window.location.href,
   };
+
   const setCategoryText = () => {
     // this is login user's page
     if (loginUserInfo.userName === userName) {

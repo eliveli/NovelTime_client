@@ -236,6 +236,12 @@ export const ModalBox = styled.div<{ padding?: string; isEditingUserBG?: boolean
 
   ${({ isEditingUserBG }) => isEditingUserBG && `bottom: -122px;`}
 `;
+
+export const BoxForPadding = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 54px;
+`;
 export const SocialCategoryContnr = styled.div`
   width: 100%;
   display: flex;
@@ -362,6 +368,53 @@ export const ContentContnr = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+`;
+export const ListTitleInputContainer = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 14px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  padding: 8px 14px;
+`;
+export const ListTitleInput = styled.input`
+  @media screen and (min-width: 500px) {
+    width: 300px;
+  }
+  border: 0;
+  resize: none;
+  -ms-overflow-style: none;
+  outline: none;
+  font-size: 16px;
+  height: 28px;
+  line-height: 1.5;
+  color: rgba(0, 0, 0, 0.6);
+  font-weight: 500;
+  font-family: "Californian FB", D2Coding, Arial, sans-serif;
+`;
+
+export const ButtonContainerForEditing = styled.div`
+  display: flex;
+  width: 100%;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  justify-content: space-evenly;
+  height: 45px;
+  background-color: white;
+  border-bottom-right-radius: 7px;
+  border-bottom-left-radius: 7px;
+`;
+export const ButtonForEditing = styled.div`
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  &:last-child {
+    border-left: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  color: rgba(100, 100, 100, 0.6);
+  font-weight: 500;
 `;
 export const ProfileImgBox = styled.div`
   width: 100%;
