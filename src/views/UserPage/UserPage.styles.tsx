@@ -436,14 +436,14 @@ export const ButtonToEditContainer = styled.div`
   position: absolute;
   bottom: 0;
   right: 0;
-
   display: flex;
-  gap: 5px;
+  gap: 15px;
 `;
-export const ButtonToEdit = styled.span`
+export const ButtonToEdit = styled.span<{ isNoBorder?: true }>`
   color: rgba(0, 0, 0, 0.4);
   font-weight: 500;
   font-size: 15px;
+  ${({ isNoBorder }) => !isNoBorder && `border-bottom: 1px solid #d3d3d382;`}
 `;
 
 // make the parent of more btn //

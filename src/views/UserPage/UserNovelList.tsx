@@ -272,7 +272,7 @@ export default function UserNovelList({ isMyList }: { isMyList: boolean }) {
           </ShareIconBox>
 
           <ButtonToEditContainer>
-            <ButtonToEdit onClick={handleToEditList}>선택한 소설 지우기</ButtonToEdit>
+            <ButtonToEdit onClick={handleToEditList}>선택 소설 삭제</ButtonToEdit>
             <ButtonToEdit onClick={finishEditing}>취소</ButtonToEdit>
           </ButtonToEditContainer>
         </CategoryMark>
@@ -341,7 +341,9 @@ export default function UserNovelList({ isMyList }: { isMyList: boolean }) {
         </ShareIconBox>
         {isLoginUsersList && (
           <ButtonToEditContainer>
-            <ButtonToEdit onClick={() => handleEditing(true)}>편집</ButtonToEdit>
+            <ButtonToEdit isNoBorder onClick={() => handleEditing(true)}>
+              편집
+            </ButtonToEdit>
           </ButtonToEditContainer>
         )}
       </CategoryMark>
