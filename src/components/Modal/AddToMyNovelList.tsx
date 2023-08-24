@@ -20,6 +20,7 @@ import {
 export default function AddToMyNovelList() {
   const dispatch = useAppDispatch();
 
+  // add a novel to one or more lists selected
   const [listsSelected, setListsSelected] = useState<string[]>([]);
 
   return (

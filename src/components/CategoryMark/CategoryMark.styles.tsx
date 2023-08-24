@@ -7,6 +7,8 @@ export const CategoryContainer = styled.div`
   margin-bottom: -2px;
   display: flex;
   align-items: flex-end;
+
+  position: relative;
 `;
 
 export const LinkCategory = styled(Link)<{ isUserMark?: boolean; novelNO?: number }>`

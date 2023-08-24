@@ -1,9 +1,8 @@
 // /* eslint-disable */
 
 import { styled } from "assets/styles/theme";
-import { Link } from "react-router-dom";
 
-export const NovelLink = styled(Link)<{ isWidth100?: true }>`
+export const NovelLink = styled.div<{ isWidth100?: true; isNotNavigation?: true }>`
   min-width: 32%;
   max-width: 32%;
 
@@ -18,8 +17,13 @@ export const NovelLink = styled(Link)<{ isWidth100?: true }>`
   @media (hover: hover) {
     &:hover {
       cursor: pointer;
-      opacity: 0.7;
-      color: rgba(100, 100, 100, 0.8);
+
+      ${({ isNotNavigation }) =>
+        !isNotNavigation &&
+        `
+        opacity: 0.7;
+        color: rgba(100, 100, 100, 0.8);
+      `}
     }
   }
   @media screen and (min-width: 560px) {

@@ -61,7 +61,7 @@ export default function CategoryMark({
   isNoContent?: boolean;
 
   novelNO?: number;
-  children?: React.ReactChild | React.ReactChildren;
+  children?: React.ReactChild | React.ReactChildren | React.ReactNode;
 }) {
   const navigate = useNavigate();
 

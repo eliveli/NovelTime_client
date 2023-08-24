@@ -36,6 +36,10 @@ import {
   ShareIconBox,
   UserImg,
   OthersTitleContnr,
+  ButtonToEdit,
+  ButtonToEditContainer,
+  NovelContainer,
+  IconContainer,
 } from "./UserPage.styles";
 import contentMark from "./utils/contentMark";
 
@@ -142,6 +146,38 @@ export default function UserNovelList({ isMyList }: { isMyList: boolean }) {
       console.log("Failed to toggle LIKE:", error);
     }
   };
+
+  const handleLike = async () => {
+    if (!currentNovelListInfo) return;
+
+    const { isLike, userName: userNameAtTitle } = currentNovelListInfo.novelList;
+
+    if (!loginUserInfo.userId) {
+      // when user didn't login
+      alert("좋아요를 누르려면 로그인을 해 주세요.");
+    } else if (loginUserInfo.userName === userNameAtTitle) {
+      // prevent login user from setting LIKE of list that he/she created
+      alert("내가 만든 리스트에는 좋아요를 누를 수 없어요.");
+    } else if (!isLike) {
+      // set isLike to true by request without alert when it was false
+      await toggleLikeRequest();
+      alert("내 좋아요 리스트에 추가되었습니다.");
+      //
+      // change this to modal that disappears later
+      //
+    } else if (userNameAtTitle !== loginUserInfo.userName) {
+      // when login user who isn't the owner of user page tries to cancel LIKE
+      if (confirm("좋아요를 취소하면 내 유저페이지의 리스트에서 지워집니다. 취소하시겠어요?")) {
+        await toggleLikeRequest();
+      }
+    } else if (userNameAtTitle === loginUserInfo.userName) {
+      // when login user who is the owner of user page tries to cancel LIKE
+      if (confirm("좋아요를 취소하면 리스트에서 지워집니다. 취소하시겠어요?")) {
+        await toggleLikeRequest();
+      }
+    }
+  };
+
   // get the content page mark
   const contentPageMark = contentMark(userName as string, loginUserInfo.userName, isMyList, false);
 
@@ -198,11 +234,100 @@ export default function UserNovelList({ isMyList }: { isMyList: boolean }) {
     }
   }, [currentNovelListInfo]);
 
+  // edit the user's novel list _ remove selected novels from it //
+  const [isEditing, handleEditing] = useState(false);
+
+  const loginUserName = useAppSelector((state) => state.user.loginUserInfo.userName);
+  const isLoginUsersList = loginUserName && loginUserName === userName && isMyList;
+
+  // novels to be removed
+  const [novelsSelected, setNovelsSelected] = useState<string[]>([]);
+
+  const finishEditing = () => {
+    handleEditing(false);
+    setNovelsSelected([]);
+  };
+
+  const handleToEditList = () => {
+    // * server request
+
+    finishEditing();
+  };
+
   // case 1. fetching data at first
   // case 2. fetching next novel list right after canceling LIKE in login user's other's list page
   if (!currentNovelListInfo || listId !== currentNovelListInfo.novelList.listId) {
     return <Spinner styles="fixed" />;
   }
+
+  if (isEditing) {
+    return (
+      <MainBG>
+        {currentNovelListInfo && <MetaTag tags={metaTags} />}
+        {(myListResult.isFetching || othersListResult.isFetching) && <Spinner styles="fixed" />}
+
+        <CategoryMark categoryText={contentPageMark}>
+          <ShareIconBox>
+            <Icon.ShareWithArrow />
+          </ShareIconBox>
+
+          <ButtonToEditContainer>
+            <ButtonToEdit onClick={handleToEditList}>선택한 소설 지우기</ButtonToEdit>
+            <ButtonToEdit onClick={finishEditing}>취소</ButtonToEdit>
+          </ButtonToEditContainer>
+        </CategoryMark>
+
+        {/* title list container */}
+        <ListTitleLimitHeightContnr limitContnrWidth={limitContnrWidth} isListMore={isListMore}>
+          <ListTitleContnr
+            limitContnrWidth={limitContnrWidth}
+            isListMore={isListMore}
+            ref={titleListRef}
+          >
+            <ListTitle>{currentNovelListInfo.novelList.listTitle}</ListTitle>
+          </ListTitleContnr>
+        </ListTitleLimitHeightContnr>
+
+        <NovelListContnr>
+          {novels?.map((_) => (
+            <NovelContainer
+              onClick={() => {
+                // unselect the novel if it was selected already
+                if (novelsSelected.includes(_.novelId)) {
+                  const nextLists = novelsSelected.filter((__) => __ !== _.novelId);
+                  setNovelsSelected(nextLists);
+                  return;
+                }
+
+                // select one
+                setNovelsSelected((prev) => [...prev, _.novelId]);
+              }}
+            >
+              <IconContainer>
+                {novelsSelected.includes(_.novelId) ? (
+                  <Icon.CheckBoxSelected />
+                ) : (
+                  <Icon.CheckBoxOutline />
+                )}
+              </IconContainer>
+
+              <NovelRow key={_.novelId} novel={_} isWidth100 isNotSubInfo isNotNavigation />
+            </NovelContainer>
+          ))}
+        </NovelListContnr>
+
+        {currentNovelListInfo.isNextOrder && (
+          <ShowMoreContent
+            _onClick={() => {
+              setOrderNumber((currentOrder) => currentOrder + 1);
+              novelsAsPreviousOrder.current = novels;
+            }}
+          />
+        )}
+      </MainBG>
+    );
+  }
+
   return (
     <MainBG>
       {currentNovelListInfo && <MetaTag tags={metaTags} />}
@@ -214,6 +339,11 @@ export default function UserNovelList({ isMyList }: { isMyList: boolean }) {
         <ShareIconBox>
           <Icon.ShareWithArrow />
         </ShareIconBox>
+        {isLoginUsersList && (
+          <ButtonToEditContainer>
+            <ButtonToEdit onClick={() => handleEditing(true)}>편집</ButtonToEdit>
+          </ButtonToEditContainer>
+        )}
       </CategoryMark>
       {/* more button to show or not all the title list */}
       {/* when isListMore is true, always : limitContnrWidth === titleListWidthScrollable
@@ -262,38 +392,7 @@ export default function UserNovelList({ isMyList }: { isMyList: boolean }) {
             <HearIconBox
               isLike={currentNovelListInfo.novelList.isLike}
               size={28}
-              onClick={async () => {
-                const { isLike, userName: userNameAtTitle } = currentNovelListInfo.novelList;
-
-                if (!loginUserInfo.userId) {
-                  // when user didn't login
-                  alert("좋아요를 누르려면 로그인을 해 주세요.");
-                } else if (loginUserInfo.userName === userNameAtTitle) {
-                  // prevent login user from setting LIKE of list that he/she created
-                  alert("내가 만든 리스트에는 좋아요를 누를 수 없어요.");
-                } else if (!isLike) {
-                  // set isLike to true by request without alert when it was false
-                  await toggleLikeRequest();
-                  alert("내 좋아요 리스트에 추가되었습니다.");
-                  //
-                  // change this to modal that disappears later
-                  //
-                } else if (userNameAtTitle !== loginUserInfo.userName) {
-                  // when login user who isn't the owner of user page tries to cancel LIKE
-                  if (
-                    confirm(
-                      "좋아요를 취소하면 내 유저페이지의 리스트에서 지워집니다. 취소하시겠어요?",
-                    )
-                  ) {
-                    await toggleLikeRequest();
-                  }
-                } else if (userNameAtTitle === loginUserInfo.userName) {
-                  // when login user who is the owner of user page tries to cancel LIKE
-                  if (confirm("좋아요를 취소하면 리스트에서 지워집니다. 취소하시겠어요?")) {
-                    await toggleLikeRequest();
-                  }
-                }
-              }}
+              onClick={handleLike}
             >
               <Icon.TogglingBigHeartIcon isLike={currentNovelListInfo.novelList.isLike} />
             </HearIconBox>

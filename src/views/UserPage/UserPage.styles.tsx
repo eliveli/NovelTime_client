@@ -369,7 +369,7 @@ export const ListTitleContnr = styled.div<{ isListMore: boolean; limitContnrWidt
   ${({ isListMore }) => (isListMore ? `flex-wrap: wrap;` : ``)}
   width: ${({ limitContnrWidth }) => limitContnrWidth}px;
 `;
-export const ListTitle = styled.span<{ listId: string; selectedListId: string }>`
+export const ListTitle = styled.span<{ listId?: string; selectedListId?: string }>`
   white-space: nowrap;
   color: rgba(100, 100, 100, 0.8);
   border-radius: 20px;
@@ -380,12 +380,39 @@ export const ListTitle = styled.span<{ listId: string; selectedListId: string }>
   font-weight: 500;
 
   ${({ listId, selectedListId }) =>
+    listId &&
+    selectedListId &&
     listId === selectedListId &&
     `color:${theme.color.main}; border: 1px solid ${theme.color.mainLight}; order: -1;`}
 `;
 export const ListTitleNormalStyle = styled.span`
   color: rgba(100, 100, 100, 0.6);
   font-size: 12px;
+`;
+
+export const NovelContainer = styled.div`
+  position: relative;
+`;
+
+export const IconContainer = styled.div`
+  background-color: "transparent";
+
+  min-width: 25px;
+  max-width: 25px;
+  min-height: 25px;
+  max-height: 25px;
+
+  @media (hover: hover) {
+    &:hover {
+      cursor: pointer;
+      opacity: 0.8;
+    }
+  }
+
+  position: absolute;
+  left: -3px;
+  top: 3px;
+  color: rgba(100, 100, 100, 0.6);
 `;
 
 export const NovelListContnr = styled.div`
@@ -403,6 +430,20 @@ export const NovelListContnr = styled.div`
   @media screen and (min-width: 700px) {
     grid-template-columns: repeat(4, 1fr);
   }
+`;
+
+export const ButtonToEditContainer = styled.div`
+  position: absolute;
+  bottom: 0;
+  right: 0;
+
+  display: flex;
+  gap: 5px;
+`;
+export const ButtonToEdit = styled.span`
+  color: rgba(0, 0, 0, 0.4);
+  font-weight: 500;
+  font-size: 15px;
 `;
 
 // make the parent of more btn //
