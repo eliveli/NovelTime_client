@@ -6,6 +6,7 @@ import { ADD_WRITING } from "utils/pathname";
 import { openModal } from "store/clientSlices/modalSlice";
 import Icon from "assets/Icon";
 import { useWhetherItIsMobile } from "utils";
+import { handleNovelIdToAddToList } from "store/clientSlices/userNovelListSlice";
 import {
   ColumnBG,
   ColumnListContainer,
@@ -103,6 +104,8 @@ export default function WritingListFrame({
         <ButtonInNovelDetail
           isForMyList
           _onClick={() => {
+            dispatch(handleNovelIdToAddToList(novelId));
+
             dispatch(openModal("addToMyNovelList"));
           }}
         >

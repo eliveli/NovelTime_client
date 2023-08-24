@@ -7,10 +7,12 @@ type UserNovelListToEdit = {
 };
 
 export type IsUserNovelListState = {
+  novelIdToAddToList: string;
   userNovelListToEdit: UserNovelListToEdit;
 };
 
 const initialState: IsUserNovelListState = {
+  novelIdToAddToList: "",
   userNovelListToEdit: {
     listId: "",
     listTitle: "",
@@ -21,6 +23,9 @@ export const userNovelListSlice = createSlice({
   name: "userNovelList",
   initialState,
   reducers: {
+    handleNovelIdToAddToList: (state, action: PayloadAction<string>) => {
+      state.novelIdToAddToList = action.payload;
+    },
     handleUserNovelListToEdit: (state, action: PayloadAction<UserNovelListToEdit>) => {
       state.userNovelListToEdit = action.payload;
     },
@@ -33,6 +38,6 @@ export const userNovelListSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { handleUserNovelListToEdit } = userNovelListSlice.actions;
+export const { handleNovelIdToAddToList, handleUserNovelListToEdit } = userNovelListSlice.actions;
 
 export default userNovelListSlice.reducer;
