@@ -3,7 +3,8 @@ import { closeModal, openModal } from "store/clientSlices/modalSlice";
 
 import Icon from "assets/Icon";
 import { handleNovelIdToAddToList } from "store/clientSlices/userNovelListSlice";
-import { useGetMyNovelListQuery } from "store/serverAPIs/novelTime";
+import { useAddNovelToListMutation, useGetMyNovelListQuery } from "store/serverAPIs/novelTime";
+import Spinner from "assets/Spinner";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 
 import {
@@ -21,6 +22,9 @@ import {
 
 export default function AddToMyNovelList() {
   const myNovelListResult = useGetMyNovelListQuery(undefined);
+
+  const [addNovelToList, addNovelToListResult] = useAddNovelToListMutation();
+
   const novelIdToAdd = useAppSelector((state) => state.userNovelList.novelIdToAddToList);
 
   // add a novel to one or more lists selected
@@ -33,16 +37,34 @@ export default function AddToMyNovelList() {
 
     dispatch(handleNovelIdToAddToList(""));
   };
-  const handleToAddNovelToLists = () => {
+  const handleToAddNovelToLists = async () => {
+    if (!novelIdToAdd) {
+      alert("담을 소설이 없습니다");
+      return;
+    }
+
+    if (!listsSelected.length) {
+      alert("리스트를 선택해 주세요");
+      return;
+    }
+
+    if (addNovelToListResult.isLoading) return;
+
+    await addNovelToList({ novelId: novelIdToAdd, listIDs: listsSelected });
+
+    // novels in the list are updated automatically used in list detailed page
+
+    if (addNovelToListResult.isError) {
+      alert("리스트에 담을 수 없습니다. 새로고침 후 시도해보세요");
+      return;
+    }
+
     closeAndInitialize();
   };
 
-  // * add this novel to novel lists selected
-  // : give _ a novel id, novel lists' IDs
-  //   after success _ update my novel list with provide and invalidate tags
-
   return (
     <TranslucentBG onClick={closeAndInitialize}>
+      {myNovelListResult.isFetching && <Spinner styles="fixed" />}
       <ModalBox
         onClick={(event: React.MouseEvent<HTMLElement>) => {
           event.stopPropagation();

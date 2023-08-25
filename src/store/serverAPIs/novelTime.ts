@@ -46,6 +46,7 @@ import {
   ParamsOfUserNovelListAll,
   ListSummary,
   ListIdAndTitle,
+  ParamToAddNovel,
 } from "./types";
 import type { RootState } from "../index";
 
@@ -96,6 +97,7 @@ export const novelTimeApi = createApi({
     "writingUpdated",
     "writingsOfNovelUpdated",
     "MyListTitlesUpdated",
+    "NovelsInListUpdated",
   ],
   endpoints: (builder) => ({
     // at home page
@@ -341,13 +343,19 @@ export const novelTimeApi = createApi({
       query: (params) =>
         `/userContent/listDetailed/created/${params.userName}/${params.listId}/${params.order}`,
       keepUnusedDataFor: 120,
-      providesTags: (result, error, arg) => [{ type: "ContentUpdatedInNovelList", id: arg.listId }],
+      providesTags: (result, error, arg) => [
+        { type: "ContentUpdatedInNovelList", id: arg.listId },
+        { type: "NovelsInListUpdated", id: arg.listId },
+      ],
     }),
     getListDetailedUserLiked: builder.query<ContentOfUserNovelList, ParamsOfUserNovelList>({
       query: (params) =>
         `/userContent/listDetailed/liked/${params.userName}/${params.listId}/${params.order}`,
       keepUnusedDataFor: 120,
-      providesTags: (result, error, arg) => [{ type: "ContentUpdatedInNovelList", id: arg.listId }],
+      providesTags: (result, error, arg) => [
+        { type: "ContentUpdatedInNovelList", id: arg.listId },
+        { type: "NovelsInListUpdated", id: arg.listId },
+      ],
     }),
     getListTitlesAndOtherInListDetailed: builder.query<
       AllTitlesAndOtherInfo,
@@ -371,6 +379,15 @@ export const novelTimeApi = createApi({
       }),
 
       invalidatesTags: ["MyListTitlesUpdated"],
+    }),
+    addNovelToList: builder.mutation<string, ParamToAddNovel>({
+      query: ({ novelId, listIDs }) => ({
+        url: `/userContent/myNovelList/novel`,
+        method: "POST",
+        body: { novelId, listIDs },
+      }),
+      invalidatesTags: (result, error, arg) =>
+        arg.listIDs.map((listId) => ({ type: "NovelsInListUpdated", id: listId })),
     }),
 
     toggleLike: builder.mutation<IsLike, ContentOfLike>({
@@ -470,4 +487,5 @@ export const {
   useToggleLikeMutation,
   useGetMyNovelListQuery,
   useCreateMyNovelListMutation,
+  useAddNovelToListMutation,
 } = novelTimeApi;

@@ -569,6 +569,10 @@ export interface ListIdAndTitle {
   novelListTitle: string;
 }
 
+export interface ParamToAddNovel {
+  novelId: string;
+  listIDs: string[];
+}
 export interface ContentOfLike {
   contentType: "writing" | "novelList";
   contentId: string;

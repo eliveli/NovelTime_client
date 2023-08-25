@@ -1,6 +1,7 @@
 import { useRef } from "react";
 import { openModal } from "store/clientSlices/modalSlice";
 import { useCreateMyNovelListMutation } from "store/serverAPIs/novelTime";
+import Spinner from "assets/Spinner";
 import { useAppDispatch } from "../../store/hooks";
 
 import {
@@ -40,6 +41,7 @@ export default function WriteNewListTitle() {
 
     if (createListResult.isError) {
       alert("리스트를 생성할 수 없습니다. 새로고침 후 시도해보세요");
+      return;
     }
 
     openPrevModal();
@@ -47,6 +49,8 @@ export default function WriteNewListTitle() {
 
   return (
     <TranslucentBG onClick={openPrevModal}>
+      {createListResult.isLoading && <Spinner styles="fixed" />}
+
       <ModalBox
         padding="0"
         onClick={(event: React.MouseEvent<HTMLElement>) => {
