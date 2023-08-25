@@ -499,8 +499,8 @@ export interface ContentOfUserHome {
   talksUserLikes: TalkUserLikes[];
   recommendsUserLikes: RecommendUserLikes[];
   novelLists: {
-    listsUserCreated: ListUserCreated[];
-    listsUserLikes: ListUserLikes[];
+    listsUserCreated: ListSummaryUserCreated[];
+    listsUserLikes: ListSummaryUserLiked[];
   };
 }
 export interface ContentOfUserWriting {
@@ -529,7 +529,7 @@ export interface ParamsOfUserNovelListAll {
   userName: string;
   isMyList: boolean;
 }
-export interface ListInUserNovelListAll {
+export interface ListSummary {
   listId: string;
   listTitle: string;
   novelNo: number;
@@ -537,6 +537,22 @@ export interface ListInUserNovelListAll {
   novelImgs: string[];
   userName?: string; // only for other's list
   userImg?: { src: string; position: string }; // only for other's list
+}
+export interface ListSummaryUserCreated {
+  listId: string;
+  listTitle: string;
+  novelNo: number;
+  likeNo: number;
+  novelImgs: string[];
+}
+export interface ListSummaryUserLiked {
+  listId: string;
+  listTitle: string;
+  novelNo: number;
+  likeNo: number;
+  novelImgs: string[];
+  userName: string;
+  userImg: { src: string; position: string };
 }
 
 export interface ContentOfUserNovelList {

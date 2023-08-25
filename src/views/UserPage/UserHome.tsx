@@ -13,6 +13,7 @@ import { NovelRow } from "../../components/Novel";
 import { WritingSection } from "./UserPage.styles";
 import { Writing, Comment, WritingFilter, NoContent } from "./UserWriting.components";
 import contentMark from "./utils/contentMark";
+import UserNovelList from "./UserNovelListAll.components";
 
 export default function UserHome() {
   const loginUserInfo = useAppSelector((state) => state.user.loginUserInfo);
@@ -151,26 +152,15 @@ export default function UserHome() {
         isNoContent={data?.novelLists.listsUserCreated.length === 0}
       />
       {data?.novelLists.listsUserCreated.length ? (
-        data?.novelLists.listsUserCreated.map((list) => (
-          <RowSlide
-            categoryId={list.listId}
-            categoryText={list.listTitle}
-            novelNO={list.novel.length}
-            infoFromUserPage={{
-              userName: userName as string,
-              path: "my-list",
-              list: { isMainCategory: false, listId: list.listId },
-            }}
-            isShowAllMark
-          >
-            {list.novel.map((_) => (
-              <NovelRow key={_.novelId} novel={_} isNotSubInfo />
-            ))}
-          </RowSlide>
-        ))
+        <WritingSection isNoContent={false} isForListAll>
+          {data?.novelLists.listsUserCreated.map((_) => (
+            <UserNovelList key={_.listId} novelList={_} isMyList />
+          ))}
+        </WritingSection>
       ) : (
         <NoContent contentType="L" isCreatedBy />
       )}
+
       <CategoryMark
         infoFromUserPage={{
           userName: userName as string,
@@ -184,24 +174,11 @@ export default function UserHome() {
         isNoContent={data?.novelLists.listsUserLikes.length === 0}
       />
       {data?.novelLists.listsUserLikes.length ? (
-        data?.novelLists.listsUserLikes.map((list) => (
-          <RowSlide
-            categoryId={list.listId}
-            categoryText={list.listTitle}
-            novelNO={list.novel.length}
-            infoFromUserPage={{
-              userName: userName as string,
-              path: "others-list",
-              list: { isMainCategory: false, listId: list.listId },
-            }}
-            userMark={{ userImg: list.userImg, userName: list.userName }}
-            isShowAllMark
-          >
-            {list.novel.map((_) => (
-              <NovelRow key={_.novelId} novel={_} isNotSubInfo />
-            ))}
-          </RowSlide>
-        ))
+        <WritingSection isNoContent={false} isForListAll>
+          {data?.novelLists.listsUserLikes.map((_) => (
+            <UserNovelList key={_.listId} novelList={_} isMyList={false} />
+          ))}
+        </WritingSection>
       ) : (
         <NoContent contentType="L" isCreatedBy={false} />
       )}

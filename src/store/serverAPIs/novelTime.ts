@@ -47,6 +47,7 @@ import {
   ParamToSearchForAll,
   ParamsOfUserNovelListAll,
   ListInUserNovelListAll,
+  ListSummary,
 } from "./types";
 import type { RootState } from "../index";
 
@@ -331,26 +332,28 @@ export const novelTimeApi = createApi({
     }),
 
     // * create apis in server work
-    getContentOfUserListAll: builder.query<ListInUserNovelListAll[], ParamsOfUserNovelListAll>({
+    getContentOfUserListAll: builder.query<ListSummary[], ParamsOfUserNovelListAll>({
       query: ({ userName, isMyList }) => {
-        if (isMyList) return `/userContent/myList/${userName}`;
-        return `/userContent/othersList/${userName}`;
+        if (isMyList) return `/userContent/listSummary/created/all/${userName}`;
+        return `/userContent/listSummary/liked/all/${userName}`;
       },
     }),
 
     getContentOfUserMyList: builder.query<ContentOfUserNovelList, ParamsOfUserNovelList>({
-      query: (params) => `/userContent/myList/${params.userName}/${params.listId}/${params.order}`,
+      query: (params) =>
+        `/userContent/listDetailed/created/${params.userName}/${params.listId}/${params.order}`,
       keepUnusedDataFor: 120,
       providesTags: (result, error, arg) => [{ type: "ContentUpdatedInNovelList", id: arg.listId }],
     }),
     getContentOfUserOthersList: builder.query<ContentOfUserNovelList, ParamsOfUserNovelList>({
       query: (params) =>
-        `/userContent/othersList/${params.userName}/${params.listId}/${params.order}`,
+        `/userContent/listDetailed/liked/${params.userName}/${params.listId}/${params.order}`,
       keepUnusedDataFor: 120,
       providesTags: (result, error, arg) => [{ type: "ContentUpdatedInNovelList", id: arg.listId }],
     }),
     getAllNovelListTitles: builder.query<AllTitlesAndOtherInfo, ParamsOfAllNovelListTitles>({
-      query: (params) => `/userContent/novelListTitles/${params.userName}/${params.isMyList}`,
+      query: (params) =>
+        `/userContent/listDetailed/listTitles/${params.userName}/${params.isMyList}`,
       keepUnusedDataFor: 120,
       providesTags: ["ListTitlesUpdated"],
     }),
