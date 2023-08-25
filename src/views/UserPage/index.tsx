@@ -1,7 +1,7 @@
 import UserParent from "./UserParent";
 import UserHome from "./UserHome";
-import UserNovelList from "./UserNovelList";
+import UserNovelListDetailed from "./UserNovelListDetailed";
 import UserWriting from "./UserWriting";
-import UserNovelListAll from "./UserNovelListAll";
+import UserNovelListSummary from "./UserNovelListSummary";
 
-export { UserHome, UserNovelList, UserParent, UserWriting, UserNovelListAll };
+export { UserHome, UserNovelListDetailed, UserParent, UserWriting, UserNovelListSummary };

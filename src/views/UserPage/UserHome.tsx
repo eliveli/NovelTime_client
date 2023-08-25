@@ -13,7 +13,7 @@ import { NovelRow } from "../../components/Novel";
 import { WritingSection } from "./UserPage.styles";
 import { Writing, Comment, WritingFilter, NoContent } from "./UserWriting.components";
 import contentMark from "./utils/contentMark";
-import UserNovelList from "./UserNovelListAll.components";
+import UserNovelList from "./UserNovelListSummary.components";
 
 export default function UserHome() {
   const loginUserInfo = useAppSelector((state) => state.user.loginUserInfo);

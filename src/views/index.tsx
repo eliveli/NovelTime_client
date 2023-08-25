@@ -7,7 +7,13 @@ import NovelList from "./NovelList";
 import WritingList from "./WritingList";
 import RecommendList from "./RecommendList";
 import RecommendDetail from "./RecommendDetail";
-import { UserHome, UserNovelList, UserParent, UserWriting } from "./UserPage";
+import {
+  UserHome,
+  UserNovelListDetailed,
+  UserParent,
+  UserWriting,
+  UserNovelListSummary,
+} from "./UserPage";
 import NotFound from "./NotFound";
 import { MainListNav, DetailNav } from "./Nav";
 import SearchNovelPage from "./SearchNovelPage";
@@ -35,9 +41,10 @@ export {
   NovelDetail,
   NovelList,
   UserHome,
-  UserNovelList,
+  UserNovelListDetailed,
   UserParent,
   UserWriting,
+  UserNovelListSummary,
   MainListNav,
   DetailNav,
   SearchAllPage,

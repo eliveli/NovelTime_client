@@ -466,7 +466,7 @@ interface ListUserCreated {
   listTitle: string;
   novel: SimpleNovel[];
 }
-interface ListUserLikes {
+interface ListUserLiked {
   listId: string;
   listTitle: string;
   userName: string;

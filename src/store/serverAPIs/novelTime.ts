@@ -322,36 +322,39 @@ export const novelTimeApi = createApi({
       //   for the reason that other's list doesn't exist anymore
       providesTags: ["ContentUpdatedInHome"],
     }),
-    getContentOfUserMyWriting: builder.query<ContentOfUserWriting, ParamsOfUserWriting>({
+    getWritingUserCreated: builder.query<ContentOfUserWriting, ParamsOfUserWriting>({
       query: (params) =>
         `/userContent/myWriting/${params.userName}/${params.contentType}/${params.order}`,
     }),
-    getContentOfUserOthersWriting: builder.query<ContentOfUserWriting, ParamsOfUserWriting>({
+    getWritingUserLiked: builder.query<ContentOfUserWriting, ParamsOfUserWriting>({
       query: (params) =>
         `/userContent/othersWriting/${params.userName}/${params.contentType}/${params.order}`,
     }),
 
     // * create apis in server work
-    getContentOfUserListAll: builder.query<ListSummary[], ParamsOfUserNovelListAll>({
+    getListSummary: builder.query<ListSummary[], ParamsOfUserNovelListAll>({
       query: ({ userName, isMyList }) => {
         if (isMyList) return `/userContent/listSummary/created/all/${userName}`;
         return `/userContent/listSummary/liked/all/${userName}`;
       },
     }),
 
-    getContentOfUserMyList: builder.query<ContentOfUserNovelList, ParamsOfUserNovelList>({
+    getListDetailedUserCreated: builder.query<ContentOfUserNovelList, ParamsOfUserNovelList>({
       query: (params) =>
         `/userContent/listDetailed/created/${params.userName}/${params.listId}/${params.order}`,
       keepUnusedDataFor: 120,
       providesTags: (result, error, arg) => [{ type: "ContentUpdatedInNovelList", id: arg.listId }],
     }),
-    getContentOfUserOthersList: builder.query<ContentOfUserNovelList, ParamsOfUserNovelList>({
+    getListDetailedUserLiked: builder.query<ContentOfUserNovelList, ParamsOfUserNovelList>({
       query: (params) =>
         `/userContent/listDetailed/liked/${params.userName}/${params.listId}/${params.order}`,
       keepUnusedDataFor: 120,
       providesTags: (result, error, arg) => [{ type: "ContentUpdatedInNovelList", id: arg.listId }],
     }),
-    getAllNovelListTitles: builder.query<AllTitlesAndOtherInfo, ParamsOfAllNovelListTitles>({
+    getListTitlesAndOtherInListDetailed: builder.query<
+      AllTitlesAndOtherInfo,
+      ParamsOfAllNovelListTitles
+    >({
       query: (params) =>
         `/userContent/listDetailed/listTitles/${params.userName}/${params.isMyList}`,
       keepUnusedDataFor: 120,
@@ -445,10 +448,11 @@ export const {
   useCheckForUserNameMutation,
   useSaveUserInfoMutation,
   useGetContentOfUserHomeQuery,
-  useGetContentOfUserMyWritingQuery,
-  useGetContentOfUserOthersWritingQuery,
-  useGetContentOfUserMyListQuery,
-  useGetContentOfUserOthersListQuery,
+  useGetListDetailedUserCreatedQuery,
+  useGetListDetailedUserLikedQuery,
+  useGetListSummaryQuery,
+  useGetListTitlesAndOtherInListDetailedQuery,
+  useGetWritingUserCreatedQuery,
+  useGetWritingUserLikedQuery,
   useToggleLikeMutation,
-  useGetAllNovelListTitlesQuery,
 } = novelTimeApi;

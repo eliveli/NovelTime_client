@@ -1,6 +1,3 @@
-/* eslint-disable no-restricted-syntax */
-/* eslint-disable @typescript-eslint/no-misused-promises */
-/* eslint-disable react/jsx-indent */
 import Icon from "assets/Icon";
 import Spinner from "assets/Spinner";
 import { CategoryMark } from "components/CategoryMark";
@@ -9,12 +6,12 @@ import { NovelRow } from "components/Novel";
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "store/hooks";
-import { closeModal, setMetaTags } from "store/clientSlices/modalSlice";
+import { setMetaTags } from "store/clientSlices/modalSlice";
 
 import {
-  useGetAllNovelListTitlesQuery,
-  useGetContentOfUserMyListQuery,
-  useGetContentOfUserOthersListQuery,
+  useGetListDetailedUserCreatedQuery,
+  useGetListDetailedUserLikedQuery,
+  useGetListTitlesAndOtherInListDetailedQuery,
   useToggleLikeMutation,
 } from "store/serverAPIs/novelTime";
 import { SimpleNovel } from "store/serverAPIs/types";
@@ -55,7 +52,7 @@ interface NovelListTitle {
   userImg?: { src: string; position: string };
 }
 
-export default function UserNovelList({ isMyList }: { isMyList: boolean }) {
+export default function UserNovelListDetailed({ isMyList }: { isMyList: boolean }) {
   const dispatch = useAppDispatch();
 
   const navigate = useNavigate();
@@ -75,7 +72,7 @@ export default function UserNovelList({ isMyList }: { isMyList: boolean }) {
   // divide these two results
   // don't destructure like this : const { data, isFetching, ... }
   // just get it as variables to avoid getting same name
-  const myListResult = useGetContentOfUserMyListQuery(
+  const myListResult = useGetListDetailedUserCreatedQuery(
     {
       accessToken,
       userName: userName as string,
@@ -86,7 +83,7 @@ export default function UserNovelList({ isMyList }: { isMyList: boolean }) {
       skip: !isMyList,
     },
   );
-  const othersListResult = useGetContentOfUserOthersListQuery(
+  const othersListResult = useGetListDetailedUserLikedQuery(
     {
       accessToken,
       userName: userName as string,
@@ -98,7 +95,7 @@ export default function UserNovelList({ isMyList }: { isMyList: boolean }) {
     },
   );
 
-  const { data: allTitles } = useGetAllNovelListTitlesQuery({
+  const { data: allTitles } = useGetListTitlesAndOtherInListDetailedQuery({
     userName: userName as string,
     isMyList: isMyList.toString(),
   });
@@ -243,15 +240,15 @@ export default function UserNovelList({ isMyList }: { isMyList: boolean }) {
   // novels to be removed
   const [novelsSelected, setNovelsSelected] = useState<string[]>([]);
 
-  const finishEditing = () => {
+  const finishRemoving = () => {
     handleEditing(false);
     setNovelsSelected([]);
   };
 
-  const handleToEditList = () => {
+  const handleToRemoveNovelFromList = () => {
     // * server request
 
-    finishEditing();
+    finishRemoving();
   };
 
   // case 1. fetching data at first
@@ -272,8 +269,8 @@ export default function UserNovelList({ isMyList }: { isMyList: boolean }) {
           </ShareIconBox>
 
           <ButtonToEditContainer>
-            <ButtonToEdit onClick={handleToEditList}>선택 소설 삭제</ButtonToEdit>
-            <ButtonToEdit onClick={finishEditing}>취소</ButtonToEdit>
+            <ButtonToEdit onClick={handleToRemoveNovelFromList}>선택 소설 삭제</ButtonToEdit>
+            <ButtonToEdit onClick={finishRemoving}>취소</ButtonToEdit>
           </ButtonToEditContainer>
         </CategoryMark>
 

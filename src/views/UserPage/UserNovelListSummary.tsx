@@ -9,10 +9,10 @@ import { closeModal, setMetaTags } from "store/clientSlices/modalSlice";
 
 import MetaTag from "utils/MetaTag";
 import { ShareIconBox, WritingSection } from "./UserPage.styles";
-import UserNovelList from "./UserNovelListAll.components";
+import UserNovelList from "./UserNovelListSummary.components";
 import { NoContent } from "./UserWriting.components";
 
-export default function UserNovelListAll({ isMyList }: { isMyList: boolean }) {
+export default function UserNovelListSummary({ isMyList }: { isMyList: boolean }) {
   const dispatch = useAppDispatch();
 
   const navigate = useNavigate();
@@ -20,7 +20,7 @@ export default function UserNovelListAll({ isMyList }: { isMyList: boolean }) {
   const { userName } = useParams();
   const loginUserInfo = useAppSelector((state) => state.user.loginUserInfo);
 
-  // const userListAllResult = useGetContentOfUserListAllQuery({
+  // const userListAllResult = getListSummary({
   //   userName: userName as string,
   //   isMyList: boolean, // * select different api with this
   // });
@@ -31,7 +31,6 @@ export default function UserNovelListAll({ isMyList }: { isMyList: boolean }) {
     image: `https://photos.google.com/album/AF1QipOy4A30VtN2Afb5ynQYejvDxN_5CVBjYRa_DYX4/photo/AF1QipM-TuRzTrhw9-AH4fdhB9EwS1vxjwdOfdX2svVp`,
     url: window.location.href,
   };
-
   const setCategoryText = () => {
     // this is login user's page
     if (loginUserInfo.userName === userName) {
@@ -101,6 +100,11 @@ export default function UserNovelListAll({ isMyList }: { isMyList: boolean }) {
   ];
   return (
     <MainBG>
+      {/*
+     {currentNovelListInfo && <MetaTag tags={metaTags} />}
+     {userListAllResult.isFetching && <Spinner styles="fixed" />}
+      */}
+
       <CategoryMark categoryText={setCategoryText()}>
         <ShareIconBox>
           <Icon.ShareWithArrow />

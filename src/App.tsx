@@ -13,8 +13,9 @@ import {
   RecommendList,
   RecommendDetail,
   UserHome,
-  UserNovelList,
+  UserNovelListDetailed,
   UserParent,
+  UserNovelListSummary,
   UserWriting,
   NotFound,
   MainListNav,
@@ -37,7 +38,6 @@ import { useAppDispatch, useAppSelector } from "store/hooks";
 import { ThemeProvider } from "styled-components";
 import theme from "assets/styles/theme";
 import EditWriting from "views/EditWriting";
-import { UserNovelListAll } from "views/UserPage";
 import GlobalStyle from "./assets/styles/GlobalStyle";
 
 function App() {
@@ -204,18 +204,21 @@ function App() {
               path="/user-page/:userName/others-writing"
               element={<UserWriting isMyWriting={false} />}
             />
-            <Route path="/user-page/:userName/my-list" element={<UserNovelListAll isMyList />} />
+            <Route
+              path="/user-page/:userName/my-list"
+              element={<UserNovelListSummary isMyList />}
+            />
             <Route
               path="/user-page/:userName/my-list/:listId"
-              element={<UserNovelList isMyList />}
+              element={<UserNovelListDetailed isMyList />}
             />
             <Route
               path="/user-page/:userName/others-list"
-              element={<UserNovelListAll isMyList={false} />}
+              element={<UserNovelListSummary isMyList={false} />}
             />
             <Route
               path="/user-page/:userName/others-list/:listId"
-              element={<UserNovelList isMyList={false} />}
+              element={<UserNovelListDetailed isMyList={false} />}
             />
           </Route>
 

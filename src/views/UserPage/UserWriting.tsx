@@ -6,10 +6,9 @@ import Icon from "assets/Icon";
 import { useAppSelector } from "store/hooks";
 import { useParams } from "react-router-dom";
 import {
-  useGetContentOfUserMyWritingQuery,
-  useGetContentOfUserOthersWritingQuery,
+  useGetWritingUserCreatedQuery,
+  useGetWritingUserLikedQuery,
 } from "store/serverAPIs/novelTime";
-import { ContentOfUserWriting } from "store/serverAPIs/types";
 import ShowMoreContent from "assets/ShowMoreContent";
 import { TalkOrRecommend, CommentUserCreated } from "../../store/serverAPIs/types";
 import { Writing, Comment, WritingFilter, NoContent } from "./UserWriting.components";
@@ -41,13 +40,10 @@ export default function UserWriting({ isMyWriting }: { isMyWriting: boolean }) {
     currentContentRef.current = currentContent;
   };
 
-  // divide these two results
-  // don't destructure like this : const { data, isLoading, ... }
-  // just get it as variables to avoid getting same name
-  const myWritingResult = useGetContentOfUserMyWritingQuery(paramsForRequest, {
+  const myWritingResult = useGetWritingUserCreatedQuery(paramsForRequest, {
     skip: !isMyWriting,
   });
-  const othersWritingResult = useGetContentOfUserOthersWritingQuery(paramsForRequest, {
+  const othersWritingResult = useGetWritingUserLikedQuery(paramsForRequest, {
     skip: isMyWriting,
   });
 
