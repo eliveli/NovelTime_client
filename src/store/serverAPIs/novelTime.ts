@@ -331,11 +331,10 @@ export const novelTimeApi = createApi({
         `/userContent/othersWriting/${params.userName}/${params.contentType}/${params.order}`,
     }),
 
-    // * create apis in server work
     getListSummary: builder.query<ListSummary[], ParamsOfUserNovelListAll>({
       query: ({ userName, isMyList }) => {
-        if (isMyList) return `/userContent/listSummary/created/all/${userName}`;
-        return `/userContent/listSummary/liked/all/${userName}`;
+        if (isMyList) return `/userContent/listSummary/created/${userName}`;
+        return `/userContent/listSummary/liked/${userName}`;
       },
     }),
 

@@ -2,12 +2,13 @@ import Icon from "assets/Icon";
 import Spinner from "assets/Spinner";
 import { CategoryMark } from "components/CategoryMark";
 import MainBG from "components/MainBG";
-import React, { useEffect, useRef, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useEffect } from "react";
+import { useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "store/hooks";
-import { closeModal, setMetaTags } from "store/clientSlices/modalSlice";
+import { setMetaTags } from "store/clientSlices/modalSlice";
 
 import MetaTag from "utils/MetaTag";
+import { useGetListSummaryQuery } from "store/serverAPIs/novelTime";
 import { ShareIconBox, WritingSection } from "./UserPage.styles";
 import UserNovelList from "./UserNovelListSummary.components";
 import { NoContent } from "./UserWriting.components";
@@ -15,95 +16,49 @@ import { NoContent } from "./UserWriting.components";
 export default function UserNovelListSummary({ isMyList }: { isMyList: boolean }) {
   const dispatch = useAppDispatch();
 
-  const navigate = useNavigate();
-
   const { userName } = useParams();
   const loginUserInfo = useAppSelector((state) => state.user.loginUserInfo);
 
-  // const userListAllResult = getListSummary({
-  //   userName: userName as string,
-  //   isMyList: boolean, // * select different api with this
-  // });
+  const listSummaryResult = useGetListSummaryQuery({
+    userName: userName as string,
+    isMyList,
+  });
 
   const metaTags = {
-    title: userName + !isMyList ? "님의 리스트" : "님이 좋아하는 리스트",
-    description: userName + !isMyList ? "님의 리스트" : "님이 좋아하는 리스트",
-    image: `https://photos.google.com/album/AF1QipOy4A30VtN2Afb5ynQYejvDxN_5CVBjYRa_DYX4/photo/AF1QipM-TuRzTrhw9-AH4fdhB9EwS1vxjwdOfdX2svVp`,
+    title: (userName as string) + (!isMyList ? "님의 리스트" : "님이 좋아하는 리스트"),
+    description: (userName as string) + (!isMyList ? "님의 리스트" : "님이 좋아하는 리스트"),
+    image: (listSummaryResult.data && listSummaryResult.data[0].novelImgs[0]) || "",
     url: window.location.href,
   };
+
+  useEffect(() => {
+    if (!listSummaryResult.data) return;
+    dispatch(
+      setMetaTags({
+        title: metaTags.title,
+        description: metaTags.description,
+        image: metaTags.image,
+        url: metaTags.url,
+      }),
+    );
+  }, [listSummaryResult.data]);
+
   const setCategoryText = () => {
+    if (!userName) return "";
+
     // this is login user's page
     if (loginUserInfo.userName === userName) {
       if (isMyList) return "My List";
       return "Other's List I Like";
     }
     // this is other user's page
-
     if (isMyList) return `${userName}'s List`;
     return `Other's List ${userName} Like`;
   };
-
-  const novelListAll = [
-    {
-      listId: "123",
-      listTitle: "title",
-
-      novelNo: 3,
-      novelImgs: [
-        "https://cdn.pixabay.com/photo/2017/02/01/09/52/animal-2029245_960_720.png",
-        "https://cdn.pixabay.com/photo/2017/02/01/09/52/animal-2029245_960_720.png",
-      ],
-      likeNo: 3,
-
-      userName: "lala",
-      userImg: {
-        src: "https://cdn.pixabay.com/photo/2017/02/01/09/52/animal-2029245_960_720.png",
-        position: "center",
-      },
-    },
-    {
-      listId: "1234",
-      listTitle: "title",
-
-      novelNo: 3,
-      novelImgs: [
-        "https://cdn.pixabay.com/photo/2017/02/01/09/52/animal-2029245_960_720.png",
-        "https://cdn.pixabay.com/photo/2017/02/01/09/52/animal-2029245_960_720.png",
-        "https://cdn.pixabay.com/photo/2017/02/01/09/52/animal-2029245_960_720.png",
-      ],
-      likeNo: 3,
-
-      userName: "lala",
-      userImg: {
-        src: "https://cdn.pixabay.com/photo/2017/02/01/09/52/animal-2029245_960_720.png",
-        position: "center",
-      },
-    },
-    {
-      listId: "1234",
-      listTitle: "title",
-
-      novelNo: 3,
-      novelImgs: [
-        "https://cdn.pixabay.com/photo/2017/02/01/09/52/animal-2029245_960_720.png",
-        "https://cdn.pixabay.com/photo/2017/02/01/09/52/animal-2029245_960_720.png",
-        "https://cdn.pixabay.com/photo/2017/02/01/09/52/animal-2029245_960_720.png",
-      ],
-      likeNo: 3,
-
-      userName: "라라라301",
-      userImg: {
-        src: "https://cdn.pixabay.com/photo/2017/02/01/09/52/animal-2029245_960_720.png",
-        position: "center",
-      },
-    },
-  ];
   return (
     <MainBG>
-      {/*
-     {currentNovelListInfo && <MetaTag tags={metaTags} />}
-     {userListAllResult.isFetching && <Spinner styles="fixed" />}
-      */}
+      {listSummaryResult.data && <MetaTag tags={metaTags} />}
+      {listSummaryResult.isFetching && <Spinner styles="fixed" />}
 
       <CategoryMark categoryText={setCategoryText()}>
         <ShareIconBox>
@@ -111,9 +66,9 @@ export default function UserNovelListSummary({ isMyList }: { isMyList: boolean }
         </ShareIconBox>
       </CategoryMark>
 
-      {novelListAll.length ? (
+      {listSummaryResult.data?.length ? (
         <WritingSection isNoContent={false} isForListAll>
-          {novelListAll.map((_) => (
+          {listSummaryResult.data.map((_) => (
             <UserNovelList key={_.listId} novelList={_} isMyList={isMyList} />
           ))}
         </WritingSection>
