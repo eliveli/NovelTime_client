@@ -509,15 +509,6 @@ export interface ContentOfUserWriting {
   writingsUserLikes?: TalkOrRecommend[];
   isNextOrder: boolean;
 }
-export interface ContentForUserPageMyWriting {
-  writingsUserCreated?: TalkOrRecommendUserCreated[];
-  commentsUserCreated?: CommentUserCreated[];
-  isNextOrder: boolean;
-}
-export interface ContentForUserPageOthersWriting {
-  writingsUserLikes: TalkUserLikes[] | RecommendUserLikes[];
-  isNextOrder: boolean;
-}
 
 export interface ParamsOfUserWriting {
   userName: string;
@@ -572,6 +563,12 @@ export interface ParamsOfUserNovelList {
   listId: string;
   order: number;
 }
+
+export interface ListIdAndTitle {
+  novelListId: string;
+  novelListTitle: string;
+}
+
 export interface ContentOfLike {
   contentType: "writing" | "novelList";
   contentId: string;

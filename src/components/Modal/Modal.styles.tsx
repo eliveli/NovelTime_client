@@ -392,6 +392,12 @@ export const ListTitleInput = styled.input`
   color: rgba(0, 0, 0, 0.6);
   font-weight: 500;
   font-family: "Californian FB", D2Coding, Arial, sans-serif;
+
+  ::placeholder {
+    color: #959595b0;
+    font-size: 16px;
+    font-weight: 500;
+  }
 `;
 
 export const ButtonContainerForAnswer = styled.div`

@@ -11,6 +11,7 @@ import AddToMyNovelList from "./AddToMyNovelList";
 import EditListTitle from "./EditListTitle";
 import Confirm from "./Confirm";
 import Alert from "./Alert";
+import WriteNewListTitle from "./WriteNewListTitle";
 
 export default function Modal() {
   const modalCategory = useAppSelector((state) => state.modal.modalCategory);
@@ -44,6 +45,8 @@ export default function Modal() {
             return <Confirm />;
           case "alert":
             return <Alert />;
+          case "writeNewListTitle":
+            return <WriteNewListTitle />;
 
           case "none":
             // eslint-disable-next-line react/jsx-no-useless-fragment

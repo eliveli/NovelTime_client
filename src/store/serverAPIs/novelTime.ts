@@ -7,8 +7,6 @@ import {
   UserInfo,
   ContentOfUserHome,
   ParamsOfUserWriting,
-  ContentForUserPageMyWriting,
-  ContentForUserPageOthersWriting,
   ContentOfUserWriting,
   ContentOfUserNovelList,
   ParamsOfUserNovelList,
@@ -46,8 +44,8 @@ import {
   NovelOrWritingList,
   ParamToSearchForAll,
   ParamsOfUserNovelListAll,
-  ListInUserNovelListAll,
   ListSummary,
+  ListIdAndTitle,
 } from "./types";
 import type { RootState } from "../index";
 
@@ -90,13 +88,14 @@ export const novelTimeApi = createApi({
   }) as BaseQueryFn<string | FetchArgs, unknown, CustomError, {}>,
   tagTypes: [
     "ContentUpdatedInHome",
-    "ListTitlesUpdated",
+    "ListTitlesUpdatedInListDetailed",
     "ContentUpdatedInNovelList",
     "commentsUpdated",
     "talkListUpdated",
     "recommendListUpdated",
     "writingUpdated",
     "writingsOfNovelUpdated",
+    "MyListTitlesUpdated",
   ],
   endpoints: (builder) => ({
     // at home page
@@ -314,7 +313,7 @@ export const novelTimeApi = createApi({
     }),
 
     getContentOfUserHome: builder.query<ContentOfUserHome, string>({
-      query: (userName) => `/userContent/${userName}`,
+      query: (userName) => `/userContent/home/${userName}`,
       // refetch data //
       // don't use cached data where part of them is not the same with them in other's list page
       //   when login user navigates automatically to his/her user's home
@@ -357,8 +356,23 @@ export const novelTimeApi = createApi({
       query: (params) =>
         `/userContent/listDetailed/listTitles/${params.userName}/${params.isMyList}`,
       keepUnusedDataFor: 120,
-      providesTags: ["ListTitlesUpdated"],
+      providesTags: ["ListTitlesUpdatedInListDetailed"],
     }),
+
+    getMyNovelList: builder.query<ListIdAndTitle[], undefined>({
+      query: () => `/userContent/myNovelList`,
+      providesTags: ["MyListTitlesUpdated"],
+    }),
+    createMyNovelList: builder.mutation<string, string>({
+      query: (listTitle) => ({
+        url: `/userContent/myNovelList`,
+        method: "POST",
+        body: { listTitle },
+      }),
+
+      invalidatesTags: ["MyListTitlesUpdated"],
+    }),
+
     toggleLike: builder.mutation<IsLike, ContentOfLike>({
       query: (contentForLike) => {
         const routeName = contentForLike.contentType === "writing" ? "writing" : "userContent";
@@ -387,9 +401,9 @@ export const novelTimeApi = createApi({
           // tag of "contentUpdatedInHome" is necessary when navigating to an user's home page
           // to get updated content after toggling LIKE
           //
-          // tag of "ListTitlesUpdated" is necessary to get all list titles of user updated
+          // tag of "ListTitlesUpdatedInListDetailed" is necessary to get all list titles of user updated
           // list title where user canceled LIKE won't be in data of new titles
-          return ["ContentUpdatedInHome", "ListTitlesUpdated"];
+          return ["ContentUpdatedInHome", "ListTitlesUpdatedInListDetailed"];
         }
         return ["ContentUpdatedInHome", { type: "ContentUpdatedInNovelList", id: arg.contentId }];
       },
@@ -454,4 +468,6 @@ export const {
   useGetWritingUserCreatedQuery,
   useGetWritingUserLikedQuery,
   useToggleLikeMutation,
+  useGetMyNovelListQuery,
+  useCreateMyNovelListMutation,
 } = novelTimeApi;

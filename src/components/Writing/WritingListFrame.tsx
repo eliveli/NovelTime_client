@@ -73,6 +73,34 @@ export default function WritingListFrame({
 
   const isNotMobile = !useWhetherItIsMobile();
 
+  const isLoginUser = !!useAppSelector((state) => state.user.loginUserInfo.userId);
+
+  const handleToGoToWrite = () => {
+    if (!isLoginUser) {
+      alert("먼저 로그인해 주세요");
+      return;
+    }
+
+    dispatch(
+      setSearchList({
+        listType: "novel",
+        list: "reset",
+      }),
+    );
+    navigate(`${ADD_WRITING}?novel-id=${novelId}&novel-title=${novelTitle}`);
+  };
+
+  const handleToGoToAddNovel = () => {
+    if (!isLoginUser) {
+      alert("먼저 로그인해 주세요");
+      return;
+    }
+
+    dispatch(handleNovelIdToAddToList(novelId));
+
+    dispatch(openModal("addToMyNovelList"));
+  };
+
   return (
     <ColumnBG>
       <CategoryMark
@@ -84,31 +112,14 @@ export default function WritingListFrame({
       />
 
       <ButtonsContainer>
-        <ButtonInNovelDetail
-          _onClick={() => {
-            dispatch(
-              setSearchList({
-                listType: "novel",
-                list: "reset",
-              }),
-            );
-            navigate(`${ADD_WRITING}?novel-id=${novelId}&novel-title=${novelTitle}`);
-          }}
-        >
+        <ButtonInNovelDetail _onClick={handleToGoToWrite}>
           <Icon.IconBox>
             <Icon.Write2 />
           </Icon.IconBox>
           {isNotMobile && <ButtonText>글쓰기</ButtonText>}
         </ButtonInNovelDetail>
 
-        <ButtonInNovelDetail
-          isForMyList
-          _onClick={() => {
-            dispatch(handleNovelIdToAddToList(novelId));
-
-            dispatch(openModal("addToMyNovelList"));
-          }}
-        >
+        <ButtonInNovelDetail isForMyList _onClick={handleToGoToAddNovel}>
           <Icon.IconBox>
             <Icon.Plus />
           </Icon.IconBox>

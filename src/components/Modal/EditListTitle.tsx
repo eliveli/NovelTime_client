@@ -69,7 +69,11 @@ export default function EditListTitle() {
           </ContentContnr>
 
           <ListTitleInputContainer>
-            <ListTitleInput ref={titleRef} defaultValue={listTitle} />
+            <ListTitleInput
+              placeholder="제목을 입력하세요"
+              ref={titleRef}
+              defaultValue={listTitle}
+            />
           </ListTitleInputContainer>
         </BoxForPadding>
         <ButtonContainerForAnswer>

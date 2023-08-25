@@ -32,6 +32,7 @@ export interface IsModalState {
     | "editListTitle"
     | "confirm"
     | "alert"
+    | "writeNewListTitle"
     | "none";
   novelImage: string;
   metaTags: MetaTags;
@@ -85,6 +86,7 @@ export const modalSlice = createSlice({
         | "editListTitle"
         | "confirm"
         | "alert"
+        | "writeNewListTitle"
         | "none"
       >,
     ) => {
