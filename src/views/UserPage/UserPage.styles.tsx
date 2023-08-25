@@ -137,16 +137,15 @@ export const WritingContnr = styled.div<{
 
 export const EditAndDeleteContainer = styled.div`
   position: absolute;
-  top: 9px;
-  right: 14px;
+  top: 16px;
+  right: 22px;
 
   padding-right: 6px;
   margin-right: -6px;
-  border-radius: 5px;
 
   background-color: #ffffffd9;
-  box-shadow: 0 0 7px 7px #ffffffd9;
-  border-radius: 10px;
+  box-shadow: 0 0 6px 4px #ffffffd9;
+  border-radius: 2px;
 `;
 
 export const ListInfoContnr = styled.div`

@@ -42,7 +42,7 @@ const UserNovelList = React.memo(
     const dispatch = useAppDispatch();
 
     const loginUserName = useAppSelector((state) => state.user.loginUserInfo.userName);
-    const isWriter = loginUserName && loginUserName === userName;
+    const isWriter = loginUserName && loginUserName === userNameInParam && isMyList;
 
     const handleToEdit = () => {
       dispatch(
@@ -66,6 +66,40 @@ const UserNovelList = React.memo(
       );
 
       dispatch(openModal("confirm"));
+
+      // if (!talk.data) return;
+      // // * ask whether you really want to delete the comment
+      // // * change this after making the modal
+      // if (deleteWritingResult.isLoading) return; // prevent click while loading for prev request
+      // await deleteWriting({
+      //   writingId: talk.data.talk.talkId,
+      //   writingType: "T",
+      //   novelId: talk.data.novel.novelId,
+      // });
+      // if (deleteWritingResult.isError) {
+      //   alert("글을 삭제할 수 없습니다. 새로고침 후 다시 시도해 보세요");
+      // }
+      // // back to the novel-detail page
+      // const { search } = window.location;
+      // if (search === "?is-from-novel-detail=true") {
+      //   navigate(`${NOVEL_DETAIL}/${talk.data.novel.novelId}`, { replace: true });
+      //   return;
+      // }
+      // // back to the talk list page
+      // if (isDesktop) {
+      //   navigate(`${TALK_LIST}?genre=All&searchType=no&searchWord=&sortType=작성일New&pageNo=1`, {
+      //     replace: true,
+      //   });
+      //   return;
+      // }
+      // // on mobile
+      // dispatch(
+      //   setSearchList({
+      //     listType: "talk",
+      //     list: "reset",
+      //   }),
+      // );
+      // navigate(TALK_LIST, { replace: true });
     }
 
     return (
