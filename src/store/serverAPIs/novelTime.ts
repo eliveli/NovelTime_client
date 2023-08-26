@@ -51,6 +51,7 @@ import {
   ParamToChangeListTitle,
   ParamToCreateList,
   ListId,
+  ParamToDeleteList,
 } from "./types";
 import type { RootState } from "../index";
 
@@ -397,6 +398,20 @@ export const novelTimeApi = createApi({
         { type: "ContentUpdatedInUserHome", id: arg.userName },
       ],
     }),
+    deleteMyNovelList: builder.mutation<string, ParamToDeleteList>({
+      query: ({ listId }) => ({
+        url: `/userContent/myNovelList`,
+        method: "DELETE",
+        body: { listId },
+      }),
+      invalidatesTags: (result, error, arg) => [
+        {
+          type: "UserNovelListUpdated",
+          id: arg.listId,
+        },
+        { type: "ContentUpdatedInUserHome", id: arg.userName },
+      ],
+    }),
 
     addOrRemoveNovelInList: builder.mutation<string, ParamToAddOrRemoveNovel>({
       query: ({ novelId, listIDsToAddNovel, listIDsToRemoveNovel }) => ({
@@ -517,4 +532,5 @@ export const {
   useCreateMyNovelListMutation,
   useAddOrRemoveNovelInListMutation,
   useChangeMyListTitleMutation,
+  useDeleteMyNovelListMutation,
 } = novelTimeApi;

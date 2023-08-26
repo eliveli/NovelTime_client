@@ -127,6 +127,7 @@ export default function UserNovelListDetailed({ isMyList }: { isMyList: boolean 
         contentType: "novelList",
         contentId: listId as string,
         isOthersListOfLoginUser,
+        userName: userName as string,
       }).unwrap();
 
       // don't display current list after login user canceled LIKE in his/her other's list

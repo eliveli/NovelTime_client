@@ -6,6 +6,7 @@ import { useAppDispatch, useAppSelector } from "store/hooks";
 import { EditAndDelete } from "components/Writing";
 import { handleConfirm, openModal } from "store/clientSlices/modalSlice";
 import { handleUserNovelListToEdit } from "store/clientSlices/userNovelListSlice";
+import { useDeleteMyNovelListMutation } from "store/serverAPIs/novelTime";
 import {
   HeartIcon,
   IconInfoContnr,
@@ -39,6 +40,8 @@ const UserNovelList = React.memo(
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
 
+    const [deleteList, deleteListResult] = useDeleteMyNovelListMutation();
+
     const { userName: userNameInParam } = useParams();
 
     const loginUserName = useAppSelector((state) => state.user.loginUserInfo.userName);
@@ -54,52 +57,28 @@ const UserNovelList = React.memo(
 
       dispatch(openModal("changeListTitle"));
     };
+
     async function handleToDelete() {
+      if (deleteListResult.isLoading) return;
+
+      await deleteList({ listId, userName: userNameInParam as string });
+
+      if (deleteListResult.isError) {
+        alert("리스트를 삭제할 수 없습니다. 새로고침 후 다시 시도해 보세요");
+      }
+    }
+    async function handleToDeleteInModal() {
       dispatch(
         handleConfirm({
           question: "리스트를 삭제하시겠습니까?",
           textForYes: "삭제",
           textForNo: "취소",
-          functionForYes: () => {}, // * 뮤테이션 함수 보낼 수 있는지 확인 필요
+          functionForYes: handleToDelete,
           functionForNo: () => {},
         }),
       );
 
       dispatch(openModal("confirm"));
-
-      // if (!talk.data) return;
-      // // * ask whether you really want to delete the comment
-      // // * change this after making the modal
-      // if (deleteWritingResult.isLoading) return; // prevent click while loading for prev request
-      // await deleteWriting({
-      //   writingId: talk.data.talk.talkId,
-      //   writingType: "T",
-      //   novelId: talk.data.novel.novelId,
-      // });
-      // if (deleteWritingResult.isError) {
-      //   alert("글을 삭제할 수 없습니다. 새로고침 후 다시 시도해 보세요");
-      // }
-      // // back to the novel-detail page
-      // const { search } = window.location;
-      // if (search === "?is-from-novel-detail=true") {
-      //   navigate(`${NOVEL_DETAIL}/${talk.data.novel.novelId}`, { replace: true });
-      //   return;
-      // }
-      // // back to the talk list page
-      // if (isDesktop) {
-      //   navigate(`${TALK_LIST}?genre=All&searchType=no&searchWord=&sortType=작성일New&pageNo=1`, {
-      //     replace: true,
-      //   });
-      //   return;
-      // }
-      // // on mobile
-      // dispatch(
-      //   setSearchList({
-      //     listType: "talk",
-      //     list: "reset",
-      //   }),
-      // );
-      // navigate(TALK_LIST, { replace: true });
     }
 
     return (
@@ -119,7 +98,7 @@ const UserNovelList = React.memo(
             <EditAndDelete
               buttonStyles="font-weight: 600;"
               clickToEdit={handleToEdit}
-              clickToDelete={async () => handleToDelete()}
+              clickToDelete={async () => handleToDeleteInModal()}
             />
           </EditAndDeleteContainer>
         )}

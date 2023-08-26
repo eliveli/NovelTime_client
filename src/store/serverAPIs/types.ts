@@ -570,16 +570,29 @@ export interface ListWithOrWithoutTheNovel {
   isContaining: boolean;
 }
 
+export interface ListId {
+  listId: string;
+}
+export interface ParamToCreateList {
+  listTitle: string;
+  userName: string;
+}
 export interface ParamToChangeListTitle {
   listId: string;
   listTitle: string;
+  userName: string;
+}
+
+export interface ParamToDeleteList {
+  listId: string;
+  userName: string;
 }
 export interface ParamToAddOrRemoveNovel {
   novelId: string;
   listIDsToAddNovel: string[];
   listIDsToRemoveNovel: string[];
 }
-export interface ContentOfLike {
+export interface ParamToToggleLike {
   contentType: "writing" | "novelList";
   contentId: string;
   forWriting?: {
@@ -587,6 +600,7 @@ export interface ContentOfLike {
     novelId: string;
   };
   isOthersListOfLoginUser?: boolean;
+  userName?: string;
 }
 export interface IsLike {
   isLike: boolean; // for both writing and novelList
