@@ -577,6 +577,10 @@ export interface ParamToCreateList {
   listTitle: string;
   userName: string;
 }
+export interface ParamToGetMyList {
+  novelId: string;
+  userName: string;
+}
 export interface ParamToChangeListTitle {
   listId: string;
   listTitle: string;

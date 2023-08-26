@@ -25,8 +25,12 @@ import {
 
 export default function AddToMyNovelList() {
   const novelIdToAdd = useAppSelector((state) => state.userNovelList.novelIdToAddToList);
+  const userName = useAppSelector((state) => state.user.loginUserInfo.userName);
 
-  const myNovelListResult = useGetMyNovelListQuery(novelIdToAdd);
+  const myNovelListResult = useGetMyNovelListQuery({
+    novelId: novelIdToAdd,
+    userName,
+  });
   const [addOrRemoveNovelInList, addOrRemoveNovelInListResult] =
     useAddOrRemoveNovelInListMutation();
 

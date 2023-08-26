@@ -52,6 +52,7 @@ import {
   ParamToCreateList,
   ListId,
   ParamToDeleteList,
+  ParamToGetMyList,
 } from "./types";
 import type { RootState } from "../index";
 
@@ -340,8 +341,7 @@ export const novelTimeApi = createApi({
         if (isMyList) return `/userContent/listSummary/created/${userName}`;
         return `/userContent/listSummary/liked/${userName}`;
       },
-      providesTags: (result, error, arg) =>
-        !result ? [] : result.map((_) => ({ type: "UserNovelListUpdated", id: _.listId })),
+      providesTags: (result, error, arg) => [{ type: "UserNovelListUpdated", id: arg.userName }],
     }),
 
     getListDetailedUserCreated: builder.query<ContentOfUserNovelList, ParamsOfUserNovelList>({
@@ -366,12 +366,9 @@ export const novelTimeApi = createApi({
       providesTags: ["ListTitlesUpdatedInListDetailed"],
     }),
 
-    getMyNovelList: builder.query<ListWithOrWithoutTheNovel[], string>({
-      query: (novelId) => `/userContent/myNovelList/${novelId}`,
-      providesTags: (result, error, arg) =>
-        !result
-          ? []
-          : result.map((list) => ({ type: "UserNovelListUpdated", id: list.novelListId })),
+    getMyNovelList: builder.query<ListWithOrWithoutTheNovel[], ParamToGetMyList>({
+      query: ({ novelId }) => `/userContent/myNovelList/${novelId}`,
+      providesTags: (result, error, arg) => [{ type: "UserNovelListUpdated", id: arg.userName }],
     }),
     createMyNovelList: builder.mutation<ListId, ParamToCreateList>({
       query: ({ listTitle }) => ({
@@ -379,10 +376,7 @@ export const novelTimeApi = createApi({
         method: "POST",
         body: { listTitle },
       }),
-      invalidatesTags: (result, error, arg) => [
-        { type: "UserNovelListUpdated", id: result?.listId },
-        { type: "ContentUpdatedInUserHome", id: arg.userName },
-      ],
+      invalidatesTags: (result, error, arg) => [{ type: "UserNovelListUpdated", id: arg.userName }],
     }),
     changeMyListTitle: builder.mutation<string, ParamToChangeListTitle>({
       query: ({ listId, listTitle }) => ({
@@ -395,7 +389,7 @@ export const novelTimeApi = createApi({
           type: "UserNovelListUpdated",
           id: arg.listId,
         },
-        { type: "ContentUpdatedInUserHome", id: arg.userName },
+        { type: "UserNovelListUpdated", id: arg.userName },
       ],
     }),
     deleteMyNovelList: builder.mutation<string, ParamToDeleteList>({
@@ -409,7 +403,7 @@ export const novelTimeApi = createApi({
           type: "UserNovelListUpdated",
           id: arg.listId,
         },
-        { type: "ContentUpdatedInUserHome", id: arg.userName },
+        { type: "UserNovelListUpdated", id: arg.userName },
       ],
     }),
 
@@ -457,13 +451,13 @@ export const novelTimeApi = createApi({
           // tag of "ListTitlesUpdatedInListDetailed" is necessary to get all list titles of user updated
           // list title where user canceled LIKE won't be in data of new titles
           return [
-            { type: "ContentUpdatedInUserHome", id: arg.userName },
+            { type: "UserNovelListUpdated", id: arg.userName },
             "ListTitlesUpdatedInListDetailed",
           ];
         }
 
         return [
-          { type: "ContentUpdatedInUserHome", id: arg.userName },
+          { type: "UserNovelListUpdated", id: arg.userName },
           { type: "UserNovelListUpdated", id: arg.contentId },
         ];
       },
