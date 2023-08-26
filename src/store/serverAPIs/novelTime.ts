@@ -45,7 +45,7 @@ import {
   ParamToSearchForAll,
   ParamsOfUserNovelListAll,
   ListSummary,
-  ListIdAndTitle,
+  ListWithOrWithoutTheNovel,
   ParamToAddNovel,
 } from "./types";
 import type { RootState } from "../index";
@@ -96,7 +96,6 @@ export const novelTimeApi = createApi({
     "recommendListUpdated",
     "writingUpdated",
     "writingsOfNovelUpdated",
-    "MyListTitlesUpdated",
     "NovelsInListUpdated",
   ],
   endpoints: (builder) => ({
@@ -367,18 +366,23 @@ export const novelTimeApi = createApi({
       providesTags: ["ListTitlesUpdatedInListDetailed"],
     }),
 
-    getMyNovelList: builder.query<ListIdAndTitle[], undefined>({
-      query: () => `/userContent/myNovelList`,
-      providesTags: ["MyListTitlesUpdated"],
+    getMyNovelList: builder.query<ListWithOrWithoutTheNovel[], string>({
+      query: (novelId) => `/userContent/myNovelList/${novelId}`,
+      providesTags: (result, error, arg) =>
+        !result
+          ? []
+          : result.map((list) => ({ type: "NovelsInListUpdated", id: list.novelListId })),
     }),
-    createMyNovelList: builder.mutation<string, string>({
+    createMyNovelList: builder.mutation<{ listId: string }, string>({
       query: (listTitle) => ({
         url: `/userContent/myNovelList`,
         method: "POST",
         body: { listTitle },
       }),
 
-      invalidatesTags: ["MyListTitlesUpdated"],
+      invalidatesTags: (result, error, arg) => [
+        { type: "NovelsInListUpdated", id: result?.listId },
+      ],
     }),
     addNovelToList: builder.mutation<string, ParamToAddNovel>({
       query: ({ novelId, listIDs }) => ({

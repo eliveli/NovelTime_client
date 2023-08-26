@@ -564,9 +564,10 @@ export interface ParamsOfUserNovelList {
   order: number;
 }
 
-export interface ListIdAndTitle {
+export interface ListWithOrWithoutTheNovel {
   novelListId: string;
   novelListTitle: string;
+  isContaining: boolean;
 }
 
 export interface ParamToAddNovel {

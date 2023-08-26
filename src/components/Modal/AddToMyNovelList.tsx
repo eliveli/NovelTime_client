@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { closeModal, openModal } from "store/clientSlices/modalSlice";
 
 import Icon from "assets/Icon";
@@ -21,14 +21,28 @@ import {
 } from "./Modal.styles";
 
 export default function AddToMyNovelList() {
-  const myNovelListResult = useGetMyNovelListQuery(undefined);
-
-  const [addNovelToList, addNovelToListResult] = useAddNovelToListMutation();
-
   const novelIdToAdd = useAppSelector((state) => state.userNovelList.novelIdToAddToList);
+
+  const myNovelListResult = useGetMyNovelListQuery(novelIdToAdd);
+  const [addNovelToList, addNovelToListResult] = useAddNovelToListMutation();
 
   // add a novel to one or more lists selected
   const [listsSelected, setListsSelected] = useState<string[]>([]);
+
+  // set the list that contains the novel already
+  useEffect(() => {
+    if (!myNovelListResult.data) return;
+
+    const listsContainingTheNovel = myNovelListResult.data.map((_) => {
+      if (_.isContaining) {
+        return _.novelListId;
+      }
+    });
+
+    const listsWithoutUndefined = listsContainingTheNovel.filter((__) => !!__);
+
+    setListsSelected(listsWithoutUndefined as string[]);
+  }, [myNovelListResult.data]);
 
   const dispatch = useAppDispatch();
 
@@ -37,6 +51,7 @@ export default function AddToMyNovelList() {
 
     dispatch(handleNovelIdToAddToList(""));
   };
+
   const handleToAddNovelToLists = async () => {
     if (!novelIdToAdd) {
       alert("담을 소설이 없습니다");
@@ -84,7 +99,7 @@ export default function AddToMyNovelList() {
         </GuideContainer>
         <MyListsContainer>
           {myNovelListResult.data?.map((_) => (
-            <MyList>
+            <MyList key={_.novelListId}>
               <Icon.IconBox
                 onClick={() => {
                   // remove the list if it was selected already
