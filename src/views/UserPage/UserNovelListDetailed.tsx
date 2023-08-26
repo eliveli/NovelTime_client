@@ -12,6 +12,7 @@ import {
   useGetListDetailedUserCreatedQuery,
   useGetListDetailedUserLikedQuery,
   useGetListTitlesAndOtherInListDetailedQuery,
+  useRemoveNovelFromListMutation,
   useToggleLikeMutation,
 } from "store/serverAPIs/novelTime";
 import { SimpleNovel } from "store/serverAPIs/types";
@@ -233,6 +234,9 @@ export default function UserNovelListDetailed({ isMyList }: { isMyList: boolean 
   }, [currentNovelListInfo]);
 
   // edit the user's novel list _ remove selected novels from it //
+
+  const [removeNovels, removeNovelsResult] = useRemoveNovelFromListMutation();
+
   const [isEditing, handleEditing] = useState(false);
 
   const loginUserName = useAppSelector((state) => state.user.loginUserInfo.userName);
@@ -246,17 +250,21 @@ export default function UserNovelListDetailed({ isMyList }: { isMyList: boolean 
     setNovelsSelected([]);
   };
 
-  const handleToRemoveNovelFromList = () => {
-    // * server request
+  const handleToRemoveNovelFromList = async () => {
+    if (removeNovelsResult.isLoading) return;
+
+    await removeNovels({
+      listId: listId as string,
+      novelIDs: novelsSelected,
+      userName: userName as string,
+    });
+
+    if (removeNovelsResult.isError) {
+      alert("리스트를 삭제할 수 없습니다. 새로고침 후 다시 시도해 보세요");
+    }
 
     finishRemoving();
   };
-
-  // case 1. fetching data at first
-  // case 2. fetching next novel list right after canceling LIKE in login user's other's list page
-  if (!currentNovelListInfo || listId !== currentNovelListInfo.novelList.listId) {
-    return <Spinner styles="fixed" />;
-  }
 
   if (isEditing) {
     return (
@@ -282,7 +290,7 @@ export default function UserNovelListDetailed({ isMyList }: { isMyList: boolean 
             isListMore={isListMore}
             ref={titleListRef}
           >
-            <ListTitle>{currentNovelListInfo.novelList.listTitle}</ListTitle>
+            <ListTitle>{currentNovelListInfo?.novelList.listTitle}</ListTitle>
           </ListTitleContnr>
         </ListTitleLimitHeightContnr>
 
@@ -314,7 +322,7 @@ export default function UserNovelListDetailed({ isMyList }: { isMyList: boolean 
           ))}
         </NovelListContnr>
 
-        {currentNovelListInfo.isNextOrder && (
+        {currentNovelListInfo?.isNextOrder && (
           <ShowMoreContent
             _onClick={() => {
               setOrderNumber((currentOrder) => currentOrder + 1);
@@ -388,7 +396,7 @@ export default function UserNovelListDetailed({ isMyList }: { isMyList: boolean 
         >
           {/* isLike */}
           {/* except when login user sees his/her my list in user page */}
-          {!(isMyList && userName === loginUserInfo.userName) && (
+          {!(isMyList && userName === loginUserInfo.userName) && !!currentNovelListInfo && (
             <HearIconBox
               isLike={currentNovelListInfo.novelList.isLike}
               size={28}
@@ -401,7 +409,7 @@ export default function UserNovelListDetailed({ isMyList }: { isMyList: boolean 
           {/* title of selected novel list */}
           <ListTitle key={listId} listId={listId} selectedListId={listId}>
             {/* in my list page */}
-            {isMyList && currentNovelListInfo.novelList.listTitle}
+            {isMyList && currentNovelListInfo?.novelList.listTitle}
             {/* in other's list page */}
             {!isMyList && currentNovelListInfo && (
               <OthersTitleContnr>
@@ -455,7 +463,7 @@ export default function UserNovelListDetailed({ isMyList }: { isMyList: boolean 
         ))}
       </NovelListContnr>
 
-      {currentNovelListInfo.isNextOrder && (
+      {currentNovelListInfo?.isNextOrder && (
         <ShowMoreContent
           _onClick={() => {
             setOrderNumber((currentOrder) => currentOrder + 1);

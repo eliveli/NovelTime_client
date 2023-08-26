@@ -93,6 +93,7 @@ export default function AddToMyNovelList() {
       novelId: novelIdToAdd,
       listIDsToAddNovel,
       listIDsToRemoveNovel,
+      userName,
     });
 
     // novels in the list are updated with provide and invalidate tags

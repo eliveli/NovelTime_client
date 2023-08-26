@@ -53,6 +53,7 @@ import {
   ListId,
   ParamToDeleteList,
   ParamToGetMyList,
+  ParamToRemoveNovelFromList,
 } from "./types";
 import type { RootState } from "../index";
 
@@ -94,7 +95,7 @@ export const novelTimeApi = createApi({
     },
   }) as BaseQueryFn<string | FetchArgs, unknown, CustomError, {}>,
   tagTypes: [
-    "ContentUpdatedInUserHome",
+    "UserNovelListUpdated",
     "ListTitlesUpdatedInListDetailed",
     "UserNovelListUpdated",
     "commentsUpdated",
@@ -325,7 +326,7 @@ export const novelTimeApi = createApi({
       //   when login user navigates automatically to his/her user's home
       //   from other's list in his/her user page
       //   for the reason that other's list doesn't exist anymore
-      providesTags: (result, error, arg) => [{ type: "ContentUpdatedInUserHome", id: arg }],
+      providesTags: (result, error, arg) => [{ type: "UserNovelListUpdated", id: arg }],
     }),
     getWritingUserCreated: builder.query<ContentOfUserWriting, ParamsOfUserWriting>({
       query: (params) =>
@@ -414,10 +415,27 @@ export const novelTimeApi = createApi({
         body: { novelId, listIDsToAddNovel, listIDsToRemoveNovel },
       }),
       invalidatesTags: (result, error, arg) =>
-        [...arg.listIDsToAddNovel, ...arg.listIDsToRemoveNovel].map((listId) => ({
+        [arg.userName, ...arg.listIDsToAddNovel, ...arg.listIDsToRemoveNovel].map((_) => ({
           type: "UserNovelListUpdated",
-          id: listId,
+          id: _, // for both user page and specific list to be updated
         })),
+    }),
+    removeNovelFromList: builder.mutation<string, ParamToRemoveNovelFromList>({
+      query: ({ listId, novelIDs }) => ({
+        url: `/userContent/myNovelList/novel`,
+        method: "DELETE",
+        body: { listId, novelIDs },
+      }),
+      invalidatesTags: (result, error, arg) => [
+        {
+          type: "UserNovelListUpdated",
+          id: arg.listId,
+        },
+        {
+          type: "UserNovelListUpdated",
+          id: arg.userName,
+        },
+      ],
     }),
 
     toggleLike: builder.mutation<IsLike, ParamToToggleLike>({
@@ -527,4 +545,5 @@ export const {
   useAddOrRemoveNovelInListMutation,
   useChangeMyListTitleMutation,
   useDeleteMyNovelListMutation,
+  useRemoveNovelFromListMutation,
 } = novelTimeApi;

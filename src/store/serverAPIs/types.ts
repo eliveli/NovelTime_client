@@ -595,6 +595,12 @@ export interface ParamToAddOrRemoveNovel {
   novelId: string;
   listIDsToAddNovel: string[];
   listIDsToRemoveNovel: string[];
+  userName: string;
+}
+export interface ParamToRemoveNovelFromList {
+  listId: string;
+  novelIDs: string[];
+  userName: string;
 }
 export interface ParamToToggleLike {
   contentType: "writing" | "novelList";
