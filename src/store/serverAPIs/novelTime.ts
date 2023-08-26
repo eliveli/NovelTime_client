@@ -47,6 +47,7 @@ import {
   ListSummary,
   ListWithOrWithoutTheNovel,
   ParamToAddOrRemoveNovel,
+  ParamToChangeListTitle,
 } from "./types";
 import type { RootState } from "../index";
 
@@ -90,13 +91,12 @@ export const novelTimeApi = createApi({
   tagTypes: [
     "ContentUpdatedInHome",
     "ListTitlesUpdatedInListDetailed",
-    "ContentUpdatedInNovelList",
+    "UserNovelListUpdated",
     "commentsUpdated",
     "talkListUpdated",
     "recommendListUpdated",
     "writingUpdated",
     "writingsOfNovelUpdated",
-    "NovelsInListUpdated",
   ],
   endpoints: (builder) => ({
     // at home page
@@ -336,25 +336,21 @@ export const novelTimeApi = createApi({
         if (isMyList) return `/userContent/listSummary/created/${userName}`;
         return `/userContent/listSummary/liked/${userName}`;
       },
+      providesTags: (result, error, arg) =>
+        !result ? [] : result.map((_) => ({ type: "UserNovelListUpdated", id: _.listId })),
     }),
 
     getListDetailedUserCreated: builder.query<ContentOfUserNovelList, ParamsOfUserNovelList>({
       query: (params) =>
         `/userContent/listDetailed/created/${params.userName}/${params.listId}/${params.order}`,
       keepUnusedDataFor: 120,
-      providesTags: (result, error, arg) => [
-        { type: "ContentUpdatedInNovelList", id: arg.listId },
-        { type: "NovelsInListUpdated", id: arg.listId },
-      ],
+      providesTags: (result, error, arg) => [{ type: "UserNovelListUpdated", id: arg.listId }],
     }),
     getListDetailedUserLiked: builder.query<ContentOfUserNovelList, ParamsOfUserNovelList>({
       query: (params) =>
         `/userContent/listDetailed/liked/${params.userName}/${params.listId}/${params.order}`,
       keepUnusedDataFor: 120,
-      providesTags: (result, error, arg) => [
-        { type: "ContentUpdatedInNovelList", id: arg.listId },
-        { type: "NovelsInListUpdated", id: arg.listId },
-      ],
+      providesTags: (result, error, arg) => [{ type: "UserNovelListUpdated", id: arg.listId }],
     }),
     getListTitlesAndOtherInListDetailed: builder.query<
       AllTitlesAndOtherInfo,
@@ -371,7 +367,7 @@ export const novelTimeApi = createApi({
       providesTags: (result, error, arg) =>
         !result
           ? []
-          : result.map((list) => ({ type: "NovelsInListUpdated", id: list.novelListId })),
+          : result.map((list) => ({ type: "UserNovelListUpdated", id: list.novelListId })),
     }),
     createMyNovelList: builder.mutation<{ listId: string }, string>({
       query: (listTitle) => ({
@@ -381,7 +377,22 @@ export const novelTimeApi = createApi({
       }),
 
       invalidatesTags: (result, error, arg) => [
-        { type: "NovelsInListUpdated", id: result?.listId },
+        { type: "UserNovelListUpdated", id: result?.listId },
+        "ContentUpdatedInHome",
+      ],
+    }),
+    changeMyListTitle: builder.mutation<string, ParamToChangeListTitle>({
+      query: ({ listId, listTitle }) => ({
+        url: `/userContent/myNovelList/title`,
+        method: "PUT",
+        body: { listId, listTitle },
+      }),
+      invalidatesTags: (result, error, arg) => [
+        {
+          type: "UserNovelListUpdated",
+          id: arg.listId,
+        },
+        "ContentUpdatedInHome",
       ],
     }),
 
@@ -393,7 +404,7 @@ export const novelTimeApi = createApi({
       }),
       invalidatesTags: (result, error, arg) =>
         [...arg.listIDsToAddNovel, ...arg.listIDsToRemoveNovel].map((listId) => ({
-          type: "NovelsInListUpdated",
+          type: "UserNovelListUpdated",
           id: listId,
         })),
     }),
@@ -430,7 +441,7 @@ export const novelTimeApi = createApi({
           // list title where user canceled LIKE won't be in data of new titles
           return ["ContentUpdatedInHome", "ListTitlesUpdatedInListDetailed"];
         }
-        return ["ContentUpdatedInHome", { type: "ContentUpdatedInNovelList", id: arg.contentId }];
+        return ["ContentUpdatedInHome", { type: "UserNovelListUpdated", id: arg.contentId }];
       },
     }),
 
@@ -496,4 +507,5 @@ export const {
   useGetMyNovelListQuery,
   useCreateMyNovelListMutation,
   useAddOrRemoveNovelInListMutation,
+  useChangeMyListTitleMutation,
 } = novelTimeApi;

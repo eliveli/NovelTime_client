@@ -570,6 +570,10 @@ export interface ListWithOrWithoutTheNovel {
   isContaining: boolean;
 }
 
+export interface ParamToChangeListTitle {
+  listId: string;
+  listTitle: string;
+}
 export interface ParamToAddOrRemoveNovel {
   novelId: string;
   listIDsToAddNovel: string[];

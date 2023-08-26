@@ -36,10 +36,10 @@ const UserNovelList = React.memo(
       userImg,
     } = novelList;
 
-    const { userName: userNameInParam } = useParams();
     const navigate = useNavigate();
-
     const dispatch = useAppDispatch();
+
+    const { userName: userNameInParam } = useParams();
 
     const loginUserName = useAppSelector((state) => state.user.loginUserInfo.userName);
     const isWriter = loginUserName && loginUserName === userNameInParam && isMyList;
@@ -52,7 +52,7 @@ const UserNovelList = React.memo(
         }),
       );
 
-      dispatch(openModal("editListTitle"));
+      dispatch(openModal("changeListTitle"));
     };
     async function handleToDelete() {
       dispatch(

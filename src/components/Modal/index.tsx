@@ -8,10 +8,10 @@ import EditProfile from "./EditProfile";
 import Share from "./Share";
 import GetNovelURL from "./GetNovelURL";
 import AddToMyNovelList from "./AddToMyNovelList";
-import EditListTitle from "./EditListTitle";
 import Confirm from "./Confirm";
 import Alert from "./Alert";
 import WriteNewListTitle from "./WriteNewListTitle";
+import ChangeListTitle from "./ChangeListTitle";
 
 export default function Modal() {
   const modalCategory = useAppSelector((state) => state.modal.modalCategory);
@@ -39,8 +39,8 @@ export default function Modal() {
             return <GetNovelURL />;
           case "addToMyNovelList":
             return <AddToMyNovelList />;
-          case "editListTitle":
-            return <EditListTitle />;
+          case "changeListTitle":
+            return <ChangeListTitle />;
           case "confirm":
             return <Confirm />;
           case "alert":

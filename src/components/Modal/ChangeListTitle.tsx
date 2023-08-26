@@ -1,6 +1,7 @@
-import { useState, useRef } from "react";
+import { useRef } from "react";
 import { closeModal } from "store/clientSlices/modalSlice";
 import { handleUserNovelListToEdit } from "store/clientSlices/userNovelListSlice";
+import { useChangeMyListTitleMutation } from "store/serverAPIs/novelTime";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 
 import {
@@ -15,7 +16,9 @@ import {
   ModalBox,
 } from "./Modal.styles";
 
-export default function EditListTitle() {
+export default function ChangeListTitle() {
+  const [changeListTitle, changeListTitleResult] = useChangeMyListTitleMutation();
+
   const dispatch = useAppDispatch();
 
   const { listId, listTitle } = useAppSelector((state) => state.userNovelList.userNovelListToEdit);
@@ -32,22 +35,22 @@ export default function EditListTitle() {
       }),
     );
   };
-  const handleToEdit = () => {
-    if (!titleRef.current?.value) return; // when title is empty
+  const handleToEdit = async () => {
+    if (!titleRef.current?.value) return;
 
-    // if (editUserNovelListTitleResult.isLoading) return;
+    if (changeListTitleResult.isLoading) return;
 
-    // await editUserNovelListTitle({
-    //   listId,
-    //   listTitle
-    // });
+    await changeListTitle({
+      listId,
+      listTitle: titleRef.current.value,
+    });
 
-    // and update userNovelListTitle automatically with the invalidate and provide tags
+    // update list automatically with the invalidate and provide tags
 
-    // if (editUserNovelListTitleResult.isError) {
-    //   alert("리스트 제목을 수정할 수 없습니다. 새로고침 후 다시 시도해 보세요");
-    //   return;
-    // }
+    if (changeListTitleResult.isError) {
+      alert("리스트 제목을 수정할 수 없습니다. 새로고침 후 다시 시도해 보세요");
+      return;
+    }
 
     closeAndInitialize();
   };
