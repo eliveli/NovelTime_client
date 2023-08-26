@@ -1,5 +1,6 @@
 // Need to use the React-specific entry point to import createApi
 import { createApi, fetchBaseQuery, BaseQueryFn } from "@reduxjs/toolkit/query/react";
+import { useParams } from "react-router-dom";
 import {
   UserAndToken,
   OauthData,
@@ -10,7 +11,7 @@ import {
   ContentOfUserWriting,
   ContentOfUserNovelList,
   ParamsOfUserNovelList,
-  ContentOfLike,
+  ParamToToggleLike,
   IsLike,
   AllTitlesAndOtherInfo,
   ParamsOfAllNovelListTitles,
@@ -48,6 +49,8 @@ import {
   ListWithOrWithoutTheNovel,
   ParamToAddOrRemoveNovel,
   ParamToChangeListTitle,
+  ParamToCreateList,
+  ListId,
 } from "./types";
 import type { RootState } from "../index";
 
@@ -89,7 +92,7 @@ export const novelTimeApi = createApi({
     },
   }) as BaseQueryFn<string | FetchArgs, unknown, CustomError, {}>,
   tagTypes: [
-    "ContentUpdatedInHome",
+    "ContentUpdatedInUserHome",
     "ListTitlesUpdatedInListDetailed",
     "UserNovelListUpdated",
     "commentsUpdated",
@@ -320,7 +323,7 @@ export const novelTimeApi = createApi({
       //   when login user navigates automatically to his/her user's home
       //   from other's list in his/her user page
       //   for the reason that other's list doesn't exist anymore
-      providesTags: ["ContentUpdatedInHome"],
+      providesTags: (result, error, arg) => [{ type: "ContentUpdatedInUserHome", id: arg }],
     }),
     getWritingUserCreated: builder.query<ContentOfUserWriting, ParamsOfUserWriting>({
       query: (params) =>
@@ -369,16 +372,15 @@ export const novelTimeApi = createApi({
           ? []
           : result.map((list) => ({ type: "UserNovelListUpdated", id: list.novelListId })),
     }),
-    createMyNovelList: builder.mutation<{ listId: string }, string>({
-      query: (listTitle) => ({
+    createMyNovelList: builder.mutation<ListId, ParamToCreateList>({
+      query: ({ listTitle }) => ({
         url: `/userContent/myNovelList`,
         method: "POST",
         body: { listTitle },
       }),
-
       invalidatesTags: (result, error, arg) => [
         { type: "UserNovelListUpdated", id: result?.listId },
-        "ContentUpdatedInHome",
+        { type: "ContentUpdatedInUserHome", id: arg.userName },
       ],
     }),
     changeMyListTitle: builder.mutation<string, ParamToChangeListTitle>({
@@ -392,7 +394,7 @@ export const novelTimeApi = createApi({
           type: "UserNovelListUpdated",
           id: arg.listId,
         },
-        "ContentUpdatedInHome",
+        { type: "ContentUpdatedInUserHome", id: arg.userName },
       ],
     }),
 
@@ -409,7 +411,7 @@ export const novelTimeApi = createApi({
         })),
     }),
 
-    toggleLike: builder.mutation<IsLike, ContentOfLike>({
+    toggleLike: builder.mutation<IsLike, ParamToToggleLike>({
       query: (contentForLike) => {
         const routeName = contentForLike.contentType === "writing" ? "writing" : "userContent";
 
@@ -439,9 +441,16 @@ export const novelTimeApi = createApi({
           //
           // tag of "ListTitlesUpdatedInListDetailed" is necessary to get all list titles of user updated
           // list title where user canceled LIKE won't be in data of new titles
-          return ["ContentUpdatedInHome", "ListTitlesUpdatedInListDetailed"];
+          return [
+            { type: "ContentUpdatedInUserHome", id: arg.userName },
+            "ListTitlesUpdatedInListDetailed",
+          ];
         }
-        return ["ContentUpdatedInHome", { type: "UserNovelListUpdated", id: arg.contentId }];
+
+        return [
+          { type: "ContentUpdatedInUserHome", id: arg.userName },
+          { type: "UserNovelListUpdated", id: arg.contentId },
+        ];
       },
     }),
 

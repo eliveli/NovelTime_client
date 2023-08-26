@@ -2,6 +2,7 @@ import { useRef } from "react";
 import { openModal } from "store/clientSlices/modalSlice";
 import { useCreateMyNovelListMutation } from "store/serverAPIs/novelTime";
 import Spinner from "assets/Spinner";
+import { useParams } from "react-router-dom";
 import { useAppDispatch } from "../../store/hooks";
 
 import {
@@ -19,6 +20,8 @@ import {
 export default function WriteNewListTitle() {
   const dispatch = useAppDispatch();
 
+  const { userName } = useParams();
+
   const titleRef = useRef<HTMLInputElement>(null);
 
   const [createList, createListResult] = useCreateMyNovelListMutation();
@@ -35,7 +38,7 @@ export default function WriteNewListTitle() {
 
     if (createListResult.isLoading) return;
 
-    await createList(titleRef.current.value);
+    await createList({ listTitle: titleRef.current.value, userName: userName as string });
 
     // my novel lists updated automatically with provide and invalidate tags
 

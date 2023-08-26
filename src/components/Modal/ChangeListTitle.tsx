@@ -2,6 +2,7 @@ import { useRef } from "react";
 import { closeModal } from "store/clientSlices/modalSlice";
 import { handleUserNovelListToEdit } from "store/clientSlices/userNovelListSlice";
 import { useChangeMyListTitleMutation } from "store/serverAPIs/novelTime";
+import { useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 
 import {
@@ -17,6 +18,8 @@ import {
 } from "./Modal.styles";
 
 export default function ChangeListTitle() {
+  const { userName } = useParams();
+
   const [changeListTitle, changeListTitleResult] = useChangeMyListTitleMutation();
 
   const dispatch = useAppDispatch();
@@ -43,6 +46,7 @@ export default function ChangeListTitle() {
     await changeListTitle({
       listId,
       listTitle: titleRef.current.value,
+      userName: userName as string,
     });
 
     // update list automatically with the invalidate and provide tags
