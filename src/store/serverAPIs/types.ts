@@ -570,9 +570,10 @@ export interface ListWithOrWithoutTheNovel {
   isContaining: boolean;
 }
 
-export interface ParamToAddNovel {
+export interface ParamToAddOrRemoveNovel {
   novelId: string;
-  listIDs: string[];
+  listIDsToAddNovel: string[];
+  listIDsToRemoveNovel: string[];
 }
 export interface ContentOfLike {
   contentType: "writing" | "novelList";

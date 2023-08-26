@@ -46,7 +46,7 @@ import {
   ParamsOfUserNovelListAll,
   ListSummary,
   ListWithOrWithoutTheNovel,
-  ParamToAddNovel,
+  ParamToAddOrRemoveNovel,
 } from "./types";
 import type { RootState } from "../index";
 
@@ -384,14 +384,18 @@ export const novelTimeApi = createApi({
         { type: "NovelsInListUpdated", id: result?.listId },
       ],
     }),
-    addNovelToList: builder.mutation<string, ParamToAddNovel>({
-      query: ({ novelId, listIDs }) => ({
+
+    addOrRemoveNovelInList: builder.mutation<string, ParamToAddOrRemoveNovel>({
+      query: ({ novelId, listIDsToAddNovel, listIDsToRemoveNovel }) => ({
         url: `/userContent/myNovelList/novel`,
-        method: "POST",
-        body: { novelId, listIDs },
+        method: "PUT",
+        body: { novelId, listIDsToAddNovel, listIDsToRemoveNovel },
       }),
       invalidatesTags: (result, error, arg) =>
-        arg.listIDs.map((listId) => ({ type: "NovelsInListUpdated", id: listId })),
+        [...arg.listIDsToAddNovel, ...arg.listIDsToRemoveNovel].map((listId) => ({
+          type: "NovelsInListUpdated",
+          id: listId,
+        })),
     }),
 
     toggleLike: builder.mutation<IsLike, ContentOfLike>({
@@ -491,5 +495,5 @@ export const {
   useToggleLikeMutation,
   useGetMyNovelListQuery,
   useCreateMyNovelListMutation,
-  useAddNovelToListMutation,
+  useAddOrRemoveNovelInListMutation,
 } = novelTimeApi;

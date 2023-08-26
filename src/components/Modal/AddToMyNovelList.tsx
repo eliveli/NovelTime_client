@@ -1,9 +1,12 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { closeModal, openModal } from "store/clientSlices/modalSlice";
 
 import Icon from "assets/Icon";
 import { handleNovelIdToAddToList } from "store/clientSlices/userNovelListSlice";
-import { useAddNovelToListMutation, useGetMyNovelListQuery } from "store/serverAPIs/novelTime";
+import {
+  useAddOrRemoveNovelInListMutation,
+  useGetMyNovelListQuery,
+} from "store/serverAPIs/novelTime";
 import Spinner from "assets/Spinner";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 
@@ -24,10 +27,12 @@ export default function AddToMyNovelList() {
   const novelIdToAdd = useAppSelector((state) => state.userNovelList.novelIdToAddToList);
 
   const myNovelListResult = useGetMyNovelListQuery(novelIdToAdd);
-  const [addNovelToList, addNovelToListResult] = useAddNovelToListMutation();
+  const [addOrRemoveNovelInList, addOrRemoveNovelInListResult] =
+    useAddOrRemoveNovelInListMutation();
 
-  // add a novel to one or more lists selected
-  const [listsSelected, setListsSelected] = useState<string[]>([]);
+  const [listsSelected, handleListsSelected] = useState<string[]>([]);
+
+  const initialListsContainingTheNovel = useRef<string[]>([]);
 
   // set the list that contains the novel already
   useEffect(() => {
@@ -41,7 +46,9 @@ export default function AddToMyNovelList() {
 
     const listsWithoutUndefined = listsContainingTheNovel.filter((__) => !!__);
 
-    setListsSelected(listsWithoutUndefined as string[]);
+    initialListsContainingTheNovel.current = listsWithoutUndefined as string[];
+
+    handleListsSelected(listsWithoutUndefined as string[]);
   }, [myNovelListResult.data]);
 
   const dispatch = useAppDispatch();
@@ -63,13 +70,30 @@ export default function AddToMyNovelList() {
       return;
     }
 
-    if (addNovelToListResult.isLoading) return;
+    if (addOrRemoveNovelInListResult.isLoading) return;
 
-    await addNovelToList({ novelId: novelIdToAdd, listIDs: listsSelected });
+    const initialLists = initialListsContainingTheNovel.current;
 
-    // novels in the list are updated automatically used in list detailed page
+    let listIDsToRemoveNovel: string[] = [];
+    let listIDsToAddNovel: string[] = [];
 
-    if (addNovelToListResult.isError) {
+    if (!initialLists.length) {
+      listIDsToAddNovel = listsSelected;
+    } else {
+      listIDsToRemoveNovel = initialLists.filter((_) => !listsSelected.includes(_));
+
+      listIDsToAddNovel = listsSelected.filter((_) => !initialLists.includes(_));
+    }
+
+    await addOrRemoveNovelInList({
+      novelId: novelIdToAdd,
+      listIDsToAddNovel,
+      listIDsToRemoveNovel,
+    });
+
+    // novels in the list are updated with provide and invalidate tags
+
+    if (addOrRemoveNovelInListResult.isError) {
       alert("리스트에 담을 수 없습니다. 새로고침 후 시도해보세요");
       return;
     }
@@ -105,12 +129,12 @@ export default function AddToMyNovelList() {
                   // remove the list if it was selected already
                   if (listsSelected.includes(_.novelListId)) {
                     const nextLists = listsSelected.filter((__) => __ !== _.novelListId);
-                    setListsSelected(nextLists);
+                    handleListsSelected(nextLists);
                     return;
                   }
 
                   // add the list
-                  setListsSelected((prev) => [...prev, _.novelListId]);
+                  handleListsSelected((prev) => [...prev, _.novelListId]);
                 }}
               >
                 {listsSelected.includes(_.novelListId) ? (
