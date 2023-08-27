@@ -48,6 +48,7 @@ import { AiOutlineUser, AiOutlineMessage, AiOutlineLogout, AiFillFacebook } from
 import { ImBooks } from "react-icons/im";
 import { SiNaver } from "react-icons/si";
 import { FcGoogle } from "react-icons/fc";
+import { FiBookOpen } from "react-icons/fi";
 
 import { openModal } from "store/clientSlices/modalSlice";
 import { useAppDispatch } from "store/hooks";
@@ -257,6 +258,9 @@ const Icon = {
   `,
   CheckBoxSelected: styled(MdCheckBox)`
     ${iconStyleHover()};
+  `,
+  Book: styled(FiBookOpen)`
+    ${iconStyle()};
   `,
 };
 export default Icon;

@@ -114,15 +114,15 @@ const UserNovelList = React.memo(
           <IconsContnrForListAll>
             <IconInfoContnr>
               <Icon.IconBox size={15}>
-                <HeartIcon />
+                <Icon.Book />
               </Icon.IconBox>
-              <IconNoInfo>{likeNo}</IconNoInfo>
+              <IconNoInfo>{novelNo}</IconNoInfo>
             </IconInfoContnr>
             <IconInfoContnr>
               <Icon.IconBox size={15}>
                 <HeartIcon />
               </Icon.IconBox>
-              <IconNoInfo>{novelNo}</IconNoInfo>
+              <IconNoInfo>{likeNo}</IconNoInfo>
             </IconInfoContnr>
           </IconsContnrForListAll>
         </ListInfoSubContainer>
