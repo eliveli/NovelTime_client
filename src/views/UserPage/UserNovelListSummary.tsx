@@ -24,23 +24,25 @@ export default function UserNovelListSummary({ isMyList }: { isMyList: boolean }
     isMyList,
   });
 
-  const metaTags = {
-    title: (userName as string) + (!isMyList ? "님의 리스트" : "님이 좋아하는 리스트"),
-    description: (userName as string) + (!isMyList ? "님의 리스트" : "님이 좋아하는 리스트"),
-    image: (listSummaryResult.data && listSummaryResult.data[0].novelImgs[0]) || "",
-    url: window.location.href,
+  const metaTags = () => {
+    let text = "";
+    if (userName) {
+      text = userName + (!isMyList ? "님이 만든 리스트" : "님이 좋아하는 리스트");
+    }
+    return {
+      title: text,
+      description: text,
+      image:
+        (listSummaryResult.data && listSummaryResult.data[0]?.userImg?.src) ||
+        loginUserInfo.userImg.src,
+      url: window.location.href,
+    };
   };
 
   useEffect(() => {
     if (!listSummaryResult.data) return;
-    dispatch(
-      setMetaTags({
-        title: metaTags.title,
-        description: metaTags.description,
-        image: metaTags.image,
-        url: metaTags.url,
-      }),
-    );
+
+    dispatch(setMetaTags(metaTags()));
   }, [listSummaryResult.data]);
 
   const setCategoryText = () => {
@@ -57,7 +59,7 @@ export default function UserNovelListSummary({ isMyList }: { isMyList: boolean }
   };
   return (
     <MainBG>
-      {listSummaryResult.data && <MetaTag tags={metaTags} />}
+      {listSummaryResult.data && <MetaTag tags={metaTags()} />}
       {listSummaryResult.isFetching && <Spinner styles="fixed" />}
 
       <CategoryMark categoryText={setCategoryText()}>

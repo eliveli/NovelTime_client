@@ -9,9 +9,8 @@ import { useAppDispatch, useAppSelector } from "store/hooks";
 import { setMetaTags } from "store/clientSlices/modalSlice";
 
 import {
-  useGetListDetailedUserCreatedQuery,
-  useGetListDetailedUserLikedQuery,
-  useGetListTitlesAndOtherInListDetailedQuery,
+  useGetListDetailedQuery,
+  useGetAllListTitlesQuery,
   useRemoveNovelFromListMutation,
   useToggleLikeMutation,
 } from "store/serverAPIs/novelTime";
@@ -40,6 +39,7 @@ import {
   IconContainer,
 } from "./UserPage.styles";
 import contentMark from "./utils/contentMark";
+import { NoContent } from "./UserWriting.components";
 
 interface ProfileImg {
   src: string;
@@ -73,37 +73,19 @@ export default function UserNovelListDetailed({ isMyList }: { isMyList: boolean 
   // divide these two results
   // don't destructure like this : const { data, isFetching, ... }
   // just get it as variables to avoid getting same name
-  const myListResult = useGetListDetailedUserCreatedQuery(
-    {
-      accessToken,
-      userName: userName as string,
-      listId: listId as string,
-      order: orderNumber,
-    },
-    {
-      skip: !isMyList,
-    },
-  );
-  const othersListResult = useGetListDetailedUserLikedQuery(
-    {
-      accessToken,
-      userName: userName as string,
-      listId: listId as string,
-      order: orderNumber,
-    },
-    {
-      skip: isMyList,
-    },
-  );
-
-  const { data: allTitles } = useGetListTitlesAndOtherInListDetailedQuery({
+  const listDetailedResult = useGetListDetailedQuery({
+    accessToken,
+    userName: userName as string,
+    listId: listId as string,
+    order: orderNumber,
+    isCreated: isMyList, // isCreated or isLiked
+  });
+  const { data: allTitles } = useGetAllListTitlesQuery({
     userName: userName as string,
     isMyList: isMyList.toString(),
   });
 
-  const currentNovelListInfo = isMyList ? myListResult?.data : othersListResult?.data;
-
-  const novelsAsCurrentOrder = currentNovelListInfo?.novelList.novel;
+  const novelsAsCurrentOrder = listDetailedResult.data?.novelList.novel;
   const novelsAsPreviousOrder = useRef<SimpleNovel[]>();
   const novels =
     orderNumber > 1 && novelsAsPreviousOrder.current && novelsAsCurrentOrder
@@ -119,37 +101,33 @@ export default function UserNovelListDetailed({ isMyList }: { isMyList: boolean 
   const [toggleLike, toggleLikeResult] = useToggleLikeMutation();
 
   const toggleLikeRequest = async () => {
-    try {
-      if (toggleLikeResult.isLoading) return; // prevent click event as loading
+    if (toggleLikeResult.isLoading) return; // prevent click event as loading
 
-      const isOthersListOfLoginUser = !isMyList && userName === loginUserInfo?.userName;
+    const isOthersListOfLoginUser = !isMyList && userName === loginUserInfo?.userName;
 
-      await toggleLike({
-        contentType: "novelList",
-        contentId: listId as string,
-        isOthersListOfLoginUser,
-        userName: userName as string,
-      }).unwrap();
+    await toggleLike({
+      contentType: "novelList",
+      contentId: listId as string,
+      isOthersListOfLoginUser,
+      userName: userName as string,
+    }).unwrap();
 
-      // don't display current list after login user canceled LIKE in his/her other's list
-      // just request next list and display it
-      if (isOthersListOfLoginUser) {
-        navigate(
-          `/user-page/${userName}/${isMyList ? `my-list` : `others-list`}/${
-            novelListTitlesExceptSelectedOne[0].listId
-          }`,
-          { replace: true },
-        );
-      }
-    } catch (error) {
-      console.log("Failed to toggle LIKE:", error);
+    // don't display current list after login user canceled LIKE in his/her other's list
+    // just request next list and display it
+    if (isOthersListOfLoginUser) {
+      navigate(
+        `/user-page/${userName}/${isMyList ? `my-list` : `others-list`}/${
+          novelListTitlesExceptSelectedOne[0].listId
+        }`,
+        { replace: true },
+      );
     }
   };
 
   const handleLike = async () => {
-    if (!currentNovelListInfo) return;
+    if (!listDetailedResult.data) return;
 
-    const { isLike, userName: userNameAtTitle } = currentNovelListInfo.novelList;
+    const { isLike, userName: userNameAtTitle } = listDetailedResult.data.novelList;
 
     if (!loginUserInfo.userId) {
       // when user didn't login
@@ -203,35 +181,37 @@ export default function UserNovelListDetailed({ isMyList }: { isMyList: boolean 
   // - then don't show the button even if isListMore is true
   const titleListHeight = useComponentHeight(titleListRef, containerWidth, isListMore);
   //
-  const metaTags = {
-    title: `${currentNovelListInfo?.novelList.listTitle}`,
-    description: `${
-      isMyList ? userName : currentNovelListInfo?.novelList.userName
-    }의 리스트 - ${contentPageMark}`,
-    image: `https://photos.google.com/album/AF1QipOy4A30VtN2Afb5ynQYejvDxN_5CVBjYRa_DYX4/photo/AF1QipM-TuRzTrhw9-AH4fdhB9EwS1vxjwdOfdX2svVp`,
-    url: window.location.href,
+  const metaTags = () => {
+    let description = "";
+    if (isMyList && userName) {
+      description = `${userName}님이 만든 리스트 - ${contentPageMark}`;
+    } else {
+      description = `${
+        listDetailedResult.data?.novelList.userName || ""
+      }님이 만든 리스트 - ${contentPageMark}`;
+    }
+
+    return {
+      title: `${listDetailedResult.data?.novelList.listTitle || ""}`,
+      description,
+      image: listDetailedResult.data?.novelList.userImg?.src || loginUserInfo.userImg.src,
+      url: window.location.href,
+    };
   };
   //
   useEffect(() => {
-    if (!currentNovelListInfo) return;
+    if (!listDetailedResult.data) return;
 
     // when list id is undefined or there is no list that matches list id
-    if (!listId || !currentNovelListInfo?.novelList?.novel) {
+    if (!listId || !listDetailedResult.data?.novelList?.novel) {
       alert("리스트가 존재하지 않습니다.");
       navigate(`/user-page/${userName as string}`, { replace: true });
     }
     //
-    if (currentNovelListInfo) {
-      dispatch(
-        setMetaTags({
-          title: metaTags.title,
-          description: metaTags.description,
-          image: metaTags.image,
-          url: metaTags.url,
-        }),
-      );
+    if (listDetailedResult.data) {
+      dispatch(setMetaTags(metaTags()));
     }
-  }, [currentNovelListInfo]);
+  }, [listDetailedResult.data]);
 
   // edit the user's novel list _ remove selected novels from it //
 
@@ -269,8 +249,8 @@ export default function UserNovelListDetailed({ isMyList }: { isMyList: boolean 
   if (isEditing) {
     return (
       <MainBG>
-        {currentNovelListInfo && <MetaTag tags={metaTags} />}
-        {(myListResult.isFetching || othersListResult.isFetching) && <Spinner styles="fixed" />}
+        {listDetailedResult.data && <MetaTag tags={metaTags()} />}
+        {listDetailedResult.isFetching && <Spinner styles="fixed" />}
 
         <CategoryMark categoryText={contentPageMark}>
           <ShareIconBox>
@@ -290,7 +270,7 @@ export default function UserNovelListDetailed({ isMyList }: { isMyList: boolean 
             isListMore={isListMore}
             ref={titleListRef}
           >
-            <ListTitle>{currentNovelListInfo?.novelList.listTitle}</ListTitle>
+            <ListTitle>{listDetailedResult.data?.novelList.listTitle}</ListTitle>
           </ListTitleContnr>
         </ListTitleLimitHeightContnr>
 
@@ -322,7 +302,7 @@ export default function UserNovelListDetailed({ isMyList }: { isMyList: boolean 
           ))}
         </NovelListContnr>
 
-        {currentNovelListInfo?.isNextOrder && (
+        {listDetailedResult.data?.isNextOrder && (
           <ShowMoreContent
             _onClick={() => {
               setOrderNumber((currentOrder) => currentOrder + 1);
@@ -336,16 +316,16 @@ export default function UserNovelListDetailed({ isMyList }: { isMyList: boolean 
 
   return (
     <MainBG>
-      {currentNovelListInfo && <MetaTag tags={metaTags} />}
-      {(myListResult.isFetching || othersListResult.isFetching || toggleLikeResult.isLoading) && (
-        <Spinner styles="fixed" />
-      )}
+      {listDetailedResult.data && <MetaTag tags={metaTags()} />}
+      {(listDetailedResult.isFetching || toggleLikeResult.isLoading) && <Spinner styles="fixed" />}
 
       <CategoryMark categoryText={contentPageMark}>
-        <ShareIconBox>
-          <Icon.ShareWithArrow />
-        </ShareIconBox>
-        {isLoginUsersList && (
+        {!!listDetailedResult.data?.novelList.novel?.length && (
+          <ShareIconBox>
+            <Icon.ShareWithArrow />
+          </ShareIconBox>
+        )}
+        {!!listDetailedResult.data?.novelList.novel?.length && isLoginUsersList && (
           <ButtonToEditContainer>
             <ButtonToEdit isNoBorder onClick={() => handleEditing(true)}>
               편집
@@ -353,6 +333,7 @@ export default function UserNovelListDetailed({ isMyList }: { isMyList: boolean 
           </ButtonToEditContainer>
         )}
       </CategoryMark>
+
       {/* more button to show or not all the title list */}
       {/* when isListMore is true, always : limitContnrWidth === titleListWidthScrollable
           so the following should be divided two, not put together in one expression.
@@ -396,31 +377,36 @@ export default function UserNovelListDetailed({ isMyList }: { isMyList: boolean 
         >
           {/* isLike */}
           {/* except when login user sees his/her my list in user page */}
-          {!(isMyList && userName === loginUserInfo.userName) && !!currentNovelListInfo && (
+          {!(isMyList && userName === loginUserInfo.userName) && !!listDetailedResult.data && (
             <HearIconBox
-              isLike={currentNovelListInfo.novelList.isLike}
+              isLike={listDetailedResult.data.novelList.isLike}
               size={28}
               onClick={handleLike}
             >
-              <Icon.TogglingBigHeartIcon isLike={currentNovelListInfo.novelList.isLike} />
+              <Icon.TogglingBigHeartIcon isLike={listDetailedResult.data.novelList.isLike} />
             </HearIconBox>
           )}
 
           {/* title of selected novel list */}
-          <ListTitle key={listId} listId={listId} selectedListId={listId}>
-            {/* in my list page */}
-            {isMyList && currentNovelListInfo?.novelList.listTitle}
-            {/* in other's list page */}
-            {!isMyList && currentNovelListInfo && (
-              <OthersTitleContnr>
-                <UserImg userImg={currentNovelListInfo.novelList.userImg as ProfileImg} isTitle />
-                {currentNovelListInfo.novelList.userName}
-                <ListTitleNormalStyle>의 리스트 : </ListTitleNormalStyle>
-                &nbsp;
-                {currentNovelListInfo.novelList.listTitle}
-              </OthersTitleContnr>
-            )}
-          </ListTitle>
+          {listDetailedResult.data && (
+            <ListTitle key={listId} listId={listId} selectedListId={listId}>
+              {/* in my list page */}
+              {isMyList && listDetailedResult.data?.novelList.listTitle}
+              {/* in other's list page */}
+              {!isMyList && listDetailedResult.data && (
+                <OthersTitleContnr>
+                  <UserImg
+                    userImg={listDetailedResult.data.novelList.userImg as ProfileImg}
+                    isTitle
+                  />
+                  {listDetailedResult.data.novelList.userName}
+                  <ListTitleNormalStyle>의 리스트 : </ListTitleNormalStyle>
+                  &nbsp;
+                  {listDetailedResult.data.novelList.listTitle}
+                </OthersTitleContnr>
+              )}
+            </ListTitle>
+          )}
 
           {/* titles of novel lists except selected one */}
           {listId &&
@@ -457,13 +443,17 @@ export default function UserNovelListDetailed({ isMyList }: { isMyList: boolean 
         </ListTitleContnr>
       </ListTitleLimitHeightContnr>
 
+      {!listDetailedResult.data?.novelList.novel.length && (
+        <NoContent contentType="L" isCreatedBy={isMyList} />
+      )}
+
       <NovelListContnr>
         {novels?.map((_) => (
           <NovelRow key={_.novelId} novel={_} isWidth100 isNotSubInfo />
         ))}
       </NovelListContnr>
 
-      {currentNovelListInfo?.isNextOrder && (
+      {listDetailedResult.data?.isNextOrder && (
         <ShowMoreContent
           _onClick={() => {
             setOrderNumber((currentOrder) => currentOrder + 1);

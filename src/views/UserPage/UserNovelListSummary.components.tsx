@@ -85,7 +85,7 @@ const UserNovelList = React.memo(
       <ListInfoContnr
         onClick={() => {
           navigate(
-            `/user-page/${userName || (userNameInParam as string)}/${
+            `/user-page/${userNameInParam as string}/${
               isMyList ? `my-list` : `others-list`
             }/${listId}`,
           );

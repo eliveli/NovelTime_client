@@ -9,8 +9,8 @@ import {
   ContentOfUserHome,
   ParamsOfUserWriting,
   ContentOfUserWriting,
-  ContentOfUserNovelList,
-  ParamsOfUserNovelList,
+  ContentOfListDetailed,
+  ParamsOfListDetailed,
   ParamToToggleLike,
   IsLike,
   AllTitlesAndOtherInfo,
@@ -345,22 +345,18 @@ export const novelTimeApi = createApi({
       providesTags: (result, error, arg) => [{ type: "UserNovelListUpdated", id: arg.userName }],
     }),
 
-    getListDetailedUserCreated: builder.query<ContentOfUserNovelList, ParamsOfUserNovelList>({
-      query: (params) =>
-        `/userContent/listDetailed/created/${params.userName}/${params.listId}/${params.order}`,
+    getListDetailed: builder.query<ContentOfListDetailed, ParamsOfListDetailed>({
+      query: (params) => {
+        if (params.isCreated) {
+          return `/userContent/listDetailed/created/${params.userName}/${params.listId}/${params.order}`;
+        }
+
+        return `/userContent/listDetailed/liked/${params.userName}/${params.listId}/${params.order}`;
+      },
       keepUnusedDataFor: 120,
       providesTags: (result, error, arg) => [{ type: "UserNovelListUpdated", id: arg.listId }],
     }),
-    getListDetailedUserLiked: builder.query<ContentOfUserNovelList, ParamsOfUserNovelList>({
-      query: (params) =>
-        `/userContent/listDetailed/liked/${params.userName}/${params.listId}/${params.order}`,
-      keepUnusedDataFor: 120,
-      providesTags: (result, error, arg) => [{ type: "UserNovelListUpdated", id: arg.listId }],
-    }),
-    getListTitlesAndOtherInListDetailed: builder.query<
-      AllTitlesAndOtherInfo,
-      ParamsOfAllNovelListTitles
-    >({
+    getAllListTitles: builder.query<AllTitlesAndOtherInfo, ParamsOfAllNovelListTitles>({
       query: (params) =>
         `/userContent/listDetailed/listTitles/${params.userName}/${params.isMyList}`,
       keepUnusedDataFor: 120,
@@ -533,10 +529,9 @@ export const {
   useCheckForUserNameMutation,
   useSaveUserInfoMutation,
   useGetContentOfUserHomeQuery,
-  useGetListDetailedUserCreatedQuery,
-  useGetListDetailedUserLikedQuery,
+  useGetListDetailedQuery,
   useGetListSummaryQuery,
-  useGetListTitlesAndOtherInListDetailedQuery,
+  useGetAllListTitlesQuery,
   useGetWritingUserCreatedQuery,
   useGetWritingUserLikedQuery,
   useToggleLikeMutation,

@@ -546,7 +546,7 @@ export interface ListSummaryUserLiked {
   userImg: { src: string; position: string };
 }
 
-export interface ContentOfUserNovelList {
+export interface ContentOfListDetailed {
   novelList: NovelListSetForMyOrOthersList;
   isNextOrder: boolean;
 }
@@ -557,11 +557,12 @@ export interface ParamsOfAllNovelListTitles {
   isMyList: string;
 }
 
-export interface ParamsOfUserNovelList {
+export interface ParamsOfListDetailed {
   accessToken?: string;
   userName: string;
   listId: string;
   order: number;
+  isCreated: boolean;
 }
 
 export interface ListWithOrWithoutTheNovel {
