@@ -514,11 +514,12 @@ export interface ParamsOfUserWriting {
   userName: string;
   contentType: "T" | "R" | "C";
   order: number;
+  isCreated: boolean; // isCreated or isLiked
 }
 
 export interface ParamsOfUserNovelListAll {
   userName: string;
-  isMyList: boolean;
+  isCreated: boolean;
 }
 export interface ListSummary {
   listId: string;

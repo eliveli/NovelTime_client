@@ -13,7 +13,7 @@ import { ShareIconBox, WritingSection } from "./UserPage.styles";
 import UserNovelList from "./UserNovelListSummary.components";
 import { NoContent } from "./UserWriting.components";
 
-export default function UserNovelListSummary({ isMyList }: { isMyList: boolean }) {
+export default function UserNovelListSummary({ isCreated }: { isCreated: boolean }) {
   const dispatch = useAppDispatch();
 
   const { userName } = useParams();
@@ -21,13 +21,13 @@ export default function UserNovelListSummary({ isMyList }: { isMyList: boolean }
 
   const listSummaryResult = useGetListSummaryQuery({
     userName: userName as string,
-    isMyList,
+    isCreated, // isCreated or isLiked
   });
 
   const metaTags = () => {
     let text = "";
     if (userName) {
-      text = userName + (!isMyList ? "님이 만든 리스트" : "님이 좋아하는 리스트");
+      text = userName + (!isCreated ? "님이 만든 리스트" : "님이 좋아하는 리스트");
     }
     return {
       title: text,
@@ -50,11 +50,11 @@ export default function UserNovelListSummary({ isMyList }: { isMyList: boolean }
 
     // this is login user's page
     if (loginUserInfo.userName === userName) {
-      if (isMyList) return "My List";
+      if (isCreated) return "My List";
       return "Other's List I Like";
     }
     // this is other user's page
-    if (isMyList) return `${userName}'s List`;
+    if (isCreated) return `${userName}'s List`;
     return `Other's List ${userName} Like`;
   };
   return (
@@ -71,11 +71,11 @@ export default function UserNovelListSummary({ isMyList }: { isMyList: boolean }
       {listSummaryResult.data?.length ? (
         <WritingSection isNoContent={false} isForListAll>
           {listSummaryResult.data.map((_) => (
-            <UserNovelList key={_.listId} novelList={_} isMyList={isMyList} />
+            <UserNovelList key={_.listId} novelList={_} isCreated={isCreated} />
           ))}
         </WritingSection>
       ) : (
-        <NoContent contentType="L" isCreatedBy={isMyList} />
+        <NoContent contentType="L" isCreatedBy={isCreated} />
       )}
     </MainBG>
   );

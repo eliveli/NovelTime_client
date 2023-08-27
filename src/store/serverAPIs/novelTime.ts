@@ -328,18 +328,17 @@ export const novelTimeApi = createApi({
       //   for the reason that other's list doesn't exist anymore
       providesTags: (result, error, arg) => [{ type: "UserNovelListUpdated", id: arg }],
     }),
-    getWritingUserCreated: builder.query<ContentOfUserWriting, ParamsOfUserWriting>({
-      query: (params) =>
-        `/userContent/myWriting/${params.userName}/${params.contentType}/${params.order}`,
-    }),
-    getWritingUserLiked: builder.query<ContentOfUserWriting, ParamsOfUserWriting>({
-      query: (params) =>
-        `/userContent/othersWriting/${params.userName}/${params.contentType}/${params.order}`,
+    getWriting: builder.query<ContentOfUserWriting, ParamsOfUserWriting>({
+      query: ({ userName, contentType, order, isCreated }) => {
+        if (isCreated) return `/userContent/writing/created/${userName}/${contentType}/${order}`;
+
+        return `/userContent/writing/liked/${userName}/${contentType}/${order}`;
+      },
     }),
 
     getListSummary: builder.query<ListSummary[], ParamsOfUserNovelListAll>({
-      query: ({ userName, isMyList }) => {
-        if (isMyList) return `/userContent/listSummary/created/${userName}`;
+      query: ({ userName, isCreated }) => {
+        if (isCreated) return `/userContent/listSummary/created/${userName}`;
         return `/userContent/listSummary/liked/${userName}`;
       },
       providesTags: (result, error, arg) => [{ type: "UserNovelListUpdated", id: arg.userName }],
@@ -532,8 +531,7 @@ export const {
   useGetListDetailedQuery,
   useGetListSummaryQuery,
   useGetAllListTitlesQuery,
-  useGetWritingUserCreatedQuery,
-  useGetWritingUserLikedQuery,
+  useGetWritingQuery,
   useToggleLikeMutation,
   useGetMyNovelListQuery,
   useCreateMyNovelListMutation,

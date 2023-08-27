@@ -5,10 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import Icon from "assets/Icon";
 import { useAppSelector } from "store/hooks";
 import { useParams } from "react-router-dom";
-import {
-  useGetWritingUserCreatedQuery,
-  useGetWritingUserLikedQuery,
-} from "store/serverAPIs/novelTime";
+import { useGetWritingQuery } from "store/serverAPIs/novelTime";
 import ShowMoreContent from "assets/ShowMoreContent";
 import { TalkOrRecommend, CommentUserCreated } from "../../store/serverAPIs/types";
 import { Writing, Comment, WritingFilter, NoContent } from "./UserWriting.components";
@@ -20,7 +17,7 @@ export type ContentInfo = {
   isNextOrder: boolean;
   currentOrder: number;
 };
-export default function UserWriting({ isMyWriting }: { isMyWriting: boolean }) {
+export default function UserWriting({ isCreated }: { isCreated: boolean }) {
   const loginUserInfo = useAppSelector((state) => state.user.loginUserInfo);
 
   const { userName } = useParams();
@@ -29,6 +26,7 @@ export default function UserWriting({ isMyWriting }: { isMyWriting: boolean }) {
     userName: userName as string,
     contentType: "T" as "T" | "R" | "C",
     order: 1,
+    isCreated, // is created or is liked
   });
 
   // to set this is required because
@@ -40,12 +38,7 @@ export default function UserWriting({ isMyWriting }: { isMyWriting: boolean }) {
     currentContentRef.current = currentContent;
   };
 
-  const myWritingResult = useGetWritingUserCreatedQuery(paramsForRequest, {
-    skip: !isMyWriting,
-  });
-  const othersWritingResult = useGetWritingUserLikedQuery(paramsForRequest, {
-    skip: isMyWriting,
-  });
+  const writingResult = useGetWritingQuery(paramsForRequest);
 
   // states for saving content from server in my writing page
   const [talksUserCreated, setTalksUserCreated] = useState<{
@@ -80,13 +73,13 @@ export default function UserWriting({ isMyWriting }: { isMyWriting: boolean }) {
   useEffect(() => {
     // don't save cached data for other's writing
     // it may remain because of rtk query trait
-    if (!isMyWriting) return;
+    if (!isCreated) return;
 
-    if (!myWritingResult.data) return;
+    if (!writingResult.data) return;
 
-    const writingsFromServer = myWritingResult.data.writingsUserCreated;
-    const commentsFromServer = myWritingResult.data.commentsUserCreated;
-    const { isNextOrder } = myWritingResult.data;
+    const writingsFromServer = writingResult.data.writingsUserCreated;
+    const commentsFromServer = writingResult.data.commentsUserCreated;
+    const { isNextOrder } = writingResult.data;
 
     // save talks
     if (writingsFromServer && writingsFromServer[0]?.talkId) {
@@ -160,18 +153,18 @@ export default function UserWriting({ isMyWriting }: { isMyWriting: boolean }) {
         currentOrder,
       };
     }
-  }, [myWritingResult.data]);
+  }, [writingResult.data]);
 
   // get and save the content in other's writing page
   useEffect(() => {
     // don't save cached data for my writing
     // it may remain because of rtk query trait
-    if (isMyWriting) return;
+    if (isCreated) return;
 
-    if (!othersWritingResult.data) return;
+    if (!writingResult.data) return;
 
-    const writingsFromServer = othersWritingResult.data.writingsUserLikes;
-    const { isNextOrder } = othersWritingResult.data;
+    const writingsFromServer = writingResult.data.writingsUserLikes;
+    const { isNextOrder } = writingResult.data;
 
     // save talks
     if (writingsFromServer && writingsFromServer[0]?.talkId) {
@@ -221,17 +214,12 @@ export default function UserWriting({ isMyWriting }: { isMyWriting: boolean }) {
         currentOrder,
       };
     }
-  }, [othersWritingResult.data]);
+  }, [writingResult.data]);
 
   // get the content page mark
-  const contentPageMark = contentMark(
-    userName as string,
-    loginUserInfo.userName,
-    isMyWriting,
-    true,
-  );
+  const contentPageMark = contentMark(userName as string, loginUserInfo.userName, isCreated, true);
   // writing category array : my writing or other's writing
-  const writingCategory = isMyWriting ? ["프리톡", "추천", "댓글"] : ["프리톡", "추천"];
+  const writingCategory = isCreated ? ["프리톡", "추천", "댓글"] : ["프리톡", "추천"];
   // set filter category
   const [writingFilter, selectWritingFilter] = useState("프리톡");
 
@@ -248,7 +236,7 @@ export default function UserWriting({ isMyWriting }: { isMyWriting: boolean }) {
         writingFilter={writingFilter}
         selectWritingFilter={selectWritingFilter}
         setParamsForRequest={setParamsForRequest}
-        isMyWriting={isMyWriting}
+        isCreated={isCreated}
         talksUserCreated={talksUserCreated}
         recommendsUserCreated={recommendsUserCreated}
         commentsUserCreated={commentsUserCreated}

@@ -184,9 +184,10 @@ interface WritingProps {
       userName: string;
       contentType: "T" | "R" | "C";
       order: number;
+      isCreated: boolean;
     }>
   >;
-  isMyWriting?: boolean;
+  isCreated?: boolean;
   talksUserCreated?: {
     talks: TalkOrRecommend[];
     isNextOrder: boolean;
@@ -221,7 +222,7 @@ export function WritingFilter({
   writingFilter,
   selectWritingFilter,
   setParamsForRequest,
-  isMyWriting,
+  isCreated,
   talksUserCreated,
   recommendsUserCreated,
   commentsUserCreated,
@@ -241,7 +242,7 @@ export function WritingFilter({
             // it is for UserPageWriting not for UserPageHome //
             // - for my writing page
             // -- request content when clicking other filter but the content is empty
-            if (isMyWriting && setParamsForRequest) {
+            if (isCreated && setParamsForRequest) {
               if (_ === "프리톡" && !talksUserCreated) {
                 setParamsForRequest((paramsForRequest) => ({
                   ...paramsForRequest,
@@ -285,7 +286,7 @@ export function WritingFilter({
             }
             // - for other's writing page
             // -- request content when clicking other filter but the content is empty
-            if (!isMyWriting && setParamsForRequest) {
+            if (!isCreated && setParamsForRequest) {
               if (_ === "프리톡" && !talksUserLikes) {
                 setParamsForRequest((paramsForRequest) => ({
                   ...paramsForRequest,

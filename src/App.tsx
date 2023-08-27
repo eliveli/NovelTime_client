@@ -199,26 +199,26 @@ function App() {
 
           <Route path="/user-page/:userName" element={<UserParent />}>
             <Route index element={<UserHome />} />
-            <Route path="/user-page/:userName/my-writing" element={<UserWriting isMyWriting />} />
+            <Route path="/user-page/:userName/my-writing" element={<UserWriting isCreated />} />
             <Route
               path="/user-page/:userName/others-writing"
-              element={<UserWriting isMyWriting={false} />}
+              element={<UserWriting isCreated={false} />}
             />
             <Route
               path="/user-page/:userName/my-list"
-              element={<UserNovelListSummary isMyList />}
+              element={<UserNovelListSummary isCreated />}
             />
             <Route
               path="/user-page/:userName/my-list/:listId"
-              element={<UserNovelListDetailed isMyList />}
+              element={<UserNovelListDetailed isCreated />}
             />
             <Route
               path="/user-page/:userName/others-list"
-              element={<UserNovelListSummary isMyList={false} />}
+              element={<UserNovelListSummary isCreated={false} />}
             />
             <Route
               path="/user-page/:userName/others-list/:listId"
-              element={<UserNovelListDetailed isMyList={false} />}
+              element={<UserNovelListDetailed isCreated={false} />}
             />
           </Route>
 

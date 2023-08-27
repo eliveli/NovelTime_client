@@ -24,7 +24,7 @@ import {
 } from "./UserPage.styles";
 
 const UserNovelList = React.memo(
-  ({ novelList, isMyList }: { novelList: ListSummary; isMyList: boolean }) => {
+  ({ novelList, isCreated }: { novelList: ListSummary; isCreated: boolean }) => {
     const {
       listId,
       listTitle,
@@ -45,7 +45,7 @@ const UserNovelList = React.memo(
     const { userName: userNameInParam } = useParams();
 
     const loginUserName = useAppSelector((state) => state.user.loginUserInfo.userName);
-    const isWriter = loginUserName && loginUserName === userNameInParam && isMyList;
+    const isWriter = loginUserName && loginUserName === userNameInParam && isCreated;
 
     const handleToEdit = () => {
       dispatch(
@@ -86,7 +86,7 @@ const UserNovelList = React.memo(
         onClick={() => {
           navigate(
             `/user-page/${userNameInParam as string}/${
-              isMyList ? `my-list` : `others-list`
+              isCreated ? `my-list` : `others-list`
             }/${listId}`,
           );
         }}
