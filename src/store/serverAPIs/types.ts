@@ -483,11 +483,10 @@ interface NovelListsSimpleInfos {
     position: string;
   };
 }
-export interface NovelListSetForMyOrOthersList {
+export interface NovelListDetailed {
   listId: string;
   listTitle: string;
   isLike: boolean;
-  otherList: NovelListsSimpleInfos[];
   novel: SimpleNovel[];
   userName?: string;
   userImg?: { src: string; position: string };
@@ -548,7 +547,7 @@ export interface ListSummaryUserLiked {
 }
 
 export interface ContentOfListDetailed {
-  novelList: NovelListSetForMyOrOthersList;
+  novelList: NovelListDetailed;
   isNextOrder: boolean;
 }
 export type AllTitlesAndOtherInfo = NovelListsSimpleInfos[];
@@ -611,8 +610,9 @@ export interface ParamToToggleLike {
     writingType: "T" | "R";
     novelId: string;
   };
-  isOthersListOfLoginUser?: boolean;
+  isTheListCanceledInLoginUserPage?: boolean;
   userName?: string;
+  loginUserName?: string;
 }
 export interface IsLike {
   isLike: boolean; // for both writing and novelList

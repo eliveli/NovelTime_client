@@ -40,7 +40,6 @@ import {
   NoContentInListDetailed,
 } from "./UserPage.styles";
 import contentMark from "./utils/contentMark";
-import { NoContent } from "./UserWriting.components";
 
 interface ProfileImg {
   src: string;
@@ -98,24 +97,27 @@ export default function UserNovelListDetailed({ isCreated }: { isCreated: boolea
     (_) => _.listId !== listId,
   ) as NovelListTitle[];
 
+  const loginUserName = useAppSelector((state) => state.user.loginUserInfo.userName);
+
   // toggle like //
   const [toggleLike, toggleLikeResult] = useToggleLikeMutation();
 
   const toggleLikeRequest = async () => {
     if (toggleLikeResult.isLoading) return; // prevent click event as loading
 
-    const isOthersListOfLoginUser = !isCreated && userName === loginUserInfo?.userName;
+    const isTheListCanceledInLoginUserPage = !isCreated && userName === loginUserInfo?.userName;
 
     await toggleLike({
       contentType: "novelList",
       contentId: listId as string,
-      isOthersListOfLoginUser,
+      isTheListCanceledInLoginUserPage,
       userName: userName as string,
+      loginUserName,
     }).unwrap();
 
     // don't display current list after login user canceled LIKE in his/her other's list
     // just request next list and display it
-    if (isOthersListOfLoginUser) {
+    if (isTheListCanceledInLoginUserPage) {
       navigate(
         `/user-page/${userName}/${isCreated ? `novel-list/created` : `novel-list/liked`}/${
           novelListTitlesExceptSelectedOne[0].listId
@@ -220,7 +222,6 @@ export default function UserNovelListDetailed({ isCreated }: { isCreated: boolea
 
   const [isEditing, handleEditing] = useState(false);
 
-  const loginUserName = useAppSelector((state) => state.user.loginUserInfo.userName);
   const isLoginUsersList = loginUserName && loginUserName === userName && isCreated;
 
   // novels to be removed
@@ -422,18 +423,19 @@ export default function UserNovelListDetailed({ isCreated }: { isCreated: boolea
           </ListTitleLimitHeightContnr>
         )}
 
-        {!listDetailedResult.data && (
+        {!listDetailedResult.data && allTitles && (
           <NoContentInListDetailed>존재하지 않는 리스트입니다</NoContentInListDetailed>
         )}
+
+        {!allTitles && <NoContentInListDetailed>작성한 리스트가 없습니다</NoContentInListDetailed>}
 
         {novels && !novels.length && (
           <NoContentInListDetailed>리스트에 담은 소설이 없습니다</NoContentInListDetailed>
         )}
 
         <NovelListContnr>
-          {novels?.map((_) => (
-            <NovelRow key={_.novelId} novel={_} isWidth100 isNotSubInfo />
-          ))}
+          {allTitles &&
+            novels?.map((_) => <NovelRow key={_.novelId} novel={_} isWidth100 isNotSubInfo />)}
         </NovelListContnr>
 
         {listDetailedResult.data?.isNextOrder && (
@@ -558,8 +560,12 @@ export default function UserNovelListDetailed({ isCreated }: { isCreated: boolea
         </ListTitleLimitHeightContnr>
       )}
 
-      {!listDetailedResult.data && (
+      {!listDetailedResult.data && allTitles && (
         <NoContentInListDetailed>존재하지 않는 리스트입니다</NoContentInListDetailed>
+      )}
+
+      {!allTitles && (
+        <NoContentInListDetailed>좋아요를 누른 리스트가 없습니다</NoContentInListDetailed>
       )}
 
       {novels && !novels.length && (
@@ -567,9 +573,8 @@ export default function UserNovelListDetailed({ isCreated }: { isCreated: boolea
       )}
 
       <NovelListContnr>
-        {novels?.map((_) => (
-          <NovelRow key={_.novelId} novel={_} isWidth100 isNotSubInfo />
-        ))}
+        {allTitles &&
+          novels?.map((_) => <NovelRow key={_.novelId} novel={_} isWidth100 isNotSubInfo />)}
       </NovelListContnr>
 
       {listDetailedResult.data?.isNextOrder && (

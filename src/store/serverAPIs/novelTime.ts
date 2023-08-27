@@ -1,6 +1,5 @@
 // Need to use the React-specific entry point to import createApi
 import { createApi, fetchBaseQuery, BaseQueryFn } from "@reduxjs/toolkit/query/react";
-import { useParams } from "react-router-dom";
 import {
   UserAndToken,
   OauthData,
@@ -454,15 +453,10 @@ export const novelTimeApi = createApi({
           ];
         }
 
-        if (arg.isOthersListOfLoginUser) {
-          // do not invalidate tag of "contentUpdatedInNovelList" not to refetch current list
-          // next list will be fetched
-          //
-          // tag of "contentUpdatedInHome" is necessary when navigating to an user's home page
-          // to get updated content after toggling LIKE
-          //
-          // tag of "ListTitlesUpdatedInListDetailed" is necessary to get all list titles of user updated
-          // list title where user canceled LIKE won't be in data of new titles
+        if (arg.isTheListCanceledInLoginUserPage) {
+          // when login user cancels like in his/her user page
+          // titles will be updated and the canceled one can't be included in it
+          // the canceled one won't be fetched as not giving the invalidate tag with the list id
           return [
             { type: "UserNovelListUpdated", id: arg.userName },
             "ListTitlesUpdatedInListDetailed",
@@ -471,7 +465,10 @@ export const novelTimeApi = createApi({
 
         return [
           { type: "UserNovelListUpdated", id: arg.userName },
+          { type: "UserNovelListUpdated", id: arg.loginUserName },
+          // ㄴchange like in a user's page and update the like info in login user's page
           { type: "UserNovelListUpdated", id: arg.contentId },
+          "ListTitlesUpdatedInListDetailed",
         ];
       },
     }),
