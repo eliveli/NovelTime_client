@@ -2,8 +2,6 @@ import { useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import {
-  NovelDetailRecommend,
-  NovelDetailTalk,
   MessageList,
   MessageRoom,
   FreeTalkDetail,
@@ -23,8 +21,6 @@ import {
   SearchNovelPage,
   SearchAllPage,
   NovelListByCategory,
-  WritingList,
-  NovelDetailMark,
   AddWriting,
   Home,
   OAuthRedirectHandler,
@@ -129,9 +125,6 @@ function App() {
             ))}
             {[
               "/novel-detail/:novelId",
-              "/novel-detail/:novelId/writing-list",
-              "/novel-detail/:novelId/:talkId",
-              "/novel-detail/:novelId/:recommendId",
               "/talk-detail/:talkId",
               "/talk-detail/:talkId/:commentId",
               "/recommend-detail/:recommendId",
@@ -145,12 +138,12 @@ function App() {
               "/message-room/:roomId",
 
               "/user-page/:userName",
-              "/user-page/:userName/my-writing",
-              "/user-page/:userName/others-writing",
-              "/user-page/:userName/my-list",
-              "/user-page/:userName/my-list/:listId",
-              "/user-page/:userName/others-list",
-              "/user-page/:userName/others-list/:listId",
+              "/user-page/:userName/writing/created",
+              "/user-page/:userName/writing/liked",
+              "/user-page/:userName/novel-list/created",
+              "/user-page/:userName/novel-list/created/:listId",
+              "/user-page/:userName/novel-list/liked",
+              "/user-page/:userName/novel-list/liked/:listId",
               "*",
             ].map((path) => (
               <Route key={path} path={path} element={<DetailNav />} />
@@ -176,9 +169,6 @@ function App() {
           />
 
           <Route path="/novel-detail/:novelId" element={<NovelDetail />} />
-          <Route path="/novel-detail/:novelId/writing-list" element={<WritingList />} />
-          <Route path="/novel-detail/:novelId/:talkId" element={<NovelDetailTalk />} />
-          <Route path="/novel-detail/:novelId/:recommendId" element={<NovelDetailRecommend />} />
 
           <Route path="/talk-detail/:talkId" element={<FreeTalkDetail />} />
           <Route path="/talk-detail/:talkId/:commentId" element={<FreeTalkDetail />} />
@@ -199,25 +189,28 @@ function App() {
 
           <Route path="/user-page/:userName" element={<UserParent />}>
             <Route index element={<UserHome />} />
-            <Route path="/user-page/:userName/my-writing" element={<UserWriting isCreated />} />
             <Route
-              path="/user-page/:userName/others-writing"
+              path="/user-page/:userName/writing/created"
+              element={<UserWriting isCreated />}
+            />
+            <Route
+              path="/user-page/:userName/writing/liked"
               element={<UserWriting isCreated={false} />}
             />
             <Route
-              path="/user-page/:userName/my-list"
+              path="/user-page/:userName/novel-list/created"
               element={<UserNovelListSummary isCreated />}
             />
             <Route
-              path="/user-page/:userName/my-list/:listId"
+              path="/user-page/:userName/novel-list/created/:listId"
               element={<UserNovelListDetailed isCreated />}
             />
             <Route
-              path="/user-page/:userName/others-list"
+              path="/user-page/:userName/novel-list/liked"
               element={<UserNovelListSummary isCreated={false} />}
             />
             <Route
-              path="/user-page/:userName/others-list/:listId"
+              path="/user-page/:userName/novel-list/liked/:listId"
               element={<UserNovelListDetailed isCreated={false} />}
             />
           </Route>

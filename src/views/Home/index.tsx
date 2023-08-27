@@ -306,7 +306,7 @@ export default function Home() {
           novelNO={list.novel.length}
           infoFromUserPage={{
             userName: list.userName,
-            path: "my-list",
+            path: "novel-list/created",
             list: { isMainCategory: false, listId: list.listId },
           }}
           userMark={{ userImg: list.userImg, userName: list.userName }}

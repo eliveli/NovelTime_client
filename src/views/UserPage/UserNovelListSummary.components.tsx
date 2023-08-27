@@ -86,7 +86,7 @@ const UserNovelList = React.memo(
         onClick={() => {
           navigate(
             `/user-page/${userNameInParam as string}/${
-              isCreated ? `my-list` : `others-list`
+              isCreated ? `novel-list/created` : `novel-list/liked`
             }/${listId}`,
           );
         }}

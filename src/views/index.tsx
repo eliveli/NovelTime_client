@@ -4,7 +4,6 @@ import FreeTalkList from "./FreeTalkList";
 import FreeTalkDetail from "./FreeTalkDetail";
 import NovelDetail from "./NovelDetail";
 import NovelList from "./NovelList";
-import WritingList from "./WritingList";
 import RecommendList from "./RecommendList";
 import RecommendDetail from "./RecommendDetail";
 import {
@@ -20,19 +19,13 @@ import SearchNovelPage from "./SearchNovelPage";
 import SearchNovelIframe from "./SearchNovelIframe";
 import SearchAllPage from "./SearchAllPage";
 import NovelListByCategory from "./NovelListByCategory";
-import NovelDetailMark from "./NovelDetailMark";
-import NovelDetailTalk from "./NovelDetailTalk";
-import NovelDetailRecommend from "./NovelDetailRecommend";
 import AddWriting from "./AddWriting";
 import Home from "./Home";
 import OAuthRedirectHandler from "./OAuthRedirectHandler";
 
 export {
-  NovelDetailTalk,
-  NovelDetailRecommend,
   MessageRoom,
   MessageList,
-  WritingList,
   RecommendDetail,
   RecommendList,
   NotFound,
@@ -51,7 +44,6 @@ export {
   SearchNovelPage,
   SearchNovelIframe,
   NovelListByCategory,
-  NovelDetailMark,
   AddWriting,
   Home,
   OAuthRedirectHandler,

@@ -276,7 +276,12 @@ export default function EditProfile() {
       // navigate to next path by new user name //
       const { pathname } = window.location; // pathname : "/user-page/" + userName (+ ...)
       // get the back of user name in url
-      const pages = ["/my-writing", "/others-writing", "/my-list", "/others-list"];
+      const pages = [
+        "/writing/created",
+        "/writing/liked",
+        "/novel-list/created",
+        "/novel-list/liked",
+      ];
       let backIndexOfUserName = -1;
       for (const page of pages) {
         const indexOfPageName = pathname.indexOf(page);

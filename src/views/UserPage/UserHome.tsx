@@ -62,7 +62,7 @@ export default function UserHome() {
       <CategoryMark
         infoFromUserPage={{
           userName: userName as string,
-          path: "my-writing",
+          path: "writing/created",
         }}
         isShowAllButton="모두 보기"
         isNoContent={
@@ -107,7 +107,7 @@ export default function UserHome() {
       <CategoryMark
         infoFromUserPage={{
           userName: userName as string,
-          path: "others-writing",
+          path: "writing/liked",
         }}
         isShowAllButton="모두 보기"
         isNoContent={data?.talksUserLikes.length === 0 && data?.recommendsUserLikes.length === 0}
@@ -142,7 +142,7 @@ export default function UserHome() {
       <CategoryMark
         infoFromUserPage={{
           userName: userName as string,
-          path: "my-list",
+          path: "novel-list/created",
           list: {
             isMainCategory: true,
           },
@@ -154,7 +154,7 @@ export default function UserHome() {
       {data?.novelLists.listsUserCreated.length ? (
         <WritingSection isNoContent={false} isForListAll>
           {data?.novelLists.listsUserCreated.map((_) => (
-            <UserNovelList key={_.listId} novelList={_} isMyList />
+            <UserNovelList key={_.listId} novelList={_} isCreated />
           ))}
         </WritingSection>
       ) : (
@@ -164,7 +164,7 @@ export default function UserHome() {
       <CategoryMark
         infoFromUserPage={{
           userName: userName as string,
-          path: "others-list",
+          path: "novel-list/liked",
           list: {
             isMainCategory: true,
           },
@@ -176,7 +176,7 @@ export default function UserHome() {
       {data?.novelLists.listsUserLikes.length ? (
         <WritingSection isNoContent={false} isForListAll>
           {data?.novelLists.listsUserLikes.map((_) => (
-            <UserNovelList key={_.listId} novelList={_} isMyList={false} />
+            <UserNovelList key={_.listId} novelList={_} isCreated={false} />
           ))}
         </WritingSection>
       ) : (
