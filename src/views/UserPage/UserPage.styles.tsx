@@ -135,6 +135,17 @@ export const WritingContnr = styled.div<{
   ${({ isNovelList }) => isNovelList && `margin: 15px 0 7px;`}
 `;
 
+export const NoContentInListDetailed = styled.div`
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 9px;
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  margin: 15px 0 7px;
+`;
+
 export const EditAndDeleteContainer = styled.div`
   position: absolute;
   top: 16px;

@@ -37,6 +37,7 @@ import {
   ButtonToEditContainer,
   NovelContainer,
   IconContainer,
+  NoContentInListDetailed,
 } from "./UserPage.styles";
 import contentMark from "./utils/contentMark";
 import { NoContent } from "./UserWriting.components";
@@ -323,12 +324,12 @@ export default function UserNovelListDetailed({ isCreated }: { isCreated: boolea
         )}
 
         <CategoryMark categoryText={contentPageMark}>
-          {!!listDetailedResult.data?.novelList.novel?.length && (
+          {novels && (
             <ShareIconBox>
               <Icon.ShareWithArrow />
             </ShareIconBox>
           )}
-          {!!listDetailedResult.data?.novelList.novel?.length && isLoginUsersList && (
+          {novels && isLoginUsersList && (
             <ButtonToEditContainer>
               <ButtonToEdit isNoBorder onClick={() => handleEditing(true)}>
                 편집
@@ -417,8 +418,12 @@ export default function UserNovelListDetailed({ isCreated }: { isCreated: boolea
           </ListTitleContnr>
         </ListTitleLimitHeightContnr>
 
-        {!listDetailedResult.data?.novelList.novel.length && (
-          <NoContent contentType="L" isCreatedBy={isCreated} />
+        {!listDetailedResult.data && (
+          <NoContentInListDetailed>존재하지 않는 리스트입니다</NoContentInListDetailed>
+        )}
+
+        {novels && !novels.length && (
+          <NoContentInListDetailed>리스트에 담은 소설이 없습니다</NoContentInListDetailed>
         )}
 
         <NovelListContnr>
@@ -445,7 +450,7 @@ export default function UserNovelListDetailed({ isCreated }: { isCreated: boolea
       {(listDetailedResult.isFetching || toggleLikeResult.isLoading) && <Spinner styles="fixed" />}
 
       <CategoryMark categoryText={contentPageMark}>
-        {!!listDetailedResult.data?.novelList.novel?.length && (
+        {novels && (
           <ShareIconBox>
             <Icon.ShareWithArrow />
           </ShareIconBox>
@@ -546,8 +551,12 @@ export default function UserNovelListDetailed({ isCreated }: { isCreated: boolea
         </ListTitleContnr>
       </ListTitleLimitHeightContnr>
 
-      {!listDetailedResult.data?.novelList.novel.length && (
-        <NoContent contentType="L" isCreatedBy={isCreated} />
+      {!listDetailedResult.data && (
+        <NoContentInListDetailed>존재하지 않는 리스트입니다</NoContentInListDetailed>
+      )}
+
+      {novels && !novels.length && (
+        <NoContentInListDetailed>리스트에 담은 소설이 없습니다</NoContentInListDetailed>
       )}
 
       <NovelListContnr>

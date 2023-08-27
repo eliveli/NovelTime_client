@@ -555,7 +555,7 @@ export type AllTitlesAndOtherInfo = NovelListsSimpleInfos[];
 
 export interface ParamsOfAllNovelListTitles {
   userName: string;
-  isMyList: string;
+  isCreated: string;
 }
 
 export interface ParamsOfListDetailed {

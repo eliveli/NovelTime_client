@@ -357,7 +357,7 @@ export const novelTimeApi = createApi({
     }),
     getAllListTitles: builder.query<AllTitlesAndOtherInfo, ParamsOfAllNovelListTitles>({
       query: (params) =>
-        `/userContent/listDetailed/listTitles/${params.userName}/${params.isMyList}`,
+        `/userContent/listDetailed/listTitles/${params.userName}/${params.isCreated}`,
       keepUnusedDataFor: 120,
       providesTags: ["ListTitlesUpdatedInListDetailed"],
     }),
