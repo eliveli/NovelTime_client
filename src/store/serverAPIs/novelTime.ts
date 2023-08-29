@@ -17,7 +17,6 @@ import {
   HomeData,
   UserNovelLists,
   WeeklyNovelsFromPlatform,
-  NovelPlatformInUrl,
   NovelListByCategory,
   ParamForNovelListByCategory,
   WritingList,
@@ -53,6 +52,9 @@ import {
   ParamToDeleteList,
   ParamToGetMyList,
   ParamToRemoveNovelFromList,
+  ParamToGetWeeklyNovels,
+  SimpleNovel,
+  NovelDetail,
 } from "./types";
 import type { RootState } from "../index";
 
@@ -108,24 +110,51 @@ export const novelTimeApi = createApi({
     getHomeData: builder.query<HomeData, undefined>({
       query: () => `/home`,
     }),
-    getUserNovelListAtRandom: builder.query<UserNovelLists, undefined>({
-      query: () => `/home/userNovelList`,
-    }),
-    getWeeklyNovelsFromPlatform: builder.query<WeeklyNovelsFromPlatform, NovelPlatformInUrl>({
-      query: (novelPlatformInUrl) => `/home/weeklyNovels/${novelPlatformInUrl}`,
+
+    getPopularNovelsInNovelTime: builder.query<SimpleNovel[], number>({
+      query: (limitedNo) => `/novels/popularNovelsInNovelTime/${String(limitedNo)}`,
     }),
 
-    // at novel list page for each category
+    getWeeklyNovelsFromPlatform: builder.query<WeeklyNovelsFromPlatform, ParamToGetWeeklyNovels>({
+      query: ({ platform, limitedNo }) => `/novels/weeklyNovels/${platform}/${String(limitedNo)}`,
+    }),
+
+    getUserNovelListPeopleLike: builder.query<UserNovelLists, number>({
+      query: (limitedNo) => `/novels/userNovelList/liked/${String(limitedNo)}`,
+    }),
+
+    getUserNovelListAtRandom: builder.query<UserNovelLists, number>({
+      query: (limitedNo) => `/novels/userNovelList/random/${String(limitedNo)}`,
+    }),
+
+    getNovelsForLoginUser: builder.query<NovelDetail[], number>({
+      query: (limitedNo) => `/novels/forLoginUser/${String(limitedNo)}`,
+    }),
+
     getNovelListByCategory: builder.query<NovelListByCategory, ParamForNovelListByCategory>({
-      query: (params) =>
-        `/novels/${params.category}/${String(params.platform)}/${String(params.novelId)}`,
-      // ㄴif platform or novelId is undefined then it will be changed to "undefined" as string type
-      // ㄴempty string "" can't be used in url that can cause 404 error
+      query: ({ category, limitedNo, platform }) => {
+        // * novels with desc
+        // * data will be novels detailed or lists containing novels
+        // * set limitedNo to 20
+        if (category === "popularNovels") {
+          return `/novels/popularNovelsInNovelTime/${String(limitedNo)}`;
+        }
+        if (category === "weeklyNovels" && platform) {
+          return `/novels/weeklyNovels/${platform}/${String(limitedNo)}`;
+        }
+        if (category === "userNovelLists") {
+          return `/novels/userNovelList/liked/${String(limitedNo)}`;
+        }
+        if (category === "forLoginUser") {
+          return `/novels/forLoginUser/${String(limitedNo)}`;
+        }
+        return "";
+      },
     }),
 
-    // search for novels
     searchForNovel: builder.query<NovelDetailList, ParamToSearchForNovels>({
-      query: (params) => `/novels/${params.searchType}/${params.searchWord}/${params.pageNo}`,
+      query: (params) =>
+        `/novels/search/${params.searchType}/${params.searchWord}/${params.pageNo}`,
     }),
 
     // add a novel into db and get the novel id and novel title when user gives the novel url
@@ -497,6 +526,9 @@ export const novelTimeApi = createApi({
 // auto-generated based on the defined endpoints
 export const {
   useGetHomeDataQuery,
+  useGetNovelsForLoginUserQuery,
+  useGetPopularNovelsInNovelTimeQuery,
+  useGetUserNovelListPeopleLikeQuery,
   useGetUserNovelListAtRandomQuery,
   useLazyGetUserNovelListAtRandomQuery,
   useGetWeeklyNovelsFromPlatformQuery,

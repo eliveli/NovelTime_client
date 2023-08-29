@@ -240,10 +240,9 @@ export default function Home() {
 
   // userNovelListResult //
   // 1. default value
-  const userNovelListResult = useGetUserNovelListAtRandomQuery(undefined);
+  const userNovelListResult = useGetUserNovelListAtRandomQuery(2);
   // 2. when clicking the button "다른 유저의 리스트 보기" below
-  const [userNovelListTrigger, lazyUserNovelListResult] =
-    useLazyGetUserNovelListAtRandomQuery(undefined);
+  const [userNovelListTrigger, lazyUserNovelListResult] = useLazyGetUserNovelListAtRandomQuery();
   // => 2 or 1
   const userNovelListSelected = lazyUserNovelListResult?.data || userNovelListResult?.data;
 
@@ -252,7 +251,10 @@ export default function Home() {
 
   const platformSelected = matchPlatformName(platformFilter); // for matching the name to request
 
-  const weeklyNovelsResult = useGetWeeklyNovelsFromPlatformQuery(platformSelected);
+  const weeklyNovelsResult = useGetWeeklyNovelsFromPlatformQuery({
+    platform: platformSelected,
+    limitedNo: 10,
+  });
   // use cached data when requesting novels for each platforms
   // 10 novels displayed in home page. 20 in its list page
 
@@ -294,7 +296,7 @@ export default function Home() {
       )}
 
       <CategoryMark categoryText="유저들의 소설 리스트">
-        <LoadNovelListBtn onClick={() => userNovelListTrigger(undefined)}>
+        <LoadNovelListBtn onClick={() => userNovelListTrigger(2)}>
           다른 유저의 리스트 보기
         </LoadNovelListBtn>
       </CategoryMark>
@@ -340,7 +342,7 @@ export default function Home() {
         <RowSlide
           categoryText="플랫폼 별 인기 소설"
           novelNO={weeklyNovelsFromPlatform.length}
-          categoryId="weeklyNovelsFromPlatform" // it can change later
+          categoryId="weeklyNovelsFromEachPlatform" // it can change later
           categoryFilter={
             <FilterForWeeklyNovelsFromPlatform
               platformFilter={platformFilter}

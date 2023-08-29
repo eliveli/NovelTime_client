@@ -339,8 +339,12 @@ export type WeeklyNovelsFromPlatform = {
   ridi?: SimpleNovel[];
   joara?: SimpleNovel[];
 };
+type NovelPlatform = "kakape" | "series" | "ridi" | "joara";
 
-export type NovelPlatformInUrl = "kakape" | "series" | "ridi" | "joara";
+export type ParamToGetWeeklyNovels = {
+  platform: NovelPlatform;
+  limitedNo: number;
+};
 
 export type UserNovelLists =
   | {
@@ -365,8 +369,8 @@ export type NovelListByCategory =
 
 export type ParamForNovelListByCategory = {
   category: string;
+  limitedNo: number;
   platform?: string;
-  novelId?: string;
 };
 
 export interface UserAndToken {

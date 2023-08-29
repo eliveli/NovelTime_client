@@ -22,7 +22,7 @@ type MyComponentProps = React.PropsWithChildren<{
     novelTitle: string;
     novelAuthor: string;
     novelGenre: string;
-    novelIsEnd: boolean;
+    novelIsEnd?: boolean;
     // ㄴ only display this when it is true
     //    when this is false, this info can be wrong info
     //     because I couldn't get this whenever it had changed in the platform

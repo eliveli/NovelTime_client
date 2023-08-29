@@ -1,3 +1,4 @@
+import { ReactNode } from "react";
 import { CategoryMark } from "../CategoryMark";
 import { ColumnBG, ColumnListContainer } from "./ColumnList.styles";
 
@@ -5,9 +6,16 @@ type Props = React.PropsWithChildren<{
   categoryId: string;
   categoryText: string;
   isShowAllMark: boolean;
+  categoryFilter?: ReactNode;
 }>;
 
-export default function ColumnList({ categoryId, categoryText, isShowAllMark, children }: Props) {
+export default function ColumnList({
+  categoryId,
+  categoryText,
+  isShowAllMark,
+  categoryFilter,
+  children,
+}: Props) {
   return (
     <ColumnBG>
       <CategoryMark
@@ -15,6 +23,7 @@ export default function ColumnList({ categoryId, categoryText, isShowAllMark, ch
         categoryId={categoryId}
         isShowAllMark={isShowAllMark}
       />
+      {categoryFilter}
       <ColumnListContainer>{children}</ColumnListContainer>
     </ColumnBG>
   );

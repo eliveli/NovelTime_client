@@ -97,7 +97,7 @@ export default function NovelListByCategory() {
     {
       category: String(categoryId),
       platform: categoryId === "weeklyNovelsFromPlatform" ? platformSelected : undefined,
-      novelId,
+      limitedNo: 20,
     },
     { skip: !categoryId },
   );
