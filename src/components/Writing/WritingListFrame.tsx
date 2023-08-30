@@ -107,7 +107,6 @@ export default function WritingListFrame({
         writing={writing}
         isShowAllMark={isShowAllMark}
         categoryText={categoryText}
-        novelId={novelId}
         fontSize={fontSize}
       />
 

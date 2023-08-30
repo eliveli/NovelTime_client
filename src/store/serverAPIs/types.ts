@@ -334,16 +334,20 @@ export interface HomeData {
 }
 
 export type WeeklyNovelsFromPlatform = {
-  kakape?: SimpleNovel[];
-  series?: SimpleNovel[];
-  ridi?: SimpleNovel[];
-  joara?: SimpleNovel[];
+  kakape?: NovelDetail[];
+  series?: NovelDetail[];
+  ridi?: NovelDetail[];
+  joara?: NovelDetail[];
 };
 type NovelPlatform = "kakape" | "series" | "ridi" | "joara";
 
 export type ParamToGetWeeklyNovels = {
   platform: NovelPlatform;
   limitedNo: number;
+};
+export type ParamForListsPeopleLike = {
+  limitedNo: number;
+  isWithListSummaryCard: string;
 };
 
 export type UserNovelLists =

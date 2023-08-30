@@ -1,17 +1,9 @@
-// /* eslint-disable */
-
 import { styled } from "assets/styles/theme";
-// import { Link } from "react-router-dom";
 
-export const NovelLink = styled.div`
+export const NovelLink = styled.div<{ isBorder?: true }>`
   display: flex;
-  width: 100%;
 
   padding: 12px 0;
-  border-bottom: 1px solid rgba(100, 100, 100, 0.2);
-  &:last-child {
-    border-bottom: 0;
-  }
 
   @media (hover: hover) {
     &:hover {
@@ -24,13 +16,24 @@ export const NovelLink = styled.div`
   /* 태블릿 */
   @media screen and (min-width: 768px) {
   }
+
+  ${({ isBorder }) =>
+    isBorder
+      ? `
+      border: 1px solid rgba(0,0,0,0.1);
+      border-radius: 9px;
+      padding: 12px;
+    `
+      : `
+      border-bottom: 1px solid rgba(100, 100, 100, 0.2);
+      &:last-child { border-bottom: 0; }
+  `}
 `;
 export const NovelInfoBox = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
   margin-left: 10px;
-  width: 100%;
 
   /* 태블릿 , PC */
   @media screen and (min-width: 768px) {

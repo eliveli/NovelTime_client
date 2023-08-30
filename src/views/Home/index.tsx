@@ -9,14 +9,15 @@ import React, { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   useGetHomeDataQuery,
-  useGetUserNovelListAtRandomQuery,
+  useGetUserNovelListAtRandomInHomeQuery,
+  useLazyGetUserNovelListAtRandomInHomeQuery,
   useGetWeeklyNovelsFromPlatformQuery,
-  useLazyGetUserNovelListAtRandomQuery,
 } from "store/serverAPIs/novelTime";
 import { Img } from "store/serverAPIs/types";
 import { goToUserPage, matchPlatformName, useComponentWidth } from "utils";
 import FreeTalk from "views/FreeTalkList/FreeTalkList.components";
 import Recommend from "views/RecommendList/RecommendList.components";
+import { RowSlideSimple } from "components/NovelListFrame/RowSlide";
 import {
   UserAct,
   UserContnr,
@@ -240,9 +241,10 @@ export default function Home() {
 
   // userNovelListResult //
   // 1. default value
-  const userNovelListResult = useGetUserNovelListAtRandomQuery(2);
+  const userNovelListResult = useGetUserNovelListAtRandomInHomeQuery(2);
   // 2. when clicking the button "다른 유저의 리스트 보기" below
-  const [userNovelListTrigger, lazyUserNovelListResult] = useLazyGetUserNovelListAtRandomQuery();
+  const [userNovelListTrigger, lazyUserNovelListResult] =
+    useLazyGetUserNovelListAtRandomInHomeQuery();
   // => 2 or 1
   const userNovelListSelected = lazyUserNovelListResult?.data || userNovelListResult?.data;
 
@@ -295,7 +297,7 @@ export default function Home() {
         <UserRankSection category="소설 추천" rankList={homeResult.data.recommendUserRank} />
       )}
 
-      <CategoryMark categoryText="유저들의 소설 리스트">
+      <CategoryMark categoryText="user's novel list">
         <LoadNovelListBtn onClick={() => userNovelListTrigger(2)}>
           다른 유저의 리스트 보기
         </LoadNovelListBtn>
@@ -324,37 +326,40 @@ export default function Home() {
         <UserRankSection category="소설 리스트" rankList={homeResult.data.novelListUserRank} />
       )}
 
+      <CategoryMark
+        categoryText="popular novels in Novel Time"
+        categoryId="popularNovelsInNovelTime"
+      >
+        <LoadNovelListBtn onClick={() => {}}>모두 보기</LoadNovelListBtn>
+      </CategoryMark>
+
       {homeResult.data?.popularNovelsInNovelTime && (
-        <RowSlide
-          categoryText="노블타임 인기 소설"
-          novelNO={homeResult.data.popularNovelsInNovelTime.length}
-          categoryId="popularNovelsInNovelTime"
-          isShowAllMark
-        >
+        <RowSlideSimple novelNO={homeResult.data.popularNovelsInNovelTime.length}>
           {homeResult.data.popularNovelsInNovelTime.map((novel) => (
             <NovelRow key={novel.novelId} novel={novel} />
           ))}
-        </RowSlide>
+        </RowSlideSimple>
       )}
+
       <AddSpace height={16} />
+      <CategoryMark
+        categoryText="weekly novels from each platform"
+        categoryId="weeklyNovelsFromEachPlatform"
+      >
+        <LoadNovelListBtn onClick={() => {}}>모두 보기</LoadNovelListBtn>
+      </CategoryMark>
+
+      <FilterForWeeklyNovelsFromPlatform
+        platformFilter={platformFilter}
+        setPlatformFilter={setPlatformFilter}
+      />
 
       {weeklyNovelsFromPlatform && (
-        <RowSlide
-          categoryText="플랫폼 별 인기 소설"
-          novelNO={weeklyNovelsFromPlatform.length}
-          categoryId="weeklyNovelsFromEachPlatform" // it can change later
-          categoryFilter={
-            <FilterForWeeklyNovelsFromPlatform
-              platformFilter={platformFilter}
-              setPlatformFilter={setPlatformFilter}
-            />
-          }
-          isShowAllMark
-        >
+        <RowSlideSimple novelNO={weeklyNovelsFromPlatform.length}>
           {weeklyNovelsFromPlatform.map((novel) => (
             <NovelRow key={novel.novelId} novel={novel} />
           ))}
-        </RowSlide>
+        </RowSlideSimple>
       )}
     </MainBG>
   );

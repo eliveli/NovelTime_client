@@ -9,23 +9,25 @@ import { useAppDispatch, useAppSelector } from "store/hooks";
 import {
   useGetNovelsForLoginUserQuery,
   useGetPopularNovelsInNovelTimeQuery,
-  useGetUserNovelListAtRandomQuery,
+  useGetUserNovelListAtRandomInNovelMainQuery,
   useGetUserNovelListPeopleLikeQuery,
   useGetWeeklyNovelsFromPlatformQuery,
-  useLazyGetUserNovelListAtRandomQuery,
+  useLazyGetUserNovelListAtRandomInNovelMainQuery,
 } from "store/serverAPIs/novelTime";
 import { CategoryMark } from "components/CategoryMark";
 import { LoadNovelListBtn } from "views/Home/Home.styles";
 import { FilterForWeeklyNovelsFromPlatform } from "views/Home";
-import { SearchIconBox, IconContainer } from "./NovelList.styles";
-import { ColumnList, ColumnDetailList, RowSlide } from "../../components/NovelListFrame";
+import { WritingSection } from "views/UserPage/UserPage.styles";
+import UserNovelList from "views/UserPage/UserNovelListSummary.components";
+import { RowSlideSimple } from "components/NovelListFrame/RowSlide";
+import { SearchIconBox, IconContainer, Space } from "./NovelList.styles";
 import { NovelColumn, NovelColumnDetail, NovelRow } from "../../components/Novel";
 
 export default function NovelList() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  const popularNovels = useGetPopularNovelsInNovelTimeQuery(5);
+  const popularNovels = useGetPopularNovelsInNovelTimeQuery(4);
 
   // weekly novels from each platforms //
   const [platformFilter, setPlatformFilter] = useState("카카페"); // for clicking the platform tab
@@ -33,15 +35,18 @@ export default function NovelList() {
 
   const weeklyNovels = useGetWeeklyNovelsFromPlatformQuery({
     platform: platformSelected,
-    limitedNo: 5,
+    limitedNo: 10,
   });
   const weeklyNovelsFromPlatform = weeklyNovels.data && weeklyNovels.data[platformSelected];
 
-  const novelListPeopleLike = useGetUserNovelListPeopleLikeQuery(4);
+  const novelListPeopleLike = useGetUserNovelListPeopleLikeQuery({
+    limitedNo: 4,
+    isWithListSummaryCard: String(true),
+  });
 
-  const randomNovelList = useGetUserNovelListAtRandomQuery(4);
+  const randomNovelList = useGetUserNovelListAtRandomInNovelMainQuery(4);
   // clicking the button to display other lists
-  const [randomListTrigger, lazyRandomList] = useLazyGetUserNovelListAtRandomQuery();
+  const [randomListTrigger, lazyRandomList] = useLazyGetUserNovelListAtRandomInNovelMainQuery();
   const userNovelListSelected = lazyRandomList?.data || randomNovelList?.data;
 
   const isLoginUser = !!useAppSelector((state) => state.user.loginUserInfo.userId);
@@ -74,56 +79,59 @@ export default function NovelList() {
         </SearchIconBox>
       </IconContainer>
 
-      <ColumnList
-        isShowAllMark
+      <CategoryMark
         categoryText="popular novels in Novel Time"
         categoryId="popularNovelsInNovelTime"
       >
-        {popularNovels.data?.map((novel) => (
-          <NovelColumn key={novel.novelId} novel={novel} />
-        ))}
-      </ColumnList>
+        <LoadNovelListBtn onClick={() => {}}>모두 보기</LoadNovelListBtn>
+      </CategoryMark>
 
-      <ColumnList
-        isShowAllMark
+      <Space height={12} />
+
+      <WritingSection isNoContent={false}>
+        {popularNovels.data?.map((novel) => (
+          <NovelColumn key={novel.novelId} novel={novel} isBorder />
+        ))}
+      </WritingSection>
+
+      <Space height={9} />
+
+      <CategoryMark
         categoryText="weekly novels from each platform"
         categoryId="weeklyNovelsFromEachPlatform"
-        categoryFilter={
-          // eslint-disable-next-line react/jsx-wrap-multilines
-          <FilterForWeeklyNovelsFromPlatform
-            platformFilter={platformFilter}
-            setPlatformFilter={setPlatformFilter}
-          />
-        }
       >
-        {weeklyNovelsFromPlatform?.map((novel) => (
-          <NovelColumn key={novel.novelId} novel={novel} />
-        ))}
-      </ColumnList>
+        <LoadNovelListBtn onClick={() => {}}>모두 보기</LoadNovelListBtn>
+      </CategoryMark>
+
+      <FilterForWeeklyNovelsFromPlatform
+        platformFilter={platformFilter}
+        setPlatformFilter={setPlatformFilter}
+      />
+
+      {weeklyNovelsFromPlatform && (
+        <RowSlideSimple novelNO={weeklyNovelsFromPlatform.length}>
+          {weeklyNovelsFromPlatform.map((novel) => (
+            <NovelRow key={novel.novelId} novel={novel} />
+          ))}
+        </RowSlideSimple>
+      )}
+
+      <Space />
+
       <CategoryMark
         categoryText="user's novel list people like"
         categoryId="userNovelListPeopleLike"
-        isShowAllMark
-      />
+      >
+        <LoadNovelListBtn onClick={() => {}}>모두 보기</LoadNovelListBtn>
+      </CategoryMark>
 
-      {novelListPeopleLike.data?.map((list) => (
-        <RowSlide
-          categoryId={list.listId}
-          categoryText={list.listTitle}
-          novelNO={list.novel.length}
-          infoFromUserPage={{
-            userName: list.userName,
-            path: "novel-list/created",
-            list: { isMainCategory: false, listId: list.listId },
-          }}
-          userMark={{ userImg: list.userImg, userName: list.userName }}
-          isShowAllMark
-        >
-          {list.novel.map((_) => (
-            <NovelRow key={_.novelId} novel={_} isNotSubInfo />
-          ))}
-        </RowSlide>
-      ))}
+      <WritingSection isNoContent={false} isForListAll>
+        {novelListPeopleLike.data?.map((_) => (
+          <UserNovelList key={_.listId} novelList={_} isCreated={false} />
+        ))}
+      </WritingSection>
+
+      <Space height={9} />
 
       <CategoryMark categoryText="user's novel list">
         <LoadNovelListBtn onClick={() => randomListTrigger(4)}>
@@ -131,34 +139,21 @@ export default function NovelList() {
         </LoadNovelListBtn>
       </CategoryMark>
 
-      {userNovelListSelected?.map((list) => (
-        <RowSlide
-          categoryId={list.listId}
-          categoryText={list.listTitle}
-          novelNO={list.novel.length}
-          infoFromUserPage={{
-            userName: list.userName,
-            path: "novel-list/created", // * change in this page and home later
-            list: { isMainCategory: false, listId: list.listId },
-          }}
-          userMark={{ userImg: list.userImg, userName: list.userName }}
-          isShowAllMark
-        >
-          {list.novel.map((_) => (
-            <NovelRow key={_.novelId} novel={_} isNotSubInfo />
-          ))}
-        </RowSlide>
-      ))}
-
-      <ColumnDetailList
-        isShowAllMark
-        categoryText="novels for you"
-        categoryId="novelsForLoginUser" // * hide this component when user didn't login
-      >
-        {novelsForLoginUser.data?.map((novel) => (
-          <NovelColumnDetail key={novel.novelId} novel={novel} />
+      <WritingSection isNoContent={false} isForListAll>
+        {userNovelListSelected?.map((_) => (
+          <UserNovelList key={_.listId} novelList={_} isCreated={false} />
         ))}
-      </ColumnDetailList>
+      </WritingSection>
+
+      <Space height={9} />
+
+      <CategoryMark categoryText="novels for you" categoryId="novelsForLoginUser">
+        <LoadNovelListBtn onClick={() => {}}>모두 보기</LoadNovelListBtn>
+      </CategoryMark>
+
+      {novelsForLoginUser.data?.map((novel) => (
+        <NovelColumnDetail key={novel.novelId} novel={novel} />
+      ))}
     </MainBG>
   );
 }

@@ -55,6 +55,7 @@ import {
   ParamToGetWeeklyNovels,
   SimpleNovel,
   NovelDetail,
+  ParamForListsPeopleLike,
 } from "./types";
 import type { RootState } from "../index";
 
@@ -119,12 +120,17 @@ export const novelTimeApi = createApi({
       query: ({ platform, limitedNo }) => `/novels/weeklyNovels/${platform}/${String(limitedNo)}`,
     }),
 
-    getUserNovelListPeopleLike: builder.query<UserNovelLists, number>({
-      query: (limitedNo) => `/novels/userNovelList/liked/${String(limitedNo)}`,
+    getUserNovelListPeopleLike: builder.query<ListSummary[], ParamForListsPeopleLike>({
+      query: ({ limitedNo, isWithListSummaryCard }) =>
+        `/novels/userNovelList/liked/${String(limitedNo)}/${isWithListSummaryCard}`,
     }),
 
-    getUserNovelListAtRandom: builder.query<UserNovelLists, number>({
-      query: (limitedNo) => `/novels/userNovelList/random/${String(limitedNo)}`,
+    getUserNovelListAtRandomInHome: builder.query<UserNovelLists, number>({
+      query: (limitedNo) => `/novels/userNovelList/random/${String(limitedNo)}/false`,
+    }),
+
+    getUserNovelListAtRandomInNovelMain: builder.query<ListSummary[], number>({
+      query: (limitedNo) => `/novels/userNovelList/random/${String(limitedNo)}/true`,
     }),
 
     getNovelsForLoginUser: builder.query<NovelDetail[], number>({
@@ -529,8 +535,10 @@ export const {
   useGetNovelsForLoginUserQuery,
   useGetPopularNovelsInNovelTimeQuery,
   useGetUserNovelListPeopleLikeQuery,
-  useGetUserNovelListAtRandomQuery,
-  useLazyGetUserNovelListAtRandomQuery,
+  useGetUserNovelListAtRandomInHomeQuery,
+  useGetUserNovelListAtRandomInNovelMainQuery,
+  useLazyGetUserNovelListAtRandomInHomeQuery,
+  useLazyGetUserNovelListAtRandomInNovelMainQuery,
   useGetWeeklyNovelsFromPlatformQuery,
   useGetNovelListByCategoryQuery,
   useSearchForNovelQuery,

@@ -93,20 +93,6 @@ export default function CategoryMark({
       </CategoryContainer>
     );
   }
-  if (novelId) {
-    return (
-      <CategoryContainer>
-        <CategoryDesc>{categoryText}</CategoryDesc>
-        {/* display show-all mark */}
-        {isShowAllMark && (
-          <LinkCategory to={`/novel-list/${categoryText}/${categoryId as string}/${novelId}`}>
-            <ShowAllText>전체보기</ShowAllText>
-            <ShowAllIcon />
-          </LinkCategory>
-        )}
-      </CategoryContainer>
-    );
-  }
 
   // category mark for each novel list title on my novel list or other's novel list in user page
   if (infoFromUserPage?.list?.isMainCategory === false) {
@@ -131,9 +117,9 @@ export default function CategoryMark({
           </CategoryDescContnr>
         )}
         {/* the page is not show-all-page */}
-        {isShowAllMark && (
+        {isShowAllMark && infoFromUserPage.list.listId && (
           <LinkCategory
-            novelNO={novelNO}
+            // novelNO={novelNO}
             isUserMark={userMark !== undefined}
             to={`/user-page/${infoFromUserPage.userName}/${infoFromUserPage.path}/${infoFromUserPage.list.listId}`}
           >

@@ -28,9 +28,11 @@ type MyComponentProps = React.PropsWithChildren<{
     //     because I couldn't get this whenever it had changed in the platform
     //     also even in the novel platform this info often doesn't change after the novel is end
   };
+
+  isBorder?: true;
 }>;
 
-export default function NovelColumn({ novel }: MyComponentProps) {
+export default function NovelColumn({ novel, isBorder }: MyComponentProps) {
   const { novelId, novelImg, novelTitle, novelAuthor, novelGenre, novelIsEnd } = novel;
   const theme = {};
   const infoRef = useRef<HTMLDivElement>(null);
@@ -41,6 +43,7 @@ export default function NovelColumn({ novel }: MyComponentProps) {
   return (
     <ThemeProvider theme={theme}>
       <NovelLink
+        isBorder={isBorder}
         onClick={() => {
           navigate(`/novel-detail/${novelId}`);
         }}

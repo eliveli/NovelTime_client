@@ -70,11 +70,11 @@ export default function NovelDetail() {
           />
 
           <WritingListFrame
+            novelId={novelId}
             fontSize={20}
             categoryText="Let's talk about the novel"
             isTalk={writingOption.type === "T"}
             selectWritingType={selectWritingType}
-            novelId={novelId}
             novelTitle={novelInDetail.data.novel.novelTitle}
             writing
           >
@@ -94,7 +94,6 @@ export default function NovelDetail() {
           )}
 
           <RowSlide
-            novelId={novelId}
             categoryId="novelPublishedByTheAuthor"
             categoryText="작가의 다른 작품"
             novelNO={novelInDetail.data.novelsPublishedByTheAuthor.length}

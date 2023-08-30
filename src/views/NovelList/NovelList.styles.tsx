@@ -15,3 +15,8 @@ export const IconContainer = styled.div`
   justify-content: flex-end;
   margin-top: 16px;
 `;
+export const Space = styled.div<{ height?: number }>`
+  width: 100%;
+
+  height: ${({ height }) => height || 16}px;
+`;
