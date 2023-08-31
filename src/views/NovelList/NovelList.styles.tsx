@@ -20,3 +20,19 @@ export const Space = styled.div<{ height?: number }>`
 
   height: ${({ height }) => height || 16}px;
 `;
+export const Note = styled.span`
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.4);
+  font-size: 13px;
+
+  display: inline-block;
+
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  padding: 2px 4px;
+  border-radius: 3px;
+  background-color: white;
+
+  position: absolute;
+  left: 112px;
+  bottom: 8px;
+`;

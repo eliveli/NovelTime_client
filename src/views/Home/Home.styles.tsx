@@ -178,7 +178,7 @@ export const AllArrowContnr = styled.div`
   gap: 10px;
 `;
 
-export const LoadNovelListBtn = styled.button`
+export const BtnToLoadContent = styled.button`
   white-space: nowrap;
 
   border: 1px solid rgba(0, 0, 0, 0.2);

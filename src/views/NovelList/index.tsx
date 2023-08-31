@@ -15,12 +15,14 @@ import {
   useLazyGetUserNovelListAtRandomInNovelMainQuery,
 } from "store/serverAPIs/novelTime";
 import { CategoryMark } from "components/CategoryMark";
-import { LoadNovelListBtn } from "views/Home/Home.styles";
+import { BtnToLoadContent } from "views/Home/Home.styles";
 import { FilterForWeeklyNovelsFromPlatform } from "views/Home";
 import { WritingSection } from "views/UserPage/UserPage.styles";
 import UserNovelList from "views/UserPage/UserNovelListSummary.components";
 import { RowSlideSimple } from "components/NovelListFrame/RowSlide";
-import { SearchIconBox, IconContainer, Space } from "./NovelList.styles";
+import NovelColumnSkeleton from "components/Novel/NovelColumnSkeleton";
+import theme from "assets/styles/theme";
+import { SearchIconBox, IconContainer, Space, Note } from "./NovelList.styles";
 import { NovelColumn, NovelColumnDetail, NovelRow } from "../../components/Novel";
 
 export default function NovelList() {
@@ -49,13 +51,21 @@ export default function NovelList() {
   const [randomListTrigger, lazyRandomList] = useLazyGetUserNovelListAtRandomInNovelMainQuery();
   const userNovelListSelected = lazyRandomList?.data || randomNovelList?.data;
 
-  const isLoginUser = !!useAppSelector((state) => state.user.loginUserInfo.userId);
-  const novelsForLoginUser = useGetNovelsForLoginUserQuery(5, { skip: !isLoginUser });
+  const loginUserName = useAppSelector((state) => state.user.loginUserInfo.userName);
+  const novelsForLoginUser = useGetNovelsForLoginUserQuery(4, { skip: !loginUserName });
+
+  const [isToolTipOpened, handleToolTip] = useState(false);
 
   const isDeskTop = useWhetherItIsDesktop();
 
   return (
-    <MainBG>
+    <MainBG
+      onClick={() => {
+        if (isToolTipOpened) {
+          handleToolTip(false);
+        }
+      }}
+    >
       <IconContainer>
         <SearchIconBox
           onClick={() => {
@@ -83,7 +93,7 @@ export default function NovelList() {
         categoryText="popular novels in Novel Time"
         categoryId="popularNovelsInNovelTime"
       >
-        <LoadNovelListBtn onClick={() => {}}>모두 보기</LoadNovelListBtn>
+        <BtnToLoadContent onClick={() => {}}>모두 보기</BtnToLoadContent>
       </CategoryMark>
 
       <Space height={12} />
@@ -100,7 +110,7 @@ export default function NovelList() {
         categoryText="weekly novels from each platform"
         categoryId="weeklyNovelsFromEachPlatform"
       >
-        <LoadNovelListBtn onClick={() => {}}>모두 보기</LoadNovelListBtn>
+        <BtnToLoadContent onClick={() => {}}>모두 보기</BtnToLoadContent>
       </CategoryMark>
 
       <FilterForWeeklyNovelsFromPlatform
@@ -122,38 +132,71 @@ export default function NovelList() {
         categoryText="user's novel list people like"
         categoryId="userNovelListPeopleLike"
       >
-        <LoadNovelListBtn onClick={() => {}}>모두 보기</LoadNovelListBtn>
+        <BtnToLoadContent onClick={() => {}}>모두 보기</BtnToLoadContent>
       </CategoryMark>
 
       <WritingSection isNoContent={false} isForListAll>
         {novelListPeopleLike.data?.map((_) => (
-          <UserNovelList key={_.listId} novelList={_} isCreated={false} />
+          <UserNovelList
+            key={_.listId}
+            userNameFromNovelMain={_.userName}
+            novelList={_}
+            isCreated
+          />
         ))}
       </WritingSection>
 
       <Space height={9} />
 
       <CategoryMark categoryText="user's novel list">
-        <LoadNovelListBtn onClick={() => randomListTrigger(4)}>
+        <BtnToLoadContent onClick={() => randomListTrigger(4)}>
           다른 유저의 리스트 보기
-        </LoadNovelListBtn>
+        </BtnToLoadContent>
       </CategoryMark>
 
       <WritingSection isNoContent={false} isForListAll>
         {userNovelListSelected?.map((_) => (
-          <UserNovelList key={_.listId} novelList={_} isCreated={false} />
+          <UserNovelList
+            key={_.listId}
+            userNameFromNovelMain={_.userName}
+            novelList={_}
+            isCreated
+          />
         ))}
       </WritingSection>
 
       <Space height={9} />
 
       <CategoryMark categoryText="novels for you" categoryId="novelsForLoginUser">
-        <LoadNovelListBtn onClick={() => {}}>모두 보기</LoadNovelListBtn>
+        {!!novelsForLoginUser.data?.length && (
+          <BtnToLoadContent onClick={() => {}}>모두 보기</BtnToLoadContent>
+        )}
+
+        <Icon.IconBox
+          color={theme.color.mainLight}
+          size={22}
+          styles="margin-left: 5px;"
+          onClick={() => handleToolTip(true)}
+        >
+          <Icon.QuestionMark />
+        </Icon.IconBox>
+        {isToolTipOpened && (
+          <Note>
+            {loginUserName || "방문자"}
+            님이 글을 남긴 소설을 기준으로 다른 독자가 본 소설을 추천해 드려요
+          </Note>
+        )}
       </CategoryMark>
 
-      {novelsForLoginUser.data?.map((novel) => (
-        <NovelColumnDetail key={novel.novelId} novel={novel} />
-      ))}
+      {novelsForLoginUser.data?.length ? (
+        novelsForLoginUser.data.map((novel) => (
+          <NovelColumnDetail key={novel.novelId} novel={novel} />
+        ))
+      ) : (
+        <NovelColumnSkeleton
+          text={`아직 ${loginUserName || "방문자"}님이 남긴 글이 없어 추천이 어려워요`}
+        />
+      )}
     </MainBG>
   );
 }

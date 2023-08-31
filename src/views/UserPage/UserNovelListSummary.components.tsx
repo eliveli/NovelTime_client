@@ -24,7 +24,15 @@ import {
 } from "./UserPage.styles";
 
 const UserNovelList = React.memo(
-  ({ novelList, isCreated }: { novelList: ListSummary; isCreated: boolean }) => {
+  ({
+    novelList,
+    isCreated,
+    userNameFromNovelMain,
+  }: {
+    novelList: ListSummary;
+    isCreated: boolean;
+    userNameFromNovelMain?: string;
+  }) => {
     const {
       listId,
       listTitle,
@@ -85,7 +93,7 @@ const UserNovelList = React.memo(
       <ListInfoContnr
         onClick={() => {
           navigate(
-            `/user-page/${userNameInParam as string}/${
+            `/user-page/${userNameFromNovelMain || (userNameInParam as string)}/${
               isCreated ? `novel-list/created` : `novel-list/liked`
             }/${listId}`,
           );

@@ -36,7 +36,7 @@ import {
   HiPlus,
   HiOutlineHome,
 } from "react-icons/hi";
-import { RiRunLine, RiShareForward2Fill, RiKakaoTalkFill } from "react-icons/ri";
+import { RiRunLine, RiShareForward2Fill, RiKakaoTalkFill, RiQuestionMark } from "react-icons/ri";
 import {
   MdOutlineShare,
   MdOutlineMoreHoriz,
@@ -261,6 +261,9 @@ const Icon = {
   `,
   Book: styled(FiBookOpen)`
     ${iconStyle()};
+  `,
+  QuestionMark: styled(RiQuestionMark)`
+    ${iconStyleHover()};
   `,
 };
 export default Icon;

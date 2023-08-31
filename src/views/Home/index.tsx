@@ -37,7 +37,7 @@ import {
   ArrowContnr,
   TitleNormalStyle,
   TitleEmphasis,
-  LoadNovelListBtn,
+  BtnToLoadContent,
   AddSpace,
 } from "./Home.styles";
 
@@ -298,9 +298,9 @@ export default function Home() {
       )}
 
       <CategoryMark categoryText="user's novel list">
-        <LoadNovelListBtn onClick={() => userNovelListTrigger(2)}>
+        <BtnToLoadContent onClick={() => userNovelListTrigger(2)}>
           다른 유저의 리스트 보기
-        </LoadNovelListBtn>
+        </BtnToLoadContent>
       </CategoryMark>
 
       {userNovelListSelected?.map((list) => (
@@ -330,7 +330,7 @@ export default function Home() {
         categoryText="popular novels in Novel Time"
         categoryId="popularNovelsInNovelTime"
       >
-        <LoadNovelListBtn onClick={() => {}}>모두 보기</LoadNovelListBtn>
+        <BtnToLoadContent onClick={() => {}}>모두 보기</BtnToLoadContent>
       </CategoryMark>
 
       {homeResult.data?.popularNovelsInNovelTime && (
@@ -346,7 +346,7 @@ export default function Home() {
         categoryText="weekly novels from each platform"
         categoryId="weeklyNovelsFromEachPlatform"
       >
-        <LoadNovelListBtn onClick={() => {}}>모두 보기</LoadNovelListBtn>
+        <BtnToLoadContent onClick={() => {}}>모두 보기</BtnToLoadContent>
       </CategoryMark>
 
       <FilterForWeeklyNovelsFromPlatform
