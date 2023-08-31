@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import MainBG from "components/MainBG";
 import Icon from "assets/Icon";
 import { matchPlatformName, useWhetherItIsDesktop } from "utils";
-import { SEARCH_NOVEL } from "utils/pathname";
+import { NOVEL_LIST, SEARCH_NOVEL } from "utils/pathname";
 import { setSearchList } from "store/clientSlices/filterSlice";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import {
@@ -54,6 +54,14 @@ export default function NovelList() {
   const loginUserName = useAppSelector((state) => state.user.loginUserInfo.userName);
   const novelsForLoginUser = useGetNovelsForLoginUserQuery(4, { skip: !loginUserName });
 
+  const category = {
+    popularNovels: "popular novels in Novel Time",
+    weeklyNovels: "weekly novels from each platform",
+    listLiked: "user's novel list people like",
+    randomList: "user's random novel list",
+    novelsForYou: "novels for you",
+  };
+
   const [isToolTipOpened, handleToolTip] = useState(false);
 
   const isDeskTop = useWhetherItIsDesktop();
@@ -89,11 +97,10 @@ export default function NovelList() {
         </SearchIconBox>
       </IconContainer>
 
-      <CategoryMark
-        categoryText="popular novels in Novel Time"
-        categoryId="popularNovelsInNovelTime"
-      >
-        <BtnToLoadContent onClick={() => {}}>모두 보기</BtnToLoadContent>
+      <CategoryMark categoryText={category.popularNovels} categoryId="popularNovels">
+        <BtnToLoadContent onClick={() => navigate(`${NOVEL_LIST}/popularNovels`)}>
+          모두 보기
+        </BtnToLoadContent>
       </CategoryMark>
 
       <Space height={12} />
@@ -106,11 +113,10 @@ export default function NovelList() {
 
       <Space height={9} />
 
-      <CategoryMark
-        categoryText="weekly novels from each platform"
-        categoryId="weeklyNovelsFromEachPlatform"
-      >
-        <BtnToLoadContent onClick={() => {}}>모두 보기</BtnToLoadContent>
+      <CategoryMark categoryText={category.weeklyNovels} categoryId="weeklyNovels">
+        <BtnToLoadContent onClick={() => navigate(`${NOVEL_LIST}/weeklyNovels`)}>
+          모두 보기
+        </BtnToLoadContent>
       </CategoryMark>
 
       <FilterForWeeklyNovelsFromPlatform
@@ -128,11 +134,10 @@ export default function NovelList() {
 
       <Space />
 
-      <CategoryMark
-        categoryText="user's novel list people like"
-        categoryId="userNovelListPeopleLike"
-      >
-        <BtnToLoadContent onClick={() => {}}>모두 보기</BtnToLoadContent>
+      <CategoryMark categoryText={category.listLiked} categoryId="listLiked">
+        <BtnToLoadContent onClick={() => navigate(`${NOVEL_LIST}/listLiked`)}>
+          모두 보기
+        </BtnToLoadContent>
       </CategoryMark>
 
       <WritingSection isNoContent={false} isForListAll>
@@ -148,7 +153,7 @@ export default function NovelList() {
 
       <Space height={9} />
 
-      <CategoryMark categoryText="user's novel list">
+      <CategoryMark categoryText={category.randomList}>
         <BtnToLoadContent onClick={() => randomListTrigger(4)}>
           다른 유저의 리스트 보기
         </BtnToLoadContent>
@@ -167,21 +172,23 @@ export default function NovelList() {
 
       <Space height={9} />
 
-      <CategoryMark categoryText="novels for you" categoryId="novelsForLoginUser">
+      <CategoryMark categoryText={category.novelsForYou} categoryId="novelsForYou">
         {!!novelsForLoginUser.data?.length && (
-          <BtnToLoadContent onClick={() => {}}>모두 보기</BtnToLoadContent>
+          <BtnToLoadContent onClick={() => navigate(`${NOVEL_LIST}/novelsForYou`)}>
+            모두 보기
+          </BtnToLoadContent>
         )}
 
         <Icon.IconBox
           color={theme.color.mainLight}
           size={22}
-          styles="margin-left: 5px;"
+          styles="margin: 0 0 2px 5px;"
           onClick={() => handleToolTip(true)}
         >
           <Icon.QuestionMark />
         </Icon.IconBox>
         {isToolTipOpened && (
-          <Note>
+          <Note isWithShowAllBtn={!!novelsForLoginUser.data?.length}>
             {loginUserName || "방문자"}
             님이 글을 남긴 소설을 기준으로 다른 독자가 본 소설을 추천해 드려요
           </Note>

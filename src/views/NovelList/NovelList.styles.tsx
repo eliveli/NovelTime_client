@@ -20,7 +20,7 @@ export const Space = styled.div<{ height?: number }>`
 
   height: ${({ height }) => height || 16}px;
 `;
-export const Note = styled.span`
+export const Note = styled.span<{ isWithShowAllBtn?: boolean }>`
   font-weight: 500;
   color: rgba(0, 0, 0, 0.4);
   font-size: 13px;
@@ -33,6 +33,6 @@ export const Note = styled.span`
   background-color: white;
 
   position: absolute;
-  left: 112px;
+  left: ${({ isWithShowAllBtn }) => (isWithShowAllBtn ? 192 : 112)}px;
   bottom: 8px;
 `;

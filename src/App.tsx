@@ -128,8 +128,7 @@ function App() {
               "/talk-detail/:talkId",
               "/talk-detail/:talkId/:commentId",
               "/recommend-detail/:recommendId",
-              "/novel-list/:categoryText/:categoryId",
-              "/novel-list/:categoryText/:categoryId/:novelId",
+              "/novel-list/:categoryId",
               "/add-writing",
               "/add-writing/:novelId/:novelTitle",
               "/edit-writing",
@@ -162,11 +161,7 @@ function App() {
           <Route path="/recommend-list" element={<RecommendList />} />
 
           <Route path="/novel-list" element={<NovelList />} />
-          <Route path="/novel-list/:categoryText/:categoryId" element={<NovelListByCategory />} />
-          <Route
-            path="/novel-list/:categoryText/:categoryId/:novelId"
-            element={<NovelListByCategory />}
-          />
+          <Route path="/novel-list/:categoryId" element={<NovelListByCategory />} />
 
           <Route path="/novel-detail/:novelId" element={<NovelDetail />} />
 

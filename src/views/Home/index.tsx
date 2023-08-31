@@ -18,6 +18,7 @@ import { goToUserPage, matchPlatformName, useComponentWidth } from "utils";
 import FreeTalk from "views/FreeTalkList/FreeTalkList.components";
 import Recommend from "views/RecommendList/RecommendList.components";
 import { RowSlideSimple } from "components/NovelListFrame/RowSlide";
+import { NOVEL_LIST } from "utils/pathname";
 import {
   UserAct,
   UserContnr,
@@ -272,6 +273,13 @@ export default function Home() {
   //  : i.e. categoryId ("weeklyNovelsFromPlatform"),
   // - 이동한 리스트 페이지에서는 desc 포함 여러 정보를 요청해야 함
 
+  const category = {
+    popularNovels: "popular novels in Novel Time",
+    weeklyNovels: "weekly novels from each platform",
+    randomList: "user's random novel list",
+  };
+
+  const navigate = useNavigate();
   return (
     <MainBG>
       {homeResult.isFetching && <Spinner styles="fixed" />}
@@ -297,7 +305,7 @@ export default function Home() {
         <UserRankSection category="소설 추천" rankList={homeResult.data.recommendUserRank} />
       )}
 
-      <CategoryMark categoryText="user's novel list">
+      <CategoryMark categoryText={category.randomList}>
         <BtnToLoadContent onClick={() => userNovelListTrigger(2)}>
           다른 유저의 리스트 보기
         </BtnToLoadContent>
@@ -326,11 +334,10 @@ export default function Home() {
         <UserRankSection category="소설 리스트" rankList={homeResult.data.novelListUserRank} />
       )}
 
-      <CategoryMark
-        categoryText="popular novels in Novel Time"
-        categoryId="popularNovelsInNovelTime"
-      >
-        <BtnToLoadContent onClick={() => {}}>모두 보기</BtnToLoadContent>
+      <CategoryMark categoryText={category.popularNovels} categoryId="popularNovels">
+        <BtnToLoadContent onClick={() => navigate(`${NOVEL_LIST}/popularNovels`)}>
+          모두 보기
+        </BtnToLoadContent>
       </CategoryMark>
 
       {homeResult.data?.popularNovelsInNovelTime && (
@@ -342,11 +349,11 @@ export default function Home() {
       )}
 
       <AddSpace height={16} />
-      <CategoryMark
-        categoryText="weekly novels from each platform"
-        categoryId="weeklyNovelsFromEachPlatform"
-      >
-        <BtnToLoadContent onClick={() => {}}>모두 보기</BtnToLoadContent>
+
+      <CategoryMark categoryText={category.weeklyNovels} categoryId="weeklyNovels">
+        <BtnToLoadContent onClick={() => navigate(`${NOVEL_LIST}/weeklyNovels`)}>
+          모두 보기
+        </BtnToLoadContent>
       </CategoryMark>
 
       <FilterForWeeklyNovelsFromPlatform

@@ -112,7 +112,7 @@ export const novelTimeApi = createApi({
       query: () => `/home`,
     }),
 
-    getPopularNovelsInNovelTime: builder.query<SimpleNovel[], number>({
+    getPopularNovelsInNovelTime: builder.query<NovelDetail[], number>({
       query: (limitedNo) => `/novels/popularNovelsInNovelTime/${String(limitedNo)}`,
     }),
 
