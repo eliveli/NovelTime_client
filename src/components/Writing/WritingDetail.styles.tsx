@@ -4,10 +4,7 @@ import { Img } from "store/serverAPIs/types";
 export const WritingDetailContainer = styled.div`
   border-radius: 20px;
   border: 1px solid lightgray;
-  /* margin-top: 10px; */
   padding: 10px 0;
-  /* padding: 10px 20px 20px 20px; */
-
   position: relative;
 `;
 export const EditAndDeleteContainer = styled.div`
@@ -20,7 +17,6 @@ export const Writing = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  /* border-bottom: 1px solid ${(props) => props.theme.color.lightGray100_2}; */
 `;
 export const NextToImgContainer = styled.div`
   margin-left: 12px;
@@ -30,7 +26,6 @@ export const UserContainer = styled.div`
   display: flex;
   align-items: center;
   border-bottom: 1px dotted rgba(0, 0, 0, 0.1);
-  /* padding-bottom: 9px; */
   padding-bottom: 16px;
   padding-left: 20px;
   padding-right: 20px;
@@ -44,7 +39,6 @@ export const UserImg = styled.div<{ userImg: Img }>`
   min-width: 50px;
   height: 50px;
 
-  // when image doesn't exist
   ${({ userImg }) => !userImg.src && `border: 1px solid #e5e5e5;`};
 
   background-image: url(${({ userImg }) => userImg.src});
@@ -60,8 +54,6 @@ export const UserNameBox = styled.div`
 
   margin-left: 0;
   padding: 0;
-
-  /* border-bottom: 1px solid ${(props) => props.theme.color.lightGray100_1}; */
 `;
 
 export const UserName = styled.p`

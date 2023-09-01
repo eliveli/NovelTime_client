@@ -78,10 +78,7 @@ export const RowAlbumContainer = styled.div`
   &::-webkit-scrollbar {
     display: none;
   }
-  /* 태블릿 */
-  @media screen and (min-width: 768px) {
-    /* position: relative; */
-  }
+
   /* PC */
   @media screen and (min-width: 1024px) {
     overflow: hidden;
@@ -99,9 +96,6 @@ export const RowAlbum = styled.div<{ moveX: number }>`
   margin-left: -6px;
   margin-right: -6px;
 
-  /* 태블릿 */
-  @media screen and (min-width: 768px) {
-  }
   /* PC */
   @media screen and (min-width: 1024px) {
     position: relative;
@@ -114,8 +108,5 @@ export const RowSlideContainer = styled.div`
   /* 태블릿 */
   @media screen and (min-width: 768px) {
     position: relative;
-  }
-  /* PC */
-  @media screen and (min-width: 1024px) {
   }
 `;

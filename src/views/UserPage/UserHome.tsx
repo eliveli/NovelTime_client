@@ -1,14 +1,10 @@
-/* eslint-disable react/jsx-indent */
-import React, { useState } from "react";
+import { useState } from "react";
 import MainBG from "components/MainBG";
-
 import { CategoryMark } from "components/CategoryMark";
 import { useAppSelector } from "store/hooks";
 import { useParams } from "react-router-dom";
 import { useGetContentOfUserHomeQuery } from "store/serverAPIs/novelTime";
 import Spinner from "assets/Spinner";
-import { RowSlide } from "../../components/NovelListFrame";
-import { NovelRow } from "../../components/Novel";
 
 import { WritingSection } from "./UserPage.styles";
 import { Writing, Comment, WritingFilter, NoContent } from "./UserWriting.components";
@@ -19,7 +15,6 @@ export default function UserHome() {
   const loginUserInfo = useAppSelector((state) => state.user.loginUserInfo);
   const { userName } = useParams();
 
-  // server request with userName
   const { data, isFetching } = useGetContentOfUserHomeQuery(userName as string, {
     skip: !userName,
   });

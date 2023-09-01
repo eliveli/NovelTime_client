@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import { useRef } from "react";
 import { ThemeProvider } from "styled-components";
 import { goToUserPage, useComponentWidth } from "utils";
 import { WritingWithoutGenre } from "store/serverAPIs/types";

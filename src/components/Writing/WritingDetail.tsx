@@ -1,5 +1,3 @@
-import { useState } from "react";
-import Icon from "assets/Icon";
 import { Img } from "store/serverAPIs/types";
 import { goToUserPage } from "utils";
 import { useNavigate } from "react-router-dom";
@@ -10,14 +8,10 @@ import {
   Writing,
   UserNameBox,
   WritingTitle,
-  WritingImg,
   UserContainer,
-  WritingImgBox,
   WritingDesc,
   NextToImgContainer,
 } from "./WritingDetail.styles";
-
-// import { UpIcon } from "components/Novel/NovelColumnDetail.styles";
 
 interface TalkProps {
   detailTalk: {
@@ -81,7 +75,7 @@ export function TalkDetail({ detailTalk }: TalkProps) {
         </NextToImgContainer>
       </UserContainer>
       <WritingDesc>{talkDesc}</WritingDesc>
-      {/* 유저 글 작성 시 넣은 사진 위치를 그대로 글 사이에 넣을 수 있나? */}
+      {/* 만약 포스트에 사진 추가 시 유저가 넣은 사진 위치 고려 */}
       {/* <WritingImgBox>
               <WritingImg img={talkPhoto ?? recommendPhoto} />
             </WritingImgBox> */}
@@ -116,7 +110,6 @@ export function RecommendDetail({ detailRecommend }: RecommendProps) {
         </NextToImgContainer>
       </UserContainer>
       <WritingDesc>{recommendDesc}</WritingDesc>
-      {/* 유저 글 작성 시 넣은 사진 위치를 그대로 글 사이에 넣을 수 있나? */}
       {/* <WritingImgBox>
               <WritingImg img={talkPhoto ?? recommendPhoto} />
             </WritingImgBox> */}

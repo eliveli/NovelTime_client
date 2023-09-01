@@ -16,9 +16,6 @@ import {
   BoardContainer,
   WritingContent,
   WritingTitle,
-  ContentPlusContnrMobile,
-  ContentPlusAlignMobile,
-  ContentPlusCotnrPC,
   WritingContentContnr,
   WritingTitleContanr,
   SubmitBtnPC,
@@ -148,7 +145,6 @@ export default function EditWriting() {
         />
       </WritingTitleContanr>
 
-      {/* treat later */}
       {/* <ContentPlusCotnrPC>사진/간단텍스트설정/이모지</ContentPlusCotnrPC> */}
 
       <WritingContentContnr>

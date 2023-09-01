@@ -1,5 +1,4 @@
 import theme, { styled } from "assets/styles/theme";
-
 import Icon from "../../assets/Icon";
 
 export const SearchBarContainer = styled.div`

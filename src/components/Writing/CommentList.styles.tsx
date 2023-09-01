@@ -15,13 +15,12 @@ export const CommentMarkContainer = styled.div`
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid rgba(100, 100, 100, 0.1);
-  /* border-bottom: 1px dotted rgba(0, 0, 0, 0.1); */
   padding-bottom: 7px;
   padding-left: 20px;
   padding-right: 20px;
   ${theme.media.mobile(`
     padding: 0 16px;
-  `)}/* padding: 0 0 10px 0; */
+  `)}
 `;
 export const CommentMark = styled.span``;
 export const CommentContainer = styled.div<{
@@ -220,11 +219,6 @@ export const ReCommentUser = styled.span`
   font-weight: 700;
   color: rgba(0, 0, 0, 0.5);
 `;
-// export const ReCommentContainer = styled.div`
-//   margin-left: -20px;
-//   margin-bottom: -12px;
-// `;
-
 export const CommentInputContainerOnMobile = styled.div<{ isRootCommentInput: boolean }>`
   display: flex;
   align-items: center;
@@ -265,7 +259,6 @@ export const WriteTextCntnr = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  /* border-radius: 20px; */
   border-radius: 14px;
   border: 1px solid rgba(0, 0, 0, 0.1);
   padding: 8px 14px;
@@ -309,9 +302,6 @@ export const WriteCommentSubmit = styled.button`
   min-width: 46px;
   height: 46px;
   border-radius: 14px;
-  /* min-width: 30px; */
-  /* height: 34px; */
-  /* border-radius: 20px; */
   background-color: transparent;
   white-space: nowrap;
   margin-left: 10px;

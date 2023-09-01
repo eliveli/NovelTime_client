@@ -25,7 +25,6 @@ export default function SortWriting() {
             category={_}
             onClick={() => {
               if (currentSortType !== _) {
-                // 직전과 필터가 다를 때 페이지넘버 1
                 setFilters({ sortType: _, pageNo: 1 });
               } else {
                 setFilters({ sortType: _ });

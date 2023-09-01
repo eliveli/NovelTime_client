@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import MainBG from "components/MainBG";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -19,9 +18,6 @@ import {
   BoardContainer,
   WritingContent,
   WritingTitle,
-  ContentPlusContnrMobile,
-  ContentPlusAlignMobile,
-  ContentPlusCotnrPC,
   WritingContentContnr,
   WritingTitleContanr,
   SubmitBtnPC,
@@ -440,8 +436,6 @@ export default function AddWriting() {
           <WritingTitleContanr>
             <WritingTitle ref={titleRef} placeholder="글 제목을 입력하세요" onChange={writeTitle} />
           </WritingTitleContanr>
-
-          {/* treat later */}
           {/* <ContentPlusCotnrPC>사진/간단텍스트설정/이모지</ContentPlusCotnrPC> */}
 
           <WritingContentContnr>

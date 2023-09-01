@@ -14,7 +14,6 @@ import {
   BiChevronLeft,
   BiChevronDown,
   BiChevronUp,
-  BiUser,
 } from "react-icons/bi";
 import { GrClose } from "react-icons/gr";
 import {

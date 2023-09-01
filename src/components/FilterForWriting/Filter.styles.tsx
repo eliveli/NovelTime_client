@@ -1,6 +1,4 @@
 import theme, { styled } from "assets/styles/theme";
-import { Link } from "react-router-dom";
-
 import Icon from "../../assets/Icon";
 
 export const FilterBG = styled.div`
@@ -72,7 +70,6 @@ export const SortCategoryLi = styled.li<{ selectedCategory: string; category: st
   width: 100%;
   height: 40px;
   display: flex;
-  /* margin: 0; */
   justify-content: center;
   align-items: center;
   border-bottom: 1px solid rgba(0, 0, 0, 0.2);
@@ -83,14 +80,9 @@ export const SortCategoryLi = styled.li<{ selectedCategory: string; category: st
     selectedCategory === category && `color:${theme.color.main};`}
 `;
 export const ContainerWithBtn = styled.div<{ borderOpacity: number | undefined }>`
-  /* ${theme.media.mobile(`
-  display: none;
-`)} */
-
   width: 135px;
   height: 100%;
   display: inline-flex;
-  //   margin: 0;
   justify-content: center;
   align-items: center;
 
@@ -116,15 +108,6 @@ export const DownIconBox = styled.div`
   color: rgba(0, 0, 0, 0.3);
 
   pointer-events: none;
-
-  /* ${theme.media.tablet(`
-    margin-top: auto;
-    margin-left: 3px;
-    `)}
-  ${theme.media.hover(`
-      cursor: pointer;
-      opacity: 0.8;
-    `)} */
 `;
 export const DownIcon = Icon.SmallDown;
 export const SearchIconBox = styled(Icon.IconBox)`

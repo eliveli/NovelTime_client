@@ -1,15 +1,6 @@
 import { styled } from "assets/styles/theme";
 
-export const ColumnBG = styled.article`
-  /* 모바일 */
-
-  /* 태블릿 */
-  @media screen and (min-width: 768px) {
-  }
-  /* PC - 모바일,태블릿과 뷰를 다르게 구성 */
-  @media screen and (min-width: 1024px) {
-  }
-`;
+export const ColumnBG = styled.article``;
 export const ColumnListContainer = styled.div`
   /* padding-left: 6px; */
   /* padding-right: 6px; */

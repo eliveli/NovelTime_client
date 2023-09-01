@@ -25,33 +25,16 @@ export const LikeIconBox = styled.div`
   display: flex;
   align-items: center;
   background-color: white;
-  /* box-shadow: 0 0 2px rgb(0 0 0 / 60%); */
   color: rgba(100, 100, 100, 0.5);
 
   min-width: 35px;
   max-width: 35px;
   min-height: 35px;
   max-height: 35px;
-
-  /* @media screen and (min-width: 768px) {
-    margin-left: 3px;
-  }
-  @media (hover: hover) {
-    &:hover {
-      cursor: pointer;
-      opacity: 0.8;
-      background-color: rgba(150, 150, 150, 0.3);
-    }
-  } */
 `;
 export const LikeIcon = styled(Icon.SmallHeart)`
   width: 100%;
   height: 100%;
-  /* @media (hover: hover) {
-    &:hover {
-      color: rgba(0, 0, 0, 0.3);
-    }
-  } */
 `;
 export const HandIconBox = styled.div`
   position: absolute;
@@ -65,8 +48,6 @@ export const HandIconBox = styled.div`
 
   background-color: rgba(255, 255, 255, 0.6);
   border-radius: 50%;
-  /* box-shadow: 0 0 2px rgb(0 0 0 / 60%); */
-
   color: rgba(0, 0, 0, 0.4);
 
   min-width: 25px;
@@ -89,7 +70,6 @@ export const PlatformIconBox = styled.div`
 
   background-color: rgba(255, 255, 255, 0.6);
   border-radius: 50%;
-  /* box-shadow: 0 0 2px rgb(0 0 0 / 60%); */
 
   color: rgba(0, 0, 0, 0.4);
 
@@ -147,7 +127,6 @@ export const NovelDescMobile = styled.div`
 `;
 export const NovelDescPart = styled.div`
   padding: 5px 3px 5px 0;
-  /* padding: 5px 3px 5px 7px; */
 
   //2줄 넘어가는 텍스트 ...표시
   overflow: hidden;
@@ -157,7 +136,7 @@ export const NovelDescPart = styled.div`
   -webkit-box-orient: vertical;
 
   white-space: normal;
-  height: 58px; //화면 보며 조정
+  height: 58px;
   text-align: left;
   word-wrap: break-word;
 `;
@@ -167,11 +146,10 @@ export const NovelDescTablet = styled.div`
   padding: 3px 5px;
 
   overflow: scroll;
-  height: 130px; //화면 보며 조정
+  height: 130px;
 
   white-space: pre-wrap; // line break 적용
 
-  // don't show this in mobile
   ${theme.media.mobile(`
     display: none;
   `)}
@@ -185,7 +163,6 @@ export const NovelDescTablet = styled.div`
 `;
 export const NovelDescAll = styled.div`
   width: 100%;
-  /* padding: 5px 3px 5px 7px; */
   padding: 5px 3px 5px 0;
 
   overflow: scroll;
@@ -276,8 +253,6 @@ export const NovelPlatformBox = styled.div`
 
 export const PlatformBorder = styled.span`
   display: inline-flex;
-  /* align-items: flex-start; */
-  /* justify-content: flex-end; */
   border-bottom: 1px solid rgba(100, 100, 100, 0.2);
 `;
 export const PlatformTextBox = styled.div`
@@ -342,7 +317,8 @@ export const NovelImgSmall = styled.div<Props>`
   padding-top: 135%; //카카오페이지
   /* padding-top: 146%; //시리즈, 리디북스 */
   /* padding-top: ${(props) =>
-    props.theme.novelImg.includes("dn-img-page.kakao.com") ? "135%" : "146%"}; */
+    props.theme.novelImg.includes("dn-img-page.kakao.com") ? "135%" : "146%"};
+  */
 
   border-radius: 5%;
 
@@ -390,7 +366,7 @@ export const NovelInfoAuthor = styled.div`
 export const NovelInfoMobile = styled.div`
   line-height: 1.2;
   margin-top: 5px;
-  // 태블릿 안 보임
+
   ${theme.media.tablet(`
     display: none;
   `)}
@@ -398,13 +374,12 @@ export const NovelInfoMobile = styled.div`
 export const NovelInfoMobileAge = styled.div`
   font-size: 12px;
   line-height: 1.9;
-  // 태블릿 안 보임
+
   ${theme.media.tablet(`
     display: none;
   `)}
 `;
 export const NovelInfoTablet = styled.div`
-  // 모바일 안 보임
   ${theme.media.mobile(`
     display: none;
   `)}

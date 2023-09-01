@@ -1,6 +1,4 @@
-// /* eslint-disable */
-// 지금은 뷰 구성에 집중할 것임. 린트 무시하는 주석은 나중에 해제하기
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import { ThemeProvider } from "styled-components";
 import { useComponentWidth } from "utils";
 import { useNavigate } from "react-router-dom";
@@ -23,10 +21,6 @@ type MyComponentProps = React.PropsWithChildren<{
     novelAuthor: string;
     novelGenre: string;
     novelIsEnd?: boolean;
-    // ㄴ only display this when it is true
-    //    when this is false, this info can be wrong info
-    //     because I couldn't get this whenever it had changed in the platform
-    //     also even in the novel platform this info often doesn't change after the novel is end
   };
 
   isBorder?: true;

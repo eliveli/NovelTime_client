@@ -1,5 +1,3 @@
-// /* eslint-disable */
-
 import { styled } from "assets/styles/theme";
 
 export const NovelLink = styled.div<{ isWidth100?: true; isNotNavigation?: true }>`
@@ -53,16 +51,11 @@ export const NovelInfoBox = styled.div`
 
   line-height: 1.4;
   margin-top: 3px;
-
-  /* 태블릿 , PC */
-  @media screen and (min-width: 768px) {
-  }
 `;
 export const NovelImgBox = styled.div`
   width: 100%;
 `;
 export const NovelImg = styled.div<{ novelImg: string }>`
-  /* 모바일 */
   padding-top: 135%;
   border-radius: 5%;
 
@@ -71,25 +64,13 @@ export const NovelImg = styled.div<{ novelImg: string }>`
   background-image: url(${({ novelImg }) => novelImg});
   background-repeat: no-repeat;
   background-size: cover;
-
-  /* 태블릿 */
-  @media screen and (min-width: 768px) {
-  }
-  /* PC */
-  @media screen and (min-width: 1024px) {
-  }
 `;
 export const NovelTitleBox = styled.div`
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  /* height: 100%; */
   height: 50px; // child인 Title 대신 적용. title에서 한 줄 제목 정렬 위해.
   margin-bottom: 7px;
-
-  /* 태블릿 , PC */
-  @media screen and (min-width: 768px) {
-  }
 `;
 export const NovelTitle = styled.div`
   font-weight: 500;
@@ -102,7 +83,6 @@ export const NovelTitle = styled.div`
   -webkit-box-orient: vertical;
 
   white-space: normal;
-  /* height: 50px;  // parent에 적용 */
   text-align: left;
   word-wrap: break-word;
 `;

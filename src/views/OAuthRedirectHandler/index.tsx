@@ -1,9 +1,8 @@
 import { useNavigate, useParams } from "react-router-dom";
-
 import { useAppDispatch } from "store/hooks";
-
 import { setLoginUserInfo, setAccessToken } from "store/clientSlices/userSlice";
 import { useGetLoginOauthServerQuery } from "store/serverAPIs/novelTime";
+import Spinner from "assets/Spinner";
 
 export default function OAuthRedirectHandler() {
   const { oauthServerUrl } = useParams();
@@ -28,20 +27,13 @@ export default function OAuthRedirectHandler() {
     oauthInfo = accessToken;
   }
 
-  const { data, error, isLoading } = useGetLoginOauthServerQuery(
+  const { data, error, isFetching } = useGetLoginOauthServerQuery(
     { oauthServer: oauthServer as string, oauthInfo },
     {
       skip: !oauthServerUrl,
     },
   );
 
-  console.log("in RedirectHandler");
-  if (isLoading) {
-    console.log("isLoading in RedirectHandler:", isLoading);
-  }
-  if (data) {
-    console.log("data in RedirectHandler:", data);
-  }
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
@@ -54,8 +46,7 @@ export default function OAuthRedirectHandler() {
 
   // login failed
   if (error) {
-    console.log("소셜로그인 에러", error);
-    window.alert("로그인에 실패하였습니다.");
+    alert("로그인에 실패하였습니다.");
     navigate("/", { replace: true });
   }
 
@@ -66,8 +57,5 @@ export default function OAuthRedirectHandler() {
   //     액세스 토큰 재발급 위해 리프레시 토큰을 받고 검증할 때 유효기간 얼마 남았는지 알 수 있나?
   //   쿠키가 사라지면 리프레시 토큰을 보낼 수 없음.
   //      그럼 다시 로그인하라고 클라이언트 단에 메세지 보낼까?
-  return (
-    <div>리다이렉트 중 : 스피너 넣기</div>
-    // {isFetching && <Spinner />}
-  );
+  return <div>{isFetching && <Spinner styles="fixed" />}</div>;
 }

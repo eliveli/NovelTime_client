@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-wrap-multilines */
 import Icon from "assets/Icon";
 import Spinner from "assets/Spinner";
 import { CategoryMark } from "components/CategoryMark";

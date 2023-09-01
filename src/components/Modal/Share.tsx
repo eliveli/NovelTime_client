@@ -1,10 +1,8 @@
 import { useEffect } from "react";
 import { closeModal } from "store/clientSlices/modalSlice";
-
 import Icon from "assets/Icon";
 import { catWalking } from "assets/images";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
-
 import {
   SocialCategoryContnr,
   SocialCategory,
@@ -80,7 +78,7 @@ export default function Share() {
       await navigator.clipboard.writeText(href);
       alert("링크가 복사되었습니다!");
     } catch (err) {
-      console.log("error occurred when copying url to clipboard :", err);
+      alert("링크 복사에 실패했습니다. 새로고침 후 시도해주세요");
     }
   };
   return (

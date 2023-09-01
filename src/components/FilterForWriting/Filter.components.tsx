@@ -77,9 +77,6 @@ export function SearchBtn({
 export function SortMobile({ borderOpacity }: { borderOpacity?: number }) {
   const dispatch = useAppDispatch();
   const { currentFilter: currentSortType } = useSearchFilter("sortType");
-  // when clicking, in Modal component,
-  // require server request in this component!
-  console.log("in sort only");
 
   return (
     <SortMobileContainer>
@@ -87,7 +84,6 @@ export function SortMobile({ borderOpacity }: { borderOpacity?: number }) {
         borderOpacity={borderOpacity}
         onClick={() => {
           dispatch(openModal("sortWriting"));
-          console.log("clicked in sort only");
         }}
       >
         <SortCategorySelected>{currentSortType}</SortCategorySelected>
@@ -110,7 +106,6 @@ export function SortTablet({
     currentFilters: { currentSortType },
     setFilters,
   } = useMultipleSearchFilters();
-  // * I am considering a button to exchange modes between pagination and infinite scroll
 
   const sortTypes = setSortTypes();
 
@@ -125,8 +120,6 @@ export function SortTablet({
   // close the sorting list when clicking outside it
   const sortRef = useRef<HTMLUListElement>(null);
   useCloseOutsideClick(sortRef, isCategoryList, handleCategoryList);
-
-  console.log("in sort tablet");
 
   // deps list is required. if it is empty, click event don't work...
   // maybe because in useEffect, state is read only once at first render, if deps list is empty
@@ -159,7 +152,6 @@ export function SortTablet({
               category={_}
               onClick={() => {
                 if (currentSortType !== _) {
-                  // 직전과 필터가 다를 때 페이지넘버 1
                   setFilters({ sortType: _, pageNo: 1 });
                 } else {
                   setFilters({ sortType: _ });

@@ -22,8 +22,6 @@ export const MessageContainer = styled.div<{ isCrntMsg: boolean; isBeforeClickLi
   width: 100%;
   display: flex;
   align-items: center;
-
-  /* border-bottom: 1px dotted rgba(0, 0, 0, 0.1); */
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   border-left: 1px solid rgba(0, 0, 0, 0.1);
   ${({ isBeforeClickList }) => isBeforeClickList && `border-left:0;`}
@@ -87,11 +85,8 @@ export const UserNameBox = styled.div`
 
 export const UserName = styled.p`
   margin: 0;
-  /* font-size: 15px; */
 `;
 export const CreateDate = styled.span`
-  /* font-size: 14px; */
-  /* font-weight: 500; */
   padding-left: 8px;
   white-space: nowrap;
 `;

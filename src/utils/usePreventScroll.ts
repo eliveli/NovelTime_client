@@ -1,4 +1,3 @@
-/* eslint-disable consistent-return */
 import { useEffect } from "react";
 
 function usePreventScroll(modalCategory: string) {

@@ -1,4 +1,3 @@
-/* eslint-disable no-nested-ternary */
 import { useNavigate } from "react-router-dom";
 import { goToUserPage } from "utils";
 import {
@@ -69,7 +68,7 @@ export default function CategoryMark({
     return (
       <CategoryContainer>
         <CategoryDesc fontSize={fontSize}>{categoryText}</CategoryDesc>
-        {/* display show-all mark */}
+
         {isShowAllMark && (
           <LinkCategory to={linkPath}>
             <ShowAllText>전체보기</ShowAllText>
@@ -83,7 +82,7 @@ export default function CategoryMark({
     return (
       <CategoryContainer>
         <CategoryDesc fontSize={fontSize}>{categoryText}</CategoryDesc>
-        {/* display show-all mark */}
+
         {isShowAllMark && (
           <LinkCategory to={`/novel-detail/${novelId as string}/writing-list`}>
             <ShowAllText>전체보기</ShowAllText>
@@ -167,7 +166,7 @@ export default function CategoryMark({
   return (
     <CategoryContainer>
       <CategoryDesc>{categoryText}</CategoryDesc>
-      {/* display show-all mark */}
+
       {isShowAllMark && (
         <LinkCategory to={`/novel-list/${categoryText}/${categoryId as string}`}>
           <ShowAllText>전체보기</ShowAllText>

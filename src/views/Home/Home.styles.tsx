@@ -3,43 +3,20 @@ import Icon from "assets/Icon";
 import { Img } from "store/serverAPIs/types";
 
 export const UserRankCntnr = styled.div<{ rankContnrWidth: number }>`
-  /* display: flex;
-  flex-direction: column; */
-
   gap: 10px;
+  padding: 2px;
   display: inline-flex;
 
   width: ${({ rankContnrWidth }) => rankContnrWidth}px;
+
   overflow-x: scroll;
   ${theme.hideScrollBar}
-
-  padding: 2px;
-
-  /* 
-  display: grid;
-  justify-content: space-between;
-  gap: 10px;
-  grid-template-columns: repeat(2, 1fr);
-
-  @media screen and (min-width: 500px) {
-    grid-template-columns: repeat(3, 1fr);
-  }
-  @media screen and (min-width: 640px) {
-    grid-template-columns: repeat(4, 1fr);
-  }
-
-  @media screen and (min-width: 790px) {
-    grid-template-columns: repeat(5, 1fr);
-  } */
 `;
 export const UserContnr = styled.div`
   min-width: 135px;
-
   display: flex;
   align-items: center;
   position: relative;
-
-  /* border: 1px solid lightgray; */
   box-shadow: 0 0 3px rgb(200 200 200 / 90%);
   border-radius: 10px;
   padding: 10px;
@@ -160,11 +137,6 @@ export const ArrowContnr = styled(Icon.IconBox)`
   background-color: white;
   box-shadow: 0 0 2px rgb(0 0 0 / 60%);
   color: rgba(100, 100, 100, 0.4);
-  /* position: absolute; */
-  /* width: 30px; */
-  /* height: 30px; */
-  /* left: -${30 / 2 - 6}px; */
-  /* top: ${168.22 / 2 - 30 / 2 + 12}px; // + 12px 은 이미지 위쪽 패딩임 */
 
   @media (hover: hover) {
     &:hover {

@@ -1,31 +1,17 @@
 import { styled } from "assets/styles/theme";
 import { Img } from "store/serverAPIs/types";
 
-// interface Props {
-//   theme: { userImg: string; talkImg: string };
-// }
 export const WritingBG = styled.article`
-  /* 모바일 */
   width: 100%;
   margin: 0 auto;
-  /* padding: 0 16px; */
-  /* padding: 0 6px; */
   background-color: white;
   border-bottom: 1px solid rgba(150, 150, 150, 0.2);
-
-  /* 태블릿 */
-  @media screen and (min-width: 768px) {
-  }
-  /* PC - 모바일,태블릿과 뷰를 다르게 구성 */
-  @media screen and (min-width: 1024px) {
-  }
 `;
 
 export const Writing = styled.div`
   width: 100%;
   display: flex;
   align-items: center;
-  /* padding: 12px 0; */
   border-bottom: 1px solid ${(props) => props.theme.color.lightGray100_2};
   &:last-child {
     border-bottom: 0;

@@ -14,7 +14,6 @@ type Props = React.PropsWithChildren<{
 const IconContainer = styled.div`
   display: flex;
   align-items: flex-end;
-  /* margin-top: 20px; */
 
   border-top: 1px dotted rgba(0, 0, 0, 0.1);
   padding: 8px 20px 0;
@@ -28,7 +27,6 @@ const HeartIcon = styled(Icon.BigEmptyHeart)``;
 const FillHeartIcon = styled(Icon.BigFillHeart)``;
 const ShareIcon = styled(Icon.Share)``;
 const LikeNumber = styled.span`
-  /* margin-right: 10px; */
   margin-right: 20px;
   margin-left: 5px;
 `;
@@ -42,24 +40,23 @@ export default function LikeAndShare({ isLike, likeNO, writingId, writingType, n
     toggleLikeResult.data?.likeNo !== undefined ? toggleLikeResult.data.likeNo : likeNO;
 
   const toggleLikeRequest = async () => {
-    try {
-      if (!loginUserId) {
-        alert("좋아요를 누르려면 로그인을 해 주세요.");
-        return;
-      }
+    if (!loginUserId) {
+      alert("좋아요를 누르려면 로그인을 해 주세요.");
+      return;
+    }
 
-      if (toggleLikeResult.isLoading) return; // prevent click event as loading
+    if (toggleLikeResult.isLoading) return; // prevent click event as loading
 
-      await toggleLike({
-        contentType: "writing",
-        contentId: writingId,
-        forWriting: {
-          writingType,
-          novelId,
-        },
-      });
-    } catch (error) {
-      console.log("Failed to toggle LIKE:", error);
+    await toggleLike({
+      contentType: "writing",
+      contentId: writingId,
+      forWriting: {
+        writingType,
+        novelId,
+      },
+    });
+    if (toggleLikeResult.isError) {
+      alert("좋아요 기능이 정상적으로 작동하지 않습니다. 새로고침 후 시도해주세요");
     }
   };
 
@@ -80,20 +77,3 @@ export default function LikeAndShare({ isLike, likeNO, writingId, writingType, n
     </IconContainer>
   );
 }
-// export default function LikeAndShare({ children, isLike, likeNO }: Props) {
-//   return (
-//     <Container>
-//       <IconContainer>
-//         <IconBox>
-//           {isLike && <FillHeartIcon />}
-//           {!isLike && <HeartIcon />}
-//         </IconBox>
-//         <LikeNumber>{likeNO}</LikeNumber>
-//         <IconBox>
-//           <ShareIcon />
-//         </IconBox>
-//       </IconContainer>
-//       {children}
-//     </Container>
-//   );
-// }

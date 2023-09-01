@@ -1,9 +1,5 @@
-/* eslint-disable no-param-reassign */
-
 import { useEffect, useRef, useState } from "react";
-
 import { io } from "socket.io-client";
-import MainBG from "components/MainBG";
 import { useParams } from "react-router-dom";
 import {
   MsgRoomContnr,
@@ -138,7 +134,7 @@ function ReceiveMessage({ message, dateRecord, lastMessage }: ReceiveMessageProp
         />
         <MessageContentContnr>
           <MessageDesc>{message.talkContent}</MessageDesc>
-          {/*  */}
+
           {/* remove date from time and put it later */}
           {((message.isContinuous && message.isContinuousLast) || !message.isContinuous) && (
             <CreateDate>{message.talkTime}</CreateDate>
@@ -183,7 +179,7 @@ function SendMessage({
       <MessageContainer isMe>
         <MessageContentContnr isMe>
           <MessageDesc isMe>{content}</MessageDesc>
-          {/*  */}
+
           {/* remove date from time and put it later */}
           {((isContinuous && isContinuousLast) || !isContinuous) && (
             <CreateDate isMe>{time}</CreateDate>
@@ -342,8 +338,6 @@ export default function MessageRoom({ roomIdTablet }: { roomIdTablet?: string })
         newMessages.current.push(currentMsg);
       }
       countNewMsg((prev) => prev + 1);
-      console.log("newMsgNO: ", newMsgNO);
-      console.log("newMessages.current: ", newMessages.current);
     });
   }, []);
 

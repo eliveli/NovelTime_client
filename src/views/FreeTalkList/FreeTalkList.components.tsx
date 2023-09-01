@@ -92,7 +92,7 @@ function TalkTablet({ talk }: { talk: TalkProps }) {
           {talkImg && <TalkImgTablet titleHeight={titleHeight} talkImg={talkImg} />}
         </TalkInfoContnrTablet>
       </TalkMainInfoContnr>
-      {/* </UserNameBox> */}
+
       <CreateDate>{dateToShow}</CreateDate>
 
       <IconsBox>

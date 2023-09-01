@@ -1,6 +1,5 @@
 import { keyframes } from "styled-components";
 import theme, { styled } from "assets/styles/theme";
-import Icon from "assets/Icon";
 import { Img } from "store/serverAPIs/types";
 
 export const Talk = styled.article<{ isLast?: boolean }>`
@@ -69,11 +68,8 @@ export const FirstLineContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-
   margin-left: 12px;
   padding-bottom: 3px;
-
-  /* border-bottom: 1px dashed rgba(100, 100, 100, 0.1); */
 `;
 export const BesideImgContainer = styled.div`
   width: 100%;
@@ -97,11 +93,7 @@ export const UserImg = styled.div<{ userImg: Img }>`
   }
 `;
 export const UserInfoTablet = styled.div`
-  /* width: 18%; */
   width: 23%;
-  @media screen and (min-width: 768px) {
-    /* width: 23%; */
-  }
   display: flex;
   gap: 9px;
   align-items: center;
@@ -134,8 +126,6 @@ export const CreateDate = styled.p`
 `;
 export const CommentLabel = styled.div`
   position: absolute;
-  /* border: 1px solid rgba(0, 0, 0, 0.1); */
-  /* padding: 1px 1px 2px 2px; */
   background-color: white;
   top: -9px;
   left: -10px;
@@ -154,8 +144,6 @@ export const TalkPreview = styled.div`
   border-radius: 10px;
   margin: 0 0 0 12px;
   padding: 6px 10px;
-  /* padding-left: 12px;
-  padding-top: 6px; */
 `;
 export const TalkImgTablet = styled.div<{ titleHeight: number; talkImg: string }>`
   border-radius: 6px;
@@ -176,14 +164,7 @@ export const TalkImgBox = styled.div`
 
   overflow: hidden;
 
-  /* 모바일 */
   height: 150px;
-  /* @media screen and (min-width: 768px) {
-    height: 200px;
-  }
-  @media screen and (min-width: 1024px) {
-    height: 250px;
-  } */
 
   /* overflow-x: hidden;  // y스크롤 넣을 경우 */
   /* scroll-behavior: smooth; */
@@ -297,7 +278,6 @@ export const TalkImg = styled.div<{ talkImg: string; imgWidth: number }>`
 `;
 export const IconsBox = styled.div`
   display: flex;
-  /* gap: 18px; */
   align-items: center;
   color: rgba(100, 100, 100, 0.9);
 
@@ -337,7 +317,6 @@ export const TalkTitle = styled.div<{ talkImg?: string }>`
   font-size: 17px;
 
   @media screen and (max-width: 599px) {
-    /* when talkImg is empty string "", */
     ${({ talkImg }) =>
       !talkImg &&
       `

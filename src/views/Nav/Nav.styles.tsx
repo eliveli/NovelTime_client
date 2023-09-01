@@ -1,7 +1,7 @@
 import theme, { styled } from "assets/styles/theme";
 import { Img } from "store/serverAPIs/types";
 import Icon from "../../assets/Icon";
-// 패딩 없애고 화면 가로 전체에 늘어나게 해야 함
+
 export const NavTopBG = styled.header`
   border-bottom: 1px solid lightgray;
 
@@ -13,7 +13,7 @@ export const NavTopBG = styled.header`
   position: sticky;
   top: 0;
 `;
-// 패딩 없애고 화면 가로 전체에 늘어나게 해야 함
+
 export const NavBottomBG = styled.header`
   z-index: 2;
 
@@ -41,14 +41,8 @@ export const NavContentBoxPC = styled.nav`
   display: flex;
   align-items: center;
   justify-content: space-between;
-
-  /* 태블릿 */
-  /* @media screen and (min-width: 768px) { */
-  /* max-width: ${860 - 2 * 26}px; */
-  /* padding: 0 20px 26px; */
-  // 내부 컨테이너와 합해 좌우 26px 설정 : row 이미지 슬라이드 시 양끝 화살표 버튼 공간 필요
-  /* } */
 `;
+
 // 층별 내비게이션에 배경 입히려면 추가 컴포넌트 필요
 // 아래는 컨텐트 정렬용(화면 중앙 또는 전체(모바일,태블릿))
 export const NavContentBoxMobile = styled.nav<{
@@ -86,14 +80,6 @@ export const NavContentBoxMobile = styled.nav<{
   display: flex;
   align-items: center;
   justify-content: space-between;
-
-  /* position: relative; */
-
-  /* @media screen and (min-width: 768px) { */
-  /* max-width: ${860 - 2 * 26}px; */
-  /* padding: 0 20px 26px; */
-  // 내부 컨테이너와 합해 좌우 26px 설정 : row 이미지 슬라이드 시 양끝 화살표 버튼 공간 필요
-  /* } */
 `;
 
 export const CatWalkingContainer = styled.div`
@@ -122,7 +108,6 @@ export const LogoContainer = styled.div`
     justify-content: center;
 
     margin-right: 0;
-    /* margin-right: -15px; */
   }
 `;
 export const Logo = styled.img`
@@ -134,15 +119,11 @@ export const Logo = styled.img`
 `;
 export const NavContentPC = styled.div`
   display: flex;
-  /* list-style: none; */
-  /* padding-left: 0px; */
   width: 50%;
   height: 100%;
-  /* margin: 0; */
 `;
 export const NavContent = styled.span<{ isCurrentPath?: boolean }>`
   width: 100%;
-  /* text-align: center; */
   display: inline-flex;
   height: 100%;
 
@@ -178,7 +159,6 @@ export const NavText = styled.span<{ isActive: boolean }>`
 
 export const MyPageTablet = styled.button`
   padding: 3px 6px;
-  /* padding: 7px 10px; */
   white-space: nowrap;
   font-size: 15px;
   font-weight: 500;
@@ -207,7 +187,6 @@ export const MyPageTablet = styled.button`
 export const LoginText = styled.button`
   margin-left: 8px;
 
-  /* padding: 7px 10px; */
   padding: 6px 8px;
 
   font-size: 15px;
@@ -297,8 +276,6 @@ export const SubmitBtn = styled.button`
   padding: 7px 10px;
   font-size: 16px;
   font-weight: 500;
-  /* margin-right: 1px; */
-
   border-radius: 10px;
   border: 1px solid rgba(0, 0, 0, 0.2);
   background-color: white;

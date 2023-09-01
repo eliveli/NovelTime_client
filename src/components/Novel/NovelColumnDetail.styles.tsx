@@ -15,7 +15,7 @@ export const NovelLink = styled.div`
   ${theme.media.hover(
     `cursor: pointer;
     color: rgba(100, 100, 100, 0.8);`,
-  )}/* opacity: 0.7; */ //from hover
+  )}
 `;
 
 export const NovelImg = styled.div<{
@@ -23,7 +23,6 @@ export const NovelImg = styled.div<{
   novelImg: string;
   recomDtlImgWidth: string;
 }>`
-  /* 모바일 */
   height: auto;
   min-width: ${({ screenWidth }) => (screenWidth < 500 ? 59 : 70)}px;
   border-radius: 5%;

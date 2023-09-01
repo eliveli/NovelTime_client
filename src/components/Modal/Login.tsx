@@ -1,9 +1,7 @@
 import { closeModal } from "store/clientSlices/modalSlice";
-
 import Icon from "assets/Icon";
 import { catWalking } from "assets/images";
 import { useAppDispatch } from "../../store/hooks";
-
 import { KAKAO_AUTH_URL, NAVER_AUTH_URL, GOOGLE_AUTH_URL } from "./utils/OAuth";
 import {
   SocialCategoryContnr,

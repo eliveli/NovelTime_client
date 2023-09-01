@@ -1,5 +1,3 @@
-// /* eslint-disable */
-// 지금은 뷰 구성에 집중할 것임. 린트 무시하는 주석은 나중에 해제하기
 import React from "react";
 import { ThemeProvider } from "styled-components";
 import { useNavigate } from "react-router-dom";
@@ -31,7 +29,7 @@ type MyComponentProps = React.PropsWithChildren<{
 }>;
 const NovelRow = React.memo(
   ({ novel, isFromSameAuthor, isWidth100, isNotSubInfo, isNotNavigation }: MyComponentProps) => {
-    const { novelId, novelImg, novelTitle, novelAuthor, novelGenre, novelAge } = novel;
+    const { novelId, novelImg, novelTitle, novelAuthor, novelGenre } = novel;
     const theme = {};
 
     const navigate = useNavigate();

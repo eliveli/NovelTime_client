@@ -11,7 +11,6 @@ import { messageIconUserPage } from "assets/images";
 import { Outlet, useNavigate, useParams } from "react-router-dom";
 import Icon from "assets/Icon";
 import { useGetLogoutQuery, useGetUserInfoByUserNameQuery } from "store/serverAPIs/novelTime";
-import { useEffect } from "react";
 import Spinner from "assets/Spinner";
 import {
   ProfileContnr,
@@ -40,12 +39,11 @@ function Profile({ userImg, userName, userBG }: ProfileProps) {
   // userBG when user is changing the BG
   const tempUserBG = useAppSelector((state) => state.user.tempUserBG);
   // after logout remove access token and user info in store
-  const { data, error, isFetching, isUninitialized } = useGetLogoutQuery(undefined, {
+  const { data } = useGetLogoutQuery(undefined, {
     skip: !isLogout,
   });
 
   if (data && loginUserInfo.userId) {
-    console.log("in logout handler");
     dispatch(setAccessToken(""));
     dispatch(
       setLoginUserInfo({
@@ -68,10 +66,6 @@ function Profile({ userImg, userName, userBG }: ProfileProps) {
     // it is not required to set logout with undefined again
     // because when user login, page will be refreshed then isLogout state will be undefined
   };
-
-  useEffect(() => {
-    console.log("tempUserBG in useEffect:", tempUserBG);
-  }, [tempUserBG]);
 
   const stylesForUserHomeIcon = `transform: scaleX(-1); ${theme.media.mobile(
     `display:none;`,
@@ -115,19 +109,14 @@ function Profile({ userImg, userName, userBG }: ProfileProps) {
 export default function UserParent() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-
   const { userName } = useParams();
-
   const loginUserInfo = useAppSelector((state) => state.user.loginUserInfo);
-
   const isLoginUser = !!userName && userName === loginUserInfo.userName;
 
   const { data, isError, isFetching } = useGetUserInfoByUserNameQuery(userName as string, {
     skip: isLoginUser,
     // only request by userName when the user didn't login
   });
-
-  console.log("user info :", data);
 
   // user info : login user or not
   let userInfoForUserPage = {

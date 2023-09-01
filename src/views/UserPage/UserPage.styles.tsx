@@ -217,7 +217,6 @@ export const NovelImgForListAll = styled.div<{ novelImg: string; idx: number }>`
 export const NovelImg = styled.div<{ novelImg: string; imgHeight: number }>`
   min-height: 80px;
   height: 100%;
-  /* min-width: 70px; */
   min-width: ${({ imgHeight }) => imgHeight * 0.8}px;
   border-radius: 5%;
 
@@ -270,7 +269,6 @@ export const WritingUserName = styled.span<{ talkId?: string }>`
       `}
 `;
 export const CreateDate = styled.span`
-  /* color: rgba(0, 0, 0, 0.5); */
   color: rgba(0, 0, 0, 0.8);
   font-weight: 500;
   font-size: 15px;
@@ -290,7 +288,6 @@ export const IconInfoContnr = styled.div`
 export const HeartIcon = styled(Icon.SmallHeart)``;
 export const CommntIcon = styled(Icon.Comment)``;
 export const IconNoInfo = styled.span`
-  /* color: rgba(0, 0, 0, 0.5); */
   color: rgba(0, 0, 0, 0.8);
 
   margin-bottom: -1px;
@@ -310,7 +307,6 @@ export const FilterContnr = styled.div`
   display: flex;
   align-items: flex-end;
   gap: 25px;
-
   margin: 12px 0 12px 4px;
 `;
 type FilterType = "프리톡" | "추천" | "댓글";
@@ -342,7 +338,6 @@ export const CommentTalkTitle = styled.p`
 
   color: rgba(130, 130, 130, 0.9);
   font-size: 15px;
-  /* font-weight: 500; */
 `;
 export const CommentNovelTitle = styled.p`
   margin: 0;
@@ -482,7 +477,6 @@ export const MoreBtnBox = styled(Icon.IconBox)`
   color: rgba(100, 100, 100, 0.4);
   margin-right: 1px;
   margin-top: 2px;
-  /* position: absolute; */
 `;
 export const ContainerWidth = styled.div`
   width: 100%;

@@ -133,9 +133,7 @@ export const DateMark = styled.span`
   color: rgba(0, 0, 0, 0.8);
   font-weight: 500;
 `;
-export const LastWatchContnr = styled.div`
-  /* margin-bottom: 31px; */
-`;
+export const LastWatchContnr = styled.div``;
 export const LastWatchMark = styled.span`
   padding: 0 10px;
   background-color: white;
@@ -150,11 +148,9 @@ export const WriteTextCntnr = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  /* border-radius: 20px; */
   border-radius: 14px;
   border: 1px solid rgba(0, 0, 0, 0.1);
   padding: 8px 14px;
-
   position: relative;
 `;
 export const WriteText = styled.textarea<{ spaceForUserName: number }>`
@@ -185,9 +181,6 @@ export const WriteCommentSubmit = styled.button`
   min-width: 46px;
   height: 46px;
   border-radius: 14px;
-  /* min-width: 30px; */
-  /* height: 34px; */
-  /* border-radius: 20px; */
   background-color: transparent;
   white-space: nowrap;
   margin-left: 10px;
@@ -203,8 +196,6 @@ export const WriteCommentSubmit = styled.button`
 export const WriteTextContainer = styled.div`
   display: flex;
   align-items: center;
-
-  /* padding: 14px 20px; */
   padding: 15px;
   padding-right: 13px;
   margin-top: 10px;

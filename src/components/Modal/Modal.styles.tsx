@@ -268,11 +268,6 @@ export const SocialCategory = styled.button<{
   font-size: 17px;
   font-weight: 500;
   background-color: white;
-  /* color: ${theme.color.main}; */
-  /* border: 1px solid ${theme.color.mainLight}; */
-  /* color: rgba(100, 100, 100, 0.8); */
-
-  /* border: 1px solid rgba(0, 0, 0, 0.2); */
   border: 0;
 
   ${theme.media.hover(`cursor: pointer;`)}
@@ -360,7 +355,7 @@ export const ModalTitle = styled.h3<{ marginBottom?: number }>`
   margin: 0;
   text-align: center;
   margin-bottom: ${({ marginBottom }) => marginBottom || 30}px;
-  color: rgba(100, 100, 100, 0.7); // * changed from (..., 0.8)
+  color: rgba(100, 100, 100, 0.7);
   font-weight: 500;
 `;
 export const ContentContnr = styled.div`
@@ -495,10 +490,7 @@ export const SelectBtn = styled.button<{ isPhoto?: true; isBG?: true }>`
   color: rgba(100, 100, 100, 0.7);
   font-size: 13px;
   font-weight: 500;
-
-  /* width: 100%; */
   white-space: nowrap;
-
   border-radius: 20px;
   padding: 2px 9px 2px 7px;
 

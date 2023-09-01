@@ -1,10 +1,7 @@
 import theme, { styled } from "assets/styles/theme";
-import Icon from "assets/Icon";
 
 export const NovelTitleContainer = styled.div`
-  /* border-bottom: 1px solid rgba(100, 100, 100, 0.1); */
   padding: 10px 0;
-
   display: flex;
   gap: 10px;
   justify-content: flex-start;
@@ -140,43 +137,7 @@ export const WritingContent = styled.textarea`
     height: 400px;
   }
 `;
-export const ContentPlusContnrMobile = styled.div`
-  box-shadow: 0 0 2px rgb(100 100 100 / 40%);
-  width: 100%;
-  position: fixed;
-  left: 0;
-  bottom: 0;
-  z-index: 2;
-  background-color: rgba(255, 255, 255, 0.9);
 
-  padding: 10px 16px;
-
-  @media screen and (min-width: 768px) {
-    padding: 10px 20px;
-  }
-
-  @media screen and (min-width: 1024px) {
-    display: none;
-  }
-`;
-export const ContentPlusAlignMobile = styled.div`
-  max-width: 860px;
-  margin: auto;
-`;
-
-export const ContentPlusCotnrPC = styled.div`
-  padding: 10px 0;
-  margin: 0;
-
-  width: 100%;
-  background-color: rgba(255, 255, 255, 0.9);
-
-  border-bottom: 1px solid rgba(100, 100, 100, 0.1);
-
-  @media screen and (max-width: 1023px) {
-    display: none;
-  }
-`;
 export const SubmitBtnContnr = styled.div`
   display: flex;
   justify-content: flex-end;
@@ -197,19 +158,11 @@ export const SubmitBtnPC = styled.button`
   color: rgba(0, 0, 0, 0.6);
 `;
 export const PlatformContnrFirst = styled.div`
-  /* display: flex;
-  padding: 2px 0px;
-  border-bottom: 1px dotted rgba(100, 100, 100, 0.1);
-  align-items: center;
-  justify-content: flex-end; */
-
   padding: 8px;
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  /* margin: 10px 0px; */
-
   border-bottom: 2px dotted rgba(100, 100, 100, 0.1);
   border-radius: 0;
 
@@ -217,25 +170,13 @@ export const PlatformContnrFirst = styled.div`
     border: 1px solid rgba(100, 100, 100, 0.1);
     border-radius: 10px;
   }
-  /* @media screen and (max-width: 500px) {
-    justify-content: space-between;
-  }
- */
 `;
 export const PlatformContnrSecond = styled.div`
-  /* display: flex;
-  padding: 2px 0px;
-  border-bottom: 1px dotted rgba(100, 100, 100, 0.1);
-  align-items: center;
-  justify-content: flex-end; */
-
   padding: 8px;
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
-
-  /* margin: 10px 0px; */
 
   @media screen and (min-width: 700px) {
     border: 1px solid rgba(100, 100, 100, 0.1);
@@ -246,10 +187,6 @@ export const PlatformContnrSecond = styled.div`
       margin-left: 10px;
     }
   }
-  /* @media screen and (max-width: 500px) {
-    justify-content: space-between;
-  }
- */
 `;
 export const PlatformBtn = styled.button<{ selectedPlatform: string; platform: string }>`
   border-radius: 15px;
@@ -315,8 +252,6 @@ export const SelectPlatform = styled.button`
   margin-left: 8px;
 `;
 export const NovelUrlContnr = styled.div`
-  /* border-bottom: 1px solid rgba(100, 100, 100, 0.1); */
-  /* padding: 8px 0; */
   display: flex;
   align-items: center;
 
@@ -328,13 +263,8 @@ export const NovelUrlContnr = styled.div`
 `;
 export const NovelUrl = styled.textarea`
   border: 0;
-  /* border: 1px solid rgba(100, 100, 100, 0.1); */
-  /* border-radius: 10px; */
-  /* padding: 5px 8px; */
   height: 33px;
-
   width: 100%;
-  /* border: 0; */
   resize: none;
   ${theme.hideScrollBar}
   outline: none;
@@ -347,6 +277,43 @@ export const NovelUrl = styled.textarea`
   }
 
   font-size: 15px;
-  /* height: 28px; */
   line-height: 1.9;
+`;
+
+// below three are not used now
+export const ContentPlusContnrMobile = styled.div`
+  box-shadow: 0 0 2px rgb(100 100 100 / 40%);
+  width: 100%;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  z-index: 2;
+  background-color: rgba(255, 255, 255, 0.9);
+
+  padding: 10px 16px;
+
+  @media screen and (min-width: 768px) {
+    padding: 10px 20px;
+  }
+
+  @media screen and (min-width: 1024px) {
+    display: none;
+  }
+`;
+export const ContentPlusAlignMobile = styled.div`
+  max-width: 860px;
+  margin: auto;
+`;
+export const ContentPlusCotnrPC = styled.div`
+  padding: 10px 0;
+  margin: 0;
+
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.9);
+
+  border-bottom: 1px solid rgba(100, 100, 100, 0.1);
+
+  @media screen and (max-width: 1023px) {
+    display: none;
+  }
 `;

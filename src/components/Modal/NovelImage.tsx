@@ -24,7 +24,6 @@ export default function NovelImage() {
   return (
     <NovelImgBG>
       <NovelImgContainer>
-        {/* <NovelImgBig src={imgSrc} /> */}
         <NovelImgBig src={imgSrc} alt="BigSize Image" />
         <ClosingBox onClick={() => dispatch(closeModal())}>
           <ClosingIcon />

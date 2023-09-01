@@ -29,8 +29,6 @@ export default function useCloseModalClickOutside(
         )
       ) {
         dispatch(closeModal());
-        console.log("clickedElement:", clickedElement);
-        console.log("componentRef.current:", componentRef.current);
       }
     };
     window.addEventListener("click", closeOutside);

@@ -46,20 +46,11 @@ function App() {
   const [isNonLogin, handleNoneLogin] = useState(false);
 
   // get access token and user info automatically when browser refresh and token is expired
-  const { data, error, isLoading } = useGetAccessTokenQuery(undefined, {
+  const { data, error } = useGetAccessTokenQuery(undefined, {
     // pollingInterval: 10000, // millisecond
     pollingInterval: 1800000 - 10000, // millisecond
     skip: isNonLogin,
   });
-
-  console.log("in app component");
-  console.log("accessToken in app component : ", accessToken);
-  if (isLoading) {
-    console.log("isLoading in App:", isLoading);
-  }
-  if (data) {
-    console.log("data in App:", data);
-  }
 
   // don't dispatch when access token in cached data is the same with one in store
   // to prevent "too many rerender" right after login
@@ -74,10 +65,8 @@ function App() {
     dispatch(setLoginUserInfo(data.userInfo));
   }
 
-  // as user didn't login(token doesn't exist) or refresh token is invalid
-  if (error) {
-    console.log("refresh token error : ", error);
-  }
+  // error occurs as user didn't login(token doesn't exist) or refresh token is invalid
+  //
   // for non login user
   // prevent non login user from "pollingInterval"
   if (!accessToken && error && "data" in error && error.data.message === "non login user") {

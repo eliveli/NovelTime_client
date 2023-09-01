@@ -36,7 +36,6 @@ export const DotAnimation = styled.div`
   animation-direction: normal;
   animation-duration: 1.3s;
   animation-fill-mode: forwards;
-  /* animation-delay: ${1}s; */
 `;
 export const ContentAnimation = styled.div<{ isTalkComnt?: true }>`
   animation-name: ${contentHidden}, ${contentShowOn};

@@ -4,7 +4,6 @@ import { Img } from "store/serverAPIs/types";
 import Icon from "../../assets/Icon";
 
 export const CategoryContainer = styled.div`
-  /* padding: 0 6px; */
   margin-bottom: -2px;
   display: flex;
   align-items: flex-end;
@@ -73,7 +72,6 @@ export const CategoryDescUserImg = styled.div<{ userImg: Img }>`
 export const CategoryDescUserName = styled.p<{ fontSize?: number }>`
   margin-top: 12px;
   margin-bottom: 0;
-  /* border-bottom: 1px dotted #0000004f; */
   font-size: ${({ fontSize }) => fontSize || 16}px;
 `;
 export const CategoryDesc = styled.p<{
@@ -97,8 +95,6 @@ export const CategoryDesc = styled.p<{
 `;
 
 export const ShowAllText = styled.span<{ isUserNovelList?: true }>`
-  /* margin: auto 0 0 auto; */
-
   ${({ isUserNovelList }) =>
     isUserNovelList &&
     theme.media.mobile(`
@@ -113,7 +109,6 @@ export const ShowAllText = styled.span<{ isUserNovelList?: true }>`
     `}
 `;
 export const ShowAllIcon = styled(Icon.ListRight)`
-  /* margin: auto 0 0 6px; */
   margin-left: 6px;
   color: rgba(100, 100, 100, 0.5);
 `;

@@ -1,4 +1,3 @@
-/* eslint-disable no-restricted-syntax */
 import { useEffect, useRef, useState } from "react";
 import { closeModal } from "store/clientSlices/modalSlice";
 import { useImageHostingMutation } from "store/serverAPIs/imageHosting";
@@ -89,22 +88,18 @@ export default function EditProfile() {
       alert("이름 맨 앞 또는 맨 뒤 공백이 없어야 해요");
     } else {
       // request with user name to check if it is duplicate or not
-      await CheckForUserName(tempUserName)
-        .then((result) => {
-          if ("data" in result) {
-            const alertMessage = result.data; // can't read it directly in alert
+      await CheckForUserName(tempUserName).then((result) => {
+        if ("data" in result) {
+          const alertMessage = result.data; // can't read it directly in alert
 
-            alert(alertMessage);
+          alert(alertMessage);
 
-            if (alertMessage === "you can use this name") {
-              // complete checking for duplicate user name
-              isCheckedForDuplicateRef.current = true;
-            }
+          if (alertMessage === "you can use this name") {
+            // complete checking for duplicate user name
+            isCheckedForDuplicateRef.current = true;
           }
-        })
-        .catch((err) => {
-          console.log("as checking new user name err occurred:", err);
-        });
+        }
+      });
       // 중복일 경우 alert, 중복 값 true 설정 (디폴트 false. false일 때 최종적으로 저장 가능(버튼클릭))
       // 중복 아니면 alert "사용 가능한 이름이에요"
     }
@@ -214,9 +209,6 @@ export default function EditProfile() {
         .then((result) => {
           const imageLink = result.link; // get image link from imgur
           resolve(imageLink);
-        })
-        .catch((err) => {
-          console.log("as requesting image hosting err occurred:", err);
         });
     });
 
@@ -235,20 +227,15 @@ export default function EditProfile() {
     let bgImgLink = "";
     // hosting user profile image
     if (newProfileImage) {
-      await handleImageHosting(newProfileImage)
-        .then((link) => {
-          profileImgLink = link as string;
-        })
-        .catch((err) => console.log("err occurred in handleImageHosting function : ", err));
+      await handleImageHosting(newProfileImage).then((link) => {
+        profileImgLink = link as string;
+      });
     }
     // hosting user bg image
     if (temUserBGasBlobRef?.current) {
-      await handleImageHosting(temUserBGasBlobRef?.current)
-        .then((link) => {
-          console.log("bgImgLink:", link);
-          bgImgLink = link as string;
-        })
-        .catch((err) => console.log("err occurred in handleImageHosting function : ", err));
+      await handleImageHosting(temUserBGasBlobRef?.current).then((link) => {
+        bgImgLink = link as string;
+      });
     }
 
     // changed or unchanged user info(as it didn't exist) to save
@@ -301,7 +288,6 @@ export default function EditProfile() {
 
       navigate(nextPathName);
     } catch (err) {
-      console.log("failed to save user info : ", err);
       isLoadingRef.current = false;
       alert("유저 정보 저장에 실패했어요");
     }
