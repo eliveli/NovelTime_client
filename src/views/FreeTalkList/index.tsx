@@ -39,7 +39,7 @@ export default function FreeTalkList() {
 
   const isSettingTheList = useAppSelector((state) => state.filter.talk.isSettingTheList);
 
-  const { isFetching, isError, data } = useGetWritingsFilteredQuery(
+  const { isFetching, data } = useGetWritingsFilteredQuery(
     {
       writingType: "T",
       novelGenre: genreMatched,

@@ -77,6 +77,7 @@ function App() {
   if (!!accessToken && error && "data" in error && error.data.message === "non login user") {
     // cookie from server is set on next page loading
     // so do refresh page
+    // eslint-disable-next-line no-self-assign
     window.location.href = window.location.href;
   }
 

@@ -255,9 +255,6 @@ export default function FreeTalkDetail() {
 
   if (!talkId || talk.isError) return <div>***에러 페이지 띄우기</div>;
 
-  // 댓글은 프리톡만. 리코멘드는 댓글 없고 좋아요만 있음.
-  //                - 대신 유저 그레이드 점수 반영은 리코멘드가 더 높음
-
   return (
     <>
       {talk.isFetching && <Spinner styles="fixed" />}
