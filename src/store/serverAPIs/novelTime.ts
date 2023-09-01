@@ -190,7 +190,7 @@ export const novelTimeApi = createApi({
           searchCategory === "novel" &&
           ["novelTitle", "novelDesc", "novelAuthor", "sample"].includes(searchType)
         ) {
-          return `/novels/${searchType}/${searchWord}/${pageNo}`;
+          return `/novels/search/${searchType}/${searchWord}/${pageNo}`;
         }
 
         if (["writingTitle", "writingDesc", "userName", "no"].includes(searchType)) {

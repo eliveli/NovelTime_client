@@ -146,7 +146,7 @@ export function CategoriesToSelectOnTablet({
           selectedCategory={currentSearchCategory}
           category={_}
           onClick={() => {
-            setFilters({ searchCategory: _, searchType: "Title" });
+            setFilters({ searchCategory: _, searchType: "Title", pageNo: 1 });
 
             handleListOpen(false);
           }}
