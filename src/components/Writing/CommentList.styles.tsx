@@ -127,6 +127,9 @@ export const UserImgBox = styled.div`
 export const UserImg = styled.div<{ userImg: Img }>`
   border-radius: 50%;
   padding-top: 100%;
+
+  ${({ userImg }) => !userImg.src && `border: 1px solid #e5e5e5;`};
+
   background-image: url(${({ userImg }) => userImg.src});
   background-position: ${({ userImg }) => userImg.position || "center"};
   background-repeat: no-repeat;

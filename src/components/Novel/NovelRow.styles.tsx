@@ -65,6 +65,9 @@ export const NovelImg = styled.div<{ novelImg: string }>`
   /* 모바일 */
   padding-top: 135%;
   border-radius: 5%;
+
+  ${({ novelImg }) => !novelImg && `border: 1px solid #e5e5e5;`};
+
   background-image: url(${({ novelImg }) => novelImg});
   background-repeat: no-repeat;
   background-size: cover;

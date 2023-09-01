@@ -45,8 +45,11 @@ export const NovelImg = styled.div<{ novelImg: string }>`
   height: 80px;
   min-width: 70px;
   border-radius: 5%;
+
+  ${({ novelImg }) => !novelImg && `border: 1px solid #e5e5e5;`};
+
   background-image: url(${({ novelImg }) => novelImg});
-  /* background-position: center; */
+  background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
 

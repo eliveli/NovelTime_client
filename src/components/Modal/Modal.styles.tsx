@@ -446,9 +446,10 @@ export const ProfileImg = styled.div<{ userImg: string; imgPosition: string }>`
   min-width: 200px;
   max-width: 200px;
   height: 200px;
-  background-image: url(${({ userImg }) =>
-    userImg || "https://cdn.pixabay.com/photo/2017/02/01/09/52/animal-2029245_960_720.png"});
 
+  ${({ userImg }) => !userImg && `border: 1px solid #e5e5e5;`};
+
+  background-image: url(${({ userImg }) => userImg});
   background-position: ${({ imgPosition }) => imgPosition || "center"};
   background-repeat: no-repeat;
   background-size: cover;

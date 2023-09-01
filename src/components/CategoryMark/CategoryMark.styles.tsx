@@ -1,5 +1,6 @@
 import theme, { styled } from "assets/styles/theme";
 import { Link } from "react-router-dom";
+import { Img } from "store/serverAPIs/types";
 import Icon from "../../assets/Icon";
 
 export const CategoryContainer = styled.div`
@@ -52,14 +53,15 @@ export const CategoryDescContnr = styled.div`
     align-items: flex-start;
   `)}
 `;
-export const CategoryDescUserImg = styled.div<{ userImg: { src: string; position: string } }>`
+export const CategoryDescUserImg = styled.div<{ userImg: Img }>`
   margin-right: 7px;
   border-radius: 50%;
   min-width: 25px;
   height: 25px;
-  background-image: url(${({ userImg }) =>
-    userImg.src || "https://cdn.pixabay.com/photo/2017/02/01/09/52/animal-2029245_960_720.png"});
 
+  ${({ userImg }) => !userImg.src && `border: 1px solid #e5e5e5;`};
+
+  background-image: url(${({ userImg }) => userImg.src});
   background-position: ${({ userImg }) => userImg.position || "center"};
   background-repeat: no-repeat;
   background-size: cover;

@@ -106,6 +106,9 @@ export const NovelImg = styled.div<Props>`
   height: 80px;
   min-width: 70px;
   border-radius: 5%;
+
+  ${(props) => !props.theme.novelImg && `border: 1px solid #e5e5e5;`}
+
   background-image: url(${(props) => props.theme.novelImg});
   /* background-position: center; */
   background-repeat: no-repeat;

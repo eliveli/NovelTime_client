@@ -1,5 +1,5 @@
 import theme, { styled } from "assets/styles/theme";
-import Icon from "assets/Icon";
+import { Img } from "store/serverAPIs/types";
 
 export const MsgListCntnrDevice = styled.div<{ isTablet: boolean }>`
   ${({ isTablet }) => (isTablet ? `display: flex;` : ``)}
@@ -54,14 +54,15 @@ export const NextToImgContainer = styled.div`
   position: relative;
 `;
 
-export const UserImg = styled.div<{ userImg: string }>`
+export const UserImg = styled.div<{ userImg: Img }>`
   border-radius: 50%;
   min-width: 45px;
   height: 45px;
-  background-image: url(${({ userImg }) =>
-    userImg || "https://cdn.pixabay.com/photo/2017/02/01/09/52/animal-2029245_960_720.png"});
 
-  background-position: center;
+  ${({ userImg }) => !userImg.src && `border: 1px solid #e5e5e5;`};
+
+  background-image: url(${({ userImg }) => userImg.src});
+  background-position: ${({ userImg }) => userImg.position || "center"};
   background-repeat: no-repeat;
   background-size: cover;
 `;
@@ -121,8 +122,10 @@ export const MessageImgBox = styled.div`
 export const MessageImg = styled.div<{ img?: string }>`
   padding-top: 100%;
 
+  ${({ img }) => !img && `border: 1px solid #e5e5e5;`};
+
   background-image: url(${({ img }) => img});
-  /* background-position: center; */
+  background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
 

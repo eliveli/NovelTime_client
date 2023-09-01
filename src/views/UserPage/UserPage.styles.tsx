@@ -24,10 +24,11 @@ export const UserImg = styled.div<{ userImg: Img; isTitle?: true }>`
   border-radius: 50%;
   min-width: 45px;
   height: 45px;
-  background-image: url(${({ userImg }) =>
-    userImg.src || "https://cdn.pixabay.com/photo/2017/02/01/09/52/animal-2029245_960_720.png"});
 
-  background-position: ${({ userImg }) => userImg.position};
+  ${({ userImg }) => !userImg.src && `border: 1px solid #e5e5e5;`};
+
+  background-image: url(${({ userImg }) => userImg.src});
+  background-position: ${({ userImg }) => userImg.position || "center"};
 
   ${({ isTitle }) =>
     isTitle &&
@@ -180,8 +181,7 @@ export const UserImgForListAll = styled.div<{ userImg: Img }>`
   ${({ userImg }) => !userImg.src && `border: 1px solid #e5e5e5;`};
 
   background-image: url(${({ userImg }) => userImg.src});
-  background-position: ${({ userImg }) => userImg.position};
-  background-position: center;
+  background-position: ${({ userImg }) => userImg.position || "center"};
   background-repeat: no-repeat;
   background-size: cover;
 `;
@@ -220,9 +220,10 @@ export const NovelImg = styled.div<{ novelImg: string; imgHeight: number }>`
   /* min-width: 70px; */
   min-width: ${({ imgHeight }) => imgHeight * 0.8}px;
   border-radius: 5%;
-  background-image: url(${({ novelImg }) =>
-    novelImg ||
-    "https://comicthumb-phinf.pstatic.net/20220126_148/pocket_16431735084292970r_JPEG/%C5%A9%B8%AE%BD%BA%C5%BB%BE%C6%B0%A1%BE%BE%B4%C2%B3%B2%C0%DA%B4%D9-%C0%CF%B7%AF%BD%BA%C6%AE%C7%A5%C1%F61.jpg?type=m260"});
+
+  ${({ novelImg }) => !novelImg && `border: 1px solid #e5e5e5;`};
+
+  background-image: url(${({ novelImg }) => novelImg});
   background-position: top;
   background-repeat: no-repeat;
   background-size: cover;

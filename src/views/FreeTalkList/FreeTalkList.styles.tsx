@@ -84,7 +84,6 @@ export const UserImg = styled.div<{ userImg: Img }>`
   min-width: 43px;
   height: 43px;
 
-  // when image doesn't exist
   ${({ userImg }) => !userImg.src && `border: 1px solid #e5e5e5;`};
 
   background-image: url(${({ userImg }) => userImg.src});

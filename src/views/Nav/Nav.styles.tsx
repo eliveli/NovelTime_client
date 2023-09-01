@@ -1,12 +1,6 @@
 import theme, { styled } from "assets/styles/theme";
-import { Link } from "react-router-dom";
-
+import { Img } from "store/serverAPIs/types";
 import Icon from "../../assets/Icon";
-
-interface Props {
-  theme: { novelImg: string; userImg: string };
-}
-
 // 패딩 없애고 화면 가로 전체에 늘어나게 해야 함
 export const NavTopBG = styled.header`
   border-bottom: 1px solid lightgray;
@@ -47,8 +41,6 @@ export const NavContentBoxPC = styled.nav`
   display: flex;
   align-items: center;
   justify-content: space-between;
-
-  /* position: relative; */
 
   /* 태블릿 */
   /* @media screen and (min-width: 768px) { */
@@ -271,52 +263,6 @@ export const LeftIconBox = styled.div`
     color: rgba(100, 100, 100, 0.8);`,
   )}
 `;
-export const HeartIcon = styled(Icon.BigEmptyHeart)`
-  color: rgba(100, 100, 100, 0.5);
-`;
-export const FillHeartIcon = styled(Icon.BigFillHeart)`
-  color: rgba(100, 100, 100, 0.5);
-`;
-export const HeartIconBox = styled.div`
-  width: 32px;
-  height: 32px;
-  ${theme.media.tablet(`
-    width: 35px;
-    height: 35px;
-    margin-right: 10px;
-  `)}
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-right: 6px;
-
-  ${theme.media.hover(
-    `cursor: pointer;
-    opacity: 0.7;
-    color: rgba(100, 100, 100, 0.8);`,
-  )}
-`;
-export const ShareIcon = styled(Icon.Share)`
-  padding-top: 2px;
-  color: rgba(100, 100, 100, 0.5);
-`;
-export const ShareIconBox = styled.div`
-  width: 32px;
-  height: 32px;
-  ${theme.media.tablet(`
-    width: 35px;
-    height: 35px;
-  `)}
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  ${theme.media.hover(
-    `cursor: pointer;
-    opacity: 0.7;
-    color: rgba(100, 100, 100, 0.8);`,
-  )}
-`;
 export const HomeIcon = styled(Icon.Home)`
   padding-bottom: 2px;
   padding-top: 1px;
@@ -378,24 +324,21 @@ export const SearchIconBox = styled(Icon.IconBox)`
   min-height: 27px;
   max-height: 27px;
 `;
-interface InterfaceUserImg {
-  src: string;
-  position: string;
-}
 
-export const UserImg = styled.div<{ userImg: InterfaceUserImg }>`
+export const UserImg = styled.div<{ userImg: Img }>`
   border-radius: 50%;
   min-width: 30px;
   height: 30px;
-  background-image: url(${({ userImg }) =>
-    userImg.src || "https://cdn.pixabay.com/photo/2017/02/01/09/52/animal-2029245_960_720.png"});
 
+  ${({ userImg }) => !userImg.src && `border: 1px solid #e5e5e5;`};
+
+  background-image: url(${({ userImg }) => userImg.src});
   background-position: ${({ userImg }) => userImg.position || "center"};
   background-repeat: no-repeat;
   background-size: cover;
 `;
 
-export const MyPageMobile = styled.div<{ userImg: InterfaceUserImg }>`
+export const MyPageMobile = styled.div<{ userImg: Img }>`
   min-width: 27px;
   max-width: 27px;
   min-height: 27px;
@@ -404,9 +347,10 @@ export const MyPageMobile = styled.div<{ userImg: InterfaceUserImg }>`
   margin-left: 7px;
 
   border-radius: 50%;
-  background-image: url(${({ userImg }) =>
-    userImg.src || "https://cdn.pixabay.com/photo/2017/02/01/09/52/animal-2029245_960_720.png"});
 
+  ${({ userImg }) => !userImg.src && `border: 1px solid #e5e5e5;`};
+
+  background-image: url(${({ userImg }) => userImg.src});
   background-position: ${({ userImg }) => userImg.position || "center"};
   background-repeat: no-repeat;
   background-size: cover;

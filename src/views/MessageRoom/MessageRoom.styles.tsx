@@ -1,5 +1,6 @@
 import theme, { styled } from "assets/styles/theme";
 import Icon from "assets/Icon";
+import { Img } from "store/serverAPIs/types";
 
 export const MsgRoomContnr = styled.div<{ roomIdMobile?: string }>`
   // for mobile
@@ -67,14 +68,15 @@ export const MessageContentContnr = styled.div<{ isMe?: true }>`
   gap: 4px;
   ${({ isMe }) => (isMe ? ` align-items: flex-end;` : ` align-items: flex-start;`)}
 `;
-export const UserImg = styled.div<{ userImg: string; isShow?: boolean }>`
+export const UserImg = styled.div<{ userImg: Img; isShow?: boolean }>`
   border-radius: 50%;
   min-width: 35px;
   height: 35px;
-  background-image: url(${({ userImg }) =>
-    userImg || "https://cdn.pixabay.com/photo/2017/02/01/09/52/animal-2029245_960_720.png"});
 
-  background-position: center;
+  ${({ userImg }) => !userImg.src && `border: 1px solid #e5e5e5;`};
+
+  background-image: url(${({ userImg }) => userImg.src});
+  background-position: ${({ userImg }) => userImg.position || "center"};
   background-repeat: no-repeat;
   background-size: cover;
 

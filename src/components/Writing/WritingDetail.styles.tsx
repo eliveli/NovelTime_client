@@ -78,7 +78,7 @@ export const WritingImg = styled.div<{ img?: string }>`
   padding-top: 100%;
 
   background-image: url(${({ img }) => img});
-  /* background-position: center; */
+  background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
 

@@ -346,6 +346,8 @@ export const NovelImgSmall = styled.div<Props>`
 
   border-radius: 5%;
 
+  ${(props) => !props.theme.novelImg && `border: 1px solid #e5e5e5;`};
+
   background-image: url(${(props) => props.theme.novelImg});
   background-position: center; //다른 컴포넌트의 작품 이미지도 center로 맞춰야하나 말아야하나
   background-repeat: no-repeat;

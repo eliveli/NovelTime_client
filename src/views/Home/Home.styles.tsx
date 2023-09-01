@@ -1,5 +1,6 @@
 import theme, { styled } from "assets/styles/theme";
 import Icon from "assets/Icon";
+import { Img } from "store/serverAPIs/types";
 
 export const UserRankCntnr = styled.div<{ rankContnrWidth: number }>`
   /* display: flex;
@@ -43,13 +44,14 @@ export const UserContnr = styled.div`
   border-radius: 10px;
   padding: 10px;
 `;
-export const UserImg = styled.div<{ userImg: { src: string; position: string } }>`
+export const UserImg = styled.div<{ userImg: Img }>`
   border-radius: 50%;
   min-width: 45px;
   height: 45px;
-  background-image: url(${({ userImg }) =>
-    userImg.src || "https://cdn.pixabay.com/photo/2017/02/01/09/52/animal-2029245_960_720.png"});
 
+  ${({ userImg }) => !userImg.src && `border: 1px solid #e5e5e5;`};
+
+  background-image: url(${({ userImg }) => userImg.src});
   background-position: ${({ userImg }) => userImg.position || "center"};
   background-repeat: no-repeat;
   background-size: cover;

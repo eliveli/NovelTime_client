@@ -27,8 +27,10 @@ export const NovelImg = styled.div<{
   height: auto;
   min-width: ${({ screenWidth }) => (screenWidth < 500 ? 59 : 70)}px;
   border-radius: 5%;
+
+  ${({ novelImg }) => !novelImg && `border: 1px solid #e5e5e5;`};
+
   background-image: url(${({ novelImg }) => novelImg});
-  /* background-position: center; */
   background-repeat: no-repeat;
   background-size: cover;
 

@@ -133,7 +133,7 @@ function ReceiveMessage({ message, dateRecord, lastMessage }: ReceiveMessageProp
       )}
       <MessageContainer>
         <UserImg
-          userImg={message.userImg}
+          userImg={{ src: message.userImg, position: "center" }}
           isShow={!message.isContinuous || (message.isContinuous && message.isContinuousFirst)}
         />
         <MessageContentContnr>
