@@ -1,6 +1,6 @@
 import { ThemeProvider } from "styled-components";
 import themeStyle from "assets/styles/theme";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   freeTalk,
   freeTalkActive,
@@ -23,12 +23,16 @@ import {
   EDIT_WRITING,
   MESSAGE_LIST,
   NOVEL_LIST,
+  RECOMMEND_DETAIL,
   RECOMMEND_LIST,
   SEARCH_ALL,
-  SEARCH_NOVEL,
+  TALK_DETAIL,
   TALK_LIST,
+  USER_PAGE,
 } from "utils/pathname";
 import { setSearchList } from "store/clientSlices/filterSlice";
+import { isThePath, useWhetherItIsTablet } from "utils";
+import { Img } from "store/serverAPIs/types";
 import { openModal } from "../../store/clientSlices/modalSlice";
 import { handleWritingToSubmitOnMobile } from "../../store/clientSlices/writingSlice";
 import { useAppSelector, useAppDispatch } from "../../store/hooks";
@@ -36,11 +40,7 @@ import { useAppSelector, useAppDispatch } from "../../store/hooks";
 import {
   BackIcon,
   ForwardIcon,
-  HeartIcon,
-  ShareIcon,
   LeftIconBox,
-  HeartIconBox,
-  ShareIconBox,
   NavContentBoxPC,
   NavContentBoxMobile,
   NavContentPC,
@@ -49,7 +49,6 @@ import {
   HomeIcon,
   HomeIconBox,
   IconsBox,
-  FillHeartIcon,
   NavImg,
   NavText,
   CatWalking,
@@ -69,13 +68,24 @@ import {
 
 export function NavPC() {
   const theme = {};
-
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-
-  const { pathname } = window.location;
-
   const loginUserInfo = useAppSelector((state) => state.user.loginUserInfo);
+
+  const navCategory = [
+    {
+      category: "FreeTalk",
+      path: `${TALK_LIST}?genre=All&searchType=no&searchWord=&sortType=작성일New&pageNo=1`,
+      partialPath: TALK_LIST,
+    },
+    {
+      category: "Recommend",
+      path: `${RECOMMEND_LIST}?genre=All&searchType=no&searchWord=&sortType=작성일New&pageNo=1`,
+      partialPath: RECOMMEND_LIST,
+    },
+    { category: "Novel", path: NOVEL_LIST, partialPath: NOVEL_LIST },
+    { category: "Message", path: MESSAGE_LIST, partialPath: MESSAGE_LIST },
+  ];
 
   return (
     <ThemeProvider theme={theme}>
@@ -83,40 +93,19 @@ export function NavPC() {
         <LogoContainer>
           <Logo src={logoPC} onClick={() => navigate(`/`)} />
         </LogoContainer>
+
         <NavContentPC>
-          {/* [category name, route path] */}
-          {[
-            [
-              "FreeTalk",
-              `${TALK_LIST}?genre=All&searchType=no&searchWord=&sortType=작성일New&pageNo=1`,
-            ],
-            [
-              "Recommend",
-              `${RECOMMEND_LIST}?genre=All&searchType=no&searchWord=&sortType=작성일New&pageNo=1`,
-            ],
-            ["Novel", NOVEL_LIST],
-            ["Message", MESSAGE_LIST],
-          ].map((_, idx) => {
-            // when path is from novel detail to anywhere, mark Novel in the NavBar
-            // but for other path, path is the same name in the Nav
-            let isPath;
-            if (idx === 2) {
-              isPath = ["novel-detail", _[1]].filter((__) => pathname.includes(__)).length === 1;
-            } else {
-              isPath = pathname.includes(_[1]);
-            }
-            return (
-              <NavContent
-                key={_[0]}
-                onClick={() => {
-                  navigate(_[1]);
-                }}
-                isCurrentPath={isPath}
-              >
-                {_[0]}
-              </NavContent>
-            );
-          })}
+          {navCategory.map((_) => (
+            <NavContent
+              key={_.category}
+              onClick={() => {
+                navigate(_.path);
+              }}
+              isCurrentPath={isThePath(_.partialPath)}
+            >
+              {_.category}
+            </NavContent>
+          ))}
         </NavContentPC>
 
         <RightSideContnr>
@@ -128,16 +117,15 @@ export function NavPC() {
             <Icon.Search />
           </SearchIconBox>
 
-          {loginUserInfo.userName && (
+          {loginUserInfo.userName ? (
             <MyPageTablet
               onClick={() => {
-                navigate(`/user-page/${loginUserInfo.userName}`);
+                navigate(`${USER_PAGE}/${loginUserInfo.userName}`);
               }}
             >
               보관함
             </MyPageTablet>
-          )}
-          {!loginUserInfo.userName && (
+          ) : (
             <LoginText
               onClick={() => {
                 dispatch(openModal("login"));
@@ -152,17 +140,17 @@ export function NavPC() {
   );
 }
 
-// all followings are only for Mobile, Tablet, not for PC //
+// all below are for Mobile, Tablet, not for PC //
 export function NavMobileMainTop() {
   const theme = {};
   const navigate = useNavigate();
-
   const dispatch = useAppDispatch();
-  const loginUserInfo = useAppSelector((state) => state.user.loginUserInfo);
+  const isTablet = useWhetherItIsTablet();
+  const { userName, userImg } = useAppSelector((state) => state.user.loginUserInfo);
+  const isLoginUser = !!userName;
 
   return (
     <ThemeProvider theme={theme}>
-      {/* top place */}
       <NavContentBoxMobile>
         <CatWalkingContainer>
           <CatWalking src={catWalking} alt="catWalking" />
@@ -174,31 +162,31 @@ export function NavMobileMainTop() {
         <RightSideContnr>
           <SearchIconBox
             onClick={() => {
-              dispatch(setSearchList({ listType: "searchAll", list: "reset" })); // 검색 필터 초기화
+              dispatch(setSearchList({ listType: "searchAll", list: "reset" }));
               navigate(SEARCH_ALL);
             }}
           >
             <Icon.Search />
           </SearchIconBox>
-          {loginUserInfo.userName && (
+
+          {isLoginUser && isTablet && (
             <MyPageTablet
               onClick={() => {
-                navigate(`/user-page/${loginUserInfo.userName}`);
+                navigate(`/user-page/${userName}`);
               }}
             >
               보관함
             </MyPageTablet>
           )}
-          {/* for mobile size */}
-          {loginUserInfo.userName && (
+          {isLoginUser && !isTablet && (
             <MyPageMobile
-              userImg={loginUserInfo.userImg}
+              userImg={userImg}
               onClick={() => {
-                navigate(`/user-page/${loginUserInfo.userName}`);
+                navigate(`/user-page/${userName}`);
               }}
             />
           )}
-          {!loginUserInfo.userName && (
+          {!isLoginUser && isTablet && (
             <LoginText
               onClick={() => {
                 dispatch(openModal("login"));
@@ -207,8 +195,7 @@ export function NavMobileMainTop() {
               로그인
             </LoginText>
           )}
-          {/* for mobile size */}
-          {!loginUserInfo.userName && (
+          {!isLoginUser && !isTablet && (
             <LoginIconBox
               onClick={() => {
                 dispatch(openModal("login"));
@@ -222,69 +209,77 @@ export function NavMobileMainTop() {
     </ThemeProvider>
   );
 }
+
 export function NavMobileMainBottom() {
   const theme = {};
-
-  const { pathname } = window.location;
-
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const isLoginUser = !!useAppSelector((state) => state.user.loginUserInfo.userId);
 
-  const navigate = useNavigate();
-
-  const dispatch = useAppDispatch();
+  const navCategory = [
+    {
+      category: "FreeTalk",
+      path: TALK_LIST,
+      img: freeTalk,
+      imgActive: freeTalkActive,
+    },
+    {
+      category: "Recommend",
+      path: RECOMMEND_LIST,
+      img: recommend,
+      imgActive: recommendActive,
+    },
+    {
+      category: "AddPost",
+      path: ADD_WRITING,
+      img: addWriting,
+    },
+    {
+      category: "Novel",
+      path: NOVEL_LIST,
+      img: novel,
+      imgActive: novelActive,
+    },
+    {
+      category: "Message",
+      path: MESSAGE_LIST,
+      img: message,
+      imgActive: messageActive,
+    },
+  ];
 
   return (
     <ThemeProvider theme={theme}>
-      {/* bottom place */}
       <NavContentBoxMobile isMainBottom>
-        {/* [category name, route path] */}
-        {[
-          ["FreeTalk", TALK_LIST, freeTalk, freeTalkActive],
-          ["Recommend", RECOMMEND_LIST, recommend, recommendActive],
-          ["AddWriting", ADD_WRITING, addWriting, addWritingActive], // 추후 라우팅 필요
-          ["Novel", NOVEL_LIST, novel, novelActive],
-          ["Message", MESSAGE_LIST, message, messageActive],
-        ].map((_, idx) => (
+        {navCategory.map((_) => (
           <NavContent
-            key={_[0]}
+            key={_.category}
             onClick={() => {
-              // 리스트 필터 초기화
-              if ([0, 1].includes(idx)) {
-                const initialFilters = {
-                  genre: "All",
-                  searchType: "Title",
-                  searchWord: "",
-                  sortType: "작성일New",
-                  pageNo: 1,
-                };
+              if (["FreeTalk", "Recommend", "Novel"].includes(_.category)) {
+                let listType: "talk" | "recommend" | "novel";
 
-                const listType = idx === 0 ? "talk" : "recommend";
+                if (_.category === "FreeTalk") {
+                  listType = "talk";
+                } else if (_.category === "Recommend") {
+                  listType = "recommend";
+                } else {
+                  listType = "novel";
+                }
 
-                dispatch(setSearchList({ listType, filters: initialFilters, list: "reset" }));
+                dispatch(setSearchList({ listType, list: "reset" }));
               }
 
-              if ([2, 4].includes(idx) && !isLoginUser) {
+              if (["AddPost", "Message"].includes(_.category) && !isLoginUser) {
                 alert("로그인이 필요합니다");
                 return;
               }
 
-              if (idx === 2) {
-                dispatch(
-                  setSearchList({
-                    listType: "novel",
-                    list: "reset",
-                  }),
-                );
-              }
-
-              navigate(_[1]);
+              navigate(_.path);
             }}
           >
-            {/* not clicked or clicked element */}
-            {pathname.includes(_[1]) === false && <NavImg src={_[2]} alt={_[0]} />}
-            {pathname.includes(_[1]) && <NavImg src={_[3]} alt={_[0]} />}
+            <NavImg src={isThePath(_.path) ? _.imgActive : _.img} alt={_.category} />
 
-            <NavText isActive={pathname.includes(_[1])}>{_[0]}</NavText>
+            <NavText isActive={isThePath(_.path)}>{_.category}</NavText>
           </NavContent>
         ))}
       </NavContentBoxMobile>
@@ -292,65 +287,28 @@ export function NavMobileMainBottom() {
   );
 }
 
-// below two Nav can be one Nav? maybe yes...
-// novel list to novel list by category too? except for heart icon, share icon, page title
-
-// from MainList to Detail : FreeTalkDetail, RecommendDetail
-// via useParams: boardTitle is in the center of NavBar
-// share icon, heart icon are in all
-interface InterfaceUserImg {
-  src: string;
-  position: string;
-}
-
-export function NavMobileDetail({
-  handleMsgList,
-}: {
-  handleMsgList?: {
-    isListOpen: boolean;
-    handleMsgOpen: () => void;
-  };
-}) {
-  // one nav component: top
-
-  const { pathname } = window.location;
-  const { novelId, talkId, recommendId } = useParams();
-
+export function NavMobileDetail() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const novelTitle = useAppSelector((state) => state.modal.novelTitle);
   const loginUserInfo = useAppSelector((state) => state.user.loginUserInfo);
+  const isLoginUser = !!loginUserInfo.userName;
   const userInfoInUserPage = useAppSelector((state) => state.user.userInfoInUserPage);
+  const isTablet = useWhetherItIsTablet();
 
   const theme = {};
   return (
     <ThemeProvider theme={theme}>
-      {/* top place */}
-      <NavContentBoxMobile isDetail isMsgList={handleMsgList ? true : undefined}>
+      <NavContentBoxMobile isDetail>
         <IconsBox isLeft>
-          {/* nav icon for normal case  */}
-          {!(pathname.includes("add-writing") && !novelId) && !handleMsgList && (
-            <LeftIconBox onClick={() => navigate(-1)}>
-              <BackIcon />
-            </LeftIconBox>
-          )}
-          {/* at add-writing page without novelId from useParams */}
-          {pathname.includes("add-writing") && !novelId && (
-            <LeftIconBox onClick={() => navigate("/")}>
+          <LeftIconBox onClick={() => navigate(-1)}>
+            {isThePath(ADD_WRITING) || isThePath(EDIT_WRITING) ? (
               <Icon.CloseWriting />
-            </LeftIconBox>
-          )}
-          {/* at message list page with message room for tablet */}
-          {handleMsgList && (
-            <LeftIconBox onClick={handleMsgList.handleMsgOpen}>
-              {handleMsgList.isListOpen && <BackIcon />}
-              {!handleMsgList.isListOpen && <ForwardIcon />}
-            </LeftIconBox>
-          )}
-          {/* show Home Icon in novel detail, user page, search for novel, search for all page */}
-          {(novelId ||
-            pathname.includes("user-page") ||
-            [SEARCH_NOVEL, SEARCH_ALL].includes(pathname)) && (
+            ) : (
+              <BackIcon />
+            )}
+          </LeftIconBox>
+
+          {!isThePath("iframe") && !isThePath(ADD_WRITING) && !isThePath(EDIT_WRITING) && (
             <HomeIconBox
               onClick={() => {
                 navigate("/");
@@ -360,94 +318,51 @@ export function NavMobileDetail({
             </HomeIconBox>
           )}
         </IconsBox>
-        {/* what page title is */}
-        {[
-          ["talk-detail", "여기는 프리톡!"],
-          ["recommend-detail", "여기는 리코멘드!"],
-          ["add-writing", "add writing"],
-          ["message", loginUserInfo.userImg, loginUserInfo.userName],
-          ["user-page", userInfoInUserPage.userImg, userInfoInUserPage.userName],
-        ].map((_, idx) => {
-          if (idx === 2 && !pathname.includes(_[0] as string) && novelId) {
-            return <PageTitle>{novelTitle}</PageTitle>;
-          }
-          if (idx === 2 && pathname.includes(_[0] as string)) {
-            return <PageTitle>{_[1]}</PageTitle>;
-          }
-          if (idx === 3 && pathname.includes(_[0] as string)) {
-            return (
-              <PageTitle>
-                <UserImg userImg={_[1] as InterfaceUserImg} />
-                <UserName>{_[2]}</UserName>
-              </PageTitle>
-            );
-          }
-          if (idx === 4 && pathname.includes(_[0] as string)) {
-            return (
-              <PageTitle onClick={() => navigate(`/user-page/${_[2] as string}`)}>
-                <UserImg userImg={_[1] as InterfaceUserImg} />
-                <UserName>{_[2]}</UserName>
-                <Icon.IconBox color={themeStyle.color.mainLight} styles="transform: scaleX(-1);">
-                  <Icon.Runner />
-                </Icon.IconBox>
-              </PageTitle>
-            );
-          }
-          if (pathname.includes(_[0] as string)) return <PageTitle>{_[1]}</PageTitle>;
-        })}
+
+        {isThePath(USER_PAGE) && (
+          <PageTitle
+            onClick={() => navigate(`${USER_PAGE}/${String(userInfoInUserPage.userName)}`)}
+          >
+            <UserImg userImg={userInfoInUserPage.userImg as Img} />
+            <UserName>{userInfoInUserPage.userName}</UserName>
+            <Icon.IconBox color={themeStyle.color.mainLight} styles="transform: scaleX(-1);">
+              <Icon.Runner />
+            </Icon.IconBox>
+          </PageTitle>
+        )}
+        {isThePath(TALK_DETAIL) && <PageTitle>Free Talk</PageTitle>}
+        {isThePath(RECOMMEND_DETAIL) && <PageTitle>Recommend</PageTitle>}
 
         <IconsBox isRight>
-          {(pathname === `/novel-detail/${novelId as string}` || recommendId || talkId) && (
-            <HeartIconBox
-              onClick={() => {
-                // handleLike(!isLikeNovel);
-                // dispatch(setLikeNovel(!isLikeNovel));
-              }}
-            >
-              <HeartIcon />
-              {/* {isLikeNovel && <FillHeartIcon />} */}
-              {/* {!isLikeNovel && <HeartIcon />} */}
-            </HeartIconBox>
-          )}
-          {(recommendId || talkId) && (
-            <ShareIconBox>
-              <ShareIcon />
-            </ShareIconBox>
-          )}
-
-          {/* submit writing */}
-          {pathname?.includes("add-writing") && (
+          {isThePath(ADD_WRITING) && (
             <SubmitBtn onClick={() => dispatch(handleWritingToSubmitOnMobile(true))}>
               작성
             </SubmitBtn>
           )}
-          {pathname === EDIT_WRITING && (
+          {isThePath(EDIT_WRITING) && (
             <SubmitBtn onClick={() => dispatch(handleWritingToSubmitOnMobile(true))}>
               수정
             </SubmitBtn>
           )}
 
-          {/* user page : my page button for tablet size */}
-          {pathname.includes("user-page") && loginUserInfo.userName && (
+          {isThePath(USER_PAGE) && isLoginUser && isTablet && (
             <MyPageTablet
               onClick={() => {
-                navigate(`/user-page/${loginUserInfo.userName}`);
+                navigate(`${USER_PAGE}/${loginUserInfo.userName}`);
               }}
             >
               보관함
             </MyPageTablet>
           )}
-          {/* user page : my page button for mobile size */}
-          {pathname.includes("user-page") && loginUserInfo.userName && (
+          {isThePath(USER_PAGE) && isLoginUser && !isTablet && (
             <MyPageMobile
               userImg={loginUserInfo.userImg}
               onClick={() => {
-                navigate(`/user-page/${loginUserInfo.userName}`);
+                navigate(`${USER_PAGE}/${loginUserInfo.userName}`);
               }}
             />
           )}
-          {/* user page : login button for tablet size */}
-          {pathname.includes("user-page") && !loginUserInfo.userName && (
+          {isThePath(USER_PAGE) && !isLoginUser && isTablet && (
             <LoginText
               onClick={() => {
                 dispatch(openModal("login"));
@@ -456,8 +371,7 @@ export function NavMobileDetail({
               로그인
             </LoginText>
           )}
-          {/* user page : login button for mobile size */}
-          {pathname.includes("user-page") && !loginUserInfo.userName && (
+          {isThePath(USER_PAGE) && !isLoginUser && !isTablet && (
             <LoginIconBox
               onClick={() => {
                 dispatch(openModal("login"));
@@ -469,5 +383,40 @@ export function NavMobileDetail({
         </IconsBox>
       </NavContentBoxMobile>
     </ThemeProvider>
+  );
+}
+
+export function NavMessageRoom({
+  handleMsgList,
+}: {
+  handleMsgList?: {
+    isListOpen: boolean;
+    handleMsgOpen: () => void;
+  };
+}) {
+  const navigate = useNavigate();
+  const loginUserInfo = useAppSelector((state) => state.user.loginUserInfo);
+
+  return (
+    <NavContentBoxMobile isDetail isMsgList>
+      <IconsBox isLeft>
+        <LeftIconBox onClick={handleMsgList?.handleMsgOpen}>
+          {handleMsgList?.isListOpen ? <BackIcon /> : <ForwardIcon />}
+        </LeftIconBox>
+
+        <HomeIconBox
+          onClick={() => {
+            navigate("/");
+          }}
+        >
+          <HomeIcon />
+        </HomeIconBox>
+      </IconsBox>
+
+      <PageTitle>
+        <UserImg userImg={loginUserInfo.userImg as Img} />
+        <UserName>{loginUserInfo.userName}</UserName>
+      </PageTitle>
+    </NavContentBoxMobile>
   );
 }

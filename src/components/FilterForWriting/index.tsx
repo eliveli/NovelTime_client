@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSearchFilter } from "utils/useSearchFilterForWriting";
-import { useWhetherItIsMobile } from "utils";
+import { isThePath, useWhetherItIsMobile } from "utils";
 import SearchForWriting from "../Search/SearchForWriting";
 import { SearchBtn, Genres, SortMobile, SortTablet } from "./Filter.components";
 import {
@@ -13,8 +13,7 @@ import {
 
 export default function Filter({ children }: { children?: React.ReactNode }) {
   // get writing name
-  const { pathname } = window.location;
-  const writing = pathname.includes("talk") ? "FreeTalk" : "Recommend";
+  const writing = isThePath("talk") ? "FreeTalk" : "Recommend";
 
   const { currentFilter: currentSearchWord } = useSearchFilter("searchWord");
 

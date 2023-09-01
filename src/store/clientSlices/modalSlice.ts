@@ -1,11 +1,6 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-interface NovelLike {
-  novelId: string | undefined;
-  isLike: boolean | undefined;
-}
-
 interface MetaTags {
   title: string;
   description: string;
@@ -38,10 +33,6 @@ export interface IsModalState {
   metaTags: MetaTags;
   confirm: Confirm;
   alert: string;
-
-  // 아래는 나중에 모듈 분리
-  novelTitle: string;
-  novelLike: NovelLike[];
 }
 
 const initialState: IsModalState = {
@@ -63,9 +54,6 @@ const initialState: IsModalState = {
     functionForNo: () => {},
   },
   alert: "",
-  //
-  novelTitle: "",
-  novelLike: [{ novelId: undefined, isLike: undefined }],
 };
 
 export const modalSlice = createSlice({
@@ -108,21 +96,6 @@ export const modalSlice = createSlice({
     handleAlert: (state, action: PayloadAction<string>) => {
       state.alert = action.payload;
     },
-
-    // 아래 리듀서 모듈 분리
-    getNovelTitle: (state, action: PayloadAction<string>) => {
-      state.novelTitle = action.payload;
-    },
-    setLikeNovel: (state, action: PayloadAction<NovelLike>) => {
-      // state.novelLike.map( _, idx=> {
-      //   if(_.novelId === action.payload.novelId){
-      //     state.novelLike[idx].isLike = action.payload.isLike
-      //     return;
-      //   }
-      //   if (idx === state.novelLike.lengh -1) {
-      //   }})
-    },
-
     // Redux Toolkit allows us to write "mutating" logic in reducers. It
     // doesn't actually mutate the state because it uses the Immer library,
     // which detects changes to a "draft state" and produces a brand new
@@ -131,15 +104,7 @@ export const modalSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const {
-  openModal,
-  showBigImage,
-  closeModal,
-  getNovelTitle,
-  setLikeNovel,
-  setMetaTags,
-  handleConfirm,
-  handleAlert,
-} = modalSlice.actions;
+export const { openModal, showBigImage, closeModal, setMetaTags, handleConfirm, handleAlert } =
+  modalSlice.actions;
 
 export default modalSlice.reducer;

@@ -22,6 +22,8 @@ import useWhetherItIsMobile from "./useWhetherItIsMobile";
 import useWhetherItIsDesktop from "./useWhetherItIsDesktop";
 import writeText from "./writeText";
 import goToUserPage from "./goToUserPage";
+import useWhetherItIsTablet from "./useWhetherItIsTablet";
+import isThePath from "./isThePath";
 
 export {
   useResetFiltersFromUrlForWriting,
@@ -44,6 +46,8 @@ export {
   adjustCreateDate,
   useWhetherItIsMobile,
   useWhetherItIsDesktop,
+  useWhetherItIsTablet,
   writeText,
   goToUserPage,
+  isThePath,
 };

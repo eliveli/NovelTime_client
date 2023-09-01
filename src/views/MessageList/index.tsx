@@ -3,7 +3,7 @@ import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useComponentWidth } from "utils";
 import MessageRoom from "views/MessageRoom";
-import { NavMobileDetail } from "views/Nav/Nav.components";
+import { NavMessageRoom } from "views/Nav/Nav.components";
 import {
   MsgRoomCntnr,
   MsgListCntnr,
@@ -53,7 +53,7 @@ function Message({ message, showRoom, crntMsg, stateChanged, isBeforeClickList }
       isCrntMsg={crntMsg === roomId}
       isBeforeClickList={isBeforeClickList}
     >
-      <UserImg userImg={otherUserImg} />
+      <UserImg userImg={{ src: otherUserImg, position: "center" }} />
       <NextToImgContainer>
         <FirstLineInfoContnr>
           <UserNameBox>
@@ -156,7 +156,7 @@ export default function MessageList() {
         </MsgListCntnr>
         {isShowRoomTablet && (
           <MsgRoomCntnr isListOpen={isListOpen}>
-            <NavMobileDetail pathname={window.location.pathname} handleMsgList={handleMsgList} />
+            <NavMessageRoom handleMsgList={handleMsgList} />
             <MessageRoom roomIdTablet={roomId} />
           </MsgRoomCntnr>
         )}

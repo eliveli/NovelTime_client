@@ -1,10 +1,8 @@
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { ThemeProvider } from "styled-components";
-// import { useComponentWidth } from "utils";
 import { NovelInDetailPage } from "store/serverAPIs/types";
-import { useAppDispatch, useAppSelector } from "../../store/hooks";
-// import { setLikeNovel } from "../../store/clientSlices/modalSlice";
-import { showBigImage, setLikeNovel } from "../../store/clientSlices/modalSlice";
+import { useAppDispatch } from "../../store/hooks";
+import { showBigImage } from "../../store/clientSlices/modalSlice";
 
 import {
   NovelMainInfo,
