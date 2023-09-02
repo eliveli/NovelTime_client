@@ -1,7 +1,7 @@
 import MainBG from "components/MainBG";
 import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useComponentWidth, useWhetherItIsMobile } from "utils";
+import { useComponentWidth, useWhetherItIsMobile, useWhetherItIsTablet } from "utils";
 import MessageRoom from "views/MessageRoom";
 import { NavMessageRoom } from "views/Nav/Nav.components";
 import { MESSAGE_ROOM } from "utils/pathname";
@@ -117,7 +117,8 @@ export default function MessageList() {
   // show the message room :
   // - for tablet and desktop, show the section of message room next to the message list
   // - for mobile go to the message room page
-  const isTablet = document.documentElement.offsetWidth >= 768;
+  const isTablet = useWhetherItIsTablet();
+
   const showRoom = (msgRoomId: string) => {
     // when clicking the list at first
     if (isTablet && isBeforeClickList) {
@@ -155,9 +156,10 @@ export default function MessageList() {
   const locationState = location.state as { roomId: string };
 
   useEffect(() => {
-    if (locationState && locationState.roomId) {
+    if (isTablet && locationState && locationState.roomId) {
       // select and display a message room with list
       // coming from message room with window resizing to tablet or desktop in the screen size
+
       showRoom(locationState.roomId);
     }
   }, []);
