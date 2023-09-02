@@ -1,5 +1,11 @@
 import { useWhetherItIsDesktop } from "utils";
-import { NavPC, NavMobileMainTop, NavMobileMainBottom, NavMobileDetail } from "./Nav.components";
+import {
+  NavPC,
+  NavMobileMainTop,
+  NavMobileMainBottom,
+  NavMobileDetail,
+  NavMessageRoom,
+} from "./Nav.components";
 import { NavTopBG, NavBottomBG } from "./Nav.styles";
 
 export function MainListNav() {
@@ -42,7 +48,7 @@ export function DetailNav() {
 export function MessageRoomNav() {
   return (
     <NavTopBG>
-      <NavMobileDetail />
+      <NavMessageRoom />
     </NavTopBG>
   );
 }

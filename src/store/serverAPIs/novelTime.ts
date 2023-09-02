@@ -107,11 +107,11 @@ export const novelTimeApi = createApi({
     "writingsOfNovelUpdated",
   ],
   endpoints: (builder) => ({
-    // at home page
     getHomeData: builder.query<HomeData, undefined>({
       query: () => `/home`,
     }),
 
+    //
     getPopularNovelsInNovelTime: builder.query<NovelDetail[], number>({
       query: (limitedNo) => `/novels/popularNovelsInNovelTime/${String(limitedNo)}`,
     }),
@@ -137,34 +137,13 @@ export const novelTimeApi = createApi({
       query: (limitedNo) => `/novels/forLoginUser/${String(limitedNo)}`,
     }),
 
-    getNovelListByCategory: builder.query<NovelListByCategory, ParamForNovelListByCategory>({
-      query: ({ category, limitedNo, platform }) => {
-        // * novels with desc
-        // * data will be novels detailed or lists containing novels
-        // * set limitedNo to 20
-        if (category === "popularNovels") {
-          return `/novels/popularNovelsInNovelTime/${String(limitedNo)}`;
-        }
-        if (category === "weeklyNovels" && platform) {
-          return `/novels/weeklyNovels/${platform}/${String(limitedNo)}`;
-        }
-        if (category === "userNovelLists") {
-          return `/novels/userNovelList/liked/${String(limitedNo)}`;
-        }
-        if (category === "forLoginUser") {
-          return `/novels/forLoginUser/${String(limitedNo)}`;
-        }
-        return "";
-      },
-    }),
-
     searchForNovel: builder.query<NovelDetailList, ParamToSearchForNovels>({
       query: (params) =>
         `/novels/search/${params.searchType}/${params.searchWord}/${params.pageNo}`,
     }),
 
-    // add a novel into db and get the novel id and novel title when user gives the novel url
     addNovelWithURL: builder.mutation<NovelIdAndTitle, string>({
+      // add a novel into db and get the novel id and novel title when user gives the novel url
       query: (novelURL) => ({
         url: "/novels/addNovelWithURL",
         method: "POST",
@@ -183,8 +162,8 @@ export const novelTimeApi = createApi({
       ],
     }),
 
-    // use two apis depending on the search category
     searchForAll: builder.query<NovelOrWritingList, ParamToSearchForAll>({
+      // use two apis depending on the search category
       query: ({ searchCategory, searchType, searchWord, pageNo }) => {
         if (
           searchCategory === "novel" &&
@@ -200,8 +179,9 @@ export const novelTimeApi = createApi({
       },
     }),
 
-    // get writing list with search filter
+    //
     getWritingsFiltered: builder.query<WritingList, ParamForGettingWritings>({
+      // get writing list with search filter
       query: (params) =>
         `/writing/${params.writingType}/${params.novelGenre}/${params.searchType}/${params.searchWord}/${params.sortBy}/${params.pageNo}`,
       providesTags: (result, error, arg) =>
@@ -278,6 +258,7 @@ export const novelTimeApi = createApi({
       },
     }),
 
+    //
     getRootComments: builder.query<CommentList, ParamForRootComments>({
       query: (params) =>
         `/comment/${params.talkId}/${params.commentSortType}/${params.commentPageNo}`,
@@ -340,6 +321,7 @@ export const novelTimeApi = createApi({
       ],
     }),
 
+    //
     getLoginOauthServer: builder.query<UserAndToken, OauthData>({
       query: (oauthData) => `/user/login/${oauthData.oauthServer}?data=${oauthData.oauthInfo}`,
     }),
@@ -353,6 +335,7 @@ export const novelTimeApi = createApi({
       query: (userName) => `/user/userInfo/${userName}`,
     }),
 
+    //
     getContentOfUserHome: builder.query<ContentOfUserHome, string>({
       query: (userName) => `/userContent/home/${userName}`,
       // refetch data //
@@ -467,6 +450,7 @@ export const novelTimeApi = createApi({
       ],
     }),
 
+    //
     toggleLike: builder.mutation<IsLike, ParamToToggleLike>({
       query: (contentForLike) => {
         const routeName = contentForLike.contentType === "writing" ? "writing" : "userContent";
@@ -508,6 +492,7 @@ export const novelTimeApi = createApi({
       },
     }),
 
+    //
     checkForUserName: builder.mutation<string, string>({
       query: (newUserName) => ({
         url: "/user/checkUserName",
@@ -540,7 +525,6 @@ export const {
   useLazyGetUserNovelListAtRandomInHomeQuery,
   useLazyGetUserNovelListAtRandomInNovelMainQuery,
   useGetWeeklyNovelsFromPlatformQuery,
-  useGetNovelListByCategoryQuery,
   useSearchForNovelQuery,
   useAddNovelWithURLMutation,
   useGetNovelInDetailQuery,

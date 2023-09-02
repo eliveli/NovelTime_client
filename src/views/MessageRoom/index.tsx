@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { io } from "socket.io-client";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { isThePath, useWhetherItIsTablet } from "utils";
+import { MESSAGE_LIST, MESSAGE_ROOM } from "utils/pathname";
 import {
   MsgRoomContnr,
   MessageContainer,
@@ -222,6 +224,7 @@ function MessageRecord({ lastMessage, message, dateRecord }: MessageProps) {
   }
   return <ReceiveMessage lastMessage={lastMessage} dateRecord={dateRecord} message={message} />;
 }
+
 export default function MessageRoom({ roomIdTablet }: { roomIdTablet?: string }) {
   // server request with (roomIdMobile || roomIdTablet) //
   const { roomId } = useParams();
@@ -340,6 +343,16 @@ export default function MessageRoom({ roomIdTablet }: { roomIdTablet?: string })
       countNewMsg((prev) => prev + 1);
     });
   }, []);
+
+  const navigate = useNavigate();
+  const isTablet = useWhetherItIsTablet();
+
+  useEffect(() => {
+    // handle window resizing
+    if (isTablet && isThePath(MESSAGE_ROOM)) {
+      navigate(MESSAGE_LIST);
+    }
+  }, [isTablet]);
 
   return (
     <ResizingFromMobile roomIdMobile={roomIdMobile}>

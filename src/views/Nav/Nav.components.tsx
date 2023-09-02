@@ -22,6 +22,7 @@ import {
   ADD_WRITING,
   EDIT_WRITING,
   MESSAGE_LIST,
+  MESSAGE_ROOM,
   NOVEL_LIST,
   RECOMMEND_DETAIL,
   RECOMMEND_LIST,
@@ -400,23 +401,41 @@ export function NavMessageRoom({
   return (
     <NavContentBoxMobile isDetail isMsgList>
       <IconsBox isLeft>
-        <LeftIconBox onClick={handleMsgList?.handleMsgOpen}>
-          {handleMsgList?.isListOpen ? <BackIcon /> : <ForwardIcon />}
-        </LeftIconBox>
+        {isThePath(MESSAGE_ROOM) && (
+          // on mobile
+          // only message room is put with the path "message-room"
+          // (message room and message list are put with different paths)
+          <>
+            <LeftIconBox onClick={() => navigate(-1)}>
+              <BackIcon />
+            </LeftIconBox>
 
-        <HomeIconBox
-          onClick={() => {
-            navigate("/");
-          }}
-        >
-          <HomeIcon />
-        </HomeIconBox>
+            <HomeIconBox
+              onClick={() => {
+                navigate("/");
+              }}
+            >
+              <HomeIcon />
+            </HomeIconBox>
+          </>
+        )}
+
+        {isThePath(MESSAGE_LIST) && (
+          // on tablet or desktop
+          // message list and message room are put together with one path "message-list"
+          // (the path "message room" isn't used)
+          <LeftIconBox onClick={handleMsgList?.handleMsgOpen}>
+            {handleMsgList?.isListOpen ? <BackIcon /> : <ForwardIcon />}
+          </LeftIconBox>
+        )}
       </IconsBox>
 
       <PageTitle>
         <UserImg userImg={loginUserInfo.userImg as Img} />
         <UserName>{loginUserInfo.userName}</UserName>
       </PageTitle>
+
+      <div />
     </NavContentBoxMobile>
   );
 }

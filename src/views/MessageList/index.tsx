@@ -1,9 +1,10 @@
 import MainBG from "components/MainBG";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useComponentWidth } from "utils";
+import { useComponentWidth, useWhetherItIsMobile } from "utils";
 import MessageRoom from "views/MessageRoom";
 import { NavMessageRoom } from "views/Nav/Nav.components";
+import { MESSAGE_ROOM } from "utils/pathname";
 import {
   MsgRoomCntnr,
   MsgListCntnr,
@@ -134,6 +135,22 @@ export default function MessageList() {
       navigate(`/message-room/${msgRoomId}`);
     }
   };
+
+  const isMobile = useWhetherItIsMobile();
+
+  useEffect(() => {
+    // handle window resizing
+    if (isMobile && roomId) {
+      // on tablet and desktop, the path is always message list
+      // when displaying message list only or both message room and message list together
+
+      // on mobile, a set of path and component is put together as message list and message room
+
+      // navigate(`${MESSAGE_ROOM}/${roomId}`); // * use this later
+      navigate(`${MESSAGE_ROOM}/testRoom`);
+    }
+  }, [isMobile]);
+
   return (
     <MainBG isMessageList>
       <MsgListCntnrDevice isTablet={isTablet}>
