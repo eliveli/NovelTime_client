@@ -510,6 +510,11 @@ export const novelTimeApi = createApi({
         body: { changedUserInfo },
       }),
     }),
+
+    //
+    getChatRoomId: builder.query<{ roomId: string }, string>({
+      query: (otherUserName) => `/chat/roomId/${otherUserName}`,
+    }),
   }),
 });
 
@@ -560,4 +565,5 @@ export const {
   useChangeMyListTitleMutation,
   useDeleteMyNovelListMutation,
   useRemoveNovelFromListMutation,
+  useLazyGetChatRoomIdQuery,
 } = novelTimeApi;
