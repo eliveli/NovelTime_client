@@ -303,9 +303,11 @@ export default function MessageRoom({ roomIdTablet }: { roomIdTablet?: string })
   const testMessage = () => {
     socket.emit("send message", { roomId: roomIdMobile || roomIdTablet, msg: testReceiveM });
   };
+
   useEffect(() => {
     socket.emit("join room", roomIdMobile || roomIdTablet);
   }, []);
+
   useEffect(() => {
     socket.on("new message", (currentMsg: NewMessage) => {
       const prevMessage = newMessages.current[newMessages.current.length - 1];
@@ -350,7 +352,7 @@ export default function MessageRoom({ roomIdTablet }: { roomIdTablet?: string })
   useEffect(() => {
     // handle window resizing
     if (isTablet && isThePath(MESSAGE_ROOM)) {
-      navigate(MESSAGE_LIST, { state: { roomId: roomIdMobile } });
+      navigate(MESSAGE_LIST, { state: { roomId: roomIdMobile }, replace: true });
     }
   }, [isTablet]);
 

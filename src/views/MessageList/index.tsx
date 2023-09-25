@@ -133,7 +133,7 @@ export default function MessageList() {
       handleCrntMsg(msgRoomId);
     } else {
       // at mobile
-      navigate(`/message-room/${msgRoomId}`);
+      navigate(`${MESSAGE_ROOM}/${msgRoomId}`); // * is replace-option needed for handling back page?
     }
   };
 
@@ -147,8 +147,8 @@ export default function MessageList() {
 
       // on mobile, message list and message room are separated each other in paths and components
 
-      // navigate(`${MESSAGE_ROOM}/${roomId}`); // * use this later
-      navigate(`${MESSAGE_ROOM}/testRoom`);
+      // navigate(`${MESSAGE_ROOM}/${roomId}`, { replace: true }); // * use this later
+      navigate(`${MESSAGE_ROOM}/testRoom`, { replace: true });
     }
   }, [isMobile]);
 
