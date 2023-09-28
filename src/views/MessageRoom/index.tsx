@@ -226,9 +226,9 @@ function MessageRecord({ lastMessage, message, dateRecord }: MessageProps) {
 }
 
 export default function MessageRoom({ roomIdTablet }: { roomIdTablet?: string }) {
-  // server request with (roomIdMobile || roomIdTablet) //
-  const { roomId } = useParams();
-  const roomIdMobile = roomId;
+  const { roomId: roomIdMobile } = useParams();
+
+  const roomId = roomIdTablet || roomIdMobile;
 
   // mark new date
   const dateRecord = useRef({ date: "", isNewDate: false });
@@ -301,11 +301,11 @@ export default function MessageRoom({ roomIdTablet }: { roomIdTablet?: string })
     isContinuousLast: false,
   };
   const testMessage = () => {
-    socket.emit("send message", { roomId: roomIdMobile || roomIdTablet, msg: testReceiveM });
+    socket.emit("send message", { roomId, msg: testReceiveM });
   };
 
   useEffect(() => {
-    socket.emit("join room", roomIdMobile || roomIdTablet);
+    socket.emit("join room", roomId);
   }, []);
 
   useEffect(() => {
@@ -352,13 +352,13 @@ export default function MessageRoom({ roomIdTablet }: { roomIdTablet?: string })
   useEffect(() => {
     // handle window resizing
     if (isTablet && isThePath(MESSAGE_ROOM)) {
-      navigate(MESSAGE_LIST, { state: { roomId: roomIdMobile }, replace: true });
+      navigate(MESSAGE_LIST, { state: { roomId }, replace: true });
     }
   }, [isTablet]);
 
   return (
-    <ResizingFromMobile roomIdMobile={roomIdMobile}>
-      <MsgRoomContnr roomIdMobile={roomIdMobile}>
+    <ResizingFromMobile roomIdMobile={roomId}>
+      <MsgRoomContnr roomIdMobile={roomId}>
         {messageRecord.message.map((_, idx) => (
           <MessageRecord
             key={_.userName + idx.toString}
