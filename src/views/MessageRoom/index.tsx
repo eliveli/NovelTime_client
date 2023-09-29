@@ -18,8 +18,6 @@ import {
 } from "./MessageRoom.styles";
 import { WriteTextMessage } from "./MessageRoom.components";
 
-// server request with (roomIdMobile || roomIdTablet) //
-
 const messageRecord = {
   message: [
     {
@@ -27,6 +25,7 @@ const messageRecord = {
       userName: "ab",
       talkContent: "hello my name is...",
       talkTime: "22.03.03.12:22",
+      // * need to change
       lastWatch: false,
       isContinuous: false,
       isContinuousFirst: false,
@@ -352,7 +351,7 @@ export default function MessageRoom({ roomIdTablet }: { roomIdTablet?: string })
   useEffect(() => {
     // handle window resizing
     if (isTablet && isThePath(MESSAGE_ROOM)) {
-      navigate(MESSAGE_LIST, { state: { roomId }, replace: true });
+      navigate(`${MESSAGE_LIST}?roomId=${roomId}`, { replace: true });
     }
   }, [isTablet]);
 

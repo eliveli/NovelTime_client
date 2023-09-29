@@ -1,6 +1,6 @@
 import MainBG from "components/MainBG";
 import { useEffect, useRef, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useComponentWidth, useWhetherItIsMobile, useWhetherItIsTablet } from "utils";
 import MessageRoom from "views/MessageRoom";
 import { NavMessageRoom } from "views/Nav/Nav.components";
@@ -104,8 +104,12 @@ export default function MessageList() {
   const navigate = useNavigate();
 
   // for tablet----------------------------------------------------------
+
+  const [searchParam] = useSearchParams();
+  const roomIdFromUrl = searchParam.get("roomId");
+
   const [isShowRoomTablet, handleShowRoomTablet] = useState(false);
-  const [roomId, getRoomId] = useState("");
+  const [roomId, setRoomId] = useState("");
   // mark current one of message list
   const [crntMsg, handleCrntMsg] = useState("");
   // open or close massage list
@@ -117,6 +121,7 @@ export default function MessageList() {
   // show the message room :
   // - for tablet and desktop, show the section of message room next to the message list
   // - for mobile go to the message room page
+  const isMobile = useWhetherItIsMobile();
   const isTablet = useWhetherItIsTablet();
 
   const showRoom = (msgRoomId: string) => {
@@ -125,20 +130,16 @@ export default function MessageList() {
       handleBeforeClickList(false);
       handleShowRoomTablet(true);
       handleListOpen(true);
-      getRoomId(msgRoomId);
+      setRoomId(msgRoomId);
       handleCrntMsg(msgRoomId);
     } else if (isTablet && !isBeforeClickList) {
       // when clicking the list since second
-      getRoomId(msgRoomId);
+      setRoomId(msgRoomId);
       handleCrntMsg(msgRoomId);
-    } else {
-      // at mobile
-      navigate(`${MESSAGE_ROOM}/${msgRoomId}`); // * is replace-option needed for handling back page?
+    } else if (isMobile) {
+      navigate(`${MESSAGE_ROOM}/${msgRoomId}`);
     }
   };
-
-  const isMobile = useWhetherItIsMobile();
-
   useEffect(() => {
     // handle window resizing
     if (isMobile && roomId) {
@@ -147,22 +148,17 @@ export default function MessageList() {
 
       // on mobile, message list and message room are separated each other in paths and components
 
-      // navigate(`${MESSAGE_ROOM}/${roomId}`, { replace: true }); // * use this later
-      navigate(`${MESSAGE_ROOM}/testRoom`, { replace: true });
+      navigate(`${MESSAGE_ROOM}/${roomId}`, { replace: true });
     }
-  }, [isMobile]);
-
-  const location = useLocation();
-  const locationState = location.state as { roomId: string };
+  }, [isMobile, roomId]);
 
   useEffect(() => {
-    if (isTablet && locationState && locationState.roomId) {
-      // select and display a message room with list
-      // coming from message room with window resizing to tablet or desktop in the screen size
-
-      showRoom(locationState.roomId);
+    // show message list with message room given
+    // when resizing window from message room page or just navigating here with room id
+    if (isTablet && roomIdFromUrl) {
+      showRoom(roomIdFromUrl);
     }
-  }, []);
+  }, [roomIdFromUrl, isTablet]);
 
   return (
     <MainBG isMessageList>

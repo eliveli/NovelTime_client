@@ -16,7 +16,8 @@ import {
   useLazyGetChatRoomIdQuery,
 } from "store/serverAPIs/novelTime";
 import Spinner from "assets/Spinner";
-import { MESSAGE_ROOM } from "utils/pathname";
+import { MESSAGE_LIST, MESSAGE_ROOM } from "utils/pathname";
+import { useWhetherItIsMobile } from "utils";
 import {
   ProfileContnr,
   ProfileBG,
@@ -42,13 +43,15 @@ function Profile({ userImg, userName, userBG }: ProfileProps) {
   const loginUserInfo = useAppSelector((state) => state.user.loginUserInfo);
   const isLogin = !!loginUserInfo.userId;
   const isLogout = useAppSelector((state) => state.user.isLogout);
+  const isMobile = useWhetherItIsMobile();
+
   // userBG when user is changing the BG
   const tempUserBG = useAppSelector((state) => state.user.tempUserBG);
+
   // after logout remove access token and user info in store
   const { data } = useGetLogoutQuery(undefined, {
     skip: !isLogout,
   });
-
   const [getChatRoomId] = useLazyGetChatRoomIdQuery();
 
   if (data && loginUserInfo.userId) {
@@ -94,7 +97,11 @@ function Profile({ userImg, userName, userBG }: ProfileProps) {
             return;
           }
 
-          navigate(`${MESSAGE_ROOM}/${result.data.roomId}`);
+          if (isMobile) {
+            navigate(`${MESSAGE_ROOM}/${result.data.roomId}`);
+          } else {
+            navigate(`${MESSAGE_LIST}?roomId=${result.data.roomId}`);
+          }
         }
       })
       .catch(() => {
