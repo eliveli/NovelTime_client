@@ -140,6 +140,7 @@ export default function MessageList() {
       navigate(`${MESSAGE_ROOM}/${msgRoomId}`);
     }
   };
+
   useEffect(() => {
     // handle window resizing
     if (isMobile && roomId) {

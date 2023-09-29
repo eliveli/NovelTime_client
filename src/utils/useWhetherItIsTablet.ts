@@ -4,8 +4,11 @@ export default function useWhetherItIsTablet() {
   const [isDeskTop, handleDeskTop] = useState(false);
 
   const checkItIsTablet = () => {
-    const htmlWidth = document.documentElement.offsetWidth;
-    return htmlWidth >= 768;
+    const windowWidth = window.innerWidth; // including scrollbar
+    return windowWidth >= 768;
+    // scrollbar width must be included
+    //  for when resizing window and navigating between message list and message room
+    //  where scrollbar can exist or not
   };
 
   const handleResize = () => handleDeskTop(checkItIsTablet());

@@ -350,7 +350,7 @@ export default function MessageRoom({ roomIdTablet }: { roomIdTablet?: string })
 
   useEffect(() => {
     // handle window resizing
-    if (isTablet && isThePath(MESSAGE_ROOM)) {
+    if (isTablet && isThePath(MESSAGE_ROOM) && roomId) {
       navigate(`${MESSAGE_LIST}?roomId=${roomId}`, { replace: true });
     }
   }, [isTablet]);

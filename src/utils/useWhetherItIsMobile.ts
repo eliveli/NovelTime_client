@@ -4,8 +4,8 @@ export default function useWhetherItIsMobile() {
   const [isMobile, handleMobile] = useState(false);
 
   const checkItIsMobile = () => {
-    const htmlWidth = document.documentElement.offsetWidth;
-    return htmlWidth < 768;
+    const windowWidth = window.innerWidth; // including scrollbar
+    return windowWidth < 768;
   };
 
   const handleResize = () => handleMobile(checkItIsMobile());
