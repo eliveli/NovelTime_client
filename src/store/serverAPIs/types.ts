@@ -626,3 +626,22 @@ export interface IsLike {
   isLike: boolean; // for both writing and novelList
   likeNo?: number; // only for writing content
 }
+
+export interface RoomId {
+  roomId: string;
+}
+
+export interface Message {
+  messageId: string;
+  roomId: string;
+  senderUserId: string;
+  senderUserName: string;
+  senderUserImg: {
+    src: string;
+    position: string;
+  };
+  content: string;
+  createdAt: string;
+  isReadByReceiver: boolean;
+}
+export type Messages = Message[];

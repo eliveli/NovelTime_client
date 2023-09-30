@@ -3,6 +3,9 @@ import { io } from "socket.io-client";
 import { useNavigate, useParams } from "react-router-dom";
 import { isThePath, useWhetherItIsTablet } from "utils";
 import { MESSAGE_LIST, MESSAGE_ROOM } from "utils/pathname";
+import { useGetMessagesQuery } from "store/serverAPIs/novelTime";
+import { useAppSelector } from "store/hooks";
+import { Message } from "store/serverAPIs/types";
 import {
   MsgRoomContnr,
   MessageContainer,
@@ -18,102 +21,42 @@ import {
 } from "./MessageRoom.styles";
 import { WriteTextMessage } from "./MessageRoom.components";
 
-const messageRecord = {
-  message: [
-    {
-      userImg: "",
-      userName: "ab",
-      talkContent: "hello my name is...",
-      talkTime: "22.03.03.12:22",
-      // * need to change
-      lastWatch: false,
-      isContinuous: false,
-      isContinuousFirst: false,
-      isContinuousLast: false,
-    },
-    {
-      userImg: "",
-      userName: "a",
-      talkContent: "last watch: hello my name is...",
-      talkTime: "22.03.03.12:22",
-      lastWatch: false,
-      isContinuous: false,
-      isContinuousFirst: false,
-      isContinuousLast: false,
-    },
-    {
-      userImg: "",
-      userName: "ab",
-      talkContent: "hello my name is...",
-      talkTime: "22.03.04.12:22",
-      lastWatch: false,
-      isContinuous: true,
-      isContinuousFirst: true,
-      isContinuousLast: false,
-    },
-    {
-      userImg: "",
-      userName: "ab",
-      talkContent: "hello my name is...",
-      talkTime: "22.03.04.12:22",
-      lastWatch: true,
-      isContinuous: true,
-      isContinuousFirst: false,
-      isContinuousLast: false,
-    },
-    {
-      userImg: "",
-      userName: "ab",
-      talkContent: "hello my name is...",
-      talkTime: "22.03.04.12:22",
-      lastWatch: false,
-      isContinuous: true,
-      isContinuousFirst: false,
-      isContinuousLast: true,
-    },
-  ],
+type DateCriterion = {
+  currentOne: { date: string; isNewDate: boolean };
+  setCriterion: (date: string, isNewDate: boolean) => void;
 };
-
-type DateRecord = { date: string; isNewDate: boolean };
 interface MessageProps {
-  message: {
-    userImg: string;
-    userName: string;
-    talkContent: string;
-    talkTime: string;
-    lastWatch?: boolean;
-    isContinuous: boolean;
-    isContinuousFirst: boolean;
-    isContinuousLast: boolean;
-  };
-  lastMessage?: boolean;
-  dateRecord?: DateRecord;
+  message: Message;
+  loginUserName?: string;
+  isFirstMessageUnread?: true;
+  dateCriterion?: DateCriterion;
 }
 interface ReceiveMessageProps {
-  message: {
-    userImg: string;
-    userName: string;
-    talkContent: string;
-    talkTime: string;
-    lastWatch?: boolean;
-    isContinuous: boolean; // when it is true and isContinuousLast is false, do not show createTime
-    isContinuousFirst: boolean; // when it is true, do not show userImg
-    isContinuousLast: boolean; // when it is true, show createTime
-  };
-  lastMessage?: boolean;
-  dateRecord?: DateRecord;
-}
-interface SendMessageProps {
-  content: string;
-  time: string;
-  lastWatch?: boolean;
-  lastMessage?: boolean;
-  isContinuous: boolean;
-  isContinuousLast: boolean;
-  dateRecord?: DateRecord;
+  message: Message;
+  // {
+  //   userImg: string;
+  //   userName: string;
+  //   talkContent: string;
+  //   talkTime: string;
+  //   lastWatch?: boolean;
+  //
+  //   isContinuous: boolean; // when it is true and isContinuousLast is false, do not show createTime
+  //   isContinuousFirst: boolean; // when it is true, do not show userImg
+  //   isContinuousLast: boolean; // when it is true, show createTime
+  // };
+  isFirstMessageUnread?: true;
+  dateCriterion?: DateCriterion;
 }
 
-function ReceiveMessage({ message, dateRecord, lastMessage }: ReceiveMessageProps) {
+interface SendMessageProps {
+  content: string;
+  createdAt: string;
+  // isContinuous: boolean;
+  // isContinuousLast: boolean;
+  dateCriterion?: DateCriterion;
+}
+
+function ReceiveMessage({ isFirstMessageUnread, message, dateCriterion }: ReceiveMessageProps) {
   // show the message which was read last when entering page
   const LastWatchRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -122,44 +65,43 @@ function ReceiveMessage({ message, dateRecord, lastMessage }: ReceiveMessageProp
 
   return (
     <>
-      {/* remove time from date later */}
-      {dateRecord?.isNewDate && (
-        <MarkContnr>
-          <DateMark>{dateRecord.date}</DateMark>
-        </MarkContnr>
-      )}
-      <MessageContainer>
-        <UserImg
-          userImg={{ src: message.userImg, position: "center" }}
-          isShow={!message.isContinuous || (message.isContinuous && message.isContinuousFirst)}
-        />
-        <MessageContentContnr>
-          <MessageDesc>{message.talkContent}</MessageDesc>
-
-          {/* remove date from time and put it later */}
-          {((message.isContinuous && message.isContinuousLast) || !message.isContinuous) && (
-            <CreateDate>{message.talkTime}</CreateDate>
-          )}
-        </MessageContentContnr>
-      </MessageContainer>
-      {message.lastWatch && !lastMessage && (
+      {isFirstMessageUnread && (
         <LastWatchContnr ref={LastWatchRef}>
           <MarkContnr>
             <LastWatchMark>마지막으로 읽은 메시지입니다</LastWatchMark>
           </MarkContnr>
         </LastWatchContnr>
       )}
+
+      {dateCriterion?.currentOne.isNewDate && (
+        <MarkContnr>
+          <DateMark>{dateCriterion.currentOne.date}</DateMark>
+        </MarkContnr>
+      )}
+
+      <MessageContainer>
+        <UserImg
+          userImg={{ ...message.senderUserImg }}
+          // isShow={!message.isContinuous || (message.isContinuous && message.isContinuousFirst)}
+        />
+        <MessageContentContnr>
+          <MessageDesc>{message.content}</MessageDesc>
+          {/* remove date from time and put it later */}
+          {/* {((message.isContinuous && message.isContinuousLast) || !message.isContinuous) && ( */}
+          <CreateDate>{message.createdAt}</CreateDate>
+          {/* )} */}
+        </MessageContentContnr>
+      </MessageContainer>
     </>
   );
 }
+
 function SendMessage({
-  lastMessage,
-  lastWatch,
-  isContinuous,
-  isContinuousLast,
+  // isContinuous,
+  // isContinuousLast,
   content,
-  time,
-  dateRecord,
+  createdAt,
+  dateCriterion,
 }: SendMessageProps) {
   // show the message which was read last when entering page
   const LastWatchRef = useRef<HTMLDivElement>(null);
@@ -167,14 +109,12 @@ function SendMessage({
     LastWatchRef.current?.scrollIntoView();
   }, []);
 
-  const loginUserName = "a"; // change later to real login user's name
-
   return (
     <>
       {/* remove time from date later */}
-      {dateRecord?.isNewDate && (
+      {dateCriterion?.currentOne.isNewDate && (
         <MarkContnr>
-          <DateMark>{dateRecord.date}</DateMark>
+          <DateMark>{dateCriterion.currentOne.date}</DateMark>
         </MarkContnr>
       )}
       <MessageContainer isMe>
@@ -182,46 +122,51 @@ function SendMessage({
           <MessageDesc isMe>{content}</MessageDesc>
 
           {/* remove date from time and put it later */}
-          {((isContinuous && isContinuousLast) || !isContinuous) && (
-            <CreateDate isMe>{time}</CreateDate>
-          )}
+          {/* {((isContinuous && isContinuousLast) || !isContinuous) && ( */}
+          <CreateDate isMe>{createdAt}</CreateDate>
+          {/* )} */}
         </MessageContentContnr>
       </MessageContainer>
-      {lastWatch && !lastMessage && (
-        <LastWatchContnr ref={LastWatchRef}>
-          <MarkContnr>
-            <LastWatchMark>마지막으로 읽은 메시지입니다</LastWatchMark>
-          </MarkContnr>
-        </LastWatchContnr>
-      )}
     </>
   );
 }
-function MessageRecord({ lastMessage, message, dateRecord }: MessageProps) {
-  const loginUserName = "a"; // change later to real login user's name
+function MessageRecord({
+  message,
+  loginUserName,
+  isFirstMessageUnread,
+  dateCriterion,
+}: MessageProps) {
+  const yearInCreateDate = message.createdAt.substring(2, 4);
+  const monthInCreateDate = message.createdAt.substring(4, 6);
+  const dayInCreateDate = message.createdAt.substring(6, 8);
+  const dateToShow = `${yearInCreateDate}.${monthInCreateDate}.${dayInCreateDate}`;
 
-  // mark new date : later, compare to date from talkTime with dateRecord.date
-  if (dateRecord && dateRecord.date !== message.talkTime) {
-    dateRecord.date = message.talkTime;
-    dateRecord.isNewDate = true;
-  } else if (dateRecord?.date === message.talkTime) {
-    dateRecord.isNewDate = false;
+  if (dateCriterion && dateCriterion.currentOne.date !== dateToShow) {
+    dateCriterion.setCriterion(dateToShow, true);
+  } else if (dateCriterion?.currentOne.date === dateToShow) {
+    dateCriterion.setCriterion(dateToShow, false);
   }
 
-  if (loginUserName === message.userName) {
+  // note. "senderUser" means message writer in DB
+  //       <SendMessage> means message sent by login user
+  if (loginUserName === message.senderUserName) {
     return (
       <SendMessage
-        lastMessage={lastMessage}
-        dateRecord={dateRecord}
-        lastWatch={message.lastWatch}
-        isContinuous={message.isContinuous}
-        isContinuousLast={message.isContinuousLast}
-        content={message.talkContent}
-        time={message.talkTime}
+        dateCriterion={dateCriterion}
+        // isContinuous={message.isContinuous}
+        // isContinuousLast={message.isContinuousLast}
+        content={message.content}
+        createdAt={message.createdAt}
       />
     );
   }
-  return <ReceiveMessage lastMessage={lastMessage} dateRecord={dateRecord} message={message} />;
+  return (
+    <ReceiveMessage
+      isFirstMessageUnread={isFirstMessageUnread}
+      dateCriterion={dateCriterion}
+      message={message}
+    />
+  );
 }
 
 export default function MessageRoom({ roomIdTablet }: { roomIdTablet?: string }) {
@@ -229,8 +174,29 @@ export default function MessageRoom({ roomIdTablet }: { roomIdTablet?: string })
 
   const roomId = roomIdTablet || roomIdMobile;
 
+  const messageResult = useGetMessagesQuery(roomId as string);
+
+  const loginUserName = useAppSelector((state) => state.user.loginUserInfo.userName);
+
+  let isMessageUnread = false;
+  const checkMessageUnread = (senderUserName: string, isReadByReceiver: boolean) => {
+    // login user is the receiver
+    if (loginUserName === senderUserName) return undefined;
+
+    if (isMessageUnread) return undefined;
+
+    if (!isMessageUnread && !isReadByReceiver) {
+      isMessageUnread = true;
+      return true; // first message unread by the login user
+    }
+    return undefined;
+  };
+
   // mark new date
-  const dateRecord = useRef({ date: "", isNewDate: false });
+  const dateCriterion = useRef({ date: "", isNewDate: false });
+  const setCriterion = (date: string, isNewDate: boolean) => {
+    dateCriterion.current = { date, isNewDate };
+  };
 
   const contnrRef = useRef<HTMLElement>(null);
 
@@ -358,20 +324,20 @@ export default function MessageRoom({ roomIdTablet }: { roomIdTablet?: string })
   return (
     <ResizingFromMobile roomIdMobile={roomId}>
       <MsgRoomContnr roomIdMobile={roomId}>
-        {messageRecord.message.map((_, idx) => (
+        {messageResult.data?.map((_, idx) => (
           <MessageRecord
-            key={_.userName + idx.toString}
+            key={_.messageId}
             message={_}
-            // following is previous data not realtime
-            dateRecord={dateRecord.current}
-            lastMessage={idx === messageRecord.message.length - 1}
+            dateCriterion={{ currentOne: dateCriterion.current, setCriterion }}
+            isFirstMessageUnread={checkMessageUnread(_.senderUserName, _.isReadByReceiver)}
+            loginUserName={loginUserName}
           />
         ))}
 
-        {newMsgNO > 0 &&
-          newMessages.current.map((_, idx) => (
-            <MessageRecord key={_.userName + idx.toString} message={_} />
-          ))}
+        {/*
+         {newMsgNO > 0 &&
+          newMessages.current.map((_) => <MessageRecord key={_.messageId} message={_} />)}
+           */}
 
         <button onClick={testMessage}>testMessage</button>
       </MsgRoomContnr>

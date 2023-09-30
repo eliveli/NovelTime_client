@@ -56,6 +56,8 @@ import {
   SimpleNovel,
   NovelDetail,
   ParamForListsPeopleLike,
+  RoomId,
+  Messages,
 } from "./types";
 import type { RootState } from "../index";
 
@@ -512,8 +514,11 @@ export const novelTimeApi = createApi({
     }),
 
     //
-    getChatRoomId: builder.query<{ roomId: string }, string>({
+    getChatRoomId: builder.query<RoomId, string>({
       query: (otherUserName) => `/chat/roomId/${otherUserName}`,
+    }),
+    getMessages: builder.query<Messages, string>({
+      query: (roomId) => `/chat/messages/${roomId}`,
     }),
   }),
 });
@@ -566,4 +571,5 @@ export const {
   useDeleteMyNovelListMutation,
   useRemoveNovelFromListMutation,
   useLazyGetChatRoomIdQuery,
+  useGetMessagesQuery,
 } = novelTimeApi;

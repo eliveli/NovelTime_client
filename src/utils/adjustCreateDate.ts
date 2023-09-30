@@ -37,7 +37,7 @@ export default function adjustCreateDate(createDate: string) {
     }
   }
 
-  const yearInCreateDate = createDate.substring(0, 4);
+  const yearInCreateDate = createDate.substring(2, 4);
   const monthInCreateDate = createDate.substring(4, 6);
   const dayInCreateDate = createDate.substring(6, 8);
   return `${yearInCreateDate}.${monthInCreateDate}.${dayInCreateDate}`;
