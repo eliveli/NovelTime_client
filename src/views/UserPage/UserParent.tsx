@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import theme from "assets/styles/theme";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import {
@@ -52,7 +53,7 @@ function Profile({ userImg, userName, userBG }: ProfileProps) {
   const { data } = useGetLogoutQuery(undefined, {
     skip: !isLogout,
   });
-  const [getChatRoomId] = useLazyGetChatRoomIdQuery();
+  const [getChatRoomId, getChatRoomIdResult] = useLazyGetChatRoomIdQuery();
 
   if (data && loginUserInfo.userId) {
     dispatch(setAccessToken(""));
@@ -84,30 +85,40 @@ function Profile({ userImg, userName, userBG }: ProfileProps) {
       return;
     }
 
-    await getChatRoomId(userName)
-      .then((result) => {
-        if ("data" in result && !result.data) {
-          alert("존재하지 않는 사용자입니다");
-          return;
-        }
-
-        if ("data" in result && result.data && "roomId" in result.data) {
-          if (!result.data.roomId) {
-            alert("메세지를 보낼 수 없습니다.");
-            return;
-          }
-
-          if (isMobile) {
-            navigate(`${MESSAGE_ROOM}/${result.data.roomId}`);
-          } else {
-            navigate(`${MESSAGE_LIST}?roomId=${result.data.roomId}`);
-          }
-        }
-      })
-      .catch(() => {
-        alert("메세지를 보낼 수 없습니다. 새로고침 후 시도해 보세요");
-      });
+    await getChatRoomId(userName);
   };
+
+  useEffect(() => {
+    if (
+      getChatRoomIdResult.error &&
+      "data" in getChatRoomIdResult.error &&
+      "message" in getChatRoomIdResult.error.data &&
+      getChatRoomIdResult.error.data.message === "user doesn't exist"
+    ) {
+      alert("존재하지 않는 사용자입니다");
+      return;
+    }
+
+    if (getChatRoomIdResult.isError) {
+      alert("메세지를 보낼 수 없습니다. 새로고침 후 시도해 보세요");
+      return;
+    }
+
+    if (getChatRoomIdResult.data && !getChatRoomIdResult.data.roomId) {
+      alert("메세지를 보낼 수 없습니다.");
+      return;
+    }
+
+    if (getChatRoomIdResult.data) {
+      if (isMobile) {
+        navigate(`${MESSAGE_ROOM}/${getChatRoomIdResult.data.roomId}`);
+        return;
+      }
+      navigate(`${MESSAGE_LIST}?roomId=${getChatRoomIdResult.data.roomId}`);
+    }
+
+    //
+  }, [getChatRoomIdResult.data, getChatRoomIdResult.isError, isMobile]);
 
   const stylesForUserHomeIcon = `transform: scaleX(-1); ${theme.media.mobile(
     `display:none;`,
