@@ -634,14 +634,14 @@ export interface RoomId {
 export interface Message {
   messageId: string;
   roomId: string;
-  senderUserId: string;
+  content: string;
+  createDate: string;
+  createTime: string;
+  isReadByReceiver: boolean;
   senderUserName: string;
   senderUserImg: {
     src: string;
     position: string;
   };
-  content: string;
-  createdAt: string;
-  isReadByReceiver: boolean;
 }
 export type Messages = Message[];

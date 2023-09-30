@@ -22,41 +22,37 @@ import {
 import { WriteTextMessage } from "./MessageRoom.components";
 
 type DateCriterion = {
-  currentOne: { date: string; isNewDate: boolean };
-  setCriterion: (date: string, isNewDate: boolean) => void;
+  date: string;
+  isNewDate: boolean;
 };
 interface MessageProps {
   message: Message;
-  loginUserName?: string;
+  isNeededCreateTime: boolean;
+  isNeededUserImg: boolean;
+  isMyMessage: boolean;
+  dateCriterion: DateCriterion;
   isFirstMessageUnread?: true;
-  dateCriterion?: DateCriterion;
 }
-interface ReceiveMessageProps {
+interface PartnerMessageProps {
   message: Message;
-  // {
-  //   userImg: string;
-  //   userName: string;
-  //   talkContent: string;
-  //   talkTime: string;
-  //   lastWatch?: boolean;
-  //
-  //   isContinuous: boolean; // when it is true and isContinuousLast is false, do not show createTime
-  //   isContinuousFirst: boolean; // when it is true, do not show userImg
-  //   isContinuousLast: boolean; // when it is true, show createTime
-  // };
+  dateCriterion: DateCriterion;
+  isNeededCreateTime: boolean;
+  isNeededUserImg: boolean;
   isFirstMessageUnread?: true;
-  dateCriterion?: DateCriterion;
 }
-
-interface SendMessageProps {
+interface MyMessageProps {
   content: string;
-  createdAt: string;
-  // isContinuous: boolean;
-  // isContinuousLast: boolean;
-  dateCriterion?: DateCriterion;
+  dateCriterion: DateCriterion;
+  createTime?: string;
 }
 
-function ReceiveMessage({ isFirstMessageUnread, message, dateCriterion }: ReceiveMessageProps) {
+function PartnerMessage({
+  isFirstMessageUnread,
+  message,
+  dateCriterion,
+  isNeededCreateTime,
+  isNeededUserImg,
+}: PartnerMessageProps) {
   // show the message which was read last when entering page
   const LastWatchRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -73,36 +69,24 @@ function ReceiveMessage({ isFirstMessageUnread, message, dateCriterion }: Receiv
         </LastWatchContnr>
       )}
 
-      {dateCriterion?.currentOne.isNewDate && (
+      {dateCriterion.isNewDate && (
         <MarkContnr>
-          <DateMark>{dateCriterion.currentOne.date}</DateMark>
+          <DateMark>{dateCriterion.date}</DateMark>
         </MarkContnr>
       )}
 
       <MessageContainer>
-        <UserImg
-          userImg={{ ...message.senderUserImg }}
-          // isShow={!message.isContinuous || (message.isContinuous && message.isContinuousFirst)}
-        />
+        <UserImg userImg={{ ...message.senderUserImg }} isShow={isNeededUserImg} />
         <MessageContentContnr>
           <MessageDesc>{message.content}</MessageDesc>
-          {/* remove date from time and put it later */}
-          {/* {((message.isContinuous && message.isContinuousLast) || !message.isContinuous) && ( */}
-          <CreateDate>{message.createdAt}</CreateDate>
-          {/* )} */}
+          {isNeededCreateTime && <CreateDate>{message.createTime}</CreateDate>}
         </MessageContentContnr>
       </MessageContainer>
     </>
   );
 }
 
-function SendMessage({
-  // isContinuous,
-  // isContinuousLast,
-  content,
-  createdAt,
-  dateCriterion,
-}: SendMessageProps) {
+function MyMessage({ content, createTime, dateCriterion }: MyMessageProps) {
   // show the message which was read last when entering page
   const LastWatchRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -111,60 +95,46 @@ function SendMessage({
 
   return (
     <>
-      {/* remove time from date later */}
-      {dateCriterion?.currentOne.isNewDate && (
+      {dateCriterion.isNewDate && (
         <MarkContnr>
-          <DateMark>{dateCriterion.currentOne.date}</DateMark>
+          <DateMark>{dateCriterion.date}</DateMark>
         </MarkContnr>
       )}
       <MessageContainer isMe>
         <MessageContentContnr isMe>
           <MessageDesc isMe>{content}</MessageDesc>
-
-          {/* remove date from time and put it later */}
-          {/* {((isContinuous && isContinuousLast) || !isContinuous) && ( */}
-          <CreateDate isMe>{createdAt}</CreateDate>
-          {/* )} */}
+          {createTime && <CreateDate isMe>{createTime}</CreateDate>}
         </MessageContentContnr>
       </MessageContainer>
     </>
   );
 }
-function MessageRecord({
+
+function MessageStored({
   message,
-  loginUserName,
+  isMyMessage,
   isFirstMessageUnread,
+  isNeededCreateTime,
+  isNeededUserImg,
   dateCriterion,
 }: MessageProps) {
-  const yearInCreateDate = message.createdAt.substring(2, 4);
-  const monthInCreateDate = message.createdAt.substring(4, 6);
-  const dayInCreateDate = message.createdAt.substring(6, 8);
-  const dateToShow = `${yearInCreateDate}.${monthInCreateDate}.${dayInCreateDate}`;
-
-  if (dateCriterion && dateCriterion.currentOne.date !== dateToShow) {
-    dateCriterion.setCriterion(dateToShow, true);
-  } else if (dateCriterion?.currentOne.date === dateToShow) {
-    dateCriterion.setCriterion(dateToShow, false);
-  }
-
-  // note. "senderUser" means message writer in DB
-  //       <SendMessage> means message sent by login user
-  if (loginUserName === message.senderUserName) {
+  if (isMyMessage) {
     return (
-      <SendMessage
+      <MyMessage
         dateCriterion={dateCriterion}
-        // isContinuous={message.isContinuous}
-        // isContinuousLast={message.isContinuousLast}
         content={message.content}
-        createdAt={message.createdAt}
+        createTime={isNeededCreateTime ? message.createTime : undefined}
       />
     );
   }
+
   return (
-    <ReceiveMessage
-      isFirstMessageUnread={isFirstMessageUnread}
-      dateCriterion={dateCriterion}
+    <PartnerMessage
       message={message}
+      dateCriterion={dateCriterion}
+      isFirstMessageUnread={isFirstMessageUnread}
+      isNeededCreateTime={isNeededCreateTime}
+      isNeededUserImg={isNeededUserImg}
     />
   );
 }
@@ -192,11 +162,16 @@ export default function MessageRoom({ roomIdTablet }: { roomIdTablet?: string })
     return undefined;
   };
 
-  // mark new date
+  const checkCreateTimeIsNeeded = (
+    currentUser: string,
+    currentTime: string,
+    nextUser?: string,
+    nextTime?: string,
+  ) => currentUser !== nextUser || currentTime !== nextTime;
+
+  const checkUserImgIsNeeded = (currentUser: string, prevUser?: string) => currentUser !== prevUser;
+
   const dateCriterion = useRef({ date: "", isNewDate: false });
-  const setCriterion = (date: string, isNewDate: boolean) => {
-    dateCriterion.current = { date, isNewDate };
-  };
 
   const contnrRef = useRef<HTMLElement>(null);
 
@@ -223,7 +198,7 @@ export default function MessageRoom({ roomIdTablet }: { roomIdTablet?: string })
   // ------------------------------------------------------------------//
 
   //
-  // below is for setting realtime
+  // below is for setting realtime // * need to change
   type NewMessage = {
     userImg: string;
     userName: string;
@@ -324,19 +299,45 @@ export default function MessageRoom({ roomIdTablet }: { roomIdTablet?: string })
   return (
     <ResizingFromMobile roomIdMobile={roomId}>
       <MsgRoomContnr roomIdMobile={roomId}>
-        {messageResult.data?.map((_, idx) => (
-          <MessageRecord
-            key={_.messageId}
-            message={_}
-            dateCriterion={{ currentOne: dateCriterion.current, setCriterion }}
-            isFirstMessageUnread={checkMessageUnread(_.senderUserName, _.isReadByReceiver)}
-            loginUserName={loginUserName}
-          />
-        ))}
+        {messageResult.data?.map((_, idx) => {
+          const previousMessage =
+            messageResult.data && idx > 0 ? messageResult.data[idx - 1] : undefined;
+
+          const nextMessage =
+            messageResult.data && idx < messageResult.data.length - 1
+              ? messageResult.data[idx + 1]
+              : undefined;
+
+          if (dateCriterion.current.date !== _.createDate) {
+            dateCriterion.current = { date: _.createDate, isNewDate: true };
+          } else {
+            dateCriterion.current.isNewDate = false;
+          }
+
+          return (
+            <MessageStored
+              key={_.messageId}
+              dateCriterion={dateCriterion.current}
+              isFirstMessageUnread={checkMessageUnread(_.senderUserName, _.isReadByReceiver)}
+              isMyMessage={loginUserName === _.senderUserName}
+              isNeededCreateTime={checkCreateTimeIsNeeded(
+                _.senderUserName,
+                _.createTime,
+                nextMessage?.senderUserName,
+                nextMessage?.createTime,
+              )}
+              isNeededUserImg={checkUserImgIsNeeded(
+                _.senderUserName,
+                previousMessage?.senderUserName,
+              )}
+              message={_}
+            />
+          );
+        })}
 
         {/*
          {newMsgNO > 0 &&
-          newMessages.current.map((_) => <MessageRecord key={_.messageId} message={_} />)}
+          newMessages.current.map((_) => <MessageStored key={_.messageId} message={_} />)}
            */}
 
         <button onClick={testMessage}>testMessage</button>
