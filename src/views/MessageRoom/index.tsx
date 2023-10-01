@@ -21,10 +21,10 @@ import {
 } from "./MessageRoom.styles";
 import { WriteTextMessage } from "./MessageRoom.components";
 
-type DateCriterion = {
+type DateCriterion = React.MutableRefObject<{
   date: string;
   isNewDate: boolean;
-};
+}>;
 interface MessageProps {
   message: Message;
   isNeededCreateTime: boolean;
@@ -69,9 +69,9 @@ function PartnerMessage({
         </LastWatchContnr>
       )}
 
-      {dateCriterion.isNewDate && (
+      {dateCriterion.current.isNewDate && (
         <MarkContnr>
-          <DateMark>{dateCriterion.date}</DateMark>
+          <DateMark>{dateCriterion.current.date}</DateMark>
         </MarkContnr>
       )}
 
@@ -95,9 +95,9 @@ function MyMessage({ content, createTime, dateCriterion }: MyMessageProps) {
 
   return (
     <>
-      {dateCriterion.isNewDate && (
+      {dateCriterion.current.isNewDate && (
         <MarkContnr>
-          <DateMark>{dateCriterion.date}</DateMark>
+          <DateMark>{dateCriterion.current.date}</DateMark>
         </MarkContnr>
       )}
       <MessageContainer isMe>
@@ -118,6 +118,14 @@ function MessageStored({
   isNeededUserImg,
   dateCriterion,
 }: MessageProps) {
+  const dateCriterionRef = dateCriterion;
+
+  if (dateCriterionRef.current.date !== message.createDate) {
+    dateCriterionRef.current = { date: message.createDate, isNewDate: true };
+  } else {
+    dateCriterionRef.current.isNewDate = false;
+  }
+
   if (isMyMessage) {
     return (
       <MyMessage
@@ -330,16 +338,10 @@ export default function MessageRoom({ roomIdTablet }: { roomIdTablet?: string })
               ? messageResult.data[idx + 1]
               : undefined;
 
-          if (dateCriterion.current.date !== _.createDate) {
-            dateCriterion.current = { date: _.createDate, isNewDate: true };
-          } else {
-            dateCriterion.current.isNewDate = false;
-          }
-
           return (
             <MessageStored
               key={_.messageId}
-              dateCriterion={dateCriterion.current}
+              dateCriterion={dateCriterion}
               isFirstMessageUnread={checkMessageUnread(_.senderUserName, _.isReadByReceiver)}
               isMyMessage={loginUserName === _.senderUserName}
               isNeededCreateTime={checkCreateTimeIsNeeded(
