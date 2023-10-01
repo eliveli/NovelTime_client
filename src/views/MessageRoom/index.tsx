@@ -53,7 +53,7 @@ function PartnerMessage({
   isNeededCreateTime,
   isNeededUserImg,
 }: PartnerMessageProps) {
-  // show the message which was read last when entering page
+  // go to the message which was read last when entering page
   const LastWatchRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     LastWatchRef.current?.scrollIntoView();
@@ -87,7 +87,7 @@ function PartnerMessage({
 }
 
 function MyMessage({ content, createTime, dateCriterion }: MyMessageProps) {
-  // show the message which was read last when entering page
+  // go to the message which was read last when entering page
   const LastWatchRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     LastWatchRef.current?.scrollIntoView();
@@ -141,12 +141,32 @@ function MessageStored({
 
 export default function MessageRoom({ roomIdTablet }: { roomIdTablet?: string }) {
   const { roomId: roomIdMobile } = useParams();
-
   const roomId = roomIdTablet || roomIdMobile;
 
-  const messageResult = useGetMessagesQuery(roomId as string);
-
   const loginUserName = useAppSelector((state) => state.user.loginUserInfo.userName);
+  const messageResult = useGetMessagesQuery(roomId as string, {
+    skip: !loginUserName,
+    // if login user refreshes page, query works after login user info is put in user slice
+  });
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!messageResult.error) return;
+
+    if ("data" in messageResult.error && "message" in messageResult.error.data) {
+      if (messageResult.error.data.message === "room doesn't exist") {
+        alert("방이 존재하지 않습니다");
+        navigate(-1);
+        return;
+      }
+
+      if (messageResult.error.data.message === "user is not in the room") {
+        alert(`${loginUserName}님이 참여한 방이 아닙니다`);
+        navigate(-1);
+      }
+    }
+  }, [messageResult.error]);
 
   let isMessageUnread = false;
   const checkMessageUnread = (senderUserName: string, isReadByReceiver: boolean) => {
@@ -286,7 +306,6 @@ export default function MessageRoom({ roomIdTablet }: { roomIdTablet?: string })
     });
   }, []);
 
-  const navigate = useNavigate();
   const isTablet = useWhetherItIsTablet();
 
   useEffect(() => {
