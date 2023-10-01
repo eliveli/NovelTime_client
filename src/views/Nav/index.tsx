@@ -4,7 +4,7 @@ import {
   NavMobileMainTop,
   NavMobileMainBottom,
   NavMobileDetail,
-  NavMessageRoom,
+  NavChatRoom,
 } from "./Nav.components";
 import { NavTopBG, NavBottomBG } from "./Nav.styles";
 
@@ -45,10 +45,11 @@ export function DetailNav() {
   );
 }
 
-export function MessageRoomNav() {
+// only used where chat room page (not chat room list page)
+export function ChatRoomNav() {
   return (
     <NavTopBG>
-      <NavMessageRoom />
+      <NavChatRoom />
     </NavTopBG>
   );
 }

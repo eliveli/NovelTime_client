@@ -48,10 +48,10 @@ export const NavContentBoxPC = styled.nav`
 export const NavContentBoxMobile = styled.nav<{
   isMainBottom?: true;
   isDetail?: true;
-  isMsgList?: true;
+  isChatRoom?: true;
 }>`
   @media screen and (min-width: 1024px) {
-    ${({ isMsgList }) => !isMsgList && `display: none;`}
+    ${({ isChatRoom }) => !isChatRoom && `display: none;`}
   }
 
   width: 100%;
@@ -66,7 +66,7 @@ export const NavContentBoxMobile = styled.nav<{
   // at tablet
   @media (min-width: 768px) {
     padding: 0 20px;
-    ${({ isMsgList }) => isMsgList && `padding: 0 8px;`}
+    ${({ isChatRoom }) => isChatRoom && `padding: 0 8px;`}
   }
 
   // 모바일용 하단 내비게이션 바는 패딩 없음

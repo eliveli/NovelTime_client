@@ -2,12 +2,12 @@ import { useEffect, useRef, useState } from "react";
 import { io } from "socket.io-client";
 import { useNavigate, useParams } from "react-router-dom";
 import { isThePath, useWhetherItIsTablet } from "utils";
-import { MESSAGE_LIST, MESSAGE_ROOM } from "utils/pathname";
+import { CHAT_ROOM_LIST, CHAT_ROOM } from "utils/pathname";
 import { useGetMessagesQuery } from "store/serverAPIs/novelTime";
 import { useAppSelector } from "store/hooks";
 import { Message } from "store/serverAPIs/types";
 import {
-  MsgRoomContnr,
+  ChatRoomContnr,
   MessageContainer,
   UserImg,
   MessageDesc,
@@ -18,8 +18,8 @@ import {
   LastWatchContnr,
   LastWatchMark,
   ResizingFromMobile,
-} from "./MessageRoom.styles";
-import { WriteTextMessage } from "./MessageRoom.components";
+} from "./ChatRoom.styles";
+import { WriteTextMessage } from "./ChatRoom.components";
 
 type DateCriterion = React.MutableRefObject<{
   date: string;
@@ -147,7 +147,7 @@ function MessageStored({
   );
 }
 
-export default function MessageRoom({ roomIdTablet }: { roomIdTablet?: string }) {
+export default function ChatRoom({ roomIdTablet }: { roomIdTablet?: string }) {
   const { roomId: roomIdMobile } = useParams();
   const roomId = roomIdTablet || roomIdMobile;
 
@@ -321,14 +321,14 @@ export default function MessageRoom({ roomIdTablet }: { roomIdTablet?: string })
 
   useEffect(() => {
     // handle window resizing
-    if (isTablet && isThePath(MESSAGE_ROOM) && roomId) {
-      navigate(`${MESSAGE_LIST}?roomId=${roomId}`, { replace: true });
+    if (isTablet && isThePath(CHAT_ROOM) && roomId) {
+      navigate(`${CHAT_ROOM_LIST}?roomId=${roomId}`, { replace: true });
     }
   }, [isTablet]);
 
   return (
     <ResizingFromMobile roomIdMobile={roomId}>
-      <MsgRoomContnr roomIdMobile={roomId}>
+      <ChatRoomContnr roomIdMobile={roomId}>
         {messageResult.data?.map((_, idx) => {
           const previousMessage =
             messageResult.data && idx > 0 ? messageResult.data[idx - 1] : undefined;
@@ -367,7 +367,7 @@ export default function MessageRoom({ roomIdTablet }: { roomIdTablet?: string })
            */}
 
         <button onClick={testMessage}>testMessage</button>
-      </MsgRoomContnr>
+      </ChatRoomContnr>
       <WriteTextMessage />
     </ResizingFromMobile>
   );

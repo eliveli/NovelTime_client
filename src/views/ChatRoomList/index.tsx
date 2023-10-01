@@ -2,27 +2,27 @@ import MainBG from "components/MainBG";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useComponentWidth, useWhetherItIsMobile, useWhetherItIsTablet } from "utils";
-import MessageRoom from "views/MessageRoom";
-import { NavMessageRoom } from "views/Nav/Nav.components";
-import { MESSAGE_ROOM } from "utils/pathname";
+import ChatRoom from "views/ChatRoom";
+import { NavChatRoom } from "views/Nav/Nav.components";
+import { CHAT_ROOM } from "utils/pathname";
 import {
-  MsgRoomCntnr,
-  MsgListCntnr,
-  MsgListCntnrDevice,
+  ChatRoomCntnr,
+  ChatRoomListCntnr,
+  ChatRoomListCntnrDevice,
   CreateDate,
   UserImg,
   UserName,
-  MessageContainer,
+  ChatRoomPreviewContainer,
   UserNameBox,
   MessageContent,
   NextToImgContainer,
   FirstLineInfoContnr,
   UnreadTalkNoContnr,
   UnreadTalkNO,
-} from "./MessageList.styles";
+} from "./ChatRoomList.styles";
 
-interface MessageProps {
-  message: {
+interface ChatRoomPreviewProps {
+  chatRoom: {
     roomId: string;
     otherUserImg: string;
     otherUserName: string;
@@ -30,28 +30,34 @@ interface MessageProps {
     recentTalkTime: string;
     unreadTalkNO: number;
   };
-  showRoom: (msgRoomId: string) => void;
-  crntMsg: string;
+  showRoom: (chatRoomId: string) => void;
+  roomSelected: string;
   // state: { state1: boolean; state2: boolean };
   stateChanged: boolean;
   isBeforeClickList: boolean;
 }
 
-function Message({ message, showRoom, crntMsg, stateChanged, isBeforeClickList }: MessageProps) {
+function ChatRoomPreview({
+  chatRoom,
+  showRoom,
+  roomSelected,
+  stateChanged,
+  isBeforeClickList,
+}: ChatRoomPreviewProps) {
   const { roomId, otherUserImg, otherUserName, recentTalkContent, recentTalkTime, unreadTalkNO } =
-    message;
+    chatRoom;
 
   // configure ellipsis of contentWidth
   const contnrRef = useRef<HTMLDivElement>(null);
   const contnrWidth = useComponentWidth(contnrRef, stateChanged);
 
   return (
-    <MessageContainer
+    <ChatRoomPreviewContainer
       ref={contnrRef}
       onClick={() => {
         showRoom(roomId);
       }}
-      isCrntMsg={crntMsg === roomId}
+      isCurrentRoom={roomSelected === roomId}
       isBeforeClickList={isBeforeClickList}
     >
       <UserImg userImg={{ src: otherUserImg, position: "center" }} />
@@ -67,12 +73,12 @@ function Message({ message, showRoom, crntMsg, stateChanged, isBeforeClickList }
         </FirstLineInfoContnr>
         <MessageContent contnrWidth={contnrWidth}>{recentTalkContent}</MessageContent>
       </NextToImgContainer>
-    </MessageContainer>
+    </ChatRoomPreviewContainer>
   );
 }
-export default function MessageList() {
-  // server request with userId(or userName) for user's message list //
-  const messageFromServer = [
+export default function ChatRoomList() {
+  // server request with userId(or userName) for user's chat room list //
+  const chatRoomsFromServer = [
     {
       roomId: "abcd",
       otherUserImg: "",
@@ -110,85 +116,85 @@ export default function MessageList() {
 
   const [isShowRoomTablet, handleShowRoomTablet] = useState(false);
   const [roomId, setRoomId] = useState("");
-  // mark current one of message list
-  const [crntMsg, handleCrntMsg] = useState("");
+  // highlight room selected
+  const [roomSelected, handleRoom] = useState("");
   // open or close massage list
-  const [isListOpen, handleListOpen] = useState(false);
-  // before clicking one of the message list : do not show the space for message room
+  const [isRoomOpen, handleRoomOpen] = useState(false);
+  // before clicking one of the chat room list : do not show the space for chat room
   const [isBeforeClickList, handleBeforeClickList] = useState(true);
 
-  const handleMsgList = { isListOpen, handleMsgOpen: () => handleListOpen(!isListOpen) };
-  // show the message room :
-  // - for tablet and desktop, show the section of message room next to the message list
-  // - for mobile go to the message room page
+  const handleRoomList = { isRoomOpen, handleRoomOpen: () => handleRoomOpen(!isRoomOpen) };
+  // show the chat room :
+  // - for tablet and desktop, show the section of chat room next to the chat room list
+  // - for mobile go to the chat room page
   const isMobile = useWhetherItIsMobile();
   const isTablet = useWhetherItIsTablet();
 
-  const showRoom = (msgRoomId: string) => {
+  const showRoom = (chatRoomId: string) => {
     // when clicking the list at first
     if (isTablet && isBeforeClickList) {
       handleBeforeClickList(false);
       handleShowRoomTablet(true);
-      handleListOpen(true);
-      setRoomId(msgRoomId);
-      handleCrntMsg(msgRoomId);
+      handleRoomOpen(true);
+      setRoomId(chatRoomId);
+      handleRoom(chatRoomId);
     } else if (isTablet && !isBeforeClickList) {
       // when clicking the list since second
-      setRoomId(msgRoomId);
-      handleCrntMsg(msgRoomId);
+      setRoomId(chatRoomId);
+      handleRoom(chatRoomId);
     } else if (isMobile) {
-      navigate(`${MESSAGE_ROOM}/${msgRoomId}`);
+      navigate(`${CHAT_ROOM}/${chatRoomId}`);
     }
   };
 
   useEffect(() => {
     // handle window resizing
     if (isMobile && roomId) {
-      // on tablet and desktop, the path is always message list
-      // when displaying message list only or both message room and message list together
+      // on tablet and desktop, the path is always chat room list
+      // when displaying chat room list only or both chat room and chat room list together
 
-      // on mobile, message list and message room are separated each other in paths and components
+      // on mobile, chat room list and chat room are separated each other in paths and components
 
-      navigate(`${MESSAGE_ROOM}/${roomId}`, { replace: true });
+      navigate(`${CHAT_ROOM}/${roomId}`, { replace: true });
     }
   }, [isMobile, roomId]);
 
   useEffect(() => {
-    // show message list with message room given
-    // when resizing window from message room page or just navigating here with room id
+    // show chat room list with chat room given
+    // when resizing window from chat room page or just navigating here with room id
     if (isTablet && roomIdFromUrl) {
       showRoom(roomIdFromUrl);
     }
   }, [roomIdFromUrl, isTablet]);
 
   return (
-    <MainBG isMessageList>
-      <MsgListCntnrDevice isTablet={isTablet}>
-        <MsgListCntnr
+    <MainBG isChatRoomList>
+      <ChatRoomListCntnrDevice isTablet={isTablet}>
+        <ChatRoomListCntnr
           isShowRoomTablet={isShowRoomTablet}
-          isListOpen={isListOpen}
+          isRoomOpen={isRoomOpen}
           isBeforeClickList={isBeforeClickList}
         >
-          {messageFromServer.map((_) => (
-            <Message
+          {chatRoomsFromServer.map((_) => (
+            <ChatRoomPreview
               key={_.roomId}
-              message={_}
+              chatRoom={_}
               showRoom={showRoom}
-              crntMsg={crntMsg}
-              stateChanged={isListOpen}
+              roomSelected={roomSelected}
+              stateChanged={isRoomOpen}
               isBeforeClickList={isBeforeClickList}
               // to change width of component used ellipsis
             />
           ))}
-        </MsgListCntnr>
+        </ChatRoomListCntnr>
 
         {isShowRoomTablet && (
-          <MsgRoomCntnr isListOpen={isListOpen}>
-            <NavMessageRoom handleMsgList={handleMsgList} />
-            <MessageRoom roomIdTablet={roomId} />
-          </MsgRoomCntnr>
+          <ChatRoomCntnr isRoomOpen={isRoomOpen}>
+            <NavChatRoom handleRoomList={handleRoomList} />
+            <ChatRoom roomIdTablet={roomId} />
+          </ChatRoomCntnr>
         )}
-      </MsgListCntnrDevice>
+      </ChatRoomListCntnrDevice>
     </MainBG>
   );
 }

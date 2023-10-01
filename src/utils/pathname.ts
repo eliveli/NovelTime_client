@@ -9,5 +9,5 @@ export const NOVEL_DETAIL = "/novel-detail";
 export const SEARCH_NOVEL = "/search/novel";
 export const SEARCH_ALL = "/search";
 export const USER_PAGE = "/user-page";
-export const MESSAGE_LIST = "/message-list";
-export const MESSAGE_ROOM = "/message-room";
+export const CHAT_ROOM_LIST = "/chat-room-list";
+export const CHAT_ROOM = "/chat-room";

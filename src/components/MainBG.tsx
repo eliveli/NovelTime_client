@@ -3,13 +3,13 @@ import { styled } from "assets/styles/theme";
 const { pathname } = window.location;
 export const MainBG = styled.main<{
   isWritingDetail?: true;
-  isMessageList?: true;
+  isChatRoomList?: true;
 }>`
   /* 모바일 */
   width: 100%;
   margin: 0 auto;
   padding: 0 ${16}px 16px;
-  ${({ isMessageList }) => isMessageList && `padding-bottom:0;`}
+  ${({ isChatRoomList }) => isChatRoomList && `padding-bottom:0;`}
 
   background-color: white;
 
@@ -38,12 +38,12 @@ export const MainBG = styled.main<{
   /* 태블릿 */
   @media screen and (min-width: 768px) {
     padding: 0 20px 20px;
-    ${({ isMessageList }) => isMessageList && `padding-bottom:0;`}
+    ${({ isChatRoomList }) => isChatRoomList && `padding-bottom:0;`}
   }
 
   @media screen and (max-width: 1023px) {
     // at mobile and tablet, 메인리스트 페이지에서 하단 내비게이션 만큼 margin-bottom 설정
-    ${["/", "/talk-list", "/recommend-list", "/novel-list", "/message-list"].includes(pathname) &&
+    ${["/", "/talk-list", "/recommend-list", "/novel-list", "/chat-room-list"].includes(pathname) &&
     "margin-bottom: 60px;"}
   }
 

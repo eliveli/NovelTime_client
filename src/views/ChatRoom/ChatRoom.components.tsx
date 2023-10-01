@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import { useComponentWidth, useWhetherItIsMobile, writeText } from "utils";
 import { useAppSelector } from "../../store/hooks";
 import {
@@ -8,7 +8,7 @@ import {
   WriteText,
   WriteTextCntnr,
   WriteTextContainer,
-} from "./MessageRoom.styles";
+} from "./ChatRoom.styles";
 
 // eslint-disable-next-line import/prefer-default-export
 export function WriteTextMessage() {

@@ -1,5 +1,5 @@
-import MessageRoom from "./MessageRoom";
-import MessageList from "./MessageList";
+import ChatRoom from "./ChatRoom";
+import ChatRoomList from "./ChatRoomList";
 import FreeTalkList from "./FreeTalkList";
 import FreeTalkDetail from "./FreeTalkDetail";
 import NovelDetail from "./NovelDetail";
@@ -24,8 +24,8 @@ import Home from "./Home";
 import OAuthRedirectHandler from "./OAuthRedirectHandler";
 
 export {
-  MessageRoom,
-  MessageList,
+  ChatRoom,
+  ChatRoomList,
   RecommendDetail,
   RecommendList,
   NotFound,

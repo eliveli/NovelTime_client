@@ -7,7 +7,7 @@ export default function useWhetherItIsTablet() {
     const windowWidth = window.innerWidth; // including scrollbar
     return windowWidth >= 768;
     // scrollbar width must be included
-    //  for when resizing window and navigating between message list and message room
+    //  for when resizing window and navigating between chat room list and chat room
     //  where scrollbar can exist or not
   };
 

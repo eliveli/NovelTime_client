@@ -17,7 +17,7 @@ import {
   useLazyGetChatRoomIdQuery,
 } from "store/serverAPIs/novelTime";
 import Spinner from "assets/Spinner";
-import { MESSAGE_LIST, MESSAGE_ROOM } from "utils/pathname";
+import { CHAT_ROOM_LIST, CHAT_ROOM } from "utils/pathname";
 import { useWhetherItIsMobile } from "utils";
 import {
   ProfileContnr,
@@ -106,10 +106,10 @@ function Profile() {
 
     if (getChatRoomIdResult.data) {
       if (isMobile) {
-        navigate(`${MESSAGE_ROOM}/${getChatRoomIdResult.data.roomId}`);
+        navigate(`${CHAT_ROOM}/${getChatRoomIdResult.data.roomId}`);
         return;
       }
-      navigate(`${MESSAGE_LIST}?roomId=${getChatRoomIdResult.data.roomId}`);
+      navigate(`${CHAT_ROOM_LIST}?roomId=${getChatRoomIdResult.data.roomId}`);
     }
 
     //

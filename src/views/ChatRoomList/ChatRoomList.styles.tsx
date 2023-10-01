@@ -1,24 +1,27 @@
 import theme, { styled } from "assets/styles/theme";
 import { Img } from "store/serverAPIs/types";
 
-export const MsgListCntnrDevice = styled.div<{ isTablet: boolean }>`
+export const ChatRoomListCntnrDevice = styled.div<{ isTablet: boolean }>`
   ${({ isTablet }) => (isTablet ? `display: flex;` : ``)}
 `;
-export const MsgListCntnr = styled.div<{
+export const ChatRoomListCntnr = styled.div<{
   isShowRoomTablet: boolean;
-  isListOpen: boolean;
+  isRoomOpen: boolean;
   isBeforeClickList: boolean;
 }>`
   // for dividing the space
   ${({ isShowRoomTablet }) => !isShowRoomTablet && `width:100%;`}
   ${({ isShowRoomTablet, isBeforeClickList }) =>
     isShowRoomTablet && isBeforeClickList && `width:100%;`}
-  ${({ isShowRoomTablet, isBeforeClickList, isListOpen }) =>
-    isShowRoomTablet && !isBeforeClickList && isListOpen && `width:50%;`}
-  ${({ isShowRoomTablet, isBeforeClickList, isListOpen }) =>
-    isShowRoomTablet && !isBeforeClickList && !isListOpen && `width: 56px;`}
+  ${({ isShowRoomTablet, isBeforeClickList, isRoomOpen }) =>
+    isShowRoomTablet && !isBeforeClickList && isRoomOpen && `width:50%;`}
+  ${({ isShowRoomTablet, isBeforeClickList, isRoomOpen }) =>
+    isShowRoomTablet && !isBeforeClickList && !isRoomOpen && `width: 56px;`}
 `;
-export const MessageContainer = styled.div<{ isCrntMsg: boolean; isBeforeClickList: boolean }>`
+export const ChatRoomPreviewContainer = styled.div<{
+  isCurrentRoom: boolean;
+  isBeforeClickList: boolean;
+}>`
   width: 100%;
   display: flex;
   align-items: center;
@@ -32,10 +35,10 @@ export const MessageContainer = styled.div<{ isCrntMsg: boolean; isBeforeClickLi
     padding:12px 5px;
   `)}
 
-  ${({ isCrntMsg }) => isCrntMsg && `border: 2px solid ${theme.color.mainLight};`}
+  ${({ isCurrentRoom }) => isCurrentRoom && `border: 2px solid ${theme.color.mainLight};`}
 `;
-export const MsgRoomCntnr = styled.div<{
-  isListOpen: boolean;
+export const ChatRoomCntnr = styled.div<{
+  isRoomOpen: boolean;
 }>`
   position: relative;
   border-left: 1px solid rgba(0, 0, 0, 0.1);
@@ -44,7 +47,7 @@ export const MsgRoomCntnr = styled.div<{
   background-color: white;
 
   // for dividing the space
-  ${({ isListOpen }) => (isListOpen ? `width:50%;` : `width: 100%;`)}
+  ${({ isRoomOpen }) => (isRoomOpen ? `width:50%;` : `width: 100%;`)}
 `;
 export const NextToImgContainer = styled.div`
   width: 100%;
@@ -111,27 +114,27 @@ export const UnreadTalkNoContnr = styled.div`
 export const UnreadTalkNO = styled.span`
   font-size: 20px;
 `;
-export const MessageImgBox = styled.div`
-  min-width: 40px;
-`;
-export const MessageImg = styled.div<{ img?: string }>`
-  padding-top: 100%;
+// export const MessageImgBox = styled.div`
+//   min-width: 40px;
+// `;
+// export const MessageImg = styled.div<{ img?: string }>`
+//   padding-top: 100%;
 
-  ${({ img }) => !img && `border: 1px solid #e5e5e5;`};
+//   ${({ img }) => !img && `border: 1px solid #e5e5e5;`};
 
-  background-image: url(${({ img }) => img});
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
+//   background-image: url(${({ img }) => img});
+//   background-position: center;
+//   background-repeat: no-repeat;
+//   background-size: cover;
 
-  border-radius: 10%;
-`;
+//   border-radius: 10%;
+// `;
 
-export const MessageTitle = styled.h3`
-  font-size: 19px;
-  margin: 0;
-  font-weight: 500;
-`;
+// export const MessageTitle = styled.h3`
+//   font-size: 19px;
+//   margin: 0;
+//   font-weight: 500;
+// `;
 export const MessageContent = styled.p<{ contnrWidth: number }>`
   margin: 0;
   color: rgba(0, 0, 0, 0.7);

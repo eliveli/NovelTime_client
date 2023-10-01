@@ -21,8 +21,8 @@ import Icon from "assets/Icon";
 import {
   ADD_WRITING,
   EDIT_WRITING,
-  MESSAGE_LIST,
-  MESSAGE_ROOM,
+  CHAT_ROOM_LIST,
+  CHAT_ROOM,
   NOVEL_LIST,
   RECOMMEND_DETAIL,
   RECOMMEND_LIST,
@@ -85,7 +85,7 @@ export function NavPC() {
       partialPath: RECOMMEND_LIST,
     },
     { category: "Novel", path: NOVEL_LIST, partialPath: NOVEL_LIST },
-    { category: "Message", path: MESSAGE_LIST, partialPath: MESSAGE_LIST },
+    { category: "Message", path: CHAT_ROOM_LIST, partialPath: CHAT_ROOM_LIST },
   ];
 
   return (
@@ -243,7 +243,7 @@ export function NavMobileMainBottom() {
     },
     {
       category: "Message",
-      path: MESSAGE_LIST,
+      path: CHAT_ROOM_LIST,
       img: message,
       imgActive: messageActive,
     },
@@ -387,24 +387,26 @@ export function NavMobileDetail() {
   );
 }
 
-export function NavMessageRoom({
-  handleMsgList,
+// used where both chat room list page and chat room page
+export function NavChatRoom({
+  handleRoomList,
 }: {
-  handleMsgList?: {
-    isListOpen: boolean;
-    handleMsgOpen: () => void;
+  handleRoomList?: {
+    // used with chat room list only
+    isRoomOpen: boolean;
+    handleRoomOpen: () => void;
   };
 }) {
   const navigate = useNavigate();
   const loginUserInfo = useAppSelector((state) => state.user.loginUserInfo);
 
   return (
-    <NavContentBoxMobile isDetail isMsgList>
+    <NavContentBoxMobile isDetail isChatRoom>
       <IconsBox isLeft>
-        {isThePath(MESSAGE_ROOM) && (
+        {isThePath(CHAT_ROOM) && (
           // on mobile
-          // only message room is put with the path "message-room"
-          // (message room and message list are put with different paths)
+          // only chat room is put with the path "chat-room"
+          // (chat room and chat room list are put with different paths)
           <>
             <LeftIconBox onClick={() => navigate(-1)}>
               <BackIcon />
@@ -420,12 +422,12 @@ export function NavMessageRoom({
           </>
         )}
 
-        {isThePath(MESSAGE_LIST) && (
+        {isThePath(CHAT_ROOM_LIST) && (
           // on tablet or desktop
-          // message list and message room are put together with one path "message-list"
-          // (the path "message room" isn't used)
-          <LeftIconBox onClick={handleMsgList?.handleMsgOpen}>
-            {handleMsgList?.isListOpen ? <BackIcon /> : <ForwardIcon />}
+          // chat room list and chat room are put together with one path "chat-room-list"
+          // (the path "chat room" isn't used)
+          <LeftIconBox onClick={handleRoomList?.handleRoomOpen}>
+            {handleRoomList?.isRoomOpen ? <BackIcon /> : <ForwardIcon />}
           </LeftIconBox>
         )}
       </IconsBox>

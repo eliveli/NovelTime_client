@@ -2,7 +2,7 @@ import theme, { styled } from "assets/styles/theme";
 import Icon from "assets/Icon";
 import { Img } from "store/serverAPIs/types";
 
-export const MsgRoomContnr = styled.div<{ roomIdMobile?: string }>`
+export const ChatRoomContnr = styled.div<{ roomIdMobile?: string }>`
   // for mobile
   height: calc(100vh - 51px - 88px);
   // 100vh - top nav - message write component
@@ -14,12 +14,12 @@ export const MsgRoomContnr = styled.div<{ roomIdMobile?: string }>`
     padding:0 20px;
     border-top: 1px solid rgba(0,0,0,0.1);
     height: calc(100vh - (71px + 60px) - 50px - 88px);
-    `)} // 100vh - (top + bottom nav) - top nav of message room - message write component
+    `)} // 100vh - (top + bottom nav) - top nav of chat room - message write component
   ${theme.media.desktop(`
     height: calc(100vh - 61px - 50px - 88px);
   `)}
 
-  // when only message room exists without message list because of resizing browser
+  // when only chat room exists without chat room list because of resizing browser
   ${({ roomIdMobile }) =>
     roomIdMobile &&
     theme.media.tablet(`

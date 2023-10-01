@@ -2,8 +2,8 @@ import { useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import {
-  MessageList,
-  MessageRoom,
+  ChatRoomList,
+  ChatRoom,
   FreeTalkDetail,
   FreeTalkList,
   NovelDetail,
@@ -34,7 +34,7 @@ import { useAppDispatch, useAppSelector } from "store/hooks";
 import { ThemeProvider } from "styled-components";
 import theme from "assets/styles/theme";
 import EditWriting from "views/EditWriting";
-import { MessageRoomNav } from "views/Nav";
+import { ChatRoomNav } from "views/Nav";
 import GlobalStyle from "./assets/styles/GlobalStyle";
 
 function App() {
@@ -111,9 +111,11 @@ function App() {
         <Modal />
         <ScrollToTop>
           <Routes>
-            {["/", "/talk-list", "/recommend-list", "/novel-list", "/message-list"].map((path) => (
-              <Route key={path} path={path} element={<MainListNav />} />
-            ))}
+            {["/", "/talk-list", "/recommend-list", "/novel-list", "/chat-room-list"].map(
+              (path) => (
+                <Route key={path} path={path} element={<MainListNav />} />
+              ),
+            )}
             {[
               "/talk-detail/:talkId",
               "/talk-detail/:talkId/:commentId",
@@ -136,7 +138,7 @@ function App() {
               <Route key={path} path={path} element={<DetailNav />} />
             ))}
 
-            <Route path="/message-room/:roomId" element={<MessageRoomNav />} />
+            <Route path="/chat-room/:roomId" element={<ChatRoomNav />} />
 
             {/* 모바일 버전은 화면 최하단에 고정, PC 버전은 최상단에 스크롤 따라 보이기/감추기 */}
             {/* 페이지 별 다른 내비게이션 바가 필요할 경우 추가 & 아래 Routes에도 parent component path 추가 */}
@@ -166,9 +168,9 @@ function App() {
           <Route path="/search/novel" element={<SearchNovelPage />} />
           <Route path="/search/novel/iframe" element={<SearchNovelIframe />} />
 
-          <Route path="/message-list" element={<MessageList />} />
+          <Route path="/chat-room-list" element={<ChatRoomList />} />
 
-          <Route path="/message-room/:roomId" element={<MessageRoom />} />
+          <Route path="/chat-room/:roomId" element={<ChatRoom />} />
 
           {/* 새로고침 등 상황에 로그인 유지 위해 클라이언트 스토어 이용 */}
 
