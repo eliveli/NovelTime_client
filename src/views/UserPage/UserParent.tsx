@@ -180,7 +180,11 @@ export default function UserParent() {
     if (!isLoginUser && !!data) {
       dispatch(setUserInfoForUserPage(data));
     }
-  }, [data, isError]);
+    //
+    // "userName" in deps is required
+    //   when navigating login user's page from other user's page
+    //   by clicking the profile icon in nav bar
+  }, [data, userName, isError]);
 
   return (
     <>
