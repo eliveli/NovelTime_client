@@ -32,15 +32,10 @@ import {
   NavigatingToUserHome,
 } from "./UserPage.styles";
 
-interface ProfileProps {
-  userName: string;
-  userImg: { src: string; position: string };
-  userBG: { src: string; position: string };
-}
-
-function Profile({ userImg, userName, userBG }: ProfileProps) {
+function Profile() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const { userName, userImg, userBG } = useAppSelector((state) => state.user.userInfoInUserPage);
   const loginUserInfo = useAppSelector((state) => state.user.loginUserInfo);
   const isLogin = !!loginUserInfo.userId;
   const isLogout = useAppSelector((state) => state.user.isLogout);
@@ -167,38 +162,30 @@ export default function UserParent() {
   const isLoginUser = !!userName && userName === loginUserInfo.userName;
 
   const { data, isError, isFetching } = useGetUserInfoByUserNameQuery(userName as string, {
-    skip: isLoginUser,
-    // only request by userName when the user didn't login
+    skip: isLoginUser, // send request when this isn't login user
   });
 
-  // user info : login user or not
-  let userInfoForUserPage = {
-    userName: "",
-    userImg: { src: "", position: "" },
-    userBG: { src: "", position: "" },
-  };
+  useEffect(() => {
+    if (isError) {
+      alert("존재하지 않는 사용자입니다.");
+      navigate("/");
+      return;
+    }
 
-  // set user info to show on nav //
-  if (!isLoginUser && !!data) {
-    userInfoForUserPage = data;
-  } else if (isLoginUser) {
-    userInfoForUserPage = loginUserInfo;
-  }
-  dispatch(setUserInfoForUserPage(userInfoForUserPage));
-  // when user name doesn't exist in DB
-  if (isError) {
-    alert("존재하지 않는 사용자입니다.");
-    navigate("/");
-  }
+    if (isLoginUser) {
+      dispatch(setUserInfoForUserPage(loginUserInfo));
+      return;
+    }
+
+    if (!isLoginUser && !!data) {
+      dispatch(setUserInfoForUserPage(data));
+    }
+  }, [data, isError]);
 
   return (
     <>
       {isFetching && <Spinner styles="fixed" />}
-      <Profile
-        userImg={userInfoForUserPage.userImg}
-        userName={userInfoForUserPage.userName}
-        userBG={userInfoForUserPage.userBG}
-      />
+      <Profile />
       <Outlet />
     </>
   );
