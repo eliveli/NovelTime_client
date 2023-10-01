@@ -185,9 +185,12 @@ export default function MessageRoom({ roomIdTablet }: { roomIdTablet?: string })
   const checkCreateTimeIsNeeded = (
     currentUser: string,
     currentTime: string,
+    currentDate: string,
+
     nextUser?: string,
     nextTime?: string,
-  ) => currentUser !== nextUser || currentTime !== nextTime;
+    nextDate?: string,
+  ) => currentUser !== nextUser || currentTime !== nextTime || currentDate !== nextDate;
 
   const checkUserImgIsNeeded = (currentUser: string, prevUser?: string) => currentUser !== prevUser;
 
@@ -342,8 +345,10 @@ export default function MessageRoom({ roomIdTablet }: { roomIdTablet?: string })
               isNeededCreateTime={checkCreateTimeIsNeeded(
                 _.senderUserName,
                 _.createTime,
+                _.createDate,
                 nextMessage?.senderUserName,
                 nextMessage?.createTime,
+                nextMessage?.createDate,
               )}
               isNeededUserImg={checkUserImgIsNeeded(
                 _.senderUserName,
