@@ -100,6 +100,11 @@ export function NavPC() {
             <NavContent
               key={_.category}
               onClick={() => {
+                if (_.category === "Message" && !loginUserInfo.userId) {
+                  alert("로그인이 필요합니다");
+                  return;
+                }
+
                 navigate(_.path);
               }}
               isCurrentPath={isThePath(_.partialPath)}
@@ -388,13 +393,13 @@ export function NavMobileDetail() {
 }
 
 // used where both chat room list page and chat room page
-export function NavChatRoom({
-  handleRoomList,
+export function ChatRoomNav({
+  roomSpread,
 }: {
-  handleRoomList?: {
-    // used with chat room list only
-    isRoomOpen: boolean;
-    handleRoomOpen: () => void;
+  roomSpread?: {
+    // used for chat room list page only
+    isRoomSpread: boolean;
+    spreadRoomOrNot: () => void;
   };
 }) {
   const navigate = useNavigate();
@@ -403,10 +408,17 @@ export function NavChatRoom({
   return (
     <NavContentBoxMobile isDetail isChatRoom>
       <IconsBox isLeft>
-        {isThePath(CHAT_ROOM) && (
+        {isThePath(CHAT_ROOM_LIST) ? (
+          // on tablet or desktop
+          // used for chat room list page
+          // placed above a chat room component next to chat room list component
+          <LeftIconBox onClick={roomSpread?.spreadRoomOrNot}>
+            {roomSpread?.isRoomSpread ? <ForwardIcon /> : <BackIcon />}
+          </LeftIconBox>
+        ) : (
           // on mobile
-          // only chat room is put with the path "chat-room"
-          // (chat room and chat room list are put with different paths)
+          // used for single chat room page
+          // placed on top navigation space (as part of <ChatRoomNavMobile> component)
           <>
             <LeftIconBox onClick={() => navigate(-1)}>
               <BackIcon />
@@ -420,15 +432,6 @@ export function NavChatRoom({
               <HomeIcon />
             </HomeIconBox>
           </>
-        )}
-
-        {isThePath(CHAT_ROOM_LIST) && (
-          // on tablet or desktop
-          // chat room list and chat room are put together with one path "chat-room-list"
-          // (the path "chat room" isn't used)
-          <LeftIconBox onClick={handleRoomList?.handleRoomOpen}>
-            {handleRoomList?.isRoomOpen ? <BackIcon /> : <ForwardIcon />}
-          </LeftIconBox>
         )}
       </IconsBox>
 

@@ -80,6 +80,8 @@ function Profile() {
       return;
     }
 
+    if (getChatRoomIdResult.isFetching) return;
+
     await getChatRoomId(userName);
   };
 
@@ -121,6 +123,8 @@ function Profile() {
   //
   return (
     <ProfileContnr whenBGisNot={!!tempUserBG.src || !!userBG.src}>
+      {getChatRoomIdResult.isFetching && <Spinner styles="fixed" />}
+
       <ProfileBG
         userBGSrc={tempUserBG.src || userBG.src}
         userBGPosition={tempUserBG.position || userBG.position}

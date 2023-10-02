@@ -6,6 +6,7 @@ import { CHAT_ROOM_LIST, CHAT_ROOM } from "utils/pathname";
 import { useGetMessagesQuery } from "store/serverAPIs/novelTime";
 import { useAppSelector } from "store/hooks";
 import { Message } from "store/serverAPIs/types";
+import Spinner from "assets/Spinner";
 import {
   ChatRoomContnr,
   MessageContainer,
@@ -328,6 +329,8 @@ export default function ChatRoom({ roomIdTablet }: { roomIdTablet?: string }) {
 
   return (
     <ResizingFromMobile roomIdMobile={roomId}>
+      {messageResult.isFetching && <Spinner styles="fixed" />}
+
       <ChatRoomContnr roomIdMobile={roomId}>
         {messageResult.data?.map((_, idx) => {
           const previousMessage =

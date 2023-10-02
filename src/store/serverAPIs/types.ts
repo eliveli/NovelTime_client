@@ -645,3 +645,17 @@ export interface Message {
   };
 }
 export type Messages = Message[];
+
+export interface ChatRoom {
+  roomId: string;
+  partnerUserName: string;
+  partnerUserImg: {
+    src: string;
+    position: string;
+  };
+  latestMessageContent: string;
+  latestMessageDate: string;
+  unreadMessageNo: number;
+}
+
+export type ChatRooms = ChatRoom[];

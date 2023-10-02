@@ -34,7 +34,7 @@ import { useAppDispatch, useAppSelector } from "store/hooks";
 import { ThemeProvider } from "styled-components";
 import theme from "assets/styles/theme";
 import EditWriting from "views/EditWriting";
-import { ChatRoomNav } from "views/Nav";
+import { ChatRoomNavMobile } from "views/Nav";
 import GlobalStyle from "./assets/styles/GlobalStyle";
 
 function App() {
@@ -138,7 +138,7 @@ function App() {
               <Route key={path} path={path} element={<DetailNav />} />
             ))}
 
-            <Route path="/chat-room/:roomId" element={<ChatRoomNav />} />
+            <Route path="/chat-room/:roomId" element={<ChatRoomNavMobile />} />
 
             {/* 모바일 버전은 화면 최하단에 고정, PC 버전은 최상단에 스크롤 따라 보이기/감추기 */}
             {/* 페이지 별 다른 내비게이션 바가 필요할 경우 추가 & 아래 Routes에도 parent component path 추가 */}
