@@ -5,7 +5,7 @@ import { isThePath, useWhetherItIsTablet } from "utils";
 import { CHAT_ROOM_LIST, CHAT_ROOM } from "utils/pathname";
 import { useGetMessagesQuery } from "store/serverAPIs/novelTime";
 import { useAppSelector } from "store/hooks";
-import { Message } from "store/serverAPIs/types";
+import { Message as TypeMessage } from "store/serverAPIs/types";
 import Spinner from "assets/Spinner";
 import {
   ChatRoomContnr,
@@ -27,7 +27,7 @@ type DateCriterion = React.MutableRefObject<{
   isNewDate: boolean;
 }>;
 interface MessageProps {
-  message: Message;
+  message: TypeMessage;
   isNeededCreateTime: boolean;
   isNeededUserImg: boolean;
   isMyMessage: boolean;
@@ -35,7 +35,7 @@ interface MessageProps {
   isFirstMessageUnread?: true;
 }
 interface PartnerMessageProps {
-  message: Message;
+  message: TypeMessage;
   dateCriterion: DateCriterion;
   isNeededCreateTime: boolean;
   isNeededUserImg: boolean;
@@ -111,7 +111,7 @@ function MyMessage({ content, createTime, dateCriterion }: MyMessageProps) {
   );
 }
 
-function MessageStored({
+function Message({
   message,
   isMyMessage,
   isFirstMessageUnread,
@@ -152,7 +152,13 @@ export default function ChatRoom({ roomIdTablet }: { roomIdTablet?: string }) {
   const { roomId: roomIdMobile } = useParams();
   const roomId = roomIdTablet || roomIdMobile;
 
-  const loginUserName = useAppSelector((state) => state.user.loginUserInfo.userName);
+  const [allMessages, setAllMessages] = useState<TypeMessage[]>([]);
+
+  const {
+    userId: loginUserId,
+    userName: loginUserName,
+    userImg: loginUserImg,
+  } = useAppSelector((state) => state.user.loginUserInfo);
   const messageResult = useGetMessagesQuery(roomId as string, {
     skip: !loginUserName,
     // if login user refreshes page, query works after login user info is put in user slice
@@ -166,19 +172,32 @@ export default function ChatRoom({ roomIdTablet }: { roomIdTablet?: string }) {
     if ("data" in messageResult.error && "message" in messageResult.error.data) {
       if (messageResult.error.data.message === "room doesn't exist") {
         alert("방이 존재하지 않습니다");
-        navigate(-1);
-        return;
+        //
+      } else if (messageResult.error.data.message === "user is not in the room") {
+        alert(`${loginUserName}님이 참여한 방이 아닙니다`);
+        //
+      } else {
+        alert(`메시지를 불러올 수 없습니다`);
       }
 
-      if (messageResult.error.data.message === "user is not in the room") {
-        alert(`${loginUserName}님이 참여한 방이 아닙니다`);
-        navigate(-1);
-      }
+      navigate(-1);
     }
   }, [messageResult.error]);
 
+  useEffect(() => {
+    if (!messageResult.data?.length) return;
+
+    setAllMessages([...messageResult.data]);
+  }, [messageResult.data]);
+
   let isMessageUnread = false;
-  const checkMessageUnread = (senderUserName: string, isReadByReceiver: boolean) => {
+  const checkMessageUnread = (
+    senderUserName: string,
+    isReadByReceiver: boolean,
+    isNewMessage: boolean,
+  ) => {
+    if (isNewMessage) return undefined; // not for new message with socket
+
     // login user is the receiver
     if (loginUserName === senderUserName) return undefined;
 
@@ -216,64 +235,14 @@ export default function ChatRoom({ roomIdTablet }: { roomIdTablet?: string }) {
     path: "/socket.io",
   });
 
-  // -- it is required
-  // -- configure from backend!! : variable isContinuous------------------
-  // when user send a message,
-  // get one just before the message from database
-  // if two are same in userName, createTime,
-  //
-  // look at the socket event handler
-  // the process of setting states about continuous messages
-  //                   (states of isContinuous, isContinuousFirst, isContinuousLast of two messages)
-  //         might should be done in backend when receiving the socket message
-  //
-  // ------------------------------------------------------------------//
-
-  //
-  // below is for setting realtime // * need to change
-  type NewMessage = {
-    userImg: string;
-    userName: string;
-    talkContent: string;
-    talkTime: string;
-    isContinuous: boolean;
-    isContinuousFirst: boolean;
-    isContinuousLast: boolean;
-  };
-  const newMessages = useRef([
-    {
-      userImg: "",
-      userName: "",
-      talkContent: "",
-      talkTime: "",
-      isContinuous: false, // when it is true, do not show createTime
-      isContinuousFirst: false, // when it is true, do not show userImg
-      isContinuousLast: false, // when it is true, show createTime
-    },
-  ]);
-
-  const [newMsgNO, countNewMsg] = useState(0);
-
-  const testReceiveM = {
-    userImg: "",
-    userName: "ab",
-    talkContent: "hello my name is...",
-    talkTime: "22.03.04.12:22",
-    isContinuous: false,
-    isContinuousFirst: false,
-    isContinuousLast: false,
-  };
-  const testSendM = {
-    userImg: "",
-    userName: "a",
-    talkContent: "hello my name is...",
-    talkTime: "22.03.04.12:22",
-    isContinuous: false,
-    isContinuousFirst: false,
-    isContinuousLast: false,
-  };
-  const testMessage = () => {
-    socket.emit("send message", { roomId, msg: testReceiveM });
+  const sendMessage = (content: string) => {
+    socket.emit("send message", {
+      roomId,
+      content,
+      senderUserId: loginUserId,
+      senderUserName: loginUserName,
+      senderUserImg: loginUserImg,
+    });
   };
 
   useEffect(() => {
@@ -281,40 +250,12 @@ export default function ChatRoom({ roomIdTablet }: { roomIdTablet?: string }) {
   }, []);
 
   useEffect(() => {
-    socket.on("new message", (currentMsg: NewMessage) => {
-      const prevMessage = newMessages.current[newMessages.current.length - 1];
-      if (newMessages.current.length === 1 && !newMessages.current[0].userName) {
-        newMessages.current = [currentMsg];
-      } else if (
-        prevMessage.userName === currentMsg.userName &&
-        prevMessage.talkTime === currentMsg.talkTime &&
-        prevMessage.isContinuous === false
-      ) {
-        // previous message is the first of continuous messages
-        prevMessage.isContinuousFirst = true;
-        prevMessage.isContinuous = true;
+    socket.on("new message", (newMessage: TypeMessage) => {
+      setAllMessages((prev) => [...prev, newMessage]);
 
-        currentMsg.isContinuous = true;
-        currentMsg.isContinuousLast = true;
-
-        newMessages.current.push(currentMsg);
-      } else if (
-        prevMessage.userName === currentMsg.userName &&
-        prevMessage.talkTime === currentMsg.talkTime &&
-        prevMessage.isContinuous === true &&
-        prevMessage.isContinuousLast === true
-      ) {
-        // previous message is between first and last continuous messages
-        prevMessage.isContinuousLast = false;
-
-        currentMsg.isContinuous = true;
-        currentMsg.isContinuousLast = true;
-
-        newMessages.current.push(currentMsg);
-      } else {
-        newMessages.current.push(currentMsg);
+      if (newMessage.senderUserName !== loginUserName) {
+        socket.emit("change message read", newMessage.messageId);
       }
-      countNewMsg((prev) => prev + 1);
     });
   }, []);
 
@@ -332,20 +273,23 @@ export default function ChatRoom({ roomIdTablet }: { roomIdTablet?: string }) {
       {messageResult.isFetching && <Spinner styles="fixed" />}
 
       <ChatRoomContnr roomIdMobile={roomId}>
-        {messageResult.data?.map((_, idx) => {
-          const previousMessage =
-            messageResult.data && idx > 0 ? messageResult.data[idx - 1] : undefined;
+        {allMessages.map((_, idx) => {
+          const previousMessage = idx > 0 ? allMessages[idx - 1] : undefined;
 
           const nextMessage =
-            messageResult.data && idx < messageResult.data.length - 1
-              ? messageResult.data[idx + 1]
-              : undefined;
+            allMessages && idx < allMessages.length - 1 ? allMessages[idx + 1] : undefined;
+
+          const isNewMessage = !!messageResult.data && messageResult.data.length - 1 < idx;
 
           return (
-            <MessageStored
+            <Message
               key={_.messageId}
               dateCriterion={dateCriterion}
-              isFirstMessageUnread={checkMessageUnread(_.senderUserName, _.isReadByReceiver)}
+              isFirstMessageUnread={checkMessageUnread(
+                _.senderUserName,
+                _.isReadByReceiver,
+                isNewMessage,
+              )}
               isMyMessage={loginUserName === _.senderUserName}
               isNeededCreateTime={checkCreateTimeIsNeeded(
                 _.senderUserName,
@@ -363,15 +307,9 @@ export default function ChatRoom({ roomIdTablet }: { roomIdTablet?: string }) {
             />
           );
         })}
-
-        {/*
-         {newMsgNO > 0 &&
-          newMessages.current.map((_) => <MessageStored key={_.messageId} message={_} />)}
-           */}
-
-        <button onClick={testMessage}>testMessage</button>
       </ChatRoomContnr>
-      <WriteTextMessage />
+
+      <WriteTextMessage sendMessage={sendMessage} />
     </ResizingFromMobile>
   );
 }

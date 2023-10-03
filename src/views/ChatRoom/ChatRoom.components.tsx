@@ -11,7 +11,7 @@ import {
 } from "./ChatRoom.styles";
 
 // eslint-disable-next-line import/prefer-default-export
-export function WriteTextMessage() {
+export function WriteTextMessage({ sendMessage }: { sendMessage: (content: string) => void }) {
   const loginUserId = useAppSelector((state) => state.user.loginUserInfo.userId);
 
   const textRef = useRef<HTMLTextAreaElement>(null);
@@ -29,7 +29,7 @@ export function WriteTextMessage() {
 
     if (!textRef.current?.value) return; // when text is empty
 
-    // server request // * reference the comment input component
+    sendMessage(textRef.current.value);
 
     // initialize text input
     textRef.current.value = "";
