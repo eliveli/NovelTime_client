@@ -639,7 +639,7 @@ export interface ChatRoom {
     position: string;
   };
   latestMessageContent: string;
-  // latestMessageDateTime: string; // sent but not used
+  latestMessageDateTime: string;
   latestMessageDate: string;
   latestMessageTime: string;
   unreadMessageNo: number;
@@ -653,6 +653,7 @@ export interface Message {
   messageId: string;
   roomId: string;
   content: string;
+  createDateTime: string; // only for treating new message with socket in room list page
   createDate: string;
   createTime: string;
   isReadByReceiver: boolean;

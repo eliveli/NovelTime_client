@@ -47,6 +47,12 @@ function getCurrentDate() {
   return `${year}.${month}.${day}`; // yy.mm.dd
 }
 
+const sortByMessageCreateTime = (room1: TypeChatRoom, room2: TypeChatRoom) => {
+  if (room1.latestMessageDateTime < room2.latestMessageDateTime) return 1;
+  if (room1.latestMessageDateTime > room2.latestMessageDateTime) return -1;
+  return 0;
+};
+
 function ChatRoomPreview({ chatRoom, roomSelected, isRoomSpread, isRoom }: ChatRoomPreviewProps) {
   const {
     roomId,
@@ -164,24 +170,26 @@ export default function ChatRoomList() {
 
   // save a new message in the room //
   const setNewMessage = (newMessage: Message) => {
-    handleChatRooms((rooms) =>
-      rooms.map((room) => {
-        if (room.roomId === newMessage.roomId) {
-          // unread message no is 0 when it was sent in the current room
-          const unreadMessageNo =
-            currentRoomId === newMessage.roomId ? 0 : room.unreadMessageNo + 1;
+    const roomsChanged = chatRooms.map((room) => {
+      if (room.roomId === newMessage.roomId) {
+        // unread message no is 0 when it was sent in the current room
+        const unreadMessageNo = currentRoomId === newMessage.roomId ? 0 : room.unreadMessageNo + 1;
 
-          return {
-            ...room,
-            latestMessageDate: newMessage.createDate,
-            latestMessageTime: newMessage.createTime,
-            latestMessageContent: newMessage.content,
-            unreadMessageNo,
-          };
-        }
-        return room;
-      }),
-    );
+        return {
+          ...room,
+          latestMessageDateTime: newMessage.createDateTime,
+          latestMessageDate: newMessage.createDate,
+          latestMessageTime: newMessage.createTime,
+          latestMessageContent: newMessage.content,
+          unreadMessageNo,
+        };
+      }
+      return room;
+    });
+
+    const roomsSorted = roomsChanged.sort(sortByMessageCreateTime);
+
+    handleChatRooms(roomsSorted);
   };
   useEffect(() => {
     socket.on("new message", setNewMessage);
