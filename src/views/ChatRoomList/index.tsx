@@ -33,6 +33,20 @@ interface ChatRoomPreviewProps {
   isRoom: boolean;
 }
 
+function getCurrentDate() {
+  const date = new Date();
+  let year: string = date.getFullYear().toString();
+  year = year.substring(2, 4);
+
+  let month: string | number = date.getMonth() + 1;
+  month = month < 10 ? `0${month.toString()}` : month.toString();
+
+  let day: string | number = date.getDate();
+  day = day < 10 ? `0${day.toString()}` : day.toString();
+
+  return `${year}.${month}.${day}`; // yy.mm.dd
+}
+
 function ChatRoomPreview({ chatRoom, roomSelected, isRoomSpread, isRoom }: ChatRoomPreviewProps) {
   const {
     roomId,
@@ -40,6 +54,7 @@ function ChatRoomPreview({ chatRoom, roomSelected, isRoomSpread, isRoom }: ChatR
     partnerUserImg,
     latestMessageContent,
     latestMessageDate,
+    latestMessageTime,
     unreadMessageNo,
   } = chatRoom;
 
@@ -48,6 +63,9 @@ function ChatRoomPreview({ chatRoom, roomSelected, isRoomSpread, isRoom }: ChatR
   const contnrWidth = useComponentWidth(contnrRef, isRoomSpread);
 
   const navigate = useNavigate();
+
+  const currentDate = getCurrentDate();
+  const dateToDisplay = currentDate === latestMessageDate ? latestMessageTime : latestMessageDate;
 
   return (
     <ChatRoomPreviewContainer
@@ -63,7 +81,7 @@ function ChatRoomPreview({ chatRoom, roomSelected, isRoomSpread, isRoom }: ChatR
         <FirstLineInfoContnr>
           <UserNameBox>
             <UserName>{partnerUserName}</UserName>
-            <CreateDate>{latestMessageDate}</CreateDate>
+            <CreateDate>{dateToDisplay}</CreateDate>
           </UserNameBox>
           {!!unreadMessageNo && (
             <UnreadTalkNoContnr>
@@ -155,7 +173,8 @@ export default function ChatRoomList() {
 
           return {
             ...room,
-            latestMessageDate: newMessage.createTime,
+            latestMessageDate: newMessage.createDate,
+            latestMessageTime: newMessage.createTime,
             latestMessageContent: newMessage.content,
             unreadMessageNo,
           };
@@ -171,6 +190,7 @@ export default function ChatRoomList() {
       socket.off("new message", setNewMessage);
     };
   }, [currentRoomId]);
+
   // Handle window resizing ----------------------------------------- //
   const navigate = useNavigate();
   const isMobile = useWhetherItIsMobile();

@@ -639,7 +639,9 @@ export interface ChatRoom {
     position: string;
   };
   latestMessageContent: string;
+  // latestMessageDateTime: string; // sent but not used
   latestMessageDate: string;
+  latestMessageTime: string;
   unreadMessageNo: number;
 }
 
