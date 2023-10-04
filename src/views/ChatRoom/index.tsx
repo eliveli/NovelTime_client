@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import { io } from "socket.io-client";
 import { useNavigate, useParams } from "react-router-dom";
 import { isThePath, useWhetherItIsTablet } from "utils";
 import { CHAT_ROOM_LIST, CHAT_ROOM } from "utils/pathname";
@@ -7,6 +6,7 @@ import { useGetMessagesQuery } from "store/serverAPIs/novelTime";
 import { useAppSelector } from "store/hooks";
 import { Message as TypeMessage } from "store/serverAPIs/types";
 import Spinner from "assets/Spinner";
+import socket from "store/serverAPIs/socket.io";
 import {
   ChatRoomContnr,
   MessageContainer,
@@ -224,17 +224,7 @@ export default function ChatRoom({ roomIdTablet }: { roomIdTablet?: string }) {
 
   const dateCriterion = useRef({ date: "", isNewDate: false });
 
-  const contnrRef = useRef<HTMLElement>(null);
-
-  // for realtime communication
-  const hostName =
-    process.env.REACT_APP_ENV === "production"
-      ? "http://www.noveltime.shop"
-      : "http://domainfordev.com";
-  const socket = io(hostName, {
-    path: "/socket.io",
-  });
-
+  // for realtime communication //
   const sendMessage = (content: string) => {
     socket.emit("send message", {
       roomId,
@@ -246,18 +236,29 @@ export default function ChatRoom({ roomIdTablet }: { roomIdTablet?: string }) {
   };
 
   useEffect(() => {
-    socket.emit("join room", roomId);
-  }, []);
+    if (!roomId) return;
+
+    if (isThePath(CHAT_ROOM_LIST)) return; // joined already
+
+    socket.emit("join a room", roomId);
+  }, [roomId]);
+
+  const setNewMessage = (newMessage: TypeMessage) => {
+    setAllMessages((prev) => [...prev, newMessage]);
+
+    if (newMessage.senderUserName !== loginUserName) {
+      socket.emit("change message read", newMessage.messageId);
+    }
+  };
 
   useEffect(() => {
-    socket.on("new message", (newMessage: TypeMessage) => {
-      setAllMessages((prev) => [...prev, newMessage]);
+    socket.on("new message", setNewMessage);
 
-      if (newMessage.senderUserName !== loginUserName) {
-        socket.emit("change message read", newMessage.messageId);
-      }
-    });
-  }, []);
+    // need to remove the event to get "loginUserName" changed
+    return () => {
+      socket.off("new message", setNewMessage);
+    };
+  }, [loginUserName]);
 
   const isTablet = useWhetherItIsTablet();
 
