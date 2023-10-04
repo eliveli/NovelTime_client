@@ -59,6 +59,7 @@ import {
   RoomId,
   Messages,
   ChatRooms,
+  ParamToGetMessages,
 } from "./types";
 import type { RootState } from "../index";
 
@@ -521,8 +522,8 @@ export const novelTimeApi = createApi({
     getChatRooms: builder.query<ChatRooms, undefined>({
       query: () => `/chat/rooms`,
     }),
-    getMessages: builder.query<Messages, string>({
-      query: (roomId) => `/chat/messages/${roomId}`,
+    getMessages: builder.query<Messages, ParamToGetMessages>({
+      query: ({ roomId }) => `/chat/messages/${roomId}`,
     }),
   }),
 });

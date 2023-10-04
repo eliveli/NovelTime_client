@@ -159,10 +159,28 @@ export default function ChatRoom({ roomIdTablet }: { roomIdTablet?: string }) {
     userName: loginUserName,
     userImg: loginUserImg,
   } = useAppSelector((state) => state.user.loginUserInfo);
-  const messageResult = useGetMessagesQuery(roomId as string, {
-    skip: !loginUserName,
-    // if login user refreshes page, query works after login user info is put in user slice
-  });
+
+  // to send query by changing arg not to use cache data
+  //    when choosing other room in chat room list page on tablet
+  const getUniqueValue = () => Math.floor(Date.now() * Math.random());
+  const valueForNoCache = useRef(getUniqueValue());
+  const prevRoomId = useRef(roomId);
+  useEffect(() => {
+    if (!roomId) return;
+
+    if (roomId !== prevRoomId.current) {
+      valueForNoCache.current = getUniqueValue();
+      prevRoomId.current = roomId;
+    }
+  }, [roomId]);
+
+  const messageResult = useGetMessagesQuery(
+    { roomId: roomId as string, valueForNoCache: valueForNoCache.current },
+    {
+      skip: !loginUserName,
+      // - if login user refreshes page, query works after login user info is put in user slice
+    },
+  );
 
   const navigate = useNavigate();
 

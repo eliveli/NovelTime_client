@@ -631,6 +631,22 @@ export interface RoomId {
   roomId: string;
 }
 
+export interface ChatRoom {
+  roomId: string;
+  partnerUserName: string;
+  partnerUserImg: {
+    src: string;
+    position: string;
+  };
+  latestMessageContent: string;
+  latestMessageDate: string;
+  unreadMessageNo: number;
+}
+
+export type ChatRooms = ChatRoom[];
+
+export type ParamToGetMessages = { roomId: string; valueForNoCache: number };
+
 export interface Message {
   messageId: string;
   roomId: string;
@@ -645,17 +661,3 @@ export interface Message {
   };
 }
 export type Messages = Message[];
-
-export interface ChatRoom {
-  roomId: string;
-  partnerUserName: string;
-  partnerUserImg: {
-    src: string;
-    position: string;
-  };
-  latestMessageContent: string;
-  latestMessageDate: string;
-  unreadMessageNo: number;
-}
-
-export type ChatRooms = ChatRoom[];
