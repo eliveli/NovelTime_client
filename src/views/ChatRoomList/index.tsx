@@ -6,9 +6,10 @@ import ChatRoom from "views/ChatRoom";
 import { ChatRoomNav } from "views/Nav/Nav.components";
 import { CHAT_ROOM, CHAT_ROOM_LIST } from "utils/pathname";
 import { useGetChatRoomsQuery } from "store/serverAPIs/novelTime";
-import { ChatRoom as TypeChatRoom } from "store/serverAPIs/types";
+import { Message, ChatRoom as TypeChatRoom } from "store/serverAPIs/types";
 import { useAppSelector } from "store/hooks";
 import Spinner from "assets/Spinner";
+import socket from "store/serverAPIs/socket.io";
 import {
   ChatRoomCntnr,
   ChatRoomListCntnr,
@@ -79,54 +80,133 @@ export default function ChatRoomList() {
   const isLoginUser = !!useAppSelector((state) => state.user.loginUserInfo.userId);
 
   const chatRoomResult = useGetChatRoomsQuery(undefined, { skip: !isLoginUser });
-  // if login user refreshes page, query works after login user info is put in user slice
+  // - if login user refreshes page, query works after login user info is put in user slice
 
-  const navigate = useNavigate();
+  const [chatRooms, handleChatRooms] = useState<TypeChatRoom[]>([]);
 
+  // Treat a certain room ------------------------------------------- //
   const [searchParam] = useSearchParams();
-  const roomId = searchParam.get("roomId");
-  // if roomId is null, display room list only (not with a certain room)
+  const currentRoomId = searchParam.get("roomId");
+  // - if roomId is null, display room list only (not with a certain room)
 
   const [isRoomSpread, handleRoomSpread] = useState(false);
   const roomSpread = { isRoomSpread, spreadRoomOrNot: () => handleRoomSpread(!isRoomSpread) };
 
+  // Display new messages (just received ones) ---------------------- //
+  useEffect(() => {
+    if (!chatRoomResult.data?.length) return;
+    if (chatRooms.length) return;
+
+    // set rooms at first //
+    if (!currentRoomId) {
+      // navigating here without roomId
+      handleChatRooms(chatRoomResult.data);
+      //
+    } else {
+      // navigating here with roomId
+      const rooms = chatRoomResult.data.map((room) => {
+        // change "unreadMessageNo" to 0 in current room
+        if (room.roomId === currentRoomId) {
+          return {
+            ...room,
+            unreadMessageNo: 0,
+          };
+        }
+        return room;
+      });
+
+      handleChatRooms(rooms);
+    }
+
+    // join the rooms with socket io //
+    const roomIDs = chatRoomResult.data.map((room) => room.roomId);
+
+    socket.emit("join rooms", roomIDs);
+    //
+  }, [chatRoomResult.data, !!chatRooms.length]);
+
+  // change "unreadMessageNo" of current room //
+  // : a room or rooms exist and no room changes. just user selects a room
+  useEffect(() => {
+    if (!currentRoomId) return;
+    if (!chatRooms.length) return;
+
+    handleChatRooms((rooms) =>
+      rooms.map((room) => {
+        if (room.roomId === currentRoomId) {
+          return {
+            ...room,
+            unreadMessageNo: 0,
+          };
+        }
+        return room;
+      }),
+    );
+  }, [currentRoomId, !!chatRooms.length]);
+
+  // save a new message in the room //
+  const setNewMessage = (newMessage: Message) => {
+    handleChatRooms((rooms) =>
+      rooms.map((room) => {
+        if (room.roomId === newMessage.roomId) {
+          // unread message no is 0 when it was sent in the current room
+          const unreadMessageNo =
+            currentRoomId === newMessage.roomId ? 0 : room.unreadMessageNo + 1;
+
+          return {
+            ...room,
+            latestMessageDate: newMessage.createTime,
+            latestMessageContent: newMessage.content,
+            unreadMessageNo,
+          };
+        }
+        return room;
+      }),
+    );
+  };
+  useEffect(() => {
+    socket.on("new message", setNewMessage);
+
+    return () => {
+      socket.off("new message", setNewMessage);
+    };
+  }, [currentRoomId]);
+  // Handle window resizing ----------------------------------------- //
+  const navigate = useNavigate();
   const isMobile = useWhetherItIsMobile();
   const isTablet = useWhetherItIsTablet();
 
   useEffect(() => {
-    if (!roomId) return;
+    if (!currentRoomId) return;
 
-    // handle window resizing //
     if (isMobile && !isTablet) {
       // don't write "if (!isTablet)" that causes continuous navigating between room and room list
       // "if (isMobile)" works well too
-      navigate(`${CHAT_ROOM}/${roomId}`, { replace: true });
+      navigate(`${CHAT_ROOM}/${currentRoomId}`, { replace: true });
     }
-  }, [isMobile, isTablet, roomId]);
+  }, [isMobile, isTablet, currentRoomId]);
 
   return (
     <MainBG isChatRoomList>
       <ListAndRoomCntnr>
         {chatRoomResult.isFetching && <Spinner styles="fixed" />}
 
-        <ChatRoomListCntnr isRoom={!!roomId} isRoomSpread={isRoomSpread}>
-          {chatRoomResult.data?.map((_) => (
-            // * connect socket io
-            // * to get and display the change from each room
+        <ChatRoomListCntnr isRoom={!!currentRoomId} isRoomSpread={isRoomSpread}>
+          {chatRooms.map((_) => (
             <ChatRoomPreview
               key={_.roomId}
               chatRoom={_}
-              roomSelected={roomId}
+              roomSelected={currentRoomId}
               isRoomSpread={isRoomSpread} // to change component width where ellipsis is used
-              isRoom={!!roomId}
+              isRoom={!!currentRoomId}
             />
           ))}
         </ChatRoomListCntnr>
 
-        {roomId && (
+        {currentRoomId && (
           <ChatRoomCntnr isRoomSpread={isRoomSpread}>
             <ChatRoomNav roomSpread={roomSpread} />
-            <ChatRoom roomIdTablet={roomId} />
+            <ChatRoom roomIdTablet={currentRoomId} />
           </ChatRoomCntnr>
         )}
       </ListAndRoomCntnr>
