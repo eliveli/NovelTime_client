@@ -519,7 +519,8 @@ export const novelTimeApi = createApi({
     getChatRoomId: builder.query<RoomId, string>({
       query: (otherUserName) => `/chat/roomId/${otherUserName}`,
     }),
-    getChatRooms: builder.query<ChatRooms, undefined>({
+    getChatRooms: builder.query<ChatRooms, number>({
+      // number type argument is always unique not to use cache data
       query: () => `/chat/rooms`,
     }),
     getMessages: builder.query<Messages, ParamToGetMessages>({

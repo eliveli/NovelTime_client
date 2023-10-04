@@ -103,7 +103,10 @@ function ChatRoomPreview({ chatRoom, roomSelected, isRoomSpread, isRoom }: ChatR
 export default function ChatRoomList() {
   const isLoginUser = !!useAppSelector((state) => state.user.loginUserInfo.userId);
 
-  const chatRoomResult = useGetChatRoomsQuery(undefined, { skip: !isLoginUser });
+  // not to use cache data as sending an always unique arg
+  const valueForNoCache = useRef(Math.floor(Date.now() * Math.random()));
+
+  const chatRoomResult = useGetChatRoomsQuery(valueForNoCache.current, { skip: !isLoginUser });
   // - if login user refreshes page, query works after login user info is put in user slice
 
   const [chatRooms, handleChatRooms] = useState<TypeChatRoom[]>([]);
