@@ -75,6 +75,7 @@ function ChatRoomPreview({ chatRoom, roomSelected, isRoomSpread, isRoom }: ChatR
 
   return (
     <ChatRoomPreviewContainer
+      isRoomSpread={isRoomSpread}
       ref={contnrRef}
       onClick={() => {
         navigate(`${CHAT_ROOM_LIST}?roomId=${roomId}`);
@@ -83,14 +84,14 @@ function ChatRoomPreview({ chatRoom, roomSelected, isRoomSpread, isRoom }: ChatR
       isRoom={isRoom}
     >
       <UserImg userImg={partnerUserImg} />
-      <NextToImgContainer>
+      <NextToImgContainer isRoomSpread={isRoomSpread}>
         <FirstLineInfoContnr>
           <UserNameBox>
             <UserName>{partnerUserName}</UserName>
             <CreateDate>{dateToDisplay}</CreateDate>
           </UserNameBox>
           {!!unreadMessageNo && (
-            <UnreadTalkNoContnr>
+            <UnreadTalkNoContnr isRoomSpread={isRoomSpread}>
               <UnreadTalkNO>{unreadMessageNo}</UnreadTalkNO>
             </UnreadTalkNoContnr>
           )}

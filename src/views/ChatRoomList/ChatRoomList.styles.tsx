@@ -16,14 +16,18 @@ export const ChatRoomListCntnr = styled.div<{
 export const ChatRoomPreviewContainer = styled.div<{
   isCurrentRoom: boolean;
   isRoom: boolean;
+  isRoomSpread: boolean;
 }>`
   width: 100%;
   display: flex;
   align-items: center;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   border-left: 1px solid rgba(0, 0, 0, 0.1);
+
   ${({ isRoom }) => !isRoom && `border-left:0;`}
 
+  ${({ isRoomSpread }) => isRoomSpread && `position: relative;`}
+      
   white-space: nowrap;
   padding: 16px 5px;
   ${theme.media.mobile(`
@@ -44,10 +48,11 @@ export const ChatRoomCntnr = styled.div<{
   // for dividing the space
   ${({ isRoomSpread }) => (isRoomSpread ? `width: 100%;` : `width:50%;`)}
 `;
-export const NextToImgContainer = styled.div`
+export const NextToImgContainer = styled.div<{ isRoomSpread: boolean }>`
   width: 100%;
   margin-left: 12px;
-  position: relative;
+
+  ${({ isRoomSpread }) => !isRoomSpread && "position: relative;"}
 `;
 
 export const UserImg = styled.div<{ userImg: Img }>`
@@ -88,7 +93,7 @@ export const CreateDate = styled.span`
   padding-left: 8px;
   white-space: nowrap;
 `;
-export const UnreadTalkNoContnr = styled.div`
+export const UnreadTalkNoContnr = styled.div<{ isRoomSpread: boolean }>`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -96,15 +101,25 @@ export const UnreadTalkNoContnr = styled.div`
   height: 23px;
   padding: 0px 5px 2px;
   position: absolute;
-  top: -1px;
-  right: 0;
 
   background-color: white;
-  box-shadow: 0 0 2px orange;
   color: ${theme.color.main};
   font-weight: 500;
 
-  border-radius: 5px;
+  ${({ isRoomSpread }) =>
+    isRoomSpread
+      ? `
+    top: 12px;
+    left: -7px;
+    box-shadow: 0 0 3px darkorange;
+    border-radius: 10px;
+    `
+      : `
+    top: -1px;
+    right: 0;
+    box-shadow: 0 0 2px orange;
+    border-radius: 5px;  
+  `}
 `;
 export const UnreadTalkNO = styled.span`
   font-size: 20px;
