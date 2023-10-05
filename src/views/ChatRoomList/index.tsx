@@ -28,9 +28,8 @@ import {
 
 interface ChatRoomPreviewProps {
   chatRoom: TypeChatRoom;
-  roomSelected: string | null;
   isRoomSpread: boolean;
-  isRoom: boolean;
+  roomIdSelected: string | null;
 }
 
 function getCurrentDate() {
@@ -53,7 +52,7 @@ const sortByMessageCreateTime = (room1: TypeChatRoom, room2: TypeChatRoom) => {
   return 0;
 };
 
-function ChatRoomPreview({ chatRoom, roomSelected, isRoomSpread, isRoom }: ChatRoomPreviewProps) {
+function ChatRoomPreview({ chatRoom, isRoomSpread, roomIdSelected }: ChatRoomPreviewProps) {
   const {
     roomId,
     partnerUserName,
@@ -66,7 +65,7 @@ function ChatRoomPreview({ chatRoom, roomSelected, isRoomSpread, isRoom }: ChatR
 
   // set ellipsis with component width
   const contnrRef = useRef<HTMLDivElement>(null);
-  const contnrWidth = useComponentWidth(contnrRef, isRoom, isRoomSpread);
+  const contnrWidth = useComponentWidth(contnrRef, !!roomIdSelected, isRoomSpread);
 
   const navigate = useNavigate();
 
@@ -75,13 +74,13 @@ function ChatRoomPreview({ chatRoom, roomSelected, isRoomSpread, isRoom }: ChatR
 
   return (
     <ChatRoomPreviewContainer
-      isRoomSpread={isRoomSpread}
       ref={contnrRef}
+      isRoom={!!roomIdSelected}
+      isRoomSpread={isRoomSpread}
+      isCurrentRoom={roomIdSelected === roomId}
       onClick={() => {
         navigate(`${CHAT_ROOM_LIST}?roomId=${roomId}`);
       }}
-      isCurrentRoom={roomSelected === roomId}
-      isRoom={isRoom}
     >
       <UserImg userImg={partnerUserImg} />
       <NextToImgContainer isRoomSpread={isRoomSpread}>
@@ -232,9 +231,8 @@ export default function ChatRoomList() {
             <ChatRoomPreview
               key={_.roomId}
               chatRoom={_}
-              roomSelected={currentRoomId}
-              isRoomSpread={isRoomSpread} // to change component width where ellipsis is used
-              isRoom={!!currentRoomId}
+              isRoomSpread={isRoomSpread}
+              roomIdSelected={currentRoomId}
             />
           ))}
         </ChatRoomListCntnr>

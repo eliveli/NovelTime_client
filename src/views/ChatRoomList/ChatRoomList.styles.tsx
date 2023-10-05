@@ -14,9 +14,9 @@ export const ChatRoomListCntnr = styled.div<{
   ${({ isRoom, isRoomSpread }) => isRoom && !isRoomSpread && `width: 50%;`}
 `;
 export const ChatRoomPreviewContainer = styled.div<{
-  isCurrentRoom: boolean;
   isRoom: boolean;
   isRoomSpread: boolean;
+  isCurrentRoom: boolean;
 }>`
   width: 100%;
   display: flex;
