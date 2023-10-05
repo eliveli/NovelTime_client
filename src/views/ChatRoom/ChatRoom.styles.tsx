@@ -10,17 +10,17 @@ export const ChatRoomContainer = styled.div`
 export const AllMessageContainer = styled.div`
   ${theme.media.mobile(`
     padding: 0 16px;
-    height: calc(100vh - 51px - 88px);
-    `)} // height: calc ( 100vh - top nav - message write component )
+    height: calc(100vh - 51px - 78px);
+    `)} // height: calc ( 100vh - top nav - message input component )
 
   ${theme.media.tablet(`
     padding:0 20px;
     border-top: 2px solid rgba(50,50,50,0.1);
-    height: calc(100vh - (71px + 60px) - 50px - 88px);
-    `)} // height: calc ( 100vh - (top + bottom nav) - top nav of chat room - message write component )
+    height: calc(100vh - (71px + 60px) - 50px - 78px);
+    `)} // height: calc ( 100vh - (top + bottom nav) - top nav of chat room - message input component )
   
   ${theme.media.desktop(`
-    height: calc(100vh - 61px - 50px - 88px);
+    height: calc(100vh - 61px - 50px - 78px);
   `)} // styles for tablet above are used here
 
   overflow-y: scroll;
@@ -173,7 +173,6 @@ export const WholeContainer = styled.div`
   align-items: center;
   padding: 15px;
   padding-right: 13px;
-  margin-top: 10px;
 
   border: 1px solid rgba(0, 0, 0, 0.1);
   border-top: 2px solid rgba(50, 50, 50, 0.1);
