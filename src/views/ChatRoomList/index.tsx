@@ -66,7 +66,7 @@ function ChatRoomPreview({ chatRoom, roomSelected, isRoomSpread, isRoom }: ChatR
 
   // set ellipsis with component width
   const contnrRef = useRef<HTMLDivElement>(null);
-  const contnrWidth = useComponentWidth(contnrRef, isRoomSpread);
+  const contnrWidth = useComponentWidth(contnrRef, isRoom, isRoomSpread);
 
   const navigate = useNavigate();
 
