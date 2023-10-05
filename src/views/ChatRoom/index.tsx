@@ -302,10 +302,10 @@ export default function ChatRoom({ roomIdTablet }: { roomIdTablet?: string }) {
   }, [isTablet]);
 
   return (
-    <ResizingFromMobile roomIdMobile={roomId}>
+    <ResizingFromMobile>
       {messageResult.isFetching && <Spinner styles="fixed" />}
 
-      <ChatRoomContnr roomIdMobile={roomId}>
+      <ChatRoomContnr>
         {allMessages.map((_, idx) => {
           const previousMessage = idx > 0 ? allMessages[idx - 1] : undefined;
 

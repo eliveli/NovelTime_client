@@ -2,54 +2,31 @@ import theme, { styled } from "assets/styles/theme";
 import Icon from "assets/Icon";
 import { Img } from "store/serverAPIs/types";
 
-export const ChatRoomContnr = styled.div<{ roomIdMobile?: string }>`
-  // for mobile
-  height: calc(100vh - 51px - 88px);
-  // 100vh - top nav - message write component
+export const ChatRoomContnr = styled.div`
   ${theme.media.mobile(`
     padding: 0 16px;
-  `)}
+    height: calc(100vh - 51px - 88px);
+    `)} // height: calc ( 100vh - top nav - message write component )
 
   ${theme.media.tablet(`
     padding:0 20px;
     border-top: 1px solid rgba(0,0,0,0.1);
     height: calc(100vh - (71px + 60px) - 50px - 88px);
-    `)} // 100vh - (top + bottom nav) - top nav of chat room - message write component
+    `)} // height: calc ( 100vh - (top + bottom nav) - top nav of chat room - message write component )
+  
   ${theme.media.desktop(`
     height: calc(100vh - 61px - 50px - 88px);
-  `)}
-
-  // when only chat room exists without chat room list because of resizing browser
-  ${({ roomIdMobile }) =>
-    roomIdMobile &&
-    theme.media.tablet(`
-    padding:0 20px;
-    border-top: 0;
-    height: calc(100vh - 51px - 88px);
-
-
-
-    `)}
-  ${({ roomIdMobile }) =>
-    roomIdMobile &&
-    theme.media.desktop(`
-    height: calc(100vh - 61px - 88px);
-
-
-  `)}
+  `)} // styles for tablet above are used here
 
   overflow-y: scroll;
   ${theme.hideScrollBar}
 `;
-export const ResizingFromMobile = styled.div<{ roomIdMobile?: string }>`
-  ${({ roomIdMobile }) =>
-    roomIdMobile &&
-    `width: 100%;
-    max-width: 860px;
-    margin: auto;
-    border-left: 1px solid rgba(0,0,0,0.1);
-    border-right: 1px solid rgba(0,0,0,0.1);
-    `}
+export const ResizingFromMobile = styled.div`
+  width: 100%;
+  max-width: 860px;
+  margin: auto;
+  border-left: 1px solid rgba(0, 0, 0, 0.1);
+  border-right: 1px solid rgba(0, 0, 0, 0.1);
 `;
 export const MessageContainer = styled.div<{ isMe?: true }>`
   width: 100%;
