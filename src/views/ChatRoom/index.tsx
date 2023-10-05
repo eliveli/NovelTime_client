@@ -8,7 +8,7 @@ import { Message as TypeMessage } from "store/serverAPIs/types";
 import Spinner from "assets/Spinner";
 import socket from "store/serverAPIs/socket.io";
 import {
-  ChatRoomContnr,
+  AllMessageContainer,
   MessageContainer,
   UserImg,
   MessageDesc,
@@ -18,9 +18,9 @@ import {
   DateMark,
   LastWatchContnr,
   LastWatchMark,
-  ResizingFromMobile,
+  ChatRoomContainer,
 } from "./ChatRoom.styles";
-import { WriteTextMessage } from "./ChatRoom.components";
+import { MessageInput } from "./ChatRoom.components";
 
 type DateCriterion = React.MutableRefObject<{
   date: string;
@@ -88,12 +88,6 @@ function PartnerMessage({
 }
 
 function MyMessage({ content, createTime, dateCriterion }: MyMessageProps) {
-  // go to the message which was read last when entering page
-  const LastWatchRef = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    LastWatchRef.current?.scrollIntoView();
-  }, []);
-
   return (
     <>
       {dateCriterion.current.isNewDate && (
@@ -302,10 +296,10 @@ export default function ChatRoom({ roomIdTablet }: { roomIdTablet?: string }) {
   }, [isTablet]);
 
   return (
-    <ResizingFromMobile>
+    <ChatRoomContainer>
       {messageResult.isFetching && <Spinner styles="fixed" />}
 
-      <ChatRoomContnr>
+      <AllMessageContainer>
         {allMessages.map((_, idx) => {
           const previousMessage = idx > 0 ? allMessages[idx - 1] : undefined;
 
@@ -343,9 +337,9 @@ export default function ChatRoom({ roomIdTablet }: { roomIdTablet?: string }) {
             />
           );
         })}
-      </ChatRoomContnr>
+      </AllMessageContainer>
 
-      <WriteTextMessage sendMessage={sendMessage} />
-    </ResizingFromMobile>
+      <MessageInput sendMessage={sendMessage} />
+    </ChatRoomContainer>
   );
 }

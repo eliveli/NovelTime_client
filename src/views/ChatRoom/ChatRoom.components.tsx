@@ -4,14 +4,14 @@ import { useAppSelector } from "../../store/hooks";
 import {
   EmojiCntnr,
   EmojiIcon,
-  WriteCommentSubmit,
-  WriteText,
-  WriteTextCntnr,
-  WriteTextContainer,
+  BtnToSubmit,
+  InputForMessage,
+  MessageInputBox,
+  WholeContainer,
 } from "./ChatRoom.styles";
 
 // eslint-disable-next-line import/prefer-default-export
-export function WriteTextMessage({ sendMessage }: { sendMessage: (content: string) => void }) {
+export function MessageInput({ sendMessage }: { sendMessage: (content: string) => void }) {
   const loginUserId = useAppSelector((state) => state.user.loginUserInfo.userId);
 
   const textRef = useRef<HTMLTextAreaElement>(null);
@@ -38,9 +38,9 @@ export function WriteTextMessage({ sendMessage }: { sendMessage: (content: strin
 
   const writeCommentRef = useRef<HTMLDivElement>(null);
   return (
-    <WriteTextContainer ref={writeCommentRef}>
-      <WriteTextCntnr>
-        <WriteText
+    <WholeContainer ref={writeCommentRef}>
+      <MessageInputBox>
+        <InputForMessage
           ref={textRef}
           onChange={(e) => writeText(e, textRef, isNotMobile)}
           placeholder="Write your text!"
@@ -49,9 +49,9 @@ export function WriteTextMessage({ sendMessage }: { sendMessage: (content: strin
         <EmojiCntnr size={20}>
           <EmojiIcon />
         </EmojiCntnr>
-      </WriteTextCntnr>
+      </MessageInputBox>
 
-      <WriteCommentSubmit onClick={handleSubmit}>작성</WriteCommentSubmit>
-    </WriteTextContainer>
+      <BtnToSubmit onClick={handleSubmit}>작성</BtnToSubmit>
+    </WholeContainer>
   );
 }

@@ -48,7 +48,7 @@ export function DetailNav() {
 // only used where chat room page (not chat room list page)
 export function ChatRoomNavMobile() {
   return (
-    <NavTopBG>
+    <NavTopBG isChatRoom>
       <ChatRoomNav />
     </NavTopBG>
   );

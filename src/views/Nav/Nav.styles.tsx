@@ -2,8 +2,9 @@ import theme, { styled } from "assets/styles/theme";
 import { Img } from "store/serverAPIs/types";
 import Icon from "../../assets/Icon";
 
-export const NavTopBG = styled.header`
-  border-bottom: 1px solid lightgray;
+export const NavTopBG = styled.header<{ isChatRoom?: true }>`
+  border-bottom: ${({ isChatRoom }) =>
+    isChatRoom ? "2px solid rgba(50,50,50,0.1)" : "1px solid lightgray"};
 
   z-index: 2;
 
@@ -86,10 +87,6 @@ export const ChatRoomNavContainer = styled.nav`
   // on tablet
   @media (min-width: 768px) {
     padding: 0 8px;
-
-    border-left: 1px solid rgba(0, 0, 0, 0.1);
-    border-right: 1px solid rgba(0, 0, 0, 0.1);
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   }
 
   display: flex;

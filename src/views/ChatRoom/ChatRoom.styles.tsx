@@ -2,7 +2,12 @@ import theme, { styled } from "assets/styles/theme";
 import Icon from "assets/Icon";
 import { Img } from "store/serverAPIs/types";
 
-export const ChatRoomContnr = styled.div`
+export const ChatRoomContainer = styled.div`
+  width: 100%;
+  max-width: 860px;
+`;
+
+export const AllMessageContainer = styled.div`
   ${theme.media.mobile(`
     padding: 0 16px;
     height: calc(100vh - 51px - 88px);
@@ -10,7 +15,7 @@ export const ChatRoomContnr = styled.div`
 
   ${theme.media.tablet(`
     padding:0 20px;
-    border-top: 1px solid rgba(0,0,0,0.1);
+    border-top: 2px solid rgba(50,50,50,0.1);
     height: calc(100vh - (71px + 60px) - 50px - 88px);
     `)} // height: calc ( 100vh - (top + bottom nav) - top nav of chat room - message write component )
   
@@ -20,13 +25,6 @@ export const ChatRoomContnr = styled.div`
 
   overflow-y: scroll;
   ${theme.hideScrollBar}
-`;
-export const ResizingFromMobile = styled.div`
-  width: 100%;
-  max-width: 860px;
-  margin: auto;
-  border-left: 1px solid rgba(0, 0, 0, 0.1);
-  border-right: 1px solid rgba(0, 0, 0, 0.1);
 `;
 export const MessageContainer = styled.div<{ isMe?: true }>`
   width: 100%;
@@ -120,7 +118,7 @@ export const LastWatchMark = styled.span`
   font-size: 15px;
 `;
 
-export const WriteTextCntnr = styled.div`
+export const MessageInputBox = styled.div`
   width: 100%;
   display: flex;
   align-items: center;
@@ -130,7 +128,7 @@ export const WriteTextCntnr = styled.div`
   padding: 8px 14px;
   position: relative;
 `;
-export const WriteText = styled.textarea<{ spaceForUserName: number }>`
+export const InputForMessage = styled.textarea<{ spaceForUserName: number }>`
   width: 100%;
   border: 0;
   resize: none;
@@ -154,7 +152,7 @@ export const EmojiCntnr = styled(Icon.IconBox)`
   align-items: center;
 `;
 export const EmojiIcon = styled(Icon.Emoji)``;
-export const WriteCommentSubmit = styled.button`
+export const BtnToSubmit = styled.button`
   min-width: 46px;
   height: 46px;
   border-radius: 14px;
@@ -170,7 +168,7 @@ export const WriteCommentSubmit = styled.button`
   font-weight: 500;
 `;
 
-export const WriteTextContainer = styled.div`
+export const WholeContainer = styled.div`
   display: flex;
   align-items: center;
   padding: 15px;
@@ -178,6 +176,7 @@ export const WriteTextContainer = styled.div`
   margin-top: 10px;
 
   border: 1px solid rgba(0, 0, 0, 0.1);
+  border-top: 2px solid rgba(50, 50, 50, 0.1);
   border-radius: 0;
   border-left: 0;
   border-right: 0;
