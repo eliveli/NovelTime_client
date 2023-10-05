@@ -31,6 +31,7 @@ interface MessageProps {
   isNeededCreateTime: boolean;
   isNeededPartnerUserImg: boolean;
   isMyMessage: boolean;
+  isLatestNewMessage: boolean;
   dateCriterion: DateCriterion;
   isFirstMessageUnread?: true;
 }
@@ -77,6 +78,7 @@ function Message({
   isFirstMessageUnread,
   isNeededCreateTime,
   isNeededPartnerUserImg,
+  isLatestNewMessage,
   dateCriterion,
 }: MessageProps) {
   const dateCriterionRef = dateCriterion;
@@ -90,9 +92,10 @@ function Message({
   // go to the message which was read last when entering page
   const MessageToRead = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    if (!isFirstMessageUnread) return;
+    if (!isFirstMessageUnread && !isLatestNewMessage) return;
+
     MessageToRead.current?.scrollIntoView();
-  }, [isFirstMessageUnread]);
+  }, [isFirstMessageUnread, isLatestNewMessage]);
 
   return (
     <MessageContainer ref={MessageToRead}>
@@ -290,6 +293,8 @@ export default function ChatRoom({ roomIdTablet }: { roomIdTablet?: string }) {
 
           const isNewMessage = !!messageResult.data && messageResult.data.length - 1 < idx;
 
+          const isLatestNewMessage = isNewMessage && allMessages.length - 1 === idx;
+
           return (
             <Message
               key={_.messageId}
@@ -315,6 +320,7 @@ export default function ChatRoom({ roomIdTablet }: { roomIdTablet?: string }) {
                 previousMessage?.senderUserName,
                 previousMessage?.createDate,
               )}
+              isLatestNewMessage={isLatestNewMessage}
               message={_}
             />
           );
