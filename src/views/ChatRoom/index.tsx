@@ -213,6 +213,7 @@ export default function ChatRoom({ roomIdTablet }: { roomIdTablet?: string }) {
     senderUserName: string,
     isReadByReceiver: boolean,
     isNewMessage: boolean,
+    messageIndex: number,
   ) => {
     if (isNewMessage) return undefined; // not for new message with socket
 
@@ -221,9 +222,16 @@ export default function ChatRoom({ roomIdTablet }: { roomIdTablet?: string }) {
 
     if (isMessageUnread) return undefined;
 
+    // don't display the unread message text
+    // when first message in the room was sent by partner and wasn't read by the login user
+    if (messageIndex === 0 && !isMessageUnread && !isReadByReceiver) {
+      isMessageUnread = true;
+      return undefined;
+    }
+
     if (!isMessageUnread && !isReadByReceiver) {
       isMessageUnread = true;
-      return true; // first message unread by the login user
+      return true; // first message unread by the login user (not first one in the room)
     }
     return undefined;
   };
@@ -314,6 +322,7 @@ export default function ChatRoom({ roomIdTablet }: { roomIdTablet?: string }) {
                 _.senderUserName,
                 _.isReadByReceiver,
                 isNewMessage,
+                idx,
               )}
               isMyMessage={loginUserName === _.senderUserName}
               isNeededCreateTime={checkCreateTimeIsNeeded(
