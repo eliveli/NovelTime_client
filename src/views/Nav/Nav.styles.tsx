@@ -48,35 +48,50 @@ export const NavContentBoxPC = styled.nav`
 export const NavContentBoxMobile = styled.nav<{
   isMainBottom?: true;
   isDetail?: true;
-  isChatRoom?: true;
 }>`
   @media screen and (min-width: 1024px) {
-    ${({ isChatRoom }) => !isChatRoom && `display: none;`}
+    display: none;
   }
 
   width: 100%;
   max-width: 860px;
   margin: auto;
-  height: 70px;
 
-  ${({ isDetail }) => isDetail && `height: 50px;`}
+  height: ${({ isDetail, isMainBottom }) => {
+    if (isDetail) return 50;
+    if (isMainBottom) return 60;
+    return 70;
+  }}px;
+
+  padding: ${({ isMainBottom }) => (isMainBottom ? `0 0 2px 0` : `0 16px`)};
+
+  // on tablet
+  @media screen and (min-width: 768px) {
+    padding: ${({ isMainBottom }) => (isMainBottom ? "0 0 2px 0" : "0 20px")};
+  }
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`;
+
+export const ChatRoomNavContainer = styled.nav`
+  width: 100%;
+  max-width: 860px;
+  margin: auto;
+  height: 50px;
 
   padding: 0 16px;
 
-  // at tablet
+  // on tablet
   @media (min-width: 768px) {
-    padding: 0 20px;
-    ${({ isChatRoom }) => isChatRoom && `padding: 0 8px;`}
+    padding: 0 8px;
+
+    border-left: 1px solid rgba(0, 0, 0, 0.1);
+    border-right: 1px solid rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   }
 
-  // 모바일용 하단 내비게이션 바는 패딩 없음
-
-  ${({ isMainBottom }) =>
-    isMainBottom &&
-    ` padding: 0 0 2px 0;
-      @media screen and (min-width:768px) {padding: 0 0 2px 0;}
-      height: 60px;
-   `}
   display: flex;
   align-items: center;
   justify-content: space-between;

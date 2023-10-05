@@ -65,6 +65,7 @@ import {
   UserImg,
   UserName,
   MyPageMobile,
+  ChatRoomNavContainer,
 } from "./Nav.styles";
 
 export function NavPC() {
@@ -406,7 +407,7 @@ export function ChatRoomNav({
   const loginUserInfo = useAppSelector((state) => state.user.loginUserInfo);
 
   return (
-    <NavContentBoxMobile isDetail isChatRoom>
+    <ChatRoomNavContainer>
       <IconsBox isLeft>
         {isThePath(CHAT_ROOM_LIST) ? (
           // on tablet or desktop
@@ -441,6 +442,6 @@ export function ChatRoomNav({
       </PageTitle>
 
       <div />
-    </NavContentBoxMobile>
+    </ChatRoomNavContainer>
   );
 }
