@@ -323,12 +323,13 @@ export default function EditProfile() {
 
   return (
     <TranslucentBG
+      ref={BGRef}
+      isEditingUserBG={!!tempUserBG.src}
       onClick={() => {
         // prevent modal from being closed
         //  when dragging to area outside the modal as editing the image
         if (!isEditingImage) closeProfileModal();
       }}
-      ref={BGRef}
     >
       {isLoadingRef.current && <Spinner />}
 

@@ -172,8 +172,7 @@ export const SortText = styled.p<{ selectedCategory: string; category: string }>
   ${({ selectedCategory, category }) =>
     selectedCategory === category && `color: ${theme.color.main};`}
 `;
-export const TranslucentBG = styled.div`
-  background-color: rgba(0, 0, 0, 0.5);
+export const TranslucentBG = styled.div<{ isEditingUserBG?: boolean }>`
   width: 100vw;
   height: 100vh;
   position: fixed;
@@ -181,6 +180,9 @@ export const TranslucentBG = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+
+  background-color: ${({ isEditingUserBG }) =>
+    isEditingUserBG ? `transparent` : "rgba(0, 0, 0, 0.5)"};
 `;
 export const CanvasContnr = styled.div`
   display: flex;
@@ -234,7 +236,12 @@ export const ModalBox = styled.div<{ padding?: string; isEditingUserBG?: boolean
   position: relative;
   border-radius: 7px;
 
-  ${({ isEditingUserBG }) => isEditingUserBG && `bottom: -122px;`}
+  ${({ isEditingUserBG }) =>
+    isEditingUserBG &&
+    `
+      bottom: -122px;
+      border: 1px solid rgba(0,0,0,0.1);
+    `}
 `;
 
 export const BoxForPadding = styled.div`
