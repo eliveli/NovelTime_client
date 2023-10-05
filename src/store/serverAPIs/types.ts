@@ -649,6 +649,13 @@ export type ChatRooms = ChatRoom[];
 
 export type ParamToGetMessages = { roomId: string; valueForNoCache: number };
 
+export type PartnerUser = {
+  userName: string;
+  userImg: {
+    src: string;
+    position: string;
+  };
+};
 export interface Message {
   messageId: string;
   roomId: string;
@@ -663,4 +670,8 @@ export interface Message {
     position: string;
   };
 }
-export type Messages = Message[];
+
+export type Messages = {
+  partnerUser: PartnerUser;
+  messages: Message[];
+};

@@ -402,7 +402,7 @@ export function ChatRoomNav({
   };
 }) {
   const navigate = useNavigate();
-  const loginUser = useAppSelector((state) => state.loginUser.user);
+  const partnerUser = useAppSelector((state) => state.chat.partnerUser);
 
   return (
     <ChatRoomNavContainer>
@@ -435,8 +435,8 @@ export function ChatRoomNav({
       </IconsBox>
 
       <PageTitle>
-        <UserImg userImg={loginUser.userImg as Img} />
-        <UserName>{loginUser.userName}</UserName>
+        <UserImg userImg={partnerUser.userImg as Img} />
+        <UserName>{partnerUser.userName}</UserName>
       </PageTitle>
 
       <div />

@@ -4,11 +4,12 @@ import logger from "redux-logger";
 import { setupListeners } from "@reduxjs/toolkit/query";
 import modalReducer from "./clientSlices/modalSlice";
 import writingReducer from "./clientSlices/writingSlice";
+import commentReducer from "./clientSlices/commentSlice";
 import filterReducer from "./clientSlices/filterSlice";
 import loginUserReducer from "./clientSlices/loginUserSlice";
 import userProfileReducer from "./clientSlices/userProfileSlice";
-import commentReducer from "./clientSlices/commentSlice";
 import userNovelListReducer from "./clientSlices/userNovelListSlice";
+import chatReducer from "./clientSlices/chatSlice";
 
 import { novelTimeApi } from "./serverAPIs/novelTime";
 import { imageHostingApi } from "./serverAPIs/imageHosting";
@@ -24,6 +25,7 @@ const store = configureStore({
     loginUser: loginUserReducer,
     userProfile: userProfileReducer,
     userNovelList: userNovelListReducer,
+    chat: chatReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

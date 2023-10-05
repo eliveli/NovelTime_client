@@ -3,10 +3,11 @@ import { useNavigate, useParams } from "react-router-dom";
 import { isThePath, useWhetherItIsTablet } from "utils";
 import { CHAT_ROOM_LIST, CHAT_ROOM } from "utils/pathname";
 import { useGetMessagesQuery } from "store/serverAPIs/novelTime";
-import { useAppSelector } from "store/hooks";
+import { useAppDispatch, useAppSelector } from "store/hooks";
 import { Message as TypeMessage } from "store/serverAPIs/types";
 import Spinner from "assets/Spinner";
 import socket from "store/serverAPIs/socket.io";
+import { setPartnerUser } from "store/clientSlices/chatSlice";
 import {
   AllMessageContainer,
   UserAndContentContainer,
@@ -181,10 +182,16 @@ export default function ChatRoom({ roomIdTablet }: { roomIdTablet?: string }) {
     }
   }, [messageResult.error]);
 
-  useEffect(() => {
-    if (!messageResult.data?.length) return;
+  const dispatch = useAppDispatch();
 
-    setAllMessages([...messageResult.data]);
+  useEffect(() => {
+    if (!messageResult.data) return;
+
+    dispatch(setPartnerUser(messageResult.data.partnerUser));
+
+    if (!messageResult.data.messages.length) return;
+
+    setAllMessages([...messageResult.data.messages]);
   }, [messageResult.data]);
 
   let isMessageUnread = false;
@@ -295,7 +302,7 @@ export default function ChatRoom({ roomIdTablet }: { roomIdTablet?: string }) {
           const nextMessage =
             allMessages && idx < allMessages.length - 1 ? allMessages[idx + 1] : undefined;
 
-          const isNewMessage = !!messageResult.data && messageResult.data.length - 1 < idx;
+          const isNewMessage = !!messageResult.data && messageResult.data.messages.length - 1 < idx;
 
           const isFirstMessageUnread = checkMessageUnread(
             _.senderUserName,
