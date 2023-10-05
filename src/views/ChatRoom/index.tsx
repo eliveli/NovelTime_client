@@ -231,7 +231,11 @@ export default function ChatRoom({ roomIdTablet }: { roomIdTablet?: string }) {
 
     prevUser?: string,
     prevCreateDate?: string,
-  ) => currentUser !== prevUser || currentCreateDate !== prevCreateDate;
+    isFirstMessageUnread?: true,
+  ) =>
+    currentUser !== prevUser ||
+    currentCreateDate !== prevCreateDate ||
+    isFirstMessageUnread === true;
 
   const dateCriterion = useRef({ date: "", isNewDate: false });
 
@@ -328,6 +332,7 @@ export default function ChatRoom({ roomIdTablet }: { roomIdTablet?: string }) {
                 _.createDate,
                 previousMessage?.senderUserName,
                 previousMessage?.createDate,
+                isFirstMessageUnread,
               )}
               isMessageToRead={isMessageToRead}
               message={_}
