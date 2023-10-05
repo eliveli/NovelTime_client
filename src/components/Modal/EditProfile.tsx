@@ -7,7 +7,7 @@ import { CheckDeviceType } from "utils";
 import { setAccessToken, setLoginUser } from "store/clientSlices/loginUserSlice";
 import Spinner from "assets/Spinner";
 import { useNavigate } from "react-router-dom";
-import { setTemporaryUserBG } from "store/clientSlices/userProfileSlice";
+import { setTemporaryUserBG, setUserProfile } from "store/clientSlices/userProfileSlice";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 
 import EditProfileImg from "./EditProfile.components";
@@ -258,6 +258,7 @@ export default function EditProfile() {
       const payload = await SaveUserInfo(changedUserInfo).unwrap();
       dispatch(setLoginUser(payload.userInfo));
       dispatch(setAccessToken(payload.accessToken));
+      dispatch(setUserProfile(payload.userInfo));
       isLoadingRef.current = false;
       alert("유저 정보가 성공적으로 저장되었어요");
 
