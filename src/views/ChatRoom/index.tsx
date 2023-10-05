@@ -31,7 +31,7 @@ interface MessageProps {
   isNeededCreateTime: boolean;
   isNeededPartnerUserImg: boolean;
   isMyMessage: boolean;
-  isLatestNewMessage: boolean;
+  isMessageToRead: boolean;
   dateCriterion: DateCriterion;
   isFirstMessageUnread?: true;
 }
@@ -78,7 +78,7 @@ function Message({
   isFirstMessageUnread,
   isNeededCreateTime,
   isNeededPartnerUserImg,
-  isLatestNewMessage,
+  isMessageToRead,
   dateCriterion,
 }: MessageProps) {
   const dateCriterionRef = dateCriterion;
@@ -89,16 +89,16 @@ function Message({
     dateCriterionRef.current.isNewDate = false;
   }
 
-  // go to the message which was read last when entering page
-  const MessageToRead = useRef<HTMLDivElement>(null);
+  // go to the message to read
+  const messageToRead = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    if (!isFirstMessageUnread && !isLatestNewMessage) return;
+    if (!isMessageToRead) return;
 
-    MessageToRead.current?.scrollIntoView();
-  }, [isFirstMessageUnread, isLatestNewMessage]);
+    messageToRead.current?.scrollIntoView();
+  }, [isMessageToRead]);
 
   return (
-    <MessageContainer ref={MessageToRead}>
+    <MessageContainer ref={messageToRead}>
       {isFirstMessageUnread && (
         <MarkContnr>
           <LastWatchMark>마지막으로 읽은 메시지입니다</LastWatchMark>
@@ -293,18 +293,27 @@ export default function ChatRoom({ roomIdTablet }: { roomIdTablet?: string }) {
 
           const isNewMessage = !!messageResult.data && messageResult.data.length - 1 < idx;
 
-          const isLatestNewMessage = isNewMessage && allMessages.length - 1 === idx;
+          const isFirstMessageUnread = checkMessageUnread(
+            _.senderUserName,
+            _.isReadByReceiver,
+            isNewMessage,
+            idx,
+          );
+          const isLastMessage = allMessages.length > 0 && allMessages.length - 1 === idx;
+
+          const isLatestNewMessage = isNewMessage && isLastMessage;
+
+          // last message when there's no message unread by login user and no new message
+          const isLastMsgNotUnreadOrNewOne = !isMessageUnread && !isNewMessage && isLastMessage;
+
+          const isMessageToRead =
+            isFirstMessageUnread || isLatestNewMessage || isLastMsgNotUnreadOrNewOne;
 
           return (
             <Message
               key={_.messageId}
               dateCriterion={dateCriterion}
-              isFirstMessageUnread={checkMessageUnread(
-                _.senderUserName,
-                _.isReadByReceiver,
-                isNewMessage,
-                idx,
-              )}
+              isFirstMessageUnread={isFirstMessageUnread}
               isMyMessage={loginUserName === _.senderUserName}
               isNeededCreateTime={checkCreateTimeIsNeeded(
                 _.senderUserName,
@@ -320,7 +329,7 @@ export default function ChatRoom({ roomIdTablet }: { roomIdTablet?: string }) {
                 previousMessage?.senderUserName,
                 previousMessage?.createDate,
               )}
-              isLatestNewMessage={isLatestNewMessage}
+              isMessageToRead={isMessageToRead}
               message={_}
             />
           );
