@@ -101,7 +101,7 @@ function ChatRoomPreview({ chatRoom, isRoomSpread, roomIdSelected }: ChatRoomPre
   );
 }
 export default function ChatRoomList() {
-  const isLoginUser = !!useAppSelector((state) => state.user.loginUserInfo.userId);
+  const isLoginUser = !!useAppSelector((state) => state.loginUser.user.userId);
 
   // not to use cache data as sending an always unique arg
   const valueForNoCache = useRef(Math.floor(Date.now() * Math.random()));

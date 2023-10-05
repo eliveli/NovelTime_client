@@ -26,7 +26,7 @@ export function ReCommentInputToCreateOnTablet() {
 
   const [addReComment, addReCommentResult] = useAddReCommentMutation();
 
-  const loginUserId = useAppSelector((state) => state.user.loginUserInfo.userId);
+  const loginUserId = useAppSelector((state) => state.loginUser.user.userId);
 
   const textRef = useRef<HTMLTextAreaElement>(null);
 
@@ -100,7 +100,7 @@ export function ReCommentInputToCreateOnTablet() {
 export function ReCommentInputToEditOnTablet() {
   const [editComment, editCommentResult] = useEditCommentMutation();
 
-  const loginUserId = useAppSelector((state) => state.user.loginUserInfo.userId);
+  const loginUserId = useAppSelector((state) => state.loginUser.user.userId);
 
   const textRef = useRef<HTMLTextAreaElement>(null);
 
@@ -196,7 +196,7 @@ export function RootCommentInputToCreateOnTablet({
 }) {
   const isNotMobile = !useWhetherItIsMobile();
   const textRef = useRef<HTMLTextAreaElement>(null);
-  const loginUserId = useAppSelector((state) => state.user.loginUserInfo.userId);
+  const loginUserId = useAppSelector((state) => state.loginUser.user.userId);
   const { talkId, novelId, novelTitle } = useAppSelector((state) => state.comment.argsForApis);
 
   const [addRootComment, addRootCommentResult] = useAddRootCommentMutation();
@@ -256,7 +256,7 @@ export function RootCommentInputToEditOnTablet({
 }) {
   const [editComment, editCommentResult] = useEditCommentMutation();
 
-  const loginUserId = useAppSelector((state) => state.user.loginUserInfo.userId);
+  const loginUserId = useAppSelector((state) => state.loginUser.user.userId);
 
   const textRef = useRef<HTMLTextAreaElement>(null);
 
@@ -347,7 +347,7 @@ export function CommentInputOnMobile({
 }) {
   const { talkId, novelId, novelTitle } = useAppSelector((state) => state.comment.argsForApis);
   const parentToWriteReComment = useAppSelector((state) => state.comment.parentToWriteReComment);
-  const loginUserId = useAppSelector((state) => state.user.loginUserInfo.userId);
+  const loginUserId = useAppSelector((state) => state.loginUser.user.userId);
   const [addReComment, addReCommentResult] = useAddReCommentMutation();
   const [addRootComment, addRootCommentResult] = useAddRootCommentMutation();
   const [editComment, editCommentResult] = useEditCommentMutation();

@@ -44,7 +44,7 @@ export default function EditWriting() {
   }, []);
   const [editWriting, editWritingResult] = useEditWritingMutation();
 
-  const loginUserId = useAppSelector((state) => state.user.loginUserInfo.userId);
+  const loginUserId = useAppSelector((state) => state.loginUser.user.userId);
 
   const navigate = useNavigate();
 

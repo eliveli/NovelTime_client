@@ -4,9 +4,10 @@ import { useImageHostingMutation } from "store/serverAPIs/imageHosting";
 import { useCheckForUserNameMutation, useSaveUserInfoMutation } from "store/serverAPIs/novelTime";
 import { CheckDeviceType } from "utils";
 
-import { setAccessToken, setLoginUserInfo, setTempUserBG } from "store/clientSlices/userSlice";
+import { setAccessToken, setLoginUser } from "store/clientSlices/loginUserSlice";
 import Spinner from "assets/Spinner";
 import { useNavigate } from "react-router-dom";
+import { setTemporaryUserBG } from "store/clientSlices/userProfileSlice";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 
 import EditProfileImg from "./EditProfile.components";
@@ -46,7 +47,7 @@ export default function EditProfile() {
   const isLoadingRef = useRef(false);
 
   // get login user info
-  const loginUserInfo = useAppSelector((state) => state.user.loginUserInfo);
+  const loginUser = useAppSelector((state) => state.loginUser.user);
   const userNameRef = useRef<HTMLInputElement>(null);
 
   // userName
@@ -80,7 +81,7 @@ export default function EditProfile() {
     } else if (userNameByte > 12) {
       // limit the text length by 12byte
       alert("입력 가능한 글자 수를 초과했어요");
-    } else if (tempUserName === loginUserInfo.userName) {
+    } else if (tempUserName === loginUser.userName) {
       alert("기존 이름과 같아요. 새로운 이름을 입력해 주세요");
     } else if (tempUserName[0] === " " || tempUserName[tempUserName.length - 1] === " ") {
       // Make user exclude leading or trailing spaces in userName
@@ -115,7 +116,7 @@ export default function EditProfile() {
   const [profileImgPosition, setProfileImgPosition] = useState("");
 
   // to show image background positioning controller for temporary userBG just after selecting it
-  const tempUserBG = useAppSelector((state) => state.user.tempUserBG);
+  const tempUserBG = useAppSelector((state) => state.userProfile.temporaryUserBG);
   // to host image as blob
   const temUserBGasBlobRef = useRef<Blob>();
 
@@ -180,7 +181,7 @@ export default function EditProfile() {
           temUserBGasBlobRef.current = blob;
           const BGasString = window.URL.createObjectURL(blob);
           // show selected BG in UserPageParent component
-          dispatch(setTempUserBG({ src: BGasString, position: "" }));
+          dispatch(setTemporaryUserBG({ src: BGasString, position: "" }));
         } else {
           alert(
             `20MB 이하로 저장 가능해요! 다른 이미지를 선택해 주세요. 현재 용량: ${dataCapacity}`,
@@ -193,7 +194,7 @@ export default function EditProfile() {
 
   const closeProfileModal = () => {
     dispatch(closeModal());
-    dispatch(setTempUserBG({ src: "", position: "" })); // remove the temp bg data
+    dispatch(setTemporaryUserBG({ src: "", position: "" })); // remove the temp bg data
   };
 
   // image hosting on imgur
@@ -240,14 +241,14 @@ export default function EditProfile() {
 
     // changed or unchanged user info(as it didn't exist) to save
     const changedUserInfo = {
-      changedUserName: userNameRef.current?.value || loginUserInfo.userName,
+      changedUserName: userNameRef.current?.value || loginUser.userName,
       changedUserImg: {
-        src: profileImgLink || loginUserInfo.userImg.src,
-        position: profileImgPosition || loginUserInfo.userImg.position,
+        src: profileImgLink || loginUser.userImg.src,
+        position: profileImgPosition || loginUser.userImg.position,
       },
       changedUserBG: {
-        src: bgImgLink || loginUserInfo.userBG.src,
-        position: tempUserBG.position || loginUserInfo.userBG.position,
+        src: bgImgLink || loginUser.userBG.src,
+        position: tempUserBG.position || loginUser.userBG.position,
       },
     };
 
@@ -255,7 +256,7 @@ export default function EditProfile() {
     // and set new token and user info in redux store
     try {
       const payload = await SaveUserInfo(changedUserInfo).unwrap();
-      dispatch(setLoginUserInfo(payload.userInfo));
+      dispatch(setLoginUser(payload.userInfo));
       dispatch(setAccessToken(payload.accessToken));
       isLoadingRef.current = false;
       alert("유저 정보가 성공적으로 저장되었어요");
@@ -314,10 +315,10 @@ export default function EditProfile() {
 
   // set the userNameByte at first
   useEffect(() => {
-    if (loginUserInfo.userName) {
-      setUserNameByte(getTextLength(loginUserInfo.userName));
+    if (loginUser.userName) {
+      setUserNameByte(getTextLength(loginUser.userName));
     }
-  }, [loginUserInfo]);
+  }, [loginUser.userName]);
 
   return (
     <TranslucentBG
@@ -372,9 +373,7 @@ export default function EditProfile() {
             <ProfileImgBox>
               <ProfileImg
                 imgPosition={profileImgPosition}
-                userImg={
-                  newProfileImageAsString || selectedProfileImage || loginUserInfo.userImg.src
-                }
+                userImg={newProfileImageAsString || selectedProfileImage || loginUser.userImg.src}
               />
               <SelectBtnBox isPhoto>
                 <SelectBtn isPhoto>수정</SelectBtn>
@@ -396,7 +395,7 @@ export default function EditProfile() {
               <ProfileName
                 type="text"
                 ref={userNameRef}
-                defaultValue={loginUserInfo.userName}
+                defaultValue={loginUser.userName}
                 onChange={handleTypeUserName}
               />
               <SelectBtn onClick={confirmUserName}>선택</SelectBtn>

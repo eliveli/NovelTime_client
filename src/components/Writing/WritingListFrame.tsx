@@ -27,7 +27,7 @@ function ButtonInNovelDetail({
   _onClick: () => void;
   children: React.ReactNode;
 }) {
-  const isLoginUser = !!useAppSelector((state) => state.user.loginUserInfo.userId);
+  const isLoginUser = !!useAppSelector((state) => state.loginUser.user.userId);
 
   return (
     <ButtonContainer
@@ -73,7 +73,7 @@ export default function WritingListFrame({
 
   const isNotMobile = !useWhetherItIsMobile();
 
-  const isLoginUser = !!useAppSelector((state) => state.user.loginUserInfo.userId);
+  const isLoginUser = !!useAppSelector((state) => state.loginUser.user.userId);
 
   const handleToGoToWrite = () => {
     if (!isLoginUser) {

@@ -12,7 +12,7 @@ import {
 
 // eslint-disable-next-line import/prefer-default-export
 export function MessageInput({ sendMessage }: { sendMessage: (content: string) => void }) {
-  const loginUserId = useAppSelector((state) => state.user.loginUserInfo.userId);
+  const loginUserId = useAppSelector((state) => state.loginUser.user.userId);
 
   const textRef = useRef<HTMLTextAreaElement>(null);
 

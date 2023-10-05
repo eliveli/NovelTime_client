@@ -51,7 +51,7 @@ export default function NovelList() {
   const [randomListTrigger, lazyRandomList] = useLazyGetUserNovelListAtRandomInNovelMainQuery();
   const userNovelListSelected = lazyRandomList?.data || randomNovelList?.data;
 
-  const loginUserName = useAppSelector((state) => state.user.loginUserInfo.userName);
+  const loginUserName = useAppSelector((state) => state.loginUser.user.userName);
   const novelsForLoginUser = useGetNovelsForLoginUserQuery(4, { skip: !loginUserName });
 
   const category = {

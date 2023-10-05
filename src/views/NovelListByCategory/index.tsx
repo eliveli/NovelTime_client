@@ -49,7 +49,7 @@ export default function NovelListByCategory() {
     { skip: categoryId !== "listLiked" },
   );
 
-  const loginUserName = useAppSelector((state) => state.user.loginUserInfo.userName);
+  const loginUserName = useAppSelector((state) => state.loginUser.user.userName);
   const novelsForLoginUser = useGetNovelsForLoginUserQuery(20, {
     skip: categoryId !== "novelsForYou",
   });

@@ -52,7 +52,7 @@ const UserNovelList = React.memo(
 
     const { userName: userNameInParam } = useParams();
 
-    const loginUserName = useAppSelector((state) => state.user.loginUserInfo.userName);
+    const loginUserName = useAppSelector((state) => state.loginUser.user.userName);
     const isWriter = loginUserName && loginUserName === userNameInParam && isCreated;
 
     const handleToEdit = () => {

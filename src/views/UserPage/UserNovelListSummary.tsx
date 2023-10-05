@@ -17,7 +17,7 @@ export default function UserNovelListSummary({ isCreated }: { isCreated: boolean
   const dispatch = useAppDispatch();
 
   const { userName } = useParams();
-  const loginUserInfo = useAppSelector((state) => state.user.loginUserInfo);
+  const loginUser = useAppSelector((state) => state.loginUser.user);
 
   const listSummaryResult = useGetListSummaryQuery({
     userName: userName as string,
@@ -34,7 +34,7 @@ export default function UserNovelListSummary({ isCreated }: { isCreated: boolean
       description: text,
       image:
         (listSummaryResult.data && listSummaryResult.data[0]?.userImg?.src) ||
-        loginUserInfo.userImg.src,
+        loginUser.userImg.src,
       url: window.location.href,
     };
   };
@@ -49,7 +49,7 @@ export default function UserNovelListSummary({ isCreated }: { isCreated: boolean
     if (!userName) return "";
 
     // this is login user's page
-    if (loginUserInfo.userName === userName) {
+    if (loginUser.userName === userName) {
       if (isCreated) return "My List";
       return "Other's List I Like";
     }

@@ -18,7 +18,7 @@ export type ContentInfo = {
   currentOrder: number;
 };
 export default function UserWriting({ isCreated }: { isCreated: boolean }) {
-  const loginUserInfo = useAppSelector((state) => state.user.loginUserInfo);
+  const loginUser = useAppSelector((state) => state.loginUser.user);
 
   const { userName } = useParams();
 
@@ -217,7 +217,7 @@ export default function UserWriting({ isCreated }: { isCreated: boolean }) {
   }, [writingResult.data]);
 
   // get the content page mark
-  const contentPageMark = contentMark(userName as string, loginUserInfo.userName, isCreated, true);
+  const contentPageMark = contentMark(userName as string, loginUser.userName, isCreated, true);
   // writing category array : my writing or other's writing
   const writingCategory = isCreated ? ["프리톡", "추천", "댓글"] : ["프리톡", "추천"];
   // set filter category

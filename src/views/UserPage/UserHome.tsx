@@ -12,7 +12,7 @@ import contentMark from "./utils/contentMark";
 import UserNovelList from "./UserNovelListSummary.components";
 
 export default function UserHome() {
-  const loginUserInfo = useAppSelector((state) => state.user.loginUserInfo);
+  const loginUser = useAppSelector((state) => state.loginUser.user);
   const { userName } = useParams();
 
   const { data, isFetching } = useGetContentOfUserHomeQuery(userName as string, {
@@ -25,25 +25,25 @@ export default function UserHome() {
   // get the content mark
   const myWritingMark = contentMark(
     userName as string,
-    loginUserInfo.userName,
+    loginUser.userName,
     true, // isMyContent
     true, // isWriting
   );
   const othersWritingMark = contentMark(
     userName as string,
-    loginUserInfo.userName,
+    loginUser.userName,
     false, // isMyContent
     true, // isWriting
   );
   const myListMark = contentMark(
     userName as string,
-    loginUserInfo.userName,
+    loginUser.userName,
     true, // isMyContent
     false, // isWriting
   );
   const othersListMark = contentMark(
     userName as string,
-    loginUserInfo.userName,
+    loginUser.userName,
     false, // isMyContent
     false, // isWriting
   );

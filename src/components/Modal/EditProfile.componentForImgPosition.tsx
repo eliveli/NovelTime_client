@@ -1,6 +1,6 @@
 import Icon from "assets/Icon";
 import theme, { styled } from "assets/styles/theme";
-import { setTempUserBG } from "store/clientSlices/userSlice";
+import { setTemporaryUserBG } from "store/clientSlices/userProfileSlice";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 
 const PositionControllerContnr = styled.div<{ isBG: boolean }>`
@@ -32,7 +32,7 @@ export default function SelectImagePosition({
   const dispatch = useAppDispatch();
 
   // for changing userBG position
-  const tempUserBG = useAppSelector((state) => state.user.tempUserBG);
+  const tempUserBG = useAppSelector((state) => state.userProfile.temporaryUserBG);
 
   return (
     <PositionControllerContnr isBG={!setProfileImgPosition}>
@@ -44,7 +44,7 @@ export default function SelectImagePosition({
               setProfileImgPosition("top");
               return;
             }
-            dispatch(setTempUserBG({ ...tempUserBG, position: "top" }));
+            dispatch(setTemporaryUserBG({ ...tempUserBG, position: "top" }));
           }}
         />
       </PositionOption>
@@ -56,7 +56,7 @@ export default function SelectImagePosition({
               setProfileImgPosition("left");
               return;
             }
-            dispatch(setTempUserBG({ ...tempUserBG, position: "left" }));
+            dispatch(setTemporaryUserBG({ ...tempUserBG, position: "left" }));
           }}
         />
       </PositionOption>
@@ -67,7 +67,7 @@ export default function SelectImagePosition({
               setProfileImgPosition("center");
               return;
             }
-            dispatch(setTempUserBG({ ...tempUserBG, position: "center" }));
+            dispatch(setTemporaryUserBG({ ...tempUserBG, position: "center" }));
           }}
         />
       </PositionOption>
@@ -78,7 +78,7 @@ export default function SelectImagePosition({
               setProfileImgPosition("right");
               return;
             }
-            dispatch(setTempUserBG({ ...tempUserBG, position: "right" }));
+            dispatch(setTemporaryUserBG({ ...tempUserBG, position: "right" }));
           }}
         />
       </PositionOption>
@@ -90,7 +90,7 @@ export default function SelectImagePosition({
               setProfileImgPosition("bottom");
               return;
             }
-            dispatch(setTempUserBG({ ...tempUserBG, position: "bottom" }));
+            dispatch(setTemporaryUserBG({ ...tempUserBG, position: "bottom" }));
           }}
         />
       </PositionOption>

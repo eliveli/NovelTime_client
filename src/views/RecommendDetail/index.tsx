@@ -23,7 +23,7 @@ export default function NovelDetailRecommend() {
 
   const recommend = useGetRecommendDetailQuery(recommendId as string);
 
-  const loginUserName = useAppSelector((state) => state.user.loginUserInfo.userName);
+  const loginUserName = useAppSelector((state) => state.loginUser.user.userName);
   const isWriter = loginUserName && loginUserName === recommend.data?.recommend.userName;
 
   const dispatch = useAppDispatch();

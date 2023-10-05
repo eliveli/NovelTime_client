@@ -72,7 +72,7 @@ export function NavPC() {
   const theme = {};
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const loginUserInfo = useAppSelector((state) => state.user.loginUserInfo);
+  const loginUser = useAppSelector((state) => state.loginUser.user);
 
   const navCategory = [
     {
@@ -101,7 +101,7 @@ export function NavPC() {
             <NavContent
               key={_.category}
               onClick={() => {
-                if (_.category === "Message" && !loginUserInfo.userId) {
+                if (_.category === "Message" && !loginUser.userId) {
                   alert("로그인이 필요합니다");
                   return;
                 }
@@ -124,10 +124,10 @@ export function NavPC() {
             <Icon.Search />
           </SearchIconBox>
 
-          {loginUserInfo.userName ? (
+          {loginUser.userName ? (
             <MyPageTablet
               onClick={() => {
-                navigate(`${USER_PAGE}/${loginUserInfo.userName}`);
+                navigate(`${USER_PAGE}/${loginUser.userName}`);
               }}
             >
               보관함
@@ -153,7 +153,7 @@ export function NavMobileMainTop() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const isTablet = useWhetherItIsTablet();
-  const { userName, userImg } = useAppSelector((state) => state.user.loginUserInfo);
+  const { userName, userImg } = useAppSelector((state) => state.loginUser.user);
   const isLoginUser = !!userName;
 
   return (
@@ -221,7 +221,7 @@ export function NavMobileMainBottom() {
   const theme = {};
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const isLoginUser = !!useAppSelector((state) => state.user.loginUserInfo.userId);
+  const isLoginUser = !!useAppSelector((state) => state.loginUser.user.userId);
 
   const navCategory = [
     {
@@ -297,9 +297,9 @@ export function NavMobileMainBottom() {
 export function NavMobileDetail() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const loginUserInfo = useAppSelector((state) => state.user.loginUserInfo);
-  const isLoginUser = !!loginUserInfo.userName;
-  const userInfoInUserPage = useAppSelector((state) => state.user.userInfoInUserPage);
+  const loginUser = useAppSelector((state) => state.loginUser.user);
+  const isLoginUser = !!loginUser.userName;
+  const userInUserProfile = useAppSelector((state) => state.userProfile.user);
   const isTablet = useWhetherItIsTablet();
 
   const theme = {};
@@ -327,11 +327,9 @@ export function NavMobileDetail() {
         </IconsBox>
 
         {isThePath(USER_PAGE) && (
-          <PageTitle
-            onClick={() => navigate(`${USER_PAGE}/${String(userInfoInUserPage.userName)}`)}
-          >
-            <UserImg userImg={userInfoInUserPage.userImg as Img} />
-            <UserName>{userInfoInUserPage.userName}</UserName>
+          <PageTitle onClick={() => navigate(`${USER_PAGE}/${String(userInUserProfile.userName)}`)}>
+            <UserImg userImg={userInUserProfile.userImg as Img} />
+            <UserName>{userInUserProfile.userName}</UserName>
             <Icon.IconBox color={themeStyle.color.mainLight} styles="transform: scaleX(-1);">
               <Icon.Runner />
             </Icon.IconBox>
@@ -355,7 +353,7 @@ export function NavMobileDetail() {
           {isThePath(USER_PAGE) && isLoginUser && isTablet && (
             <MyPageTablet
               onClick={() => {
-                navigate(`${USER_PAGE}/${loginUserInfo.userName}`);
+                navigate(`${USER_PAGE}/${loginUser.userName}`);
               }}
             >
               보관함
@@ -363,9 +361,9 @@ export function NavMobileDetail() {
           )}
           {isThePath(USER_PAGE) && isLoginUser && !isTablet && (
             <MyPageMobile
-              userImg={loginUserInfo.userImg}
+              userImg={loginUser.userImg}
               onClick={() => {
-                navigate(`${USER_PAGE}/${loginUserInfo.userName}`);
+                navigate(`${USER_PAGE}/${loginUser.userName}`);
               }}
             />
           )}
@@ -404,7 +402,7 @@ export function ChatRoomNav({
   };
 }) {
   const navigate = useNavigate();
-  const loginUserInfo = useAppSelector((state) => state.user.loginUserInfo);
+  const loginUser = useAppSelector((state) => state.loginUser.user);
 
   return (
     <ChatRoomNavContainer>
@@ -437,8 +435,8 @@ export function ChatRoomNav({
       </IconsBox>
 
       <PageTitle>
-        <UserImg userImg={loginUserInfo.userImg as Img} />
-        <UserName>{loginUserInfo.userName}</UserName>
+        <UserImg userImg={loginUser.userImg as Img} />
+        <UserName>{loginUser.userName}</UserName>
       </PageTitle>
 
       <div />

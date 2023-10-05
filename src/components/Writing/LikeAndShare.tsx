@@ -31,7 +31,7 @@ const LikeNumber = styled.span`
   margin-left: 5px;
 `;
 export default function LikeAndShare({ isLike, likeNO, writingId, writingType, novelId }: Props) {
-  const loginUserId = useAppSelector((state) => state.user.loginUserInfo.userId);
+  const loginUserId = useAppSelector((state) => state.loginUser.user.userId);
 
   const [toggleLike, toggleLikeResult] = useToggleLikeMutation();
 

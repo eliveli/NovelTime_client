@@ -1,12 +1,7 @@
 import { useEffect } from "react";
 import theme from "assets/styles/theme";
 import { useAppDispatch, useAppSelector } from "store/hooks";
-import {
-  setLoginUserInfo,
-  setAccessToken,
-  setLogout,
-  setUserInfoForUserPage,
-} from "store/clientSlices/userSlice";
+import { setLoginUser, setAccessToken, setLogout } from "store/clientSlices/loginUserSlice";
 import { openModal } from "store/clientSlices/modalSlice";
 import { messageIconUserPage } from "assets/images";
 import { Outlet, useNavigate, useParams } from "react-router-dom";
@@ -19,6 +14,7 @@ import {
 import Spinner from "assets/Spinner";
 import { CHAT_ROOM_LIST, CHAT_ROOM } from "utils/pathname";
 import { useWhetherItIsMobile } from "utils";
+import { setUserProfile } from "store/clientSlices/userProfileSlice";
 import {
   ProfileContnr,
   ProfileBG,
@@ -35,14 +31,14 @@ import {
 function Profile() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { userName, userImg, userBG } = useAppSelector((state) => state.user.userInfoInUserPage);
-  const loginUserInfo = useAppSelector((state) => state.user.loginUserInfo);
-  const isLogin = !!loginUserInfo.userId;
-  const isLogout = useAppSelector((state) => state.user.isLogout);
+  const { userName, userImg, userBG } = useAppSelector((state) => state.userProfile.user);
+  const loginUser = useAppSelector((state) => state.loginUser.user);
+  const isLogin = !!loginUser.userId;
+  const isLogout = useAppSelector((state) => state.loginUser.isLogout);
   const isMobile = useWhetherItIsMobile();
 
   // userBG when user is changing the BG
-  const tempUserBG = useAppSelector((state) => state.user.tempUserBG);
+  const tempUserBG = useAppSelector((state) => state.userProfile.temporaryUserBG);
 
   // after logout remove access token and user info in store
   const { data } = useGetLogoutQuery(undefined, {
@@ -50,10 +46,10 @@ function Profile() {
   });
   const [getChatRoomId, getChatRoomIdResult] = useLazyGetChatRoomIdQuery();
 
-  if (data && loginUserInfo.userId) {
+  if (data && loginUser.userId) {
     dispatch(setAccessToken(""));
     dispatch(
-      setLoginUserInfo({
+      setLoginUser({
         userId: "",
         userName: "",
         userImg: {
@@ -139,7 +135,7 @@ function Profile() {
               </Icon.IconBox>
             </NavigatingToUserHome>
             {/* message icon for other's page, logout icon for login user's page */}
-            {loginUserInfo.userName !== userName ? (
+            {loginUser.userName !== userName ? (
               <MessageIcon onClick={handleMessage} src={messageIconUserPage} alt="message" />
             ) : (
               <>
@@ -162,8 +158,8 @@ export default function UserParent() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { userName } = useParams();
-  const loginUserInfo = useAppSelector((state) => state.user.loginUserInfo);
-  const isLoginUser = !!userName && userName === loginUserInfo.userName;
+  const loginUser = useAppSelector((state) => state.loginUser.user);
+  const isLoginUser = !!userName && userName === loginUser.userName;
 
   const { data, isError, isFetching } = useGetUserInfoByUserNameQuery(userName as string, {
     skip: isLoginUser, // send request when this isn't login user
@@ -177,12 +173,12 @@ export default function UserParent() {
     }
 
     if (isLoginUser) {
-      dispatch(setUserInfoForUserPage(loginUserInfo));
+      dispatch(setUserProfile(loginUser));
       return;
     }
 
     if (!isLoginUser && !!data) {
-      dispatch(setUserInfoForUserPage(data));
+      dispatch(setUserProfile(data));
     }
     //
     // "userName" in deps is required

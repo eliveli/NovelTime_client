@@ -25,7 +25,7 @@ import {
 
 export default function AddToMyNovelList() {
   const novelIdToAdd = useAppSelector((state) => state.userNovelList.novelIdToAddToList);
-  const userName = useAppSelector((state) => state.user.loginUserInfo.userName);
+  const userName = useAppSelector((state) => state.loginUser.user.userName);
 
   const myNovelListResult = useGetMyNovelListQuery({
     novelId: novelIdToAdd,

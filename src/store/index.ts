@@ -5,7 +5,8 @@ import { setupListeners } from "@reduxjs/toolkit/query";
 import modalReducer from "./clientSlices/modalSlice";
 import writingReducer from "./clientSlices/writingSlice";
 import filterReducer from "./clientSlices/filterSlice";
-import userReducer from "./clientSlices/userSlice";
+import loginUserReducer from "./clientSlices/loginUserSlice";
+import userProfileReducer from "./clientSlices/userProfileSlice";
 import commentReducer from "./clientSlices/commentSlice";
 import userNovelListReducer from "./clientSlices/userNovelListSlice";
 
@@ -18,9 +19,10 @@ const store = configureStore({
     [imageHostingApi.reducerPath]: imageHostingApi.reducer,
     modal: modalReducer,
     writing: writingReducer,
-    filter: filterReducer,
-    user: userReducer,
     comment: commentReducer,
+    filter: filterReducer,
+    loginUser: loginUserReducer,
+    userProfile: userProfileReducer,
     userNovelList: userNovelListReducer,
   },
   middleware: (getDefaultMiddleware) =>

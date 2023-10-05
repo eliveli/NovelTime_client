@@ -205,7 +205,7 @@ export default function AddWriting() {
 
   const [addWriting, addWritingResult] = useAddWritingMutation();
 
-  const loginUserId = useAppSelector((state) => state.user.loginUserInfo.userId);
+  const loginUserId = useAppSelector((state) => state.loginUser.user.userId);
 
   const navigate = useNavigate();
   const dispatch = useAppDispatch();

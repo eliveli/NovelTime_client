@@ -29,7 +29,7 @@ import {
 import Modal from "components/Modal";
 import ScrollToTop from "utils/ScrollToTop";
 import { useGetAccessTokenQuery } from "store/serverAPIs/novelTime";
-import { setLoginUserInfo, setAccessToken } from "store/clientSlices/userSlice";
+import { setLoginUser, setAccessToken } from "store/clientSlices/loginUserSlice";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { ThemeProvider } from "styled-components";
 import theme from "assets/styles/theme";
@@ -40,8 +40,8 @@ import GlobalStyle from "./assets/styles/GlobalStyle";
 function App() {
   const dispatch = useAppDispatch();
 
-  const accessToken = useAppSelector((state) => state.user.accessToken);
-  const isLogout = useAppSelector((state) => state.user.isLogout);
+  const accessToken = useAppSelector((state) => state.loginUser.accessToken);
+  const isLogout = useAppSelector((state) => state.loginUser.isLogout);
 
   const [isNonLogin, handleNoneLogin] = useState(false);
 
@@ -62,7 +62,7 @@ function App() {
     handleNoneLogin(false);
   }
   if (data && !accessToken && isLogout === undefined) {
-    dispatch(setLoginUserInfo(data.userInfo));
+    dispatch(setLoginUser(data.userInfo));
   }
 
   // error occurs as user didn't login(token doesn't exist) or refresh token is invalid

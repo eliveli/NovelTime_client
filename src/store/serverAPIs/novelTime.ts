@@ -87,7 +87,7 @@ export const novelTimeApi = createApi({
         : "http://domainfordev.com/api", // 개발 환경에서도 도커 필요
     credentials: "include",
     prepareHeaders: (headers, { getState, endpoint }) => {
-      const { accessToken } = (getState() as RootState).user;
+      const { accessToken } = (getState() as RootState).loginUser;
 
       // headers.set('Access-Control-Allow-Origin', '*');
 

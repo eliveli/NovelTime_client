@@ -182,7 +182,7 @@ export default function FreeTalkDetail() {
 
   const isMobile = useWhetherItIsMobile();
 
-  const loginUserName = useAppSelector((state) => state.user.loginUserInfo.userName);
+  const loginUserName = useAppSelector((state) => state.loginUser.user.userName);
   const isWriter = loginUserName && loginUserName === talk.data?.talk.userName;
 
   const handleEdit = () => {

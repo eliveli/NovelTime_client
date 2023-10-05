@@ -118,7 +118,7 @@ function CommentWritten({
 
   const isMobile = useWhetherItIsMobile();
 
-  const loginUserName = useAppSelector((state) => state.user.loginUserInfo.userName);
+  const loginUserName = useAppSelector((state) => state.loginUser.user.userName);
   const commentToEdit = useAppSelector((state) => state.comment.commentToEdit);
 
   const isWriter = loginUserName === userName;

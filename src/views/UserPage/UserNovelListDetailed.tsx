@@ -59,7 +59,7 @@ export default function UserNovelListDetailed({ isCreated }: { isCreated: boolea
   const navigate = useNavigate();
 
   const { userName, listId } = useParams();
-  const loginUserInfo = useAppSelector((state) => state.user.loginUserInfo);
+  const loginUser = useAppSelector((state) => state.loginUser.user);
 
   const [orderNumber, setOrderNumber] = useState(1);
 
@@ -69,7 +69,7 @@ export default function UserNovelListDetailed({ isCreated }: { isCreated: boolea
   //               with no token and no login info right after refreshing page
   // but when navigating to this page request won't be done again because token won't be changed
 
-  const accessToken = useAppSelector((state) => state.user.accessToken);
+  const accessToken = useAppSelector((state) => state.loginUser.accessToken);
   // divide these two results
   // don't destructure like this : const { data, isFetching, ... }
   // just get it as variables to avoid getting same name
@@ -97,22 +97,20 @@ export default function UserNovelListDetailed({ isCreated }: { isCreated: boolea
     (_) => _.listId !== listId,
   ) as NovelListTitle[];
 
-  const loginUserName = useAppSelector((state) => state.user.loginUserInfo.userName);
-
   // toggle like //
   const [toggleLike, toggleLikeResult] = useToggleLikeMutation();
 
   const toggleLikeRequest = async () => {
     if (toggleLikeResult.isLoading) return; // prevent click event as loading
 
-    const isTheListCanceledInLoginUserPage = !isCreated && userName === loginUserInfo?.userName;
+    const isTheListCanceledInLoginUserPage = !isCreated && userName === loginUser.userName;
 
     await toggleLike({
       contentType: "novelList",
       contentId: listId as string,
       isTheListCanceledInLoginUserPage,
       userName: userName as string,
-      loginUserName,
+      loginUserName: loginUser.userName,
     }).unwrap();
 
     // don't display current list after login user canceled LIKE in his/her other's list
@@ -132,10 +130,10 @@ export default function UserNovelListDetailed({ isCreated }: { isCreated: boolea
 
     const { isLike, userName: userNameAtTitle } = listDetailedResult.data.novelList;
 
-    if (!loginUserInfo.userId) {
+    if (!loginUser.userId) {
       // when user didn't login
       alert("좋아요를 누르려면 로그인을 해 주세요.");
-    } else if (loginUserInfo.userName === userNameAtTitle) {
+    } else if (loginUser.userName === userNameAtTitle) {
       // prevent login user from setting LIKE of list that he/she created
       alert("내가 만든 리스트에는 좋아요를 누를 수 없어요.");
     } else if (!isLike) {
@@ -145,12 +143,12 @@ export default function UserNovelListDetailed({ isCreated }: { isCreated: boolea
       //
       // change this to modal that disappears later
       //
-    } else if (userNameAtTitle !== loginUserInfo.userName) {
+    } else if (userNameAtTitle !== loginUser.userName) {
       // when login user who isn't the owner of user page tries to cancel LIKE
       if (confirm("좋아요를 취소하면 내 유저페이지의 리스트에서 지워집니다. 취소하시겠어요?")) {
         await toggleLikeRequest();
       }
-    } else if (userNameAtTitle === loginUserInfo.userName) {
+    } else if (userNameAtTitle === loginUser.userName) {
       // when login user who is the owner of user page tries to cancel LIKE
       if (confirm("좋아요를 취소하면 리스트에서 지워집니다. 취소하시겠어요?")) {
         await toggleLikeRequest();
@@ -159,7 +157,7 @@ export default function UserNovelListDetailed({ isCreated }: { isCreated: boolea
   };
 
   // get the content page mark
-  const contentPageMark = contentMark(userName as string, loginUserInfo.userName, isCreated, false);
+  const contentPageMark = contentMark(userName as string, loginUser.userName, isCreated, false);
 
   // - list more button : show or not all the list title
   const [isListMore, setListMore] = useState(false);
@@ -197,7 +195,7 @@ export default function UserNovelListDetailed({ isCreated }: { isCreated: boolea
     return {
       title: `${listDetailedResult.data?.novelList.listTitle || ""}`,
       description,
-      image: listDetailedResult.data?.novelList.userImg?.src || loginUserInfo.userImg.src,
+      image: listDetailedResult.data?.novelList.userImg?.src || loginUser.userImg.src,
       url: window.location.href,
     };
   };
@@ -222,7 +220,7 @@ export default function UserNovelListDetailed({ isCreated }: { isCreated: boolea
 
   const [isEditing, handleEditing] = useState(false);
 
-  const isLoginUsersList = loginUserName && loginUserName === userName && isCreated;
+  const isLoginUsersList = loginUser.userName && loginUser.userName === userName && isCreated;
 
   // novels to be removed
   const [novelsSelected, setNovelsSelected] = useState<string[]>([]);
@@ -385,7 +383,7 @@ export default function UserNovelListDetailed({ isCreated }: { isCreated: boolea
             >
               {/* isLike */}
               {/* except when login user sees his/her my list in user page */}
-              {userName !== loginUserInfo.userName && !!listDetailedResult.data && (
+              {userName !== loginUser.userName && !!listDetailedResult.data && (
                 <HearIconBox
                   isLike={listDetailedResult.data.novelList.isLike}
                   size={28}

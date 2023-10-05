@@ -137,7 +137,7 @@ export default function ChatRoom({ roomIdTablet }: { roomIdTablet?: string }) {
     userId: loginUserId,
     userName: loginUserName,
     userImg: loginUserImg,
-  } = useAppSelector((state) => state.user.loginUserInfo);
+  } = useAppSelector((state) => state.loginUser.user);
 
   // to send query by changing arg not to use cache data
   //    when choosing other room in chat room list page on tablet

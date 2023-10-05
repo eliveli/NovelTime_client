@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useAppDispatch } from "store/hooks";
-import { setLoginUserInfo, setAccessToken } from "store/clientSlices/userSlice";
+import { setLoginUser, setAccessToken } from "store/clientSlices/loginUserSlice";
 import { useGetLoginOauthServerQuery } from "store/serverAPIs/novelTime";
 import Spinner from "assets/Spinner";
 
@@ -39,7 +39,7 @@ export default function OAuthRedirectHandler() {
 
   // login success : store login info and access token in memory
   if (data) {
-    dispatch(setLoginUserInfo(data.userInfo));
+    dispatch(setLoginUser(data.userInfo));
     dispatch(setAccessToken(data.accessToken));
     navigate("/", { replace: true });
   }

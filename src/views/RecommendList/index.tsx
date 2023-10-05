@@ -59,7 +59,7 @@ export default function RecommendList() {
     data,
   });
 
-  const isLoginUser = !!useAppSelector((state) => state.user.loginUserInfo.userId);
+  const isLoginUser = !!useAppSelector((state) => state.loginUser.user.userId);
 
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
