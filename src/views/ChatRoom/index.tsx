@@ -29,7 +29,7 @@ type DateCriterion = React.MutableRefObject<{
 interface MessageProps {
   message: TypeMessage;
   isNeededCreateTime: boolean;
-  isNeededUserImg: boolean;
+  isNeededPartnerUserImg: boolean;
   isMyMessage: boolean;
   dateCriterion: DateCriterion;
   isFirstMessageUnread?: true;
@@ -38,7 +38,7 @@ interface PartnerMessageProps {
   message: TypeMessage;
   dateCriterion: DateCriterion;
   isNeededCreateTime: boolean;
-  isNeededUserImg: boolean;
+  isNeededPartnerUserImg: boolean;
   isFirstMessageUnread?: true;
 }
 interface MyMessageProps {
@@ -52,7 +52,7 @@ function PartnerMessage({
   message,
   dateCriterion,
   isNeededCreateTime,
-  isNeededUserImg,
+  isNeededPartnerUserImg,
 }: PartnerMessageProps) {
   // go to the message which was read last when entering page
   const LastWatchRef = useRef<HTMLDivElement>(null);
@@ -77,7 +77,7 @@ function PartnerMessage({
       )}
 
       <MessageContainer>
-        <UserImg userImg={{ ...message.senderUserImg }} isShow={isNeededUserImg} />
+        <UserImg userImg={{ ...message.senderUserImg }} isShow={isNeededPartnerUserImg} />
         <MessageContentContnr>
           <MessageDesc>{message.content}</MessageDesc>
           {isNeededCreateTime && <CreateDate>{message.createTime}</CreateDate>}
@@ -116,7 +116,7 @@ function Message({
   isMyMessage,
   isFirstMessageUnread,
   isNeededCreateTime,
-  isNeededUserImg,
+  isNeededPartnerUserImg,
   dateCriterion,
 }: MessageProps) {
   const dateCriterionRef = dateCriterion;
@@ -143,7 +143,7 @@ function Message({
       dateCriterion={dateCriterion}
       isFirstMessageUnread={isFirstMessageUnread}
       isNeededCreateTime={isNeededCreateTime}
-      isNeededUserImg={isNeededUserImg}
+      isNeededPartnerUserImg={isNeededPartnerUserImg}
     />
   );
 }
@@ -238,7 +238,13 @@ export default function ChatRoom({ roomIdTablet }: { roomIdTablet?: string }) {
     nextDate?: string,
   ) => currentUser !== nextUser || currentTime !== nextTime || currentDate !== nextDate;
 
-  const checkUserImgIsNeeded = (currentUser: string, prevUser?: string) => currentUser !== prevUser;
+  const checkPartnerUserImgIsNeeded = (
+    currentUser: string,
+    currentCreateDate: string,
+
+    prevUser?: string,
+    prevCreateDate?: string,
+  ) => currentUser !== prevUser || currentCreateDate !== prevCreateDate;
 
   const dateCriterion = useRef({ date: "", isNewDate: false });
 
@@ -318,9 +324,11 @@ export default function ChatRoom({ roomIdTablet }: { roomIdTablet?: string }) {
                 nextMessage?.createTime,
                 nextMessage?.createDate,
               )}
-              isNeededUserImg={checkUserImgIsNeeded(
+              isNeededPartnerUserImg={checkPartnerUserImgIsNeeded(
                 _.senderUserName,
+                _.createDate,
                 previousMessage?.senderUserName,
+                previousMessage?.createDate,
               )}
               message={_}
             />
