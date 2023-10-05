@@ -9,16 +9,16 @@ import Spinner from "assets/Spinner";
 import socket from "store/serverAPIs/socket.io";
 import {
   AllMessageContainer,
-  MessageContainer,
+  UserAndContentContainer,
   UserImg,
   MessageDesc,
   CreateDate,
   MessageContentContnr,
   MarkContnr,
   DateMark,
-  LastWatchContnr,
   LastWatchMark,
   ChatRoomContainer,
+  MessageContainer,
 } from "./ChatRoom.styles";
 import { MessageInput } from "./ChatRoom.components";
 
@@ -36,72 +36,38 @@ interface MessageProps {
 }
 interface PartnerMessageProps {
   message: TypeMessage;
-  dateCriterion: DateCriterion;
   isNeededCreateTime: boolean;
   isNeededPartnerUserImg: boolean;
-  isFirstMessageUnread?: true;
 }
 interface MyMessageProps {
   content: string;
-  dateCriterion: DateCriterion;
   createTime?: string;
 }
 
 function PartnerMessage({
-  isFirstMessageUnread,
   message,
-  dateCriterion,
   isNeededCreateTime,
   isNeededPartnerUserImg,
 }: PartnerMessageProps) {
-  // go to the message which was read last when entering page
-  const LastWatchRef = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    LastWatchRef.current?.scrollIntoView();
-  }, []);
-
   return (
-    <>
-      {isFirstMessageUnread && (
-        <LastWatchContnr ref={LastWatchRef}>
-          <MarkContnr>
-            <LastWatchMark>마지막으로 읽은 메시지입니다</LastWatchMark>
-          </MarkContnr>
-        </LastWatchContnr>
-      )}
-
-      {dateCriterion.current.isNewDate && (
-        <MarkContnr>
-          <DateMark>{dateCriterion.current.date}</DateMark>
-        </MarkContnr>
-      )}
-
-      <MessageContainer>
-        <UserImg userImg={{ ...message.senderUserImg }} isShow={isNeededPartnerUserImg} />
-        <MessageContentContnr>
-          <MessageDesc>{message.content}</MessageDesc>
-          {isNeededCreateTime && <CreateDate>{message.createTime}</CreateDate>}
-        </MessageContentContnr>
-      </MessageContainer>
-    </>
+    <UserAndContentContainer>
+      <UserImg userImg={{ ...message.senderUserImg }} isShow={isNeededPartnerUserImg} />
+      <MessageContentContnr>
+        <MessageDesc>{message.content}</MessageDesc>
+        {isNeededCreateTime && <CreateDate>{message.createTime}</CreateDate>}
+      </MessageContentContnr>
+    </UserAndContentContainer>
   );
 }
 
-function MyMessage({ content, createTime, dateCriterion }: MyMessageProps) {
+function MyMessage({ content, createTime }: MyMessageProps) {
   return (
-    <>
-      {dateCriterion.current.isNewDate && (
-        <MarkContnr>
-          <DateMark>{dateCriterion.current.date}</DateMark>
-        </MarkContnr>
-      )}
-      <MessageContainer isMe>
-        <MessageContentContnr isMe>
-          <MessageDesc isMe>{content}</MessageDesc>
-          {createTime && <CreateDate isMe>{createTime}</CreateDate>}
-        </MessageContentContnr>
-      </MessageContainer>
-    </>
+    <UserAndContentContainer isMe>
+      <MessageContentContnr isMe>
+        <MessageDesc isMe>{content}</MessageDesc>
+        {createTime && <CreateDate isMe>{createTime}</CreateDate>}
+      </MessageContentContnr>
+    </UserAndContentContainer>
   );
 }
 
@@ -121,24 +87,40 @@ function Message({
     dateCriterionRef.current.isNewDate = false;
   }
 
-  if (isMyMessage) {
-    return (
-      <MyMessage
-        dateCriterion={dateCriterion}
-        content={message.content}
-        createTime={isNeededCreateTime ? message.createTime : undefined}
-      />
-    );
-  }
+  // go to the message which was read last when entering page
+  const MessageToRead = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!isFirstMessageUnread) return;
+    MessageToRead.current?.scrollIntoView();
+  }, [isFirstMessageUnread]);
 
   return (
-    <PartnerMessage
-      message={message}
-      dateCriterion={dateCriterion}
-      isFirstMessageUnread={isFirstMessageUnread}
-      isNeededCreateTime={isNeededCreateTime}
-      isNeededPartnerUserImg={isNeededPartnerUserImg}
-    />
+    <MessageContainer ref={MessageToRead}>
+      {isFirstMessageUnread && (
+        <MarkContnr>
+          <LastWatchMark>마지막으로 읽은 메시지입니다</LastWatchMark>
+        </MarkContnr>
+      )}
+
+      {dateCriterion.current.isNewDate && (
+        <MarkContnr>
+          <DateMark>{dateCriterion.current.date}</DateMark>
+        </MarkContnr>
+      )}
+
+      {isMyMessage ? (
+        <MyMessage
+          content={message.content}
+          createTime={isNeededCreateTime ? message.createTime : undefined}
+        />
+      ) : (
+        <PartnerMessage
+          message={message}
+          isNeededCreateTime={isNeededCreateTime}
+          isNeededPartnerUserImg={isNeededPartnerUserImg}
+        />
+      )}
+    </MessageContainer>
   );
 }
 

@@ -26,7 +26,7 @@ export const AllMessageContainer = styled.div`
   overflow-y: scroll;
   ${theme.hideScrollBar}
 `;
-export const MessageContainer = styled.div<{ isMe?: true }>`
+export const UserAndContentContainer = styled.div<{ isMe?: true }>`
   width: 100%;
   display: flex;
   align-items: flex-start;
@@ -108,7 +108,8 @@ export const DateMark = styled.span`
   color: rgba(0, 0, 0, 0.8);
   font-weight: 500;
 `;
-export const LastWatchContnr = styled.div``;
+export const MessageContainer = styled.div``;
+
 export const LastWatchMark = styled.span`
   padding: 0 10px;
   background-color: white;
