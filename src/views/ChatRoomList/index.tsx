@@ -209,7 +209,11 @@ export default function ChatRoomList() {
   const isTablet = useWhetherItIsTablet();
 
   useEffect(() => {
-    if (!currentRoomId) return;
+    if (!currentRoomId) {
+      handleRoomSpread(false);
+      // initialize for when navigating here again from here by clicking the message navigation icon
+      return;
+    }
 
     if (isMobile && !isTablet) {
       // don't write "if (!isTablet)" that causes continuous navigating between room and room list
