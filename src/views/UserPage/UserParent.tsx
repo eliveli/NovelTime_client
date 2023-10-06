@@ -31,11 +31,23 @@ import {
 function Profile() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { userName, userImg, userBG } = useAppSelector((state) => state.userProfile.user);
+  const { userName: userNameFromURL } = useParams();
+  const {
+    userName: userNameFromSlice,
+    userImg: userImgFromSlice,
+    userBG: userBGFromSlice,
+  } = useAppSelector((state) => state.userProfile.user);
   const loginUser = useAppSelector((state) => state.loginUser.user);
   const isLogin = !!loginUser.userId;
   const isLogout = useAppSelector((state) => state.loginUser.isLogout);
   const isMobile = useWhetherItIsMobile();
+
+  // not to display a previous user even for a second just before getting new user with query
+  const userName = userNameFromSlice === userNameFromURL ? userNameFromSlice : "";
+  const userImg =
+    userNameFromSlice === userNameFromURL ? userImgFromSlice : { src: "", position: "" };
+  const userBG =
+    userNameFromSlice === userNameFromURL ? userBGFromSlice : { src: "", position: "" };
 
   // userBG when user is changing the BG
   const tempUserBG = useAppSelector((state) => state.userProfile.temporaryUserBG);
@@ -164,7 +176,6 @@ export default function UserParent() {
   const { data, isError, isFetching } = useGetUserInfoByUserNameQuery(userName as string, {
     skip: isLoginUser, // send request when this isn't login user
   });
-
   useEffect(() => {
     if (isError) {
       alert("존재하지 않는 사용자입니다.");

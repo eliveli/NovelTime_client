@@ -297,8 +297,16 @@ export function NavMobileDetail() {
   const dispatch = useAppDispatch();
   const loginUser = useAppSelector((state) => state.loginUser.user);
   const isLoginUser = !!loginUser.userName;
-  const userInUserProfile = useAppSelector((state) => state.userProfile.user);
   const isTablet = useWhetherItIsTablet();
+
+  // not to display a previous user even for a second just before getting new user with query
+  const { userName: userNameFromURL } = useParams();
+  const { userName: userNameFromSlice, userImg: userImgFromSlice } = useAppSelector(
+    (state) => state.userProfile.user,
+  );
+  const profileUserName = userNameFromSlice === userNameFromURL ? userNameFromSlice : "";
+  const profileUserImg =
+    userNameFromSlice === userNameFromURL ? userImgFromSlice : { src: "", position: "" };
 
   const theme = {};
   return (
@@ -325,9 +333,9 @@ export function NavMobileDetail() {
         </IconsBox>
 
         {isThePath(USER_PAGE) && (
-          <PageTitle onClick={() => navigate(`${USER_PAGE}/${String(userInUserProfile.userName)}`)}>
-            <UserImg userImg={userInUserProfile.userImg as Img} />
-            <UserName>{userInUserProfile.userName}</UserName>
+          <PageTitle onClick={() => navigate(`${USER_PAGE}/${profileUserName}`)}>
+            <UserImg userImg={profileUserImg} />
+            <UserName>{profileUserName}</UserName>
             <Icon.IconBox color={themeStyle.color.mainLight} styles="transform: scaleX(-1);">
               <Icon.Runner />
             </Icon.IconBox>
