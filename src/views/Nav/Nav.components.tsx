@@ -1,13 +1,12 @@
 import { ThemeProvider } from "styled-components";
 import themeStyle from "assets/styles/theme";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   freeTalk,
   freeTalkActive,
   recommend,
   recommendActive,
   addWriting,
-  addWritingActive,
   novel,
   novelActive,
   message,
@@ -22,7 +21,6 @@ import {
   ADD_WRITING,
   EDIT_WRITING,
   CHAT_ROOM_LIST,
-  CHAT_ROOM,
   NOVEL_LIST,
   RECOMMEND_DETAIL,
   RECOMMEND_LIST,
@@ -403,6 +401,7 @@ export function ChatRoomNav({
 }) {
   const navigate = useNavigate();
   const partnerUser = useAppSelector((state) => state.chat.partnerUser);
+  const loginUser = useAppSelector((state) => state.loginUser.user);
 
   return (
     <ChatRoomNavContainer>
@@ -434,12 +433,21 @@ export function ChatRoomNav({
         )}
       </IconsBox>
 
-      <PageTitle>
+      <PageTitle onClick={() => navigate(`${USER_PAGE}/${partnerUser.userName}`)}>
         <UserImg userImg={partnerUser.userImg as Img} />
         <UserName>{partnerUser.userName}</UserName>
       </PageTitle>
 
-      <div />
+      <IconsBox isRight>
+        {!isThePath(CHAT_ROOM_LIST) && (
+          <MyPageMobile
+            userImg={loginUser.userImg}
+            onClick={() => {
+              navigate(`${USER_PAGE}/${loginUser.userName}`);
+            }}
+          />
+        )}
+      </IconsBox>
     </ChatRoomNavContainer>
   );
 }

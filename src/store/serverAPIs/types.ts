@@ -651,10 +651,7 @@ export type ParamToGetMessages = { roomId: string; valueForNoCache: number };
 
 export type PartnerUser = {
   userName: string;
-  userImg: {
-    src: string;
-    position: string;
-  };
+  userImg: Img;
 };
 export interface Message {
   messageId: string;
