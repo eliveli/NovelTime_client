@@ -7,7 +7,7 @@ import { useAppDispatch, useAppSelector } from "store/hooks";
 import { Message as TypeMessage } from "store/serverAPIs/types";
 import Spinner from "assets/Spinner";
 import socket from "store/serverAPIs/socket.io";
-import { setPartnerUser } from "store/clientSlices/chatSlice";
+import { setPartnerUser, setRoomUserJoined } from "store/clientSlices/chatSlice";
 import {
   AllMessageContainer,
   UserAndContentContainer,
@@ -257,13 +257,19 @@ export default function ChatRoom({ roomIdTablet }: { roomIdTablet?: string }) {
     });
   };
 
+  const roomIDsUserJoins = useAppSelector((state) => state.chat.roomIDsLoginUserJoins);
+
   useEffect(() => {
     if (!roomId) return;
 
     if (isThePath(CHAT_ROOM_LIST)) return; // joined already
 
+    if (roomIDsUserJoins.includes(roomId)) return; // joined already
+
     socket.emit("join a room", roomId);
-  }, [roomId]);
+
+    dispatch(setRoomUserJoined(roomId));
+  }, [roomId, roomIDsUserJoins]);
 
   const setNewMessage = (newMessage: TypeMessage) => {
     setAllMessages((prev) => [...prev, newMessage]);

@@ -65,18 +65,18 @@ export function ReCommentInputToCreateOnTablet() {
     textRef.current.style.height = "28px";
   };
 
-  const writeCommentRef = useRef<HTMLDivElement>(null);
+  const commentInputRef = useRef<HTMLDivElement>(null);
 
   // for tablet or pc when reComment input is located under the root comment
 
   // after clicking the "답글 쓰기" for writing a reComment,
   // scroll to the reComment input that is located under the reComments or just under the parent comment
   useEffect(() => {
-    writeCommentRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+    commentInputRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
   }, [parentCommentUserName]);
 
   return (
-    <CommentInputContainerOnTablet ref={writeCommentRef}>
+    <CommentInputContainerOnTablet ref={commentInputRef}>
       <WriteTextCntnr>
         <SpaceForUserNameOnTextArea ref={userNameOnTextAreaRef}>
           {`@${parentCommentUserName}`}
@@ -144,7 +144,7 @@ export function ReCommentInputToEditOnTablet() {
     dispatch(setCommentToEdit({ commentId: "", commentContent: "", parentUserName: "" }));
   };
 
-  const writeCommentRef = useRef<HTMLDivElement>(null);
+  const commentInputRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!textRef.current) return;
@@ -168,7 +168,7 @@ export function ReCommentInputToEditOnTablet() {
   }, [textToEdit]);
 
   return (
-    <CommentInputContainerOnTablet ref={writeCommentRef}>
+    <CommentInputContainerOnTablet ref={commentInputRef}>
       <WriteTextCntnr>
         <SpaceForUserNameOnTextArea ref={userNameOnTextAreaRef}>
           {`@${commentToEdit.parentUserName}`}
@@ -229,10 +229,10 @@ export function RootCommentInputToCreateOnTablet({
     getAllRootCommentPages();
   };
 
-  const writeCommentRef = useRef<HTMLDivElement>(null);
+  const commentInputRef = useRef<HTMLDivElement>(null);
 
   return (
-    <CommentInputContainerOnTablet ref={writeCommentRef}>
+    <CommentInputContainerOnTablet ref={commentInputRef}>
       <WriteTextCntnr>
         <WriteText
           ref={textRef}
@@ -299,7 +299,7 @@ export function RootCommentInputToEditOnTablet({
     dispatch(setCommentToEdit({ commentId: "", commentContent: "", parentUserName: "" }));
   };
 
-  const writeCommentRef = useRef<HTMLDivElement>(null);
+  const commentInputRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!textRef.current) return;
@@ -322,7 +322,7 @@ export function RootCommentInputToEditOnTablet({
   }, [textToEdit]);
 
   return (
-    <CommentInputContainerOnTablet ref={writeCommentRef}>
+    <CommentInputContainerOnTablet ref={commentInputRef}>
       <WriteTextCntnr>
         <WriteText
           ref={textRef}
@@ -448,7 +448,7 @@ export function CommentInputOnMobile({
     dispatch(setCommentToEdit({ commentId: "", commentContent: "", parentUserName: "" }));
   };
 
-  const writeCommentRef = useRef<HTMLDivElement>(null);
+  const commentInputRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!textRef.current) return;
@@ -476,7 +476,7 @@ export function CommentInputOnMobile({
   }, [textToEdit]);
 
   return (
-    <CommentInputContainerOnMobile ref={writeCommentRef} isRootCommentInput={isRootCommentInput}>
+    <CommentInputContainerOnMobile ref={commentInputRef} isRootCommentInput={isRootCommentInput}>
       <WriteTextCntnr>
         {isRootCommentInput ? (
           <WriteText

@@ -6,6 +6,8 @@ export type IsChatState = {
     userName: string;
     userImg: { src: string; position: string };
   };
+
+  roomIDsLoginUserJoins: string[];
 };
 
 const initialState: IsChatState = {
@@ -13,6 +15,8 @@ const initialState: IsChatState = {
     userName: "",
     userImg: { src: "", position: "" },
   },
+
+  roomIDsLoginUserJoins: [],
 };
 
 export const chatSlice = createSlice({
@@ -28,8 +32,14 @@ export const chatSlice = createSlice({
     ) => {
       state.partnerUser = action.payload;
     },
+    setRoomUserJoined: (state, action: PayloadAction<string>) => {
+      state.roomIDsLoginUserJoins = [...state.roomIDsLoginUserJoins, action.payload];
+    },
+    setMultipleRoomsUserJoined: (state, action: PayloadAction<string[]>) => {
+      state.roomIDsLoginUserJoins = [...state.roomIDsLoginUserJoins, ...action.payload];
+    },
   },
 });
-export const { setPartnerUser } = chatSlice.actions;
+export const { setPartnerUser, setRoomUserJoined, setMultipleRoomsUserJoined } = chatSlice.actions;
 
 export default chatSlice.reducer;

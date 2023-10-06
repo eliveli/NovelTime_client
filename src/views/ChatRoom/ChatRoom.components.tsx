@@ -36,9 +36,8 @@ export function MessageInput({ sendMessage }: { sendMessage: (content: string) =
     textRef.current.style.height = "28px";
   };
 
-  const writeCommentRef = useRef<HTMLDivElement>(null);
   return (
-    <WholeContainer ref={writeCommentRef}>
+    <WholeContainer>
       <MessageInputBox>
         <InputForMessage
           ref={textRef}

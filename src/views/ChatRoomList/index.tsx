@@ -7,9 +7,10 @@ import { ChatRoomNav } from "views/Nav/Nav.components";
 import { CHAT_ROOM, CHAT_ROOM_LIST } from "utils/pathname";
 import { useGetChatRoomsQuery } from "store/serverAPIs/novelTime";
 import { Message, ChatRoom as TypeChatRoom } from "store/serverAPIs/types";
-import { useAppSelector } from "store/hooks";
+import { useAppDispatch, useAppSelector } from "store/hooks";
 import Spinner from "assets/Spinner";
 import socket from "store/serverAPIs/socket.io";
+import { setMultipleRoomsUserJoined } from "store/clientSlices/chatSlice";
 import {
   ChatRoomCntnr,
   ChatRoomListCntnr,
@@ -119,6 +120,9 @@ export default function ChatRoomList() {
   const [isRoomSpread, handleRoomSpread] = useState(false);
   const roomSpread = { isRoomSpread, spreadRoomOrNot: () => handleRoomSpread(!isRoomSpread) };
 
+  const roomIDsUserJoins = useAppSelector((state) => state.chat.roomIDsLoginUserJoins);
+  const dispatch = useAppDispatch();
+
   // Display new messages (just received ones) ---------------------- //
   useEffect(() => {
     if (!chatRoomResult.data?.length) return;
@@ -146,10 +150,15 @@ export default function ChatRoomList() {
     }
 
     // join the rooms with socket io //
-    const roomIDs = chatRoomResult.data.map((room) => room.roomId);
+    const allRoomIDs = chatRoomResult.data.map((room) => room.roomId);
 
-    socket.emit("join rooms", roomIDs);
-    //
+    const roomIDsToJoin = allRoomIDs.filter((roomId) => !roomIDsUserJoins.includes(roomId));
+
+    if (!roomIDsToJoin.length) return; // user already joined the all rooms
+
+    socket.emit("join rooms", roomIDsToJoin);
+
+    dispatch(setMultipleRoomsUserJoined(roomIDsToJoin));
   }, [chatRoomResult.data, !!chatRooms.length]);
 
   // change "unreadMessageNo" of current room //
