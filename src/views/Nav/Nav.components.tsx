@@ -72,7 +72,7 @@ export function NavPC() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const loginUser = useAppSelector((state) => state.loginUser.user);
-  const unreadMessageNo = useAppSelector((state) => state.chat.unreadMessageNo);
+  const allUnreadMsgNo = useAppSelector((state) => state.chat.allUnreadMsgNo);
 
   const navCategory = [
     {
@@ -100,7 +100,7 @@ export function NavPC() {
           {navCategory.map((_) => (
             <NavContent
               key={_.category}
-              isUnreadMessageNo={!!unreadMessageNo}
+              isUnreadMessageNo={!!allUnreadMsgNo}
               onClick={() => {
                 if (_.category === "Message" && !loginUser.userId) {
                   alert("로그인이 필요합니다");
@@ -114,7 +114,7 @@ export function NavPC() {
               {_.category}
 
               {_.category === "Message" && (
-                <UnreadMessageNo isForDesktopNav unreadMessageNo={unreadMessageNo} />
+                <UnreadMessageNo isForDesktopNav unreadMessageNo={allUnreadMsgNo} />
               )}
             </NavContent>
           ))}
@@ -227,7 +227,7 @@ export function NavMobileMainBottom() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const isLoginUser = !!useAppSelector((state) => state.loginUser.user.userId);
-  const unreadMessageNo = useAppSelector((state) => state.chat.unreadMessageNo);
+  const allUnreadMsgNo = useAppSelector((state) => state.chat.allUnreadMsgNo);
 
   const navCategory = [
     {
@@ -267,7 +267,7 @@ export function NavMobileMainBottom() {
         {navCategory.map((_) => (
           <NavContent
             key={_.category}
-            isUnreadMessageNo={!!unreadMessageNo}
+            isUnreadMessageNo={!!allUnreadMsgNo}
             onClick={() => {
               if (["FreeTalk", "Recommend", "Novel"].includes(_.category)) {
                 let listType: "talk" | "recommend" | "novel";
@@ -292,7 +292,7 @@ export function NavMobileMainBottom() {
             }}
           >
             {_.category === "Message" && (
-              <UnreadMessageNo isForMobileNav unreadMessageNo={unreadMessageNo} />
+              <UnreadMessageNo isForMobileNav unreadMessageNo={allUnreadMsgNo} />
             )}
 
             <NavImg src={isThePath(_.path) ? _.imgActive : _.img} alt={_.category} />

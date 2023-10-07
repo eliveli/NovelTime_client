@@ -360,23 +360,6 @@ export type UserNovelLists =
     }[]
   | undefined;
 
-export type NovelListByCategory =
-  | {
-      novelId: string;
-      novelImg: string;
-      novelTitle: string;
-      novelAuthor: string;
-      novelGenre: string;
-      novelDesc: string;
-    }[]
-  | undefined;
-
-export type ParamForNovelListByCategory = {
-  category: string;
-  limitedNo: number;
-  platform?: string;
-};
-
 export interface UserAndToken {
   accessToken: string;
   userInfo: {
@@ -418,17 +401,7 @@ interface RecommendUserCreated {
   novelImg: string;
   novelTitle: string;
 }
-interface TalkOrRecommendUserCreated {
-  talkId?: string;
-  talkTitle?: string;
-  recommendId?: string;
-  recommendTitle?: string;
-  createDate: string;
-  likeNO: number;
-  commentNO?: number;
-  novelImg: string;
-  novelTitle: string;
-}
+
 export interface TalkOrRecommend {
   talkId?: string;
   talkTitle?: string;
@@ -468,20 +441,6 @@ export interface CommentUserCreated {
   talkTitle: string;
   novelTitle: string;
 }
-
-interface ListUserCreated {
-  listId: string;
-  listTitle: string;
-  novel: SimpleNovel[];
-}
-interface ListUserLiked {
-  listId: string;
-  listTitle: string;
-  userName: string;
-  userImg: { src: string; position: string };
-  novel: SimpleNovel[];
-}
-
 interface NovelListsSimpleInfos {
   listId: string;
   listTitle: string;
@@ -645,8 +604,6 @@ export interface ChatRoom {
   unreadMessageNo: number;
 }
 
-export type ChatRooms = ChatRoom[];
-
 export type ParamToGetMessages = { roomId: string; valueForNoCache: number };
 
 export type PartnerUser = {
@@ -657,7 +614,9 @@ export interface Message {
   messageId: string;
   roomId: string;
   content: string;
-  createDateTime: string; // only for treating new message with socket in room list page
+  createDateTime: string;
+  // ㄴit is saved as "latestMessageDateTime" of "rooms" in chatSlice
+  // ㄴfor sorting rooms in room list page after new message comes
   createDate: string;
   createTime: string;
   isReadByReceiver: boolean;

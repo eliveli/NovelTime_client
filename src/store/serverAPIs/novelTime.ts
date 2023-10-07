@@ -17,8 +17,6 @@ import {
   HomeData,
   UserNovelLists,
   WeeklyNovelsFromPlatform,
-  NovelListByCategory,
-  ParamForNovelListByCategory,
   WritingList,
   ParamForGettingWritings,
   TalkDetail,
@@ -53,12 +51,10 @@ import {
   ParamToGetMyList,
   ParamToRemoveNovelFromList,
   ParamToGetWeeklyNovels,
-  SimpleNovel,
   NovelDetail,
   ParamForListsPeopleLike,
   RoomId,
   Messages,
-  ChatRooms,
   ParamToGetMessages,
 } from "./types";
 import type { RootState } from "../index";
@@ -519,10 +515,6 @@ export const novelTimeApi = createApi({
     getChatRoomId: builder.query<RoomId, string>({
       query: (otherUserName) => `/chat/roomId/${otherUserName}`,
     }),
-    getChatRooms: builder.query<ChatRooms, number>({
-      // number type argument is always unique not to use cache data
-      query: () => `/chat/rooms`,
-    }),
     getMessages: builder.query<Messages, ParamToGetMessages>({
       query: ({ roomId }) => `/chat/messages/${roomId}`,
     }),
@@ -577,6 +569,5 @@ export const {
   useDeleteMyNovelListMutation,
   useRemoveNovelFromListMutation,
   useLazyGetChatRoomIdQuery,
-  useGetChatRoomsQuery,
   useGetMessagesQuery,
 } = novelTimeApi;

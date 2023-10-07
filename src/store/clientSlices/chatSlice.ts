@@ -5,7 +5,7 @@ import { ChatRoom, Message } from "store/serverAPIs/types";
 export type IsChatState = {
   rooms: ChatRoom[];
 
-  unreadMessageNo: number;
+  allUnreadMsgNo: number;
 
   // * below will change
   partnerUser: {
@@ -19,7 +19,7 @@ export type IsChatState = {
 const initialState: IsChatState = {
   rooms: [],
 
-  unreadMessageNo: 0,
+  allUnreadMsgNo: 0,
 
   partnerUser: {
     userName: "",
@@ -38,18 +38,25 @@ export const chatSlice = createSlice({
       state.rooms.push(...action.payload);
 
       // set unread message number of all rooms
-      let unreadMessageNoOfAllRooms = 0;
+      let unreadMsgNoOfAllRooms = 0;
       action.payload.forEach((room) => {
-        unreadMessageNoOfAllRooms += room.unreadMessageNo;
+        unreadMsgNoOfAllRooms += room.unreadMessageNo;
       });
 
-      state.unreadMessageNo = unreadMessageNoOfAllRooms;
+      state.allUnreadMsgNo = unreadMsgNoOfAllRooms;
     },
 
-    changeRoom: (state, action: PayloadAction<{ newMessage: Message; loginUserName: string }>) => {
-      const { newMessage, loginUserName } = action.payload;
+    setNewMsgInTheRoom: (
+      state,
+      action: PayloadAction<{
+        newMessage: Message;
+        loginUserName: string;
+        currentRoomId?: string; // when user sees a chatroom in room list
+      }>,
+    ) => {
+      const { newMessage, loginUserName, currentRoomId } = action.payload;
       const {
-        roomId,
+        roomId: roomIdOfNewMsg,
         senderUserName,
         senderUserImg,
         createDateTime,
@@ -58,14 +65,14 @@ export const chatSlice = createSlice({
         content,
       } = newMessage;
 
-      const index = state.rooms.findIndex((room) => room.roomId === roomId);
+      const index = state.rooms.findIndex((room) => room.roomId === roomIdOfNewMsg);
 
       // when partner user sends a new message
       if (senderUserName !== loginUserName) {
         // add a new room
         if (index === -1) {
           state.rooms.push({
-            roomId,
+            roomId: roomIdOfNewMsg,
             partnerUserName: senderUserName,
             partnerUserImg: senderUserImg,
             latestMessageDateTime: createDateTime,
@@ -76,18 +83,22 @@ export const chatSlice = createSlice({
           });
         } else {
           // change the room with new message
+          //  set unreadMessageNo to 0 when new message comes in a room that the user is in
+          const unreadMessageNo =
+            currentRoomId === roomIdOfNewMsg ? 0 : state.rooms[index].unreadMessageNo + 1;
+
           state.rooms[index] = {
             ...state.rooms[index],
             latestMessageDateTime: createDateTime,
             latestMessageDate: createDate,
             latestMessageTime: createTime,
             latestMessageContent: content,
-            unreadMessageNo: state.rooms[index].unreadMessageNo + 1,
+            unreadMessageNo,
           };
         }
 
         // change unread message number of all rooms
-        state.unreadMessageNo += 1;
+        state.allUnreadMsgNo += 1;
         return;
       }
 
@@ -99,6 +110,18 @@ export const chatSlice = createSlice({
         latestMessageDate: createDate,
         latestMessageTime: createTime,
         latestMessageContent: content,
+        unreadMessageNo: 0,
+      };
+    },
+
+    decreaseUnreadMsgNo: (state, action: PayloadAction<{ currentRoomId: string }>) => {
+      // change "unreadMessageNo" to 0 of current room
+      const index = state.rooms.findIndex((room) => room.roomId === action.payload.currentRoomId);
+
+      state.allUnreadMsgNo -= state.rooms[index].unreadMessageNo;
+
+      state.rooms[index] = {
+        ...state.rooms[index],
         unreadMessageNo: 0,
       };
     },
@@ -122,7 +145,8 @@ export const chatSlice = createSlice({
 });
 export const {
   setRooms,
-  changeRoom,
+  setNewMsgInTheRoom,
+  decreaseUnreadMsgNo,
   setPartnerUser,
   setRoomUserJoined,
   setMultipleRoomsUserJoined,

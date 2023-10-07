@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, useSearchParams } from "react-router-dom";
 
 import {
   ChatRoomList,
@@ -37,7 +37,8 @@ import EditWriting from "views/EditWriting";
 import { ChatRoomNavMobile } from "views/Nav";
 import socket from "store/serverAPIs/socket.io";
 import { Message, ChatRoom as TypeChatRoom } from "store/serverAPIs/types";
-import { changeRoom, setRooms } from "store/clientSlices/chatSlice";
+import { setNewMsgInTheRoom, setRooms } from "store/clientSlices/chatSlice";
+import { CHAT_ROOM_LIST } from "utils/pathname";
 import GlobalStyle from "./assets/styles/GlobalStyle";
 
 function App() {
@@ -131,10 +132,27 @@ function App() {
   }, []);
 
   // Get a new message and Change the room that the message comes in //
+
   const changeRoomWithMessage = (newMessage: Message) => {
     if (!data) return;
 
-    dispatch(changeRoom({ newMessage, loginUserName: data.userInfo.userName }));
+    // for when the user entered a chatroom in room list
+    let currentRoomId: string | undefined;
+
+    if (
+      window.location.pathname === CHAT_ROOM_LIST &&
+      window.location.search.indexOf("?roomId=") === 0
+    ) {
+      currentRoomId = window.location.search.substring(8);
+    }
+
+    dispatch(
+      setNewMsgInTheRoom({
+        newMessage,
+        loginUserName: data.userInfo.userName,
+        currentRoomId,
+      }),
+    );
   };
 
   useEffect(() => {
