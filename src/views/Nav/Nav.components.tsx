@@ -100,7 +100,7 @@ export function NavPC() {
           {navCategory.map((_) => (
             <NavContent
               key={_.category}
-              isUnreadMessageNo={!!allUnreadMsgNo}
+              isMessageCategory={_.category === "Message"}
               onClick={() => {
                 if (_.category === "Message" && !loginUser.userId) {
                   alert("로그인이 필요합니다");
@@ -113,7 +113,7 @@ export function NavPC() {
             >
               {_.category}
 
-              {_.category === "Message" && (
+              {_.category === "Message" && !!allUnreadMsgNo && (
                 <UnreadMessageNo isForDesktopNav unreadMessageNo={allUnreadMsgNo} />
               )}
             </NavContent>
@@ -267,7 +267,7 @@ export function NavMobileMainBottom() {
         {navCategory.map((_) => (
           <NavContent
             key={_.category}
-            isUnreadMessageNo={!!allUnreadMsgNo}
+            isMessageCategory={_.category === "Message"}
             onClick={() => {
               if (["FreeTalk", "Recommend", "Novel"].includes(_.category)) {
                 let listType: "talk" | "recommend" | "novel";
@@ -291,7 +291,7 @@ export function NavMobileMainBottom() {
               navigate(_.path);
             }}
           >
-            {_.category === "Message" && (
+            {_.category === "Message" && !!allUnreadMsgNo && (
               <UnreadMessageNo isForMobileNav unreadMessageNo={allUnreadMsgNo} />
             )}
 
