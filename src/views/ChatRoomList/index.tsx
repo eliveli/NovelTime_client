@@ -23,8 +23,8 @@ import {
   MessageContent,
   NextToImgContainer,
   FirstLineInfoContnr,
-  UnreadTalkNoContnr,
-  UnreadTalkNO,
+  UnreadMessageNoContnr,
+  UnreadMessageNumber,
 } from "./ChatRoomList.styles";
 
 interface ChatRoomPreviewProps {
@@ -52,6 +52,30 @@ const sortByMessageCreateTime = (room1: TypeChatRoom, room2: TypeChatRoom) => {
   if (room1.latestMessageDateTime > room2.latestMessageDateTime) return -1;
   return 0;
 };
+
+export function UnreadMessageNo({
+  isRoomSpread,
+  unreadMessageNo,
+  isForMobileNav,
+  isForDesktopNav,
+}: {
+  isRoomSpread?: boolean;
+  unreadMessageNo: number;
+  isForMobileNav?: true;
+  isForDesktopNav?: true;
+}) {
+  return (
+    <UnreadMessageNoContnr
+      isRoomSpread={isRoomSpread}
+      isForMobileNav={isForMobileNav}
+      isForDesktopNav={isForDesktopNav}
+    >
+      <UnreadMessageNumber isForNav={isForMobileNav || isForDesktopNav}>
+        {unreadMessageNo}
+      </UnreadMessageNumber>
+    </UnreadMessageNoContnr>
+  );
+}
 
 function ChatRoomPreview({ chatRoom, isRoomSpread, roomIdSelected }: ChatRoomPreviewProps) {
   const {
@@ -91,9 +115,7 @@ function ChatRoomPreview({ chatRoom, isRoomSpread, roomIdSelected }: ChatRoomPre
             <CreateDate>{dateToDisplay}</CreateDate>
           </UserNameBox>
           {!!unreadMessageNo && (
-            <UnreadTalkNoContnr isRoomSpread={isRoomSpread}>
-              <UnreadTalkNO>{unreadMessageNo}</UnreadTalkNO>
-            </UnreadTalkNoContnr>
+            <UnreadMessageNo isRoomSpread={isRoomSpread} unreadMessageNo={unreadMessageNo} />
           )}
         </FirstLineInfoContnr>
         <MessageContent contnrWidth={contnrWidth}>{latestMessageContent}</MessageContent>

@@ -93,36 +93,68 @@ export const CreateDate = styled.span`
   padding-left: 8px;
   white-space: nowrap;
 `;
-export const UnreadTalkNoContnr = styled.div<{ isRoomSpread: boolean }>`
+export const UnreadMessageNoContnr = styled.div<{
+  isRoomSpread?: boolean;
+  isForMobileNav?: true;
+  isForDesktopNav?: true;
+}>`
   display: flex;
   justify-content: center;
   align-items: center;
 
-  height: 23px;
-  padding: 0px 5px 2px;
   position: absolute;
 
   background-color: white;
   color: ${theme.color.main};
   font-weight: 500;
 
-  ${({ isRoomSpread }) =>
-    isRoomSpread
-      ? `
-    top: 12px;
-    left: -7px;
-    box-shadow: 0 0 3px darkorange;
-    border-radius: 10px;
-    `
-      : `
-    top: -1px;
-    right: 0;
-    box-shadow: 0 0 2px orange;
-    border-radius: 5px;  
-  `}
+  ${({ isRoomSpread, isForMobileNav, isForDesktopNav }) => {
+    if (isRoomSpread) {
+      return `
+        top: 12px;
+        left: -7px;
+        height: 23px;
+        padding: 0px 5px 2px;
+        box-shadow: 0 0 3px darkorange;
+        border-radius: 10px;
+      `;
+    }
+    if (isRoomSpread === false) {
+      return `
+        top: -1px;
+        right: 0;
+        height: 23px;
+        padding: 0px 5px 2px;
+        box-shadow: 0 0 2px orange;
+        border-radius: 5px;  
+      `;
+    }
+    if (isForMobileNav) {
+      return `
+        top: 3px;
+        right: calc(50% - 24px);
+        height: 16px;
+        padding: 0px 3px 0px;
+        box-shadow: 0 0 3px darkorange;
+        border-radius: 10px;
+      `;
+    }
+    if (isForDesktopNav) {
+      return `
+        top: 16px;
+        right: 10px;
+        height: 16px;
+        padding: 0px 3px 0px;
+        box-shadow: 0 0 3px darkorange;
+        border-radius: 10px;
+      `;
+    }
+  }}
 `;
-export const UnreadTalkNO = styled.span`
-  font-size: 20px;
+
+export const UnreadMessageNumber = styled.span<{ isForNav?: true }>`
+  font-size: ${({ isForNav }) => (isForNav ? 13 : 20)}px;
+  font-weight: ${({ isForNav }) => (isForNav ? 600 : 300)};
 `;
 
 export const MessageContent = styled.p<{ contnrWidth: number }>`

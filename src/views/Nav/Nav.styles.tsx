@@ -134,13 +134,15 @@ export const NavContentPC = styled.div`
   width: 50%;
   height: 100%;
 `;
-export const NavContent = styled.span<{ isCurrentPath?: boolean }>`
+export const NavContent = styled.span<{ isCurrentPath?: boolean; isUnreadMessageNo: boolean }>`
   width: 100%;
   display: inline-flex;
   height: 100%;
 
   /* for PC Nav */
   ${({ isCurrentPath }) => isCurrentPath && `border-bottom: 2px solid ${theme.color.main};`}
+
+  ${({ isUnreadMessageNo }) => isUnreadMessageNo && `position: relative;`}
 
   gap: 2px;
   flex-direction: column;

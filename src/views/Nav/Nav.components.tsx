@@ -32,6 +32,7 @@ import {
 import { setSearchList } from "store/clientSlices/filterSlice";
 import { isThePath, useWhetherItIsTablet } from "utils";
 import { Img } from "store/serverAPIs/types";
+import { UnreadMessageNo } from "views/ChatRoomList";
 import { openModal } from "../../store/clientSlices/modalSlice";
 import { handleWritingToSubmitOnMobile } from "../../store/clientSlices/writingSlice";
 import { useAppSelector, useAppDispatch } from "../../store/hooks";
@@ -71,6 +72,7 @@ export function NavPC() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const loginUser = useAppSelector((state) => state.loginUser.user);
+  const unreadMessageNo = useAppSelector((state) => state.chat.unreadMessageNo);
 
   const navCategory = [
     {
@@ -98,6 +100,7 @@ export function NavPC() {
           {navCategory.map((_) => (
             <NavContent
               key={_.category}
+              isUnreadMessageNo={!!unreadMessageNo}
               onClick={() => {
                 if (_.category === "Message" && !loginUser.userId) {
                   alert("로그인이 필요합니다");
@@ -109,6 +112,10 @@ export function NavPC() {
               isCurrentPath={isThePath(_.partialPath)}
             >
               {_.category}
+
+              {_.category === "Message" && (
+                <UnreadMessageNo isForDesktopNav unreadMessageNo={unreadMessageNo} />
+              )}
             </NavContent>
           ))}
         </NavContentPC>
@@ -220,6 +227,7 @@ export function NavMobileMainBottom() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const isLoginUser = !!useAppSelector((state) => state.loginUser.user.userId);
+  const unreadMessageNo = useAppSelector((state) => state.chat.unreadMessageNo);
 
   const navCategory = [
     {
@@ -259,6 +267,7 @@ export function NavMobileMainBottom() {
         {navCategory.map((_) => (
           <NavContent
             key={_.category}
+            isUnreadMessageNo={!!unreadMessageNo}
             onClick={() => {
               if (["FreeTalk", "Recommend", "Novel"].includes(_.category)) {
                 let listType: "talk" | "recommend" | "novel";
@@ -282,6 +291,10 @@ export function NavMobileMainBottom() {
               navigate(_.path);
             }}
           >
+            {_.category === "Message" && (
+              <UnreadMessageNo isForMobileNav unreadMessageNo={unreadMessageNo} />
+            )}
+
             <NavImg src={isThePath(_.path) ? _.imgActive : _.img} alt={_.category} />
 
             <NavText isActive={isThePath(_.path)}>{_.category}</NavText>

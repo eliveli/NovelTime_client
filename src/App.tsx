@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import {
@@ -35,6 +35,9 @@ import { ThemeProvider } from "styled-components";
 import theme from "assets/styles/theme";
 import EditWriting from "views/EditWriting";
 import { ChatRoomNavMobile } from "views/Nav";
+import socket from "store/serverAPIs/socket.io";
+import { Message, ChatRoom as TypeChatRoom } from "store/serverAPIs/types";
+import { changeRoom, setRooms } from "store/clientSlices/chatSlice";
 import GlobalStyle from "./assets/styles/GlobalStyle";
 
 function App() {
@@ -103,6 +106,44 @@ function App() {
   //      - dispatch 작동 조건을 다음과 같이 설정했기에 가능 : isLogout === undefined
   // 4. 비로그인일 경우
   //   최초 페이지 진입 시 리프레시 요청 감. 이 때 non login user 에러 받고 polling interval 막기
+
+  //
+  // Join chat rooms //
+  useEffect(() => {
+    if (!data?.userInfo.userId) return;
+
+    socket.emit("join all rooms with userId", data.userInfo.userId);
+  }, [data?.userInfo.userId]);
+
+  // Set chat rooms //
+  const setRoomsAfterLogIn = (rooms: TypeChatRoom[]) => {
+    if (!rooms.length) return;
+
+    dispatch(setRooms(rooms));
+  };
+
+  useEffect(() => {
+    socket.on("rooms", setRoomsAfterLogIn);
+
+    return () => {
+      socket.off("rooms", setRoomsAfterLogIn);
+    };
+  }, []);
+
+  // Get a new message and Change the room that the message comes in //
+  const changeRoomWithMessage = (newMessage: Message) => {
+    if (!data) return;
+
+    dispatch(changeRoom({ newMessage, loginUserName: data.userInfo.userName }));
+  };
+
+  useEffect(() => {
+    socket.on("new message", changeRoomWithMessage);
+
+    return () => {
+      socket.off("new message", changeRoomWithMessage);
+    };
+  }, []);
 
   return (
     <Router>
