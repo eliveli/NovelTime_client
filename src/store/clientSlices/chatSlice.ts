@@ -4,7 +4,7 @@ import socket from "store/serverAPIs/socket.io";
 import { ChatRoom, Message, MessagesWithPartner } from "store/serverAPIs/types";
 
 export type IsChatState = {
-  rooms: ChatRoom[];
+  rooms: { [roomId: string]: ChatRoom };
 
   allUnreadMsgNo: number;
 
@@ -12,7 +12,7 @@ export type IsChatState = {
 };
 
 const initialState: IsChatState = {
-  rooms: [],
+  rooms: {},
 
   allUnreadMsgNo: 0,
 
@@ -25,7 +25,9 @@ export const chatSlice = createSlice({
   reducers: {
     setRooms: (state, action: PayloadAction<ChatRoom[]>) => {
       // set rooms at first
-      state.rooms.push(...action.payload);
+      action.payload?.forEach((room) => {
+        state.rooms[room.roomId] = room;
+      });
 
       // set unread message number of all rooms
       let unreadMsgNoOfAllRooms = 0;
@@ -41,7 +43,7 @@ export const chatSlice = createSlice({
       action: PayloadAction<{
         newMessage: Message;
         loginUserName: string;
-        currentRoomId?: string; // when user entered a chatroom
+        currentRoomId: string; // when user entered a chatroom
       }>,
     ) => {
       const { newMessage, loginUserName, currentRoomId } = action.payload;
@@ -55,15 +57,15 @@ export const chatSlice = createSlice({
         content,
       } = newMessage;
 
-      const index = state.rooms.findIndex((room) => room.roomId === roomIdOfNewMsg);
+      const roomThatMsgCameIn = state.rooms[roomIdOfNewMsg];
 
       // Treat rooms ----------------------------------------------
       // when partner user sends a new message
       if (senderUserName !== loginUserName) {
         // there's no room for the message
         // add a new room
-        if (index === -1) {
-          state.rooms.push({
+        if (!roomThatMsgCameIn) {
+          state.rooms[roomIdOfNewMsg] = {
             roomId: roomIdOfNewMsg,
             partnerUserName: senderUserName,
             partnerUserImg: senderUserImg,
@@ -72,15 +74,15 @@ export const chatSlice = createSlice({
             latestMessageTime: createTime,
             latestMessageContent: content,
             unreadMessageNo: 1,
-          });
+          };
         } else {
           // change the room with new message
           //  set unreadMessageNo to 0 when new message comes in a room that the user is in
           const unreadMessageNo =
-            currentRoomId === roomIdOfNewMsg ? 0 : state.rooms[index].unreadMessageNo + 1;
+            currentRoomId === roomIdOfNewMsg ? 0 : state.rooms[roomIdOfNewMsg].unreadMessageNo + 1;
 
-          state.rooms[index] = {
-            ...state.rooms[index],
+          state.rooms[roomIdOfNewMsg] = {
+            ...state.rooms[roomIdOfNewMsg],
             latestMessageDateTime: createDateTime,
             latestMessageDate: createDate,
             latestMessageTime: createTime,
@@ -96,15 +98,14 @@ export const chatSlice = createSlice({
 
       // when the login user sends a new message
       // change the room with new message
-      state.rooms[index] = {
-        ...state.rooms[index],
+      state.rooms[roomIdOfNewMsg] = {
+        ...state.rooms[roomIdOfNewMsg],
         latestMessageDateTime: createDateTime,
         latestMessageDate: createDate,
         latestMessageTime: createTime,
         latestMessageContent: content,
         unreadMessageNo: 0,
       };
-
       // Treat Messages ------------------------------------------------
       // partner user sends a message to the room that the login user is in
       if (currentRoomId === roomIdOfNewMsg && newMessage.senderUserName !== loginUserName) {
@@ -129,9 +130,8 @@ export const chatSlice = createSlice({
         };
       } else {
         // Get partner user from state.rooms
-        const indexOfRoom = state.rooms.findIndex((room) => room.roomId === roomIdOfNewMsg);
         const { partnerUserName: partnerUserNameOfNewMsg, partnerUserImg: partnerUserImgOfNewMsg } =
-          state.rooms[indexOfRoom];
+          state.rooms[roomIdOfNewMsg];
 
         // Set new message to the message list identified by the room
         state.allMessages[roomIdOfNewMsg] = {
@@ -146,11 +146,15 @@ export const chatSlice = createSlice({
 
     decreaseUnreadMsgNo: (state, action: PayloadAction<{ currentRoomId: string }>) => {
       // change "unreadMessageNo" to 0 of current room
-      const index = state.rooms.findIndex((room) => room.roomId === action.payload.currentRoomId);
-      state.allUnreadMsgNo -= state.rooms[index].unreadMessageNo;
+      const currentRoom = state.rooms[action.payload.currentRoomId];
+      if (!currentRoom) {
+        return;
+      }
 
-      state.rooms[index] = {
-        ...state.rooms[index],
+      state.allUnreadMsgNo -= currentRoom.unreadMessageNo;
+
+      state.rooms[action.payload.currentRoomId] = {
+        ...currentRoom,
         unreadMessageNo: 0,
       };
     },

@@ -24,6 +24,7 @@ import writeText from "./writeText";
 import goToUserPage from "./goToUserPage";
 import useWhetherItIsTablet from "./useWhetherItIsTablet";
 import isThePath from "./isThePath";
+import getCurrentRoomId from "./getCurrentRoomId";
 
 export {
   useResetFiltersFromUrlForWriting,
@@ -50,4 +51,5 @@ export {
   writeText,
   goToUserPage,
   isThePath,
+  getCurrentRoomId,
 };

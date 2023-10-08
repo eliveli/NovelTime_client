@@ -38,7 +38,7 @@ import { ChatRoomNavMobile } from "views/Nav";
 import socket from "store/serverAPIs/socket.io";
 import { Message, ChatRoom as TypeChatRoom } from "store/serverAPIs/types";
 import { treatNewMessage, setRooms } from "store/clientSlices/chatSlice";
-import { CHAT_ROOM, CHAT_ROOM_LIST } from "utils/pathname";
+import { getCurrentRoomId } from "utils";
 import GlobalStyle from "./assets/styles/GlobalStyle";
 
 function App() {
@@ -137,20 +137,12 @@ function App() {
     if (!data) return;
 
     // for when the user entered a chatroom
-    let currentRoomId: string | undefined;
-
-    if (window.location.pathname.indexOf(`${CHAT_ROOM_LIST}?roomId=`) === 0) {
-      currentRoomId = window.location.search.substring(8);
-    }
-    if (window.location.pathname.indexOf(`${CHAT_ROOM}/`) === 0) {
-      currentRoomId = window.location.pathname.substring(11);
-    }
 
     dispatch(
       treatNewMessage({
         newMessage,
         loginUserName: data.userInfo.userName,
-        currentRoomId,
+        currentRoomId: getCurrentRoomId(),
       }),
     );
   };

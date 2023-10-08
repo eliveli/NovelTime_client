@@ -30,7 +30,7 @@ import {
   USER_PAGE,
 } from "utils/pathname";
 import { setSearchList } from "store/clientSlices/filterSlice";
-import { isThePath, useWhetherItIsTablet } from "utils";
+import { getCurrentRoomId, isThePath, useWhetherItIsTablet } from "utils";
 import { Img } from "store/serverAPIs/types";
 import { UnreadMessageNo } from "views/ChatRoomList";
 import { openModal } from "../../store/clientSlices/modalSlice";
@@ -421,9 +421,20 @@ export function ChatRoomNav({
   };
 }) {
   const navigate = useNavigate();
-  // const partnerUser = useAppSelector((state) => state.chat.partnerUser);
-  const partnerUser = { userName: "", userImg: { src: "", position: "" } }; // * fix in chatSlice
   const loginUser = useAppSelector((state) => state.loginUser.user);
+
+  const currentRoomId = getCurrentRoomId();
+
+  const rooms = useAppSelector((state) => state.chat.rooms);
+  const room = rooms[currentRoomId];
+
+  const partnerUserName = room ? room.partnerUserName : "";
+  const partnerUserImg = room
+    ? room.partnerUserImg
+    : {
+        src: "",
+        position: "",
+      };
 
   return (
     <ChatRoomNavContainer>
@@ -455,9 +466,9 @@ export function ChatRoomNav({
         )}
       </IconsBox>
 
-      <PageTitle onClick={() => navigate(`${USER_PAGE}/${partnerUser.userName}`)}>
-        <UserImg userImg={partnerUser.userImg as Img} />
-        <UserName>{partnerUser.userName}</UserName>
+      <PageTitle onClick={() => navigate(`${USER_PAGE}/${partnerUserName}`)}>
+        <UserImg userImg={partnerUserImg} />
+        <UserName>{partnerUserName}</UserName>
       </PageTitle>
 
       <IconsBox isRight>

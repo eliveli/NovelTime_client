@@ -124,7 +124,6 @@ function ChatRoomPreview({ chatRoom, isRoomSpread, roomIdSelected }: ChatRoomPre
 export default function ChatRoomList() {
   const navigate = useNavigate();
   const isLogin = !!useAppSelector((state) => state.loginUser.user.userName);
-
   useEffect(() => {
     if (!isLogin) {
       alert("로그인 후 이용해 주세요");
@@ -146,7 +145,6 @@ export default function ChatRoomList() {
   // Change unreadMessageNo whenever choosing a room ---------------- //
   useEffect(() => {
     if (!currentRoomId) return;
-    if (!rooms.length) return;
 
     dispatch(decreaseUnreadMsgNo({ currentRoomId }));
   }, [currentRoomId]);
@@ -173,17 +171,14 @@ export default function ChatRoomList() {
     <MainBG isChatRoomList>
       <ListAndRoomCntnr>
         <ChatRoomListCntnr isRoom={!!currentRoomId} isRoomSpread={isRoomSpread}>
-          {!!rooms.length &&
-            [...rooms]
-              .sort(sortByMessageCreateTime)
-              .map((_) => (
-                <ChatRoomPreview
-                  key={_.roomId}
-                  chatRoom={_}
-                  isRoomSpread={isRoomSpread}
-                  roomIdSelected={currentRoomId}
-                />
-              ))}
+          {[...Object.values(rooms)]?.sort(sortByMessageCreateTime).map((_) => (
+            <ChatRoomPreview
+              key={_.roomId}
+              chatRoom={_}
+              isRoomSpread={isRoomSpread}
+              roomIdSelected={currentRoomId}
+            />
+          ))}
         </ChatRoomListCntnr>
 
         {currentRoomId && (
