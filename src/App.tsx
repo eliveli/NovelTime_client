@@ -37,8 +37,8 @@ import EditWriting from "views/EditWriting";
 import { ChatRoomNavMobile } from "views/Nav";
 import socket from "store/serverAPIs/socket.io";
 import { Message, ChatRoom as TypeChatRoom } from "store/serverAPIs/types";
-import { setNewMsgInTheRoom, setRooms } from "store/clientSlices/chatSlice";
-import { CHAT_ROOM_LIST } from "utils/pathname";
+import { treatNewMessage, setRooms } from "store/clientSlices/chatSlice";
+import { CHAT_ROOM, CHAT_ROOM_LIST } from "utils/pathname";
 import GlobalStyle from "./assets/styles/GlobalStyle";
 
 function App() {
@@ -113,7 +113,7 @@ function App() {
   useEffect(() => {
     if (!data?.userInfo.userId) return;
 
-    socket.emit("join all rooms with userId", data.userInfo.userId);
+    socket.emit("join all rooms", data.userInfo.userId);
   }, [data?.userInfo.userId]);
 
   // Set chat rooms //
@@ -136,18 +136,18 @@ function App() {
   const changeRoomWithMessage = (newMessage: Message) => {
     if (!data) return;
 
-    // for when the user entered a chatroom in room list
+    // for when the user entered a chatroom
     let currentRoomId: string | undefined;
 
-    if (
-      window.location.pathname === CHAT_ROOM_LIST &&
-      window.location.search.indexOf("?roomId=") === 0
-    ) {
+    if (window.location.pathname.indexOf(`${CHAT_ROOM_LIST}?roomId=`) === 0) {
       currentRoomId = window.location.search.substring(8);
+    }
+    if (window.location.pathname.indexOf(`${CHAT_ROOM}/`) === 0) {
+      currentRoomId = window.location.pathname.substring(11);
     }
 
     dispatch(
-      setNewMsgInTheRoom({
+      treatNewMessage({
         newMessage,
         loginUserName: data.userInfo.userName,
         currentRoomId,

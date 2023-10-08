@@ -604,8 +604,6 @@ export interface ChatRoom {
   unreadMessageNo: number;
 }
 
-export type ParamToGetMessages = { roomId: string; valueForNoCache: number };
-
 export type PartnerUser = {
   userName: string;
   userImg: Img;
@@ -627,7 +625,7 @@ export interface Message {
   };
 }
 
-export type Messages = {
+export type MessagesWithPartner = {
   partnerUser: PartnerUser;
   messages: Message[];
 };

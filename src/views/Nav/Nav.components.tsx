@@ -421,7 +421,8 @@ export function ChatRoomNav({
   };
 }) {
   const navigate = useNavigate();
-  const partnerUser = useAppSelector((state) => state.chat.partnerUser);
+  // const partnerUser = useAppSelector((state) => state.chat.partnerUser);
+  const partnerUser = { userName: "", userImg: { src: "", position: "" } }; // * fix in chatSlice
   const loginUser = useAppSelector((state) => state.loginUser.user);
 
   return (

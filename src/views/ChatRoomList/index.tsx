@@ -122,6 +122,16 @@ function ChatRoomPreview({ chatRoom, isRoomSpread, roomIdSelected }: ChatRoomPre
   );
 }
 export default function ChatRoomList() {
+  const navigate = useNavigate();
+  const isLogin = !!useAppSelector((state) => state.loginUser.user.userName);
+
+  useEffect(() => {
+    if (!isLogin) {
+      alert("로그인 후 이용해 주세요");
+      navigate(-1);
+    }
+  }, [isLogin]);
+
   // Treat a certain room ------------------------------------------- //
   const [searchParam] = useSearchParams();
   const currentRoomId = searchParam.get("roomId");
@@ -142,7 +152,6 @@ export default function ChatRoomList() {
   }, [currentRoomId]);
 
   // Handle window resizing ----------------------------------------- //
-  const navigate = useNavigate();
   const isMobile = useWhetherItIsMobile();
   const isTablet = useWhetherItIsTablet();
 

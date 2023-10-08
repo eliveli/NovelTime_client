@@ -1,19 +1,14 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { ChatRoom, Message } from "store/serverAPIs/types";
+import socket from "store/serverAPIs/socket.io";
+import { ChatRoom, Message, MessagesWithPartner } from "store/serverAPIs/types";
 
 export type IsChatState = {
   rooms: ChatRoom[];
 
   allUnreadMsgNo: number;
 
-  // * below will change
-  partnerUser: {
-    userName: string;
-    userImg: { src: string; position: string };
-  };
-
-  roomIDsLoginUserJoins: string[];
+  allMessages: { [roomId: string]: MessagesWithPartner };
 };
 
 const initialState: IsChatState = {
@@ -21,12 +16,7 @@ const initialState: IsChatState = {
 
   allUnreadMsgNo: 0,
 
-  partnerUser: {
-    userName: "",
-    userImg: { src: "", position: "" },
-  },
-
-  roomIDsLoginUserJoins: [],
+  allMessages: {},
 };
 
 export const chatSlice = createSlice({
@@ -46,12 +36,12 @@ export const chatSlice = createSlice({
       state.allUnreadMsgNo = unreadMsgNoOfAllRooms;
     },
 
-    setNewMsgInTheRoom: (
+    treatNewMessage: (
       state,
       action: PayloadAction<{
         newMessage: Message;
         loginUserName: string;
-        currentRoomId?: string; // when user sees a chatroom in room list
+        currentRoomId?: string; // when user entered a chatroom
       }>,
     ) => {
       const { newMessage, loginUserName, currentRoomId } = action.payload;
@@ -67,8 +57,10 @@ export const chatSlice = createSlice({
 
       const index = state.rooms.findIndex((room) => room.roomId === roomIdOfNewMsg);
 
+      // Treat rooms ----------------------------------------------
       // when partner user sends a new message
       if (senderUserName !== loginUserName) {
+        // there's no room for the message
         // add a new room
         if (index === -1) {
           state.rooms.push({
@@ -112,12 +104,49 @@ export const chatSlice = createSlice({
         latestMessageContent: content,
         unreadMessageNo: 0,
       };
+
+      // Treat Messages ------------------------------------------------
+      // partner user sends a message to the room that the login user is in
+      if (currentRoomId === roomIdOfNewMsg && newMessage.senderUserName !== loginUserName) {
+        socket.emit("change message read", newMessage.messageId);
+
+        // Set "isReadByReceiver" is true
+        // - to mark a first message unread by login user
+        // - this mark is for partner user's message. no need to mark for login user's
+        const newMessageSet = { ...newMessage, isReadByReceiver: true };
+        state.allMessages[currentRoomId]?.messages.push(newMessageSet);
+
+        // Set new message to the message list identified by the room
+        state.allMessages[currentRoomId] = {
+          // - add a new property [roomId] in messages if it doesn't exist
+          partnerUser: {
+            userImg: newMessageSet.senderUserImg,
+            userName: newMessageSet.senderUserName,
+          },
+          messages: state.allMessages[currentRoomId]
+            ? [...state.allMessages[currentRoomId].messages, newMessageSet]
+            : [newMessageSet],
+        };
+      } else {
+        // Get partner user from state.rooms
+        const indexOfRoom = state.rooms.findIndex((room) => room.roomId === roomIdOfNewMsg);
+        const { partnerUserName: partnerUserNameOfNewMsg, partnerUserImg: partnerUserImgOfNewMsg } =
+          state.rooms[indexOfRoom];
+
+        // Set new message to the message list identified by the room
+        state.allMessages[roomIdOfNewMsg] = {
+          // - add a new property [roomId] in messages if it doesn't exist
+          partnerUser: { userImg: partnerUserImgOfNewMsg, userName: partnerUserNameOfNewMsg },
+          messages: state.allMessages[roomIdOfNewMsg]
+            ? [...state.allMessages[roomIdOfNewMsg].messages, newMessage]
+            : [newMessage],
+        };
+      }
     },
 
     decreaseUnreadMsgNo: (state, action: PayloadAction<{ currentRoomId: string }>) => {
       // change "unreadMessageNo" to 0 of current room
       const index = state.rooms.findIndex((room) => room.roomId === action.payload.currentRoomId);
-
       state.allUnreadMsgNo -= state.rooms[index].unreadMessageNo;
 
       state.rooms[index] = {
@@ -126,30 +155,12 @@ export const chatSlice = createSlice({
       };
     },
 
-    setPartnerUser: (
-      state,
-      action: PayloadAction<{
-        userName: string;
-        userImg: { src: string; position: string };
-      }>,
-    ) => {
-      state.partnerUser = action.payload;
-    },
-    setRoomUserJoined: (state, action: PayloadAction<string>) => {
-      state.roomIDsLoginUserJoins.push(action.payload);
-    },
-    setMultipleRoomsUserJoined: (state, action: PayloadAction<string[]>) => {
-      state.roomIDsLoginUserJoins.push(...action.payload);
+    setMessages: (state, action: PayloadAction<{ roomId: string; data: MessagesWithPartner }>) => {
+      const { roomId, data } = action.payload;
+      state.allMessages[roomId] = data;
     },
   },
 });
-export const {
-  setRooms,
-  setNewMsgInTheRoom,
-  decreaseUnreadMsgNo,
-  setPartnerUser,
-  setRoomUserJoined,
-  setMultipleRoomsUserJoined,
-} = chatSlice.actions;
+export const { setRooms, treatNewMessage, decreaseUnreadMsgNo, setMessages } = chatSlice.actions;
 
 export default chatSlice.reducer;

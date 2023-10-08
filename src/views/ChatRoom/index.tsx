@@ -1,13 +1,11 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { isThePath, useWhetherItIsTablet } from "utils";
 import { CHAT_ROOM_LIST, CHAT_ROOM } from "utils/pathname";
-import { useGetMessagesQuery } from "store/serverAPIs/novelTime";
 import { useAppDispatch, useAppSelector } from "store/hooks";
-import { Message as TypeMessage } from "store/serverAPIs/types";
-import Spinner from "assets/Spinner";
+import { MessagesWithPartner, Message as TypeMessage } from "store/serverAPIs/types";
 import socket from "store/serverAPIs/socket.io";
-import { setPartnerUser, setRoomUserJoined } from "store/clientSlices/chatSlice";
+import { setMessages } from "store/clientSlices/chatSlice";
 import {
   AllMessageContainer,
   UserAndContentContainer,
@@ -132,77 +130,84 @@ export default function ChatRoom({ roomIdTablet }: { roomIdTablet?: string }) {
   const { roomId: roomIdMobile } = useParams();
   const roomId = roomIdTablet || roomIdMobile;
 
-  const [allMessages, setAllMessages] = useState<TypeMessage[]>([]);
-
   const {
     userId: loginUserId,
     userName: loginUserName,
     userImg: loginUserImg,
   } = useAppSelector((state) => state.loginUser.user);
 
-  // to send query by changing arg not to use cache data
-  //    when choosing other room in chat room list page on tablet
-  const getUniqueValue = () => Math.floor(Date.now() * Math.random());
-  const valueForNoCache = useRef(getUniqueValue());
-  const prevRoomId = useRef(roomId);
-  useEffect(() => {
-    if (!roomId) return;
-
-    if (roomId !== prevRoomId.current) {
-      valueForNoCache.current = getUniqueValue();
-      prevRoomId.current = roomId;
-    }
-  }, [roomId]);
-
-  const messageResult = useGetMessagesQuery(
-    { roomId: roomId as string, valueForNoCache: valueForNoCache.current },
-    {
-      skip: !loginUserName,
-      // - if login user refreshes page, query works after login user info is put in user slice
-    },
-  );
-
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+
+  // Handle when non-login user comes in ------------------------------------ //
+  useEffect(() => {
+    if (!window.location.pathname.includes(`${CHAT_ROOM}/`)) return;
+    // - avoid to handle non-login case repeatedly with one in chat room list
+
+    if (!loginUserId) {
+      alert("로그인 후 이용해 주세요");
+      navigate(-1);
+    }
+  }, [loginUserId]);
+
+  // Get messages in the room and Handle errors ----------------------------- //
+  const messagesInThisRoom = useAppSelector((state) => state.chat.allMessages[String(roomId)]);
 
   useEffect(() => {
-    if (!messageResult.error) return;
+    if (!roomId || !loginUserId) return;
 
-    if ("data" in messageResult.error && "message" in messageResult.error.data) {
-      if (messageResult.error.data.message === "room doesn't exist") {
+    if (messagesInThisRoom) return;
+
+    socket.emit("get messages", { roomId, userId: loginUserId });
+  }, [roomId, loginUserId]);
+
+  type MessagesWithSocket = {
+    status: number;
+    data?: MessagesWithPartner;
+    error?: { message?: string };
+  };
+
+  const setMessagesWithSocket = ({ status, data, error }: MessagesWithSocket) => {
+    if (status === 200 && data && roomId) {
+      dispatch(setMessages({ roomId, data }));
+      return;
+    }
+
+    if (status === 400 && error) {
+      if (error.message === "room doesn't exist") {
         alert("방이 존재하지 않습니다");
-        //
-      } else if (messageResult.error.data.message === "user is not in the room") {
+      }
+
+      if (error.message === "user is not in the room") {
         alert(`${loginUserName}님이 참여한 방이 아닙니다`);
-        //
-      } else {
-        alert(`메시지를 불러올 수 없습니다`);
       }
 
       navigate(-1);
+      return;
     }
-  }, [messageResult.error]);
 
-  const dispatch = useAppDispatch();
+    if (status === 500) {
+      alert(`메시지를 불러올 수 없습니다`);
+
+      navigate(-1);
+    }
+  };
 
   useEffect(() => {
-    if (!messageResult.data) return;
+    socket.on("messages in the room", setMessagesWithSocket);
 
-    dispatch(setPartnerUser(messageResult.data.partnerUser));
+    return () => {
+      socket.off("messages in the room", setMessagesWithSocket);
+    };
+  }, [roomId]);
 
-    if (!messageResult.data.messages.length) return;
-
-    setAllMessages([...messageResult.data.messages]);
-  }, [messageResult.data]);
-
+  // Display messages ------------------------------------------------------ //
   let isMessageUnread = false;
   const checkMessageUnread = (
     senderUserName: string,
     isReadByReceiver: boolean,
-    isNewMessage: boolean,
     messageIndex: number,
   ) => {
-    if (isNewMessage) return undefined; // not for new message with socket
-
     // login user is the receiver
     if (loginUserName === senderUserName) return undefined;
 
@@ -246,7 +251,7 @@ export default function ChatRoom({ roomIdTablet }: { roomIdTablet?: string }) {
 
   const dateCriterion = useRef({ date: "", isNewDate: false });
 
-  // for realtime communication //
+  // Send a new message ------------------------------------------------- //
   const sendMessage = (content: string) => {
     socket.emit("send message", {
       roomId,
@@ -257,41 +262,10 @@ export default function ChatRoom({ roomIdTablet }: { roomIdTablet?: string }) {
     });
   };
 
-  const roomIDsUserJoins = useAppSelector((state) => state.chat.roomIDsLoginUserJoins);
-
-  useEffect(() => {
-    if (!roomId) return;
-
-    if (isThePath(CHAT_ROOM_LIST)) return; // joined already
-
-    if (roomIDsUserJoins.includes(roomId)) return; // joined already
-
-    socket.emit("join a room", roomId);
-
-    dispatch(setRoomUserJoined(roomId));
-  }, [roomId, roomIDsUserJoins]);
-
-  const setNewMessage = (newMessage: TypeMessage) => {
-    setAllMessages((prev) => [...prev, newMessage]);
-
-    if (newMessage.senderUserName !== loginUserName) {
-      socket.emit("change message read", newMessage.messageId);
-    }
-  };
-
-  useEffect(() => {
-    socket.on("new message", setNewMessage);
-
-    // need to remove the event to get "loginUserName" changed
-    return () => {
-      socket.off("new message", setNewMessage);
-    };
-  }, [loginUserName]);
-
+  // Handle window resizing -------------------------------------------------- //
   const isTablet = useWhetherItIsTablet();
 
   useEffect(() => {
-    // handle window resizing
     if (isTablet && isThePath(CHAT_ROOM) && roomId) {
       navigate(`${CHAT_ROOM_LIST}?roomId=${roomId}`, { replace: true });
     }
@@ -299,24 +273,21 @@ export default function ChatRoom({ roomIdTablet }: { roomIdTablet?: string }) {
 
   return (
     <ChatRoomContainer>
-      {messageResult.isFetching && <Spinner styles="fixed" />}
-
       <AllMessageContainer>
-        {allMessages.map((_, idx) => {
-          const previousMessage = idx > 0 ? allMessages[idx - 1] : undefined;
+        {messagesInThisRoom?.messages.map((_, idx) => {
+          const { messages } = messagesInThisRoom;
+          const previousMessage = idx > 0 ? messages[idx - 1] : undefined;
 
-          const nextMessage =
-            allMessages && idx < allMessages.length - 1 ? allMessages[idx + 1] : undefined;
+          const isNewMessage = false; // * fix code related in displaying unread message and other
 
-          const isNewMessage = !!messageResult.data && messageResult.data.messages.length - 1 < idx;
+          const nextMessage = messages && idx < messages.length - 1 ? messages[idx + 1] : undefined;
 
           const isFirstMessageUnread = checkMessageUnread(
             _.senderUserName,
             _.isReadByReceiver,
-            isNewMessage,
             idx,
           );
-          const isLastMessage = allMessages.length > 0 && allMessages.length - 1 === idx;
+          const isLastMessage = messages.length > 0 && messages.length - 1 === idx;
 
           const isLatestNewMessage = isNewMessage && isLastMessage;
 
