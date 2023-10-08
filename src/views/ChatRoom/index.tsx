@@ -5,7 +5,7 @@ import { CHAT_ROOM_LIST, CHAT_ROOM } from "utils/pathname";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { MessagesWithPartner, Message as TypeMessage } from "store/serverAPIs/types";
 import socket from "store/serverAPIs/socket.io";
-import { setMessages } from "store/clientSlices/chatSlice";
+import { changeMsgsUnread, decreaseUnreadMsgNo, setMessages } from "store/clientSlices/chatSlice";
 import {
   AllMessageContainer,
   UserAndContentContainer,
@@ -32,7 +32,7 @@ interface MessageProps {
   isMyMessage: boolean;
   isMessageToRead: boolean;
   dateCriterion: DateCriterion;
-  isFirstMessageUnread?: true;
+  isFirstMessageUnread: boolean;
 }
 interface PartnerMessageProps {
   message: TypeMessage;
@@ -195,31 +195,35 @@ export default function ChatRoom({ roomIdTablet }: { roomIdTablet?: string }) {
     };
   }, [roomId]);
 
+  // Change unreadMessageNo whenever choosing a room --------------------- //
+  useEffect(() => {
+    if (!roomId) return;
+
+    dispatch(decreaseUnreadMsgNo({ currentRoomId: roomId }));
+  }, [roomId]);
+
+  // Treat first unread message of the current room ----------------------- //
+  const idxOfFirstMsgUnread = useRef<number>(-1);
+
+  useEffect(() => {
+    if (!roomId) return;
+
+    // Set the index of first message unread by login user in current room
+    const index = messagesInThisRoom.messages.findIndex(
+      (message) =>
+        message.senderUserName === messagesInThisRoom.partnerUser.userName &&
+        message.isReadByReceiver === false,
+    );
+    idxOfFirstMsgUnread.current = index;
+
+    // Change isReadByReceiver to true of messages in current room
+    dispatch(changeMsgsUnread({ roomId }));
+
+    // Whenever new message comes in, Change isReadByReceiver to true
+    //  - This works with treatNewMessage in chatSlice
+  }, [roomId]);
+
   // Display messages ------------------------------------------------------ //
-  let isMessageUnread = false;
-  const checkMessageUnread = (
-    senderUserName: string,
-    isReadByReceiver: boolean,
-    messageIndex: number,
-  ) => {
-    // login user is the receiver
-    if (loginUserName === senderUserName) return undefined;
-
-    if (isMessageUnread) return undefined;
-
-    // don't display the unread message text
-    // when first message in the room was sent by partner and wasn't read by the login user
-    if (messageIndex === 0 && !isMessageUnread && !isReadByReceiver) {
-      isMessageUnread = true;
-      return undefined;
-    }
-
-    if (!isMessageUnread && !isReadByReceiver) {
-      isMessageUnread = true;
-      return true; // first message unread by the login user (not first one in the room)
-    }
-    return undefined;
-  };
 
   const checkCreateTimeIsNeeded = (
     currentUser: string,
@@ -234,10 +238,10 @@ export default function ChatRoom({ roomIdTablet }: { roomIdTablet?: string }) {
   const checkPartnerUserImgIsNeeded = (
     currentUser: string,
     currentCreateDate: string,
+    isFirstMessageUnread: boolean,
 
     prevUser?: string,
     prevCreateDate?: string,
-    isFirstMessageUnread?: true,
   ) =>
     currentUser !== prevUser ||
     currentCreateDate !== prevCreateDate ||
@@ -245,7 +249,7 @@ export default function ChatRoom({ roomIdTablet }: { roomIdTablet?: string }) {
 
   const dateCriterion = useRef({ date: "", isNewDate: false });
 
-  // Send a new message ------------------------------------------------- //
+  // Send a new message ----------------------------------------------------- //
   const sendMessage = (content: string) => {
     socket.emit("send message", {
       roomId,
@@ -276,20 +280,18 @@ export default function ChatRoom({ roomIdTablet }: { roomIdTablet?: string }) {
 
           const nextMessage = messages && idx < messages.length - 1 ? messages[idx + 1] : undefined;
 
-          const isFirstMessageUnread = checkMessageUnread(
-            _.senderUserName,
-            _.isReadByReceiver,
-            idx,
-          );
+          const isFirstMessageUnread = idxOfFirstMsgUnread.current === idx;
+
           const isLastMessage = messages.length > 0 && messages.length - 1 === idx;
 
           const isLatestNewMessage = isNewMessage && isLastMessage;
 
           // last message when there's no message unread by login user and no new message
-          const isLastMsgNotUnreadOrNewOne = !isMessageUnread && !isNewMessage && isLastMessage;
+          // const isLastMsgNotUnreadOrNewOne = !isMessageUnread && !isNewMessage && isLastMessage;
+          const isLastMsgNotUnreadOrNewOne = false; // * fix
 
-          const isMessageToRead =
-            isFirstMessageUnread || isLatestNewMessage || isLastMsgNotUnreadOrNewOne;
+          const isMessageToRead = false; // * fix
+          // isFirstMessageUnread || isLatestNewMessage || isLastMsgNotUnreadOrNewOne;
 
           return (
             <Message
@@ -308,9 +310,9 @@ export default function ChatRoom({ roomIdTablet }: { roomIdTablet?: string }) {
               isNeededPartnerUserImg={checkPartnerUserImgIsNeeded(
                 _.senderUserName,
                 _.createDate,
+                isFirstMessageUnread,
                 previousMessage?.senderUserName,
                 previousMessage?.createDate,
-                isFirstMessageUnread,
               )}
               isMessageToRead={isMessageToRead}
               message={_}

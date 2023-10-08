@@ -59,7 +59,7 @@ export const chatSlice = createSlice({
 
       const roomThatMsgCameIn = state.rooms[roomIdOfNewMsg];
 
-      // Treat rooms ----------------------------------------------
+      // Treat rooms ------------------------------------------------------------ //
       // when partner user sends a new message
       if (senderUserName !== loginUserName) {
         // there's no room for the message
@@ -106,16 +106,16 @@ export const chatSlice = createSlice({
         latestMessageContent: content,
         unreadMessageNo: 0,
       };
-      // Treat Messages ------------------------------------------------
+
+      // Treat Messages --------------------------------------------------------- //
       // partner user sends a message to the room that the login user is in
       if (currentRoomId === roomIdOfNewMsg && newMessage.senderUserName !== loginUserName) {
         socket.emit("change message read", newMessage.messageId);
 
         // Set "isReadByReceiver" is true
-        // - to mark a first message unread by login user
+        // - to mark a first message unread by login user in next visit to this room
         // - this mark is for partner user's message. no need to mark for login user's
         const newMessageSet = { ...newMessage, isReadByReceiver: true };
-        state.allMessages[currentRoomId]?.messages.push(newMessageSet);
 
         // Set new message to the message list identified by the room
         state.allMessages[currentRoomId] = {
@@ -132,6 +132,9 @@ export const chatSlice = createSlice({
         // Get partner user from state.rooms
         const { partnerUserName: partnerUserNameOfNewMsg, partnerUserImg: partnerUserImgOfNewMsg } =
           state.rooms[roomIdOfNewMsg];
+        // - if a partner user sends a message at first,
+        //    the room holding the partner data exists already.
+        //   it was added in the code to treat the room above
 
         // Set new message to the message list identified by the room
         state.allMessages[roomIdOfNewMsg] = {
@@ -161,10 +164,26 @@ export const chatSlice = createSlice({
 
     setMessages: (state, action: PayloadAction<{ roomId: string; data: MessagesWithPartner }>) => {
       const { roomId, data } = action.payload;
+
       state.allMessages[roomId] = data;
+    },
+
+    changeMsgsUnread: (state, action: PayloadAction<{ roomId: string }>) => {
+      const { partnerUser, messages } = state.allMessages[action.payload.roomId];
+
+      state.allMessages[action.payload.roomId].messages = messages.map((message) => {
+        if (message.senderUserName === partnerUser.userName && message.isReadByReceiver === false) {
+          return {
+            ...message,
+            isReadByReceiver: true,
+          };
+        }
+        return message;
+      });
     },
   },
 });
-export const { setRooms, treatNewMessage, decreaseUnreadMsgNo, setMessages } = chatSlice.actions;
+export const { setRooms, treatNewMessage, decreaseUnreadMsgNo, setMessages, changeMsgsUnread } =
+  chatSlice.actions;
 
 export default chatSlice.reducer;

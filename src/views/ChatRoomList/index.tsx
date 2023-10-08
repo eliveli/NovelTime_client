@@ -1,6 +1,6 @@
 import MainBG from "components/MainBG";
 import { useEffect, useRef, useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   getCurrentRoomId,
   useComponentWidth,
@@ -11,8 +11,7 @@ import ChatRoom from "views/ChatRoom";
 import { ChatRoomNav } from "views/Nav/Nav.components";
 import { CHAT_ROOM, CHAT_ROOM_LIST } from "utils/pathname";
 import { ChatRoom as TypeChatRoom } from "store/serverAPIs/types";
-import { useAppDispatch, useAppSelector } from "store/hooks";
-import { decreaseUnreadMsgNo } from "store/clientSlices/chatSlice";
+import { useAppSelector } from "store/hooks";
 import {
   ChatRoomCntnr,
   ChatRoomListCntnr,
@@ -129,22 +128,14 @@ function ChatRoomPreview({ chatRoom, isRoomSpread, roomIdSelected }: ChatRoomPre
 export default function ChatRoomList() {
   const navigate = useNavigate();
 
+  const rooms = useAppSelector((state) => state.chat.rooms);
+
   // Treat a certain room ------------------------------------------- //
   const currentRoomId = getCurrentRoomId();
   // - if roomId is empty string, display room list only (not with a certain room)
 
   const [isRoomSpread, handleRoomSpread] = useState(false);
   const roomSpread = { isRoomSpread, spreadRoomOrNot: () => handleRoomSpread(!isRoomSpread) };
-
-  const rooms = useAppSelector((state) => state.chat.rooms);
-  const dispatch = useAppDispatch();
-
-  // Change unreadMessageNo whenever choosing a room ---------------- //
-  useEffect(() => {
-    if (!currentRoomId) return;
-
-    dispatch(decreaseUnreadMsgNo({ currentRoomId }));
-  }, [currentRoomId]);
 
   // Handle window resizing ----------------------------------------- //
   const isMobile = useWhetherItIsMobile();
