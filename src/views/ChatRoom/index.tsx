@@ -195,14 +195,18 @@ export default function ChatRoom({ roomIdTablet }: { roomIdTablet?: string }) {
     };
   }, [roomId]);
 
+  // Check if new message came in
+  const prevMsgLength = useRef(-1); // set when entering here
+  const isNewMessage = prevMsgLength.current < messagesInThisRoom?.messages.length;
+
   // Treat first unread message of the current room ----------------------- //
   const idxOfFirstMsgUnread = useRef<number>(-1);
 
   useEffect(() => {
-    if (!roomId) return;
+    if (!roomId || !messagesInThisRoom) return;
 
     // Set the index of first message unread by login user in current room
-    const index = messagesInThisRoom?.messages.findIndex(
+    const index = messagesInThisRoom.messages.findIndex(
       (message) =>
         message.senderUserName === messagesInThisRoom.partnerUser.userName &&
         message.isReadByReceiver === false,
@@ -214,10 +218,13 @@ export default function ChatRoom({ roomIdTablet }: { roomIdTablet?: string }) {
 
     // Whenever new message comes in, Change isReadByReceiver to true
     //  - This works with treatNewMessage in chatSlice
+
+    // To check when new message came in //
+    prevMsgLength.current = messagesInThisRoom.messages.length;
+    //
   }, [roomId]);
 
   // Display messages ------------------------------------------------------ //
-
   const checkCreateTimeIsNeeded = (
     currentUser: string,
     currentTime: string,
@@ -269,22 +276,19 @@ export default function ChatRoom({ roomIdTablet }: { roomIdTablet?: string }) {
           const { messages } = messagesInThisRoom;
           const previousMessage = idx > 0 ? messages[idx - 1] : undefined;
 
-          const isNewMessage = false; // * fix code related in displaying unread message and other
-
           const nextMessage = messages && idx < messages.length - 1 ? messages[idx + 1] : undefined;
 
-          const isFirstMessageUnread = idxOfFirstMsgUnread.current === idx;
+          const isFirstMessageUnread = idx !== 0 && idxOfFirstMsgUnread.current === idx;
+          // (idx !== 0) Except for when an user didn't read any messages before
+          //             Don't display unread message mark at the top of all in the room
+          //             and Scrolling doesn't work
 
-          const isLastMessage = messages.length > 0 && messages.length - 1 === idx;
+          // last message when there's no message unread by login user
+          const isLastAndReadInAll =
+            idxOfFirstMsgUnread.current === -1 && idx === prevMsgLength.current - 1;
 
-          const isLatestNewMessage = isNewMessage && isLastMessage;
-
-          // last message when there's no message unread by login user and no new message
-          // const isLastMsgNotUnreadOrNewOne = !isMessageUnread && !isNewMessage && isLastMessage;
-          const isLastMsgNotUnreadOrNewOne = false; // * fix
-
-          const isMessageToRead = false; // * fix
-          // isFirstMessageUnread || isLatestNewMessage || isLastMsgNotUnreadOrNewOne;
+          // Scroll to the message when entering here. not works when new message comes
+          const isMessageToRead = !isNewMessage && (isFirstMessageUnread || isLastAndReadInAll);
 
           return (
             <Message
