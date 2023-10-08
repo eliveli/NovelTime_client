@@ -5,7 +5,7 @@ import { CHAT_ROOM_LIST, CHAT_ROOM } from "utils/pathname";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { MessagesWithPartner, Message as TypeMessage } from "store/serverAPIs/types";
 import socket from "store/serverAPIs/socket.io";
-import { changeMsgsUnread, decreaseUnreadMsgNo, setMessages } from "store/clientSlices/chatSlice";
+import { changeMsgsUnread, setMessages } from "store/clientSlices/chatSlice";
 import {
   AllMessageContainer,
   UserAndContentContainer,
@@ -195,13 +195,6 @@ export default function ChatRoom({ roomIdTablet }: { roomIdTablet?: string }) {
     };
   }, [roomId]);
 
-  // Change unreadMessageNo whenever choosing a room --------------------- //
-  useEffect(() => {
-    if (!roomId) return;
-
-    dispatch(decreaseUnreadMsgNo({ currentRoomId: roomId }));
-  }, [roomId]);
-
   // Treat first unread message of the current room ----------------------- //
   const idxOfFirstMsgUnread = useRef<number>(-1);
 
@@ -209,14 +202,14 @@ export default function ChatRoom({ roomIdTablet }: { roomIdTablet?: string }) {
     if (!roomId) return;
 
     // Set the index of first message unread by login user in current room
-    const index = messagesInThisRoom.messages.findIndex(
+    const index = messagesInThisRoom?.messages.findIndex(
       (message) =>
         message.senderUserName === messagesInThisRoom.partnerUser.userName &&
         message.isReadByReceiver === false,
     );
     idxOfFirstMsgUnread.current = index;
 
-    // Change isReadByReceiver to true of messages in current room
+    // Change isReadByReceiver in allMessages and unreadMessageNo in rooms
     dispatch(changeMsgsUnread({ roomId }));
 
     // Whenever new message comes in, Change isReadByReceiver to true

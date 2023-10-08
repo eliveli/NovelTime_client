@@ -146,30 +146,21 @@ export const chatSlice = createSlice({
         };
       }
     },
-
-    decreaseUnreadMsgNo: (state, action: PayloadAction<{ currentRoomId: string }>) => {
-      // change "unreadMessageNo" to 0 of current room
-      const currentRoom = state.rooms[action.payload.currentRoomId];
-      if (!currentRoom) {
-        return;
-      }
-
-      state.allUnreadMsgNo -= currentRoom.unreadMessageNo;
-
-      state.rooms[action.payload.currentRoomId] = {
-        ...currentRoom,
-        unreadMessageNo: 0,
-      };
-    },
-
     setMessages: (state, action: PayloadAction<{ roomId: string; data: MessagesWithPartner }>) => {
       const { roomId, data } = action.payload;
 
       state.allMessages[roomId] = data;
     },
 
+    // it works whenever choosing a room
     changeMsgsUnread: (state, action: PayloadAction<{ roomId: string }>) => {
-      const { partnerUser, messages } = state.allMessages[action.payload.roomId];
+      // Treat messages ------------------------------------------------------ //
+
+      // Set "isReadByReceiver" to true of messages in current room
+      const room = state.allMessages[action.payload.roomId];
+      if (!room) return;
+
+      const { partnerUser, messages } = room;
 
       state.allMessages[action.payload.roomId].messages = messages.map((message) => {
         if (message.senderUserName === partnerUser.userName && message.isReadByReceiver === false) {
@@ -180,10 +171,22 @@ export const chatSlice = createSlice({
         }
         return message;
       });
+
+      // Treat the room -------------------------------------------------------- //
+      const currentRoom = state.rooms[action.payload.roomId];
+      if (!currentRoom) return;
+
+      // Reduce all of unread message numbers in all rooms
+      state.allUnreadMsgNo -= currentRoom.unreadMessageNo;
+
+      // Change "unreadMessageNo" to 0 of current room
+      state.rooms[action.payload.roomId] = {
+        ...currentRoom,
+        unreadMessageNo: 0,
+      };
     },
   },
 });
-export const { setRooms, treatNewMessage, decreaseUnreadMsgNo, setMessages, changeMsgsUnread } =
-  chatSlice.actions;
+export const { setRooms, treatNewMessage, setMessages, changeMsgsUnread } = chatSlice.actions;
 
 export default chatSlice.reducer;
