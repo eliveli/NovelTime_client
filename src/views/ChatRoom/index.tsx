@@ -139,16 +139,10 @@ export default function ChatRoom({ roomIdTablet }: { roomIdTablet?: string }) {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  // Handle when non-login user comes in ------------------------------------ //
-  useEffect(() => {
-    if (!window.location.pathname.includes(`${CHAT_ROOM}/`)) return;
-    // - avoid to handle non-login case repeatedly with one in chat room list
-
-    if (!loginUserId) {
-      alert("로그인 후 이용해 주세요");
-      navigate(-1);
-    }
-  }, [loginUserId]);
+  // Don't handle the case where non-login user comes in
+  //  because the login user can refresh this page and be a non-login user for a second
+  //  and basically non-login user can't enter chatroom or chatroom list
+  //     by clicking message icons on nav bar or in an user page
 
   // Get messages in the room and Handle errors ----------------------------- //
   const messagesInThisRoom = useAppSelector((state) => state.chat.allMessages[String(roomId)]);

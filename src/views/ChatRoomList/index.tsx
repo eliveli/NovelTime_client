@@ -1,7 +1,12 @@
 import MainBG from "components/MainBG";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { useComponentWidth, useWhetherItIsMobile, useWhetherItIsTablet } from "utils";
+import {
+  getCurrentRoomId,
+  useComponentWidth,
+  useWhetherItIsMobile,
+  useWhetherItIsTablet,
+} from "utils";
 import ChatRoom from "views/ChatRoom";
 import { ChatRoomNav } from "views/Nav/Nav.components";
 import { CHAT_ROOM, CHAT_ROOM_LIST } from "utils/pathname";
@@ -123,18 +128,10 @@ function ChatRoomPreview({ chatRoom, isRoomSpread, roomIdSelected }: ChatRoomPre
 }
 export default function ChatRoomList() {
   const navigate = useNavigate();
-  const isLogin = !!useAppSelector((state) => state.loginUser.user.userName);
-  useEffect(() => {
-    if (!isLogin) {
-      alert("로그인 후 이용해 주세요");
-      navigate(-1);
-    }
-  }, [isLogin]);
 
   // Treat a certain room ------------------------------------------- //
-  const [searchParam] = useSearchParams();
-  const currentRoomId = searchParam.get("roomId");
-  // - if roomId is null, display room list only (not with a certain room)
+  const currentRoomId = getCurrentRoomId();
+  // - if roomId is empty string, display room list only (not with a certain room)
 
   const [isRoomSpread, handleRoomSpread] = useState(false);
   const roomSpread = { isRoomSpread, spreadRoomOrNot: () => handleRoomSpread(!isRoomSpread) };
