@@ -202,13 +202,13 @@ export default function ChatRoom({ roomIdTablet }: { roomIdTablet?: string }) {
     };
   }, [roomId]);
 
-  // Separate existing messages from new ones ---------------------------- //
+  // Separate existing messages from new ones ----------------------------- //
   const existingMsgLength = useRef(-1); // Set when entering here
   const isNewMessage =
     existingMsgLength.current !== -1 &&
     existingMsgLength.current < messagesInThisRoom?.messages.length;
 
-  // Display a preview to go to the latest message with click ------------- //
+  // Treat the latest message preview to go there with click -------------- //
   const [isPreviewToGoToNewMsg, handlePreviewToGoToNewMsg] = useState(false);
 
   const allMessagesRef = useRef<HTMLDivElement>(null);
@@ -218,6 +218,7 @@ export default function ChatRoom({ roomIdTablet }: { roomIdTablet?: string }) {
     if (!allMessagesRef.current || !isPreviewToGoToNewMsg) return;
 
     const isNearBottom = checkNearBottom(allMessagesRef.current, 40);
+
     if (isNearBottom) {
       handlePreviewToGoToNewMsg(false);
     }
@@ -225,10 +226,11 @@ export default function ChatRoom({ roomIdTablet }: { roomIdTablet?: string }) {
 
   useEffect(() => {
     if (!isPreviewToGoToNewMsg || !allMessagesRef.current) return;
+
     allMessagesRef.current.addEventListener("scroll", throttledScroll);
 
     return () => {
-      allMessagesRef.current.addEventListener("scroll", throttledScroll); // clean up
+      allMessagesRef.current.removeEventListener("scroll", throttledScroll); // clean up
     };
   }, [isPreviewToGoToNewMsg, allMessagesRef.current]);
 
@@ -290,16 +292,16 @@ export default function ChatRoom({ roomIdTablet }: { roomIdTablet?: string }) {
 
     // Change isReadByReceiver in allMessages and unreadMessageNo in rooms
     dispatch(changeMsgsUnread({ roomId }));
+
     // Whenever new message comes in, Change isReadByReceiver to true
     //  - This works with treatNewMessage in chatSlice
 
     // To check when new message came in //
     existingMsgLength.current = messagesInThisRoom.messages.length;
-
     //
   }, [roomId, messagesInThisRoom]);
 
-  // Display messages ------------------------------------------------------ //
+  // Check to display messages ------------------------------------------------------ //
   const checkCreateTimeIsNeeded = (
     currentUser: string,
     currentTime: string,
@@ -324,7 +326,7 @@ export default function ChatRoom({ roomIdTablet }: { roomIdTablet?: string }) {
 
   const dateCriterion = useRef({ date: "", isNewDate: false });
 
-  // Send a new message ----------------------------------------------------- //
+  // Send a new message ---------------------------------------------------------- //
   const sendMessage = (content: string) => {
     socket.emit("send message", {
       roomId,
@@ -362,9 +364,7 @@ export default function ChatRoom({ roomIdTablet }: { roomIdTablet?: string }) {
             idxOfFirstMsgUnread.current !== 0 && idxOfFirstMsgUnread.current - 1 === idx;
           // Scroll to the last message read
           // (idxOfFirstMsgUnread.current !== 0) Don't scroll when there's no message read
-
           //
-
           // last message in all existing ones and login user read it already
           const isLastAndReadMsgOfAll =
             idxOfFirstMsgUnread.current === -1 && idx === existingMsgLength.current - 1;
