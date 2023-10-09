@@ -7,7 +7,9 @@ import {
   BtnToSubmit,
   InputForMessage,
   MessageInputBox,
-  WholeContainer,
+  MsgInputWholeContainer,
+  NewMsgPreviewContainer,
+  NewMsgContent,
 } from "./ChatRoom.styles";
 
 // eslint-disable-next-line import/prefer-default-export
@@ -37,7 +39,7 @@ export function MessageInput({ sendMessage }: { sendMessage: (content: string) =
   };
 
   return (
-    <WholeContainer>
+    <MsgInputWholeContainer>
       <MessageInputBox>
         <InputForMessage
           ref={textRef}
@@ -51,6 +53,14 @@ export function MessageInput({ sendMessage }: { sendMessage: (content: string) =
       </MessageInputBox>
 
       <BtnToSubmit onClick={handleSubmit}>작성</BtnToSubmit>
-    </WholeContainer>
+    </MsgInputWholeContainer>
+  );
+}
+
+export function NewMsgPreview({ message }: { message: string }) {
+  return (
+    <NewMsgPreviewContainer>
+      <NewMsgContent>{message}</NewMsgContent>
+    </NewMsgPreviewContainer>
   );
 }

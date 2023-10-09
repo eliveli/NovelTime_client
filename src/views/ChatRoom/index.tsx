@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { isThePath, useWhetherItIsTablet } from "utils";
 import { CHAT_ROOM_LIST, CHAT_ROOM } from "utils/pathname";
@@ -19,7 +19,7 @@ import {
   ChatRoomContainer,
   MessageContainer,
 } from "./ChatRoom.styles";
-import { MessageInput } from "./ChatRoom.components";
+import { MessageInput, NewMsgPreview } from "./ChatRoom.components";
 
 type DateCriterion = React.MutableRefObject<{
   date: string;
@@ -317,6 +317,10 @@ export default function ChatRoom({ roomIdTablet }: { roomIdTablet?: string }) {
           );
         })}
       </AllMessageContainer>
+
+      <NewMsgPreview
+        message={messagesInThisRoom?.messages[messagesInThisRoom.messages.length - 1].content}
+      />
 
       <MessageInput sendMessage={sendMessage} />
     </ChatRoomContainer>

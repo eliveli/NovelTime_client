@@ -133,27 +133,27 @@ function App() {
 
   // Get a new message and Change the room that the message comes in //
 
-  const changeRoomWithMessage = (newMessage: Message) => {
-    if (!data) return;
+  const treatNewMsgInSlice = (newMessage: Message) => {
+    if (!data?.userInfo.userName) return;
 
     // for when the user entered a chatroom
 
     dispatch(
       treatNewMessage({
         newMessage,
-        loginUserName: data.userInfo.userName,
+        loginUserName: data?.userInfo.userName,
         currentRoomId: getCurrentRoomId(),
       }),
     );
   };
 
   useEffect(() => {
-    socket.on("new message", changeRoomWithMessage);
+    socket.on("new message", treatNewMsgInSlice);
 
     return () => {
-      socket.off("new message", changeRoomWithMessage);
+      socket.off("new message", treatNewMsgInSlice);
     };
-  }, []);
+  }, [data?.userInfo.userName]);
 
   return (
     <Router>

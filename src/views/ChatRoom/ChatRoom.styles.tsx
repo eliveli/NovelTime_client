@@ -5,6 +5,8 @@ import { Img } from "store/serverAPIs/types";
 export const ChatRoomContainer = styled.div`
   width: 100%;
   max-width: 860px;
+
+  position: relative;
 `;
 
 export const AllMessageContainer = styled.div`
@@ -63,10 +65,10 @@ export const UserImg = styled.div<{ userImg: Img; isShow?: boolean }>`
 export const MessageDesc = styled.div<{ isMe?: true }>`
   display: flex;
   align-items: center;
-
+  padding: 4px 11px;
   border-radius: 15px;
 
-  padding: 4px 11px;
+  white-space: pre-wrap; // allow the line break
 
   ${({ isMe }) =>
     isMe
@@ -169,7 +171,7 @@ export const BtnToSubmit = styled.button`
   font-weight: 500;
 `;
 
-export const WholeContainer = styled.div`
+export const MsgInputWholeContainer = styled.div`
   display: flex;
   align-items: center;
   padding: 15px;
@@ -195,4 +197,31 @@ export const WholeContainer = styled.div`
     left: 0;
     width: 100%;
   }
+`;
+
+export const NewMsgPreviewContainer = styled.div`
+  position: absolute;
+  bottom: 82px; // (message input height 78px) + (extra space)
+
+  padding: 6px 8px;
+  left: 4px;
+  right: 4px;
+
+  border-radius: 55px;
+  background-color: white;
+  box-shadow: 0 0 4px rgb(0 0 0 / 24%);
+`;
+
+export const NewMsgContent = styled.p`
+  color: rgba(120, 120, 120, 0.7);
+  font-size: 14px;
+  font-weight: 500;
+  font-family: "Californian FB", D2Coding, Arial, sans-serif;
+
+  margin: 0 0 -3px 0px;
+  width: calc(100% + 3px);
+  // + 3px : 표시되는 마지막 글자 크기가 width와 맞아떨어지지 않을 때 우측 간격이 비는 것 보완
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
