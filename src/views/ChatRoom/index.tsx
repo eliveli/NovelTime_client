@@ -137,6 +137,8 @@ export default function ChatRoom({ roomIdTablet }: { roomIdTablet?: string }) {
   const { roomId: roomIdMobile } = useParams();
   const roomId = roomIdTablet || roomIdMobile;
 
+  const prevRoomId = useRef(""); // to know that the user changed a room to visit
+
   const {
     userId: loginUserId,
     userName: loginUserName,
@@ -280,7 +282,10 @@ export default function ChatRoom({ roomIdTablet }: { roomIdTablet?: string }) {
   const idxOfFirstMsgUnread = useRef<number>(-1);
 
   useEffect(() => {
-    if (!roomId || !messagesInThisRoom || existingMsgLength.current !== -1) return;
+    if (!roomId || !messagesInThisRoom || prevRoomId.current === roomId) return;
+    // - Initialize several data whenever the user changes a room to visit
+
+    prevRoomId.current = roomId; // to know the roomId change
 
     // Set the index of first message unread by login user in current room
     const index = messagesInThisRoom.messages.findIndex(
@@ -301,7 +306,7 @@ export default function ChatRoom({ roomIdTablet }: { roomIdTablet?: string }) {
     //
   }, [roomId, messagesInThisRoom]);
 
-  // Check to display messages ------------------------------------------------------ //
+  // Check before message is displayed -------------------------------------------------- //
   const checkCreateTimeIsNeeded = (
     currentUser: string,
     currentTime: string,
@@ -358,7 +363,7 @@ export default function ChatRoom({ roomIdTablet }: { roomIdTablet?: string }) {
           const isFirstMessageUnread = idx !== 0 && idxOfFirstMsgUnread.current === idx;
           // (idx !== 0) Except for when an user didn't read any messages before
           //             Don't display unread message mark at the top of all in the room
-
+          //
           // previous message of first message unread
           const isLastMsgRead =
             idxOfFirstMsgUnread.current !== 0 && idxOfFirstMsgUnread.current - 1 === idx;
