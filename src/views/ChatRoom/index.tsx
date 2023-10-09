@@ -6,6 +6,7 @@ import { useAppDispatch, useAppSelector } from "store/hooks";
 import { MessagesWithPartner, Message as TypeMessage } from "store/serverAPIs/types";
 import socket from "store/serverAPIs/socket.io";
 import { changeMsgsUnread, setMessages } from "store/clientSlices/chatSlice";
+import { throttle } from "lodash";
 import {
   AllMessageContainer,
   UserAndContentContainer,
@@ -42,6 +43,13 @@ interface PartnerMessageProps {
 interface MyMessageProps {
   content: string;
   createTime?: string;
+}
+function checkNearBottom(element: HTMLElement, errorRange: number) {
+  if (element.clientHeight + element.scrollTop + errorRange >= element.scrollHeight) {
+    return true;
+  }
+
+  return false;
 }
 
 function PartnerMessage({
@@ -125,7 +133,6 @@ function Message({
     </MessageContainer>
   );
 }
-
 export default function ChatRoom({ roomIdTablet }: { roomIdTablet?: string }) {
   const { roomId: roomIdMobile } = useParams();
   const roomId = roomIdTablet || roomIdMobile;
@@ -195,15 +202,83 @@ export default function ChatRoom({ roomIdTablet }: { roomIdTablet?: string }) {
     };
   }, [roomId]);
 
-  // Check if new message came in
-  const prevMsgLength = useRef(-1); // set when entering here
-  const isNewMessage = prevMsgLength.current < messagesInThisRoom?.messages.length;
+  // Separate existing messages from new ones ---------------------------- //
+  const existingMsgLength = useRef(-1); // Set when entering here
+  const isNewMessage =
+    existingMsgLength.current !== -1 &&
+    existingMsgLength.current < messagesInThisRoom?.messages.length;
+
+  // Display a preview to go to the latest message with click ------------- //
+  const [isPreviewToGoToNewMsg, handlePreviewToGoToNewMsg] = useState(false);
+
+  const allMessagesRef = useRef<HTMLDivElement>(null);
+
+  // Remove the preview when y-scroll is near bottom
+  const throttledScroll = throttle(() => {
+    if (!allMessagesRef.current || !isPreviewToGoToNewMsg) return;
+
+    const isNearBottom = checkNearBottom(allMessagesRef.current, 40);
+    if (isNearBottom) {
+      handlePreviewToGoToNewMsg(false);
+    }
+  }, 400);
+
+  useEffect(() => {
+    if (!isPreviewToGoToNewMsg || !allMessagesRef.current) return;
+    allMessagesRef.current.addEventListener("scroll", throttledScroll);
+
+    return () => {
+      allMessagesRef.current.addEventListener("scroll", throttledScroll); // clean up
+    };
+  }, [isPreviewToGoToNewMsg, allMessagesRef.current]);
+
+  // The preview appears when a new message comes in that was sent by the partner
+  //  except when the y-scroll is near the bottom.
+  //  As clicking it, the user can go to the latest message automatically.
+  // If the message was sent by login user, he/she goes to the message directly without preview.
+  useEffect(() => {
+    if (!messagesInThisRoom?.messages.length) return;
+
+    if (isNewMessage) {
+      if (
+        messagesInThisRoom.messages[messagesInThisRoom.messages.length - 1].senderUserName ===
+        loginUserName
+      ) {
+        handlePreviewToGoToNewMsg(false);
+        return;
+      }
+
+      const isNearBottom = allMessagesRef.current && checkNearBottom(allMessagesRef.current, 40);
+
+      if (!isNearBottom) {
+        // Display the preview
+        //  when the partner send the message when y-scroll is not near bottom
+        handlePreviewToGoToNewMsg(true);
+      }
+    }
+  }, [messagesInThisRoom?.messages, allMessagesRef.current]);
+
+  const handleClosePreview = (event: React.MouseEvent<HTMLDivElement>) => {
+    if (!allMessagesRef.current) return;
+
+    event.preventDefault();
+    event.stopPropagation();
+
+    handlePreviewToGoToNewMsg(false);
+
+    // Scroll to the bottom
+    const scrollY = allMessagesRef.current.scrollHeight;
+    allMessagesRef.current.scrollTo(0, scrollY);
+    // - This scrollY value is more than one it can be with scrollTo()
+    //   but this goes to the bottom of the component
+    // - ScrollIntoView doesn't work. so I use this instead
+  };
 
   // Treat first unread message of the current room ----------------------- //
   const idxOfFirstMsgUnread = useRef<number>(-1);
 
   useEffect(() => {
-    if (!roomId || !messagesInThisRoom) return;
+    if (!roomId || !messagesInThisRoom || existingMsgLength.current !== -1) return;
 
     // Set the index of first message unread by login user in current room
     const index = messagesInThisRoom.messages.findIndex(
@@ -215,14 +290,14 @@ export default function ChatRoom({ roomIdTablet }: { roomIdTablet?: string }) {
 
     // Change isReadByReceiver in allMessages and unreadMessageNo in rooms
     dispatch(changeMsgsUnread({ roomId }));
-
     // Whenever new message comes in, Change isReadByReceiver to true
     //  - This works with treatNewMessage in chatSlice
 
     // To check when new message came in //
-    prevMsgLength.current = messagesInThisRoom.messages.length;
+    existingMsgLength.current = messagesInThisRoom.messages.length;
+
     //
-  }, [roomId]);
+  }, [roomId, messagesInThisRoom]);
 
   // Display messages ------------------------------------------------------ //
   const checkCreateTimeIsNeeded = (
@@ -271,7 +346,7 @@ export default function ChatRoom({ roomIdTablet }: { roomIdTablet?: string }) {
 
   return (
     <ChatRoomContainer>
-      <AllMessageContainer>
+      <AllMessageContainer ref={allMessagesRef}>
         {messagesInThisRoom?.messages.map((_, idx) => {
           const { messages } = messagesInThisRoom;
           const previousMessage = idx > 0 ? messages[idx - 1] : undefined;
@@ -281,14 +356,46 @@ export default function ChatRoom({ roomIdTablet }: { roomIdTablet?: string }) {
           const isFirstMessageUnread = idx !== 0 && idxOfFirstMsgUnread.current === idx;
           // (idx !== 0) Except for when an user didn't read any messages before
           //             Don't display unread message mark at the top of all in the room
-          //             and Scrolling doesn't work
 
-          // last message when there's no message unread by login user
-          const isLastAndReadInAll =
-            idxOfFirstMsgUnread.current === -1 && idx === prevMsgLength.current - 1;
+          // previous message of first message unread
+          const isLastMsgRead =
+            idxOfFirstMsgUnread.current !== 0 && idxOfFirstMsgUnread.current - 1 === idx;
+          // Scroll to the last message read
+          // (idxOfFirstMsgUnread.current !== 0) Don't scroll when there's no message read
 
-          // Scroll to the message when entering here. not works when new message comes
-          const isMessageToRead = !isNewMessage && (isFirstMessageUnread || isLastAndReadInAll);
+          //
+
+          // last message in all existing ones and login user read it already
+          const isLastAndReadMsgOfAll =
+            idxOfFirstMsgUnread.current === -1 && idx === existingMsgLength.current - 1;
+
+          // Scroll to the message to read
+          const isExistingMsgToRead = !isNewMessage && (isLastMsgRead || isLastAndReadMsgOfAll);
+
+          const isLatestMsgToRead =
+            isNewMessage &&
+            idx === messages.length - 1 &&
+            messages[messages.length - 1].senderUserName === loginUserName;
+          // Scroll if the latest message is sent by the login user when it comes in
+          // - Don't use "isPreviewToGoToNewMsg" to scroll to it as it works unexpectedly
+          //   : When a new message comes in, it is added to the message array in chatSlice
+          //      and isPreviewToGoToNewMsg changes in useEffect.
+          //     But actually components rerender and
+          //      new message component is added and scroll works there
+          //     even before the message is pushed with "treatNewMessage" in chatSlice.
+          //      (at least with console check. I don't understand why it does)
+          //     In my test, when the partner user sent a new message,
+          //      "isPreviewToGoToNewMsg" is set to true first (scrolling works in this moment)
+          //       and set to false at last for a second in the flow
+          //     To prevent this, I changed how to set "isLatestMsgToRead"
+          //       as checking the sender is login user instead of using "isPreviewToGoToNewMsg".
+          //       if yes, scrolling works in the latest message.
+          //       if not, it means the partner sent the latest message,
+          //               scrolling works in the parent component "AllMessageContainer"
+          //                (not in this component to avoid an unexpected result)
+          //               after the login user clicks the preview
+
+          const isMessageToRead = isExistingMsgToRead || isLatestMsgToRead;
 
           return (
             <Message
@@ -318,9 +425,12 @@ export default function ChatRoom({ roomIdTablet }: { roomIdTablet?: string }) {
         })}
       </AllMessageContainer>
 
-      <NewMsgPreview
-        message={messagesInThisRoom?.messages[messagesInThisRoom.messages.length - 1].content}
-      />
+      {isNewMessage && isPreviewToGoToNewMsg && (
+        <NewMsgPreview
+          clickToClose={handleClosePreview}
+          message={messagesInThisRoom?.messages[messagesInThisRoom.messages.length - 1]?.content}
+        />
+      )}
 
       <MessageInput sendMessage={sendMessage} />
     </ChatRoomContainer>

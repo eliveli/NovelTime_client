@@ -93,20 +93,19 @@ export const chatSlice = createSlice({
 
         // change unread message number of all rooms
         state.allUnreadMsgNo += 1;
-        return;
+        //
+      } else {
+        // when the login user sends a new message
+        // change the room with new message
+        state.rooms[roomIdOfNewMsg] = {
+          ...state.rooms[roomIdOfNewMsg],
+          latestMessageDateTime: createDateTime,
+          latestMessageDate: createDate,
+          latestMessageTime: createTime,
+          latestMessageContent: content,
+          unreadMessageNo: 0,
+        };
       }
-
-      // when the login user sends a new message
-      // change the room with new message
-      state.rooms[roomIdOfNewMsg] = {
-        ...state.rooms[roomIdOfNewMsg],
-        latestMessageDateTime: createDateTime,
-        latestMessageDate: createDate,
-        latestMessageTime: createTime,
-        latestMessageContent: content,
-        unreadMessageNo: 0,
-      };
-
       // Treat Messages --------------------------------------------------------- //
       // partner user sends a message to the room that the login user is in
       if (currentRoomId === roomIdOfNewMsg && newMessage.senderUserName !== loginUserName) {
@@ -146,6 +145,7 @@ export const chatSlice = createSlice({
         };
       }
     },
+
     setMessages: (state, action: PayloadAction<{ roomId: string; data: MessagesWithPartner }>) => {
       const { roomId, data } = action.payload;
 

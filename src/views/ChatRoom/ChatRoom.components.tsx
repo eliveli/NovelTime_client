@@ -57,9 +57,15 @@ export function MessageInput({ sendMessage }: { sendMessage: (content: string) =
   );
 }
 
-export function NewMsgPreview({ message }: { message: string }) {
+export function NewMsgPreview({
+  clickToClose,
+  message,
+}: {
+  clickToClose: (event: React.MouseEvent<HTMLDivElement>) => void;
+  message: string;
+}) {
   return (
-    <NewMsgPreviewContainer>
+    <NewMsgPreviewContainer onClick={clickToClose}>
       <NewMsgContent>{message}</NewMsgContent>
     </NewMsgPreviewContainer>
   );
