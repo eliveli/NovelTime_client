@@ -133,13 +133,13 @@ function Message({
     </MessageContainer>
   );
 }
+
 export default function ChatRoom({ roomIdTablet }: { roomIdTablet?: string }) {
   const { roomId: roomIdMobile } = useParams();
   const roomId = roomIdTablet || roomIdMobile;
 
   const prevRoomId = useRef(""); // to know that the user changed a room to visit
-
-  const elementRef = useRef<{ [key: string]: HTMLElement | null }>({});
+  // note. I didn't use one ref for many refs which have different types in order to avoid ts error
 
   const {
     userId: loginUserId,
@@ -370,7 +370,7 @@ export default function ChatRoom({ roomIdTablet }: { roomIdTablet?: string }) {
           //             Don't display unread message mark at the top of all in the room
           //
           // previous message of first message unread
-          const isLastMsgRead =
+          const isLastReadMsg =
             idxOfFirstMsgUnread.current !== 0 && idxOfFirstMsgUnread.current - 1 === idx;
           // Scroll to the last message read
           // (idxOfFirstMsgUnread.current !== 0) Don't scroll when there's no message read
@@ -380,7 +380,7 @@ export default function ChatRoom({ roomIdTablet }: { roomIdTablet?: string }) {
             idxOfFirstMsgUnread.current === -1 && idx === existingMsgLength.current - 1;
 
           // Scroll to the message to read
-          const isExistingMsgToRead = !isNewMessage && (isLastMsgRead || isLastAndReadMsgOfAll);
+          const isExistingMsgToRead = !isNewMessage && (isLastReadMsg || isLastAndReadMsgOfAll);
 
           const isLatestMsgToRead =
             isNewMessage &&
@@ -444,11 +444,7 @@ export default function ChatRoom({ roomIdTablet }: { roomIdTablet?: string }) {
           msgInputHeight={msgInputHeight}
         />
       )}
-      <MessageInput
-        elementRef={elementRef}
-        sendMessage={sendMessage}
-        getMsgInputHeight={getMsgInputHeight}
-      />
+      <MessageInput sendMessage={sendMessage} getMsgInputHeight={getMsgInputHeight} />
     </ChatRoomContainer>
   );
 }

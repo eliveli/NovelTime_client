@@ -1,3 +1,5 @@
+/* eslint-disable no-param-reassign */
+/* eslint-disable-next-line no-param-reassign */
 import { useRef } from "react";
 import { useComponentWidth, useWhetherItIsMobile, writeText } from "utils";
 import { useAppSelector } from "../../store/hooks";
@@ -12,23 +14,19 @@ import {
   NewMsgContent,
 } from "./ChatRoom.styles";
 
-// eslint-disable-next-line import/prefer-default-export
 export function MessageInput({
   sendMessage,
-  elementRef,
   getMsgInputHeight,
 }: {
   sendMessage: (content: string) => void;
-  elementRef: React.MutableRefObject<{
-    [key: string]: HTMLElement | null;
-  }>;
   getMsgInputHeight: React.Dispatch<React.SetStateAction<number>>;
 }) {
   const loginUserId = useAppSelector((state) => state.loginUser.user.userId);
 
-  const textRef = useRef<HTMLTextAreaElement>(null);
-
   const isNotMobile = !useWhetherItIsMobile();
+
+  const msgInputCntnrRef = useRef<HTMLDivElement>(null);
+  const msgInputRef = useRef<HTMLTextAreaElement>(null);
 
   const userNameOnTextAreaRef = useRef<HTMLSpanElement>(null);
   const userNameWidth = useComponentWidth(userNameOnTextAreaRef);
@@ -39,35 +37,28 @@ export function MessageInput({
       return;
     }
 
-    if (!textRef.current?.value) return; // when text is empty
+    if (!msgInputRef.current?.value || !msgInputCntnrRef.current) return;
 
-    if (!elementRef.current.msgInputContainer) return;
-
-    sendMessage(textRef.current.value);
+    sendMessage(msgInputRef.current.value);
 
     // initialize text and height
-    textRef.current.value = "";
-    textRef.current.style.height = "28px";
+    msgInputRef.current.value = "";
+    msgInputRef.current.style.height = "28px";
     getMsgInputHeight(78);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    if (!elementRef.current.msgInputContainer) return;
+    if (!msgInputCntnrRef.current || !msgInputRef.current) return;
 
-    writeText(e, textRef, isNotMobile);
-    getMsgInputHeight(elementRef.current.msgInputContainer.offsetHeight);
+    writeText(e, msgInputRef, isNotMobile);
+    getMsgInputHeight(msgInputCntnrRef.current.offsetHeight);
   };
 
   return (
-    <MsgInputWholeContainer
-      ref={(el) => {
-        // eslint-disable-next-line no-param-reassign
-        elementRef.current.msgInputContainer = el;
-      }}
-    >
+    <MsgInputWholeContainer ref={msgInputCntnrRef}>
       <MessageInputBox>
         <InputForMessage
-          ref={textRef}
+          ref={msgInputRef}
           onChange={handleChange}
           placeholder="Write your text!"
           spaceForUserName={userNameWidth}
