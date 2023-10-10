@@ -9,25 +9,26 @@ export const ChatRoomContainer = styled.div`
   position: relative;
 `;
 
-export const AllMessageContainer = styled.div`
-  ${theme.media.mobile(`
+export const AllMessageContainer = styled.div<{ msgInputHeight: number }>`
+  @media (max-width: 767px) {
     padding: 0 16px;
-    height: calc(100vh - 51px - 78px);
-    `)} // height: calc ( 100vh - top nav - message input component )
+    height: ${({ msgInputHeight }) => `calc(100vh - 51px - ${msgInputHeight}px)`};
+  } // on mobile. height: calc(100vh - top nav - msgInputHeight)
 
-  ${theme.media.tablet(`
-    padding:0 20px;
-    border-top: 2px solid rgba(50,50,50,0.1);
-    height: calc(100vh - (71px + 60px) - 50px - 78px);
-    `)} // height: calc ( 100vh - (top + bottom nav) - top nav of chat room - message input component )
-  
-  ${theme.media.desktop(`
-    height: calc(100vh - 61px - 50px - 78px);
-  `)} // styles for tablet above are used here
+  @media (min-width: 768px) {
+    padding: 0 20px;
+    border-top: 2px solid rgba(50, 50, 50, 0.1);
+    height: ${({ msgInputHeight }) => `calc(100vh - (71px + 60px) - 50px - ${msgInputHeight}px)`};
+  } // on tablet. height: calc(100vh - (top + bottom nav) - top nav in chatroom - msgInputHeight)
+
+  @media (min-width: 1024px) {
+    height: ${({ msgInputHeight }) => `calc(100vh - 61px - 50px - ${msgInputHeight}px)`};
+  } // on desktop. height: calc(100vh - top nav - top nav in chatroom) // other tablet styles used here
 
   overflow-y: scroll;
   ${theme.hideScrollBar}
 `;
+
 export const UserAndContentContainer = styled.div<{ isMe?: true }>`
   width: 100%;
   display: flex;
@@ -199,9 +200,9 @@ export const MsgInputWholeContainer = styled.div`
   }
 `;
 
-export const NewMsgPreviewContainer = styled.div`
+export const NewMsgPreviewContainer = styled.div<{ msgInputHeight: number }>`
   position: absolute;
-  bottom: 82px; // (message input height 78px) + (extra space)
+  bottom: ${({ msgInputHeight }) => msgInputHeight + 4}px;
 
   padding: 6px 8px;
   left: 4px;

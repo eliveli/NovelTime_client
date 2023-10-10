@@ -13,7 +13,17 @@ import {
 } from "./ChatRoom.styles";
 
 // eslint-disable-next-line import/prefer-default-export
-export function MessageInput({ sendMessage }: { sendMessage: (content: string) => void }) {
+export function MessageInput({
+  sendMessage,
+  elementRef,
+  getMsgInputHeight,
+}: {
+  sendMessage: (content: string) => void;
+  elementRef: React.MutableRefObject<{
+    [key: string]: HTMLElement | null;
+  }>;
+  getMsgInputHeight: React.Dispatch<React.SetStateAction<number>>;
+}) {
   const loginUserId = useAppSelector((state) => state.loginUser.user.userId);
 
   const textRef = useRef<HTMLTextAreaElement>(null);
@@ -31,19 +41,34 @@ export function MessageInput({ sendMessage }: { sendMessage: (content: string) =
 
     if (!textRef.current?.value) return; // when text is empty
 
+    if (!elementRef.current.msgInputContainer) return;
+
     sendMessage(textRef.current.value);
 
-    // initialize text input
+    // initialize text and height
     textRef.current.value = "";
     textRef.current.style.height = "28px";
+    getMsgInputHeight(78);
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    if (!elementRef.current.msgInputContainer) return;
+
+    writeText(e, textRef, isNotMobile);
+    getMsgInputHeight(elementRef.current.msgInputContainer.offsetHeight);
   };
 
   return (
-    <MsgInputWholeContainer>
+    <MsgInputWholeContainer
+      ref={(el) => {
+        // eslint-disable-next-line no-param-reassign
+        elementRef.current.msgInputContainer = el;
+      }}
+    >
       <MessageInputBox>
         <InputForMessage
           ref={textRef}
-          onChange={(e) => writeText(e, textRef, isNotMobile)}
+          onChange={handleChange}
           placeholder="Write your text!"
           spaceForUserName={userNameWidth}
         />
@@ -59,14 +84,16 @@ export function MessageInput({ sendMessage }: { sendMessage: (content: string) =
 
 export function NewMsgPreview({
   clickToClose,
-  message,
+  messageContent,
+  msgInputHeight,
 }: {
   clickToClose: (event: React.MouseEvent<HTMLDivElement>) => void;
-  message: string;
+  messageContent: string;
+  msgInputHeight: number;
 }) {
   return (
-    <NewMsgPreviewContainer onClick={clickToClose}>
-      <NewMsgContent>{message}</NewMsgContent>
+    <NewMsgPreviewContainer msgInputHeight={msgInputHeight} onClick={clickToClose}>
+      <NewMsgContent>{messageContent}</NewMsgContent>
     </NewMsgPreviewContainer>
   );
 }

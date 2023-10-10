@@ -139,6 +139,8 @@ export default function ChatRoom({ roomIdTablet }: { roomIdTablet?: string }) {
 
   const prevRoomId = useRef(""); // to know that the user changed a room to visit
 
+  const elementRef = useRef<{ [key: string]: HTMLElement | null }>({});
+
   const {
     userId: loginUserId,
     userName: loginUserName,
@@ -232,9 +234,9 @@ export default function ChatRoom({ roomIdTablet }: { roomIdTablet?: string }) {
     allMessagesRef.current.addEventListener("scroll", throttledScroll);
 
     return () => {
-      allMessagesRef.current.removeEventListener("scroll", throttledScroll); // clean up
+      allMessagesRef.current?.removeEventListener("scroll", throttledScroll); // clean up
     };
-  }, [isPreviewToGoToNewMsg, allMessagesRef.current]);
+  }, [isPreviewToGoToNewMsg]);
 
   // The preview appears when a new message comes in that was sent by the partner
   //  except when the y-scroll is near the bottom.
@@ -342,6 +344,9 @@ export default function ChatRoom({ roomIdTablet }: { roomIdTablet?: string }) {
     });
   };
 
+  // To adjust designs in other components with message input height when typing the message
+  const [msgInputHeight, getMsgInputHeight] = useState(78); // initial height
+
   // Handle window resizing -------------------------------------------------- //
   const isTablet = useWhetherItIsTablet();
 
@@ -353,7 +358,7 @@ export default function ChatRoom({ roomIdTablet }: { roomIdTablet?: string }) {
 
   return (
     <ChatRoomContainer>
-      <AllMessageContainer ref={allMessagesRef}>
+      <AllMessageContainer ref={allMessagesRef} msgInputHeight={msgInputHeight}>
         {messagesInThisRoom?.messages.map((_, idx) => {
           const { messages } = messagesInThisRoom;
           const previousMessage = idx > 0 ? messages[idx - 1] : undefined;
@@ -433,11 +438,17 @@ export default function ChatRoom({ roomIdTablet }: { roomIdTablet?: string }) {
       {isNewMessage && isPreviewToGoToNewMsg && (
         <NewMsgPreview
           clickToClose={handleClosePreview}
-          message={messagesInThisRoom?.messages[messagesInThisRoom.messages.length - 1]?.content}
+          messageContent={
+            messagesInThisRoom?.messages[messagesInThisRoom.messages.length - 1]?.content
+          }
+          msgInputHeight={msgInputHeight}
         />
       )}
-
-      <MessageInput sendMessage={sendMessage} />
+      <MessageInput
+        elementRef={elementRef}
+        sendMessage={sendMessage}
+        getMsgInputHeight={getMsgInputHeight}
+      />
     </ChatRoomContainer>
   );
 }
