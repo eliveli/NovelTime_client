@@ -30,17 +30,16 @@ export const chatSlice = createSlice({
       });
 
       // set unread message number of all rooms
-      let unreadMsgNoOfAllRooms = 0;
       action.payload.forEach((room) => {
-        unreadMsgNoOfAllRooms += room.unreadMessageNo;
+        state.allUnreadMsgNo += room.unreadMessageNo;
       });
-
-      state.allUnreadMsgNo = unreadMsgNoOfAllRooms;
     },
 
     // set an initial room and empty message info
     setNewRoom: (state, action: PayloadAction<ChatRoom>) => {
       const room = action.payload;
+
+      if (!room.roomId) return;
 
       if (!state.rooms[room.roomId]) {
         state.rooms[room.roomId] = room;
@@ -81,8 +80,7 @@ export const chatSlice = createSlice({
       // Treat rooms ------------------------------------------------------------ //
       // when partner user sends a new message
       if (senderUserName !== loginUserName) {
-        // there's no room for the message
-        // add a new room
+        // add a new room when there's no room for the message
         if (!roomThatMsgCameIn) {
           state.rooms[roomIdOfNewMsg] = {
             roomId: roomIdOfNewMsg,
@@ -94,28 +92,40 @@ export const chatSlice = createSlice({
             latestMessageContent: content,
             unreadMessageNo: 1,
           };
-        } else {
-          // change the room with new message
-          //  set unreadMessageNo to 0 when new message comes in a room that the user is in
-          const unreadMessageNo =
-            currentRoomId === roomIdOfNewMsg ? 0 : state.rooms[roomIdOfNewMsg].unreadMessageNo + 1;
 
+          // change unread message number of all rooms
+          state.allUnreadMsgNo += 1;
+          //
+          // new message comes in the current room
+        } else if (currentRoomId === roomIdOfNewMsg) {
           state.rooms[roomIdOfNewMsg] = {
             ...state.rooms[roomIdOfNewMsg],
             latestMessageDateTime: createDateTime,
             latestMessageDate: createDate,
             latestMessageTime: createTime,
             latestMessageContent: content,
-            unreadMessageNo,
+            unreadMessageNo: 0,
           };
+
+          //
+          // new message comes in the room that the user isn't watching now
+        } else {
+          state.rooms[roomIdOfNewMsg] = {
+            ...state.rooms[roomIdOfNewMsg],
+            latestMessageDateTime: createDateTime,
+            latestMessageDate: createDate,
+            latestMessageTime: createTime,
+            latestMessageContent: content,
+            unreadMessageNo: state.rooms[roomIdOfNewMsg].unreadMessageNo + 1,
+          };
+
+          // change unread message number of all rooms
+          state.allUnreadMsgNo += 1;
         }
 
-        // change unread message number of all rooms
-        state.allUnreadMsgNo += 1;
         //
       } else {
         // when the login user sends a new message
-        // change the room with new message
         state.rooms[roomIdOfNewMsg] = {
           ...state.rooms[roomIdOfNewMsg],
           latestMessageDateTime: createDateTime,
