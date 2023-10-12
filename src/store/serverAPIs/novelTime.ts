@@ -53,7 +53,6 @@ import {
   ParamToGetWeeklyNovels,
   NovelDetail,
   ParamForListsPeopleLike,
-  RoomId,
 } from "./types";
 import type { RootState } from "../index";
 
@@ -508,11 +507,6 @@ export const novelTimeApi = createApi({
         body: { changedUserInfo },
       }),
     }),
-
-    //
-    getChatRoomId: builder.query<RoomId, string>({
-      query: (otherUserName) => `/chat/roomId/${otherUserName}`,
-    }),
   }),
 });
 
@@ -563,5 +557,4 @@ export const {
   useChangeMyListTitleMutation,
   useDeleteMyNovelListMutation,
   useRemoveNovelFromListMutation,
-  useLazyGetChatRoomIdQuery,
 } = novelTimeApi;

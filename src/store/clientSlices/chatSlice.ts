@@ -38,6 +38,25 @@ export const chatSlice = createSlice({
       state.allUnreadMsgNo = unreadMsgNoOfAllRooms;
     },
 
+    // set an initial room and empty message info
+    setNewRoom: (state, action: PayloadAction<ChatRoom>) => {
+      const room = action.payload;
+
+      if (!state.rooms[room.roomId]) {
+        state.rooms[room.roomId] = room;
+      }
+
+      if (!state.allMessages[room.roomId]) {
+        state.allMessages[room.roomId] = {
+          partnerUser: {
+            userName: room.partnerUserName,
+            userImg: room.partnerUserImg,
+          },
+          messages: [],
+        };
+      }
+    },
+
     treatNewMessage: (
       state,
       action: PayloadAction<{
@@ -106,6 +125,7 @@ export const chatSlice = createSlice({
           unreadMessageNo: 0,
         };
       }
+
       // Treat Messages --------------------------------------------------------- //
       // partner user sends a message to the room that the login user is in
       if (currentRoomId === roomIdOfNewMsg && newMessage.senderUserName !== loginUserName) {
@@ -187,6 +207,7 @@ export const chatSlice = createSlice({
     },
   },
 });
-export const { setRooms, treatNewMessage, setMessages, changeMsgsUnread } = chatSlice.actions;
+export const { setRooms, setNewRoom, treatNewMessage, setMessages, changeMsgsUnread } =
+  chatSlice.actions;
 
 export default chatSlice.reducer;

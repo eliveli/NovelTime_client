@@ -586,10 +586,6 @@ export interface IsLike {
   likeNo?: number; // only for writing content
 }
 
-export interface RoomId {
-  roomId: string;
-}
-
 export interface ChatRoom {
   roomId: string;
   partnerUserName: string;

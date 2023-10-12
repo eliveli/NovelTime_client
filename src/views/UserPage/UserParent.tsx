@@ -6,15 +6,14 @@ import { openModal } from "store/clientSlices/modalSlice";
 import { messageIconUserPage } from "assets/images";
 import { Outlet, useNavigate, useParams } from "react-router-dom";
 import Icon from "assets/Icon";
-import {
-  useGetLogoutQuery,
-  useGetUserInfoByUserNameQuery,
-  useLazyGetChatRoomIdQuery,
-} from "store/serverAPIs/novelTime";
+import { useGetLogoutQuery, useGetUserInfoByUserNameQuery } from "store/serverAPIs/novelTime";
 import Spinner from "assets/Spinner";
 import { CHAT_ROOM_LIST, CHAT_ROOM } from "utils/pathname";
 import { useWhetherItIsMobile } from "utils";
 import { setUserProfile } from "store/clientSlices/userProfileSlice";
+import socket from "store/serverAPIs/socket.io";
+import { ChatRoom } from "store/serverAPIs/types";
+import { setNewRoom } from "store/clientSlices/chatSlice";
 import {
   ProfileContnr,
   ProfileBG,
@@ -53,12 +52,13 @@ function Profile() {
   const tempUserBG = useAppSelector((state) => state.userProfile.temporaryUserBG);
 
   // after logout remove access token and user info in store
-  const { data } = useGetLogoutQuery(undefined, {
+  const logoutResult = useGetLogoutQuery(undefined, {
     skip: !isLogout,
   });
-  const [getChatRoomId, getChatRoomIdResult] = useLazyGetChatRoomIdQuery();
 
-  if (data && loginUser.userId) {
+  const rooms = useAppSelector((state) => state.chat.rooms);
+
+  if (logoutResult.data && loginUser.userId) {
     dispatch(setAccessToken(""));
     dispatch(
       setLoginUser({
@@ -88,50 +88,66 @@ function Profile() {
       return;
     }
 
-    if (getChatRoomIdResult.isFetching) return;
+    const [roomWithTheUser] = Object.values(rooms).filter(
+      (room) => room.partnerUserName === userName,
+    );
 
-    await getChatRoomId(userName);
+    // Go to the chatroom that exists
+    if (roomWithTheUser) {
+      if (isMobile) {
+        navigate(`${CHAT_ROOM}/${roomWithTheUser.roomId}`);
+        return;
+      }
+      navigate(`${CHAT_ROOM_LIST}?roomId=${roomWithTheUser.roomId}`);
+      return;
+    }
+
+    // Create a new room if it doesn't exist
+    socket.emit("create a room", loginUser.userId, userName);
   };
 
-  useEffect(() => {
-    if (
-      getChatRoomIdResult.error &&
-      "data" in getChatRoomIdResult.error &&
-      "message" in getChatRoomIdResult.error.data &&
-      getChatRoomIdResult.error.data.message === "user doesn't exist"
-    ) {
+  type NewRoomResult = {
+    status: number;
+    data?: { room: ChatRoom };
+    error?: { message?: string };
+  };
+  const setNewRoomWithSocket = ({ status, data, error }: NewRoomResult) => {
+    if (status === 200 && data) {
+      dispatch(setNewRoom(data.room));
+
+      if (isMobile) {
+        navigate(`${CHAT_ROOM}/${data.room.roomId}`);
+        return;
+      }
+      navigate(`${CHAT_ROOM_LIST}?roomId=${data.room.roomId}`);
+      return;
+    }
+
+    if (status === 400 && error && error.message === "user doesn't exist") {
       alert("존재하지 않는 사용자입니다");
       return;
     }
 
-    if (getChatRoomIdResult.isError) {
+    if (status === 500) {
       alert("메세지를 보낼 수 없습니다. 새로고침 후 시도해 보세요");
-      return;
     }
+  };
 
-    if (getChatRoomIdResult.data && !getChatRoomIdResult.data.roomId) {
-      alert("메세지를 보낼 수 없습니다.");
-      return;
-    }
+  useEffect(() => {
+    socket.on("newRoom", setNewRoomWithSocket);
 
-    if (getChatRoomIdResult.data) {
-      if (isMobile) {
-        navigate(`${CHAT_ROOM}/${getChatRoomIdResult.data.roomId}`);
-        return;
-      }
-      navigate(`${CHAT_ROOM_LIST}?roomId=${getChatRoomIdResult.data.roomId}`);
-    }
-
-    //
-  }, [getChatRoomIdResult.data, getChatRoomIdResult.isError, isMobile]);
-
+    return () => {
+      socket.off("newRoom", setNewRoomWithSocket);
+    };
+  }, [isMobile]);
+  //
   const stylesForUserHomeIcon = `transform: scaleX(-1); ${theme.media.mobile(
     `display:none;`,
   )} ${theme.media.tablet(`display:none;`)} ${theme.media.desktop(`display:block;`)}`;
   //
   return (
     <ProfileContnr whenBGisNot={!!tempUserBG.src || !!userBG.src}>
-      {getChatRoomIdResult.isFetching && <Spinner styles="fixed" />}
+      {logoutResult.isFetching && <Spinner styles="fixed" />}
 
       <ProfileBG
         userBGSrc={tempUserBG.src || userBG.src}
