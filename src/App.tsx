@@ -109,12 +109,20 @@ function App() {
   //   최초 페이지 진입 시 리프레시 요청 감. 이 때 non login user 에러 받고 polling interval 막기
 
   //
+  const { userId: loginUserId, userName: loginUserName } = useAppSelector(
+    (state) => state.loginUser.user,
+  );
+  // It's necessary to use states from userSlice to chat right after login
+  // Don't use "data.userInfo.userId" or "data.userInfo.userName"
+  // With them, user can't chat right after login
+  //  only can do after login and page refresh.
+
   // Join chat rooms //
   useEffect(() => {
-    if (!data?.userInfo.userId) return;
+    if (!loginUserId) return;
 
-    socket.emit("join all rooms", data.userInfo.userId);
-  }, [data?.userInfo.userId]);
+    socket.emit("join all rooms", loginUserId);
+  }, [loginUserId]);
 
   // Set chat rooms //
   const setRoomsAfterLogIn = (rooms: TypeChatRoom[]) => {
@@ -132,16 +140,14 @@ function App() {
   }, []);
 
   // Get a new message and Change the room that the message comes in //
-
   const treatNewMsgInSlice = (newMessage: Message) => {
-    if (!data?.userInfo.userName) return;
+    if (!loginUserName) return;
 
     // for when the user entered a chatroom
-
     dispatch(
       treatNewMessage({
         newMessage,
-        loginUserName: data?.userInfo.userName,
+        loginUserName,
         currentRoomId: getCurrentRoomId(),
       }),
     );
@@ -153,7 +159,7 @@ function App() {
     return () => {
       socket.off("new message", treatNewMsgInSlice);
     };
-  }, [data?.userInfo.userName]);
+  }, [loginUserName]);
 
   return (
     <Router>
