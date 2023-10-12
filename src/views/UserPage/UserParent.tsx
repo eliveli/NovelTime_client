@@ -13,7 +13,7 @@ import { useWhetherItIsMobile } from "utils";
 import { setUserProfile } from "store/clientSlices/userProfileSlice";
 import socket from "store/serverAPIs/socket.io";
 import { ChatRoom } from "store/serverAPIs/types";
-import { setNewRoom } from "store/clientSlices/chatSlice";
+import { initializeChat, setNewRoom } from "store/clientSlices/chatSlice";
 import {
   ProfileContnr,
   ProfileBG,
@@ -78,8 +78,12 @@ function Profile() {
   const handleLogout = () => {
     alert("로그아웃 하시겠습니까?");
     dispatch(setLogout(true));
-    // it is not required to set logout with undefined again
-    // because when user login, page will be refreshed then isLogout state will be undefined
+    // - it is not required to set logout with undefined again
+    //   because when user logs in, page will be refreshed then isLogout state will be undefined
+
+    socket.emit("logout");
+
+    dispatch(initializeChat());
   };
 
   const handleMessage = async () => {

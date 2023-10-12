@@ -166,6 +166,7 @@ export const chatSlice = createSlice({
       }
     },
 
+    // it works when getting messages in the room at first
     setMessages: (state, action: PayloadAction<{ roomId: string; data: MessagesWithPartner }>) => {
       const { roomId, data } = action.payload;
 
@@ -205,9 +206,22 @@ export const chatSlice = createSlice({
         unreadMessageNo: 0,
       };
     },
+
+    initializeChat: (state) => {
+      state.rooms = {};
+      state.allMessages = {};
+      state.allUnreadMsgNo = 0;
+    },
   },
 });
-export const { setRooms, setNewRoom, treatNewMessage, setMessages, changeMsgsUnread } =
-  chatSlice.actions;
+
+export const {
+  setRooms,
+  setNewRoom,
+  treatNewMessage,
+  setMessages,
+  changeMsgsUnread,
+  initializeChat,
+} = chatSlice.actions;
 
 export default chatSlice.reducer;
