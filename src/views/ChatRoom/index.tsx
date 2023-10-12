@@ -309,15 +309,28 @@ export default function ChatRoom({ roomIdTablet }: { roomIdTablet?: string }) {
   }, [roomId, messagesInThisRoom]);
 
   // Check before message is displayed -------------------------------------------------- //
-  const checkCreateTimeIsNeeded = (
-    currentUser: string,
-    currentTime: string,
-    currentDate: string,
+  const checkCreateTimeIsNeeded = ({
+    currentUser,
+    currentTime,
+    currentDate,
+    nextUser,
+    nextTime,
+    nextDate,
+    isPrevMsgOfFirstUnreadMsg,
+  }: {
+    currentUser: string;
+    currentTime: string;
+    currentDate: string;
 
-    nextUser?: string,
-    nextTime?: string,
-    nextDate?: string,
-  ) => currentUser !== nextUser || currentTime !== nextTime || currentDate !== nextDate;
+    nextUser?: string;
+    nextTime?: string;
+    nextDate?: string;
+    isPrevMsgOfFirstUnreadMsg: boolean;
+  }) =>
+    currentUser !== nextUser ||
+    currentTime !== nextTime ||
+    currentDate !== nextDate ||
+    isPrevMsgOfFirstUnreadMsg;
 
   const checkPartnerUserImgIsNeeded = (
     currentUser: string,
@@ -413,14 +426,15 @@ export default function ChatRoom({ roomIdTablet }: { roomIdTablet?: string }) {
               dateCriterion={dateCriterion}
               isFirstMessageUnread={isFirstMessageUnread}
               isMyMessage={loginUserName === _.senderUserName}
-              isNeededCreateTime={checkCreateTimeIsNeeded(
-                _.senderUserName,
-                _.createTime,
-                _.createDate,
-                nextMessage?.senderUserName,
-                nextMessage?.createTime,
-                nextMessage?.createDate,
-              )}
+              isNeededCreateTime={checkCreateTimeIsNeeded({
+                currentUser: _.senderUserName,
+                currentTime: _.createTime,
+                currentDate: _.createDate,
+                nextUser: nextMessage?.senderUserName,
+                nextTime: nextMessage?.createTime,
+                nextDate: nextMessage?.createDate,
+                isPrevMsgOfFirstUnreadMsg: idxOfFirstMsgUnread.current === idx + 1,
+              })}
               isNeededPartnerUserImg={checkPartnerUserImgIsNeeded(
                 _.senderUserName,
                 _.createDate,
