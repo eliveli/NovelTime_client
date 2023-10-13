@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 export default function writeText(
-  e: React.ChangeEvent<HTMLTextAreaElement>,
+  e: React.ChangeEvent<HTMLTextAreaElement> | undefined,
   textRef: React.RefObject<HTMLTextAreaElement>,
   isTablet: boolean,
 ) {

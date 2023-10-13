@@ -174,20 +174,18 @@ export const BtnToSubmit = styled.button`
 
 export const MsgInputWholeContainer = styled.div`
   display: flex;
-  align-items: center;
-  padding: 15px;
-  padding-right: 13px;
+  flex-direction: column;
+  gap: 15px;
 
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  border-top: 2px solid rgba(50, 50, 50, 0.1);
+  padding: 15px;
+
   border-radius: 0;
+  border-top: 2px solid rgba(50, 50, 50, 0.1);
   border-left: 0;
   border-right: 0;
   border-bottom: 0;
 
   background-color: rgba(255, 255, 255, 1);
-
-  position: relative;
 
   z-index: 1;
 
@@ -198,6 +196,13 @@ export const MsgInputWholeContainer = styled.div`
     left: 0;
     width: 100%;
   }
+`;
+
+export const MsgAndBtnCntnr = styled.div`
+  display: flex;
+  align-items: center;
+
+  width: 100%;
 `;
 
 export const NewMsgPreviewContainer = styled.div<{ msgInputHeight: number }>`
