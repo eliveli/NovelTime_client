@@ -204,7 +204,8 @@ export default function useSearchListWithInfntScrollForWriting({
         currentList !== undefined &&
         prevPageNo === pageNo - 1
       ) {
-        setNextList([...currentList, ...listFromServer]);
+        const nextList = [...currentList, ...listFromServer] as TalkList | RecommendList;
+        setNextList(nextList);
 
         setPrevFilters((prev) => ({
           ...prev,
