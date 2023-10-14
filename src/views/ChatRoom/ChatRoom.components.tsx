@@ -46,12 +46,6 @@ export function MessageInput({
     getMsgInputHeight(msgInputCntnrRef.current.offsetHeight);
   };
 
-  useEffect(() => {
-    if (!msgInputCntnrRef.current) return;
-
-    getMsgInputHeight(msgInputCntnrRef.current.offsetHeight);
-  }, [showEmojiPicker]);
-
   // Treat message
   const handleSubmit = async () => {
     if (!loginUserId) {
@@ -93,13 +87,14 @@ export function MessageInput({
             styles={showEmojiPicker ? `color: ${theme.color.main}; opacity: 0.8;` : undefined}
             onClick={() => {
               if (!showEmojiPicker) {
-                getMsgInputHeight(318); // with EmojiPicker
-                // = height in MessageInputBox 46
-                //   + top padding, bottom padding, gap in MsgInputWholeContainer 15 + 15 + 15
+                getMsgInputHeight((prev) => prev + 225 + 15); // with EmojiPicker
+                // = height in MsgInputWholeContainer without EmojiPicker
                 //   + height in EmojiPicker 225
-                //   + border-top in MsgInputWholeContainer 2
+                //   + gap in MsgInputWholeContainer 15
+                //  note. height in MsgInputWholeContainer can be different
+                //         with the change in InputForMessage when writing a message
               } else {
-                getMsgInputHeight(78); // without EmojiPicker
+                getMsgInputHeight((prev) => prev - 225 - 15); // without EmojiPicker
               }
 
               handleEmojiPicker(!showEmojiPicker);
