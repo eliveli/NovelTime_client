@@ -79,12 +79,11 @@ export const novelTimeApi = createApi({
         ? "http://www.noveltime.shop/api"
         : "http://domainfordev.com/api", // 개발 환경에서도 도커 필요
     credentials: "include",
-    prepareHeaders: (headers, { getState, endpoint }) => {
+    prepareHeaders: (headers, { getState }) => {
       const { accessToken } = (getState() as RootState).loginUser;
 
       // headers.set('Access-Control-Allow-Origin', '*');
 
-      // if (accessToken && endpoint.includes("")) {
       if (accessToken) {
         // every time send token to authenticate user
         headers.set("authorization", `Bearer ${accessToken}`);

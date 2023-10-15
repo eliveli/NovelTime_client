@@ -12,7 +12,20 @@ export const ChatRoomListCntnr = styled.div<{
   ${({ isRoom }) => !isRoom && `width:100%;`}
   ${({ isRoom, isRoomSpread }) => isRoom && isRoomSpread && `width:56px;`}
   ${({ isRoom, isRoomSpread }) => isRoom && !isRoomSpread && `width: 50%;`}
+
+  @media (max-width: 1023px) {
+    height: calc(100vh - 71px - 60px); // calc(100vh - top nav - msgInputHeight)
+  } // on mobile and tablet
+
+  @media (min-width: 1024px) {
+    height: calc(100vh - 61px); // calc(100vh - top nav)
+  } // on desktop
+
+  overflow-y: scroll;
+  overflow-x: hidden;
+  ${theme.hideScrollBar}
 `;
+
 export const ChatRoomPreviewContainer = styled.div<{
   isRoom: boolean;
   isRoomSpread: boolean;

@@ -87,9 +87,11 @@ export function ReCommentInputToCreateOnTablet() {
           onChange={(e) => writeText(e, textRef, isNotMobile)}
           spaceForUserName={userNameWidth}
         />
-        <EmojiCntnr size={20}>
+        {/*
+         <EmojiCntnr size={20}>
           <EmojiIcon />
-        </EmojiCntnr>
+         </EmojiCntnr>
+        */}
       </WriteTextCntnr>
 
       <WriteCommentSubmit onClick={handleSubmitToCreate}>작성</WriteCommentSubmit>
@@ -179,9 +181,11 @@ export function ReCommentInputToEditOnTablet() {
           onChange={(e) => writeText(e, textRef, isNotMobile)}
           spaceForUserName={userNameWidth}
         />
+        {/*
         <EmojiCntnr size={20}>
           <EmojiIcon />
         </EmojiCntnr>
+        */}
       </WriteTextCntnr>
 
       <WriteCommentSubmit onClick={handleSubmitToEdit}>수정</WriteCommentSubmit>
@@ -239,9 +243,11 @@ export function RootCommentInputToCreateOnTablet({
           onChange={(e) => writeText(e, textRef, isNotMobile)}
           placeholder="Write your comment!"
         />
+        {/*
         <EmojiCntnr size={20}>
           <EmojiIcon />
         </EmojiCntnr>
+        */}
       </WriteTextCntnr>
 
       <WriteCommentSubmit onClick={handleSubmitToCreate}>작성</WriteCommentSubmit>
@@ -329,9 +335,12 @@ export function RootCommentInputToEditOnTablet({
           onChange={(e) => writeText(e, textRef, isNotMobile)}
           placeholder="Write your comment!"
         />
-        <EmojiCntnr size={20}>
-          <EmojiIcon />
-        </EmojiCntnr>
+
+        {/*
+          <EmojiCntnr size={20}>
+            <EmojiIcon />
+          </EmojiCntnr>
+         */}
       </WriteTextCntnr>
 
       <WriteCommentSubmit onClick={handleSubmitToEdit}>수정</WriteCommentSubmit>
@@ -496,9 +505,11 @@ export function CommentInputOnMobile({
             />
           </>
         )}
+        {/*
         <EmojiCntnr size={20}>
           <EmojiIcon />
         </EmojiCntnr>
+        */}
       </WriteTextCntnr>
 
       <WriteCommentSubmit onClick={textToEdit ? handleSubmitToEdit : handleSubmitToCreate}>
