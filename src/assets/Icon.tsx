@@ -135,13 +135,13 @@ const Icon = {
     ${iconStyle()};
   `,
   Naver: styled(SiNaver)`
-    ${iconStyleHover()};
+    ${iconStyle()};
   `,
   Kakao: styled(RiKakaoTalkFill)`
-    ${iconStyleHover()};
+    ${iconStyle()};
   `,
   Google: styled(FcGoogle)`
-    ${iconStyleHover()};
+    ${iconStyle()};
   `,
   FaceBook: styled(AiFillFacebook)`
     ${iconStyleHover()};

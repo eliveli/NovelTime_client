@@ -277,7 +277,7 @@ export const SocialCategory = styled.button<{
   background-color: white;
   border: 0;
 
-  ${theme.media.hover(`cursor: pointer;`)}
+  ${theme.media.hover(`cursor: pointer; opacity: 0.7;`)}
 
   ${({ isKaKao }) =>
     isKaKao && `color: rgb(211 204 0 / 76%); box-shadow: 0 0 4px rgb(250 225 0 / 100%);`};
@@ -537,19 +537,26 @@ export const NormalFontWeight = styled.span`
 export const SocialIconBox = styled(Icon.IconBox)<{
   isKaKao?: true;
   isNaver?: true;
-  isGoogle?: true;
+  isGoogle?: true; // not used
   isFaceBook?: true;
   isTwitter?: true;
   isLink?: true;
 }>`
   margin-right: 10px;
 
+  ${theme.media.hover(``)}; // don't use hover here. already used in SocialCategory
+
   ${({ isKaKao }) =>
     isKaKao &&
     ` background-color: rgba(250, 225, 0,0.6);
-    color: rgba(60, 30, 30,0.7); padding: 2px;
-    border-radius: 3px;`}
-  ${({ isNaver, isGoogle }) => (isNaver || isGoogle) && `color: rgba(3, 199, 90, 0.6);`};
+      color: rgba(60, 30, 30,0.7);
+      padding: 2px;
+      border-radius: 3px;
+    `}
+  ${({ isNaver }) =>
+    isNaver &&
+    ` color: rgba(3, 199, 90, 0.6);
+    `};
   ${({ isFaceBook }) => isFaceBook && `color: rgb(8 116 231 / 85%);`};
   ${({ isTwitter }) => isTwitter && `color: rgb(29 155 240 / 88%);`};
   ${({ isLink }) => isLink && `color: rgb(96 96 96 / 98%);`};
