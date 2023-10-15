@@ -5,7 +5,7 @@ import Icon from "assets/Icon";
 import { NOVEL_DETAIL, RECOMMEND_LIST, SEARCH_NOVEL, TALK_LIST } from "utils/pathname";
 import { useAddNovelWithURLMutation, useAddWritingMutation } from "store/serverAPIs/novelTime";
 import Spinner from "assets/Spinner";
-import { openModal } from "store/clientSlices/modalSlice";
+import { handleAlert, openModal } from "store/clientSlices/modalSlice";
 import { useWhetherItIsDesktop } from "utils";
 import { setSearchList } from "store/clientSlices/filterSlice";
 import { handleWritingToSubmitOnMobile } from "../../store/clientSlices/writingSlice";
@@ -126,7 +126,8 @@ export default function AddWriting() {
     if (!novelUrlRef.current) return;
 
     if (!novelUrlRef.current.value) {
-      alert("작품 url을 넣어주세요");
+      dispatch(openModal("alert"));
+      dispatch(handleAlert("작품 url을 넣어주세요"));
       return;
     }
 
@@ -135,14 +136,16 @@ export default function AddWriting() {
     await addNovelWithURL(novelUrlRef.current.value);
 
     if (addNovelWithURLResult.isError) {
-      alert("작품 url을 확인해 주세요");
+      dispatch(openModal("alert"));
+      dispatch(handleAlert("작품 url을 확인해 주세요"));
     }
   };
 
   useEffect(() => {
     if (!addNovelWithURLResult.data) return;
     if (!addNovelWithURLResult.data.novelId || !addNovelWithURLResult.data.novelTitle) {
-      alert("작품 url을 확인해 주세요");
+      dispatch(openModal("alert"));
+      dispatch(handleAlert("작품 url을 확인해 주세요"));
       return;
     }
 
@@ -213,26 +216,31 @@ export default function AddWriting() {
 
   const submitToAddWriting = async () => {
     if (!loginUserId) {
-      alert("먼저 로그인을 해 주세요");
+      dispatch(openModal("alert"));
+      dispatch(handleAlert("먼저 로그인을 해 주세요"));
       return;
     }
     if (!novelForReview.novelId) {
-      alert("소설을 선택해 주세요");
+      dispatch(openModal("alert"));
+      dispatch(handleAlert("소설을 선택해 주세요"));
       return;
     }
 
     if (!board) {
-      alert("게시판 종류를 선택해 주세요");
+      dispatch(openModal("alert"));
+      dispatch(handleAlert("게시판 종류를 선택해 주세요"));
       return;
     }
 
     if (!titleRef.current?.value) {
-      alert("제목을 입력해 주세요");
+      dispatch(openModal("alert"));
+      dispatch(handleAlert("제목을 입력해 주세요"));
       return;
     }
 
     if (!contentRef.current?.value) {
-      alert("내용을 입력해 주세요");
+      dispatch(openModal("alert"));
+      dispatch(handleAlert("내용을 입력해 주세요"));
       return;
     }
 
@@ -247,7 +255,8 @@ export default function AddWriting() {
     });
 
     if (addWritingResult.isError) {
-      alert("글을 등록할 수 없습니다. 새로고침 후 다시 시도해 보세요");
+      dispatch(openModal("alert"));
+      dispatch(handleAlert("글을 등록할 수 없습니다. 새로고침 후 다시 시도해 보세요"));
     }
 
     // back to the novel-detail page

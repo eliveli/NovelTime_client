@@ -3,6 +3,8 @@ import { useComponentHeight, useComponentWidth } from "utils";
 import theme from "assets/styles/theme";
 
 import Spinner from "assets/Spinner";
+import { handleAlert, openModal } from "store/clientSlices/modalSlice";
+import { useAppDispatch } from "store/hooks";
 import {
   CropImageCanvas,
   BtnUponCanvasContnr,
@@ -104,6 +106,8 @@ export default function EditProfileImg({
   // it will be true as clicking the button for saving image edited
   const [isImageSelected, setImageSelected] = useState(false);
 
+  const dispatch = useAppDispatch();
+
   // set canvas and draw square and circles
   useEffect(() => {
     if (!cropImgCanvasRef.current) return;
@@ -150,7 +154,8 @@ export default function EditProfileImg({
       const blob = dataURLtoBlob(dataUrlImg);
 
       if (!blob) {
-        alert("이미지 편집에 실패했습니다. 다시 한 번 시도해주세요.");
+        dispatch(openModal("alert"));
+        dispatch(handleAlert("이미지 편집에 실패했습니다. 다시 한 번 시도해주세요."));
         return;
       }
 
@@ -165,7 +170,8 @@ export default function EditProfileImg({
         setNewProfileImage(blob);
         handleEditingImage(false); // show profile modal
       } else {
-        alert(`20MB 이하로 저장 가능해요! 현재 용량: ${dataCapacity}`);
+        dispatch(openModal("alert"));
+        dispatch(handleAlert(`20MB 이하로 저장 가능해요! 현재 용량: ${dataCapacity}`));
       }
     }
 

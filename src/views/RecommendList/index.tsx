@@ -16,6 +16,7 @@ import { useNavigate } from "react-router-dom";
 import { ADD_WRITING } from "utils/pathname";
 import { useEffect } from "react";
 import Spinner from "assets/Spinner";
+import { handleAlert, openModal } from "store/clientSlices/modalSlice";
 import Recommend from "./RecommendList.components";
 
 export default function RecommendList() {
@@ -78,7 +79,8 @@ export default function RecommendList() {
         <WritingButton
           clickToWrite={() => {
             if (!isLoginUser) {
-              alert("로그인이 필요합니다");
+              dispatch(openModal("alert"));
+              dispatch(handleAlert("로그인이 필요합니다"));
               return;
             }
 

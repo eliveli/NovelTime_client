@@ -13,6 +13,7 @@ import {
 } from "store/clientSlices/commentSlice";
 import { useDeleteCommentMutation } from "store/serverAPIs/novelTime";
 import { Comment, Img, ReCommentList } from "store/serverAPIs/types";
+import { handleAlert, openModal } from "store/clientSlices/modalSlice";
 import {
   CommentContainer,
   CommentContent,
@@ -155,7 +156,8 @@ function CommentWritten({
     await deleteComment({ commentId, novelId: argsForApis.novelId });
 
     if (deleteCommentResult.isError) {
-      alert("코멘트를 삭제할 수 없습니다. 새로고침 후 다시 시도해 보세요");
+      dispatch(openModal("alert"));
+      dispatch(handleAlert("코멘트를 삭제할 수 없습니다. 새로고침 후 다시 시도해 보세요"));
       return;
     }
 

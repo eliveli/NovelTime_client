@@ -4,7 +4,8 @@ import { useRef, useState, useEffect } from "react";
 import { useComponentWidth, useWhetherItIsMobile, writeText } from "utils";
 import EmojiPicker, { EmojiClickData } from "emoji-picker-react";
 import theme from "assets/styles/theme";
-import { useAppSelector } from "../../store/hooks";
+import { handleAlert, openModal } from "store/clientSlices/modalSlice";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import {
   EmojiCntnr,
   EmojiIcon,
@@ -36,6 +37,8 @@ export function MessageInput({
   const userNameOnTextAreaRef = useRef<HTMLSpanElement>(null);
   const userNameWidth = useComponentWidth(userNameOnTextAreaRef);
 
+  const dispatch = useAppDispatch();
+
   // Treat the emoji picker
   const [showEmojiPicker, handleEmojiPicker] = useState(false);
 
@@ -64,7 +67,8 @@ export function MessageInput({
   // Treat message
   const handleSubmit = async () => {
     if (!loginUserId) {
-      alert("먼저 로그인을 해 주세요");
+      dispatch(openModal("alert"));
+      dispatch(handleAlert("먼저 로그인을 해 주세요"));
       return;
     }
 

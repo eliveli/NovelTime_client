@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import { openModal } from "store/clientSlices/modalSlice";
+import { handleAlert, openModal } from "store/clientSlices/modalSlice";
 import { useCreateMyNovelListMutation } from "store/serverAPIs/novelTime";
 import Spinner from "assets/Spinner";
 import { useParams } from "react-router-dom";
@@ -31,7 +31,8 @@ export default function WriteNewListTitle() {
 
   const handleToCreateList = async () => {
     if (!titleRef.current?.value) {
-      alert("리스트 제목을 입력해 주세요");
+      dispatch(openModal("alert"));
+      dispatch(handleAlert("리스트 제목을 입력해 주세요"));
       return;
     }
 
@@ -42,7 +43,8 @@ export default function WriteNewListTitle() {
     // my novel lists updated automatically with provide and invalidate tags
 
     if (createListResult.isError) {
-      alert("리스트를 생성할 수 없습니다. 새로고침 후 시도해보세요");
+      dispatch(openModal("alert"));
+      dispatch(handleAlert("리스트를 생성할 수 없습니다. 새로고침 후 시도해보세요"));
       return;
     }
 

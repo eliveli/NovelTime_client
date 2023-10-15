@@ -33,7 +33,7 @@ import { setSearchList } from "store/clientSlices/filterSlice";
 import { getCurrentRoomId, isThePath, useWhetherItIsTablet } from "utils";
 import { Img } from "store/serverAPIs/types";
 import { UnreadMessageNo } from "views/ChatRoomList";
-import { openModal } from "../../store/clientSlices/modalSlice";
+import { handleAlert, openModal } from "../../store/clientSlices/modalSlice";
 import { handleWritingToSubmitOnMobile } from "../../store/clientSlices/writingSlice";
 import { useAppSelector, useAppDispatch } from "../../store/hooks";
 
@@ -103,7 +103,8 @@ export function NavPC() {
               isMessageCategory={_.category === "Message"}
               onClick={() => {
                 if (_.category === "Message" && !loginUser.userId) {
-                  alert("로그인이 필요합니다");
+                  dispatch(openModal("alert"));
+                  dispatch(handleAlert("로그인이 필요합니다"));
                   return;
                 }
 
@@ -284,7 +285,8 @@ export function NavMobileMainBottom() {
               }
 
               if (["AddPost", "Message"].includes(_.category) && !isLoginUser) {
-                alert("로그인이 필요합니다");
+                dispatch(openModal("alert"));
+                dispatch(handleAlert("로그인이 필요합니다"));
                 return;
               }
 

@@ -16,6 +16,7 @@ import { useWhetherItIsDesktop } from "utils";
 import { setSearchList } from "store/clientSlices/filterSlice";
 import Spinner from "assets/Spinner";
 import { EditAndDeleteContainer } from "components/Writing/WritingDetail.styles";
+import { handleAlert, openModal } from "store/clientSlices/modalSlice";
 import { DotLine, DotAnimation, ContentAnimation } from "./RecommendDetail.styles";
 
 export default function NovelDetailRecommend() {
@@ -64,7 +65,8 @@ export default function NovelDetailRecommend() {
     });
 
     if (deleteWritingResult.isError) {
-      alert("글을 삭제할 수 없습니다. 새로고침 후 다시 시도해 보세요");
+      dispatch(openModal("alert"));
+      dispatch(handleAlert("글을 삭제할 수 없습니다. 새로고침 후 다시 시도해 보세요"));
     }
 
     // go to the recommend list page

@@ -424,6 +424,10 @@ export const ButtonForAnswer = styled.div<{ isSingleButton?: true }>`
 
   color: rgba(100, 100, 100, 0.6);
   font-weight: 500;
+
+  ${theme.media.hover(`
+    cursor: pointer;
+  `)}
 `;
 export const TextForAlertOrConfirm = styled.div`
   width: 100%;

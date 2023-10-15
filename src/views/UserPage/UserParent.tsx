@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import theme from "assets/styles/theme";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { setLoginUser, setAccessToken, setLogout } from "store/clientSlices/loginUserSlice";
-import { openModal } from "store/clientSlices/modalSlice";
+import { handleAlert, openModal } from "store/clientSlices/modalSlice";
 import { messageIconUserPage } from "assets/images";
 import { Outlet, useNavigate, useParams } from "react-router-dom";
 import Icon from "assets/Icon";
@@ -76,7 +76,8 @@ function Profile() {
     );
   }
   const handleLogout = () => {
-    alert("로그아웃 하시겠습니까?");
+    dispatch(openModal("alert"));
+    dispatch(handleAlert("로그아웃 하시겠습니까?"));
     dispatch(setLogout(true));
     // - it is not required to set logout with undefined again
     //   because when user logs in, page will be refreshed then isLogout state will be undefined
@@ -88,7 +89,8 @@ function Profile() {
 
   const handleMessage = async () => {
     if (!isLogin) {
-      alert("메세지를 보내려면 로그인해 주세요");
+      dispatch(openModal("alert"));
+      dispatch(handleAlert("메세지를 보내려면 로그인해 주세요"));
       return;
     }
 
@@ -128,12 +130,14 @@ function Profile() {
     }
 
     if (status === 400 && error && error.message === "user doesn't exist") {
-      alert("존재하지 않는 사용자입니다");
+      dispatch(openModal("alert"));
+      dispatch(handleAlert("존재하지 않는 사용자입니다"));
       return;
     }
 
     if (status === 500) {
-      alert("메세지를 보낼 수 없습니다. 새로고침 후 시도해 보세요");
+      dispatch(openModal("alert"));
+      dispatch(handleAlert("메세지를 보낼 수 없습니다. 새로고침 후 시도해 보세요"));
     }
   };
 
@@ -198,7 +202,8 @@ export default function UserParent() {
   });
   useEffect(() => {
     if (isError) {
-      alert("존재하지 않는 사용자입니다.");
+      dispatch(openModal("alert"));
+      dispatch(handleAlert("존재하지 않는 사용자입니다."));
       navigate("/");
       return;
     }

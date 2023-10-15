@@ -6,7 +6,7 @@ import { NovelRow } from "components/Novel";
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "store/hooks";
-import { setMetaTags } from "store/clientSlices/modalSlice";
+import { handleAlert, openModal, setMetaTags } from "store/clientSlices/modalSlice";
 
 import {
   useGetListDetailedQuery,
@@ -132,14 +132,17 @@ export default function UserNovelListDetailed({ isCreated }: { isCreated: boolea
 
     if (!loginUser.userId) {
       // when user didn't login
-      alert("좋아요를 누르려면 로그인을 해 주세요.");
+      dispatch(openModal("alert"));
+      dispatch(handleAlert("좋아요를 누르려면 로그인을 해 주세요."));
     } else if (loginUser.userName === userNameAtTitle) {
       // prevent login user from setting LIKE of list that he/she created
-      alert("내가 만든 리스트에는 좋아요를 누를 수 없어요.");
+      dispatch(openModal("alert"));
+      dispatch(handleAlert("내가 만든 리스트에는 좋아요를 누를 수 없어요."));
     } else if (!isLike) {
       // set isLike to true by request without alert when it was false
       await toggleLikeRequest();
-      alert("내 좋아요 리스트에 추가되었습니다.");
+      dispatch(openModal("alert"));
+      dispatch(handleAlert("내 좋아요 리스트에 추가되었습니다."));
       //
       // change this to modal that disappears later
       //
@@ -205,7 +208,8 @@ export default function UserNovelListDetailed({ isCreated }: { isCreated: boolea
 
     // when list id is undefined or there is no list that matches list id
     if (!listId || !listDetailedResult.data?.novelList?.novel) {
-      alert("리스트가 존재하지 않습니다.");
+      dispatch(openModal("alert"));
+      dispatch(handleAlert("리스트가 존재하지 않습니다."));
       navigate(`/user-page/${userName as string}`, { replace: true });
     }
     //
@@ -240,7 +244,8 @@ export default function UserNovelListDetailed({ isCreated }: { isCreated: boolea
     });
 
     if (removeNovelsResult.isError) {
-      alert("리스트를 삭제할 수 없습니다. 새로고침 후 다시 시도해 보세요");
+      dispatch(openModal("alert"));
+      dispatch(handleAlert("리스트를 삭제할 수 없습니다. 새로고침 후 다시 시도해 보세요"));
     }
 
     finishRemoving();

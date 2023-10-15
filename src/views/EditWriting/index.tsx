@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { RECOMMEND_DETAIL, RECOMMEND_LIST, TALK_DETAIL, TALK_LIST } from "utils/pathname";
 import { useEditWritingMutation } from "store/serverAPIs/novelTime";
 import Spinner from "assets/Spinner";
+import { handleAlert, openModal } from "store/clientSlices/modalSlice";
 import {
   handleWritingToSubmitOnMobile,
   handleWritingToEdit,
@@ -50,16 +51,19 @@ export default function EditWriting() {
 
   const submitToEditWriting = async () => {
     if (!loginUserId) {
-      alert("먼저 로그인을 해 주세요");
+      dispatch(openModal("alert"));
+      dispatch(handleAlert("먼저 로그인을 해 주세요"));
       return;
     }
     if (!titleRef.current?.value) {
-      alert("제목을 입력해 주세요");
+      dispatch(openModal("alert"));
+      dispatch(handleAlert("제목을 입력해 주세요"));
       return;
     }
 
     if (!contentRef.current?.value) {
-      alert("내용을 입력해 주세요");
+      dispatch(openModal("alert"));
+      dispatch(handleAlert("내용을 입력해 주세요"));
       return;
     }
 
@@ -75,7 +79,8 @@ export default function EditWriting() {
     });
 
     if (editWritingResult.isError) {
-      alert("글을 수정할 수 없습니다. 새로고침 후 다시 시도해 보세요");
+      dispatch(openModal("alert"));
+      dispatch(handleAlert("글을 수정할 수 없습니다. 새로고침 후 다시 시도해 보세요"));
     }
 
     const pathToGoTo = writingType === "FreeTalk" ? TALK_DETAIL : RECOMMEND_DETAIL;
@@ -120,7 +125,8 @@ export default function EditWriting() {
     if (!writingId) {
       const pathToGoTo = writingType === "FreeTalk" ? TALK_LIST : RECOMMEND_LIST;
 
-      alert("비정상적인 접근입니다");
+      dispatch(openModal("alert"));
+      dispatch(handleAlert("비정상적인 접근입니다"));
       navigate(pathToGoTo);
     }
   }, [writingId]);

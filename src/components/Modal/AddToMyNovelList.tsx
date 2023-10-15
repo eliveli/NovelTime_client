@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { closeModal, openModal } from "store/clientSlices/modalSlice";
+import { closeModal, handleAlert, openModal } from "store/clientSlices/modalSlice";
 
 import Icon from "assets/Icon";
 import { handleNovelIdToAddToList } from "store/clientSlices/userNovelListSlice";
@@ -65,12 +65,14 @@ export default function AddToMyNovelList() {
 
   const handleToAddNovelToLists = async () => {
     if (!novelIdToAdd) {
-      alert("담을 소설이 없습니다");
+      dispatch(openModal("alert"));
+      dispatch(handleAlert("담을 소설이 없습니다"));
       return;
     }
 
     if (!listsSelected.length) {
-      alert("리스트를 선택해 주세요");
+      dispatch(openModal("alert"));
+      dispatch(handleAlert("리스트를 선택해 주세요"));
       return;
     }
 
@@ -99,7 +101,8 @@ export default function AddToMyNovelList() {
     // novels in the list are updated with provide and invalidate tags
 
     if (addOrRemoveNovelInListResult.isError) {
-      alert("리스트에 담을 수 없습니다. 새로고침 후 시도해보세요");
+      dispatch(openModal("alert"));
+      dispatch(handleAlert("리스트에 담을 수 없습니다. 새로고침 후 시도해보세요"));
       return;
     }
 

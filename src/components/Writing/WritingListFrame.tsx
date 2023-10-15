@@ -3,7 +3,7 @@ import { CategoryMark } from "components/CategoryMark";
 import { setSearchList } from "store/clientSlices/filterSlice";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { ADD_WRITING } from "utils/pathname";
-import { openModal } from "store/clientSlices/modalSlice";
+import { handleAlert, openModal } from "store/clientSlices/modalSlice";
 import Icon from "assets/Icon";
 import { useWhetherItIsMobile } from "utils";
 import { handleNovelIdToAddToList } from "store/clientSlices/userNovelListSlice";
@@ -28,13 +28,15 @@ function ButtonInNovelDetail({
   children: React.ReactNode;
 }) {
   const isLoginUser = !!useAppSelector((state) => state.loginUser.user.userId);
+  const dispatch = useAppDispatch();
 
   return (
     <ButtonContainer
       isForMyList={isForMyList}
       onClick={() => {
         if (!isLoginUser) {
-          alert("로그인이 필요합니다");
+          dispatch(openModal("alert"));
+          dispatch(handleAlert("로그인이 필요합니다"));
           return;
         }
 
@@ -77,7 +79,8 @@ export default function WritingListFrame({
 
   const handleToGoToWrite = () => {
     if (!isLoginUser) {
-      alert("먼저 로그인해 주세요");
+      dispatch(openModal("alert"));
+      dispatch(handleAlert("먼저 로그인해 주세요"));
       return;
     }
 
@@ -92,7 +95,8 @@ export default function WritingListFrame({
 
   const handleToGoToAddNovel = () => {
     if (!isLoginUser) {
-      alert("먼저 로그인해 주세요");
+      dispatch(openModal("alert"));
+      dispatch(handleAlert("먼저 로그인해 주세요"));
       return;
     }
 

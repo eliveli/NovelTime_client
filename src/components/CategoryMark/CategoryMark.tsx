@@ -1,5 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { goToUserPage } from "utils";
+import { useAppDispatch } from "store/hooks";
+import { handleAlert, openModal } from "store/clientSlices/modalSlice";
 import {
   CategoryContainer,
   CategoryDesc,
@@ -63,6 +65,7 @@ export default function CategoryMark({
   children?: React.ReactChild | React.ReactChildren | React.ReactNode;
 }) {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
   if (linkPath) {
     return (
@@ -151,7 +154,8 @@ export default function CategoryMark({
           <GoToAllContentBtn
             onClick={() => {
               if (isNoContent) {
-                alert("게시글이 존재하지 않아요.");
+                dispatch(openModal("alert"));
+                dispatch(handleAlert("게시글이 존재하지 않아요."));
                 return;
               }
               navigate(userPagePath());

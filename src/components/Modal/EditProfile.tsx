@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { closeModal } from "store/clientSlices/modalSlice";
+import { closeModal, handleAlert, openModal } from "store/clientSlices/modalSlice";
 import { useImageHostingMutation } from "store/serverAPIs/imageHosting";
 import { useCheckForUserNameMutation, useSaveUserInfoMutation } from "store/serverAPIs/novelTime";
 import { CheckDeviceType } from "utils";
@@ -77,23 +77,28 @@ export default function EditProfile() {
   const confirmUserName = async () => {
     const tempUserName = userNameRef.current?.value as string;
     if (!tempUserName) {
-      alert("유저 네임을 입력해 주세요");
+      dispatch(openModal("alert"));
+      dispatch(handleAlert("유저 네임을 입력해 주세요"));
     } else if (userNameByte > 12) {
       // limit the text length by 12byte
-      alert("입력 가능한 글자 수를 초과했어요");
+      dispatch(openModal("alert"));
+      dispatch(handleAlert("입력 가능한 글자 수를 초과했어요"));
     } else if (tempUserName === loginUser.userName) {
-      alert("기존 이름과 같아요. 새로운 이름을 입력해 주세요");
+      dispatch(openModal("alert"));
+      dispatch(handleAlert("기존 이름과 같아요. 새로운 이름을 입력해 주세요"));
     } else if (tempUserName[0] === " " || tempUserName[tempUserName.length - 1] === " ") {
       // Make user exclude leading or trailing spaces in userName
       // and allow spaces between userName letters. this naming rule is the same as kakao's
-      alert("이름 맨 앞 또는 맨 뒤 공백이 없어야 해요");
+      dispatch(openModal("alert"));
+      dispatch(handleAlert("이름 맨 앞 또는 맨 뒤 공백이 없어야 해요"));
     } else {
       // request with user name to check if it is duplicate or not
       await CheckForUserName(tempUserName).then((result) => {
         if ("data" in result) {
-          const alertMessage = result.data; // can't read it directly in alert
+          const alertMessage = result.data;
 
-          alert(alertMessage);
+          dispatch(openModal("alert"));
+          dispatch(handleAlert(alertMessage));
 
           if (alertMessage === "you can use this name") {
             // complete checking for duplicate user name
@@ -132,7 +137,8 @@ export default function EditProfile() {
         if (CheckDeviceType() !== "desktop") {
           const blob = dataURLtoBlob(reader.result as string);
           if (!blob) {
-            alert("이미지 편집에 실패했습니다. 다시 한 번 시도해주세요.");
+            dispatch(openModal("alert"));
+            dispatch(handleAlert("이미지 편집에 실패했습니다. 다시 한 번 시도해주세요."));
             return;
           }
 
@@ -143,8 +149,11 @@ export default function EditProfile() {
             // set the image and show it as image profile
             setNewProfileImage(blob);
           } else {
-            alert(
-              `20MB 이하로 저장 가능해요! 다른 이미지를 선택해 주세요. 현재 용량: ${dataCapacity}`,
+            dispatch(openModal("alert"));
+            dispatch(
+              handleAlert(
+                `20MB 이하로 저장 가능해요! 다른 이미지를 선택해 주세요. 현재 용량: ${dataCapacity}`,
+              ),
             );
           }
         }
@@ -170,7 +179,8 @@ export default function EditProfile() {
       reader.onloadend = () => {
         const blob = dataURLtoBlob(reader.result as string);
         if (!blob) {
-          alert("이미지 편집에 실패했습니다. 다시 한 번 시도해주세요.");
+          dispatch(openModal("alert"));
+          dispatch(handleAlert("이미지 편집에 실패했습니다. 다시 한 번 시도해주세요."));
           return;
         }
 
@@ -183,8 +193,11 @@ export default function EditProfile() {
           // show selected BG in UserPageParent component
           dispatch(setTemporaryUserBG({ src: BGasString, position: "" }));
         } else {
-          alert(
-            `20MB 이하로 저장 가능해요! 다른 이미지를 선택해 주세요. 현재 용량: ${dataCapacity}`,
+          dispatch(openModal("alert"));
+          dispatch(
+            handleAlert(
+              `20MB 이하로 저장 가능해요! 다른 이미지를 선택해 주세요. 현재 용량: ${dataCapacity}`,
+            ),
           );
         }
       };
@@ -220,7 +233,8 @@ export default function EditProfile() {
     // in this case don't save and do alert
     if (isCheckedForDuplicateRef.current === false) {
       isLoadingRef.current = false;
-      alert("유저네임 중복 체크를 완료해 주세요");
+      dispatch(openModal("alert"));
+      dispatch(handleAlert("유저네임 중복 체크를 완료해 주세요"));
       return;
     }
 
@@ -260,7 +274,8 @@ export default function EditProfile() {
       dispatch(setAccessToken(payload.accessToken));
       dispatch(setUserProfile(payload.userInfo));
       isLoadingRef.current = false;
-      alert("유저 정보가 성공적으로 저장되었어요");
+      dispatch(openModal("alert"));
+      dispatch(handleAlert("유저 정보가 성공적으로 저장되었어요"));
 
       // navigate to next path by new user name //
       const { pathname } = window.location; // pathname : "/user-page/" + userName (+ ...)
@@ -291,7 +306,8 @@ export default function EditProfile() {
       navigate(nextPathName);
     } catch (err) {
       isLoadingRef.current = false;
-      alert("유저 정보 저장에 실패했어요");
+      dispatch(openModal("alert"));
+      dispatch(handleAlert("유저 정보 저장에 실패했어요"));
     }
     // after all passed close the modal // change upper code later
     closeProfileModal();

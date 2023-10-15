@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import { closeModal } from "store/clientSlices/modalSlice";
+import { closeModal, handleAlert, openModal } from "store/clientSlices/modalSlice";
 import { handleUserNovelListToEdit } from "store/clientSlices/userNovelListSlice";
 import { useChangeMyListTitleMutation } from "store/serverAPIs/novelTime";
 import { useParams } from "react-router-dom";
@@ -52,7 +52,8 @@ export default function ChangeListTitle() {
     // update list automatically with the invalidate and provide tags
 
     if (changeListTitleResult.isError) {
-      alert("리스트 제목을 수정할 수 없습니다. 새로고침 후 다시 시도해 보세요");
+      dispatch(openModal("alert"));
+      dispatch(handleAlert("리스트 제목을 수정할 수 없습니다. 새로고침 후 다시 시도해 보세요"));
       return;
     }
 

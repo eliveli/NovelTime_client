@@ -6,6 +6,7 @@ import {
   useEditCommentMutation,
 } from "store/serverAPIs/novelTime";
 import { setCommentToEdit } from "store/clientSlices/commentSlice";
+import { handleAlert, openModal } from "store/clientSlices/modalSlice";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import {
   EmojiCntnr,
@@ -35,9 +36,12 @@ export function ReCommentInputToCreateOnTablet() {
   const userNameOnTextAreaRef = useRef<HTMLSpanElement>(null);
   const userNameWidth = useComponentWidth(userNameOnTextAreaRef);
 
+  const dispatch = useAppDispatch();
+
   const handleSubmitToCreate = async () => {
     if (!loginUserId) {
-      alert("먼저 로그인을 해 주세요");
+      dispatch(openModal("alert"));
+      dispatch(handleAlert("먼저 로그인을 해 주세요"));
       return;
     }
 
@@ -56,7 +60,8 @@ export function ReCommentInputToCreateOnTablet() {
     // and update reComments automatically with the invalidate and provide tags
 
     if (addReCommentResult.isError) {
-      alert("코멘트를 추가할 수 없습니다. 새로고침 후 다시 시도해 보세요");
+      dispatch(openModal("alert"));
+      dispatch(handleAlert("코멘트를 추가할 수 없습니다. 새로고침 후 다시 시도해 보세요"));
       return;
     }
 
@@ -119,12 +124,14 @@ export function ReCommentInputToEditOnTablet() {
   const handleSubmitToEdit = async () => {
     // provide a reComment to server
     if (!loginUserId) {
-      alert("먼저 로그인을 해 주세요");
+      dispatch(openModal("alert"));
+      dispatch(handleAlert("먼저 로그인을 해 주세요"));
       return;
     }
 
     if (!textRef.current?.value) {
-      alert("내용을 입력해 주세요");
+      dispatch(openModal("alert"));
+      dispatch(handleAlert("내용을 입력해 주세요"));
       return; // when comment content is empty
     }
 
@@ -136,7 +143,8 @@ export function ReCommentInputToEditOnTablet() {
     });
 
     if (editCommentResult.isError) {
-      alert("코멘트를 수정할 수 없습니다. 새로고침 후 다시 시도해 보세요");
+      dispatch(openModal("alert"));
+      dispatch(handleAlert("코멘트를 수정할 수 없습니다. 새로고침 후 다시 시도해 보세요"));
       return;
     }
 
@@ -205,9 +213,12 @@ export function RootCommentInputToCreateOnTablet({
 
   const [addRootComment, addRootCommentResult] = useAddRootCommentMutation();
 
+  const dispatch = useAppDispatch();
+
   const handleSubmitToCreate = async () => {
     if (!loginUserId) {
-      alert("먼저 로그인을 해 주세요");
+      dispatch(openModal("alert"));
+      dispatch(handleAlert("먼저 로그인을 해 주세요"));
       return;
     }
 
@@ -222,7 +233,8 @@ export function RootCommentInputToCreateOnTablet({
     });
 
     if (addRootCommentResult.isError) {
-      alert("코멘트를 추가할 수 없습니다. 새로고침 후 다시 시도해 보세요");
+      dispatch(openModal("alert"));
+      dispatch(handleAlert("코멘트를 추가할 수 없습니다. 새로고침 후 다시 시도해 보세요"));
       return;
     }
 
@@ -275,12 +287,14 @@ export function RootCommentInputToEditOnTablet({
 
   const handleSubmitToEdit = async () => {
     if (!loginUserId) {
-      alert("먼저 로그인을 해 주세요");
+      dispatch(openModal("alert"));
+      dispatch(handleAlert("먼저 로그인을 해 주세요"));
       return;
     }
 
     if (!textRef.current?.value) {
-      alert("내용을 입력해 주세요");
+      dispatch(openModal("alert"));
+      dispatch(handleAlert("내용을 입력해 주세요"));
       return; // when comment content is empty
     }
 
@@ -292,7 +306,8 @@ export function RootCommentInputToEditOnTablet({
     });
 
     if (editCommentResult.isError) {
-      alert("코멘트를 수정할 수 없습니다. 새로고침 후 다시 시도해 보세요");
+      dispatch(openModal("alert"));
+      dispatch(handleAlert("코멘트를 수정할 수 없습니다. 새로고침 후 다시 시도해 보세요"));
       return;
     }
     // initialize comment input
@@ -376,7 +391,8 @@ export function CommentInputOnMobile({
   const handleSubmitToCreate = async () => {
     // provide a rootComment or reComment to server
     if (!loginUserId) {
-      alert("먼저 로그인을 해 주세요");
+      dispatch(openModal("alert"));
+      dispatch(handleAlert("먼저 로그인을 해 주세요"));
       return;
     }
 
@@ -393,7 +409,8 @@ export function CommentInputOnMobile({
       });
 
       if (addRootCommentResult.isError) {
-        alert("코멘트를 추가할 수 없습니다. 새로고침 후 다시 시도해 보세요");
+        dispatch(openModal("alert"));
+        dispatch(handleAlert("코멘트를 추가할 수 없습니다. 새로고침 후 다시 시도해 보세요"));
         return;
       }
 
@@ -411,7 +428,8 @@ export function CommentInputOnMobile({
       // and update reComments automatically with the invalidate and provide tags
 
       if (addReCommentResult.isError) {
-        alert("코멘트를 추가할 수 없습니다. 새로고침 후 다시 시도해 보세요");
+        dispatch(openModal("alert"));
+        dispatch(handleAlert("코멘트를 추가할 수 없습니다. 새로고침 후 다시 시도해 보세요"));
         return;
       }
     }
@@ -424,12 +442,14 @@ export function CommentInputOnMobile({
   const handleSubmitToEdit = async () => {
     // provide a rootComment or reComment to server
     if (!loginUserId) {
-      alert("먼저 로그인을 해 주세요");
+      dispatch(openModal("alert"));
+      dispatch(handleAlert("먼저 로그인을 해 주세요"));
       return;
     }
 
     if (!textRef.current?.value) {
-      alert("내용을 입력해 주세요");
+      dispatch(openModal("alert"));
+      dispatch(handleAlert("내용을 입력해 주세요"));
       return; // when comment content is empty
     }
 
@@ -441,7 +461,8 @@ export function CommentInputOnMobile({
     });
 
     if (editCommentResult.isError) {
-      alert("코멘트를 수정할 수 없습니다. 새로고침 후 다시 시도해 보세요");
+      dispatch(openModal("alert"));
+      dispatch(handleAlert("코멘트를 수정할 수 없습니다. 새로고침 후 다시 시도해 보세요"));
       return;
     }
 
