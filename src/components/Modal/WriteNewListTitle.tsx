@@ -44,7 +44,7 @@ export default function WriteNewListTitle() {
 
     if (createListResult.isError) {
       dispatch(openModal("alert"));
-      dispatch(handleAlert("리스트를 생성할 수 없습니다. 새로고침 후 시도해보세요"));
+      dispatch(handleAlert(`리스트를 생성할 수 없습니다.\n새로고침 후 시도해보세요`));
       return;
     }
 

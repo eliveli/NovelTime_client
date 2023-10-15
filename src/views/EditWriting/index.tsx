@@ -80,7 +80,7 @@ export default function EditWriting() {
 
     if (editWritingResult.isError) {
       dispatch(openModal("alert"));
-      dispatch(handleAlert("글을 수정할 수 없습니다. 새로고침 후 다시 시도해 보세요"));
+      dispatch(handleAlert(`글을 수정할 수 없습니다.\n새로고침 후 다시 시도해 보세요`));
     }
 
     const pathToGoTo = writingType === "FreeTalk" ? TALK_DETAIL : RECOMMEND_DETAIL;

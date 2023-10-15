@@ -61,7 +61,7 @@ export function ReCommentInputToCreateOnTablet() {
 
     if (addReCommentResult.isError) {
       dispatch(openModal("alert"));
-      dispatch(handleAlert("코멘트를 추가할 수 없습니다. 새로고침 후 다시 시도해 보세요"));
+      dispatch(handleAlert(`코멘트를 추가할 수 없습니다.\n새로고침 후 다시 시도해 보세요`));
       return;
     }
 
@@ -144,7 +144,7 @@ export function ReCommentInputToEditOnTablet() {
 
     if (editCommentResult.isError) {
       dispatch(openModal("alert"));
-      dispatch(handleAlert("코멘트를 수정할 수 없습니다. 새로고침 후 다시 시도해 보세요"));
+      dispatch(handleAlert(`코멘트를 수정할 수 없습니다.\n새로고침 후 다시 시도해 보세요`));
       return;
     }
 
@@ -234,7 +234,7 @@ export function RootCommentInputToCreateOnTablet({
 
     if (addRootCommentResult.isError) {
       dispatch(openModal("alert"));
-      dispatch(handleAlert("코멘트를 추가할 수 없습니다. 새로고침 후 다시 시도해 보세요"));
+      dispatch(handleAlert(`코멘트를 추가할 수 없습니다.\n새로고침 후 다시 시도해 보세요`));
       return;
     }
 
@@ -307,7 +307,7 @@ export function RootCommentInputToEditOnTablet({
 
     if (editCommentResult.isError) {
       dispatch(openModal("alert"));
-      dispatch(handleAlert("코멘트를 수정할 수 없습니다. 새로고침 후 다시 시도해 보세요"));
+      dispatch(handleAlert(`코멘트를 수정할 수 없습니다.\n새로고침 후 다시 시도해 보세요`));
       return;
     }
     // initialize comment input
@@ -410,7 +410,7 @@ export function CommentInputOnMobile({
 
       if (addRootCommentResult.isError) {
         dispatch(openModal("alert"));
-        dispatch(handleAlert("코멘트를 추가할 수 없습니다. 새로고침 후 다시 시도해 보세요"));
+        dispatch(handleAlert(`코멘트를 추가할 수 없습니다.\n새로고침 후 다시 시도해 보세요`));
         return;
       }
 
@@ -429,7 +429,7 @@ export function CommentInputOnMobile({
 
       if (addReCommentResult.isError) {
         dispatch(openModal("alert"));
-        dispatch(handleAlert("코멘트를 추가할 수 없습니다. 새로고침 후 다시 시도해 보세요"));
+        dispatch(handleAlert(`코멘트를 추가할 수 없습니다.\n새로고침 후 다시 시도해 보세요`));
         return;
       }
     }
@@ -462,7 +462,7 @@ export function CommentInputOnMobile({
 
     if (editCommentResult.isError) {
       dispatch(openModal("alert"));
-      dispatch(handleAlert("코멘트를 수정할 수 없습니다. 새로고침 후 다시 시도해 보세요"));
+      dispatch(handleAlert(`코멘트를 수정할 수 없습니다.\n새로고침 후 다시 시도해 보세요`));
       return;
     }
 

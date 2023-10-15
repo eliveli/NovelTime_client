@@ -438,6 +438,9 @@ export const TextForAlertOrConfirm = styled.div`
 
   color: rgba(100, 100, 100, 0.6);
   font-weight: 500;
+
+  white-space: pre-line;
+  text-align: center;
 `;
 
 export const ProfileImgBox = styled.div`

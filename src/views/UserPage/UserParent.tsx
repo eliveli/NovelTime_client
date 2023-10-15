@@ -137,7 +137,7 @@ function Profile() {
 
     if (status === 500) {
       dispatch(openModal("alert"));
-      dispatch(handleAlert("메세지를 보낼 수 없습니다. 새로고침 후 시도해 보세요"));
+      dispatch(handleAlert(`메세지를 보낼 수 없습니다.\n새로고침 후 시도해 보세요`));
     }
   };
 

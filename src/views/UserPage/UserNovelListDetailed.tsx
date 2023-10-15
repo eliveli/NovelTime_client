@@ -6,7 +6,7 @@ import { NovelRow } from "components/Novel";
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "store/hooks";
-import { handleAlert, openModal, setMetaTags } from "store/clientSlices/modalSlice";
+import { handleAlert, handleConfirm, openModal, setMetaTags } from "store/clientSlices/modalSlice";
 
 import {
   useGetListDetailedQuery,
@@ -134,10 +134,12 @@ export default function UserNovelListDetailed({ isCreated }: { isCreated: boolea
       // when user didn't login
       dispatch(openModal("alert"));
       dispatch(handleAlert("좋아요를 누르려면 로그인을 해 주세요."));
+      //
     } else if (loginUser.userName === userNameAtTitle) {
       // prevent login user from setting LIKE of list that he/she created
       dispatch(openModal("alert"));
       dispatch(handleAlert("내가 만든 리스트에는 좋아요를 누를 수 없어요."));
+      //
     } else if (!isLike) {
       // set isLike to true by request without alert when it was false
       await toggleLikeRequest();
@@ -148,14 +150,31 @@ export default function UserNovelListDetailed({ isCreated }: { isCreated: boolea
       //
     } else if (userNameAtTitle !== loginUser.userName) {
       // when login user who isn't the owner of user page tries to cancel LIKE
-      if (confirm("좋아요를 취소하면 내 유저페이지의 리스트에서 지워집니다. 취소하시겠어요?")) {
-        await toggleLikeRequest();
-      }
+      dispatch(
+        handleConfirm({
+          question: `좋아요를 취소하면 내 유저페이지의 리스트에서 지워집니다.\n취소하시겠어요?`,
+          textForYes: "예",
+          textForNo: "아니오",
+          functionForYes: toggleLikeRequest,
+          functionForNo: () => {},
+        }),
+      );
+
+      dispatch(openModal("confirm"));
+      //
     } else if (userNameAtTitle === loginUser.userName) {
       // when login user who is the owner of user page tries to cancel LIKE
-      if (confirm("좋아요를 취소하면 리스트에서 지워집니다. 취소하시겠어요?")) {
-        await toggleLikeRequest();
-      }
+      dispatch(
+        handleConfirm({
+          question: `좋아요를 취소하면 리스트에서 지워집니다.\n취소하시겠어요?`,
+          textForYes: "예",
+          textForNo: "아니오",
+          functionForYes: toggleLikeRequest,
+          functionForNo: () => {},
+        }),
+      );
+
+      dispatch(openModal("confirm"));
     }
   };
 
@@ -245,7 +264,7 @@ export default function UserNovelListDetailed({ isCreated }: { isCreated: boolea
 
     if (removeNovelsResult.isError) {
       dispatch(openModal("alert"));
-      dispatch(handleAlert("리스트를 삭제할 수 없습니다. 새로고침 후 다시 시도해 보세요"));
+      dispatch(handleAlert(`리스트를 삭제할 수 없습니다.\n새로고침 후 다시 시도해 보세요`));
     }
 
     finishRemoving();

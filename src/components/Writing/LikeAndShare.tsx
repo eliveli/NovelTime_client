@@ -60,7 +60,9 @@ export default function LikeAndShare({ isLike, likeNO, writingId, writingType, n
     });
     if (toggleLikeResult.isError) {
       dispatch(openModal("alert"));
-      dispatch(handleAlert("좋아요 기능이 정상적으로 작동하지 않습니다. 새로고침 후 시도해주세요"));
+      dispatch(
+        handleAlert(`좋아요 기능이 정상적으로 작동하지 않습니다.\n새로고침 후 시도해주세요`),
+      );
     }
   };
 

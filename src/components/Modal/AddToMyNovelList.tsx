@@ -102,7 +102,7 @@ export default function AddToMyNovelList() {
 
     if (addOrRemoveNovelInListResult.isError) {
       dispatch(openModal("alert"));
-      dispatch(handleAlert("리스트에 담을 수 없습니다. 새로고침 후 시도해보세요"));
+      dispatch(handleAlert(`리스트에 담을 수 없습니다.\n새로고침 후 시도해보세요`));
       return;
     }
 
