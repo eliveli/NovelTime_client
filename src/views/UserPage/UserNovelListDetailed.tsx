@@ -156,7 +156,6 @@ export default function UserNovelListDetailed({ isCreated }: { isCreated: boolea
           textForYes: "예",
           textForNo: "아니오",
           functionForYes: toggleLikeRequest,
-          functionForNo: () => {},
         }),
       );
 
@@ -170,7 +169,6 @@ export default function UserNovelListDetailed({ isCreated }: { isCreated: boolea
           textForYes: "예",
           textForNo: "아니오",
           functionForYes: toggleLikeRequest,
-          functionForNo: () => {},
         }),
       );
 

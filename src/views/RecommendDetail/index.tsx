@@ -16,7 +16,7 @@ import { useWhetherItIsDesktop } from "utils";
 import { setSearchList } from "store/clientSlices/filterSlice";
 import Spinner from "assets/Spinner";
 import { EditAndDeleteContainer } from "components/Writing/WritingDetail.styles";
-import { handleAlert, openModal } from "store/clientSlices/modalSlice";
+import { handleAlert, handleConfirm, openModal } from "store/clientSlices/modalSlice";
 import { DotLine, DotAnimation, ContentAnimation } from "./RecommendDetail.styles";
 
 export default function NovelDetailRecommend() {
@@ -53,11 +53,6 @@ export default function NovelDetailRecommend() {
   async function handleDelete() {
     if (!recommend.data) return;
 
-    // * ask whether you really want to delete the comment
-    // * change this after making the modal
-
-    if (deleteWritingResult.isLoading) return; // prevent click while loading for prev request
-
     await deleteWriting({
       writingId: recommend.data.recommend.recommendId,
       writingType: "R",
@@ -89,6 +84,21 @@ export default function NovelDetailRecommend() {
     }
   }
 
+  const confirmDelete = () => {
+    if (deleteWritingResult.isLoading) return; // prevent click while loading for prev request
+
+    dispatch(
+      handleConfirm({
+        question: "글을 삭제하시겠습니까?",
+        textForYes: "삭제",
+        textForNo: "취소",
+        functionForYes: async () => handleDelete(),
+      }),
+    );
+
+    dispatch(openModal("confirm"));
+  };
+
   const recommendDetail = {
     recomDtlImgWidth: "min-width: 92px;",
     recomDtlTextHeight: "height: 64px;",
@@ -110,10 +120,7 @@ export default function NovelDetailRecommend() {
             <WritingDetailContainer>
               <EditAndDeleteContainer>
                 {isWriter && (
-                  <EditAndDelete
-                    clickToEdit={handleEdit}
-                    clickToDelete={async () => handleDelete()}
-                  />
+                  <EditAndDelete clickToEdit={handleEdit} clickToDelete={confirmDelete} />
                 )}
               </EditAndDeleteContainer>
 

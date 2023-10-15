@@ -12,7 +12,7 @@ interface Confirm {
   textForYes: string;
   textForNo: string;
   functionForYes: () => void;
-  functionForNo: () => void;
+  functionForNo?: () => void;
 }
 export interface IsModalState {
   modalCategory:

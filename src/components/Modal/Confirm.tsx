@@ -53,7 +53,9 @@ export default function Confirm() {
           </ButtonForAnswer>
           <ButtonForAnswer
             onClick={() => {
-              functionForNo();
+              if (functionForNo) {
+                functionForNo();
+              }
               closeAndInitialize();
             }}
           >

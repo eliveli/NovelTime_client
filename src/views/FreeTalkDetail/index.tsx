@@ -36,7 +36,7 @@ import {
   setParentToWriteReComment,
   setRootCommentIdToShowReComments,
 } from "store/clientSlices/commentSlice";
-import { handleAlert, openModal } from "store/clientSlices/modalSlice";
+import { handleAlert, handleConfirm, openModal } from "store/clientSlices/modalSlice";
 
 export default function FreeTalkDetail() {
   const { talkId, commentId } = useParams();
@@ -209,10 +209,6 @@ export default function FreeTalkDetail() {
   async function handleDelete() {
     if (!talk.data) return;
 
-    // * ask whether you really want to delete the comment
-    // * change this after making the modal
-    if (deleteWritingResult.isLoading) return; // prevent click while loading for prev request
-
     await deleteWriting({
       writingId: talk.data.talk.talkId,
       writingType: "T",
@@ -248,6 +244,22 @@ export default function FreeTalkDetail() {
     );
     navigate(TALK_LIST, { replace: true });
   }
+
+  const confirmDelete = () => {
+    if (deleteWritingResult.isLoading) return; // prevent click while loading for prev request
+
+    dispatch(
+      handleConfirm({
+        question: "글을 삭제하시겠습니까?",
+        textForYes: "삭제",
+        textForNo: "취소",
+        functionForYes: async () => handleDelete(),
+      }),
+    );
+
+    dispatch(openModal("confirm"));
+  };
+
   const location = useLocation();
 
   useEffect(() => {
@@ -264,12 +276,7 @@ export default function FreeTalkDetail() {
         <MainBG isWritingDetail>
           <WritingDetailContainer>
             <EditAndDeleteContainer>
-              {isWriter && (
-                <EditAndDelete
-                  clickToEdit={handleEdit}
-                  clickToDelete={async () => handleDelete()}
-                />
-              )}
+              {isWriter && <EditAndDelete clickToEdit={handleEdit} clickToDelete={confirmDelete} />}
             </EditAndDeleteContainer>
 
             <BoardMark>Let's Free Talk about Novel!</BoardMark>

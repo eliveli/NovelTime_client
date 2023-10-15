@@ -13,7 +13,7 @@ import {
 } from "store/clientSlices/commentSlice";
 import { useDeleteCommentMutation } from "store/serverAPIs/novelTime";
 import { Comment, Img, ReCommentList } from "store/serverAPIs/types";
-import { handleAlert, openModal } from "store/clientSlices/modalSlice";
+import { handleAlert, handleConfirm, openModal } from "store/clientSlices/modalSlice";
 import {
   CommentContainer,
   CommentContent,
@@ -149,10 +149,6 @@ function CommentWritten({
   };
 
   async function handleDelete() {
-    // * ask whether you really want to delete the comment
-    // * change this after making the modal
-    if (deleteCommentResult.isLoading) return; // prevent click while loading for prev request
-
     await deleteComment({ commentId, novelId: argsForApis.novelId });
 
     if (deleteCommentResult.isError) {
@@ -165,6 +161,21 @@ function CommentWritten({
       getAllRootCommentPages(); // when deleting a root comment
     }
   }
+
+  const confirmDelete = () => {
+    if (deleteCommentResult.isLoading) return; // prevent click while loading for prev request
+
+    dispatch(
+      handleConfirm({
+        question: "코멘트를 삭제하시겠습니까?",
+        textForYes: "삭제",
+        textForNo: "취소",
+        functionForYes: async () => handleDelete(),
+      }),
+    );
+
+    dispatch(openModal("confirm"));
+  };
 
   // scroll to the parent comment of its reComment when clicking "원댓글보기"
   useEffect(() => {
@@ -280,7 +291,7 @@ function CommentWritten({
               <CreateDate>{dateToShow}</CreateDate>
             </UserNameContainer>
             {isWriter && !isEdit && (
-              <EditAndDelete clickToEdit={handleEdit} clickToDelete={async () => handleDelete()} />
+              <EditAndDelete clickToEdit={handleEdit} clickToDelete={confirmDelete} />
             )}
             {isWriter && isEdit && <CancelWhenEditing clickToCancel={handleCancelEdit} />}
           </UserNameAndEditContainer>
@@ -363,7 +374,7 @@ function CommentWritten({
             <CreateDate>{dateToShow}</CreateDate>
           </UserNameContainer>
           {isWriter && !isEdit && (
-            <EditAndDelete clickToEdit={handleEdit} clickToDelete={async () => handleDelete()} />
+            <EditAndDelete clickToEdit={handleEdit} clickToDelete={confirmDelete} />
           )}
           {isWriter && isEdit && <CancelWhenEditing clickToCancel={handleCancelEdit} />}
         </UserNameAndEditContainer>
