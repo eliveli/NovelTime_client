@@ -357,7 +357,7 @@ export default function ChatRoom({ roomIdTablet }: { roomIdTablet?: string }) {
     });
   };
 
-  // To adjust designs in other components with message input height when typing the message
+  // To adjust designs in other components as change in MessageInput height when typing the message
   const [msgInputHeight, getMsgInputHeight] = useState(78); // initial height
 
   // Handle window resizing -------------------------------------------------- //
@@ -458,7 +458,11 @@ export default function ChatRoom({ roomIdTablet }: { roomIdTablet?: string }) {
           msgInputHeight={msgInputHeight}
         />
       )}
-      <MessageInput sendMessage={sendMessage} getMsgInputHeight={getMsgInputHeight} />
+      <MessageInput
+        sendMessage={sendMessage}
+        getMsgInputHeight={getMsgInputHeight}
+        allMessagesRef={allMessagesRef}
+      />
     </ChatRoomContainer>
   );
 }

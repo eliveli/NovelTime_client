@@ -20,9 +20,11 @@ import {
 export function MessageInput({
   sendMessage,
   getMsgInputHeight,
+  allMessagesRef,
 }: {
   sendMessage: (content: string) => void;
   getMsgInputHeight: React.Dispatch<React.SetStateAction<number>>;
+  allMessagesRef: React.RefObject<HTMLDivElement>;
 }) {
   const loginUserId = useAppSelector((state) => state.loginUser.user.userId);
 
@@ -42,9 +44,22 @@ export function MessageInput({
 
     msgInputRef.current.value += emojiObject.emoji; // add the selected emoji
 
-    writeText(undefined, msgInputRef, isNotMobile); // change the hight in textarea if needed
-    getMsgInputHeight(msgInputCntnrRef.current.offsetHeight);
+    // change designs if lines in message input increase
+    writeText(undefined, msgInputRef, isNotMobile); // for the hight in textarea
+    getMsgInputHeight(msgInputCntnrRef.current.offsetHeight); // for other components' layout
   };
+
+  const [scrollTop, setScrollTop] = useState(-1);
+
+  useEffect(() => {
+    if (scrollTop === -1) return;
+
+    // in a certain case with EmojiPicker (See the code with EmojiCntnr below)
+    // there will be a little delay in scroll right after displaying EmojiPicker
+    //  but it can exactly scroll to the bottom message in previous screen view
+    allMessagesRef.current?.scrollTo(0, scrollTop);
+    setScrollTop(-1);
+  }, [scrollTop]);
 
   // Treat message
   const handleSubmit = async () => {
@@ -86,15 +101,35 @@ export function MessageInput({
             size={20}
             styles={showEmojiPicker ? `color: ${theme.color.main}; opacity: 0.8;` : undefined}
             onClick={() => {
+              if (!allMessagesRef.current) return;
+
+              // height difference in MsgInputWholeContainer when opening EmojiPicker
+              const heightDifference = 225 + 15;
+              // = height in EmojiPicker + gap in MsgInputWholeContainer
+
+              const allMsgs = allMessagesRef.current;
+              const possibleDownScrollHeight =
+                allMsgs.scrollHeight - allMsgs.scrollTop - allMsgs.clientHeight;
+
               if (!showEmojiPicker) {
-                getMsgInputHeight((prev) => prev + 225 + 15); // with EmojiPicker
-                // = height in MsgInputWholeContainer without EmojiPicker
-                //   + height in EmojiPicker 225
-                //   + gap in MsgInputWholeContainer 15
-                //  note. height in MsgInputWholeContainer can be different
+                getMsgInputHeight((prev) => prev + heightDifference); // with EmojiPicker
+                // [note] height in MsgInputWholeContainer can be different
                 //         with the change in InputForMessage when writing a message
+                //
+                // Keep the scroll in messages when opening emoji picker
+                //  : the bottom message in the current screen view is the criterion
+                if (possibleDownScrollHeight < heightDifference) {
+                  setScrollTop(allMsgs.scrollTop + heightDifference);
+                  // - scroll after component rerender.
+                  //   if not, can't scroll to the bottom message with EmojiPicker
+                } else {
+                  allMsgs.scrollTo(0, allMsgs.scrollTop + heightDifference);
+                }
               } else {
-                getMsgInputHeight((prev) => prev - 225 - 15); // without EmojiPicker
+                getMsgInputHeight((prev) => prev - heightDifference); // without EmojiPicker
+                //
+                // Keep the scroll in messages when closing emoji picker
+                allMsgs.scrollTo(0, allMsgs.scrollTop - heightDifference);
               }
 
               handleEmojiPicker(!showEmojiPicker);
