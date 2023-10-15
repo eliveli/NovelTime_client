@@ -22,6 +22,7 @@ import UserNovelList from "views/UserPage/UserNovelListSummary.components";
 import { RowSlideSimple } from "components/NovelListFrame/RowSlide";
 import NovelColumnSkeleton from "components/Novel/NovelColumnSkeleton";
 import theme from "assets/styles/theme";
+import Spinner from "assets/Spinner";
 import { SearchIconBox, IconContainer, Space, Note } from "./NovelList.styles";
 import { NovelColumn, NovelColumnDetail, NovelRow } from "../../components/Novel";
 
@@ -74,6 +75,13 @@ export default function NovelList() {
         }
       }}
     >
+      {(popularNovels.isFetching ||
+        weeklyNovels.isFetching ||
+        novelListPeopleLike.isFetching ||
+        randomNovelList.isFetching ||
+        lazyRandomList.isFetching ||
+        novelsForLoginUser.isFetching) && <Spinner styles="fixed" />}
+
       <IconContainer>
         <SearchIconBox
           onClick={() => {

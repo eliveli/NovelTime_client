@@ -7,6 +7,7 @@ import { useAppSelector } from "store/hooks";
 import { useParams } from "react-router-dom";
 import { useGetWritingQuery } from "store/serverAPIs/novelTime";
 import ShowMoreContent from "assets/ShowMoreContent";
+import Spinner from "assets/Spinner";
 import { TalkOrRecommend, CommentUserCreated } from "../../store/serverAPIs/types";
 import { Writing, Comment, WritingFilter, NoContent } from "./UserWriting.components";
 import { ShareIconBox, WritingSection } from "./UserPage.styles";
@@ -225,6 +226,8 @@ export default function UserWriting({ isCreated }: { isCreated: boolean }) {
 
   return (
     <MainBG>
+      {writingResult.isFetching && <Spinner styles="fixed" />}
+
       <CategoryMark categoryText={contentPageMark}>
         <ShareIconBox>
           <Icon.ShareWithArrow />

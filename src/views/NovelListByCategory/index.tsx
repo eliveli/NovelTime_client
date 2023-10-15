@@ -17,6 +17,7 @@ import NovelColumnSkeleton from "components/Novel/NovelColumnSkeleton";
 import UserNovelList from "views/UserPage/UserNovelListSummary.components";
 import Icon from "assets/Icon";
 import theme from "assets/styles/theme";
+import Spinner from "assets/Spinner";
 import { NovelColumnDetail } from "../../components/Novel";
 
 export default function NovelListByCategory() {
@@ -73,6 +74,11 @@ export default function NovelListByCategory() {
         }
       }}
     >
+      {(popularNovels.isFetching ||
+        weeklyNovels.isFetching ||
+        novelListPeopleLike.isFetching ||
+        novelsForLoginUser.isFetching) && <Spinner styles="fixed" />}
+
       <CategoryMark categoryText={category[String(categoryId) as Category]}>
         {categoryId === "novelsForYou" && (
           <Icon.IconBox

@@ -40,7 +40,7 @@ export default function RecommendList() {
   });
 
   const isSettingTheList = useAppSelector((state) => state.filter.recommend.isSettingTheList);
-  const { isFetching, isError, data } = useGetWritingsFilteredQuery(
+  const { isFetching, data } = useGetWritingsFilteredQuery(
     {
       writingType: "R",
       novelGenre: genreMatched,
@@ -75,6 +75,7 @@ export default function RecommendList() {
   return (
     <MainBG>
       {isFetching && <Spinner styles="fixed" />}
+
       <Filter>
         <WritingButton
           clickToWrite={() => {

@@ -54,6 +54,7 @@ export default function UserHome() {
   return (
     <MainBG>
       {isFetching && <Spinner styles="fixed" />}
+
       <CategoryMark
         infoFromUserPage={{
           userName: userName as string,

@@ -109,6 +109,8 @@ export default function AddWriting() {
 
   const novelUrlRef = useRef<HTMLTextAreaElement>(null);
 
+  const dispatch = useAppDispatch();
+
   const adjustHeightOfNovelUrlElement = useCallback(() => {
     if (!novelUrlRef.current) return;
 
@@ -211,7 +213,6 @@ export default function AddWriting() {
   const loginUserId = useAppSelector((state) => state.loginUser.user.userId);
 
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
   const isDesktop = useWhetherItIsDesktop();
 
   const submitToAddWriting = async () => {

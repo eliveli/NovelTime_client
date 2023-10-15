@@ -23,7 +23,7 @@ export default function CategoryMark({
   novelId,
   fontSize,
   userMark,
-  novelNO,
+  novelNO, // not used now
 
   infoFromUserPage,
   linkPath,
