@@ -104,7 +104,11 @@ export default function NovelDetailRecommend() {
     recomDtlTextHeight: "height: 64px;",
   };
 
-  if (!recommendId || recommend.isError) return <div>***에러 페이지 띄우기</div>;
+  if (!recommendId || recommend.isError) {
+    dispatch(openModal("alert"));
+    dispatch(handleAlert(`글을 불러올 수 없습니다.`));
+    navigate(-1);
+  }
 
   return (
     <>

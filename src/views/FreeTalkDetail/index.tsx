@@ -267,7 +267,11 @@ export default function FreeTalkDetail() {
     dispatch(initializeCommentStates());
   }, [location]);
 
-  if (!talkId || talk.isError) return <div>***에러 페이지 띄우기</div>;
+  if (!talkId || talk.isError) {
+    dispatch(openModal("alert"));
+    dispatch(handleAlert(`글을 불러올 수 없습니다.`));
+    navigate(-1);
+  }
 
   return (
     <>

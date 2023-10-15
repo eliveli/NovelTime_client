@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import MainBG from "components/MainBG";
 import { useGetNovelInDetailQuery, useGetWritingsOfNovelQuery } from "store/serverAPIs/novelTime";
 import Spinner from "assets/Spinner";
 import ShowMoreContent from "assets/ShowMoreContent";
 import { WritingWithoutGenre } from "store/serverAPIs/types";
+import { useAppDispatch } from "store/hooks";
+import { handleAlert, openModal } from "store/clientSlices/modalSlice";
 import { RowSlide } from "../../components/NovelListFrame";
 import { WritingListFrame, WritingInNovelDetail } from "../../components/Writing";
 import { NovelRow } from "../../components/Novel";
@@ -57,7 +59,14 @@ export default function NovelDetail() {
   const isOtherNovelsOfTheAuthor =
     novelInDetail.data && novelInDetail.data.novelsPublishedByTheAuthor.length > 1;
 
-  if (!novelId || novelInDetail.isError) return <div>***에러 페이지 띄우기</div>;
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  if (!novelId || novelInDetail.isError) {
+    dispatch(openModal("alert"));
+    dispatch(handleAlert(`소설을 불러올 수 없습니다.`));
+    navigate(-1);
+  }
 
   return (
     <>
