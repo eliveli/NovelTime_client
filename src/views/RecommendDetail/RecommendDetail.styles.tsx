@@ -1,10 +1,14 @@
-import { styled } from "assets/styles/theme";
+import theme, { styled } from "assets/styles/theme";
 import { keyframes } from "styled-components";
 
 export const DotLine = styled.div`
   margin: 5px 17px;
   padding-top: 20px;
   border-top: 8px dashed rgba(0, 0, 0, 0.1);
+
+  ${theme.media.mobile(`
+    padding-top: 12px;
+  `)}
 `;
 // animation
 const dotShowOn = keyframes`

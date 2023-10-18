@@ -69,6 +69,7 @@ export default function NovelList() {
 
   return (
     <MainBG
+      isMarginBottom
       onClick={() => {
         if (isToolTipOpened) {
           handleToolTip(false);

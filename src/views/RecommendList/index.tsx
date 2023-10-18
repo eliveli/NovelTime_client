@@ -73,7 +73,7 @@ export default function RecommendList() {
   }, []);
 
   return (
-    <MainBG>
+    <MainBG isWritingList>
       {isFetching && <Spinner styles="fixed" />}
 
       <Filter>

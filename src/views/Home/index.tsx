@@ -280,7 +280,7 @@ export default function Home() {
 
   const navigate = useNavigate();
   return (
-    <MainBG>
+    <MainBG isMarginBottom>
       {homeResult.isFetching && <Spinner styles="fixed" />}
 
       <CategoryMark categoryText="소설 한담 new" linkPath="talk-list" />

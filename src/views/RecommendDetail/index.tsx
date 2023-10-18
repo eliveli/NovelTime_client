@@ -115,7 +115,7 @@ export default function NovelDetailRecommend() {
       {recommend.isFetching && <Spinner styles="fixed" />}
 
       {recommend.data && (
-        <MainBG isWritingDetail>
+        <MainBG isDetail="R">
           <NovelInWriting recommendDetail={recommendDetail} novel={recommend.data.novel} />
           <DotAnimation>
             <DotLine />

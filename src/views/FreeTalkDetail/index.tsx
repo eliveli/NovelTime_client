@@ -277,7 +277,7 @@ export default function FreeTalkDetail() {
     <>
       {talk.isFetching && <Spinner styles="fixed" />}
       {talk.data && (
-        <MainBG isWritingDetail>
+        <MainBG isDetail="T">
           <WritingDetailContainer>
             <EditAndDeleteContainer>
               {isWriter && <EditAndDelete clickToEdit={handleEdit} clickToDelete={confirmDelete} />}
