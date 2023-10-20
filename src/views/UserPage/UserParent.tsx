@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import theme from "assets/styles/theme";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { setLoginUser, setAccessToken, setLogout } from "store/clientSlices/loginUserSlice";
-import { handleAlert, openModal } from "store/clientSlices/modalSlice";
+import { handleAlert, handleConfirm, openModal } from "store/clientSlices/modalSlice";
 import { messageIconUserPage } from "assets/images";
 import { Outlet, useNavigate, useParams } from "react-router-dom";
 import Icon from "assets/Icon";
@@ -23,7 +23,7 @@ import {
   UserName,
   MessageIcon,
   LogOutIconBox,
-  EditProfileBtn,
+  ProfileBtn,
   NavigatingToUserHome,
 } from "./UserPage.styles";
 
@@ -75,16 +75,28 @@ function Profile() {
       }),
     );
   }
+
   const handleLogout = () => {
-    dispatch(openModal("alert"));
-    dispatch(handleAlert("로그아웃 하시겠습니까?"));
     dispatch(setLogout(true));
-    // - it is not required to set logout with undefined again
-    //   because when user logs in, page will be refreshed then isLogout state will be undefined
+    // - it is not necessary to set logout to undefined again
+    //   because when user logs in, page will be refreshed and isLogout state will be undefined
 
     socket.emit("logout");
 
     dispatch(initializeChat());
+  };
+
+  const confirmLogout = () => {
+    dispatch(
+      handleConfirm({
+        question: "로그아웃 하시겠습니까?",
+        textForYes: "예",
+        textForNo: "아니오",
+        functionForYes: handleLogout,
+      }),
+    );
+
+    dispatch(openModal("confirm"));
   };
 
   const handleMessage = async () => {
@@ -175,12 +187,15 @@ function Profile() {
               <MessageIcon onClick={handleMessage} src={messageIconUserPage} alt="message" />
             ) : (
               <>
-                <EditProfileBtn onClick={() => dispatch(openModal("editProfile"))}>
-                  수정
-                </EditProfileBtn>
-                <LogOutIconBox size={33} onClick={handleLogout}>
-                  <Icon.Logout />
-                </LogOutIconBox>
+                <ProfileBtn onClick={() => dispatch(openModal("editProfile"))}>수정</ProfileBtn>
+
+                {isMobile ? (
+                  <LogOutIconBox size={33} onClick={confirmLogout}>
+                    <Icon.Logout />
+                  </LogOutIconBox>
+                ) : (
+                  <ProfileBtn isLogOut>로그아웃</ProfileBtn>
+                )}
               </>
             )}
           </ProfileUserInfoBG>

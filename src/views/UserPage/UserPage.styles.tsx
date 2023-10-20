@@ -66,7 +66,7 @@ export const MessageIcon = styled.img`
   )}
 `;
 export const LogOutIconBox = styled(Icon.IconBox)`
-  margin-left: 15px;
+  margin-left: 9px;
 `;
 export const ProfileUserCntnr = styled.div`
   display: flex;
@@ -88,19 +88,28 @@ export const ProfileUserInfoBG = styled.div`
   align-items: flex-end;
 `;
 
-export const EditProfileBtn = styled.button`
+export const ProfileBtn = styled.button<{ isLogOut?: true }>`
   white-space: nowrap;
 
   border-radius: 20px;
   padding: 2px 9px 2px 7px;
-  margin-left: 12px;
 
-  color: #f29f05f0;
-  border: 1px solid #f29f058f;
   background-color: #ffffff96;
 
   font-size: 13px;
   font-weight: 500;
+
+  ${({ isLogOut }) =>
+    isLogOut
+      ? `color: rgba(100,100,100,0.7);
+        border: 1px solid rgba(0,0,0,0.2);
+        margin-left: 9px;
+    `
+      : `
+        color: #f29f05f0;
+        border: 1px solid #f29f058f;
+        margin-left: 12px;
+  `}
 
   ${theme.media.hover(
     `cursor: pointer;
