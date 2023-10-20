@@ -1,5 +1,4 @@
 import { useRef } from "react";
-import { ThemeProvider } from "styled-components";
 import { goToUserPage, useComponentWidth } from "utils";
 import { WritingWithoutGenre } from "store/serverAPIs/types";
 import { useNavigate } from "react-router-dom";
@@ -35,7 +34,6 @@ export default function WritingInNovelDetail({ writing }: { writing: WritingWith
     commentNO, // undefined for recommend
     talkOrRecommend,
   } = writing;
-  const theme = {};
 
   // configure title ellipsis
   const titleWidthRef = useRef<HTMLDivElement>(null);
@@ -53,46 +51,44 @@ export default function WritingInNovelDetail({ writing }: { writing: WritingWith
   };
 
   return (
-    <ThemeProvider theme={theme}>
-      <WritingBG onClick={goToWritingPage}>
-        <Writing>
-          <UserImg userImg={userImg} onClick={(e) => goToUserPage(navigate, e, userName)} />
-          <BesideImgContainer>
-            <FirstLineContainer ref={titleWidthRef}>
-              <UserNameBox>
-                <UserName onClick={(e) => goToUserPage(navigate, e, userName)}>{userName}</UserName>
-                <CreateDate>{createDate}</CreateDate>
-              </UserNameBox>
-              <IconsBox>
+    <WritingBG onClick={goToWritingPage}>
+      <Writing>
+        <UserImg userImg={userImg} onClick={(e) => goToUserPage(navigate, e, userName)} />
+        <BesideImgContainer>
+          <FirstLineContainer ref={titleWidthRef}>
+            <UserNameBox>
+              <UserName onClick={(e) => goToUserPage(navigate, e, userName)}>{userName}</UserName>
+              <CreateDate>{createDate}</CreateDate>
+            </UserNameBox>
+            <IconsBox>
+              <IconBox>
+                <Icon.IconBox noPointer size={20}>
+                  <Icon.SmallHeart />
+                </Icon.IconBox>
+                <IconNO>{likeNO}</IconNO>
+              </IconBox>
+              {talkOrRecommend === "T" && (
                 <IconBox>
                   <Icon.IconBox noPointer size={20}>
-                    <Icon.SmallHeart />
+                    <Icon.Comment />
                   </Icon.IconBox>
-                  <IconNO>{likeNO}</IconNO>
+                  <IconNO>{commentNO}</IconNO>
                 </IconBox>
-                {talkOrRecommend === "T" && (
-                  <IconBox>
-                    <Icon.IconBox noPointer size={20}>
-                      <Icon.Comment />
-                    </Icon.IconBox>
-                    <IconNO>{commentNO}</IconNO>
-                  </IconBox>
-                )}
-              </IconsBox>
-            </FirstLineContainer>
-
-            <WritingPreview>
-              <WritingTitleToShow titleWidth={titleWidth}>{writingTitle}</WritingTitleToShow>
-
-              {writingImg && (
-                <WritingImgBox>
-                  <WritingImg img={writingImg} />
-                </WritingImgBox>
               )}
-            </WritingPreview>
-          </BesideImgContainer>
-        </Writing>
-      </WritingBG>
-    </ThemeProvider>
+            </IconsBox>
+          </FirstLineContainer>
+
+          <WritingPreview>
+            <WritingTitleToShow titleWidth={titleWidth}>{writingTitle}</WritingTitleToShow>
+
+            {writingImg && (
+              <WritingImgBox>
+                <WritingImg img={writingImg} />
+              </WritingImgBox>
+            )}
+          </WritingPreview>
+        </BesideImgContainer>
+      </Writing>
+    </WritingBG>
   );
 }

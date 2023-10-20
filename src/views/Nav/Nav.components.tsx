@@ -1,4 +1,3 @@
-import { ThemeProvider } from "styled-components";
 import themeStyle from "assets/styles/theme";
 import { useNavigate, useParams } from "react-router-dom";
 import {
@@ -67,7 +66,6 @@ import {
 } from "./Nav.styles";
 
 export function NavPC() {
-  const theme = {};
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const loginUser = useAppSelector((state) => state.loginUser.user);
@@ -89,72 +87,69 @@ export function NavPC() {
   ];
 
   return (
-    <ThemeProvider theme={theme}>
-      <NavContentBoxPC>
-        <LogoContainer>
-          <Logo src={logoPC} onClick={() => navigate(`/`)} />
-        </LogoContainer>
+    <NavContentBoxPC>
+      <LogoContainer>
+        <Logo src={logoPC} onClick={() => navigate(`/`)} />
+      </LogoContainer>
 
-        <NavContentPC>
-          {navCategory.map((_) => (
-            <NavContent
-              key={_.category}
-              isMessageCategory={_.category === "Message"}
-              onClick={() => {
-                if (_.category === "Message" && !loginUser.userId) {
-                  dispatch(openModal("alert"));
-                  dispatch(handleAlert("로그인이 필요합니다"));
-                  return;
-                }
-
-                navigate(_.path);
-              }}
-              isCurrentPath={isThePath(_.partialPath)}
-            >
-              {_.category}
-
-              {_.category === "Message" && !!allUnreadMsgNo && (
-                <UnreadMessageNo isForDesktopNav unreadMessageNo={allUnreadMsgNo} />
-              )}
-            </NavContent>
-          ))}
-        </NavContentPC>
-
-        <RightSideContnr>
-          <SearchIconBox
+      <NavContentPC>
+        {navCategory.map((_) => (
+          <NavContent
+            key={_.category}
+            isMessageCategory={_.category === "Message"}
             onClick={() => {
-              navigate(`${SEARCH_ALL}?searchCategory=Novel&searchType=Title&searchWord=&pageNo=1`);
+              if (_.category === "Message" && !loginUser.userId) {
+                dispatch(openModal("alert"));
+                dispatch(handleAlert("로그인이 필요합니다"));
+                return;
+              }
+
+              navigate(_.path);
+            }}
+            isCurrentPath={isThePath(_.partialPath)}
+          >
+            {_.category}
+
+            {_.category === "Message" && !!allUnreadMsgNo && (
+              <UnreadMessageNo isForDesktopNav unreadMessageNo={allUnreadMsgNo} />
+            )}
+          </NavContent>
+        ))}
+      </NavContentPC>
+
+      <RightSideContnr>
+        <SearchIconBox
+          onClick={() => {
+            navigate(`${SEARCH_ALL}?searchCategory=Novel&searchType=Title&searchWord=&pageNo=1`);
+          }}
+        >
+          <Icon.Search />
+        </SearchIconBox>
+
+        {loginUser.userName ? (
+          <MyPageTablet
+            onClick={() => {
+              navigate(`${USER_PAGE}/${loginUser.userName}`);
             }}
           >
-            <Icon.Search />
-          </SearchIconBox>
-
-          {loginUser.userName ? (
-            <MyPageTablet
-              onClick={() => {
-                navigate(`${USER_PAGE}/${loginUser.userName}`);
-              }}
-            >
-              프로필
-            </MyPageTablet>
-          ) : (
-            <LoginText
-              onClick={() => {
-                dispatch(openModal("login"));
-              }}
-            >
-              로그인
-            </LoginText>
-          )}
-        </RightSideContnr>
-      </NavContentBoxPC>
-    </ThemeProvider>
+            프로필
+          </MyPageTablet>
+        ) : (
+          <LoginText
+            onClick={() => {
+              dispatch(openModal("login"));
+            }}
+          >
+            로그인
+          </LoginText>
+        )}
+      </RightSideContnr>
+    </NavContentBoxPC>
   );
 }
 
 // all below are for Mobile, Tablet, not for PC //
 export function NavMobileMainTop() {
-  const theme = {};
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const isTablet = useWhetherItIsTablet();
@@ -162,68 +157,65 @@ export function NavMobileMainTop() {
   const isLoginUser = !!userName;
 
   return (
-    <ThemeProvider theme={theme}>
-      <NavContentBoxMobile>
-        <CatWalkingContainer>
-          <CatWalking src={catWalking} alt="catWalking" />
-        </CatWalkingContainer>
-        <LogoContainer>
-          <Logo src={logoMobile} onClick={() => navigate(`/`)} />
-        </LogoContainer>
+    <NavContentBoxMobile>
+      <CatWalkingContainer>
+        <CatWalking src={catWalking} alt="catWalking" />
+      </CatWalkingContainer>
+      <LogoContainer>
+        <Logo src={logoMobile} onClick={() => navigate(`/`)} />
+      </LogoContainer>
 
-        <RightSideContnr>
-          <SearchIconBox
+      <RightSideContnr>
+        <SearchIconBox
+          onClick={() => {
+            dispatch(setSearchList({ listType: "searchAll", list: "reset" }));
+            navigate(SEARCH_ALL);
+          }}
+        >
+          <Icon.Search />
+        </SearchIconBox>
+
+        {isLoginUser && isTablet && (
+          <MyPageTablet
             onClick={() => {
-              dispatch(setSearchList({ listType: "searchAll", list: "reset" }));
-              navigate(SEARCH_ALL);
+              navigate(`/user-page/${userName}`);
             }}
           >
-            <Icon.Search />
-          </SearchIconBox>
-
-          {isLoginUser && isTablet && (
-            <MyPageTablet
-              onClick={() => {
-                navigate(`/user-page/${userName}`);
-              }}
-            >
-              프로필
-            </MyPageTablet>
-          )}
-          {isLoginUser && !isTablet && (
-            <MyPageMobile
-              userImg={userImg}
-              onClick={() => {
-                navigate(`/user-page/${userName}`);
-              }}
-            />
-          )}
-          {!isLoginUser && isTablet && (
-            <LoginText
-              onClick={() => {
-                dispatch(openModal("login"));
-              }}
-            >
-              로그인
-            </LoginText>
-          )}
-          {!isLoginUser && !isTablet && (
-            <LoginIconBox
-              onClick={() => {
-                dispatch(openModal("login"));
-              }}
-            >
-              <Icon.Login />
-            </LoginIconBox>
-          )}
-        </RightSideContnr>
-      </NavContentBoxMobile>
-    </ThemeProvider>
+            프로필
+          </MyPageTablet>
+        )}
+        {isLoginUser && !isTablet && (
+          <MyPageMobile
+            userImg={userImg}
+            onClick={() => {
+              navigate(`/user-page/${userName}`);
+            }}
+          />
+        )}
+        {!isLoginUser && isTablet && (
+          <LoginText
+            onClick={() => {
+              dispatch(openModal("login"));
+            }}
+          >
+            로그인
+          </LoginText>
+        )}
+        {!isLoginUser && !isTablet && (
+          <LoginIconBox
+            onClick={() => {
+              dispatch(openModal("login"));
+            }}
+          >
+            <Icon.Login />
+          </LoginIconBox>
+        )}
+      </RightSideContnr>
+    </NavContentBoxMobile>
   );
 }
 
 export function NavMobileMainBottom() {
-  const theme = {};
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const isLoginUser = !!useAppSelector((state) => state.loginUser.user.userId);
@@ -262,47 +254,45 @@ export function NavMobileMainBottom() {
   ];
 
   return (
-    <ThemeProvider theme={theme}>
-      <NavContentBoxMobile isMainBottom>
-        {navCategory.map((_) => (
-          <NavContent
-            key={_.category}
-            isMessageCategory={_.category === "Message"}
-            onClick={() => {
-              if (["FreeTalk", "Recommend", "Novel"].includes(_.category)) {
-                let listType: "talk" | "recommend" | "novel";
+    <NavContentBoxMobile isMainBottom>
+      {navCategory.map((_) => (
+        <NavContent
+          key={_.category}
+          isMessageCategory={_.category === "Message"}
+          onClick={() => {
+            if (["FreeTalk", "Recommend", "Novel"].includes(_.category)) {
+              let listType: "talk" | "recommend" | "novel";
 
-                if (_.category === "FreeTalk") {
-                  listType = "talk";
-                } else if (_.category === "Recommend") {
-                  listType = "recommend";
-                } else {
-                  listType = "novel";
-                }
-
-                dispatch(setSearchList({ listType, list: "reset" }));
+              if (_.category === "FreeTalk") {
+                listType = "talk";
+              } else if (_.category === "Recommend") {
+                listType = "recommend";
+              } else {
+                listType = "novel";
               }
 
-              if (["AddPost", "Message"].includes(_.category) && !isLoginUser) {
-                dispatch(openModal("alert"));
-                dispatch(handleAlert("로그인이 필요합니다"));
-                return;
-              }
+              dispatch(setSearchList({ listType, list: "reset" }));
+            }
 
-              navigate(_.path);
-            }}
-          >
-            {_.category === "Message" && !!allUnreadMsgNo && (
-              <UnreadMessageNo isForMobileNav unreadMessageNo={allUnreadMsgNo} />
-            )}
+            if (["AddPost", "Message"].includes(_.category) && !isLoginUser) {
+              dispatch(openModal("alert"));
+              dispatch(handleAlert("로그인이 필요합니다"));
+              return;
+            }
 
-            <NavImg src={isThePath(_.path) ? _.imgActive : _.img} alt={_.category} />
+            navigate(_.path);
+          }}
+        >
+          {_.category === "Message" && !!allUnreadMsgNo && (
+            <UnreadMessageNo isForMobileNav unreadMessageNo={allUnreadMsgNo} />
+          )}
 
-            <NavText isActive={isThePath(_.path)}>{_.category}</NavText>
-          </NavContent>
-        ))}
-      </NavContentBoxMobile>
-    </ThemeProvider>
+          <NavImg src={isThePath(_.path) ? _.imgActive : _.img} alt={_.category} />
+
+          <NavText isActive={isThePath(_.path)}>{_.category}</NavText>
+        </NavContent>
+      ))}
+    </NavContentBoxMobile>
   );
 }
 
@@ -321,100 +311,87 @@ export function NavMobileDetail() {
   const profileUserName = userNameFromSlice === userNameFromURL ? userNameFromSlice : "";
   const profileUserImg =
     userNameFromSlice === userNameFromURL ? userImgFromSlice : { src: "", position: "" };
-
-  const theme = {};
-
   if (isThePath("iframe")) return <></>;
 
   return (
-    <ThemeProvider theme={theme}>
-      <NavContentBoxMobile isDetail>
-        <IconsBox isLeft>
-          <LeftIconBox onClick={() => navigate(-1)}>
-            {isThePath(ADD_WRITING) || isThePath(EDIT_WRITING) ? (
-              <Icon.CloseWriting />
-            ) : (
-              <BackIcon />
-            )}
-          </LeftIconBox>
+    <NavContentBoxMobile isDetail>
+      <IconsBox isLeft>
+        <LeftIconBox onClick={() => navigate(-1)}>
+          {isThePath(ADD_WRITING) || isThePath(EDIT_WRITING) ? <Icon.CloseWriting /> : <BackIcon />}
+        </LeftIconBox>
 
-          {!isThePath(ADD_WRITING) && !isThePath(EDIT_WRITING) && (
-            <HomeIconBox
-              onClick={() => {
-                navigate("/");
-              }}
-            >
-              <HomeIcon />
-            </HomeIconBox>
-          )}
-        </IconsBox>
-
-        {isThePath(USER_PAGE) && (
-          <PageTitle onClick={() => navigate(`${USER_PAGE}/${profileUserName}`)} isHover>
-            <UserImg userImg={profileUserImg} />
-            <UserName>{profileUserName}</UserName>
-            <Icon.IconBox
-              color={themeStyle.color.mainLight}
-              hover="none"
-              styles="transform: scaleX(-1);"
-            >
-              <Icon.Runner />
-            </Icon.IconBox>
-          </PageTitle>
+        {!isThePath(ADD_WRITING) && !isThePath(EDIT_WRITING) && (
+          <HomeIconBox
+            onClick={() => {
+              navigate("/");
+            }}
+          >
+            <HomeIcon />
+          </HomeIconBox>
         )}
-        {isThePath(TALK_DETAIL) && <PageTitle>Free Talk</PageTitle>}
-        {isThePath(RECOMMEND_DETAIL) && <PageTitle>Recommend</PageTitle>}
+      </IconsBox>
 
-        <IconsBox isRight>
-          {isThePath(ADD_WRITING) && (
-            <SubmitBtn onClick={() => dispatch(handleWritingToSubmitOnMobile(true))}>
-              작성
-            </SubmitBtn>
-          )}
-          {isThePath(EDIT_WRITING) && (
-            <SubmitBtn onClick={() => dispatch(handleWritingToSubmitOnMobile(true))}>
-              수정
-            </SubmitBtn>
-          )}
+      {isThePath(USER_PAGE) && (
+        <PageTitle onClick={() => navigate(`${USER_PAGE}/${profileUserName}`)} isHover>
+          <UserImg userImg={profileUserImg} />
+          <UserName>{profileUserName}</UserName>
+          <Icon.IconBox
+            color={themeStyle.color.mainLight}
+            hover="none"
+            styles="transform: scaleX(-1);"
+          >
+            <Icon.Runner />
+          </Icon.IconBox>
+        </PageTitle>
+      )}
+      {isThePath(TALK_DETAIL) && <PageTitle>Free Talk</PageTitle>}
+      {isThePath(RECOMMEND_DETAIL) && <PageTitle>Recommend</PageTitle>}
 
-          {isThePath(USER_PAGE) && isLoginUser && isTablet && (
-            <MyPageTablet
-              onClick={() => {
-                navigate(`${USER_PAGE}/${loginUser.userName}`);
-              }}
-            >
-              프로필
-            </MyPageTablet>
-          )}
-          {isThePath(USER_PAGE) && isLoginUser && !isTablet && (
-            <MyPageMobile
-              userImg={loginUser.userImg}
-              onClick={() => {
-                navigate(`${USER_PAGE}/${loginUser.userName}`);
-              }}
-            />
-          )}
-          {isThePath(USER_PAGE) && !isLoginUser && isTablet && (
-            <LoginText
-              onClick={() => {
-                dispatch(openModal("login"));
-              }}
-            >
-              로그인
-            </LoginText>
-          )}
-          {isThePath(USER_PAGE) && !isLoginUser && !isTablet && (
-            <LoginIconBox
-              onClick={() => {
-                dispatch(openModal("login"));
-              }}
-            >
-              <Icon.Login />
-            </LoginIconBox>
-          )}
-        </IconsBox>
-      </NavContentBoxMobile>
-    </ThemeProvider>
+      <IconsBox isRight>
+        {isThePath(ADD_WRITING) && (
+          <SubmitBtn onClick={() => dispatch(handleWritingToSubmitOnMobile(true))}>작성</SubmitBtn>
+        )}
+        {isThePath(EDIT_WRITING) && (
+          <SubmitBtn onClick={() => dispatch(handleWritingToSubmitOnMobile(true))}>수정</SubmitBtn>
+        )}
+
+        {isThePath(USER_PAGE) && isLoginUser && isTablet && (
+          <MyPageTablet
+            onClick={() => {
+              navigate(`${USER_PAGE}/${loginUser.userName}`);
+            }}
+          >
+            프로필
+          </MyPageTablet>
+        )}
+        {isThePath(USER_PAGE) && isLoginUser && !isTablet && (
+          <MyPageMobile
+            userImg={loginUser.userImg}
+            onClick={() => {
+              navigate(`${USER_PAGE}/${loginUser.userName}`);
+            }}
+          />
+        )}
+        {isThePath(USER_PAGE) && !isLoginUser && isTablet && (
+          <LoginText
+            onClick={() => {
+              dispatch(openModal("login"));
+            }}
+          >
+            로그인
+          </LoginText>
+        )}
+        {isThePath(USER_PAGE) && !isLoginUser && !isTablet && (
+          <LoginIconBox
+            onClick={() => {
+              dispatch(openModal("login"));
+            }}
+          >
+            <Icon.Login />
+          </LoginIconBox>
+        )}
+      </IconsBox>
+    </NavContentBoxMobile>
   );
 }
 

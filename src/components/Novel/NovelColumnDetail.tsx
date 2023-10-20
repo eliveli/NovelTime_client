@@ -1,5 +1,4 @@
 import React, { useLayoutEffect, useRef } from "react";
-import { ThemeProvider } from "styled-components";
 import { isThePath, useComponentWidth, useModal } from "utils";
 
 import { useNavigate } from "react-router-dom";
@@ -74,7 +73,6 @@ export default function NovelColumnDetail({
 }) {
   // props or default props
   const { novelId, novelImg, novelTitle, novelAuthor, novelGenre, novelDesc } = novel;
-  const theme = {};
 
   // calculate and gave the correct width to NovelInfoBox
   // and set "width : 100%" in its child and descendant components
@@ -110,64 +108,62 @@ export default function NovelColumnDetail({
   const navigate = useNavigate();
 
   return (
-    <ThemeProvider theme={theme}>
-      <NovelLink
-        ref={containerRef}
-        onClick={(event: React.MouseEvent<HTMLElement>) => {
-          event.stopPropagation();
-          event.preventDefault();
+    <NovelLink
+      ref={containerRef}
+      onClick={(event: React.MouseEvent<HTMLElement>) => {
+        event.stopPropagation();
+        event.preventDefault();
 
-          if (isIframe) {
-            sendNovel();
-            return;
-          }
+        if (isIframe) {
+          sendNovel();
+          return;
+        }
 
-          navigate(`/novel-detail/${novelId}`);
-        }}
-      >
-        <NovelImg screenWidth={screenWidth} novelImg={novelImg} isRecommend={isRecommend} />
-        <NovelInfoBox containerWidth={containerWidth} screenWidth={screenWidth}>
-          <NovelTitle infoWidth={infoWidth}>{`[${novelGenre}] ${novelTitle}`}</NovelTitle>
-          <NovelSubInfoBox ref={infoRef}>
-            <NovelAuthor>{novelAuthor}</NovelAuthor>
-            <NovelDescBox>
-              <NovelDesc isRecommend={isRecommend}>{novelDesc}</NovelDesc>
-              {isModal && (
-                <DownIconBox
-                  onClick={(event: React.MouseEvent<HTMLElement>) => {
-                    event.stopPropagation();
-                    event.preventDefault();
-                    getModalScroll();
-                    handleModal();
-                  }}
-                >
-                  <DownIcon />
-                </DownIconBox>
-              )}
-              {!isModal && (
-                <UpIconBox
-                  onClick={(event: React.MouseEvent<HTMLElement>) => {
-                    event.stopPropagation();
-                    event.preventDefault();
-                    handleModal();
-                  }}
-                >
-                  <UpIcon />
-                </UpIconBox>
-              )}
-            </NovelDescBox>
-          </NovelSubInfoBox>
-          {isModal && (
-            <NovelDescModal
-              modalScrollY={modalScrollY}
-              modalTRef={modalTRef}
-              modalFRef={modalFRef}
-              isShowOn={isShowModal}
-              desc={novelDesc}
-            />
-          )}
-        </NovelInfoBox>
-      </NovelLink>
-    </ThemeProvider>
+        navigate(`/novel-detail/${novelId}`);
+      }}
+    >
+      <NovelImg screenWidth={screenWidth} novelImg={novelImg} isRecommend={isRecommend} />
+      <NovelInfoBox containerWidth={containerWidth} screenWidth={screenWidth}>
+        <NovelTitle infoWidth={infoWidth}>{`[${novelGenre}] ${novelTitle}`}</NovelTitle>
+        <NovelSubInfoBox ref={infoRef}>
+          <NovelAuthor>{novelAuthor}</NovelAuthor>
+          <NovelDescBox>
+            <NovelDesc isRecommend={isRecommend}>{novelDesc}</NovelDesc>
+            {isModal && (
+              <DownIconBox
+                onClick={(event: React.MouseEvent<HTMLElement>) => {
+                  event.stopPropagation();
+                  event.preventDefault();
+                  getModalScroll();
+                  handleModal();
+                }}
+              >
+                <DownIcon />
+              </DownIconBox>
+            )}
+            {!isModal && (
+              <UpIconBox
+                onClick={(event: React.MouseEvent<HTMLElement>) => {
+                  event.stopPropagation();
+                  event.preventDefault();
+                  handleModal();
+                }}
+              >
+                <UpIcon />
+              </UpIconBox>
+            )}
+          </NovelDescBox>
+        </NovelSubInfoBox>
+        {isModal && (
+          <NovelDescModal
+            modalScrollY={modalScrollY}
+            modalTRef={modalTRef}
+            modalFRef={modalFRef}
+            isShowOn={isShowModal}
+            desc={novelDesc}
+          />
+        )}
+      </NovelInfoBox>
+    </NovelLink>
   );
 }

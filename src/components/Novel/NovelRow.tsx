@@ -1,5 +1,4 @@
 import React from "react";
-import { ThemeProvider } from "styled-components";
 import { useNavigate } from "react-router-dom";
 import {
   NovelImg,
@@ -30,38 +29,35 @@ type MyComponentProps = React.PropsWithChildren<{
 const NovelRow = React.memo(
   ({ novel, isFromSameAuthor, isWidth100, isNotSubInfo, isNotNavigation }: MyComponentProps) => {
     const { novelId, novelImg, novelTitle, novelAuthor, novelGenre } = novel;
-    const theme = {};
 
     const navigate = useNavigate();
 
     return (
-      <ThemeProvider theme={theme}>
-        <NovelLink
-          isNotNavigation={isNotNavigation}
-          isWidth100={isWidth100}
-          onClick={() => {
-            if (isNotNavigation) return;
-            navigate(`/novel-detail/${novelId}`);
-          }}
-        >
-          <NovelImgBox>
-            <NovelImg novelImg={novelImg} />
-          </NovelImgBox>
-          <NovelInfoBox>
-            <NovelTitleBox>
-              <NovelTitle>{novelTitle}</NovelTitle>
-            </NovelTitleBox>
-            {!isNotSubInfo && (
-              <NovelSubInfoBox>
-                {isFromSameAuthor && <NovelInfo>{novelGenre}</NovelInfo>}
-                {!isFromSameAuthor && (
-                  <NovelInfoLineHeight>{`${novelGenre} | ${novelAuthor}`}</NovelInfoLineHeight>
-                )}
-              </NovelSubInfoBox>
-            )}
-          </NovelInfoBox>
-        </NovelLink>
-      </ThemeProvider>
+      <NovelLink
+        isNotNavigation={isNotNavigation}
+        isWidth100={isWidth100}
+        onClick={() => {
+          if (isNotNavigation) return;
+          navigate(`/novel-detail/${novelId}`);
+        }}
+      >
+        <NovelImgBox>
+          <NovelImg novelImg={novelImg} />
+        </NovelImgBox>
+        <NovelInfoBox>
+          <NovelTitleBox>
+            <NovelTitle>{novelTitle}</NovelTitle>
+          </NovelTitleBox>
+          {!isNotSubInfo && (
+            <NovelSubInfoBox>
+              {isFromSameAuthor && <NovelInfo>{novelGenre}</NovelInfo>}
+              {!isFromSameAuthor && (
+                <NovelInfoLineHeight>{`${novelGenre} | ${novelAuthor}`}</NovelInfoLineHeight>
+              )}
+            </NovelSubInfoBox>
+          )}
+        </NovelInfoBox>
+      </NovelLink>
     );
   },
 );

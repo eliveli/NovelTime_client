@@ -316,8 +316,9 @@ export const NovelImgSmall = styled.div<Props>`
   /* div로 가로세로 비율 맞출 때 */
   padding-top: 135%; //카카오페이지
   /* padding-top: 146%; //시리즈, 리디북스 */
-  /* padding-top: ${(props) =>
-    props.theme.novelImg.includes("dn-img-page.kakao.com") ? "135%" : "146%"};
+  /* 
+    padding-top: 
+     ${(props) => (props.theme.novelImg.includes("dn-img-page.kakao.com") ? "135%" : "146%")};
   */
 
   border-radius: 5%;
