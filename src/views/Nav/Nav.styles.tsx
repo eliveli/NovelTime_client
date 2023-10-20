@@ -146,7 +146,11 @@ export const NavContentPC = styled.div`
   width: 50%;
   height: 100%;
 `;
-export const NavContent = styled.span<{ isCurrentPath?: boolean; isMessageCategory: boolean }>`
+export const NavContent = styled.span<{
+  isCurrentPath?: boolean;
+  isMessageCategory: boolean;
+  isPostPage?: boolean;
+}>`
   width: 100%;
   display: inline-flex;
   height: 100%;
@@ -165,11 +169,13 @@ export const NavContent = styled.span<{ isCurrentPath?: boolean; isMessageCatego
     justify-content: center;
   }
 
-  ${theme.media.hover(
-    `cursor: pointer;
-    opacity: 0.7;
-    color: rgba(100, 100, 100, 0.8);`,
-  )}
+  ${({ isPostPage }) =>
+    !isPostPage &&
+    theme.media.hover(
+      `cursor: pointer;
+      opacity: 0.7;
+      color: rgba(100, 100, 100, 0.8);`,
+    )}
 `;
 
 export const NavImg = styled.img`

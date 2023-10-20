@@ -291,12 +291,20 @@ export function NavMobileMainBottom() {
     }
   };
 
+  const handleNavigate = (path: string) => {
+    navigate(path);
+  };
+
   const handleClick = (category: string, path: string) => {
     handleNonLogin(category);
 
+    // Don't navigate to the list page if current path is that
+    //  to avoid displaying incorrect or no data with infinite scroll
+    if ([TALK_LIST, RECOMMEND_LIST].includes(path) && isThePath(path)) return;
+
     resetList(category);
 
-    navigate(path);
+    handleNavigate(path);
   };
 
   return (
@@ -305,6 +313,12 @@ export function NavMobileMainBottom() {
         <NavContent
           key={_.category}
           isMessageCategory={_.category === "Message"}
+          isPostPage={
+            // Don't set hover when current path is post list page
+            //  navigation also won't work here
+            (_.category === "FreeTalk" && isThePath(_.path)) ||
+            (_.category === "Recommend" && isThePath(_.path))
+          }
           onClick={() => handleClick(_.category, _.path)}
         >
           {_.category === "Message" && !!allUnreadMsgNo && (
