@@ -48,7 +48,13 @@ export const ChatRoomPreviewContainer = styled.div<{
     padding:12px 5px;
   `)}
 
-  ${({ isCurrentRoom }) => isCurrentRoom && `border: 2px solid ${theme.color.mainLight};`}
+  ${({ isCurrentRoom }) =>
+    isCurrentRoom
+      ? `border: 2px solid ${theme.color.mainLight};`
+      : theme.media.hover(
+          `cursor: pointer;
+          opacity: 0.7;`,
+        )}
 `;
 export const ChatRoomCntnr = styled.div<{
   isRoomSpread: boolean;

@@ -109,10 +109,10 @@ export function SortTablet({
 
   const sortTypes = setSortTypes();
 
-  // open or close all list
+  // open or close the list
   const [isCategoryList, handleCategoryList] = useState(false);
 
-  // when opening or closing search bar, close all list if it is open
+  // when opening or closing search bar, close the list if it is open
   useEffect(() => {
     handleCategoryList(false);
   }, [isSearch]);

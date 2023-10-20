@@ -294,6 +294,7 @@ export default function FreeTalkDetail() {
               novelId={talk.data.novel.novelId}
             />
           </WritingDetailContainer>
+
           <ContentAnimation isTalkComnt>
             {!!rootComments.length && (
               <CommentList

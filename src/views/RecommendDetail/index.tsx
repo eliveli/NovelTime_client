@@ -98,12 +98,6 @@ export default function NovelDetailRecommend() {
 
     dispatch(openModal("confirm"));
   };
-
-  const recommendDetail = {
-    recomDtlImgWidth: "min-width: 92px;",
-    recomDtlTextHeight: "height: 64px;",
-  };
-
   if (!recommendId || recommend.isError) {
     dispatch(openModal("alert"));
     dispatch(handleAlert(`글을 불러올 수 없습니다.`));
@@ -116,7 +110,7 @@ export default function NovelDetailRecommend() {
 
       {recommend.data && (
         <MainBG isDetail="R">
-          <NovelInWriting recommendDetail={recommendDetail} novel={recommend.data.novel} />
+          <NovelInWriting isRecommend novel={recommend.data.novel} />
           <DotAnimation>
             <DotLine />
           </DotAnimation>

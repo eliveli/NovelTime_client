@@ -59,6 +59,11 @@ export const MessageIcon = styled.img`
   margin-left: 15px;
   width: 37px;
   height: 37px;
+
+  ${theme.media.hover(
+    `cursor: pointer;
+    opacity: 0.7;`,
+  )}
 `;
 export const LogOutIconBox = styled(Icon.IconBox)`
   margin-left: 15px;
@@ -96,6 +101,11 @@ export const EditProfileBtn = styled.button`
 
   font-size: 13px;
   font-weight: 500;
+
+  ${theme.media.hover(
+    `cursor: pointer;
+    opacity: 0.7;`,
+  )}
 `;
 
 export const WritingSection = styled.section<{ isNoContent: boolean; isForListAll?: true }>`
@@ -134,6 +144,11 @@ export const WritingContnr = styled.div<{
     align-items: center;`
       : theme.media.tablet(`justify-content: space-between;`)}
   ${({ isNovelList }) => isNovelList && `margin: 15px 0 7px;`}
+
+  ${theme.media.hover(
+    `cursor: pointer;
+    opacity: 0.7;`,
+  )}
 `;
 
 export const NoContentInListDetailed = styled.div`
@@ -167,6 +182,11 @@ export const ListInfoContnr = styled.div`
   display: flex;
   justify-content: space-between;
   position: relative;
+
+  ${theme.media.hover(
+    `cursor: pointer;
+    opacity: 0.7;`,
+  )}
 `;
 export const UserImgContainerForListAll = styled.div`
   display: flex;
@@ -309,15 +329,21 @@ export const FilterContnr = styled.div`
   gap: 25px;
   margin: 12px 0 12px 4px;
 `;
+
 type FilterType = "프리톡" | "추천" | "댓글";
 export const Filter = styled.p<{ category: FilterType; selectedCtgr: FilterType }>`
   margin: 0;
   font-weight: 500;
   color: rgba(100, 100, 100, 0.6);
   ${({ category, selectedCtgr }) =>
-    category === selectedCtgr &&
-    `color:${theme.color.main}; border-bottom: 3px solid ${theme.color.mainLight};`}
+    category === selectedCtgr
+      ? `color:${theme.color.main}; border-bottom: 3px solid ${theme.color.mainLight};`
+      : theme.media.hover(
+          `cursor: pointer;
+          opacity: 0.7;`,
+        )}
 `;
+
 export const CommentContentContnr = styled.div`
   display: flex;
   align-items: flex-end;
@@ -375,11 +401,14 @@ export const ListTitleContnr = styled.div<{ isListMore: boolean; limitContnrWidt
   ${({ isListMore }) => (isListMore ? `flex-wrap: wrap;` : ``)}
   width: ${({ limitContnrWidth }) => limitContnrWidth}px;
 `;
-export const ListTitle = styled.span<{ listId?: string; selectedListId?: string }>`
+export const ListTitle = styled.span<{
+  listId?: string;
+  selectedListId?: string;
+}>`
   white-space: nowrap;
   color: rgba(100, 100, 100, 0.8);
   border-radius: 20px;
-  border: 1px solid rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(22, 21, 21, 0.2);
   background-color: white;
   padding: 5px 10px 4px;
   font-size: 14px;
@@ -390,6 +419,14 @@ export const ListTitle = styled.span<{ listId?: string; selectedListId?: string 
     selectedListId &&
     listId === selectedListId &&
     `color:${theme.color.main}; border: 1px solid ${theme.color.mainLight}; order: -1;`}
+
+  ${({ listId, selectedListId }) =>
+    listId &&
+    listId !== selectedListId &&
+    theme.media.hover(
+      `cursor: pointer;
+      opacity: 0.7;`,
+    )}
 `;
 export const ListTitleNormalStyle = styled.span`
   color: rgba(100, 100, 100, 0.6);
@@ -450,6 +487,11 @@ export const ButtonToEdit = styled.span<{ isNoBorder?: true }>`
   font-weight: 500;
   font-size: 15px;
   ${({ isNoBorder }) => !isNoBorder && `border-bottom: 1px solid #d3d3d382;`}
+
+  ${theme.media.hover(
+    `cursor: pointer;
+    opacity: 0.7;`,
+  )}
 `;
 
 // make the parent of more btn //

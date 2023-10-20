@@ -129,4 +129,9 @@ export const GoToAllContentBtn = styled.button`
   color: rgba(100, 100, 100, 0.7);
   font-size: 13px;
   font-weight: 500;
+
+  ${theme.media.hover(
+    `cursor: pointer;
+    opacity: 0.7;`,
+  )}
 `;

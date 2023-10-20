@@ -116,14 +116,14 @@ export default function WritingListFrame({
 
       <ButtonsContainer>
         <ButtonInNovelDetail _onClick={handleToGoToWrite}>
-          <Icon.IconBox>
+          <Icon.IconBox hover="none">
             <Icon.Write2 />
           </Icon.IconBox>
           {isNotMobile && <ButtonText>글쓰기</ButtonText>}
         </ButtonInNovelDetail>
 
         <ButtonInNovelDetail isForMyList _onClick={handleToGoToAddNovel}>
-          <Icon.IconBox>
+          <Icon.IconBox hover="none">
             <Icon.Plus />
           </Icon.IconBox>
           {isNotMobile && <ButtonText>담기</ButtonText>}

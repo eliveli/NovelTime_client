@@ -109,9 +109,16 @@ export const CatWalking = styled.img`
   height: 50px;
 `;
 
-export const PageTitle = styled.div`
+export const PageTitle = styled.div<{ isHover?: true }>`
   display: flex;
   align-items: center;
+
+  ${({ isHover }) =>
+    isHover &&
+    theme.media.hover(
+      `cursor: pointer;
+      opacity: 0.7;`,
+    )}
 `;
 export const LogoContainer = styled.div`
   @media screen and (max-width: 1023px) {
@@ -128,6 +135,11 @@ export const Logo = styled.img`
     padding-bottom: 3px;
     height: 60px;
   }
+
+  ${theme.media.hover(
+    `cursor: pointer;
+     opacity: 0.7;`,
+  )}
 `;
 export const NavContentPC = styled.div`
   display: flex;
@@ -295,6 +307,11 @@ export const SubmitBtn = styled.button`
   background-color: white;
   color: rgba(0, 0, 0, 0.6);
 
+  ${theme.media.hover(
+    `cursor: pointer;
+    opacity: 0.7;`,
+  )}
+
   /* reset margin - from parent container of IconBox as isRight- */
   margin-right: 3px;
   margin-top: 2px;
@@ -358,5 +375,5 @@ export const MyPageMobile = styled.div<{ userImg: Img }>`
 `;
 
 export const UserName = styled.span`
-  padding-left: 12px;
+  padding-left: 4px;
 `;

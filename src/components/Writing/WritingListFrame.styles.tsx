@@ -70,6 +70,11 @@ export const ButtonContainer = styled.div<{ isForMyList?: true }>`
     `padding: 4px 7px 4px 3px;  
   `}
 
+  ${theme.media.hover(
+    `cursor: pointer;
+    opacity: 0.7;`,
+  )}
+
   @media (max-width: 767px) {
     ${({ isForMyList }) =>
       isForMyList &&

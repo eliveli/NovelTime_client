@@ -75,11 +75,13 @@ const IconBox = styled.div<{
 
   @media (hover: hover) {
     &:hover {
-      ${({ hover }) =>
-        hover ||
-        `cursor: pointer;
-         opacity: 0.8;
-      `}
+      ${({ hover }) => {
+        if (hover === "none") return "";
+
+        if (hover) return hover;
+
+        return `cursor: pointer; opacity: 0.8;`;
+      }}
     }
   }
 
@@ -118,7 +120,7 @@ const Icon = {
     ${iconStyle()};
   `,
   Write2: styled(FaPencilAlt)`
-    ${iconStyleHover()};
+    ${iconStyle()};
   `,
   NovelList: styled(ImBooks)`
     ${iconStyle()};
@@ -132,7 +134,7 @@ const Icon = {
     ${iconStyle()};
   `,
   BigLeft: styled(HiOutlineChevronLeft)`
-    ${iconStyle()};
+    ${iconStyleHover()};
   `,
   Naver: styled(SiNaver)`
     ${iconStyle()};

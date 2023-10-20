@@ -170,6 +170,11 @@ export const BtnToSubmit = styled.button`
 
   color: rgba(0, 0, 0, 0.6);
   font-weight: 500;
+
+  ${theme.media.hover(
+    `cursor: pointer;
+    opacity: 0.7;`,
+  )}
 `;
 
 export const MsgInputWholeContainer = styled.div`

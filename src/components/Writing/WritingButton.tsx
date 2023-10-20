@@ -1,5 +1,5 @@
 import Icon from "assets/Icon";
-import { styled } from "assets/styles/theme";
+import theme, { styled } from "assets/styles/theme";
 import { useWhetherItIsMobile } from "utils";
 
 const WritingPostContainer = styled.div<{ styles?: string }>`
@@ -15,6 +15,11 @@ const WritingPostContainer = styled.div<{ styles?: string }>`
   align-items: center;
 
   ${({ styles }) => styles && styles}
+
+  ${theme.media.hover(
+    `cursor: pointer;
+    opacity: 0.7;`,
+  )}
 `;
 const WritingText = styled.span`
   color: #808080c4;
@@ -34,7 +39,7 @@ export default function WritingButton({
 
   return (
     <WritingPostContainer onClick={clickToWrite} styles={styles}>
-      <Icon.IconBox>
+      <Icon.IconBox hover="none">
         <Icon.Write2 />
       </Icon.IconBox>
       {isNotMobile && <WritingText>글쓰기</WritingText>}

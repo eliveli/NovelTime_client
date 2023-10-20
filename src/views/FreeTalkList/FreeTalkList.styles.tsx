@@ -19,6 +19,11 @@ export const Talk = styled.article<{ isLast?: boolean }>`
   }
   // this is used in home page
   ${({ isLast }) => isLast && `border-bottom: 0;`}
+
+  ${theme.media.hover(
+    `cursor: pointer;
+    opacity: 0.7;`,
+  )}
 `;
 export const TalkMobileContnr = styled.div`
   display: flex;

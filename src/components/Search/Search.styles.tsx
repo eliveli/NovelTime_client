@@ -104,7 +104,12 @@ export const SearchFilterText = styled.p<{
   }
 
   ${({ contentName, selectedContent }) =>
-    contentName === selectedContent && `border-bottom: 2px solid ${theme.color.main};`}
+    contentName === selectedContent
+      ? `border-bottom: 2px solid ${theme.color.main};`
+      : theme.media.hover(
+          `cursor: pointer;
+          opacity: 0.7;`,
+        )}
 `;
 export const SearchIconBox = styled(Icon.IconBox)`
   border-radius: 11px;

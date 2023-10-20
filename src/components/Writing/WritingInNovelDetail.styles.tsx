@@ -1,4 +1,4 @@
-import { styled } from "assets/styles/theme";
+import theme, { styled } from "assets/styles/theme";
 import { Img } from "store/serverAPIs/types";
 
 export const WritingBG = styled.article`
@@ -16,6 +16,10 @@ export const Writing = styled.div`
   &:last-child {
     border-bottom: 0;
   }
+  ${theme.media.hover(
+    `cursor: pointer;
+    opacity: 0.7;`,
+  )}
 `;
 export const FirstLineContainer = styled.div`
   display: flex;

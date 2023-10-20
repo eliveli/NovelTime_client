@@ -1,4 +1,4 @@
-import { styled } from "assets/styles/theme";
+import theme, { styled } from "assets/styles/theme";
 
 export const ContainerToGoTo = styled.div`
   margin-top: 10px;
@@ -22,4 +22,9 @@ export const BtnToGoTo = styled.button`
   font-weight: 500;
   white-space: nowrap;
   margin-left: 10px;
+
+  ${theme.media.hover(
+    `cursor: pointer;
+    opacity: 0.7;`,
+  )}
 `;

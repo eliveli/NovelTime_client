@@ -21,7 +21,7 @@ export const NovelLink = styled.div`
 export const NovelImg = styled.div<{
   screenWidth: number;
   novelImg: string;
-  recomDtlImgWidth: string;
+  isRecommend?: true;
 }>`
   height: auto;
   min-width: ${({ screenWidth }) => (screenWidth < 500 ? 59 : 70)}px;
@@ -33,7 +33,7 @@ export const NovelImg = styled.div<{
   background-repeat: no-repeat;
   background-size: cover;
 
-  ${({ recomDtlImgWidth }) => recomDtlImgWidth && recomDtlImgWidth}
+  ${({ isRecommend }) => isRecommend && "min-width: 92px;"}
 `;
 
 export const NovelInfoBox = styled.div<{ containerWidth: number; screenWidth: number }>`
@@ -78,7 +78,7 @@ export const NovelDescBox = styled.div`
 
   width: 100%;
 `;
-export const NovelDesc = styled.div<{ recomDtlTextHeight: string }>`
+export const NovelDesc = styled.div<{ isRecommend?: true }>`
   //2줄 넘어가는 텍스트 ...표시
   overflow: hidden;
   text-overflow: ellipsis;
@@ -91,7 +91,7 @@ export const NovelDesc = styled.div<{ recomDtlTextHeight: string }>`
   text-align: left;
   word-wrap: break-word;
 
-  ${({ recomDtlTextHeight }) => recomDtlTextHeight && recomDtlTextHeight}
+  ${({ isRecommend }) => isRecommend && "height: 64px;"}
 
   width: 100%;
 `;

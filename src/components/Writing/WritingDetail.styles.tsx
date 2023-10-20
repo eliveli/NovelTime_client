@@ -45,6 +45,11 @@ export const UserImg = styled.div<{ userImg: Img }>`
   background-position: ${({ userImg }) => userImg.position || "center"};
   background-repeat: no-repeat;
   background-size: cover;
+
+  ${theme.media.hover(
+    `cursor: pointer;
+    opacity: 0.7;`,
+  )}
 `;
 
 export const UserNameBox = styled.div`
@@ -58,6 +63,10 @@ export const UserNameBox = styled.div`
 
 export const UserName = styled.p`
   margin: 0;
+  ${theme.media.hover(
+    `cursor: pointer;
+    opacity: 0.7;`,
+  )}
 `;
 export const CreateDate = styled.p`
   margin: 0;

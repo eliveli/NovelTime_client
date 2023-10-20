@@ -18,6 +18,11 @@ export const Genre = styled.p<{ genreName: string; selectedGenre: string }>`
 
   ${({ genreName, selectedGenre }) =>
     genreName === selectedGenre && `border-bottom: 2px solid  ${theme.color.main};`}
+
+  ${theme.media.hover(
+    `cursor: pointer;
+    opacity: 0.7;`,
+  )}
 `;
 
 export const SortMobileContainer = styled.div`
@@ -78,6 +83,11 @@ export const SortCategoryLi = styled.li<{ selectedCategory: string; category: st
   }
   ${({ selectedCategory, category }) =>
     selectedCategory === category && `color:${theme.color.main};`}
+
+  ${theme.media.hover(
+    `cursor: pointer;
+    opacity: 0.7;`,
+  )}
 `;
 export const ContainerWithBtn = styled.div<{ borderOpacity: number | undefined }>`
   width: 135px;

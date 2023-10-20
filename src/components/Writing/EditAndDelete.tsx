@@ -1,4 +1,4 @@
-import { styled } from "assets/styles/theme";
+import theme, { styled } from "assets/styles/theme";
 
 const EditAndDeleteContainer = styled.div`
   display: flex;
@@ -14,6 +14,11 @@ const Button = styled.button<{ buttonStyles?: string }>`
   font-weight: 500;
   font-size: 14px;
   ${({ buttonStyles }) => buttonStyles && buttonStyles}
+
+  ${theme.media.hover(
+    `cursor: pointer;
+    opacity: 0.7;`,
+  )}
 `;
 
 export function EditAndDelete({

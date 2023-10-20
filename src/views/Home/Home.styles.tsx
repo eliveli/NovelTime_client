@@ -20,6 +20,11 @@ export const UserContnr = styled.div`
   box-shadow: 0 0 3px rgb(200 200 200 / 90%);
   border-radius: 10px;
   padding: 10px;
+
+  ${theme.media.hover(
+    `cursor: pointer;
+    opacity: 0.7;`,
+  )}
 `;
 export const UserImg = styled.div<{ userImg: Img }>`
   border-radius: 50%;
@@ -126,7 +131,13 @@ export const Filter = styled.p<{ category: string; selectedCtgr: string }>`
   ${({ category, selectedCtgr }) =>
     category === selectedCtgr &&
     `color:${theme.color.main}; border-bottom: 3px solid ${theme.color.mainLight};`}
+
+  ${theme.media.hover(
+    `cursor: pointer;
+    opacity: 0.7;`,
+  )}
 `;
+
 export const ArrowContnr = styled(Icon.IconBox)`
   // 모바일은 아이콘 없음
   @media screen and (max-width: 767px) {
@@ -164,6 +175,11 @@ export const BtnToLoadContent = styled.button`
   color: rgba(100, 100, 100, 0.7);
   font-size: 13px;
   font-weight: 500;
+
+  ${theme.media.hover(
+    `cursor: pointer;
+    opacity: 0.7;`,
+  )}
 `;
 
 export const AddSpace = styled.div<{ height: number }>`

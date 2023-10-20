@@ -1,4 +1,4 @@
-import { styled } from "assets/styles/theme";
+import theme, { styled } from "assets/styles/theme";
 import { Img } from "store/serverAPIs/types";
 import Icon from "../../assets/Icon";
 
@@ -44,6 +44,11 @@ export const Text = styled.article<{ isLast?: boolean }>`
     flex-direction: row;
     padding: ${16 - 2}px 0 16px; // children인 두 컨테이너에 margin-top 2px임. 합하면 위쪽 간격 16px로써 아래 간격과 같음
   }
+
+  ${theme.media.hover(
+    `cursor: pointer;
+    opacity: 0.7;`,
+  )}
 `;
 export const LastLineContainer = styled.div`
   display: flex;

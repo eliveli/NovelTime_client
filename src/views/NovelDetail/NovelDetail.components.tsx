@@ -104,7 +104,8 @@ export default function NovelDetailInfo({
                   </NovelInfoMobile>
                   <NovelInfoMobileAge>{novelAge}</NovelInfoMobileAge>
                 </NovelInfoAuthorBox>
-                {writingNoWithAllType && (
+
+                {!!writingNoWithAllType && (
                   <InfoIconBox>
                     <TextIconBox>
                       <TextIcon />

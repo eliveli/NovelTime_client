@@ -1,28 +1,29 @@
 import theme, { styled } from "assets/styles/theme";
 import Icon from "assets/Icon";
 
-export const NovelSpace = styled.div<{ recommend: boolean }>`
+export const NovelSpace = styled.div<{ isRecommend?: true }>`
   width: 100%;
   padding: 0 20px;
   ${theme.media.mobile(`
       padding: 0 12px;
   `)}
 
-  ${({ recommend }) => recommend && "padding:0 0 20px 0;"}
-  ${({ recommend }) =>
-    recommend &&
+  ${({ isRecommend }) => isRecommend && "padding:0 0 20px 0;"}
+
+  ${({ isRecommend }) =>
+    isRecommend &&
     theme.media.mobile(`
       padding: 0 0 12px 0;
   `)}
 `;
-export const NovelContainer = styled.div<{ recommend: boolean }>`
+export const NovelContainer = styled.div<{ isRecommend?: true }>`
   margin: 0 auto;
   width: 100%;
   border-radius: 15px;
   box-shadow: 0 0 3px rgb(0 0 0 / 20%);
 
   @media screen and (min-width: 500px) {
-    ${({ recommend }) => !recommend && "max-width: 500px;"}
+    ${({ isRecommend }) => !isRecommend && "max-width: 500px;"}
   }
 `;
 
@@ -40,6 +41,11 @@ export const NovelTitleContainer = styled.div`
   align-items: center;
   justify-content: center;
   height: 45px;
+
+  ${theme.media.hover(
+    `cursor: pointer;
+    opacity: 0.7;`,
+  )}
 `;
 export const DownIconBox = styled(Icon.IconBox)`
   pointer-events: none;

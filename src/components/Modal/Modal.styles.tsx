@@ -86,8 +86,7 @@ export const TextForSave = styled.span`
   @media (hover: hover) {
     &:hover {
       cursor: pointer;
-      opacity: 0.8;
-      background-color: rgba(150, 150, 150, 0.3);
+      background-color: rgba(200, 200, 200, 0.4);
     }
   }
 `;
@@ -132,8 +131,7 @@ export const ClosingBox = styled(Icon.IconBox)<{ isSmallWidth?: true; isProfile?
   @media (hover: hover) {
     &:hover {
       cursor: pointer;
-      opacity: 0.8;
-      background-color: rgba(150, 150, 150, 0.3);
+      background-color: rgba(200, 200, 200, 0.4);
     }
   }
 `;
@@ -171,6 +169,11 @@ export const SortText = styled.p<{ selectedCategory: string; category: string }>
   padding: 10px 0;
   ${({ selectedCategory, category }) =>
     selectedCategory === category && `color: ${theme.color.main};`}
+
+  ${theme.media.hover(
+    `cursor: pointer;
+    opacity: 0.7;`,
+  )}
 `;
 export const TranslucentBG = styled.div<{ isEditingUserBG?: boolean }>`
   width: 100vw;
@@ -412,6 +415,7 @@ export const ButtonContainerForAnswer = styled.div`
   border-bottom-right-radius: 7px;
   border-bottom-left-radius: 7px;
 `;
+
 export const ButtonForAnswer = styled.div<{ isSingleButton?: true }>`
   width: 50%;
   display: flex;
@@ -425,9 +429,10 @@ export const ButtonForAnswer = styled.div<{ isSingleButton?: true }>`
   color: rgba(100, 100, 100, 0.6);
   font-weight: 500;
 
-  ${theme.media.hover(`
-    cursor: pointer;
-  `)}
+  ${theme.media.hover(
+    `cursor: pointer;
+    opacity: 0.7;`,
+  )}
 `;
 export const TextForAlertOrConfirm = styled.div`
   width: 100%;
@@ -481,6 +486,26 @@ export const ProfileName = styled.input`
   color: rgba(0, 0, 0, 0.7);
   width: 100%;
 `;
+export const SelectBtnBox = styled.div<{ isPhoto?: true; isBG?: true }>`
+  ${({ isPhoto }) =>
+    isPhoto &&
+    `position: absolute;
+    bottom: 0;
+    right: 15px;
+    margin:0;`}
+
+  ${({ isBG }) => isBG && `margin: 0; margin-top: 40px; position: relative;`}
+
+@media (hover: hover) {
+    &:hover {
+      background-color: rgba(200, 200, 200, 0.4);
+      border-radius: 20px;
+    }
+  }
+`;
+
+// do not set cursor to buttons for photo, bg where it doesn't work properly
+
 export const UploadImg = styled.input`
   position: absolute;
 
@@ -490,31 +515,34 @@ export const UploadImg = styled.input`
   height: 100%;
   opacity: 0; // to not show but work
 `;
-export const SelectBtnBox = styled.div<{ isPhoto?: true; isBG?: true }>`
-  margin-left: 12px;
 
-  ${({ isPhoto }) =>
-    isPhoto &&
-    `position: absolute; bottom: 0;
-    right: 15px; margin:0;`}
-  ${({ isBG }) => isBG && ` margin: 0; margin-top: 40px; position: relative;`}
-`;
 export const SelectBtn = styled.button<{ isPhoto?: true; isBG?: true }>`
-  border: 1px dotted rgba(0, 0, 0, 0.2);
   color: rgba(100, 100, 100, 0.7);
-  font-size: 13px;
   font-weight: 500;
   white-space: nowrap;
   border-radius: 20px;
-  padding: 2px 9px 2px 7px;
-
   background-color: transparent;
 
   ${({ isBG }) =>
-    isBG &&
-    `padding: 6px 18px 6px 18px;
-    font-size: 14px;     border: 1px solid rgba(0,0,0,0.16);`}
+    isBG
+      ? `padding: 6px 18px 6px 18px;
+        font-size: 14px;
+        border: 1px solid rgba(0,0,0,0.16);
+    `
+      : `padding: 2px 9px 2px 7px;
+        font-size: 13px;
+        border: 1px dotted rgba(0, 0, 0, 0.2);
+    `}
+
+  ${({ isPhoto, isBG }) =>
+    !isPhoto &&
+    !isBG &&
+    theme.media.hover(`
+      cursor: pointer;
+      background-color: rgba(200,200,200,0.4);
+  `)}
 `;
+
 export const TextByteContnr = styled.div`
   position: absolute;
   bottom: -25px;

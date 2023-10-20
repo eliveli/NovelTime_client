@@ -20,6 +20,11 @@ export const TextToBack = styled.span`
   font-size: 14px;
   font-weight: 500;
   color: rgba(100, 100, 100, 0.5);
+
+  ${theme.media.hover(
+    `cursor: pointer;
+    opacity: 0.7;`,
+  )}
 `;
 
 export const NoteContainer = styled.div`
@@ -88,9 +93,14 @@ export const Board = styled.button<{
   }
 
   ${({ category, selected }) =>
-    category === selected &&
-    `background-color: white; color: ${theme.color.main}; border-block-color:  ${theme.color.mainLight};`}
+    category === selected
+      ? `background-color: white; color: ${theme.color.main}; border-block-color:  ${theme.color.mainLight};`
+      : theme.media.hover(
+          `cursor: pointer;
+          opacity: 0.7;`,
+        )}
 `;
+
 export const WritingTitleContanr = styled.div`
   border-bottom: 1px solid rgba(100, 100, 100, 0.1);
   padding: 8px 0;
@@ -204,8 +214,12 @@ export const PlatformBtn = styled.button<{ selectedPlatform: string; platform: s
   }
 
   ${({ selectedPlatform, platform }) =>
-    selectedPlatform === platform &&
-    `border:1px solid ${theme.color.mainLight}; color:${theme.color.main};`}
+    selectedPlatform === platform
+      ? `border:1px solid ${theme.color.mainLight}; color:${theme.color.main};`
+      : theme.media.hover(
+          `cursor: pointer;
+          opacity: 0.7;`,
+        )}
 `;
 
 export const PlatformBtnContnr = styled.div<{ isNewTab?: true }>`
@@ -250,6 +264,11 @@ export const SelectPlatform = styled.button`
   white-space: nowrap;
 
   margin-left: 8px;
+
+  ${theme.media.hover(
+    `cursor: pointer;
+    opacity: 0.7;`,
+  )}
 `;
 export const NovelUrlContnr = styled.div`
   display: flex;

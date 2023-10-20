@@ -21,7 +21,7 @@ import {
   UpIconBox,
 } from "./NovelColumnDetail.styles";
 
-function DescModal({
+function NovelDescModal({
   modalScrollY,
   modalFRef,
   modalTRef,
@@ -45,6 +45,7 @@ function DescModal({
         ref={modalTRef}
         onClick={(e: React.MouseEvent) => {
           e.preventDefault();
+          e.stopPropagation();
         }}
       >
         {desc}
@@ -56,6 +57,7 @@ function DescModal({
       ref={modalFRef}
       onClick={(e: React.MouseEvent) => {
         e.preventDefault();
+        e.stopPropagation();
       }}
     >
       {desc}
@@ -64,11 +66,11 @@ function DescModal({
 }
 
 export default function NovelColumnDetail({
-  recommendDetail,
+  isRecommend,
   novel,
 }: {
   novel: NovelDetail;
-  recommendDetail?: { recomDtlImgWidth?: string; recomDtlTextHeight?: string };
+  isRecommend?: true;
 }) {
   // props or default props
   const { novelId, novelImg, novelTitle, novelAuthor, novelGenre, novelDesc } = novel;
@@ -106,6 +108,7 @@ export default function NovelColumnDetail({
   };
 
   const navigate = useNavigate();
+
   return (
     <ThemeProvider theme={theme}>
       <NovelLink
@@ -122,19 +125,13 @@ export default function NovelColumnDetail({
           navigate(`/novel-detail/${novelId}`);
         }}
       >
-        <NovelImg
-          screenWidth={screenWidth}
-          novelImg={novelImg}
-          recomDtlImgWidth={recommendDetail?.recomDtlImgWidth as string}
-        />
+        <NovelImg screenWidth={screenWidth} novelImg={novelImg} isRecommend={isRecommend} />
         <NovelInfoBox containerWidth={containerWidth} screenWidth={screenWidth}>
           <NovelTitle infoWidth={infoWidth}>{`[${novelGenre}] ${novelTitle}`}</NovelTitle>
           <NovelSubInfoBox ref={infoRef}>
             <NovelAuthor>{novelAuthor}</NovelAuthor>
             <NovelDescBox>
-              <NovelDesc recomDtlTextHeight={recommendDetail?.recomDtlTextHeight as string}>
-                {novelDesc}
-              </NovelDesc>
+              <NovelDesc isRecommend={isRecommend}>{novelDesc}</NovelDesc>
               {isModal && (
                 <DownIconBox
                   onClick={(event: React.MouseEvent<HTMLElement>) => {
@@ -161,7 +158,7 @@ export default function NovelColumnDetail({
             </NovelDescBox>
           </NovelSubInfoBox>
           {isModal && (
-            <DescModal
+            <NovelDescModal
               modalScrollY={modalScrollY}
               modalTRef={modalTRef}
               modalFRef={modalFRef}

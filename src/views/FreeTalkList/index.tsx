@@ -67,7 +67,7 @@ export default function FreeTalkList() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  // 기존에 받아온 리스트 없이 최초 페이지 진입 시 기본 필터 설정값으로 리스트 불러오기
+  // 기존에 받아온 리스트 없이 최초 페이지 진입 시 기본 필터 설정값으로 리스트 불러옴
   // 유저가 처음 서치 필터 작동하기 전 동작
   // 기존에 받아온 리스트 있고 뒤로가기로 페이지 진입 시 제외
   useEffect(() => {
@@ -79,6 +79,7 @@ export default function FreeTalkList() {
   return (
     <MainBG isWritingList>
       {isFetching && <Spinner styles="fixed" />}
+
       <Filter>
         <WritingButton
           clickToWrite={() => {

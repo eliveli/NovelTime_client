@@ -180,16 +180,23 @@ export const CommentSortContainer = styled.div`
 `;
 export const CommentSort = styled.span<{ isSelected: boolean }>`
   ${({ isSelected }) =>
-    !!isSelected &&
-    `
-    color: ${theme.color.main}
-  `}
+    isSelected
+      ? `color: ${theme.color.main};`
+      : theme.media.hover(
+          `cursor: pointer;
+          opacity: 0.7;`,
+        )}
 `;
 
 export const ReCommentMarkContainer = styled.div`
   display: flex;
   justify-content: flex-start;
   align-items: flex-start;
+
+  ${theme.media.hover(
+    `cursor: pointer;
+    opacity: 0.7;`,
+  )}
 `;
 
 export const ReCommentButtonsContainer = styled.div`
@@ -207,6 +214,11 @@ export const MarkParentAndChildComment = styled.span<{
 
   font-weight: 500;
   font-size: 14px;
+
+  ${theme.media.hover(
+    `cursor: pointer;
+    opacity: 0.7;`,
+  )}
 `;
 
 export const ReCommentMark = styled.span`
@@ -312,4 +324,9 @@ export const WriteCommentSubmit = styled.button`
 
   color: rgba(0, 0, 0, 0.6);
   font-weight: 500;
+
+  ${theme.media.hover(
+    `cursor: pointer;
+    opacity: 0.7;`,
+  )}
 `;

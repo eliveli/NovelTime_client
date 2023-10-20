@@ -31,7 +31,6 @@ import {
 } from "utils/pathname";
 import { setSearchList } from "store/clientSlices/filterSlice";
 import { getCurrentRoomId, isThePath, useWhetherItIsTablet } from "utils";
-import { Img } from "store/serverAPIs/types";
 import { UnreadMessageNo } from "views/ChatRoomList";
 import { handleAlert, openModal } from "../../store/clientSlices/modalSlice";
 import { handleWritingToSubmitOnMobile } from "../../store/clientSlices/writingSlice";
@@ -348,10 +347,14 @@ export function NavMobileDetail() {
         </IconsBox>
 
         {isThePath(USER_PAGE) && (
-          <PageTitle onClick={() => navigate(`${USER_PAGE}/${profileUserName}`)}>
+          <PageTitle onClick={() => navigate(`${USER_PAGE}/${profileUserName}`)} isHover>
             <UserImg userImg={profileUserImg} />
             <UserName>{profileUserName}</UserName>
-            <Icon.IconBox color={themeStyle.color.mainLight} styles="transform: scaleX(-1);">
+            <Icon.IconBox
+              color={themeStyle.color.mainLight}
+              hover="none"
+              styles="transform: scaleX(-1);"
+            >
               <Icon.Runner />
             </Icon.IconBox>
           </PageTitle>
@@ -468,7 +471,7 @@ export function ChatRoomNav({
         )}
       </IconsBox>
 
-      <PageTitle onClick={() => navigate(`${USER_PAGE}/${partnerUserName}`)}>
+      <PageTitle isHover onClick={() => navigate(`${USER_PAGE}/${partnerUserName}`)}>
         <UserImg userImg={partnerUserImg} />
         <UserName>{partnerUserName}</UserName>
       </PageTitle>

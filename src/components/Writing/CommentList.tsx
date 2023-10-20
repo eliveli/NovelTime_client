@@ -233,7 +233,7 @@ function CommentWritten({
           <DeletedCommentNumberContainer>
             <ReCommentButtonsContainer>
               <ReCommentMarkContainer>
-                <Icon.IconBox size={15}>
+                <Icon.IconBox size={15} hover="none">
                   <Icon.Comment />
                 </Icon.IconBox>
 
