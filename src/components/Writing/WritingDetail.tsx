@@ -1,5 +1,5 @@
 import { Img } from "store/serverAPIs/types";
-import { goToUserPage } from "utils";
+import { adjustCreateDate, goToUserPage } from "utils";
 import { useNavigate } from "react-router-dom";
 import {
   CreateDate,
@@ -60,6 +60,8 @@ export function TalkDetail({ detailTalk }: TalkProps) {
     talkImg,
   } = detailTalk;
 
+  const dateToShow = adjustCreateDate(createDate);
+
   const navigate = useNavigate();
 
   return (
@@ -70,7 +72,7 @@ export function TalkDetail({ detailTalk }: TalkProps) {
           <WritingTitle>{talkTitle}</WritingTitle>
           <UserNameBox>
             <UserName onClick={(e) => goToUserPage(navigate, e, userName)}>{userName}</UserName>
-            <CreateDate>{createDate}</CreateDate>
+            <CreateDate>{dateToShow}</CreateDate>
           </UserNameBox>
         </NextToImgContainer>
       </UserContainer>
@@ -95,6 +97,8 @@ export function RecommendDetail({ detailRecommend }: RecommendProps) {
     recommendImg,
   } = detailRecommend;
 
+  const dateToShow = adjustCreateDate(createDate);
+
   const navigate = useNavigate();
 
   return (
@@ -105,7 +109,7 @@ export function RecommendDetail({ detailRecommend }: RecommendProps) {
           <WritingTitle>{recommendTitle}</WritingTitle>
           <UserNameBox>
             <UserName onClick={(e) => goToUserPage(navigate, e, userName)}>{userName}</UserName>
-            <CreateDate>{createDate}</CreateDate>
+            <CreateDate>{dateToShow}</CreateDate>
           </UserNameBox>
         </NextToImgContainer>
       </UserContainer>

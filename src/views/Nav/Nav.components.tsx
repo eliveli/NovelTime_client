@@ -86,6 +86,39 @@ export function NavPC() {
     { category: "Message", path: CHAT_ROOM_LIST, partialPath: CHAT_ROOM_LIST },
   ];
 
+  const resetList = (category: string) => {
+    if (!["FreeTalk", "Recommend", "Novel"].includes(category)) return;
+
+    let listType: "talk" | "recommend" | "novel";
+
+    if (category === "FreeTalk") {
+      listType = "talk";
+    } else if (category === "Recommend") {
+      listType = "recommend";
+    } else {
+      listType = "novel";
+    }
+
+    dispatch(setSearchList({ listType, list: "reset" }));
+  };
+
+  const handleNonLogin = (category: string) => {
+    if (category === "Message" && !loginUser.userId) {
+      dispatch(openModal("alert"));
+      dispatch(handleAlert("로그인이 필요합니다"));
+    }
+  };
+
+  const handleClick = (category: string, path: string) => {
+    handleNonLogin(category);
+
+    resetList(category);
+    // for the case where the user have visited list page
+    //  with mobile or tablet screen size where infinite scroll is used
+
+    navigate(path);
+  };
+
   return (
     <NavContentBoxPC>
       <LogoContainer>
@@ -97,16 +130,8 @@ export function NavPC() {
           <NavContent
             key={_.category}
             isMessageCategory={_.category === "Message"}
-            onClick={() => {
-              if (_.category === "Message" && !loginUser.userId) {
-                dispatch(openModal("alert"));
-                dispatch(handleAlert("로그인이 필요합니다"));
-                return;
-              }
-
-              navigate(_.path);
-            }}
             isCurrentPath={isThePath(_.partialPath)}
+            onClick={() => handleClick(_.category, _.path)}
           >
             {_.category}
 
@@ -119,29 +144,19 @@ export function NavPC() {
 
       <RightSideContnr>
         <SearchIconBox
-          onClick={() => {
-            navigate(`${SEARCH_ALL}?searchCategory=Novel&searchType=Title&searchWord=&pageNo=1`);
-          }}
+          onClick={() =>
+            navigate(`${SEARCH_ALL}?searchCategory=Novel&searchType=Title&searchWord=&pageNo=1`)
+          }
         >
           <Icon.Search />
         </SearchIconBox>
 
         {loginUser.userName ? (
-          <MyPageTablet
-            onClick={() => {
-              navigate(`${USER_PAGE}/${loginUser.userName}`);
-            }}
-          >
+          <MyPageTablet onClick={() => navigate(`${USER_PAGE}/${loginUser.userName}`)}>
             프로필
           </MyPageTablet>
         ) : (
-          <LoginText
-            onClick={() => {
-              dispatch(openModal("login"));
-            }}
-          >
-            로그인
-          </LoginText>
+          <LoginText onClick={() => dispatch(openModal("login"))}>로그인</LoginText>
         )}
       </RightSideContnr>
     </NavContentBoxPC>
@@ -253,35 +268,44 @@ export function NavMobileMainBottom() {
     },
   ];
 
+  const resetList = (category: string) => {
+    if (!["FreeTalk", "Recommend", "Novel"].includes(category)) return;
+
+    let listType: "talk" | "recommend" | "novel";
+
+    if (category === "FreeTalk") {
+      listType = "talk";
+    } else if (category === "Recommend") {
+      listType = "recommend";
+    } else {
+      listType = "novel";
+    }
+
+    dispatch(setSearchList({ listType, list: "reset" }));
+  };
+
+  const handleNonLogin = (category: string) => {
+    if (["AddPost", "Message"].includes(category) && !isLoginUser) {
+      dispatch(openModal("alert"));
+      dispatch(handleAlert("로그인이 필요합니다"));
+    }
+  };
+
+  const handleClick = (category: string, path: string) => {
+    handleNonLogin(category);
+
+    resetList(category);
+
+    navigate(path);
+  };
+
   return (
     <NavContentBoxMobile isMainBottom>
       {navCategory.map((_) => (
         <NavContent
           key={_.category}
           isMessageCategory={_.category === "Message"}
-          onClick={() => {
-            if (["FreeTalk", "Recommend", "Novel"].includes(_.category)) {
-              let listType: "talk" | "recommend" | "novel";
-
-              if (_.category === "FreeTalk") {
-                listType = "talk";
-              } else if (_.category === "Recommend") {
-                listType = "recommend";
-              } else {
-                listType = "novel";
-              }
-
-              dispatch(setSearchList({ listType, list: "reset" }));
-            }
-
-            if (["AddPost", "Message"].includes(_.category) && !isLoginUser) {
-              dispatch(openModal("alert"));
-              dispatch(handleAlert("로그인이 필요합니다"));
-              return;
-            }
-
-            navigate(_.path);
-          }}
+          onClick={() => handleClick(_.category, _.path)}
         >
           {_.category === "Message" && !!allUnreadMsgNo && (
             <UnreadMessageNo isForMobileNav unreadMessageNo={allUnreadMsgNo} />
