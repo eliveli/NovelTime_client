@@ -135,7 +135,7 @@ export function NavPC() {
                 navigate(`${USER_PAGE}/${loginUser.userName}`);
               }}
             >
-              보관함
+              프로필
             </MyPageTablet>
           ) : (
             <LoginText
@@ -187,7 +187,7 @@ export function NavMobileMainTop() {
                 navigate(`/user-page/${userName}`);
               }}
             >
-              보관함
+              프로필
             </MyPageTablet>
           )}
           {isLoginUser && !isTablet && (
@@ -323,6 +323,9 @@ export function NavMobileDetail() {
     userNameFromSlice === userNameFromURL ? userImgFromSlice : { src: "", position: "" };
 
   const theme = {};
+
+  if (isThePath("iframe")) return <></>;
+
   return (
     <ThemeProvider theme={theme}>
       <NavContentBoxMobile isDetail>
@@ -335,7 +338,7 @@ export function NavMobileDetail() {
             )}
           </LeftIconBox>
 
-          {!isThePath("iframe") && !isThePath(ADD_WRITING) && !isThePath(EDIT_WRITING) && (
+          {!isThePath(ADD_WRITING) && !isThePath(EDIT_WRITING) && (
             <HomeIconBox
               onClick={() => {
                 navigate("/");
@@ -380,7 +383,7 @@ export function NavMobileDetail() {
                 navigate(`${USER_PAGE}/${loginUser.userName}`);
               }}
             >
-              보관함
+              프로필
             </MyPageTablet>
           )}
           {isThePath(USER_PAGE) && isLoginUser && !isTablet && (

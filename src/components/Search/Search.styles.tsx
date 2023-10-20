@@ -73,11 +73,17 @@ export const SearchCategoryLi = styled.li<{ selectedCategory: string; category: 
   justify-content: center;
   align-items: center;
   border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+
+  cursor: pointer;
+
   &:last-child {
     border-bottom: 0;
   }
+
   ${({ selectedCategory, category }) =>
-    selectedCategory === category && `color: ${theme.color.main};`}
+    selectedCategory === category
+      ? `color: ${theme.color.main};`
+      : theme.media.hover(`opacity: 0.7;`)}
 `;
 export const SearchFilterText = styled.p<{
   contentName: string;

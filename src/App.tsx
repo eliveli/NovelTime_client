@@ -168,11 +168,13 @@ function App() {
         <Modal />
         <ScrollToTop>
           <Routes>
-            {["/", "/talk-list", "/recommend-list", "/novel-list", "/chat-room-list"].map(
+            {["/", "/talk-list", "/recommend-list", "/novel-list", "/chat-room-list", "*"].map(
+              // "*" for not found page
               (path) => (
                 <Route key={path} path={path} element={<MainListNav />} />
               ),
             )}
+
             {[
               "/talk-detail/:talkId",
               "/talk-detail/:talkId/:commentId",
@@ -190,7 +192,6 @@ function App() {
               "/user-page/:userName/novel-list/created/:listId",
               "/user-page/:userName/novel-list/liked",
               "/user-page/:userName/novel-list/liked/:listId",
-              "*", // for not found page
             ].map((path) => (
               <Route key={path} path={path} element={<DetailNav />} />
             ))}
@@ -222,11 +223,11 @@ function App() {
           <Route path="/search/novel" element={<SearchNovelPage />} />
           <Route path="/search/novel/iframe" element={<SearchNovelIframe />} />
 
+          {/* on tablet, desktop */}
           <Route path="/chat-room-list" element={<ChatRoomList />} />
 
+          {/* on mobile */}
           <Route path="/chat-room/:roomId" element={<ChatRoom />} />
-
-          {/* 새로고침 등 상황에 로그인 유지 위해 클라이언트 스토어 이용 */}
 
           <Route path="/user-page/:userName" element={<UserParent />}>
             <Route index element={<UserHome />} />
