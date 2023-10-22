@@ -120,7 +120,7 @@ export default function FreeTalkDetail() {
   useEffect(() => {
     const commentList = commentPerPage.data?.commentList;
 
-    if (!commentList || !commentList?.length) return;
+    if (!commentList) return;
 
     // replace comment
     //  . when comment page is 0 it's updating root comments right after adding one
