@@ -23,14 +23,11 @@ const IconContainer = styled.div`
       padding: 8px 12px 0;
   `)}
 `;
-const IconBox = styled(Icon.IconBox)``;
-const HeartIcon = styled(Icon.BigEmptyHeart)``;
-const FillHeartIcon = styled(Icon.BigFillHeart)``;
-const ShareIcon = styled(Icon.Share)``;
 const LikeNumber = styled.span`
   margin-right: 20px;
   margin-left: 5px;
 `;
+
 export default function LikeAndShare({ isLike, likeNO, writingId, writingType, novelId }: Props) {
   const loginUserId = useAppSelector((state) => state.loginUser.user.userId);
 
@@ -68,18 +65,16 @@ export default function LikeAndShare({ isLike, likeNO, writingId, writingType, n
 
   return (
     <IconContainer>
-      <IconBox
-        onClick={async () => {
-          await toggleLikeRequest();
-        }}
-      >
-        {isLikeSet && <FillHeartIcon />}
-        {!isLikeSet && <HeartIcon />}
-      </IconBox>
+      <Icon.IconBox color={isLikeSet ? theme.color.main : ""} onClick={toggleLikeRequest}>
+        {isLikeSet && <Icon.BigFillHeart />}
+        {!isLikeSet && <Icon.BigEmptyHeart />}
+      </Icon.IconBox>
+
       <LikeNumber>{likeNoSet}</LikeNumber>
-      <IconBox size={23}>
-        <ShareIcon />
-      </IconBox>
+
+      <Icon.IconBox size={23}>
+        <Icon.Share />
+      </Icon.IconBox>
     </IconContainer>
   );
 }

@@ -205,9 +205,20 @@ const Icon = {
   Runner: styled(RiRunLine)`
     ${iconStyle()};
   `,
-  Share: styled(MdOutlineShare)`
-    ${iconStyleHover()};
-  `,
+  Share: () => {
+    const dispatch = useAppDispatch();
+
+    const SharingIcon = styled(MdOutlineShare)`
+      ${iconStyleHover()};
+    `;
+    return (
+      <SharingIcon
+        onClick={() => {
+          dispatch(openModal("share"));
+        }}
+      />
+    );
+  },
   ShareWithArrow: () => {
     const dispatch = useAppDispatch();
 
@@ -227,10 +238,10 @@ const Icon = {
     ${iconStyleHover()};
   `,
   BigEmptyHeart: styled(HiOutlineHeart)`
-    ${iconStyleHover()};
+    ${iconStyle()};
   `,
   BigFillHeart: styled(HiHeart)`
-    ${iconStyleHover()};
+    ${iconStyle()};
   `,
   TogglingBigHeartIcon,
   Search: styled(IoIosSearch)`
