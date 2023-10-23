@@ -35,8 +35,7 @@ export interface IsModalState {
   metaTags: MetaTags;
 }
 
-export const websiteImg =
-  "https://photos.google.com/album/AF1QipOy4A30VtN2Afb5ynQYejvDxN_5CVBjYRa_DYX4/photo/AF1QipM-TuRzTrhw9-AH4fdhB9EwS1vxjwdOfdX2svVp";
+export const logoImg = "https://i.imgur.com/wjATdZi.jpg";
 export const websiteURL = "http://domainfordev.com"; // * need to change after setting the domain
 
 const initialState: IsModalState = {
@@ -55,7 +54,7 @@ const initialState: IsModalState = {
   metaTags: {
     title: "NovelTime",
     description: "It's time to read novels!",
-    image: websiteImg,
+    image: logoImg,
     url: websiteURL,
   },
 };

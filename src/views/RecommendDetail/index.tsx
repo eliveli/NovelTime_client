@@ -18,7 +18,7 @@ import { setSearchList } from "store/clientSlices/filterSlice";
 import Spinner from "assets/Spinner";
 import { EditAndDeleteContainer } from "components/Writing/WritingDetail.styles";
 import {
-  websiteImg,
+  logoImg,
   handleAlert,
   handleConfirm,
   openModal,
@@ -117,7 +117,7 @@ export default function NovelDetailRecommend() {
   const metaTags = () => ({
     title: recommend.data?.recommend.recommendTitle || "",
     description: recommend.data?.recommend.recommendDesc || "",
-    image: recommend.data?.recommend.recommendImg || websiteImg,
+    image: recommend.data?.recommend.recommendImg || logoImg,
     url: window.location.href,
   });
 

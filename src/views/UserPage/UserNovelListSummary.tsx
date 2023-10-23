@@ -24,24 +24,18 @@ export default function UserNovelListSummary({ isCreated }: { isCreated: boolean
     isCreated, // isCreated or isLiked
   });
 
-  const metaTags = () => {
-    let text = "";
-    if (userName) {
-      text = userName + (!isCreated ? "님이 만든 리스트" : "님이 좋아하는 리스트");
-    }
-    return {
-      title: text,
-      description: text,
-      image:
-        (listSummaryResult.data && listSummaryResult.data[0]?.userImg?.src) ||
-        loginUser.userImg.src,
-      url: window.location.href,
-    };
-  };
+  const listTitles = listSummaryResult.data?.map((_) => _.listTitle).toString() || "";
+
+  const metaTags = () => ({
+    title: userName ? `${userName}님이${!isCreated ? " 만든 " : " 좋아하는 "}리스트` : "",
+    description: listTitles,
+    image:
+      (listSummaryResult.data && listSummaryResult.data[0]?.userImg?.src) || loginUser.userImg.src,
+    url: window.location.href,
+  });
 
   useEffect(() => {
     if (!listSummaryResult.data) return;
-
     dispatch(setMetaTags(metaTags()));
   }, [listSummaryResult.data]);
 

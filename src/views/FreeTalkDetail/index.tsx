@@ -37,7 +37,7 @@ import {
   setRootCommentIdToShowReComments,
 } from "store/clientSlices/commentSlice";
 import {
-  websiteImg,
+  logoImg,
   handleAlert,
   handleConfirm,
   openModal,
@@ -284,7 +284,7 @@ export default function FreeTalkDetail() {
   const metaTags = () => ({
     title: talk.data?.talk.talkTitle || "",
     description: talk.data?.talk.talkDesc || "",
-    image: talk.data?.talk.talkImg || websiteImg,
+    image: talk.data?.talk.talkImg || logoImg,
     url: window.location.href,
   });
 

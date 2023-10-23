@@ -59,5 +59,5 @@ export default function OAuthRedirectHandler() {
   //     액세스 토큰 재발급 위해 리프레시 토큰을 받고 검증할 때 유효기간 얼마 남았는지 알 수 있나?
   //   쿠키가 사라지면 리프레시 토큰을 보낼 수 없음.
   //      그럼 다시 로그인하라고 클라이언트 단에 메세지 보낼까?
-  return <div>{isFetching && <Spinner styles="fixed" />}</div>;
+  return <>{isFetching && <Spinner styles="fixed" />}</>;
 }

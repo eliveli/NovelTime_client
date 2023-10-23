@@ -28,7 +28,7 @@ export default function Share() {
   }
   const socialUrl = {
     facebook: `https://www.facebook.com/sharer/sharer.php?u=${href}`,
-    twitter: `https://twitter.com/share?url=${href}&text=NovelTime`,
+    twitter: `https://twitter.com/intent/tweet?url=${href}&text=NovelTime`,
   };
   const socialList: SocialList = { FB: socialUrl.facebook, TW: socialUrl.twitter };
 
@@ -72,7 +72,7 @@ export default function Share() {
     });
   };
 
-  // copy link
+  // copy link : works with https
   const onCopyLink = async () => {
     try {
       await navigator.clipboard.writeText(href);
@@ -84,6 +84,7 @@ export default function Share() {
       dispatch(handleAlert(`링크 복사에 실패했습니다.\n새로고침 후 시도해주세요`));
     }
   };
+
   return (
     <TranslucentBG onClick={() => dispatch(closeModal())}>
       <ModalBox

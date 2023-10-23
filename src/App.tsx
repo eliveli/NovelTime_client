@@ -40,7 +40,7 @@ import { Message, ChatRoom as TypeChatRoom } from "store/serverAPIs/types";
 import { treatNewMessage, setRooms } from "store/clientSlices/chatSlice";
 import { getCurrentRoomId } from "utils";
 import MetaTag from "utils/MetaTag";
-import { websiteImg, websiteURL } from "store/clientSlices/modalSlice";
+import { logoImg, websiteURL } from "store/clientSlices/modalSlice";
 import GlobalStyle from "./assets/styles/GlobalStyle";
 
 function App() {
@@ -171,7 +171,7 @@ function App() {
         tags={{
           title: "NovelTime",
           description: "It's time to read novels!",
-          image: websiteImg,
+          image: logoImg,
           url: websiteURL,
         }}
       />
