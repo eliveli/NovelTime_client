@@ -66,7 +66,7 @@ export default function NovelDetail() {
     dispatch(openModal("alert"));
     dispatch(handleAlert(`소설을 불러올 수 없습니다.`));
     navigate(-1);
-    return <div />;
+    return <></>;
   }
 
   return (

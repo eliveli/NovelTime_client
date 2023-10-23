@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { BrowserRouter as Router, Routes, Route, useSearchParams } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import {
   ChatRoomList,
@@ -39,6 +39,8 @@ import socket from "store/serverAPIs/socket.io";
 import { Message, ChatRoom as TypeChatRoom } from "store/serverAPIs/types";
 import { treatNewMessage, setRooms } from "store/clientSlices/chatSlice";
 import { getCurrentRoomId } from "utils";
+import MetaTag from "utils/MetaTag";
+import { websiteImg, websiteURL } from "store/clientSlices/modalSlice";
 import GlobalStyle from "./assets/styles/GlobalStyle";
 
 function App() {
@@ -164,8 +166,19 @@ function App() {
   return (
     <Router>
       <GlobalStyle />
+
+      <MetaTag
+        tags={{
+          title: "NovelTime",
+          description: "It's time to read novels!",
+          image: websiteImg,
+          url: websiteURL,
+        }}
+      />
+
       <ThemeProvider theme={theme}>
         <Modal />
+
         <ScrollToTop>
           <Routes>
             {["/", "/talk-list", "/recommend-list", "/novel-list", "/chat-room-list", "*"].map(
@@ -199,6 +212,7 @@ function App() {
             <Route path="/chat-room/:roomId" element={<ChatRoomNavMobile />} />
           </Routes>
         </ScrollToTop>
+
         <Routes>
           <Route path="/" element={<Home />} />
 

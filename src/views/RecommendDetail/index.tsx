@@ -1,4 +1,5 @@
 import { useNavigate, useParams } from "react-router-dom";
+import { useEffect } from "react";
 import MainBG from "components/MainBG";
 import {
   WritingDetailContainer,
@@ -16,7 +17,14 @@ import { useWhetherItIsDesktop } from "utils";
 import { setSearchList } from "store/clientSlices/filterSlice";
 import Spinner from "assets/Spinner";
 import { EditAndDeleteContainer } from "components/Writing/WritingDetail.styles";
-import { handleAlert, handleConfirm, openModal } from "store/clientSlices/modalSlice";
+import {
+  websiteImg,
+  handleAlert,
+  handleConfirm,
+  openModal,
+  setMetaTags,
+} from "store/clientSlices/modalSlice";
+import MetaTag from "utils/MetaTag";
 import { DotLine, DotAnimation, ContentAnimation } from "./RecommendDetail.styles";
 
 export default function NovelDetailRecommend() {
@@ -98,14 +106,30 @@ export default function NovelDetailRecommend() {
 
     dispatch(openModal("confirm"));
   };
+
   if (!recommendId || recommend.isError) {
     dispatch(openModal("alert"));
     dispatch(handleAlert(`글을 불러올 수 없습니다.`));
     navigate(-1);
   }
 
+  // Set meta tags //
+  const metaTags = () => ({
+    title: recommend.data?.recommend.recommendTitle || "",
+    description: recommend.data?.recommend.recommendDesc || "",
+    image: recommend.data?.recommend.recommendImg || websiteImg,
+    url: window.location.href,
+  });
+
+  useEffect(() => {
+    if (!recommend.data) return;
+
+    dispatch(setMetaTags(metaTags()));
+  }, [recommend.data]);
   return (
     <>
+      {recommend.data && <MetaTag tags={metaTags()} />}
+
       {recommend.isFetching && <Spinner styles="fixed" />}
 
       {recommend.data && (

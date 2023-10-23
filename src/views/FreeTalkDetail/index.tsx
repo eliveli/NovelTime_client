@@ -36,7 +36,14 @@ import {
   setParentToWriteReComment,
   setRootCommentIdToShowReComments,
 } from "store/clientSlices/commentSlice";
-import { handleAlert, handleConfirm, openModal } from "store/clientSlices/modalSlice";
+import {
+  websiteImg,
+  handleAlert,
+  handleConfirm,
+  openModal,
+  setMetaTags,
+} from "store/clientSlices/modalSlice";
+import MetaTag from "utils/MetaTag";
 
 export default function FreeTalkDetail() {
   const { talkId, commentId } = useParams();
@@ -273,48 +280,62 @@ export default function FreeTalkDetail() {
     navigate(-1);
   }
 
+  // Set meta tags //
+  const metaTags = () => ({
+    title: talk.data?.talk.talkTitle || "",
+    description: talk.data?.talk.talkDesc || "",
+    image: talk.data?.talk.talkImg || websiteImg,
+    url: window.location.href,
+  });
+
+  useEffect(() => {
+    if (!talk.data) return;
+
+    dispatch(setMetaTags(metaTags()));
+  }, [talk.data]);
+
   return (
-    <>
+    <MainBG isDetail="T">
+      {talk.data && <MetaTag tags={metaTags()} />}
       {talk.isFetching && <Spinner styles="fixed" />}
+
       {talk.data && (
-        <MainBG isDetail="T">
-          <WritingDetailContainer>
-            <EditAndDeleteContainer>
-              {isWriter && <EditAndDelete clickToEdit={handleEdit} clickToDelete={confirmDelete} />}
-            </EditAndDeleteContainer>
+        <WritingDetailContainer>
+          <EditAndDeleteContainer>
+            {isWriter && <EditAndDelete clickToEdit={handleEdit} clickToDelete={confirmDelete} />}
+          </EditAndDeleteContainer>
 
-            <BoardMark>Let's Free Talk about Novel!</BoardMark>
-            <TalkDetail detailTalk={talk.data.talk} />
-            <NovelInWriting novel={talk.data.novel} />
-            <LikeAndShare
-              isLike={talk.data.talk.isLike}
-              likeNO={talk.data.talk.likeNO}
-              writingId={talk.data.talk.talkId}
-              writingType="T"
-              novelId={talk.data.novel.novelId}
-            />
-          </WritingDetailContainer>
-
-          <ContentAnimation isTalkComnt>
-            {!!rootComments.length && (
-              <CommentList
-                rootComments={rootComments}
-                reComments={reCommentsFromServer.data}
-                getAllRootCommentPages={getAllRootCommentPages}
-              />
-            )}
-            {!!commentPerPage.data?.hasNext && (
-              <ShowMoreContent _onClick={() => dispatch(setCommentPageNo(commentPageNo + 1))} />
-            )}
-
-            {isMobile ? (
-              <CommentInputOnMobile getAllRootCommentPages={getAllRootCommentPages} />
-            ) : (
-              <RootCommentInputToCreateOnTablet getAllRootCommentPages={getAllRootCommentPages} />
-            )}
-          </ContentAnimation>
-        </MainBG>
+          <BoardMark>Let's Free Talk about Novel!</BoardMark>
+          <TalkDetail detailTalk={talk.data.talk} />
+          <NovelInWriting novel={talk.data.novel} />
+          <LikeAndShare
+            isLike={talk.data.talk.isLike}
+            likeNO={talk.data.talk.likeNO}
+            writingId={talk.data.talk.talkId}
+            writingType="T"
+            novelId={talk.data.novel.novelId}
+          />
+        </WritingDetailContainer>
       )}
-    </>
+
+      <ContentAnimation isTalkComnt>
+        {!!rootComments.length && (
+          <CommentList
+            rootComments={rootComments}
+            reComments={reCommentsFromServer.data}
+            getAllRootCommentPages={getAllRootCommentPages}
+          />
+        )}
+        {!!commentPerPage.data?.hasNext && (
+          <ShowMoreContent _onClick={() => dispatch(setCommentPageNo(commentPageNo + 1))} />
+        )}
+
+        {isMobile ? (
+          <CommentInputOnMobile getAllRootCommentPages={getAllRootCommentPages} />
+        ) : (
+          <RootCommentInputToCreateOnTablet getAllRootCommentPages={getAllRootCommentPages} />
+        )}
+      </ContentAnimation>
+    </MainBG>
   );
 }

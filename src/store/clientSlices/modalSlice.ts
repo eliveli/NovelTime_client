@@ -30,22 +30,18 @@ export interface IsModalState {
     | "writeNewListTitle"
     | "none";
   novelImage: string;
-  metaTags: MetaTags;
   confirm: Confirm;
   alert: string;
+  metaTags: MetaTags;
 }
+
+export const websiteImg =
+  "https://photos.google.com/album/AF1QipOy4A30VtN2Afb5ynQYejvDxN_5CVBjYRa_DYX4/photo/AF1QipM-TuRzTrhw9-AH4fdhB9EwS1vxjwdOfdX2svVp";
+export const websiteURL = "http://domainfordev.com"; // * need to change after setting the domain
 
 const initialState: IsModalState = {
   modalCategory: "none",
   novelImage: "",
-  metaTags: {
-    title: "NovelTime",
-    description: "It's time to read novels!",
-    image:
-      // 사이트 썸네일 이미지 in 구글 포토 앨범
-      "https://photos.google.com/album/AF1QipOy4A30VtN2Afb5ynQYejvDxN_5CVBjYRa_DYX4/photo/AF1QipM-TuRzTrhw9-AH4fdhB9EwS1vxjwdOfdX2svVp",
-    url: "",
-  },
   confirm: {
     question: "",
     textForYes: "",
@@ -54,6 +50,14 @@ const initialState: IsModalState = {
     functionForNo: () => {},
   },
   alert: "",
+
+  // Used for sharer after setting new meta tags in each page
+  metaTags: {
+    title: "NovelTime",
+    description: "It's time to read novels!",
+    image: websiteImg,
+    url: websiteURL,
+  },
 };
 
 export const modalSlice = createSlice({
