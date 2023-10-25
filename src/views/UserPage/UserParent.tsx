@@ -102,7 +102,7 @@ function Profile() {
   const handleMessage = async () => {
     if (!isLogin) {
       dispatch(openModal("alert"));
-      dispatch(handleAlert("메세지를 보내려면 로그인해 주세요"));
+      dispatch(handleAlert({ text: "메세지를 보내려면 로그인해 주세요" }));
       return;
     }
 
@@ -143,13 +143,13 @@ function Profile() {
 
     if (status === 400 && error && error.message === "user doesn't exist") {
       dispatch(openModal("alert"));
-      dispatch(handleAlert("존재하지 않는 사용자입니다"));
+      dispatch(handleAlert({ text: "존재하지 않는 사용자입니다" }));
       return;
     }
 
     if (status === 500) {
       dispatch(openModal("alert"));
-      dispatch(handleAlert(`메세지를 보낼 수 없습니다.\n새로고침 후 시도해 보세요`));
+      dispatch(handleAlert({ text: `메세지를 보낼 수 없습니다.\n새로고침 후 시도해 보세요` }));
     }
   };
 
@@ -220,7 +220,7 @@ export default function UserParent() {
   useEffect(() => {
     if (isError) {
       dispatch(openModal("alert"));
-      dispatch(handleAlert("존재하지 않는 사용자입니다."));
+      dispatch(handleAlert({ text: "존재하지 않는 사용자입니다." }));
       navigate("/");
       return;
     }

@@ -64,7 +64,7 @@ export default function NovelDetail() {
 
   if (!novelId || novelInDetail.isError) {
     dispatch(openModal("alert"));
-    dispatch(handleAlert(`소설을 불러올 수 없습니다.`));
+    dispatch(handleAlert({ text: `소설을 불러올 수 없습니다.` }));
     navigate(-1);
     return <></>;
   }

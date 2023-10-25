@@ -78,10 +78,10 @@ export default function Share() {
       await navigator.clipboard.writeText(href);
 
       dispatch(openModal("alert"));
-      dispatch(handleAlert("링크가 복사되었습니다!"));
+      dispatch(handleAlert({ text: "링크가 복사되었습니다!" }));
     } catch (err) {
       dispatch(openModal("alert"));
-      dispatch(handleAlert(`링크 복사에 실패했습니다.\n새로고침 후 시도해주세요`));
+      dispatch(handleAlert({ text: `링크 복사에 실패했습니다.\n새로고침 후 시도해주세요` }));
     }
   };
 

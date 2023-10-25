@@ -49,11 +49,9 @@ export default function Modal() {
             return <WriteNewListTitle />;
 
           case "none":
-            // eslint-disable-next-line react/jsx-no-useless-fragment
             return <></>;
 
           default:
-            // eslint-disable-next-line react/jsx-no-useless-fragment
             return <></>;
         }
       })()}

@@ -52,18 +52,18 @@ export default function EditWriting() {
   const submitToEditWriting = async () => {
     if (!loginUserId) {
       dispatch(openModal("alert"));
-      dispatch(handleAlert("먼저 로그인을 해 주세요"));
+      dispatch(handleAlert({ text: "먼저 로그인을 해 주세요" }));
       return;
     }
     if (!titleRef.current?.value) {
       dispatch(openModal("alert"));
-      dispatch(handleAlert("제목을 입력해 주세요"));
+      dispatch(handleAlert({ text: "제목을 입력해 주세요" }));
       return;
     }
 
     if (!contentRef.current?.value) {
       dispatch(openModal("alert"));
-      dispatch(handleAlert("내용을 입력해 주세요"));
+      dispatch(handleAlert({ text: "내용을 입력해 주세요" }));
       return;
     }
 
@@ -80,7 +80,7 @@ export default function EditWriting() {
 
     if (editWritingResult.isError) {
       dispatch(openModal("alert"));
-      dispatch(handleAlert(`글을 수정할 수 없습니다.\n새로고침 후 다시 시도해 보세요`));
+      dispatch(handleAlert({ text: `글을 수정할 수 없습니다.\n새로고침 후 다시 시도해 보세요` }));
     }
 
     const pathToGoTo = writingType === "FreeTalk" ? TALK_DETAIL : RECOMMEND_DETAIL;
@@ -126,7 +126,7 @@ export default function EditWriting() {
       const pathToGoTo = writingType === "FreeTalk" ? TALK_LIST : RECOMMEND_LIST;
 
       dispatch(openModal("alert"));
-      dispatch(handleAlert("비정상적인 접근입니다"));
+      dispatch(handleAlert({ text: "비정상적인 접근입니다" }));
       navigate(pathToGoTo);
     }
   }, [writingId]);

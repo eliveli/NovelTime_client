@@ -120,6 +120,8 @@ function App() {
   //   - case2. 페이지 진입 직후 리프레시 토큰으로 자동로그인,
   //             이후 액세스 토큰 갱신 시점에 리프레시 토큰 만료 임박 시
   //   -> 새로운 리프레시 토큰 쿠키에 저장, 액세스 토큰도 기존 흐름대로 클라이언트 스토어에 저장
+  // 8. 유저 정보 변경 시 (in EditProfile)
+  //   - 바뀐 정보로 리프레시 토큰과 액세스 토큰 새로 발급
   //
   const { userId: loginUserId, userName: loginUserName } = useAppSelector(
     (state) => state.loginUser.user,

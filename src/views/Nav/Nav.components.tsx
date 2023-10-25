@@ -105,7 +105,7 @@ export function NavPC() {
   const handleNonLogin = (category: string) => {
     if (category === "Message" && !loginUser.userId) {
       dispatch(openModal("alert"));
-      dispatch(handleAlert("로그인이 필요합니다"));
+      dispatch(handleAlert({ text: "로그인이 필요합니다" }));
     }
   };
 
@@ -287,7 +287,7 @@ export function NavMobileMainBottom() {
   const handleNonLogin = (category: string) => {
     if (["AddPost", "Message"].includes(category) && !isLoginUser) {
       dispatch(openModal("alert"));
-      dispatch(handleAlert("로그인이 필요합니다"));
+      dispatch(handleAlert({ text: "로그인이 필요합니다" }));
     }
   };
 

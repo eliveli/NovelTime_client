@@ -68,7 +68,7 @@ export function MessageInput({
   const handleSubmit = async () => {
     if (!loginUserId) {
       dispatch(openModal("alert"));
-      dispatch(handleAlert("먼저 로그인을 해 주세요"));
+      dispatch(handleAlert({ text: "먼저 로그인을 해 주세요" }));
       return;
     }
 

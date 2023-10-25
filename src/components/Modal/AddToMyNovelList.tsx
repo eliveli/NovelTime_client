@@ -66,13 +66,13 @@ export default function AddToMyNovelList() {
   const handleToAddNovelToLists = async () => {
     if (!novelIdToAdd) {
       dispatch(openModal("alert"));
-      dispatch(handleAlert("담을 소설이 없습니다"));
+      dispatch(handleAlert({ text: "담을 소설이 없습니다" }));
       return;
     }
 
     if (!listsSelected.length) {
       dispatch(openModal("alert"));
-      dispatch(handleAlert("리스트를 선택해 주세요"));
+      dispatch(handleAlert({ text: "리스트를 선택해 주세요" }));
       return;
     }
 
@@ -102,7 +102,7 @@ export default function AddToMyNovelList() {
 
     if (addOrRemoveNovelInListResult.isError) {
       dispatch(openModal("alert"));
-      dispatch(handleAlert(`리스트에 담을 수 없습니다.\n새로고침 후 시도해보세요`));
+      dispatch(handleAlert({ text: `리스트에 담을 수 없습니다.\n새로고침 후 시도해보세요` }));
       return;
     }
 

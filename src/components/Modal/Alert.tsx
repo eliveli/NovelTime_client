@@ -11,14 +11,18 @@ import {
 } from "./Modal.styles";
 
 export default function Alert() {
-  const TextForAlert = useAppSelector((state) => state.modal.alert);
+  const alert = useAppSelector((state) => state.modal.alert);
 
   const dispatch = useAppDispatch();
 
   const closeAndInitialize = () => {
     dispatch(closeModal());
 
-    dispatch(handleAlert(""));
+    dispatch(handleAlert({ text: "", nextFunction: undefined }));
+
+    if (alert.nextFunction) {
+      alert.nextFunction();
+    }
   };
 
   return (
@@ -30,7 +34,7 @@ export default function Alert() {
         }}
       >
         <BoxForPadding>
-          <TextForAlertOrConfirm>{TextForAlert}</TextForAlertOrConfirm>
+          <TextForAlertOrConfirm>{alert.text}</TextForAlertOrConfirm>
         </BoxForPadding>
         <ButtonContainerForAnswer>
           <ButtonForAnswer isSingleButton onClick={closeAndInitialize}>

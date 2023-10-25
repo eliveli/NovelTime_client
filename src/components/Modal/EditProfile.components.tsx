@@ -155,7 +155,7 @@ export default function EditProfileImg({
 
       if (!blob) {
         dispatch(openModal("alert"));
-        dispatch(handleAlert(`이미지 편집에 실패했습니다.\n다시 한 번 시도해주세요.`));
+        dispatch(handleAlert({ text: `이미지 편집에 실패했습니다.\n다시 한 번 시도해주세요.` }));
         return;
       }
 
@@ -171,7 +171,7 @@ export default function EditProfileImg({
         handleEditingImage(false); // show profile modal
       } else {
         dispatch(openModal("alert"));
-        dispatch(handleAlert(`20MB 이하로 저장 가능해요!\n현재 용량: ${dataCapacity}`));
+        dispatch(handleAlert({ text: `20MB 이하로 저장 가능해요!\n현재 용량: ${dataCapacity}` }));
       }
     }
 

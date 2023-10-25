@@ -53,7 +53,9 @@ export default function ChangeListTitle() {
 
     if (changeListTitleResult.isError) {
       dispatch(openModal("alert"));
-      dispatch(handleAlert(`리스트 제목을 수정할 수 없습니다.\n새로고침 후 다시 시도해 보세요`));
+      dispatch(
+        handleAlert({ text: `리스트 제목을 수정할 수 없습니다.\n새로고침 후 다시 시도해 보세요` }),
+      );
       return;
     }
 

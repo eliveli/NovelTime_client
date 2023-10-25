@@ -7,6 +7,10 @@ interface MetaTags {
   image: string;
   url: string;
 }
+interface Alert {
+  text: string;
+  nextFunction?: () => void;
+}
 interface Confirm {
   question: string;
   textForYes: string;
@@ -31,7 +35,7 @@ export interface IsModalState {
     | "none";
   novelImage: string;
   confirm: Confirm;
-  alert: string;
+  alert: Alert;
   metaTags: MetaTags;
 }
 
@@ -48,7 +52,10 @@ const initialState: IsModalState = {
     functionForYes: () => {},
     functionForNo: () => {},
   },
-  alert: "",
+  alert: {
+    text: "",
+    nextFunction: undefined,
+  },
 
   // Used for sharer after setting new meta tags in each page
   metaTags: {
@@ -96,7 +103,7 @@ export const modalSlice = createSlice({
     handleConfirm: (state, action: PayloadAction<Confirm>) => {
       state.confirm = action.payload;
     },
-    handleAlert: (state, action: PayloadAction<string>) => {
+    handleAlert: (state, action: PayloadAction<Alert>) => {
       state.alert = action.payload;
     },
     // Redux Toolkit allows us to write "mutating" logic in reducers. It

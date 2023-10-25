@@ -224,7 +224,7 @@ export default function FreeTalkDetail() {
 
     if (deleteWritingResult.isError) {
       dispatch(openModal("alert"));
-      dispatch(handleAlert(`글을 삭제할 수 없습니다.\n새로고침 후 다시 시도해 보세요`));
+      dispatch(handleAlert({ text: `글을 삭제할 수 없습니다.\n새로고침 후 다시 시도해 보세요` }));
     }
 
     // back to the novel-detail page
@@ -276,7 +276,7 @@ export default function FreeTalkDetail() {
 
   if (!talkId || talk.isError) {
     dispatch(openModal("alert"));
-    dispatch(handleAlert(`글을 불러올 수 없습니다.`));
+    dispatch(handleAlert({ text: `글을 불러올 수 없습니다.` }));
     navigate(-1);
   }
 

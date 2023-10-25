@@ -85,7 +85,7 @@ export default function FreeTalkList() {
           clickToWrite={() => {
             if (!isLoginUser) {
               dispatch(openModal("alert"));
-              dispatch(handleAlert("로그인이 필요합니다"));
+              dispatch(handleAlert({ text: "로그인이 필요합니다" }));
               return;
             }
 

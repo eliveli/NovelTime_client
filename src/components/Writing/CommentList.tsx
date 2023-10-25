@@ -153,7 +153,9 @@ function CommentWritten({
 
     if (deleteCommentResult.isError) {
       dispatch(openModal("alert"));
-      dispatch(handleAlert(`코멘트를 삭제할 수 없습니다.\n새로고침 후 다시 시도해 보세요`));
+      dispatch(
+        handleAlert({ text: `코멘트를 삭제할 수 없습니다.\n새로고침 후 다시 시도해 보세요` }),
+      );
       return;
     }
 

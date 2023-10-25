@@ -48,7 +48,7 @@ export default function OAuthRedirectHandler() {
   // login failed
   if (error) {
     dispatch(openModal("alert"));
-    dispatch(handleAlert("로그인에 실패하였습니다."));
+    dispatch(handleAlert({ text: "로그인에 실패하였습니다." }));
     navigate("/", { replace: true });
   }
 

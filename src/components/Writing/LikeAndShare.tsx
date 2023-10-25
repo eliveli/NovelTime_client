@@ -41,7 +41,7 @@ export default function LikeAndShare({ isLike, likeNO, writingId, writingType, n
   const toggleLikeRequest = async () => {
     if (!loginUserId) {
       dispatch(openModal("alert"));
-      dispatch(handleAlert("좋아요를 누르려면 로그인을 해 주세요."));
+      dispatch(handleAlert({ text: "좋아요를 누르려면 로그인을 해 주세요." }));
       return;
     }
 
@@ -58,7 +58,9 @@ export default function LikeAndShare({ isLike, likeNO, writingId, writingType, n
     if (toggleLikeResult.isError) {
       dispatch(openModal("alert"));
       dispatch(
-        handleAlert(`좋아요 기능이 정상적으로 작동하지 않습니다.\n새로고침 후 시도해주세요`),
+        handleAlert({
+          text: `좋아요 기능이 정상적으로 작동하지 않습니다.\n새로고침 후 시도해주세요`,
+        }),
       );
     }
   };

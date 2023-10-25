@@ -129,7 +129,7 @@ export default function AddWriting() {
 
     if (!novelUrlRef.current.value) {
       dispatch(openModal("alert"));
-      dispatch(handleAlert("작품 url을 넣어주세요"));
+      dispatch(handleAlert({ text: "작품 url을 넣어주세요" }));
       return;
     }
 
@@ -139,7 +139,7 @@ export default function AddWriting() {
 
     if (addNovelWithURLResult.isError) {
       dispatch(openModal("alert"));
-      dispatch(handleAlert("작품 url을 확인해 주세요"));
+      dispatch(handleAlert({ text: "작품 url을 확인해 주세요" }));
     }
   };
 
@@ -147,7 +147,7 @@ export default function AddWriting() {
     if (!addNovelWithURLResult.data) return;
     if (!addNovelWithURLResult.data.novelId || !addNovelWithURLResult.data.novelTitle) {
       dispatch(openModal("alert"));
-      dispatch(handleAlert("작품 url을 확인해 주세요"));
+      dispatch(handleAlert({ text: "작품 url을 확인해 주세요" }));
       return;
     }
 
@@ -218,30 +218,30 @@ export default function AddWriting() {
   const submitToAddWriting = async () => {
     if (!loginUserId) {
       dispatch(openModal("alert"));
-      dispatch(handleAlert("먼저 로그인을 해 주세요"));
+      dispatch(handleAlert({ text: "먼저 로그인을 해 주세요" }));
       return;
     }
     if (!novelForReview.novelId) {
       dispatch(openModal("alert"));
-      dispatch(handleAlert("소설을 선택해 주세요"));
+      dispatch(handleAlert({ text: "소설을 선택해 주세요" }));
       return;
     }
 
     if (!board) {
       dispatch(openModal("alert"));
-      dispatch(handleAlert("게시판 종류를 선택해 주세요"));
+      dispatch(handleAlert({ text: "게시판 종류를 선택해 주세요" }));
       return;
     }
 
     if (!titleRef.current?.value) {
       dispatch(openModal("alert"));
-      dispatch(handleAlert("제목을 입력해 주세요"));
+      dispatch(handleAlert({ text: "제목을 입력해 주세요" }));
       return;
     }
 
     if (!contentRef.current?.value) {
       dispatch(openModal("alert"));
-      dispatch(handleAlert("내용을 입력해 주세요"));
+      dispatch(handleAlert({ text: "내용을 입력해 주세요" }));
       return;
     }
 
@@ -257,7 +257,7 @@ export default function AddWriting() {
 
     if (addWritingResult.isError) {
       dispatch(openModal("alert"));
-      dispatch(handleAlert(`글을 등록할 수 없습니다.\n새로고침 후 다시 시도해 보세요`));
+      dispatch(handleAlert({ text: `글을 등록할 수 없습니다.\n새로고침 후 다시 시도해 보세요` }));
     }
 
     // back to the novel-detail page

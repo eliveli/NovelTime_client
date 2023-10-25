@@ -36,7 +36,7 @@ function ButtonInNovelDetail({
       onClick={() => {
         if (!isLoginUser) {
           dispatch(openModal("alert"));
-          dispatch(handleAlert("로그인이 필요합니다"));
+          dispatch(handleAlert({ text: "로그인이 필요합니다" }));
           return;
         }
 
@@ -80,7 +80,7 @@ export default function WritingListFrame({
   const handleToGoToWrite = () => {
     if (!isLoginUser) {
       dispatch(openModal("alert"));
-      dispatch(handleAlert("먼저 로그인해 주세요"));
+      dispatch(handleAlert({ text: "먼저 로그인해 주세요" }));
       return;
     }
 
@@ -96,7 +96,7 @@ export default function WritingListFrame({
   const handleToGoToAddNovel = () => {
     if (!isLoginUser) {
       dispatch(openModal("alert"));
-      dispatch(handleAlert("먼저 로그인해 주세요"));
+      dispatch(handleAlert({ text: "먼저 로그인해 주세요" }));
       return;
     }
 

@@ -76,35 +76,39 @@ export default function EditProfile() {
   // as clicking the select button for user name
   const confirmUserName = async () => {
     const tempUserName = userNameRef.current?.value as string;
+
     if (!tempUserName) {
       dispatch(openModal("alert"));
-      dispatch(handleAlert("유저 네임을 입력해 주세요"));
+      dispatch(handleAlert({ text: "유저 네임을 입력해 주세요" }));
       //
     } else if (userNameByte > 12) {
       // limit the text length by 12byte
       dispatch(openModal("alert"));
-      dispatch(handleAlert("입력 가능한 글자 수를 초과했어요"));
+      dispatch(handleAlert({ text: "입력 가능한 글자 수를 초과했어요" }));
       //
     } else if (tempUserName === loginUser.userName) {
       dispatch(openModal("alert"));
-      dispatch(handleAlert(`기존 이름과 같아요.\n새로운 이름을 입력해 주세요`));
+      dispatch(handleAlert({ text: `기존 이름과 같아요.\n새로운 이름을 입력해 주세요` }));
       //
     } else if (tempUserName[0] === " " || tempUserName[tempUserName.length - 1] === " ") {
       // Make user exclude leading or trailing spaces in userName
       // and allow spaces between userName letters. this naming rule is the same as kakao's
       dispatch(openModal("alert"));
-      dispatch(handleAlert("이름 맨 앞 또는 맨 뒤 공백이 없어야 해요"));
+      dispatch(handleAlert({ text: "이름 맨 앞 또는 맨 뒤 공백이 없어야 해요" }));
       //
     } else {
       // request with user name to check if it is duplicate or not
       await CheckForUserName(tempUserName).then((result) => {
         if ("data" in result) {
-          const alertMessage = result.data;
+          const alertMessage =
+            result.data === "you can use this name"
+              ? "사용 가능한 이름이에요"
+              : "사용할 수 없는 이름이에요";
 
           dispatch(openModal("alert"));
-          dispatch(handleAlert(alertMessage));
+          dispatch(handleAlert({ text: alertMessage }));
 
-          if (alertMessage === "you can use this name") {
+          if (alertMessage === "사용 가능한 이름이에요") {
             // complete checking for duplicate user name
             isCheckedForDuplicateRef.current = true;
           }
@@ -142,7 +146,9 @@ export default function EditProfile() {
           const blob = dataURLtoBlob(reader.result as string);
           if (!blob) {
             dispatch(openModal("alert"));
-            dispatch(handleAlert(`이미지 편집에 실패했습니다.\n다시 한 번 시도해주세요.`));
+            dispatch(
+              handleAlert({ text: `이미지 편집에 실패했습니다.\n다시 한 번 시도해주세요.` }),
+            );
             return;
           }
 
@@ -155,9 +161,9 @@ export default function EditProfile() {
           } else {
             dispatch(openModal("alert"));
             dispatch(
-              handleAlert(
-                `20MB 이하로 저장 가능해요!\n다른 이미지를 선택해 주세요.\n현재 용량: ${dataCapacity}`,
-              ),
+              handleAlert({
+                text: `20MB 이하로 저장 가능해요!\n다른 이미지를 선택해 주세요.\n현재 용량: ${dataCapacity}`,
+              }),
             );
           }
         }
@@ -184,7 +190,7 @@ export default function EditProfile() {
         const blob = dataURLtoBlob(reader.result as string);
         if (!blob) {
           dispatch(openModal("alert"));
-          dispatch(handleAlert(`이미지 편집에 실패했습니다.\n다시 한 번 시도해주세요.`));
+          dispatch(handleAlert({ text: `이미지 편집에 실패했습니다.\n다시 한 번 시도해주세요.` }));
           return;
         }
 
@@ -199,9 +205,9 @@ export default function EditProfile() {
         } else {
           dispatch(openModal("alert"));
           dispatch(
-            handleAlert(
-              `20MB 이하로 저장 가능해요!\n다른 이미지를 선택해 주세요.\n현재 용량: ${dataCapacity}`,
-            ),
+            handleAlert({
+              text: `20MB 이하로 저장 가능해요!\n다른 이미지를 선택해 주세요.\n현재 용량: ${dataCapacity}`,
+            }),
           );
         }
       };
@@ -238,7 +244,7 @@ export default function EditProfile() {
     if (isCheckedForDuplicateRef.current === false) {
       isLoadingRef.current = false;
       dispatch(openModal("alert"));
-      dispatch(handleAlert("유저네임 중복 체크를 완료해 주세요"));
+      dispatch(handleAlert({ text: "유저네임 중복 체크를 완료해 주세요" }));
       return;
     }
 
@@ -279,7 +285,7 @@ export default function EditProfile() {
       dispatch(setUserProfile(payload.userInfo));
       isLoadingRef.current = false;
       dispatch(openModal("alert"));
-      dispatch(handleAlert("유저 정보가 성공적으로 저장되었어요"));
+      dispatch(handleAlert({ text: "유저 정보가 성공적으로 저장되었어요" }));
 
       // navigate to next path by new user name //
       const { pathname } = window.location; // pathname : "/user-page/" + userName (+ ...)
@@ -311,7 +317,7 @@ export default function EditProfile() {
     } catch (err) {
       isLoadingRef.current = false;
       dispatch(openModal("alert"));
-      dispatch(handleAlert("유저 정보 저장에 실패했어요"));
+      dispatch(handleAlert({ text: "유저 정보 저장에 실패했어요" }));
     }
     // after all passed close the modal // change upper code later
     closeProfileModal();

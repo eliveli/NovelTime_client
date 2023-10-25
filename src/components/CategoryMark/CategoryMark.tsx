@@ -155,7 +155,7 @@ export default function CategoryMark({
             onClick={() => {
               if (isNoContent) {
                 dispatch(openModal("alert"));
-                dispatch(handleAlert("게시글이 존재하지 않아요."));
+                dispatch(handleAlert({ text: "게시글이 존재하지 않아요." }));
                 return;
               }
               navigate(userPagePath());
