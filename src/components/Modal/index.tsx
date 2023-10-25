@@ -13,48 +13,52 @@ import Alert from "./Alert";
 import WriteNewListTitle from "./WriteNewListTitle";
 import ChangeListTitle from "./ChangeListTitle";
 
+function ModalOpen({ category, isSecond }: { category: string; isSecond?: true }) {
+  switch (category) {
+    case "novelImage":
+      return <NovelImage isSecond={isSecond} />;
+    case "sortWriting":
+      return <SortWriting isSecond={isSecond} />;
+    case "filterContent":
+      return <FilterContent isSecond={isSecond} />;
+    case "login":
+      return <Login isSecond={isSecond} />;
+    case "editProfile":
+      return <EditProfile isSecond={isSecond} />;
+    case "share":
+      return <Share isSecond={isSecond} />;
+    case "getNovelURL":
+      return <GetNovelURL isSecond={isSecond} />;
+    case "addToMyNovelList":
+      return <AddToMyNovelList isSecond={isSecond} />;
+    case "changeListTitle":
+      return <ChangeListTitle isSecond={isSecond} />;
+    case "confirm":
+      return <Confirm isSecond={isSecond} />;
+    case "alert":
+      return <Alert isSecond={isSecond} />;
+    case "writeNewListTitle":
+      return <WriteNewListTitle isSecond={isSecond} />;
+
+    case "none":
+      return <></>;
+
+    default:
+      return <></>;
+  }
+}
 export default function Modal() {
-  const modalCategory = useAppSelector((state) => state.modal.modalCategory);
+  const firstModalCategory = useAppSelector((state) => state.modal.firstModalCategory);
+  const secondModalCategory = useAppSelector((state) => state.modal.secondModalCategory);
 
   // prevent scrolling body when modal displays
-  usePreventScroll(modalCategory);
+  usePreventScroll(firstModalCategory);
 
   return (
     <>
-      {(() => {
-        switch (modalCategory) {
-          case "novelImage":
-            return <NovelImage />;
-          case "sortWriting":
-            return <SortWriting />;
-          case "filterContent":
-            return <FilterContent />;
-          case "login":
-            return <Login />;
-          case "editProfile":
-            return <EditProfile />;
-          case "share":
-            return <Share />;
-          case "getNovelURL":
-            return <GetNovelURL />;
-          case "addToMyNovelList":
-            return <AddToMyNovelList />;
-          case "changeListTitle":
-            return <ChangeListTitle />;
-          case "confirm":
-            return <Confirm />;
-          case "alert":
-            return <Alert />;
-          case "writeNewListTitle":
-            return <WriteNewListTitle />;
+      {firstModalCategory && <ModalOpen category={firstModalCategory} />}
 
-          case "none":
-            return <></>;
-
-          default:
-            return <></>;
-        }
-      })()}
+      {secondModalCategory && <ModalOpen isSecond category={secondModalCategory} />}
     </>
   );
 }

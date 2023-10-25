@@ -4,7 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Img, ListSummary } from "store/serverAPIs/types";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { EditAndDelete } from "components/Writing";
-import { handleAlert, handleConfirm, openModal } from "store/clientSlices/modalSlice";
+import { handleAlert, handleConfirm, openFirstModal } from "store/clientSlices/modalSlice";
 import { handleUserNovelListToEdit } from "store/clientSlices/userNovelListSlice";
 import { useDeleteMyNovelListMutation } from "store/serverAPIs/novelTime";
 import {
@@ -63,14 +63,14 @@ const UserNovelList = React.memo(
         }),
       );
 
-      dispatch(openModal("changeListTitle"));
+      dispatch(openFirstModal("changeListTitle"));
     };
 
     async function handleToDelete() {
       await deleteList({ listId, userName: userNameInParam as string });
 
       if (deleteListResult.isError) {
-        dispatch(openModal("alert"));
+        dispatch(openFirstModal("alert"));
         dispatch(
           handleAlert({ text: `리스트를 삭제할 수 없습니다.\n새로고침 후 다시 시도해 보세요` }),
         );
@@ -89,7 +89,7 @@ const UserNovelList = React.memo(
         }),
       );
 
-      dispatch(openModal("confirm"));
+      dispatch(openFirstModal("confirm"));
     };
 
     return (

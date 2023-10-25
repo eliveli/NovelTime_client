@@ -7,7 +7,7 @@ import { MessagesWithPartner, Message as TypeMessage } from "store/serverAPIs/ty
 import socket from "store/serverAPIs/socket.io";
 import { changeMsgsUnread, setMessages } from "store/clientSlices/chatSlice";
 import { throttle } from "lodash";
-import { handleAlert, openModal } from "store/clientSlices/modalSlice";
+import { handleAlert, openFirstModal } from "store/clientSlices/modalSlice";
 import {
   AllMessageContainer,
   UserAndContentContainer,
@@ -181,12 +181,12 @@ export default function ChatRoom({ roomIdTablet }: { roomIdTablet?: string }) {
 
     if (status === 400 && error) {
       if (error.message === "room doesn't exist") {
-        dispatch(openModal("alert"));
+        dispatch(openFirstModal("alert"));
         dispatch(handleAlert({ text: "방이 존재하지 않습니다" }));
       }
 
       if (error.message === "user is not in the room") {
-        dispatch(openModal("alert"));
+        dispatch(openFirstModal("alert"));
         dispatch(handleAlert({ text: `${loginUserName}님이 참여한 방이 아닙니다` }));
       }
 
@@ -195,7 +195,7 @@ export default function ChatRoom({ roomIdTablet }: { roomIdTablet?: string }) {
     }
 
     if (status === 500) {
-      dispatch(openModal("alert"));
+      dispatch(openFirstModal("alert"));
       dispatch(handleAlert({ text: `메시지를 불러올 수 없습니다` }));
 
       navigate(-1);

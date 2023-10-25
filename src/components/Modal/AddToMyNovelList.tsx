@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { closeModal, handleAlert, openModal } from "store/clientSlices/modalSlice";
+import { closeModal, handleAlert, openFirstModal } from "store/clientSlices/modalSlice";
 
 import Icon from "assets/Icon";
 import { handleNovelIdToAddToList } from "store/clientSlices/userNovelListSlice";
@@ -23,7 +23,7 @@ import {
   ContainerToCreateNewList,
 } from "./Modal.styles";
 
-export default function AddToMyNovelList() {
+export default function AddToMyNovelList({ isSecond }: { isSecond?: true }) {
   const novelIdToAdd = useAppSelector((state) => state.userNovelList.novelIdToAddToList);
   const userName = useAppSelector((state) => state.loginUser.user.userName);
 
@@ -58,25 +58,25 @@ export default function AddToMyNovelList() {
   const dispatch = useAppDispatch();
 
   const closeAndInitialize = () => {
-    dispatch(closeModal());
+    dispatch(closeModal({ isSecond }));
 
     dispatch(handleNovelIdToAddToList(""));
   };
 
-  const reOpenModal = () => {
-    dispatch(openModal("addToMyNovelList"));
+  const reopenModal = () => {
+    dispatch(openFirstModal("addToMyNovelList"));
   };
 
   const handleToAddNovelToLists = async () => {
     if (!novelIdToAdd) {
-      dispatch(openModal("alert"));
+      dispatch(openFirstModal("alert"));
       dispatch(handleAlert({ text: "담을 소설이 없습니다" }));
       return;
     }
 
     if (!listsSelected.length) {
-      dispatch(openModal("alert"));
-      dispatch(handleAlert({ text: "리스트를 선택해 주세요", nextFunction: reOpenModal }));
+      dispatch(openFirstModal("alert"));
+      dispatch(handleAlert({ text: "리스트를 선택해 주세요", nextFunction: reopenModal }));
       return;
     }
 
@@ -105,7 +105,7 @@ export default function AddToMyNovelList() {
     // novels in the list are updated with provide and invalidate tags
 
     if (addOrRemoveNovelInListResult.isError) {
-      dispatch(openModal("alert"));
+      dispatch(openFirstModal("alert"));
       dispatch(handleAlert({ text: `리스트에 담을 수 없습니다.\n새로고침 후 시도해보세요` }));
       return;
     }
@@ -125,7 +125,7 @@ export default function AddToMyNovelList() {
           <ModalTitle>리스트에 담기</ModalTitle>
         </ContentContnr>
         <GuideContainer>
-          <ContainerToCreateNewList onClick={() => dispatch(openModal("writeNewListTitle"))}>
+          <ContainerToCreateNewList onClick={() => dispatch(openFirstModal("writeNewListTitle"))}>
             <Icon.IconBox styles="margin-top: -2px;">
               <Icon.Plus />
             </Icon.IconBox>

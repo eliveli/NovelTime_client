@@ -40,7 +40,7 @@ import {
   logoImg,
   handleAlert,
   handleConfirm,
-  openModal,
+  openFirstModal,
   setMetaTags,
 } from "store/clientSlices/modalSlice";
 import MetaTag from "utils/MetaTag";
@@ -223,7 +223,7 @@ export default function FreeTalkDetail() {
     });
 
     if (deleteWritingResult.isError) {
-      dispatch(openModal("alert"));
+      dispatch(openFirstModal("alert"));
       dispatch(handleAlert({ text: `글을 삭제할 수 없습니다.\n새로고침 후 다시 시도해 보세요` }));
     }
 
@@ -264,7 +264,7 @@ export default function FreeTalkDetail() {
       }),
     );
 
-    dispatch(openModal("confirm"));
+    dispatch(openFirstModal("confirm"));
   };
 
   const location = useLocation();
@@ -275,7 +275,7 @@ export default function FreeTalkDetail() {
   }, [location]);
 
   if (!talkId || talk.isError) {
-    dispatch(openModal("alert"));
+    dispatch(openFirstModal("alert"));
     dispatch(handleAlert({ text: `글을 불러올 수 없습니다.` }));
     navigate(-1);
   }

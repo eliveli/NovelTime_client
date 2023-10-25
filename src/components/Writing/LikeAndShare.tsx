@@ -2,7 +2,7 @@ import theme, { styled } from "assets/styles/theme";
 import Icon from "assets/Icon";
 import { useToggleLikeMutation } from "store/serverAPIs/novelTime";
 import { useAppDispatch, useAppSelector } from "store/hooks";
-import { handleAlert, openModal } from "store/clientSlices/modalSlice";
+import { handleAlert, openFirstModal } from "store/clientSlices/modalSlice";
 
 type Props = React.PropsWithChildren<{
   isLike: boolean;
@@ -40,7 +40,7 @@ export default function LikeAndShare({ isLike, likeNO, writingId, writingType, n
   const dispatch = useAppDispatch();
   const toggleLikeRequest = async () => {
     if (!loginUserId) {
-      dispatch(openModal("alert"));
+      dispatch(openFirstModal("alert"));
       dispatch(handleAlert({ text: "좋아요를 누르려면 로그인을 해 주세요." }));
       return;
     }
@@ -56,7 +56,7 @@ export default function LikeAndShare({ isLike, likeNO, writingId, writingType, n
       },
     });
     if (toggleLikeResult.isError) {
-      dispatch(openModal("alert"));
+      dispatch(openFirstModal("alert"));
       dispatch(
         handleAlert({
           text: `좋아요 기능이 정상적으로 작동하지 않습니다.\n새로고침 후 시도해주세요`,

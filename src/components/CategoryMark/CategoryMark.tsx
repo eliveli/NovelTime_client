@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { goToUserPage } from "utils";
 import { useAppDispatch } from "store/hooks";
-import { handleAlert, openModal } from "store/clientSlices/modalSlice";
+import { handleAlert, openFirstModal } from "store/clientSlices/modalSlice";
 import {
   CategoryContainer,
   CategoryDesc,
@@ -154,7 +154,7 @@ export default function CategoryMark({
           <GoToAllContentBtn
             onClick={() => {
               if (isNoContent) {
-                dispatch(openModal("alert"));
+                dispatch(openFirstModal("alert"));
                 dispatch(handleAlert({ text: "게시글이 존재하지 않아요." }));
                 return;
               }

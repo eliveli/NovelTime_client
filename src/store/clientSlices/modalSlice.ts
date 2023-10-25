@@ -1,6 +1,21 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
+type ModalCategory =
+  | "novelImage"
+  | "sortWriting"
+  | "filterContent" // used with searchAll.filters.searchCategory in filterSlice
+  | "login"
+  | "editProfile"
+  | "share"
+  | "getNovelURL"
+  | "addToMyNovelList"
+  | "changeListTitle"
+  | "confirm"
+  | "alert"
+  | "writeNewListTitle"
+  | undefined;
+
 interface MetaTags {
   title: string;
   description: string;
@@ -19,20 +34,8 @@ interface Confirm {
   functionForNo?: () => void;
 }
 export interface IsModalState {
-  modalCategory:
-    | "novelImage"
-    | "sortWriting"
-    | "filterContent" // used with searchAll.filters.searchCategory in filterSlice
-    | "login"
-    | "editProfile"
-    | "share"
-    | "getNovelURL"
-    | "addToMyNovelList"
-    | "changeListTitle"
-    | "confirm"
-    | "alert"
-    | "writeNewListTitle"
-    | "none";
+  firstModalCategory: ModalCategory;
+  secondModalCategory: ModalCategory;
   novelImage: string;
   confirm: Confirm;
   alert: Alert;
@@ -43,7 +46,8 @@ export const logoImg = "https://i.imgur.com/wjATdZi.jpg";
 export const websiteURL = "http://domainfordev.com"; // * need to change after setting the domain
 
 const initialState: IsModalState = {
-  modalCategory: "none",
+  firstModalCategory: undefined,
+  secondModalCategory: undefined,
   novelImage: "",
   confirm: {
     question: "",
@@ -70,32 +74,23 @@ export const modalSlice = createSlice({
   name: "modal",
   initialState,
   reducers: {
-    openModal: (
-      state,
-      action: PayloadAction<
-        | "novelImage"
-        | "sortWriting"
-        | "filterContent"
-        | "login"
-        | "editProfile"
-        | "share"
-        | "getNovelURL"
-        | "addToMyNovelList"
-        | "changeListTitle"
-        | "confirm"
-        | "alert"
-        | "writeNewListTitle"
-        | "none"
-      >,
-    ) => {
-      state.modalCategory = action.payload;
+    openFirstModal: (state, action: PayloadAction<ModalCategory>) => {
+      state.firstModalCategory = action.payload;
     },
+    openSecondModal: (state, action: PayloadAction<ModalCategory>) => {
+      state.secondModalCategory = action.payload;
+    },
+    closeModal: (state, action: PayloadAction<{ isSecond?: true }>) => {
+      if (action.payload.isSecond) {
+        state.secondModalCategory = undefined;
+        return;
+      }
+      state.firstModalCategory = undefined;
+    },
+
     showBigImage: (state, action: PayloadAction<string>) => {
-      state.modalCategory = "novelImage";
+      state.firstModalCategory = "novelImage";
       state.novelImage = action.payload;
-    },
-    closeModal: (state) => {
-      state.modalCategory = "none";
     },
     setMetaTags: (state, action: PayloadAction<MetaTags>) => {
       state.metaTags = action.payload;
@@ -114,7 +109,14 @@ export const modalSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { openModal, showBigImage, closeModal, setMetaTags, handleConfirm, handleAlert } =
-  modalSlice.actions;
+export const {
+  openFirstModal,
+  openSecondModal,
+  closeModal,
+  showBigImage,
+  setMetaTags,
+  handleConfirm,
+  handleAlert,
+} = modalSlice.actions;
 
 export default modalSlice.reducer;

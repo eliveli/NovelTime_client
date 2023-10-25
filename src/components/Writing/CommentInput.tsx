@@ -6,7 +6,7 @@ import {
   useEditCommentMutation,
 } from "store/serverAPIs/novelTime";
 import { setCommentToEdit } from "store/clientSlices/commentSlice";
-import { handleAlert, openModal } from "store/clientSlices/modalSlice";
+import { handleAlert, openFirstModal } from "store/clientSlices/modalSlice";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import {
   EmojiCntnr,
@@ -40,7 +40,7 @@ export function ReCommentInputToCreateOnTablet() {
 
   const handleSubmitToCreate = async () => {
     if (!loginUserId) {
-      dispatch(openModal("alert"));
+      dispatch(openFirstModal("alert"));
       dispatch(handleAlert({ text: "먼저 로그인을 해 주세요" }));
       return;
     }
@@ -60,7 +60,7 @@ export function ReCommentInputToCreateOnTablet() {
     // and update reComments automatically with the invalidate and provide tags
 
     if (addReCommentResult.isError) {
-      dispatch(openModal("alert"));
+      dispatch(openFirstModal("alert"));
       dispatch(
         handleAlert({ text: `코멘트를 추가할 수 없습니다.\n새로고침 후 다시 시도해 보세요` }),
       );
@@ -126,13 +126,13 @@ export function ReCommentInputToEditOnTablet() {
   const handleSubmitToEdit = async () => {
     // provide a reComment to server
     if (!loginUserId) {
-      dispatch(openModal("alert"));
+      dispatch(openFirstModal("alert"));
       dispatch(handleAlert({ text: "먼저 로그인을 해 주세요" }));
       return;
     }
 
     if (!textRef.current?.value) {
-      dispatch(openModal("alert"));
+      dispatch(openFirstModal("alert"));
       dispatch(handleAlert({ text: "내용을 입력해 주세요" }));
       return; // when comment content is empty
     }
@@ -145,7 +145,7 @@ export function ReCommentInputToEditOnTablet() {
     });
 
     if (editCommentResult.isError) {
-      dispatch(openModal("alert"));
+      dispatch(openFirstModal("alert"));
       dispatch(
         handleAlert({ text: `코멘트를 수정할 수 없습니다.\n새로고침 후 다시 시도해 보세요` }),
       );
@@ -221,7 +221,7 @@ export function RootCommentInputToCreateOnTablet({
 
   const handleSubmitToCreate = async () => {
     if (!loginUserId) {
-      dispatch(openModal("alert"));
+      dispatch(openFirstModal("alert"));
       dispatch(handleAlert({ text: "먼저 로그인을 해 주세요" }));
       return;
     }
@@ -237,7 +237,7 @@ export function RootCommentInputToCreateOnTablet({
     });
 
     if (addRootCommentResult.isError) {
-      dispatch(openModal("alert"));
+      dispatch(openFirstModal("alert"));
       dispatch(
         handleAlert({ text: `코멘트를 추가할 수 없습니다.\n새로고침 후 다시 시도해 보세요` }),
       );
@@ -293,13 +293,13 @@ export function RootCommentInputToEditOnTablet({
 
   const handleSubmitToEdit = async () => {
     if (!loginUserId) {
-      dispatch(openModal("alert"));
+      dispatch(openFirstModal("alert"));
       dispatch(handleAlert({ text: "먼저 로그인을 해 주세요" }));
       return;
     }
 
     if (!textRef.current?.value) {
-      dispatch(openModal("alert"));
+      dispatch(openFirstModal("alert"));
       dispatch(handleAlert({ text: "내용을 입력해 주세요" }));
       return; // when comment content is empty
     }
@@ -312,7 +312,7 @@ export function RootCommentInputToEditOnTablet({
     });
 
     if (editCommentResult.isError) {
-      dispatch(openModal("alert"));
+      dispatch(openFirstModal("alert"));
       dispatch(
         handleAlert({ text: `코멘트를 수정할 수 없습니다.\n새로고침 후 다시 시도해 보세요` }),
       );
@@ -399,7 +399,7 @@ export function CommentInputOnMobile({
   const handleSubmitToCreate = async () => {
     // provide a rootComment or reComment to server
     if (!loginUserId) {
-      dispatch(openModal("alert"));
+      dispatch(openFirstModal("alert"));
       dispatch(handleAlert({ text: "먼저 로그인을 해 주세요" }));
       return;
     }
@@ -417,7 +417,7 @@ export function CommentInputOnMobile({
       });
 
       if (addRootCommentResult.isError) {
-        dispatch(openModal("alert"));
+        dispatch(openFirstModal("alert"));
         dispatch(
           handleAlert({ text: `코멘트를 추가할 수 없습니다.\n새로고침 후 다시 시도해 보세요` }),
         );
@@ -438,7 +438,7 @@ export function CommentInputOnMobile({
       // and update reComments automatically with the invalidate and provide tags
 
       if (addReCommentResult.isError) {
-        dispatch(openModal("alert"));
+        dispatch(openFirstModal("alert"));
         dispatch(
           handleAlert({ text: `코멘트를 추가할 수 없습니다.\n새로고침 후 다시 시도해 보세요` }),
         );
@@ -454,13 +454,13 @@ export function CommentInputOnMobile({
   const handleSubmitToEdit = async () => {
     // provide a rootComment or reComment to server
     if (!loginUserId) {
-      dispatch(openModal("alert"));
+      dispatch(openFirstModal("alert"));
       dispatch(handleAlert({ text: "먼저 로그인을 해 주세요" }));
       return;
     }
 
     if (!textRef.current?.value) {
-      dispatch(openModal("alert"));
+      dispatch(openFirstModal("alert"));
       dispatch(handleAlert({ text: "내용을 입력해 주세요" }));
       return; // when comment content is empty
     }
@@ -473,7 +473,7 @@ export function CommentInputOnMobile({
     });
 
     if (editCommentResult.isError) {
-      dispatch(openModal("alert"));
+      dispatch(openFirstModal("alert"));
       dispatch(
         handleAlert({ text: `코멘트를 수정할 수 없습니다.\n새로고침 후 다시 시도해 보세요` }),
       );

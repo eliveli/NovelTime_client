@@ -49,7 +49,7 @@ import { SiNaver } from "react-icons/si";
 import { FcGoogle } from "react-icons/fc";
 import { FiBookOpen } from "react-icons/fi";
 
-import { openModal } from "store/clientSlices/modalSlice";
+import { openFirstModal } from "store/clientSlices/modalSlice";
 import { useAppDispatch } from "store/hooks";
 import theme, { styled } from "./styles/theme";
 
@@ -214,7 +214,7 @@ const Icon = {
     return (
       <SharingIcon
         onClick={() => {
-          dispatch(openModal("share"));
+          dispatch(openFirstModal("share"));
         }}
       />
     );
@@ -228,7 +228,7 @@ const Icon = {
     return (
       <SharingIcon
         onClick={() => {
-          dispatch(openModal("share"));
+          dispatch(openFirstModal("share"));
         }}
       />
     );

@@ -3,7 +3,7 @@ import { useMultipleSearchFilters } from "utils/useSearchFilterForSearchAll";
 import { useAppDispatch } from "../../store/hooks";
 import { MobileBG, SortBox, SortText, ClosingSpace } from "./Modal.styles";
 
-export default function FilterContent() {
+export default function FilterContent({ isSecond }: { isSecond?: true }) {
   const dispatch = useAppDispatch();
 
   const {
@@ -23,18 +23,14 @@ export default function FilterContent() {
             category={_}
             onClick={() => {
               setFilters({ searchCategory: _, searchType: "Title", pageNo: 1 });
-              dispatch(closeModal());
+              dispatch(closeModal({ isSecond }));
             }}
           >
             {_}
           </SortText>
         ))}
       </SortBox>
-      <ClosingSpace
-        onClick={() => {
-          dispatch(closeModal());
-        }}
-      />
+      <ClosingSpace onClick={() => dispatch(closeModal({ isSecond }))} />
     </MobileBG>
   );
 }

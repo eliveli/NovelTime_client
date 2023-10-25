@@ -9,7 +9,7 @@ import {
   NovelImgContainer,
 } from "./Modal.styles";
 
-export default function NovelImage() {
+export default function NovelImage({ isSecond }: { isSecond?: true }) {
   const dispatch = useAppDispatch();
   const novelImage = useAppSelector((state) => state.modal.novelImage);
 
@@ -25,7 +25,7 @@ export default function NovelImage() {
     <NovelImgBG>
       <NovelImgContainer>
         <NovelImgBig src={imgSrc} alt="BigSize Image" />
-        <ClosingBox onClick={() => dispatch(closeModal())}>
+        <ClosingBox onClick={() => dispatch(closeModal({ isSecond }))}>
           <ClosingIcon />
         </ClosingBox>
       </NovelImgContainer>

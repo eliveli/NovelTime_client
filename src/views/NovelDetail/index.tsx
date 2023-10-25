@@ -6,7 +6,7 @@ import Spinner from "assets/Spinner";
 import ShowMoreContent from "assets/ShowMoreContent";
 import { WritingWithoutGenre } from "store/serverAPIs/types";
 import { useAppDispatch } from "store/hooks";
-import { handleAlert, openModal } from "store/clientSlices/modalSlice";
+import { handleAlert, openFirstModal } from "store/clientSlices/modalSlice";
 import { RowSlide } from "../../components/NovelListFrame";
 import { WritingListFrame, WritingInNovelDetail } from "../../components/Writing";
 import { NovelRow } from "../../components/Novel";
@@ -63,7 +63,7 @@ export default function NovelDetail() {
   const navigate = useNavigate();
 
   if (!novelId || novelInDetail.isError) {
-    dispatch(openModal("alert"));
+    dispatch(openFirstModal("alert"));
     dispatch(handleAlert({ text: `소설을 불러올 수 없습니다.` }));
     navigate(-1);
     return <></>;

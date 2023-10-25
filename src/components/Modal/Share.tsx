@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { closeModal, handleAlert, openModal } from "store/clientSlices/modalSlice";
+import { closeModal, handleAlert, openFirstModal } from "store/clientSlices/modalSlice";
 import Icon from "assets/Icon";
 import { catWalking } from "assets/images";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
@@ -17,7 +17,7 @@ import {
   ModalBox,
 } from "./Modal.styles";
 
-export default function Share() {
+export default function Share({ isSecond }: { isSecond?: true }) {
   const dispatch = useAppDispatch();
 
   const { href } = window.location;
@@ -77,22 +77,22 @@ export default function Share() {
     try {
       await navigator.clipboard.writeText(href);
 
-      dispatch(openModal("alert"));
+      dispatch(openFirstModal("alert"));
       dispatch(handleAlert({ text: "링크가 복사되었습니다!" }));
     } catch (err) {
-      dispatch(openModal("alert"));
+      dispatch(openFirstModal("alert"));
       dispatch(handleAlert({ text: `링크 복사에 실패했습니다.\n새로고침 후 시도해주세요` }));
     }
   };
 
   return (
-    <TranslucentBG onClick={() => dispatch(closeModal())}>
+    <TranslucentBG onClick={() => dispatch(closeModal({ isSecond }))}>
       <ModalBox
         onClick={(event: React.MouseEvent<HTMLElement>) => {
           event.stopPropagation();
         }}
       >
-        <ClosingBox isSmallWidth onClick={() => dispatch(closeModal())}>
+        <ClosingBox isSmallWidth onClick={() => dispatch(closeModal({ isSecond }))}>
           <ClosingIcon />
         </ClosingBox>
 

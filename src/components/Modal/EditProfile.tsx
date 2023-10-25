@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { closeModal, handleAlert, openModal } from "store/clientSlices/modalSlice";
+import { closeModal, handleAlert, openSecondModal } from "store/clientSlices/modalSlice";
 import { useImageHostingMutation } from "store/serverAPIs/imageHosting";
 import { useCheckForUserNameMutation, useSaveUserInfoMutation } from "store/serverAPIs/novelTime";
 import { CheckDeviceType } from "utils";
@@ -38,7 +38,7 @@ import dataURLtoBlob from "./utils/dataURLtoBlob";
 import formatBytes from "./utils/formatBytes";
 import { getTextLength } from "./utils/EditProfile.utils";
 
-export default function EditProfile() {
+export default function EditProfile({ isSecond }: { isSecond?: true }) {
   const BGRef = useRef<HTMLDivElement>(null);
 
   const dispatch = useAppDispatch();
@@ -78,22 +78,26 @@ export default function EditProfile() {
     const tempUserName = userNameRef.current?.value as string;
 
     if (!tempUserName) {
-      dispatch(openModal("alert"));
-      dispatch(handleAlert({ text: "유저 네임을 입력해 주세요" }));
+      dispatch(openSecondModal("alert"));
+      dispatch(
+        handleAlert({
+          text: "유저 네임을 입력해 주세요",
+        }),
+      );
       //
     } else if (userNameByte > 12) {
       // limit the text length by 12byte
-      dispatch(openModal("alert"));
+      dispatch(openSecondModal("alert"));
       dispatch(handleAlert({ text: "입력 가능한 글자 수를 초과했어요" }));
       //
     } else if (tempUserName === loginUser.userName) {
-      dispatch(openModal("alert"));
+      dispatch(openSecondModal("alert"));
       dispatch(handleAlert({ text: `기존 이름과 같아요.\n새로운 이름을 입력해 주세요` }));
       //
     } else if (tempUserName[0] === " " || tempUserName[tempUserName.length - 1] === " ") {
       // Make user exclude leading or trailing spaces in userName
       // and allow spaces between userName letters. this naming rule is the same as kakao's
-      dispatch(openModal("alert"));
+      dispatch(openSecondModal("alert"));
       dispatch(handleAlert({ text: "이름 맨 앞 또는 맨 뒤 공백이 없어야 해요" }));
       //
     } else {
@@ -105,7 +109,7 @@ export default function EditProfile() {
               ? "사용 가능한 이름이에요"
               : "사용할 수 없는 이름이에요";
 
-          dispatch(openModal("alert"));
+          dispatch(openSecondModal("alert"));
           dispatch(handleAlert({ text: alertMessage }));
 
           if (alertMessage === "사용 가능한 이름이에요") {
@@ -145,7 +149,7 @@ export default function EditProfile() {
         if (CheckDeviceType() !== "desktop") {
           const blob = dataURLtoBlob(reader.result as string);
           if (!blob) {
-            dispatch(openModal("alert"));
+            dispatch(openSecondModal("alert"));
             dispatch(
               handleAlert({ text: `이미지 편집에 실패했습니다.\n다시 한 번 시도해주세요.` }),
             );
@@ -159,7 +163,7 @@ export default function EditProfile() {
             // set the image and show it as image profile
             setNewProfileImage(blob);
           } else {
-            dispatch(openModal("alert"));
+            dispatch(openSecondModal("alert"));
             dispatch(
               handleAlert({
                 text: `20MB 이하로 저장 가능해요!\n다른 이미지를 선택해 주세요.\n현재 용량: ${dataCapacity}`,
@@ -189,7 +193,7 @@ export default function EditProfile() {
       reader.onloadend = () => {
         const blob = dataURLtoBlob(reader.result as string);
         if (!blob) {
-          dispatch(openModal("alert"));
+          dispatch(openSecondModal("alert"));
           dispatch(handleAlert({ text: `이미지 편집에 실패했습니다.\n다시 한 번 시도해주세요.` }));
           return;
         }
@@ -203,7 +207,7 @@ export default function EditProfile() {
           // show selected BG in UserPageParent component
           dispatch(setTemporaryUserBG({ src: BGasString, position: "" }));
         } else {
-          dispatch(openModal("alert"));
+          dispatch(openSecondModal("alert"));
           dispatch(
             handleAlert({
               text: `20MB 이하로 저장 가능해요!\n다른 이미지를 선택해 주세요.\n현재 용량: ${dataCapacity}`,
@@ -216,7 +220,7 @@ export default function EditProfile() {
   };
 
   const closeProfileModal = () => {
-    dispatch(closeModal());
+    dispatch(closeModal({ isSecond }));
     dispatch(setTemporaryUserBG({ src: "", position: "" })); // remove the temp bg data
   };
 
@@ -243,7 +247,7 @@ export default function EditProfile() {
     // in this case don't save and do alert
     if (isCheckedForDuplicateRef.current === false) {
       isLoadingRef.current = false;
-      dispatch(openModal("alert"));
+      dispatch(openSecondModal("alert"));
       dispatch(handleAlert({ text: "유저네임 중복 체크를 완료해 주세요" }));
       return;
     }
@@ -284,7 +288,7 @@ export default function EditProfile() {
       dispatch(setAccessToken(payload.accessToken));
       dispatch(setUserProfile(payload.userInfo));
       isLoadingRef.current = false;
-      dispatch(openModal("alert"));
+      dispatch(openSecondModal("alert"));
       dispatch(handleAlert({ text: "유저 정보가 성공적으로 저장되었어요" }));
 
       // navigate to next path by new user name //
@@ -316,7 +320,7 @@ export default function EditProfile() {
       navigate(nextPathName);
     } catch (err) {
       isLoadingRef.current = false;
-      dispatch(openModal("alert"));
+      dispatch(openSecondModal("alert"));
       dispatch(handleAlert({ text: "유저 정보 저장에 실패했어요" }));
     }
     // after all passed close the modal // change upper code later

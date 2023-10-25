@@ -18,17 +18,17 @@ import {
   ModalBox,
 } from "./Modal.styles";
 
-export default function Login() {
+export default function Login({ isSecond }: { isSecond?: true }) {
   const dispatch = useAppDispatch();
 
   return (
-    <TranslucentBG onClick={() => dispatch(closeModal())}>
+    <TranslucentBG onClick={() => dispatch(closeModal({ isSecond }))}>
       <ModalBox
         onClick={(event: React.MouseEvent<HTMLElement>) => {
           event.stopPropagation();
         }}
       >
-        <ClosingBox isSmallWidth onClick={() => dispatch(closeModal())}>
+        <ClosingBox isSmallWidth onClick={() => dispatch(closeModal({ isSecond }))}>
           <ClosingIcon />
         </ClosingBox>
         <ContentContnr>

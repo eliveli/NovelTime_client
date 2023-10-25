@@ -3,7 +3,7 @@ import { useCloseOutsideClick, useWhetherItIsMobile } from "utils";
 import { useSearchFilter, useMultipleSearchFilters } from "utils/useSearchFilterForSearchAll";
 import { useSearchParams } from "react-router-dom";
 import { useAppDispatch } from "../../store/hooks";
-import { openModal } from "../../store/clientSlices/modalSlice";
+import { openFirstModal } from "../../store/clientSlices/modalSlice";
 import {
   SearchBarContainer,
   SearchFilterContainer,
@@ -92,7 +92,7 @@ export function CategoriesToSelectOnMobile() {
   return (
     <MobileContainer
       onClick={() => {
-        dispatch(openModal("filterContent"));
+        dispatch(openFirstModal("filterContent"));
       }}
     >
       <SearchCategorySelected>{currentSearchCategory}</SearchCategorySelected>

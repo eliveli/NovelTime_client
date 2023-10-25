@@ -3,7 +3,7 @@ import { useCloseOutsideClick } from "utils";
 import { useSearchFilter, useMultipleSearchFilters } from "utils/useSearchFilterForWriting";
 import { GenresFromFilter, setSortTypes } from "store/clientSlices/filterSlice";
 import { useAppDispatch } from "../../store/hooks";
-import { openModal } from "../../store/clientSlices/modalSlice";
+import { openFirstModal } from "../../store/clientSlices/modalSlice";
 import {
   SortMobileContainer,
   SortTabletContainer,
@@ -83,7 +83,7 @@ export function SortMobile({ borderOpacity }: { borderOpacity?: number }) {
       <ContainerWithBtn
         borderOpacity={borderOpacity}
         onClick={() => {
-          dispatch(openModal("sortWriting"));
+          dispatch(openFirstModal("sortWriting"));
         }}
       >
         <SortCategorySelected>{currentSortType}</SortCategorySelected>

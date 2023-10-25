@@ -5,7 +5,7 @@ import Icon from "assets/Icon";
 import { NOVEL_DETAIL, RECOMMEND_LIST, SEARCH_NOVEL, TALK_LIST } from "utils/pathname";
 import { useAddNovelWithURLMutation, useAddWritingMutation } from "store/serverAPIs/novelTime";
 import Spinner from "assets/Spinner";
-import { handleAlert, openModal } from "store/clientSlices/modalSlice";
+import { handleAlert, openFirstModal } from "store/clientSlices/modalSlice";
 import { useWhetherItIsDesktop } from "utils";
 import { setSearchList } from "store/clientSlices/filterSlice";
 import { handleWritingToSubmitOnMobile } from "../../store/clientSlices/writingSlice";
@@ -128,7 +128,7 @@ export default function AddWriting() {
     if (!novelUrlRef.current) return;
 
     if (!novelUrlRef.current.value) {
-      dispatch(openModal("alert"));
+      dispatch(openFirstModal("alert"));
       dispatch(handleAlert({ text: "작품 url을 넣어주세요" }));
       return;
     }
@@ -138,7 +138,7 @@ export default function AddWriting() {
     await addNovelWithURL(novelUrlRef.current.value);
 
     if (addNovelWithURLResult.isError) {
-      dispatch(openModal("alert"));
+      dispatch(openFirstModal("alert"));
       dispatch(handleAlert({ text: "작품 url을 확인해 주세요" }));
     }
   };
@@ -146,7 +146,7 @@ export default function AddWriting() {
   useEffect(() => {
     if (!addNovelWithURLResult.data) return;
     if (!addNovelWithURLResult.data.novelId || !addNovelWithURLResult.data.novelTitle) {
-      dispatch(openModal("alert"));
+      dispatch(openFirstModal("alert"));
       dispatch(handleAlert({ text: "작품 url을 확인해 주세요" }));
       return;
     }
@@ -217,30 +217,30 @@ export default function AddWriting() {
 
   const submitToAddWriting = async () => {
     if (!loginUserId) {
-      dispatch(openModal("alert"));
+      dispatch(openFirstModal("alert"));
       dispatch(handleAlert({ text: "먼저 로그인을 해 주세요" }));
       return;
     }
     if (!novelForReview.novelId) {
-      dispatch(openModal("alert"));
+      dispatch(openFirstModal("alert"));
       dispatch(handleAlert({ text: "소설을 선택해 주세요" }));
       return;
     }
 
     if (!board) {
-      dispatch(openModal("alert"));
+      dispatch(openFirstModal("alert"));
       dispatch(handleAlert({ text: "게시판 종류를 선택해 주세요" }));
       return;
     }
 
     if (!titleRef.current?.value) {
-      dispatch(openModal("alert"));
+      dispatch(openFirstModal("alert"));
       dispatch(handleAlert({ text: "제목을 입력해 주세요" }));
       return;
     }
 
     if (!contentRef.current?.value) {
-      dispatch(openModal("alert"));
+      dispatch(openFirstModal("alert"));
       dispatch(handleAlert({ text: "내용을 입력해 주세요" }));
       return;
     }
@@ -256,7 +256,7 @@ export default function AddWriting() {
     });
 
     if (addWritingResult.isError) {
-      dispatch(openModal("alert"));
+      dispatch(openFirstModal("alert"));
       dispatch(handleAlert({ text: `글을 등록할 수 없습니다.\n새로고침 후 다시 시도해 보세요` }));
     }
 
@@ -341,7 +341,7 @@ export default function AddWriting() {
             <SrchGuideText
               isHowTo
               onClick={() => {
-                dispatch(openModal("getNovelURL"));
+                dispatch(openFirstModal("getNovelURL"));
               }}
             >
               &nbsp;&nbsp;어떻게 주소를 찾나요?&nbsp;&nbsp;

@@ -15,7 +15,7 @@ import { ADD_WRITING } from "utils/pathname";
 import { setSearchList } from "store/clientSlices/filterSlice";
 import Spinner from "assets/Spinner";
 import { useEffect } from "react";
-import { handleAlert, openModal } from "store/clientSlices/modalSlice";
+import { handleAlert, openFirstModal } from "store/clientSlices/modalSlice";
 import FreeTalk from "./FreeTalkList.components";
 
 export default function FreeTalkList() {
@@ -84,7 +84,7 @@ export default function FreeTalkList() {
         <WritingButton
           clickToWrite={() => {
             if (!isLoginUser) {
-              dispatch(openModal("alert"));
+              dispatch(openFirstModal("alert"));
               dispatch(handleAlert({ text: "로그인이 필요합니다" }));
               return;
             }

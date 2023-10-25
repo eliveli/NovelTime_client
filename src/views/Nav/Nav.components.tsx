@@ -31,7 +31,7 @@ import {
 import { setSearchList } from "store/clientSlices/filterSlice";
 import { getCurrentRoomId, isThePath, useWhetherItIsTablet } from "utils";
 import { UnreadMessageNo } from "views/ChatRoomList";
-import { handleAlert, openModal } from "../../store/clientSlices/modalSlice";
+import { handleAlert, openFirstModal } from "../../store/clientSlices/modalSlice";
 import { handleWritingToSubmitOnMobile } from "../../store/clientSlices/writingSlice";
 import { useAppSelector, useAppDispatch } from "../../store/hooks";
 
@@ -104,7 +104,7 @@ export function NavPC() {
 
   const handleNonLogin = (category: string) => {
     if (category === "Message" && !loginUser.userId) {
-      dispatch(openModal("alert"));
+      dispatch(openFirstModal("alert"));
       dispatch(handleAlert({ text: "로그인이 필요합니다" }));
     }
   };
@@ -156,7 +156,7 @@ export function NavPC() {
             프로필
           </MyPageTablet>
         ) : (
-          <LoginText onClick={() => dispatch(openModal("login"))}>로그인</LoginText>
+          <LoginText onClick={() => dispatch(openFirstModal("login"))}>로그인</LoginText>
         )}
       </RightSideContnr>
     </NavContentBoxPC>
@@ -210,7 +210,7 @@ export function NavMobileMainTop() {
         {!isLoginUser && isTablet && (
           <LoginText
             onClick={() => {
-              dispatch(openModal("login"));
+              dispatch(openFirstModal("login"));
             }}
           >
             로그인
@@ -219,7 +219,7 @@ export function NavMobileMainTop() {
         {!isLoginUser && !isTablet && (
           <LoginIconBox
             onClick={() => {
-              dispatch(openModal("login"));
+              dispatch(openFirstModal("login"));
             }}
           >
             <Icon.Login />
@@ -286,7 +286,7 @@ export function NavMobileMainBottom() {
 
   const handleNonLogin = (category: string) => {
     if (["AddPost", "Message"].includes(category) && !isLoginUser) {
-      dispatch(openModal("alert"));
+      dispatch(openFirstModal("alert"));
       dispatch(handleAlert({ text: "로그인이 필요합니다" }));
     }
   };
@@ -413,7 +413,7 @@ export function NavMobileDetail() {
         {isThePath(USER_PAGE) && !isLoginUser && isTablet && (
           <LoginText
             onClick={() => {
-              dispatch(openModal("login"));
+              dispatch(openFirstModal("login"));
             }}
           >
             로그인
@@ -422,7 +422,7 @@ export function NavMobileDetail() {
         {isThePath(USER_PAGE) && !isLoginUser && !isTablet && (
           <LoginIconBox
             onClick={() => {
-              dispatch(openModal("login"));
+              dispatch(openFirstModal("login"));
             }}
           >
             <Icon.Login />

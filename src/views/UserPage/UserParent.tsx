@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import theme from "assets/styles/theme";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { setLoginUser, setAccessToken, setLogout } from "store/clientSlices/loginUserSlice";
-import { handleAlert, handleConfirm, openModal } from "store/clientSlices/modalSlice";
+import { handleAlert, handleConfirm, openFirstModal } from "store/clientSlices/modalSlice";
 import { messageIconUserPage } from "assets/images";
 import { Outlet, useNavigate, useParams } from "react-router-dom";
 import Icon from "assets/Icon";
@@ -96,12 +96,12 @@ function Profile() {
       }),
     );
 
-    dispatch(openModal("confirm"));
+    dispatch(openFirstModal("confirm"));
   };
 
   const handleMessage = async () => {
     if (!isLogin) {
-      dispatch(openModal("alert"));
+      dispatch(openFirstModal("alert"));
       dispatch(handleAlert({ text: "메세지를 보내려면 로그인해 주세요" }));
       return;
     }
@@ -142,13 +142,13 @@ function Profile() {
     }
 
     if (status === 400 && error && error.message === "user doesn't exist") {
-      dispatch(openModal("alert"));
+      dispatch(openFirstModal("alert"));
       dispatch(handleAlert({ text: "존재하지 않는 사용자입니다" }));
       return;
     }
 
     if (status === 500) {
-      dispatch(openModal("alert"));
+      dispatch(openFirstModal("alert"));
       dispatch(handleAlert({ text: `메세지를 보낼 수 없습니다.\n새로고침 후 시도해 보세요` }));
     }
   };
@@ -187,7 +187,9 @@ function Profile() {
               <MessageIcon onClick={handleMessage} src={messageIconUserPage} alt="message" />
             ) : (
               <>
-                <ProfileBtn onClick={() => dispatch(openModal("editProfile"))}>수정</ProfileBtn>
+                <ProfileBtn onClick={() => dispatch(openFirstModal("editProfile"))}>
+                  수정
+                </ProfileBtn>
 
                 {isMobile ? (
                   <LogOutIconBox size={33} onClick={confirmLogout}>
@@ -219,7 +221,7 @@ export default function UserParent() {
   });
   useEffect(() => {
     if (isError) {
-      dispatch(openModal("alert"));
+      dispatch(openFirstModal("alert"));
       dispatch(handleAlert({ text: "존재하지 않는 사용자입니다." }));
       navigate("/");
       return;

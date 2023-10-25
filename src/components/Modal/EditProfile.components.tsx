@@ -3,7 +3,7 @@ import { useComponentHeight, useComponentWidth } from "utils";
 import theme from "assets/styles/theme";
 
 import Spinner from "assets/Spinner";
-import { handleAlert, openModal } from "store/clientSlices/modalSlice";
+import { handleAlert, openFirstModal } from "store/clientSlices/modalSlice";
 import { useAppDispatch } from "store/hooks";
 import {
   CropImageCanvas,
@@ -154,7 +154,7 @@ export default function EditProfileImg({
       const blob = dataURLtoBlob(dataUrlImg);
 
       if (!blob) {
-        dispatch(openModal("alert"));
+        dispatch(openFirstModal("alert"));
         dispatch(handleAlert({ text: `이미지 편집에 실패했습니다.\n다시 한 번 시도해주세요.` }));
         return;
       }
@@ -170,7 +170,7 @@ export default function EditProfileImg({
         setNewProfileImage(blob);
         handleEditingImage(false); // show profile modal
       } else {
-        dispatch(openModal("alert"));
+        dispatch(openFirstModal("alert"));
         dispatch(handleAlert({ text: `20MB 이하로 저장 가능해요!\n현재 용량: ${dataCapacity}` }));
       }
     }

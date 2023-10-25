@@ -3,7 +3,7 @@ import { CategoryMark } from "components/CategoryMark";
 import { setSearchList } from "store/clientSlices/filterSlice";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { ADD_WRITING } from "utils/pathname";
-import { handleAlert, openModal } from "store/clientSlices/modalSlice";
+import { handleAlert, openFirstModal } from "store/clientSlices/modalSlice";
 import Icon from "assets/Icon";
 import { useWhetherItIsMobile } from "utils";
 import { handleNovelIdToAddToList } from "store/clientSlices/userNovelListSlice";
@@ -35,7 +35,7 @@ function ButtonInNovelDetail({
       isForMyList={isForMyList}
       onClick={() => {
         if (!isLoginUser) {
-          dispatch(openModal("alert"));
+          dispatch(openFirstModal("alert"));
           dispatch(handleAlert({ text: "로그인이 필요합니다" }));
           return;
         }
@@ -79,7 +79,7 @@ export default function WritingListFrame({
 
   const handleToGoToWrite = () => {
     if (!isLoginUser) {
-      dispatch(openModal("alert"));
+      dispatch(openFirstModal("alert"));
       dispatch(handleAlert({ text: "먼저 로그인해 주세요" }));
       return;
     }
@@ -95,14 +95,14 @@ export default function WritingListFrame({
 
   const handleToGoToAddNovel = () => {
     if (!isLoginUser) {
-      dispatch(openModal("alert"));
+      dispatch(openFirstModal("alert"));
       dispatch(handleAlert({ text: "먼저 로그인해 주세요" }));
       return;
     }
 
     dispatch(handleNovelIdToAddToList(novelId));
 
-    dispatch(openModal("addToMyNovelList"));
+    dispatch(openFirstModal("addToMyNovelList"));
   };
 
   return (

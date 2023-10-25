@@ -3,7 +3,7 @@ import { useAppDispatch } from "store/hooks";
 import { setLoginUser, setAccessToken } from "store/clientSlices/loginUserSlice";
 import { useGetLoginOauthServerQuery } from "store/serverAPIs/novelTime";
 import Spinner from "assets/Spinner";
-import { handleAlert, openModal } from "store/clientSlices/modalSlice";
+import { handleAlert, openFirstModal } from "store/clientSlices/modalSlice";
 
 export default function OAuthRedirectHandler() {
   const { oauthServerUrl } = useParams();
@@ -47,7 +47,7 @@ export default function OAuthRedirectHandler() {
 
   // login failed
   if (error) {
-    dispatch(openModal("alert"));
+    dispatch(openFirstModal("alert"));
     dispatch(handleAlert({ text: "로그인에 실패하였습니다." }));
     navigate("/", { replace: true });
   }

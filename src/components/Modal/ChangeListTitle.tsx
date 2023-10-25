@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import { closeModal, handleAlert, openModal } from "store/clientSlices/modalSlice";
+import { closeModal, handleAlert, openFirstModal } from "store/clientSlices/modalSlice";
 import { handleUserNovelListToEdit } from "store/clientSlices/userNovelListSlice";
 import { useChangeMyListTitleMutation } from "store/serverAPIs/novelTime";
 import { useParams } from "react-router-dom";
@@ -17,7 +17,7 @@ import {
   ModalBox,
 } from "./Modal.styles";
 
-export default function ChangeListTitle() {
+export default function ChangeListTitle({ isSecond }: { isSecond?: true }) {
   const { userName } = useParams();
 
   const [changeListTitle, changeListTitleResult] = useChangeMyListTitleMutation();
@@ -29,7 +29,7 @@ export default function ChangeListTitle() {
   const titleRef = useRef<HTMLInputElement>(null);
 
   const closeAndInitialize = () => {
-    dispatch(closeModal());
+    dispatch(closeModal({ isSecond }));
 
     dispatch(
       handleUserNovelListToEdit({
@@ -52,7 +52,7 @@ export default function ChangeListTitle() {
     // update list automatically with the invalidate and provide tags
 
     if (changeListTitleResult.isError) {
-      dispatch(openModal("alert"));
+      dispatch(openFirstModal("alert"));
       dispatch(
         handleAlert({ text: `리스트 제목을 수정할 수 없습니다.\n새로고침 후 다시 시도해 보세요` }),
       );

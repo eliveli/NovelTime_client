@@ -10,7 +10,7 @@ import {
   BoxForPadding,
 } from "./Modal.styles";
 
-export default function Confirm() {
+export default function Confirm({ isSecond }: { isSecond?: true }) {
   const dispatch = useAppDispatch();
 
   const { question, textForYes, textForNo, functionForYes, functionForNo } = useAppSelector(
@@ -18,7 +18,7 @@ export default function Confirm() {
   );
 
   const closeAndInitialize = () => {
-    dispatch(closeModal());
+    dispatch(closeModal({ isSecond }));
 
     dispatch(
       handleConfirm({

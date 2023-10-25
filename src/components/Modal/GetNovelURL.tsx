@@ -19,7 +19,7 @@ import {
   ArrowBox,
 } from "./Modal.styles";
 
-export default function GetNovelURL() {
+export default function GetNovelURL({ isSecond }: { isSecond?: true }) {
   const dispatch = useAppDispatch();
 
   const imgAlbumContainerRef = useRef<HTMLDivElement>(null);
@@ -55,14 +55,14 @@ export default function GetNovelURL() {
   };
 
   return (
-    <TranslucentBG onClick={() => dispatch(closeModal())}>
+    <TranslucentBG onClick={() => dispatch(closeModal({ isSecond }))}>
       <ModalBox
         padding={isMobile ? "25px 15px" : undefined}
         onClick={(event: React.MouseEvent<HTMLElement>) => {
           event.stopPropagation();
         }}
       >
-        <ClosingBox isSmallWidth onClick={() => dispatch(closeModal())}>
+        <ClosingBox isSmallWidth onClick={() => dispatch(closeModal({ isSecond }))}>
           <ClosingIcon />
         </ClosingBox>
 

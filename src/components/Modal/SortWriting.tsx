@@ -6,7 +6,7 @@ import { useAppDispatch } from "../../store/hooks";
 
 import { MobileBG, SortBox, SortText, ClosingSpace } from "./Modal.styles";
 
-export default function SortWriting() {
+export default function SortWriting({ isSecond }: { isSecond?: true }) {
   const dispatch = useAppDispatch();
 
   const {
@@ -15,6 +15,7 @@ export default function SortWriting() {
   } = useMultipleSearchFilters();
 
   const sortTypes = setSortTypes();
+
   return (
     <MobileBG>
       <SortBox>
@@ -30,18 +31,14 @@ export default function SortWriting() {
                 setFilters({ sortType: _ });
               }
 
-              dispatch(closeModal());
+              dispatch(closeModal({ isSecond }));
             }}
           >
             {_}
           </SortText>
         ))}
       </SortBox>
-      <ClosingSpace
-        onClick={() => {
-          dispatch(closeModal());
-        }}
-      />
+      <ClosingSpace onClick={() => dispatch(closeModal({ isSecond }))} />
     </MobileBG>
   );
 }

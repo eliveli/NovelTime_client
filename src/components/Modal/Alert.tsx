@@ -10,13 +10,13 @@ import {
   BoxForPadding,
 } from "./Modal.styles";
 
-export default function Alert() {
+export default function Alert({ isSecond }: { isSecond?: true }) {
   const alert = useAppSelector((state) => state.modal.alert);
 
   const dispatch = useAppDispatch();
 
   const closeAndInitialize = () => {
-    dispatch(closeModal());
+    dispatch(closeModal({ isSecond }));
 
     dispatch(handleAlert({ text: "", nextFunction: undefined }));
 

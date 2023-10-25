@@ -4,7 +4,7 @@ import { useRef, useState, useEffect } from "react";
 import { useComponentWidth, useWhetherItIsMobile, writeText } from "utils";
 import EmojiPicker, { EmojiClickData } from "emoji-picker-react";
 import theme from "assets/styles/theme";
-import { handleAlert, openModal } from "store/clientSlices/modalSlice";
+import { handleAlert, openFirstModal } from "store/clientSlices/modalSlice";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import {
   EmojiCntnr,
@@ -67,7 +67,7 @@ export function MessageInput({
   // Treat message
   const handleSubmit = async () => {
     if (!loginUserId) {
-      dispatch(openModal("alert"));
+      dispatch(openFirstModal("alert"));
       dispatch(handleAlert({ text: "먼저 로그인을 해 주세요" }));
       return;
     }

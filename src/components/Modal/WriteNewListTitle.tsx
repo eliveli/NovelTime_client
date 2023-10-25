@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import { handleAlert, openModal } from "store/clientSlices/modalSlice";
+import { handleAlert, openFirstModal } from "store/clientSlices/modalSlice";
 import { useCreateMyNovelListMutation } from "store/serverAPIs/novelTime";
 import Spinner from "assets/Spinner";
 import { useParams } from "react-router-dom";
@@ -16,7 +16,7 @@ import {
   ModalBox,
 } from "./Modal.styles";
 
-export default function WriteNewListTitle() {
+export default function WriteNewListTitle({ isSecond }: { isSecond?: true }) {
   const dispatch = useAppDispatch();
 
   const { userName } = useParams();
@@ -26,16 +26,16 @@ export default function WriteNewListTitle() {
   const [createList, createListResult] = useCreateMyNovelListMutation();
 
   const openCurrentModal = () => {
-    dispatch(openModal("writeNewListTitle"));
+    dispatch(openFirstModal("writeNewListTitle"));
   };
 
   const openPrevModal = () => {
-    dispatch(openModal("addToMyNovelList"));
+    dispatch(openFirstModal("addToMyNovelList"));
   };
 
   const handleToCreateList = async () => {
     if (!titleRef.current?.value) {
-      dispatch(openModal("alert"));
+      dispatch(openFirstModal("alert"));
       dispatch(
         handleAlert({ text: "리스트 제목을 입력해 주세요", nextFunction: openCurrentModal }),
       );
@@ -49,7 +49,7 @@ export default function WriteNewListTitle() {
     // my novel lists updated automatically with provide and invalidate tags
 
     if (createListResult.isError) {
-      dispatch(openModal("alert"));
+      dispatch(openFirstModal("alert"));
       dispatch(handleAlert({ text: `리스트를 생성할 수 없습니다.\n새로고침 후 시도해보세요` }));
       return;
     }

@@ -13,7 +13,7 @@ import {
 } from "store/clientSlices/commentSlice";
 import { useDeleteCommentMutation } from "store/serverAPIs/novelTime";
 import { Comment, Img, ReCommentList } from "store/serverAPIs/types";
-import { handleAlert, handleConfirm, openModal } from "store/clientSlices/modalSlice";
+import { handleAlert, handleConfirm, openFirstModal } from "store/clientSlices/modalSlice";
 import {
   CommentContainer,
   CommentContent,
@@ -152,7 +152,7 @@ function CommentWritten({
     await deleteComment({ commentId, novelId: argsForApis.novelId });
 
     if (deleteCommentResult.isError) {
-      dispatch(openModal("alert"));
+      dispatch(openFirstModal("alert"));
       dispatch(
         handleAlert({ text: `코멘트를 삭제할 수 없습니다.\n새로고침 후 다시 시도해 보세요` }),
       );
@@ -176,7 +176,7 @@ function CommentWritten({
       }),
     );
 
-    dispatch(openModal("confirm"));
+    dispatch(openFirstModal("confirm"));
   };
 
   // scroll to the parent comment of its reComment when clicking "원댓글보기"
