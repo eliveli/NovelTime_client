@@ -194,7 +194,9 @@ function Profile() {
                     <Icon.Logout />
                   </LogOutIconBox>
                 ) : (
-                  <ProfileBtn isLogOut>로그아웃</ProfileBtn>
+                  <ProfileBtn isLogOut onClick={confirmLogout}>
+                    로그아웃
+                  </ProfileBtn>
                 )}
               </>
             )}
