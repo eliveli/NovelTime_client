@@ -23,7 +23,7 @@ import useWhetherItIsDesktop from "./useWhetherItIsDesktop";
 import writeText from "./writeText";
 import goToUserPage from "./goToUserPage";
 import useWhetherItIsTablet from "./useWhetherItIsTablet";
-import isThePath from "./isThePath";
+import isCurrentPath from "./isCurrentPath";
 import getCurrentRoomId from "./getCurrentRoomId";
 
 export {
@@ -50,6 +50,6 @@ export {
   useWhetherItIsTablet,
   writeText,
   goToUserPage,
-  isThePath,
+  isCurrentPath,
   getCurrentRoomId,
 };

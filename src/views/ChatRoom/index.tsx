@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { isThePath, useWhetherItIsTablet } from "utils";
+import { isCurrentPath, useWhetherItIsTablet } from "utils";
 import { CHAT_ROOM_LIST, CHAT_ROOM } from "utils/pathname";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { MessagesWithPartner, Message as TypeMessage } from "store/serverAPIs/types";
@@ -368,7 +368,7 @@ export default function ChatRoom({ roomIdTablet }: { roomIdTablet?: string }) {
   const isTablet = useWhetherItIsTablet();
 
   useEffect(() => {
-    if (isTablet && isThePath(CHAT_ROOM) && roomId) {
+    if (isTablet && isCurrentPath(CHAT_ROOM) && roomId) {
       navigate(`${CHAT_ROOM_LIST}?roomId=${roomId}`, { replace: true });
     }
   }, [isTablet]);

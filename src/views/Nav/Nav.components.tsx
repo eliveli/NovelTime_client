@@ -29,7 +29,7 @@ import {
   USER_PAGE,
 } from "utils/pathname";
 import { setSearchList } from "store/clientSlices/filterSlice";
-import { getCurrentRoomId, isThePath, useWhetherItIsTablet } from "utils";
+import { getCurrentRoomId, isCurrentPath, useWhetherItIsTablet } from "utils";
 import { UnreadMessageNo } from "views/ChatRoomList";
 import { handleAlert, openFirstModal } from "../../store/clientSlices/modalSlice";
 import { handleWritingToSubmitOnMobile } from "../../store/clientSlices/writingSlice";
@@ -119,6 +119,16 @@ export function NavPC() {
     navigate(path);
   };
 
+  const checkPath = (partialPath: string) => {
+    if (partialPath === NOVEL_LIST && isCurrentPath(partialPath)) {
+      // Don't highlight category if the current partial path "novel-list" is in the user page
+      if (isCurrentPath(USER_PAGE)) return false;
+      return true;
+    }
+
+    return isCurrentPath(partialPath);
+  };
+
   return (
     <NavContentBoxPC>
       <LogoContainer>
@@ -130,7 +140,7 @@ export function NavPC() {
           <NavContent
             key={_.category}
             isMessageCategory={_.category === "Message"}
-            isCurrentPath={isThePath(_.partialPath)}
+            isCurrentPath={checkPath(_.partialPath)}
             onClick={() => handleClick(_.category, _.path)}
           >
             {_.category}
@@ -300,7 +310,7 @@ export function NavMobileMainBottom() {
 
     // Don't navigate to the list page if current path is that
     //  to avoid displaying incorrect or no data with infinite scroll
-    if ([TALK_LIST, RECOMMEND_LIST].includes(path) && isThePath(path)) return;
+    if ([TALK_LIST, RECOMMEND_LIST].includes(path) && isCurrentPath(path)) return;
 
     resetList(category);
 
@@ -316,8 +326,8 @@ export function NavMobileMainBottom() {
           isPostPage={
             // Don't set hover when current path is post list page
             //  navigation also won't work here
-            (_.category === "FreeTalk" && isThePath(_.path)) ||
-            (_.category === "Recommend" && isThePath(_.path))
+            (_.category === "FreeTalk" && isCurrentPath(_.path)) ||
+            (_.category === "Recommend" && isCurrentPath(_.path))
           }
           onClick={() => handleClick(_.category, _.path)}
         >
@@ -325,9 +335,9 @@ export function NavMobileMainBottom() {
             <UnreadMessageNo isForMobileNav unreadMessageNo={allUnreadMsgNo} />
           )}
 
-          <NavImg src={isThePath(_.path) ? _.imgActive : _.img} alt={_.category} />
+          <NavImg src={isCurrentPath(_.path) ? _.imgActive : _.img} alt={_.category} />
 
-          <NavText isActive={isThePath(_.path)}>{_.category}</NavText>
+          <NavText isActive={isCurrentPath(_.path)}>{_.category}</NavText>
         </NavContent>
       ))}
     </NavContentBoxMobile>
@@ -349,16 +359,20 @@ export function NavMobileDetail() {
   const profileUserName = userNameFromSlice === userNameFromURL ? userNameFromSlice : "";
   const profileUserImg =
     userNameFromSlice === userNameFromURL ? userImgFromSlice : { src: "", position: "" };
-  if (isThePath("iframe")) return <></>;
+  if (isCurrentPath("iframe")) return <></>;
 
   return (
     <NavContentBoxMobile isDetail>
       <IconsBox isLeft>
         <LeftIconBox onClick={() => navigate(-1)}>
-          {isThePath(ADD_WRITING) || isThePath(EDIT_WRITING) ? <Icon.CloseWriting /> : <BackIcon />}
+          {isCurrentPath(ADD_WRITING) || isCurrentPath(EDIT_WRITING) ? (
+            <Icon.CloseWriting />
+          ) : (
+            <BackIcon />
+          )}
         </LeftIconBox>
 
-        {!isThePath(ADD_WRITING) && !isThePath(EDIT_WRITING) && (
+        {!isCurrentPath(ADD_WRITING) && !isCurrentPath(EDIT_WRITING) && (
           <HomeIconBox
             onClick={() => {
               navigate("/");
@@ -369,7 +383,7 @@ export function NavMobileDetail() {
         )}
       </IconsBox>
 
-      {isThePath(USER_PAGE) && (
+      {isCurrentPath(USER_PAGE) && (
         <PageTitle onClick={() => navigate(`${USER_PAGE}/${profileUserName}`)} isHover>
           <UserImg userImg={profileUserImg} />
           <UserName>{profileUserName}</UserName>
@@ -382,18 +396,18 @@ export function NavMobileDetail() {
           </Icon.IconBox>
         </PageTitle>
       )}
-      {isThePath(TALK_DETAIL) && <PageTitle>Free Talk</PageTitle>}
-      {isThePath(RECOMMEND_DETAIL) && <PageTitle>Recommend</PageTitle>}
+      {isCurrentPath(TALK_DETAIL) && <PageTitle>Free Talk</PageTitle>}
+      {isCurrentPath(RECOMMEND_DETAIL) && <PageTitle>Recommend</PageTitle>}
 
       <IconsBox isRight>
-        {isThePath(ADD_WRITING) && (
+        {isCurrentPath(ADD_WRITING) && (
           <SubmitBtn onClick={() => dispatch(handleWritingToSubmitOnMobile(true))}>작성</SubmitBtn>
         )}
-        {isThePath(EDIT_WRITING) && (
+        {isCurrentPath(EDIT_WRITING) && (
           <SubmitBtn onClick={() => dispatch(handleWritingToSubmitOnMobile(true))}>수정</SubmitBtn>
         )}
 
-        {isThePath(USER_PAGE) && isLoginUser && isTablet && (
+        {isCurrentPath(USER_PAGE) && isLoginUser && isTablet && (
           <MyPageTablet
             onClick={() => {
               navigate(`${USER_PAGE}/${loginUser.userName}`);
@@ -402,7 +416,7 @@ export function NavMobileDetail() {
             프로필
           </MyPageTablet>
         )}
-        {isThePath(USER_PAGE) && isLoginUser && !isTablet && (
+        {isCurrentPath(USER_PAGE) && isLoginUser && !isTablet && (
           <MyPageMobile
             userImg={loginUser.userImg}
             onClick={() => {
@@ -410,7 +424,7 @@ export function NavMobileDetail() {
             }}
           />
         )}
-        {isThePath(USER_PAGE) && !isLoginUser && isTablet && (
+        {isCurrentPath(USER_PAGE) && !isLoginUser && isTablet && (
           <LoginText
             onClick={() => {
               dispatch(openFirstModal("login"));
@@ -419,7 +433,7 @@ export function NavMobileDetail() {
             로그인
           </LoginText>
         )}
-        {isThePath(USER_PAGE) && !isLoginUser && !isTablet && (
+        {isCurrentPath(USER_PAGE) && !isLoginUser && !isTablet && (
           <LoginIconBox
             onClick={() => {
               dispatch(openFirstModal("login"));
@@ -462,7 +476,7 @@ export function ChatRoomNav({
   return (
     <ChatRoomNavContainer>
       <IconsBox isLeft>
-        {isThePath(CHAT_ROOM_LIST) ? (
+        {isCurrentPath(CHAT_ROOM_LIST) ? (
           // on tablet or desktop
           // used for chat room list page
           // placed above a chat room component next to chat room list component
@@ -495,7 +509,7 @@ export function ChatRoomNav({
       </PageTitle>
 
       <IconsBox isRight>
-        {!isThePath(CHAT_ROOM_LIST) && (
+        {!isCurrentPath(CHAT_ROOM_LIST) && (
           <MyPageMobile
             userImg={loginUser.userImg}
             onClick={() => {

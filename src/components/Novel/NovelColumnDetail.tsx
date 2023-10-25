@@ -1,5 +1,5 @@
 import React, { useLayoutEffect, useRef } from "react";
-import { isThePath, useComponentWidth, useModal } from "utils";
+import { isCurrentPath, useComponentWidth, useModal } from "utils";
 
 import { useNavigate } from "react-router-dom";
 import { NovelDetail } from "store/serverAPIs/types";
@@ -99,7 +99,7 @@ export default function NovelColumnDetail({
   };
 
   // when this is used in iframe
-  const isIframe = isThePath("iframe");
+  const isIframe = isCurrentPath("iframe");
   //  pass novel info to the parent
   const sendNovel = () => {
     window.parent.postMessage({ novelId, novelTitle }, "*");
