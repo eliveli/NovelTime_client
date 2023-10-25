@@ -63,6 +63,10 @@ export default function AddToMyNovelList() {
     dispatch(handleNovelIdToAddToList(""));
   };
 
+  const reOpenModal = () => {
+    dispatch(openModal("addToMyNovelList"));
+  };
+
   const handleToAddNovelToLists = async () => {
     if (!novelIdToAdd) {
       dispatch(openModal("alert"));
@@ -72,7 +76,7 @@ export default function AddToMyNovelList() {
 
     if (!listsSelected.length) {
       dispatch(openModal("alert"));
-      dispatch(handleAlert({ text: "리스트를 선택해 주세요" }));
+      dispatch(handleAlert({ text: "리스트를 선택해 주세요", nextFunction: reOpenModal }));
       return;
     }
 

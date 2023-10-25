@@ -20,7 +20,7 @@ export default function Modal() {
   usePreventScroll(modalCategory);
 
   return (
-    <div>
+    <>
       {(() => {
         switch (modalCategory) {
           case "novelImage":
@@ -55,6 +55,6 @@ export default function Modal() {
             return <></>;
         }
       })()}
-    </div>
+    </>
   );
 }

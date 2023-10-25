@@ -25,6 +25,10 @@ export default function WriteNewListTitle() {
 
   const [createList, createListResult] = useCreateMyNovelListMutation();
 
+  const openCurrentModal = () => {
+    dispatch(openModal("writeNewListTitle"));
+  };
+
   const openPrevModal = () => {
     dispatch(openModal("addToMyNovelList"));
   };
@@ -32,7 +36,9 @@ export default function WriteNewListTitle() {
   const handleToCreateList = async () => {
     if (!titleRef.current?.value) {
       dispatch(openModal("alert"));
-      dispatch(handleAlert({ text: "리스트 제목을 입력해 주세요" }));
+      dispatch(
+        handleAlert({ text: "리스트 제목을 입력해 주세요", nextFunction: openCurrentModal }),
+      );
       return;
     }
 
