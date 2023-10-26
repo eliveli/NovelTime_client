@@ -131,7 +131,9 @@ export default function AddToMyNovelList({ isSecond }: { isSecond?: true }) {
             </Icon.IconBox>
             <GuideText>새 리스트</GuideText>
           </ContainerToCreateNewList>
-          <GuideText onClick={handleToAddNovelToLists}>완료</GuideText>
+          <GuideText isHover onClick={handleToAddNovelToLists}>
+            완료
+          </GuideText>
         </GuideContainer>
         <MyListsContainer>
           {myNovelListResult.data?.map((_) => (

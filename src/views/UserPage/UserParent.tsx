@@ -26,6 +26,7 @@ import {
   ProfileBtn,
   NavigatingToUserHome,
   UserContentContainer,
+  UserImgAndName,
 } from "./UserPage.styles";
 
 function Profile() {
@@ -162,7 +163,7 @@ function Profile() {
     };
   }, [isMobile]);
   //
-  const stylesForUserHomeIcon = `transform: scaleX(-1); ${theme.media.mobile(
+  const stylesForUserInUserHome = `transform: scaleX(-1); ${theme.media.mobile(
     `display:none;`,
   )} ${theme.media.tablet(`display:none;`)} ${theme.media.desktop(`display:block;`)}`;
   //
@@ -176,13 +177,19 @@ function Profile() {
       >
         <ProfileUserCntnr>
           <ProfileUserInfoBG>
-            <UserImg userImg={userImg} />
-            <NavigatingToUserHome onClick={() => navigate(`/user-page/${userName}`)}>
-              <UserName>{userName}</UserName>
-              <Icon.IconBox color={theme.color.main} styles={stylesForUserHomeIcon}>
-                <Icon.Runner />
-              </Icon.IconBox>
-            </NavigatingToUserHome>
+            <UserImgAndName>
+              <UserImg userImg={userImg} onClick={() => navigate(`/user-page/${userName}`)} />
+              <NavigatingToUserHome onClick={() => navigate(`/user-page/${userName}`)}>
+                <UserName>{userName}</UserName>
+                <Icon.IconBox
+                  color={theme.color.main}
+                  styles={stylesForUserInUserHome}
+                  hover="none"
+                >
+                  <Icon.Runner />
+                </Icon.IconBox>
+              </NavigatingToUserHome>
+            </UserImgAndName>
             {/* message icon for other's page, logout icon for login user's page */}
             {loginUser.userName !== userName ? (
               <MessageIcon onClick={handleMessage} src={messageIconUserPage} alt="message" />

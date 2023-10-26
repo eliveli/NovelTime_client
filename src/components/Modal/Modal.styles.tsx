@@ -610,12 +610,25 @@ export const GuideContainer = styled.div`
 `;
 export const ContainerToCreateNewList = styled.div`
   display: flex;
+
+  ${theme.media.hover(
+    `cursor: pointer;
+     opacity: 0.7;`,
+  )}
 `;
-export const GuideText = styled.span`
+export const GuideText = styled.span<{ isHover?: true }>`
   color: #959595b0;
   font-size: 16px;
   font-weight: 500;
+
+  ${({ isHover }) =>
+    isHover &&
+    theme.media.hover(
+      `cursor: pointer;
+       opacity: 0.7;`,
+    )}
 `;
+
 export const MyListsContainer = styled.div`
   display: flex;
   flex-direction: column;

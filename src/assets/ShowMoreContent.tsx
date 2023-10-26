@@ -1,5 +1,5 @@
 import Icon from "./Icon";
-import { styled } from "./styles/theme";
+import theme, { styled } from "./styles/theme";
 
 const NextContentBtn = styled.div`
   border: 1px solid rgba(0, 0, 0, 0.1);
@@ -15,6 +15,11 @@ const NextContentBtn = styled.div`
   font-weight: 300;
 
   margin-bottom: 10px;
+
+  ${theme.media.hover(
+    `cursor: pointer;
+     opacity: 0.7;`,
+  )}
 `;
 
 export default function ShowMoreContent({ _onClick }: { _onClick: () => void }) {

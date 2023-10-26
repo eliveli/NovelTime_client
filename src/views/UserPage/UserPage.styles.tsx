@@ -38,11 +38,13 @@ export const UserImg = styled.div<{ userImg: Img; isTitle?: true }>`
       height: 20px;
       margin-right: 3px;
       margin-left: -2px;
-  `}
+    `}
+
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
 `;
+
 export const UserName = styled.span`
   margin-left: 5px;
   font-size: 15px;
@@ -86,6 +88,16 @@ export const ProfileUserInfoBG = styled.div`
 
   display: flex;
   align-items: flex-end;
+`;
+
+export const UserImgAndName = styled.div`
+  display: flex;
+  align-items: flex-end;
+
+  ${theme.media.hover(
+    `cursor: pointer;
+     opacity: 0.7;`,
+  )}
 `;
 
 export const ProfileBtn = styled.button<{ isLogOut?: true }>`
@@ -146,18 +158,20 @@ export const WritingContnr = styled.div<{
   border-radius: 9px;
   padding: 10px;
   display: flex;
-  ${({ isComment }) => isComment && `flex-direction:column;`}
-  ${({ isNoContent }) =>
-    isNoContent
-      ? `justify-content: center;
-    align-items: center;`
-      : theme.media.tablet(`justify-content: space-between;`)}
-  ${({ isNovelList }) => isNovelList && `margin: 15px 0 7px;`}
 
-  ${theme.media.hover(
-    `cursor: pointer;
-    opacity: 0.7;`,
-  )}
+  ${({ isComment }) => isComment && `flex-direction:column;`}
+
+  ${({ isNoContent }) => {
+    if (isNoContent) {
+      return `justify-content: center; align-items: center;`;
+    }
+
+    return `${theme.media.tablet(`justify-content: space-between;`)}
+      ${theme.media.hover(`cursor: pointer; opacity: 0.7;`)}
+      `;
+  }}
+
+  ${({ isNovelList }) => isNovelList && `margin: 15px 0 7px;`}
 `;
 
 export const NoContentInListDetailed = styled.div`
