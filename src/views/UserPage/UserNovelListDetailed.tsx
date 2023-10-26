@@ -244,15 +244,15 @@ export default function UserNovelListDetailed({ isCreated }: { isCreated: boolea
 
   const [removeNovels, removeNovelsResult] = useRemoveNovelFromListMutation();
 
-  const [isEditing, handleEditing] = useState(false);
+  const [isEditingList, handleEditingList] = useState(false);
 
   const isLoginUsersList = loginUser.userName && loginUser.userName === userName && isCreated;
 
   // novels to be removed
   const [novelsSelected, setNovelsSelected] = useState<string[]>([]);
 
-  const finishRemoving = () => {
-    handleEditing(false);
+  const finishOrCancelRemoving = () => {
+    handleEditingList(false);
     setNovelsSelected([]);
   };
 
@@ -272,10 +272,23 @@ export default function UserNovelListDetailed({ isCreated }: { isCreated: boolea
       );
     }
 
-    finishRemoving();
+    finishOrCancelRemoving();
   };
 
-  if (isEditing) {
+  // Cancel editing list if modal opened
+  //  _user can open modal to edit profile at <Profile>
+  const firstModalCategory = useAppSelector((state) => state.modal.firstModalCategory);
+
+  useEffect(() => {
+    if (!firstModalCategory) return;
+
+    finishOrCancelRemoving();
+  }, [firstModalCategory]);
+
+  // Darken user content while editing userBG
+  const isEditingBG = !!useAppSelector((state) => state.userProfile.temporaryUserBG.src);
+
+  if (isEditingList) {
     return (
       <MainBG>
         {listDetailedResult.data && <MetaTag tags={metaTags()} />}
@@ -288,7 +301,7 @@ export default function UserNovelListDetailed({ isCreated }: { isCreated: boolea
 
           <ButtonToEditContainer>
             <ButtonToEdit onClick={handleToRemoveNovelFromList}>선택 소설 삭제</ButtonToEdit>
-            <ButtonToEdit onClick={finishRemoving}>취소</ButtonToEdit>
+            <ButtonToEdit onClick={finishOrCancelRemoving}>취소</ButtonToEdit>
           </ButtonToEditContainer>
         </CategoryMark>
 
@@ -359,7 +372,7 @@ export default function UserNovelListDetailed({ isCreated }: { isCreated: boolea
           )}
           {!!novels?.length && isLoginUsersList && (
             <ButtonToEditContainer>
-              <ButtonToEdit isNoBorder onClick={() => handleEditing(true)}>
+              <ButtonToEdit isNoBorder onClick={() => handleEditingList(true)}>
                 편집
               </ButtonToEdit>
             </ButtonToEditContainer>
@@ -418,7 +431,10 @@ export default function UserNovelListDetailed({ isCreated }: { isCreated: boolea
                   size={28}
                   onClick={handleLike}
                 >
-                  <Icon.TogglingBigHeartIcon isLike={listDetailedResult.data.novelList.isLike} />
+                  <Icon.TogglingBigHeartIcon
+                    isLike={listDetailedResult.data.novelList.isLike}
+                    isEditingBG={isEditingBG}
+                  />
                 </HearIconBox>
               )}
 
@@ -540,7 +556,10 @@ export default function UserNovelListDetailed({ isCreated }: { isCreated: boolea
                 size={28}
                 onClick={handleLike}
               >
-                <Icon.TogglingBigHeartIcon isLike={listDetailedResult.data.novelList.isLike} />
+                <Icon.TogglingBigHeartIcon
+                  isLike={listDetailedResult.data.novelList.isLike}
+                  isEditingBG={isEditingBG}
+                />
               </HearIconBox>
             )}
 

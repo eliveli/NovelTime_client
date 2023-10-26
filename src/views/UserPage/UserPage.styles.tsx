@@ -171,7 +171,7 @@ export const NoContentInListDetailed = styled.div`
   margin: 15px 0 7px;
 `;
 
-export const EditAndDeleteContainer = styled.div`
+export const EditAndDeleteContainer = styled.div<{ isEditingBG: boolean }>`
   position: absolute;
   top: 16px;
   right: 22px;
@@ -179,8 +179,13 @@ export const EditAndDeleteContainer = styled.div`
   padding-right: 6px;
   margin-right: -6px;
 
-  background-color: #ffffffd9;
-  box-shadow: 0 0 6px 4px #ffffffd9;
+  ${({ isEditingBG }) =>
+    !isEditingBG &&
+    `
+      background-color: #ffffffd9;
+      box-shadow: 0 0 6px 4px #ffffffd9;
+    `};
+
   border-radius: 2px;
 `;
 
@@ -202,14 +207,19 @@ export const UserImgContainerForListAll = styled.div`
   gap: 6px;
   font-size: 16px;
 `;
-export const UserImgForListAll = styled.div<{ userImg: Img }>`
+export const UserImgForListAll = styled.div<{ userImg: Img; isEditingBG: boolean }>`
   border-radius: 50%;
   min-width: 20px;
   height: 20px;
 
-  ${({ userImg }) => !userImg.src && `border: 1px solid #e5e5e5;`};
+  ${({ isEditingBG, userImg }) => {
+    if (isEditingBG) return "";
 
-  background-image: url(${({ userImg }) => userImg.src});
+    if (!userImg.src) return `border: 1px solid #e5e5e5;`;
+
+    return `background-image: url(${userImg.src});`;
+  }};
+
   background-position: ${({ userImg }) => userImg.position || "center"};
   background-repeat: no-repeat;
   background-size: cover;
@@ -228,21 +238,31 @@ export const IconsContnrForListAll = styled.div`
 export const NovelImgContainer = styled.div`
   display: flex;
 `;
-export const NovelImgForListAll = styled.div<{ novelImg: string; idx: number }>`
+export const NovelImgForListAll = styled.div<{
+  novelImg: string;
+  idx: number;
+  isEditingBG: boolean;
+}>`
   ${({ idx }) => idx === 1 && "width:100px;"}
   ${({ idx }) => [2, 3].includes(idx) && "width:50px;"}
   // I did like this because "novelImgs.map" didn't work
   
   height: 100px;
 
-  background-color: ${({ novelImg }) => !novelImg && "#f5f5f5cf"};
-
   border-radius: 5%;
-  background-image: url(${({ novelImg }) => novelImg});
   background-position: top;
   background-repeat: no-repeat;
   background-size: cover;
+
+  ${({ isEditingBG, novelImg }) => {
+    if (isEditingBG) return "";
+
+    if (novelImg) return `background-image: url(${novelImg});`;
+
+    return `background-color: #f5f5f5cf;`;
+  }}
 `;
+
 export const NovelImg = styled.div<{ novelImg: string; imgHeight: number }>`
   min-height: 80px;
   height: 100%;
@@ -543,4 +563,22 @@ export const ShareIconBox = styled(Icon.IconBox)`
 export const OthersTitleContnr = styled.div`
   display: flex;
   align-items: center;
+`;
+
+export const UserContentContainer = styled.div<{ isEditingBG: boolean }>`
+  ${({ isEditingBG }) =>
+    isEditingBG &&
+    `
+      position: relative;
+
+      &:before {
+        content: "";
+        position: absolute;
+        
+        width: 100%;
+        height: 100vh;
+        
+        background-color: rgba(0,0,0,0.5);
+      }
+  `}
 `;

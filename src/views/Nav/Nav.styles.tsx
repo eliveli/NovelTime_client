@@ -2,13 +2,14 @@ import theme, { styled } from "assets/styles/theme";
 import { Img } from "store/serverAPIs/types";
 import Icon from "../../assets/Icon";
 
-export const NavTopBG = styled.header<{ isChatRoom?: true }>`
+export const NavTopBG = styled.header<{ isChatRoom?: true; isEditingBG?: boolean }>`
   border-bottom: ${({ isChatRoom }) =>
     isChatRoom ? "2px solid rgba(50,50,50,0.1)" : "1px solid lightgray"};
 
   z-index: 2;
 
-  background-color: rgba(255, 255, 255, 0.9);
+  background-color: ${({ isEditingBG }) =>
+    isEditingBG ? "rgba(0,0,0,0.5)" : "rgba(255, 255, 255, 0.9)"};
 
   width: 100%;
   position: sticky;
@@ -189,7 +190,7 @@ export const NavText = styled.span<{ isActive: boolean }>`
   ${({ isActive }) => isActive && `color:${theme.color.main};`}
 `;
 
-export const MyPageTablet = styled.button`
+export const MyPageTablet = styled.button<{ isEditingBG?: boolean }>`
   padding: 3px 6px;
   white-space: nowrap;
   font-size: 15px;
@@ -199,7 +200,7 @@ export const MyPageTablet = styled.button`
 
   border-radius: 10px;
   border: 1px solid rgba(0, 0, 0, 0.2);
-  background-color: white;
+  background-color: ${({ isEditingBG }) => (isEditingBG ? "transparent" : "white")};
   color: rgba(0, 0, 0, 0.6);
 
   @media screen and (min-width: 768px) {
@@ -339,20 +340,25 @@ export const SearchIconBox = styled(Icon.IconBox)`
   max-height: 27px;
 `;
 
-export const UserImg = styled.div<{ userImg: Img }>`
+export const UserImg = styled.div<{ userImg: Img; isEditingBG?: boolean }>`
   border-radius: 50%;
   min-width: 30px;
   height: 30px;
 
-  ${({ userImg }) => !userImg.src && `border: 1px solid #e5e5e5;`};
+  ${({ isEditingBG, userImg }) => {
+    if (isEditingBG) return "";
 
-  background-image: url(${({ userImg }) => userImg.src});
+    if (!userImg.src) return `border: 1px solid #e5e5e5;`;
+
+    return `background-image: url(${userImg.src});`;
+  }};
+
   background-position: ${({ userImg }) => userImg.position || "center"};
   background-repeat: no-repeat;
   background-size: cover;
 `;
 
-export const MyPageMobile = styled.div<{ userImg: Img }>`
+export const MyPageMobile = styled.div<{ userImg: Img; isEditingBG?: boolean }>`
   min-width: 27px;
   max-width: 27px;
   min-height: 27px;
@@ -362,9 +368,14 @@ export const MyPageMobile = styled.div<{ userImg: Img }>`
 
   border-radius: 50%;
 
-  ${({ userImg }) => !userImg.src && `border: 1px solid #e5e5e5;`};
+  ${({ isEditingBG, userImg }) => {
+    if (isEditingBG) return "";
 
-  background-image: url(${({ userImg }) => userImg.src});
+    if (!userImg.src) return `border: 1px solid #e5e5e5;`;
+
+    return `background-image: url(${userImg.src});`;
+  }};
+
   background-position: ${({ userImg }) => userImg.position || "center"};
   background-repeat: no-repeat;
   background-size: cover;

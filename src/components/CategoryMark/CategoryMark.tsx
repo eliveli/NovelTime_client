@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { goToUserPage } from "utils";
-import { useAppDispatch } from "store/hooks";
+import { useAppDispatch, useAppSelector } from "store/hooks";
 import { handleAlert, openFirstModal } from "store/clientSlices/modalSlice";
 import {
   CategoryContainer,
@@ -66,6 +66,9 @@ export default function CategoryMark({
 }) {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+
+  // Darken user content while editing userBG
+  const isEditingBG = !!useAppSelector((state) => state.userProfile.temporaryUserBG.src);
 
   if (linkPath) {
     return (
@@ -145,13 +148,15 @@ export default function CategoryMark({
       }
       return `/user-page/${infoFromUserPage.userName}/${infoFromUserPage.path}`;
     };
-
     return (
       <CategoryContainer>
-        <CategoryDesc fontSize={fontSize}>{categoryText}</CategoryDesc>
+        <CategoryDesc fontSize={fontSize} isEditingBG={isEditingBG}>
+          {categoryText}
+        </CategoryDesc>
 
         {isShowAllButton && (
           <GoToAllContentBtn
+            isEditingBG={isEditingBG}
             onClick={() => {
               if (isNoContent) {
                 dispatch(openFirstModal("alert"));
@@ -169,7 +174,7 @@ export default function CategoryMark({
   }
   return (
     <CategoryContainer>
-      <CategoryDesc>{categoryText}</CategoryDesc>
+      <CategoryDesc isEditingBG={isEditingBG}>{categoryText}</CategoryDesc>
 
       {isShowAllMark && (
         <LinkCategory to={`/novel-list/${categoryText}/${categoryId as string}`}>

@@ -1,4 +1,5 @@
 import { useWhetherItIsDesktop } from "utils";
+import { useAppSelector } from "store/hooks";
 import {
   NavPC,
   NavMobileMainTop,
@@ -10,7 +11,6 @@ import { NavTopBG, NavBottomBG } from "./Nav.styles";
 
 export function MainListNav() {
   const isDesktop = useWhetherItIsDesktop();
-
   return (
     <>
       {isDesktop && (
@@ -37,8 +37,11 @@ export function MainListNav() {
 export function DetailNav() {
   const isDesktop = useWhetherItIsDesktop();
 
+  // Darken user content while editing userBG
+  const isEditingBG = !!useAppSelector((state) => state.userProfile.temporaryUserBG.src);
+
   return (
-    <NavTopBG>
+    <NavTopBG isEditingBG={isEditingBG}>
       {isDesktop && <NavPC />}
       {!isDesktop && <NavMobileDetail />}
     </NavTopBG>

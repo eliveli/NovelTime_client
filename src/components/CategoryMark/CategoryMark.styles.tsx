@@ -78,10 +78,14 @@ export const CategoryDesc = styled.p<{
   fontSize?: number;
   isUserNovelList?: true;
   isUserMark?: boolean;
+  isEditingBG?: boolean;
 }>`
   margin-bottom: 0;
-  border-bottom: 1px dotted lightgray;
+
   font-size: ${({ fontSize }) => fontSize || 16}px;
+
+  ${({ isEditingBG }) => !isEditingBG && `border-bottom: 1px dotted lightgray;`}
+
   ${({ isUserNovelList }) =>
     isUserNovelList &&
     `margin-top: 12px; border-bottom: 0; color: rgba(0,0,0,0.5); font-weight:600;`}
@@ -117,12 +121,12 @@ export const CategoryDescUserContnr = styled.div`
   align-items: flex-end;
 `;
 
-export const GoToAllContentBtn = styled.button`
+export const GoToAllContentBtn = styled.button<{ isEditingBG?: boolean }>`
   white-space: nowrap;
 
   border: 1px solid rgba(0, 0, 0, 0.2);
   border-radius: 20px;
-  background-color: white;
+  background-color: ${({ isEditingBG }) => (isEditingBG ? "inherit" : "white")};
   padding: 2px 9px 2px 7px;
   margin-left: 12px;
 

@@ -98,10 +98,15 @@ const iconStyleHover = () => `
       color: rgba(0, 0, 0, 0.2);
   `)}`;
 
-const TogglingBigHeartIcon = styled(HiHeart)<{ isLike: boolean }>`
+const TogglingBigHeartIcon = styled(HiHeart)<{ isLike: boolean; isEditingBG: boolean }>`
   width: 100%;
   height: 100%;
-  color: ${({ isLike }) => (isLike ? `${theme.color.main}` : `rgba(150, 150, 150, 0.4)`)};
+
+  ${({ isLike, isEditingBG }) => {
+    if (isEditingBG) return "";
+    if (isLike) return `color: ${theme.color.main}`;
+    return `color: rgba(150, 150, 150, 0.4)`;
+  }};
 
   @media (hover: hover) {
     &:hover {

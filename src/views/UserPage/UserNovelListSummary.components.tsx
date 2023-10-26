@@ -92,6 +92,9 @@ const UserNovelList = React.memo(
       dispatch(openFirstModal("confirm"));
     };
 
+    // Darken user content while editing userBG
+    const isEditingBG = !!useAppSelector((state) => state.userProfile.temporaryUserBG.src);
+
     return (
       <ListInfoContnr
         onClick={() => {
@@ -104,6 +107,7 @@ const UserNovelList = React.memo(
       >
         {isWriter && (
           <EditAndDeleteContainer
+            isEditingBG={isEditingBG}
             onClick={(event: React.MouseEvent<HTMLElement>) => event.stopPropagation()}
           >
             <EditAndDelete
@@ -118,7 +122,7 @@ const UserNovelList = React.memo(
           <NovelTitle>{listTitle}</NovelTitle>
           {userName && (
             <UserImgContainerForListAll>
-              <UserImgForListAll userImg={userImg as Img} />
+              <UserImgForListAll userImg={userImg as Img} isEditingBG={isEditingBG} />
               <WritingUserName>{userName}</WritingUserName>
             </UserImgContainerForListAll>
           )}
@@ -138,9 +142,9 @@ const UserNovelList = React.memo(
           </IconsContnrForListAll>
         </ListInfoSubContainer>
         <NovelImgContainer>
-          <NovelImgForListAll idx={1} novelImg={novelImgs[0]} />
-          <NovelImgForListAll idx={2} novelImg={novelImgs[1]} />
-          <NovelImgForListAll idx={3} novelImg={novelImgs[2]} />
+          <NovelImgForListAll idx={1} novelImg={novelImgs[0]} isEditingBG={isEditingBG} />
+          <NovelImgForListAll idx={2} novelImg={novelImgs[1]} isEditingBG={isEditingBG} />
+          <NovelImgForListAll idx={3} novelImg={novelImgs[2]} isEditingBG={isEditingBG} />
         </NovelImgContainer>
       </ListInfoContnr>
     );

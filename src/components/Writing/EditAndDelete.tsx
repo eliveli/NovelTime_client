@@ -17,7 +17,7 @@ const Button = styled.button<{ buttonStyles?: string }>`
 
   ${theme.media.hover(
     `cursor: pointer;
-    opacity: 0.7;`,
+     opacity: 0.7;`,
   )}
 `;
 

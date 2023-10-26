@@ -129,10 +129,13 @@ export function NavPC() {
     return isCurrentPath(partialPath);
   };
 
+  // Darken user content while editing userBG
+  const isEditingBG = !!useAppSelector((state) => state.userProfile.temporaryUserBG.src);
+
   return (
     <NavContentBoxPC>
       <LogoContainer>
-        <Logo src={logoPC} onClick={() => navigate(`/`)} />
+        {!isEditingBG && <Logo src={logoPC} onClick={() => navigate(`/`)} />}
       </LogoContainer>
 
       <NavContentPC>
@@ -162,7 +165,10 @@ export function NavPC() {
         </SearchIconBox>
 
         {loginUser.userName ? (
-          <MyPageTablet onClick={() => navigate(`${USER_PAGE}/${loginUser.userName}`)}>
+          <MyPageTablet
+            isEditingBG={isEditingBG}
+            onClick={() => navigate(`${USER_PAGE}/${loginUser.userName}`)}
+          >
             프로필
           </MyPageTablet>
         ) : (
@@ -359,6 +365,11 @@ export function NavMobileDetail() {
   const profileUserName = userNameFromSlice === userNameFromURL ? userNameFromSlice : "";
   const profileUserImg =
     userNameFromSlice === userNameFromURL ? userImgFromSlice : { src: "", position: "" };
+
+  // Darken user content while editing userBG
+  const isEditingBG = !!useAppSelector((state) => state.userProfile.temporaryUserBG.src);
+
+  //
   if (isCurrentPath("iframe")) return <></>;
 
   return (
@@ -385,15 +396,18 @@ export function NavMobileDetail() {
 
       {isCurrentPath(USER_PAGE) && (
         <PageTitle onClick={() => navigate(`${USER_PAGE}/${profileUserName}`)} isHover>
-          <UserImg userImg={profileUserImg} />
+          <UserImg userImg={profileUserImg} isEditingBG={isEditingBG} />
           <UserName>{profileUserName}</UserName>
-          <Icon.IconBox
-            color={themeStyle.color.mainLight}
-            hover="none"
-            styles="transform: scaleX(-1);"
-          >
-            <Icon.Runner />
-          </Icon.IconBox>
+
+          {!isEditingBG && (
+            <Icon.IconBox
+              color={themeStyle.color.mainLight}
+              hover="none"
+              styles="transform: scaleX(-1);"
+            >
+              <Icon.Runner />
+            </Icon.IconBox>
+          )}
         </PageTitle>
       )}
       {isCurrentPath(TALK_DETAIL) && <PageTitle>Free Talk</PageTitle>}
@@ -409,6 +423,7 @@ export function NavMobileDetail() {
 
         {isCurrentPath(USER_PAGE) && isLoginUser && isTablet && (
           <MyPageTablet
+            isEditingBG={isEditingBG}
             onClick={() => {
               navigate(`${USER_PAGE}/${loginUser.userName}`);
             }}
@@ -418,6 +433,7 @@ export function NavMobileDetail() {
         )}
         {isCurrentPath(USER_PAGE) && isLoginUser && !isTablet && (
           <MyPageMobile
+            isEditingBG={isEditingBG}
             userImg={loginUser.userImg}
             onClick={() => {
               navigate(`${USER_PAGE}/${loginUser.userName}`);

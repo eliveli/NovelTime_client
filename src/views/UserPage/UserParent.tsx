@@ -25,6 +25,7 @@ import {
   LogOutIconBox,
   ProfileBtn,
   NavigatingToUserHome,
+  UserContentContainer,
 } from "./UserPage.styles";
 
 function Profile() {
@@ -241,11 +242,17 @@ export default function UserParent() {
     //   by clicking the profile icon in nav bar
   }, [data, userName, isError]);
 
+  // Darken user content while editing userBG
+  const isEditingBG = !!useAppSelector((state) => state.userProfile.temporaryUserBG.src);
+
   return (
     <>
       {isFetching && <Spinner styles="fixed" />}
       <Profile />
-      <Outlet />
+
+      <UserContentContainer isEditingBG={isEditingBG}>
+        <Outlet />
+      </UserContentContainer>
     </>
   );
 }
