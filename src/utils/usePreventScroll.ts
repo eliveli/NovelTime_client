@@ -1,9 +1,10 @@
 import { useEffect } from "react";
 
 function usePreventScroll(firstModalCategory?: string) {
-  // 모달 띄운 동안 body 영역 스크롤 막기
+  // Prevent scrolling body while modal opens
+  //  except for when editing profile so as to see the whole userBG that user edits now
   useEffect(() => {
-    if (firstModalCategory) {
+    if (firstModalCategory && firstModalCategory !== "editProfile") {
       document.body.style.overflow = "hidden";
       return () => {
         document.body.style.overflow = "unset";
