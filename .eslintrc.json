@@ -53,7 +53,7 @@
         "import/prefer-default-export": "warn",
         "no-confusing-arrow": "off",
         "implicit-arrow-linebreak": "off",
-        "no-nested-ternary": "warn",
+        "no-nested-ternary": "off",
         "@typescript-eslint/indent": "off",
         "max-len":"warn",
         "operator-linebreak":"off",

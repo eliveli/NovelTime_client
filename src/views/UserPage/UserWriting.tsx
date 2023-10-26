@@ -1,7 +1,6 @@
-/* eslint-disable no-nested-ternary */
 import MainBG from "components/MainBG";
 import { CategoryMark } from "components/CategoryMark";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import Icon from "assets/Icon";
 import { useAppSelector } from "store/hooks";
 import { useParams } from "react-router-dom";
@@ -30,18 +29,17 @@ export default function UserWriting({ isCreated }: { isCreated: boolean }) {
     isCreated, // is created or is liked
   });
 
-  // to set this is required because
-  //   it can be done that user don't request content but do change writing filter(content)
-  // (so it is not always correct to get the current content value from "paramsForRequest")
-  const currentContentRef = useRef<ContentInfo>({ type: "T", isNextOrder: false, currentOrder: 1 });
-
-  const handleCurrentContent = (currentContent: ContentInfo) => {
-    currentContentRef.current = currentContent;
-  };
+  // it can be different from "paramsForRequest" above
+  //  when user doesn't request as choosing content filter which content exists already
+  const [currentContentFilter, setCurrentContentFilter] = useState<ContentInfo>({
+    type: "T",
+    isNextOrder: false,
+    currentOrder: 1,
+  });
 
   const writingResult = useGetWritingQuery(paramsForRequest);
 
-  // states for saving content from server in my writing page
+  // content from server in my writing page
   const [talksUserCreated, setTalksUserCreated] = useState<{
     talks: TalkOrRecommend[];
     isNextOrder: boolean;
@@ -58,7 +56,7 @@ export default function UserWriting({ isCreated }: { isCreated: boolean }) {
     currentOrder: number;
   }>();
 
-  // states for saving content from server in other's writing page
+  // content from server in other's writing page
   const [talksUserLikes, setTalksUserLikes] = useState<{
     talks: TalkOrRecommend[];
     isNextOrder: boolean;
@@ -70,10 +68,8 @@ export default function UserWriting({ isCreated }: { isCreated: boolean }) {
     currentOrder: number;
   }>();
 
-  // get and save the content in my writing page
+  // Get and Set content in my writing page //
   useEffect(() => {
-    // don't save cached data for other's writing
-    // it may remain because of rtk query trait
     if (!isCreated) return;
 
     if (!writingResult.data) return;
@@ -83,7 +79,7 @@ export default function UserWriting({ isCreated }: { isCreated: boolean }) {
     const { isNextOrder } = writingResult.data;
 
     // save talks
-    if (writingsFromServer && writingsFromServer[0]?.talkId) {
+    if (writingsFromServer && paramsForRequest.contentType === "T") {
       const currentOrder = talksUserCreated ? talksUserCreated.currentOrder + 1 : 1;
       if (!talksUserCreated) {
         setTalksUserCreated({
@@ -98,16 +94,18 @@ export default function UserWriting({ isCreated }: { isCreated: boolean }) {
           currentOrder,
         });
       }
-      // set current content info
-      currentContentRef.current = {
+      // set current content summary
+      setCurrentContentFilter({
         type: "T",
         isNextOrder,
         currentOrder,
-      };
+      });
+
+      return;
     }
 
     // save recommends
-    if (writingsFromServer && writingsFromServer[0]?.recommendId) {
+    if (writingsFromServer && paramsForRequest.contentType === "R") {
       const currentOrder = recommendsUserCreated ? recommendsUserCreated.currentOrder + 1 : 1;
 
       if (!recommendsUserCreated) {
@@ -124,11 +122,13 @@ export default function UserWriting({ isCreated }: { isCreated: boolean }) {
         });
       }
       // set current content info
-      currentContentRef.current = {
+      setCurrentContentFilter({
         type: "R",
         isNextOrder,
         currentOrder,
-      };
+      });
+
+      return;
     }
 
     // save comments
@@ -148,27 +148,27 @@ export default function UserWriting({ isCreated }: { isCreated: boolean }) {
         });
       }
       // set current content info
-      currentContentRef.current = {
+      setCurrentContentFilter({
         type: "C",
         isNextOrder,
         currentOrder,
-      };
+      });
     }
   }, [writingResult.data]);
 
-  // get and save the content in other's writing page
+  // Get and Set content in other's writing page //
   useEffect(() => {
-    // don't save cached data for my writing
-    // it may remain because of rtk query trait
     if (isCreated) return;
 
     if (!writingResult.data) return;
 
     const writingsFromServer = writingResult.data.writingsUserLikes;
+    if (!writingsFromServer) return;
+
     const { isNextOrder } = writingResult.data;
 
     // save talks
-    if (writingsFromServer && writingsFromServer[0]?.talkId) {
+    if (paramsForRequest.contentType === "T") {
       const currentOrder = talksUserLikes ? talksUserLikes.currentOrder + 1 : 1;
       if (!talksUserLikes) {
         setTalksUserLikes({
@@ -183,16 +183,18 @@ export default function UserWriting({ isCreated }: { isCreated: boolean }) {
           currentOrder,
         });
       }
-      // set current content info
-      currentContentRef.current = {
+      // set current content summary
+      setCurrentContentFilter({
         type: "T",
         isNextOrder,
         currentOrder,
-      };
+      });
+
+      return;
     }
 
     // save recommends
-    if (writingsFromServer && writingsFromServer[0]?.recommendId) {
+    if (paramsForRequest.contentType === "R") {
       const currentOrder = recommendsUserLikes ? recommendsUserLikes.currentOrder + 1 : 1;
 
       if (!recommendsUserLikes) {
@@ -209,19 +211,19 @@ export default function UserWriting({ isCreated }: { isCreated: boolean }) {
         });
       }
       // set current content info
-      currentContentRef.current = {
+      setCurrentContentFilter({
         type: "R",
         isNextOrder,
         currentOrder,
-      };
+      });
     }
   }, [writingResult.data]);
 
-  // get the content page mark
+  //
   const contentPageMark = contentMark(userName as string, loginUser.userName, isCreated, true);
-  // writing category array : my writing or other's writing
-  const writingCategory = isCreated ? ["프리톡", "추천", "댓글"] : ["프리톡", "추천"];
-  // set filter category
+
+  const writingCategory = isCreated ? ["프리톡", "추천", "댓글"] : ["프리톡", "추천"]; // my writing : other's writing
+
   const [writingFilter, selectWritingFilter] = useState("프리톡");
 
   return (
@@ -245,52 +247,74 @@ export default function UserWriting({ isCreated }: { isCreated: boolean }) {
         commentsUserCreated={commentsUserCreated}
         talksUserLikes={talksUserLikes}
         recommendsUserLikes={recommendsUserLikes}
-        handleCurrentContent={handleCurrentContent}
+        setCurrentContentFilter={setCurrentContentFilter}
       />
-      <WritingSection
-        isNoContent={
-          (writingFilter === "프리톡" && !talksUserCreated && !talksUserLikes) ||
-          (writingFilter === "추천" && !recommendsUserCreated && !recommendsUserLikes) ||
-          (writingFilter === "댓글" && !commentsUserCreated)
-        }
-      >
-        {writingFilter === "프리톡" &&
-          // return talks for my writing or talks for other's writing or no-content-mark
-          (talksUserCreated ? (
-            talksUserCreated.talks.map((_) => <Writing key={_.talkId} writingInfo={_} />)
-          ) : talksUserLikes ? (
-            talksUserLikes.talks.map((_) => <Writing key={_.talkId} writingInfo={_} />)
-          ) : (
-            <NoContent contentType="T" isCreatedBy={!!talksUserCreated} />
-          ))}
-        {writingFilter === "추천" &&
-          // return recommends for my writing or recommends for other's writing or no-content-mark
-          (recommendsUserCreated ? (
-            recommendsUserCreated.recommends.map((_) => (
-              <Writing key={_.recommendId} writingInfo={_} />
-            ))
-          ) : recommendsUserLikes ? (
-            recommendsUserLikes.recommends.map((_) => (
-              <Writing key={_.recommendId} writingInfo={_} />
-            ))
-          ) : (
-            <NoContent contentType="R" isCreatedBy={!!recommendsUserCreated} />
-          ))}
-        {writingFilter === "댓글" &&
-          // return comments or no-content-mark
-          (commentsUserCreated ? (
-            commentsUserCreated.comments.map((_) => <Comment key={_.commentId} commentInfo={_} />)
-          ) : (
-            <NoContent contentType="C" isCreatedBy={!!commentsUserCreated} />
-          ))}
-      </WritingSection>
-      {currentContentRef.current.isNextOrder && (
+
+      {isCreated && (
+        <WritingSection
+          isNoContent={
+            (writingFilter === "프리톡" && !talksUserCreated?.talks?.length) ||
+            (writingFilter === "추천" && !recommendsUserCreated?.recommends?.length) ||
+            (writingFilter === "댓글" && !commentsUserCreated?.comments?.length)
+          }
+        >
+          {writingFilter === "프리톡" &&
+            (talksUserCreated?.talks?.length ? (
+              talksUserCreated.talks.map((_) => <Writing key={_.talkId} writingInfo={_} />)
+            ) : (
+              <NoContent contentType="T" isCreatedBy={!!talksUserCreated} />
+            ))}
+
+          {writingFilter === "추천" &&
+            (recommendsUserCreated?.recommends?.length ? (
+              recommendsUserCreated.recommends.map((_) => (
+                <Writing key={_.recommendId} writingInfo={_} />
+              ))
+            ) : (
+              <NoContent contentType="R" isCreatedBy={!!recommendsUserCreated} />
+            ))}
+
+          {writingFilter === "댓글" &&
+            (commentsUserCreated?.comments?.length ? (
+              commentsUserCreated.comments.map((_) => <Comment key={_.commentId} commentInfo={_} />)
+            ) : (
+              <NoContent contentType="C" isCreatedBy={!!commentsUserCreated} />
+            ))}
+        </WritingSection>
+      )}
+
+      {!isCreated && (
+        <WritingSection
+          isNoContent={
+            (writingFilter === "프리톡" && !talksUserLikes?.talks?.length) ||
+            (writingFilter === "추천" && !recommendsUserLikes?.recommends?.length)
+          }
+        >
+          {writingFilter === "프리톡" &&
+            (talksUserLikes?.talks?.length ? (
+              talksUserLikes.talks.map((_) => <Writing key={_.talkId} writingInfo={_} />)
+            ) : (
+              <NoContent contentType="T" isCreatedBy={!!talksUserCreated} />
+            ))}
+
+          {writingFilter === "추천" &&
+            (recommendsUserLikes?.recommends?.length ? (
+              recommendsUserLikes.recommends.map((_) => (
+                <Writing key={_.recommendId} writingInfo={_} />
+              ))
+            ) : (
+              <NoContent contentType="R" isCreatedBy={!!recommendsUserCreated} />
+            ))}
+        </WritingSection>
+      )}
+
+      {currentContentFilter.isNextOrder && (
         <ShowMoreContent
           _onClick={() => {
             setParamsForRequest({
               ...paramsForRequest,
-              contentType: currentContentRef.current.type,
-              order: currentContentRef.current.currentOrder + 1,
+              contentType: currentContentFilter.type,
+              order: currentContentFilter.currentOrder + 1,
             });
           }}
         />

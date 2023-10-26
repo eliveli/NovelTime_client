@@ -215,7 +215,7 @@ interface WritingProps {
     isNextOrder: boolean;
     currentOrder: number;
   };
-  handleCurrentContent?: (currentContent: ContentInfo) => void;
+  setCurrentContentFilter?: React.Dispatch<React.SetStateAction<ContentInfo>>;
 }
 export function WritingFilter({
   writingCategory,
@@ -228,7 +228,7 @@ export function WritingFilter({
   commentsUserCreated,
   talksUserLikes,
   recommendsUserLikes,
-  handleCurrentContent,
+  setCurrentContentFilter,
 }: WritingProps) {
   return (
     <FilterContnr>
@@ -239,9 +239,8 @@ export function WritingFilter({
           onClick={() => {
             selectWritingFilter(_);
 
-            // it is for UserPageWriting not for UserPageHome //
-            // - for my writing page
-            // -- request content when clicking other filter but the content is empty
+            // Used in my writing, <UserWriting>
+            // -- request content when clicking other filter which content is empty
             if (isCreated && setParamsForRequest) {
               if (_ === "프리톡" && !talksUserCreated) {
                 setParamsForRequest((paramsForRequest) => ({
@@ -263,7 +262,7 @@ export function WritingFilter({
                 }));
               }
               // -- set current content when changing writing filter without request
-              else if (handleCurrentContent) {
+              else if (setCurrentContentFilter) {
                 const getContentTypeOfWritingFilter = (currentFilter: string) =>
                   currentFilter === "프리톡" ? "T" : currentFilter === "추천" ? "R" : "C";
 
@@ -281,11 +280,12 @@ export function WritingFilter({
                     ? (recommendsUserCreated?.currentOrder as number)
                     : (commentsUserCreated?.currentOrder as number);
 
-                handleCurrentContent({ type: contentType, isNextOrder, currentOrder });
+                setCurrentContentFilter({ type: contentType, isNextOrder, currentOrder });
               }
             }
-            // - for other's writing page
-            // -- request content when clicking other filter but the content is empty
+
+            // Used in other's writing, <UserWriting>
+            // -- request content when clicking other filter which content is empty
             if (!isCreated && setParamsForRequest) {
               if (_ === "프리톡" && !talksUserLikes) {
                 setParamsForRequest((paramsForRequest) => ({
@@ -301,7 +301,7 @@ export function WritingFilter({
                 }));
               }
               // -- set current content when changing writing filter without request
-              else if (handleCurrentContent) {
+              else if (setCurrentContentFilter) {
                 const getContentTypeOfWritingFilter = (currentFilter: string) =>
                   currentFilter === "프리톡" ? "T" : "R";
 
@@ -316,7 +316,7 @@ export function WritingFilter({
                     ? (talksUserLikes?.currentOrder as number)
                     : (recommendsUserLikes?.currentOrder as number);
 
-                handleCurrentContent({ type: contentType, isNextOrder, currentOrder });
+                setCurrentContentFilter({ type: contentType, isNextOrder, currentOrder });
               }
             }
           }}
