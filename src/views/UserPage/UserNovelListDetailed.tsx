@@ -9,6 +9,7 @@ import { useAppDispatch, useAppSelector } from "store/hooks";
 import {
   handleAlert,
   handleConfirm,
+  logoImg,
   openFirstModal,
   setMetaTags,
 } from "store/clientSlices/modalSlice";
@@ -206,24 +207,7 @@ export default function UserNovelListDetailed({ isCreated }: { isCreated: boolea
   // - if titleListHeight is not longer than the height 32px that is 1 line of ListTitleContnr,
   // - then don't show the button even if isListMore is true
   const titleListHeight = useComponentHeight(titleListRef, containerWidth, isListMore);
-  //
-  const metaTags = () => {
-    let description = "";
-    if (isCreated && userName) {
-      description = `${userName}님이 만든 리스트 - ${contentPageMark}`;
-    } else {
-      description = `${
-        listDetailedResult.data?.novelList.userName || ""
-      }님이 만든 리스트 - ${contentPageMark}`;
-    }
 
-    return {
-      title: `${listDetailedResult.data?.novelList.listTitle || ""}`,
-      description,
-      image: listDetailedResult.data?.novelList.userImg?.src || loginUser.userImg.src,
-      url: window.location.href,
-    };
-  };
   //
   useEffect(() => {
     if (!listDetailedResult.data) return;
@@ -233,10 +217,6 @@ export default function UserNovelListDetailed({ isCreated }: { isCreated: boolea
       dispatch(openFirstModal("alert"));
       dispatch(handleAlert({ text: "리스트가 존재하지 않습니다." }));
       navigate(`/user-page/${userName as string}`, { replace: true });
-    }
-    //
-    if (listDetailedResult.data) {
-      dispatch(setMetaTags(metaTags()));
     }
   }, [listDetailedResult.data]);
 
@@ -275,7 +255,28 @@ export default function UserNovelListDetailed({ isCreated }: { isCreated: boolea
     finishOrCancelRemoving();
   };
 
-  // Cancel editing list if modal opened
+  // Set meta tags //
+  const userImg = useAppSelector((state) => state.userProfile.user.userImg);
+
+  const metaTags = () => {
+    const text = isCreated ? "만든" : "좋아하는";
+    const title = userName ? `${userName}님이 ${text} 리스트` : "";
+
+    return {
+      title,
+      description: `${listDetailedResult.data?.novelList.listTitle || ""}`,
+      image: userImg.src || logoImg,
+      url: window.location.href,
+    };
+  };
+
+  useEffect(() => {
+    if (!listDetailedResult.data) return;
+
+    dispatch(setMetaTags(metaTags()));
+  }, [listDetailedResult.data]);
+
+  // Cancel editing list if modal opened //
   //  _user can open modal to edit profile at <Profile>
   const firstModalCategory = useAppSelector((state) => state.modal.firstModalCategory);
 

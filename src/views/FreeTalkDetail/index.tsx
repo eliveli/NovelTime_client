@@ -284,7 +284,7 @@ export default function FreeTalkDetail() {
   const metaTags = () => ({
     title: talk.data?.talk.talkTitle || "",
     description: talk.data?.talk.talkDesc || "",
-    image: talk.data?.talk.talkImg || logoImg,
+    image: talk.data?.talk.talkImg || talk.data?.talk.userImg.src || logoImg,
     url: window.location.href,
   });
 

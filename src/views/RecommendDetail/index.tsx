@@ -117,7 +117,8 @@ export default function NovelDetailRecommend() {
   const metaTags = () => ({
     title: recommend.data?.recommend.recommendTitle || "",
     description: recommend.data?.recommend.recommendDesc || "",
-    image: recommend.data?.recommend.recommendImg || logoImg,
+    image:
+      recommend.data?.recommend.recommendImg || recommend.data?.recommend.userImg.src || logoImg,
     url: window.location.href,
   });
 

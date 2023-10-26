@@ -2,11 +2,13 @@ import MainBG from "components/MainBG";
 import { CategoryMark } from "components/CategoryMark";
 import { useEffect, useState } from "react";
 import Icon from "assets/Icon";
-import { useAppSelector } from "store/hooks";
+import { useAppDispatch, useAppSelector } from "store/hooks";
 import { useParams } from "react-router-dom";
 import { useGetWritingQuery } from "store/serverAPIs/novelTime";
 import ShowMoreContent from "assets/ShowMoreContent";
 import Spinner from "assets/Spinner";
+import MetaTag from "utils/MetaTag";
+import { logoImg, setMetaTags } from "store/clientSlices/modalSlice";
 import { TalkOrRecommend, CommentUserCreated } from "../../store/serverAPIs/types";
 import { Writing, Comment, WritingFilter, NoContent } from "./UserWriting.components";
 import { ShareIconBox, WritingSection } from "./UserPage.styles";
@@ -17,6 +19,7 @@ export type ContentInfo = {
   isNextOrder: boolean;
   currentOrder: number;
 };
+
 export default function UserWriting({ isCreated }: { isCreated: boolean }) {
   const loginUser = useAppSelector((state) => state.loginUser.user);
 
@@ -226,8 +229,32 @@ export default function UserWriting({ isCreated }: { isCreated: boolean }) {
 
   const [writingFilter, selectWritingFilter] = useState("프리톡");
 
+  // Set meta tags //
+  const userImg = useAppSelector((state) => state.userProfile.user.userImg);
+
+  const metaTags = () => {
+    const text = isCreated ? "작성한 글 목록" : "좋아하는 글 목록";
+    const title = userName ? `${userName}님이 ${text}` : "";
+
+    return {
+      title,
+      description: "",
+      image: userImg.src || logoImg,
+      url: window.location.href,
+    };
+  };
+
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    if (!writingResult.data) return;
+
+    dispatch(setMetaTags(metaTags()));
+  }, [writingResult.data]);
+
   return (
     <MainBG>
+      {writingResult.data && <MetaTag tags={metaTags()} />}
       {writingResult.isFetching && <Spinner styles="fixed" />}
 
       <CategoryMark categoryText={contentPageMark}>

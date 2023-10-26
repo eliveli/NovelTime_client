@@ -5,7 +5,7 @@ import MainBG from "components/MainBG";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "store/hooks";
-import { setMetaTags } from "store/clientSlices/modalSlice";
+import { logoImg, setMetaTags } from "store/clientSlices/modalSlice";
 
 import MetaTag from "utils/MetaTag";
 import { useGetListSummaryQuery } from "store/serverAPIs/novelTime";
@@ -23,22 +23,6 @@ export default function UserNovelListSummary({ isCreated }: { isCreated: boolean
     userName: userName as string,
     isCreated, // isCreated or isLiked
   });
-
-  const listTitles = listSummaryResult.data?.map((_) => _.listTitle).toString() || "";
-
-  const metaTags = () => ({
-    title: userName ? `${userName}님이${!isCreated ? " 만든 " : " 좋아하는 "}리스트` : "",
-    description: listTitles,
-    image:
-      (listSummaryResult.data && listSummaryResult.data[0]?.userImg?.src) || loginUser.userImg.src,
-    url: window.location.href,
-  });
-
-  useEffect(() => {
-    if (!listSummaryResult.data) return;
-    dispatch(setMetaTags(metaTags()));
-  }, [listSummaryResult.data]);
-
   const setCategoryText = () => {
     if (!userName) return "";
 
@@ -51,6 +35,30 @@ export default function UserNovelListSummary({ isCreated }: { isCreated: boolean
     if (isCreated) return `${userName}'s List`;
     return `Other's List ${userName} Like`;
   };
+
+  // Set meta tags //
+  const userImg = useAppSelector((state) => state.userProfile.user.userImg);
+
+  const listTitles = listSummaryResult.data?.map((_) => _.listTitle).toString() || "";
+
+  const metaTags = () => {
+    const text = isCreated ? "만든" : "좋아하는";
+    const title = userName ? `${userName}님이 ${text} 리스트` : "";
+
+    return {
+      title,
+      description: listTitles,
+      image: userImg.src || logoImg,
+      url: window.location.href,
+    };
+  };
+
+  useEffect(() => {
+    if (!listSummaryResult.data) return;
+
+    dispatch(setMetaTags(metaTags()));
+  }, [listSummaryResult.data]);
+
   return (
     <MainBG>
       {listSummaryResult.data && <MetaTag tags={metaTags()} />}
