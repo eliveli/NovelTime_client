@@ -1,4 +1,4 @@
-import { useWhetherItIsDesktop } from "utils";
+import { isCurrentPath, useWhetherItIsDesktop } from "utils";
 import { useAppSelector } from "store/hooks";
 import {
   NavPC,
@@ -11,6 +11,10 @@ import { NavTopBG, NavBottomBG } from "./Nav.styles";
 
 export function MainListNav() {
   const isDesktop = useWhetherItIsDesktop();
+
+  const isIframe = isCurrentPath("iframe");
+  if (isIframe) return <></>;
+
   return (
     <>
       {isDesktop && (

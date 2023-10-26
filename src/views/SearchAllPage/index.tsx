@@ -88,7 +88,7 @@ export default function SearchPage() {
 
       {/* 받아오는 데이터 : 노블/톡/리코멘드 에 따라 컴포넌트 분리 구성 */}
 
-      {listForInfntScroll?.novels?.length && (
+      {!!listForInfntScroll?.novels?.length && (
         <ColumnDetailList categoryText={!currentSearchWord ? "작품을 검색해 보세요" : "검색 결과"}>
           {listForInfntScroll?.novels?.map((novel) => (
             <NovelColumnDetail key={novel.novelId} novel={novel} />
@@ -106,7 +106,7 @@ export default function SearchPage() {
 
       {/* on desktop */}
 
-      {isForPagination && !!data?.novels?.length && (
+      {!!isForPagination && !!data?.novels?.length && (
         <ColumnDetailList categoryText={!currentSearchWord ? "작품을 검색해 보세요" : "검색 결과"}>
           {data.novels.map((novel) => (
             <NovelColumnDetail key={novel.novelId} novel={novel} />
