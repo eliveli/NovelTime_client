@@ -23,9 +23,9 @@ const PositionOption = styled(Icon.IconBox)<{ isBG: boolean }>`
   max-height: 23px;
 `;
 
+// Used to change img position for both the userImg on mobile/desktop and the userBG
 export default function SelectImagePosition({
-  // for changing userImg position
-  setProfileImgPosition,
+  setProfileImgPosition, // for changing userImg position
 }: {
   setProfileImgPosition?: React.Dispatch<React.SetStateAction<string>>;
 }) {

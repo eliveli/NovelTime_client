@@ -27,15 +27,17 @@ import formatBytes from "./utils/formatBytes";
 import dataURLtoBlob from "./utils/dataURLtoBlob";
 
 interface EditProfileImgProps {
-  selectedProfileImage: string;
-  setNewProfileImage: React.Dispatch<React.SetStateAction<Blob | undefined>>;
-  handleEditingImage: React.Dispatch<React.SetStateAction<boolean>>;
+  userImgToEdit: string;
+  handleEditingImg: React.Dispatch<React.SetStateAction<boolean>>;
+  setNewUserImg: React.Dispatch<React.SetStateAction<Blob | undefined>>;
   BGRef: React.RefObject<HTMLDivElement>;
 }
-export default function EditProfileImg({
-  selectedProfileImage,
-  setNewProfileImage,
-  handleEditingImage,
+
+// Desktop is detected by checking device not by screen size
+export default function EditUserImgOnDesktop({
+  userImgToEdit,
+  handleEditingImg,
+  setNewUserImg,
   BGRef,
 }: EditProfileImgProps) {
   // get BG width and height to size canvas
@@ -117,7 +119,7 @@ export default function EditProfileImg({
 
     // image for canvas' background
     const image = new Image();
-    image.src = selectedProfileImage; // it is needed for setting the canvas' width and height
+    image.src = userImgToEdit; // it is needed for setting the canvas' width and height
 
     // crop image
     if (isImageSelected) {
@@ -155,7 +157,7 @@ export default function EditProfileImg({
 
       if (!blob) {
         dispatch(openFirstModal("alert"));
-        dispatch(handleAlert({ text: `이미지 편집에 실패했습니다.\n다시 한 번 시도해주세요.` }));
+        dispatch(handleAlert({ text: `이미지 편집에 실패했습니다.\n다시 한 번 시도해 보세요.` }));
         return;
       }
 
@@ -167,8 +169,8 @@ export default function EditProfileImg({
       //   the image will shrink to fit in the canvas as its background image
       if (blob.size <= 2e7) {
         // editedImgRef.current = blob;
-        setNewProfileImage(blob);
-        handleEditingImage(false); // show profile modal
+        setNewUserImg(blob);
+        handleEditingImg(false); // show profile modal
       } else {
         dispatch(openFirstModal("alert"));
         dispatch(handleAlert({ text: `20MB 이하로 저장 가능해요!\n현재 용량: ${dataCapacity}` }));
@@ -210,7 +212,7 @@ export default function EditProfileImg({
       //   that mismatch with display pixel size
       canvas.width = canvasWidthRef.current;
       canvas.height = canvasHeightRef.current;
-      canvas.style.backgroundImage = `url(${selectedProfileImage})`; // set image as background
+      canvas.style.backgroundImage = `url(${userImgToEdit})`; // set image as background
 
       ctx.lineWidth = lineWidth;
       ctx.strokeStyle = theme.color.mainLight;
@@ -260,15 +262,7 @@ export default function EditProfileImg({
         ctx.fill(); // ctx.stroke();
       });
     };
-  }, [
-    cropImgCanvasRef,
-    selectedProfileImage,
-    BGWidth,
-    BGHeight,
-    sXYinBG,
-    sXYinCanvas,
-    isImageSelected,
-  ]);
+  }, [cropImgCanvasRef, userImgToEdit, BGWidth, BGHeight, sXYinBG, sXYinCanvas, isImageSelected]);
 
   return (
     <CanvasContnr>
@@ -279,7 +273,7 @@ export default function EditProfileImg({
       {isImageSelected && <Spinner />}
 
       <BtnUponCanvasContnr>
-        <BtnUponCanvas onClick={() => handleEditingImage(false)}>취소</BtnUponCanvas>
+        <BtnUponCanvas onClick={() => handleEditingImg(false)}>취소</BtnUponCanvas>
         <TextForCropImg>이미지를 잘라 주세요</TextForCropImg>
         <BtnUponCanvas onClick={() => setImageSelected(true)}>선택</BtnUponCanvas>
       </BtnUponCanvasContnr>

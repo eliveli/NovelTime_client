@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { setTemporaryUserBG, setUserProfile } from "store/clientSlices/userProfileSlice";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 
-import EditProfileImg from "./EditProfile.components";
+import EditUserImgOnDesktop from "./EditProfile.components";
 
 import {
   CloseOrSave,
@@ -39,21 +39,30 @@ import formatBytes from "./utils/formatBytes";
 import { getTextLength } from "./utils/EditProfile.utils";
 
 export default function EditProfile({ isSecond }: { isSecond?: true }) {
-  const BGRef = useRef<HTMLDivElement>(null);
-
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
+  const BGRef = useRef<HTMLDivElement>(null);
+
   const isLoadingRef = useRef(false);
 
-  // get login user info
-  const loginUser = useAppSelector((state) => state.loginUser.user);
   const userNameRef = useRef<HTMLInputElement>(null);
+  const loginUser = useAppSelector((state) => state.loginUser.user);
 
-  // userName
+  const [CheckForUserName] = useCheckForUserNameMutation();
+  const [SaveUserInfo] = useSaveUserInfoMutation();
+
+  // Treat userName to change ------------------------------------------------------------ //
   const [userNameByte, setUserNameByte] = useState(0);
   // as clicking "save" button : pass for undefined or true, stop for false
   const isCheckedForDuplicateRef = useRef<undefined | boolean>();
+
+  // Set the userNameByte at first
+  useEffect(() => {
+    if (loginUser.userName) {
+      setUserNameByte(getTextLength(loginUser.userName));
+    }
+  }, [loginUser.userName]);
 
   // onChange handler to calculate the user name as bytes as typing userName
   const handleTypeUserName = () => {
@@ -70,10 +79,6 @@ export default function EditProfile({ isSecond }: { isSecond?: true }) {
     isCheckedForDuplicateRef.current = false;
   };
 
-  const [CheckForUserName] = useCheckForUserNameMutation();
-  const [SaveUserInfo] = useSaveUserInfoMutation();
-
-  // as clicking the select button for user name
   const confirmUserName = async () => {
     const tempUserName = userNameRef.current?.value as string;
 
@@ -118,27 +123,38 @@ export default function EditProfile({ isSecond }: { isSecond?: true }) {
           }
         }
       });
-      // 중복일 경우 alert, 중복 값 true 설정 (디폴트 false. false일 때 최종적으로 저장 가능(버튼클릭))
-      // 중복 아니면 alert "사용 가능한 이름이에요"
     }
   };
 
-  // set image
-  const [selectedProfileImage, setSelectedProfileImage] = useState<string>("");
-  const [newProfileImage, setNewProfileImage] = useState<Blob>(); // image link after hosting image
-  const [newProfileImageAsString, setNewProfileImageAsString] = useState<string>(); // to show as profile image
-  const [isEditingImage, handleEditingImage] = useState(false); // if it is false show the profile modal
+  //
+  // Select and Edit userImg and userBG ------------------------------------------------------ //
+  // note. Desktop is detected by checking device not by screen size
 
-  // set profile image background position for mobile and tablet device
-  const [profileImgPosition, setProfileImgPosition] = useState("");
+  // Treat userImg //
+  const [userImgToEditOnDesktop, setUserImgToEditOnDesktop] = useState<string>("");
+  const [isEditingImgOnDesktop, handleEditingImgOnDesktop] = useState(false);
+  // ㄴ close <EditUserImgOnDesktop> and show this modal when it is false
 
-  // to show image background positioning controller for temporary userBG just after selecting it
+  // Below two are the same actually (not in image type)
+  const [newUserImgToHost, setNewUserImgToHost] = useState<Blob>();
+  // ㄴ new user image to host in imgur
+  // ㄴ it is set after user img is selected and edited on desktop (where canvas works only)
+  //           or after user img is just selected mobile/tablet (where canvas can't work)
+  //              (and then user can set the img position)
+  const [newUserImgToDisplay, setNewUserImgToDisplay] = useState<string>();
+  // ㄴ new user image to display on modal (just converted image type from blob to string)
+  //
+  const [userImgPositionExceptDesktop, setUserImgPositionExceptDesktop] = useState("");
+  // ㄴ set user img position on mobile/tablet (not on desktop detected by its device type)
+
+  // Treat temporary userBG
   const tempUserBG = useAppSelector((state) => state.userProfile.temporaryUserBG);
-  // to host image as blob
+  // ㄴ to show image background positioning controller for temporary userBG just after selecting it
   const temUserBGasBlobRef = useRef<Blob>();
-
-  // convert file to DataURL
-  const handleProfileImage = (event: React.ChangeEvent<HTMLInputElement>) => {
+  // ㄴ to host image as blob
+  //
+  // Upload and Convert file to DataURL
+  const handleUserImg = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();
     if (event && event.target && event.target.files) {
       const reader = new FileReader();
@@ -151,7 +167,7 @@ export default function EditProfile({ isSecond }: { isSecond?: true }) {
           if (!blob) {
             dispatch(openSecondModal("alert"));
             dispatch(
-              handleAlert({ text: `이미지 편집에 실패했습니다.\n다시 한 번 시도해주세요.` }),
+              handleAlert({ text: `이미지 편집에 실패했습니다.\n다시 한 번 시도해 보세요.` }),
             );
             return;
           }
@@ -161,7 +177,7 @@ export default function EditProfile({ isSecond }: { isSecond?: true }) {
           // if blob size is smaller than 20MB image hosting is available
           if (blob.size <= 2e7) {
             // set the image and show it as image profile
-            setNewProfileImage(blob);
+            setNewUserImgToHost(blob);
           } else {
             dispatch(openSecondModal("alert"));
             dispatch(
@@ -173,19 +189,19 @@ export default function EditProfile({ isSecond }: { isSecond?: true }) {
         }
         // always set the image in desktop
         else {
-          setSelectedProfileImage(reader.result as string);
+          setUserImgToEditOnDesktop(reader.result as string);
         }
       };
       reader.readAsDataURL(file);
       //
-      handleEditingImage(true); // for desktop
+      handleEditingImgOnDesktop(true); // for desktop
       // if this is the second time that user try to edit image
       // this setState will make the user do that
       // without this user can't edit the second image on canvas
     }
   };
 
-  const handleProfileBG = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleUserBG = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();
     if (event && event.target && event.target.files) {
       const reader = new FileReader();
@@ -194,7 +210,7 @@ export default function EditProfile({ isSecond }: { isSecond?: true }) {
         const blob = dataURLtoBlob(reader.result as string);
         if (!blob) {
           dispatch(openSecondModal("alert"));
-          dispatch(handleAlert({ text: `이미지 편집에 실패했습니다.\n다시 한 번 시도해주세요.` }));
+          dispatch(handleAlert({ text: `이미지 편집에 실패했습니다.\n다시 한 번 시도해 보세요.` }));
           return;
         }
 
@@ -219,12 +235,25 @@ export default function EditProfile({ isSecond }: { isSecond?: true }) {
     }
   };
 
-  const closeProfileModal = () => {
-    dispatch(closeModal({ isSecond }));
-    dispatch(setTemporaryUserBG({ src: "", position: "" })); // remove the temp bg data
-  };
+  useEffect(() => {
+    if (isEditingImgOnDesktop) {
+      setUserImgToEditOnDesktop("");
+      // From this set,
+      //  in <EditUserImgOnDesktop> especially when user tries to edit image twice
+      //   values depending on "userImgToEditOnDesktop" such as canvas size, sXY, squareSize
+      //    will be set as their initial values
+      // Without this set, those will be set as them as when the previous image was displayed
+      //    and user will see the untidy square on canvas
+      //    and the feature for resizing square won't work
+    }
+    //
+    if (newUserImgToHost) {
+      setNewUserImgToDisplay(window.URL.createObjectURL(newUserImgToHost));
+    }
+  }, [isEditingImgOnDesktop, newUserImgToHost]);
 
-  // image hosting on imgur
+  // Save user info to server ------------------------------------------------------------- //
+  // Image hosting to imgur
   const [ImageHosting] = useImageHostingMutation();
   const handleImageHosting = (selectedImg: Blob) =>
     new Promise<any>((resolve) => {
@@ -240,6 +269,13 @@ export default function EditProfile({ isSecond }: { isSecond?: true }) {
         });
     });
 
+  //
+  const closeProfileModal = () => {
+    dispatch(closeModal({ isSecond }));
+    dispatch(setTemporaryUserBG({ src: "", position: "" })); // remove the temp bg data
+  };
+
+  // Save changed info to server
   const saveChangedInfo = async () => {
     // set loading state
     isLoadingRef.current = true;
@@ -255,8 +291,10 @@ export default function EditProfile({ isSecond }: { isSecond?: true }) {
     let profileImgLink = "";
     let bgImgLink = "";
     // hosting user profile image
-    if (newProfileImage) {
-      await handleImageHosting(newProfileImage).then((link) => {
+    if (newUserImgToHost) {
+      //
+      await handleImageHosting(newUserImgToHost).then((link) => {
+        //
         profileImgLink = link as string;
       });
     }
@@ -272,7 +310,7 @@ export default function EditProfile({ isSecond }: { isSecond?: true }) {
       changedUserName: userNameRef.current?.value || loginUser.userName,
       changedUserImg: {
         src: profileImgLink || loginUser.userImg.src,
-        position: profileImgPosition || loginUser.userImg.position,
+        position: userImgPositionExceptDesktop || loginUser.userImg.position,
       },
       changedUserBG: {
         src: bgImgLink || loginUser.userBG.src,
@@ -327,30 +365,6 @@ export default function EditProfile({ isSecond }: { isSecond?: true }) {
     closeProfileModal();
   };
 
-  // this will set selectedProfileImage as empty string //
-  // thanks to this setting
-  //    in EditProfileImg component especially when user try to edit image twice
-  //    values depending on this state "selectedProfileImage" such as canvas size, sXY, squareSize
-  //    will be set as their initial value
-  // if not the values will be set as them as when the previous image was displayed
-  //    and user will see the untidy square on canvas and the feature for resizing square won't work
-  useEffect(() => {
-    if (isEditingImage) {
-      setSelectedProfileImage("");
-    }
-    // convert newProfileImage type from blob to string to show it on profile modal
-    if (newProfileImage) {
-      setNewProfileImageAsString(window.URL.createObjectURL(newProfileImage));
-    }
-  }, [isEditingImage, newProfileImage]);
-
-  // set the userNameByte at first
-  useEffect(() => {
-    if (loginUser.userName) {
-      setUserNameByte(getTextLength(loginUser.userName));
-    }
-  }, [loginUser.userName]);
-
   return (
     <TranslucentBG
       ref={BGRef}
@@ -358,29 +372,27 @@ export default function EditProfile({ isSecond }: { isSecond?: true }) {
       onClick={() => {
         // prevent modal from being closed
         //  when dragging to area outside the modal as editing the image
-        if (!isEditingImage) closeProfileModal();
+        if (!isEditingImgOnDesktop) closeProfileModal();
       }}
     >
       {isLoadingRef.current && <Spinner />}
 
-      {/* edit image on desktop not on mobile or tablet where canvas can't work */}
-      {/* note : it is not about screen size. it is about device type */}
-      {/* after selecting image close the component */}
-      {selectedProfileImage && isEditingImage && CheckDeviceType() === "desktop" && (
-        <EditProfileImg
-          selectedProfileImage={selectedProfileImage}
-          setNewProfileImage={setNewProfileImage}
-          handleEditingImage={handleEditingImage}
+      {userImgToEditOnDesktop && isEditingImgOnDesktop && CheckDeviceType() === "desktop" && (
+        <EditUserImgOnDesktop
+          userImgToEdit={userImgToEditOnDesktop}
+          handleEditingImg={handleEditingImgOnDesktop}
+          setNewUserImg={setNewUserImgToHost}
           BGRef={BGRef}
         />
       )}
 
       {/* show profile modal at first and after hosting image */}
       {/* (at first) || (canceling editing image and back here) || (finishing editing and back) */}
-      {/* || (mobile or tablet browser)  : in this case user see the selected image directly */}
-      {(!selectedProfileImage ||
-        !isEditingImage ||
-        (newProfileImage && !isEditingImage) ||
+      {/* || (mobile/tablet device) : in this case user see the selected image directly */}
+      {(!userImgToEditOnDesktop ||
+        !isEditingImgOnDesktop ||
+        (newUserImgToHost && !isEditingImgOnDesktop) ||
+        //
         CheckDeviceType() !== "desktop") && (
         <ModalBox
           padding="54px 40px"
@@ -401,12 +413,14 @@ export default function EditProfile({ isSecond }: { isSecond?: true }) {
               저장
             </TextForSave>
           </CloseOrSave>
+
           <ContentContnr>
             <ProfileImgBox>
               <ProfileImg
-                imgPosition={profileImgPosition}
-                userImg={newProfileImageAsString || selectedProfileImage || loginUser.userImg.src}
+                imgPosition={userImgPositionExceptDesktop}
+                userImg={newUserImgToDisplay || loginUser.userImg.src}
               />
+
               <SelectBtnBox isPhoto>
                 <SelectBtn isPhoto>수정</SelectBtn>
 
@@ -414,15 +428,16 @@ export default function EditProfile({ isSecond }: { isSecond?: true }) {
                   type="file"
                   name="myImage"
                   onChange={(event) => {
-                    handleProfileImage(event);
+                    handleUserImg(event);
                   }}
                 />
               </SelectBtnBox>
-              {/* select the image position on mobile or tablet browser */}
-              {newProfileImage && CheckDeviceType() !== "desktop" && (
-                <SelectImagePosition setProfileImgPosition={setProfileImgPosition} />
+
+              {newUserImgToHost && CheckDeviceType() !== "desktop" && (
+                <SelectImagePosition setProfileImgPosition={setUserImgPositionExceptDesktop} />
               )}
             </ProfileImgBox>
+
             <ProfileNameBox>
               <ProfileName
                 type="text"
@@ -431,6 +446,7 @@ export default function EditProfile({ isSecond }: { isSecond?: true }) {
                 onChange={handleTypeUserName}
               />
               <SelectBtn onClick={confirmUserName}>선택</SelectBtn>
+
               <TextByteContnr>
                 <NoteUserName>영문, 숫자는 1로, 한글은 2로 계산됩니다</NoteUserName>
                 <UserNameAsByteContnr>
@@ -442,16 +458,18 @@ export default function EditProfile({ isSecond }: { isSecond?: true }) {
                 </UserNameAsByteContnr>
               </TextByteContnr>
             </ProfileNameBox>
+
             <SelectBtnBox isBG>
               <SelectBtn isBG>배경 수정</SelectBtn>
               <UploadImg
                 type="file"
                 name="BGImage"
                 onChange={(event) => {
-                  handleProfileBG(event);
+                  handleUserBG(event);
                 }}
               />
             </SelectBtnBox>
+
             {tempUserBG.src && <SelectImagePosition />}
           </ContentContnr>
         </ModalBox>
