@@ -569,10 +569,6 @@ export const UserContentContainer = styled.div<{ isEditingBG: boolean }>`
   ${({ isEditingBG }) => {
     if (!isEditingBG) return "";
 
-    // cover the page to end in height under the user profile while editing BG
-    const isVerticalScrollBar = window.innerWidth > document.body.clientWidth;
-    const height = isVerticalScrollBar ? "100%" : "100vh";
-
     return `
       position: relative;
 
@@ -581,7 +577,7 @@ export const UserContentContainer = styled.div<{ isEditingBG: boolean }>`
         position: absolute;
         
         width: 100%;
-        height: ${height};
+        height: 100vh;
         
         background-color: rgba(0,0,0,0.5);
       }
