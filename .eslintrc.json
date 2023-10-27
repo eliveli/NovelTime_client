@@ -26,7 +26,7 @@
         },
         "ecmaVersion": "latest",
         "sourceType": "module",
-        "project":"**/tsconfig.json" // tsconfig 파일 못 찾는 에러 해결
+        "project":"**/tsconfig.json"
     },
     "plugins": [
         "react",
@@ -41,25 +41,26 @@
         }
     },
     "rules": {
-       "react/jsx-filename-extension": ["off", { "extensions": [".js", ".jsx","ts","tsx"] }],
-       "react/require-default-props": "off",
-       "quotes": "off",
-       "@typescript-eslint/quotes": "off",
-       "linebreak-style":"off",
-       "prettier/prettier": [
+        "prettier/prettier": [
             "error", { "endOfLine": "auto" }
         ],
-        "react/react-in-jsx-scope": "off",
-        "import/prefer-default-export": "warn",
-        "no-confusing-arrow": "off",
-        "implicit-arrow-linebreak": "off",
-        "no-nested-ternary": "off",
-        "@typescript-eslint/indent": "off",
-        "max-len":"warn",
-        "operator-linebreak":"off",
         "react/jsx-curly-newline": "off",
-        "import/no-extraneous-dependencies": "warn",
+        "react/react-in-jsx-scope": "off",
+        "react/require-default-props": "off",
+        "react/jsx-no-useless-fragment": "off",
+        "react/jsx-filename-extension": ["off", { "extensions": [".js", ".jsx","ts","tsx"] }],
+        "@typescript-eslint/indent": "off",
+        "@typescript-eslint/quotes": "off",
         "@typescript-eslint/no-misused-promises": "warn",
-        "react/jsx-no-useless-fragment": "off"
+        "implicit-arrow-linebreak": "off",
+        "import/prefer-default-export": "warn",
+        "import/no-extraneous-dependencies": "warn",
+        "no-nested-ternary": "off",
+        "no-confusing-arrow": "off",
+        "quotes": "off",
+        "max-len":"warn",
+        "linebreak-style":"off",
+        "operator-linebreak":"off",
+        "object-curly-newline": "off"
     }
 }

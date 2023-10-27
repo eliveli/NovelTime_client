@@ -317,25 +317,67 @@ export const IconNO = styled.span`
   font-size: 17px;
 `;
 
-export const TalkTitle = styled.div<{ talkImg?: string }>`
+export const TalkTitle = styled.div<{ talkImg?: string; isTalkDesc?: boolean }>`
   font-weight: 500;
   font-size: 17px;
 
+  ${({ isTalkDesc, talkImg }) => {
+    if (!talkImg && !isTalkDesc) {
+      return `
+        @media screen and (max-width: 599px) {
+          padding-bottom: 3px;
+          border-bottom: 1px dashed rgba(100, 100, 100, 0.1);
+        }
+    `;
+    }
+
+    if (!talkImg && isTalkDesc) {
+      return `
+        line-height: 1.2;
+        padding-bottom: 3px;
+        border-bottom: 1px dashed rgba(100, 100, 100, 0.1);
+    `;
+    }
+  }}
+`;
+
+export const TalkDesc = styled.div`
+  padding: 6px 0;
+  border-bottom: 1px dashed rgba(100, 100, 100, 0.1);
+  line-height: 1.2;
+
+  // set ellipsis
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+
+  white-space: normal;
+  text-align: left;
+  word-wrap: break-word;
+
+  height: 67px; // 화면 표시되는 것 보며 맞춰야 함
   @media screen and (max-width: 599px) {
-    ${({ talkImg }) =>
-      !talkImg &&
-      `
-      padding-bottom: 6px;
-      border-bottom: 1px dashed rgba(100, 100, 100, 0.1);
-    `}
+    height: 66px;
   }
 `;
-export const NovelTitle = styled.div`
+
+export const NovelTitle = styled.div<{ isTalkDesc?: boolean }>`
   color: ${(props) => props.theme.color.textGray};
   font-weight: 500;
-  @media screen and (max-width: 599px) {
-    padding-top: 3px;
-  }
+
+  ${({ isTalkDesc }) => {
+    if (!isTalkDesc) {
+      return `
+        @media screen and (max-width: 599px) {
+          padding-top: 6px;
+        }
+    `;
+    }
+
+    return `padding-top: 6px; line-height: 1.2;`;
+  }}
 `;
 
 // (구분) img vs div의 backgorund-image (하기)

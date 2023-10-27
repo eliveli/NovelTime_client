@@ -28,6 +28,7 @@ import {
   UserInfoTablet,
   CommentLabel,
   TalkMainInfoContnr,
+  TalkDesc,
 } from "./FreeTalkList.styles";
 
 interface TalkProps {
@@ -46,22 +47,11 @@ interface TalkProps {
   novelTitle: string;
 }
 
+const talkDesc = `가나다라마바사아자차...ㅌ.`;
+
+// Displayed : screen size >= 600px
 function TalkTablet({ talk }: { talk: TalkProps }) {
-  const {
-    talkId,
-
-    userName,
-    userImg,
-    createDate,
-
-    likeNO,
-    commentNO,
-
-    talkTitle,
-    talkImg,
-
-    novelTitle,
-  } = talk;
+  const { userName, userImg, createDate, likeNO, commentNO, talkTitle, talkImg, novelTitle } = talk;
   const navigate = useNavigate();
 
   // to set the image width as title height
@@ -85,10 +75,15 @@ function TalkTablet({ talk }: { talk: TalkProps }) {
               <Icon.CommentLabel />
             </Icon.IconBox>
           </CommentLabel>
+
           <TitleContnr ref={titleHeightRef}>
-            <TalkTitle>{talkTitle}</TalkTitle>
-            <NovelTitle>{novelTitle}</NovelTitle>
+            <TalkTitle isTalkDesc={!!talkDesc}>{talkTitle}</TalkTitle>
+            {talkDesc && <TalkDesc>{talkDesc}</TalkDesc>}
+            <NovelTitle isTalkDesc={!!talkDesc}>{novelTitle}</NovelTitle>
           </TitleContnr>
+
+          {/* Note. Check or Adjust styles if adding talkImg actually */}
+
           {talkImg && <TalkImgTablet titleHeight={titleHeight} talkImg={talkImg} />}
         </TalkInfoContnrTablet>
       </TalkMainInfoContnr>
@@ -113,21 +108,8 @@ function TalkTablet({ talk }: { talk: TalkProps }) {
   );
 }
 function TalkMobile({ talk }: { talk: TalkProps }) {
-  const {
-    talkId,
+  const { userName, userImg, createDate, likeNO, commentNO, talkTitle, talkImg, novelTitle } = talk;
 
-    userName,
-    userImg,
-    createDate,
-
-    likeNO,
-    commentNO,
-
-    talkTitle,
-    talkImg,
-
-    novelTitle,
-  } = talk;
   const navigate = useNavigate();
 
   // set image height as image width : for animation at screen size 500-599px
@@ -167,18 +149,27 @@ function TalkMobile({ talk }: { talk: TalkProps }) {
               <Icon.CommentLabel />
             </Icon.IconBox>
           </CommentLabel>
-          <TalkTitle talkImg={talkImg}>{talkTitle}</TalkTitle>
+
+          <TalkTitle talkImg={talkImg} isTalkDesc={!!talkDesc}>
+            {talkTitle}
+          </TalkTitle>
+          {talkDesc && <TalkDesc>{talkDesc}</TalkDesc>}
+
+          {/* Note. Check or Adjust styles if adding talkImg actually */}
+
           {talkImg && (
             <TalkImgBox ref={imgWidthRef}>
               <TalkImg imgWidth={imgWidth} talkImg={talkImg} />
             </TalkImgBox>
           )}
-          <NovelTitle>{novelTitle}</NovelTitle>
+
+          <NovelTitle isTalkDesc={!!talkDesc}>{novelTitle}</NovelTitle>
         </TalkPreview>
       </BesideImgContainer>
     </TalkMobileContnr>
   );
 }
+
 export default function FreeTalk({ talk, isLast }: { talk: TalkProps; isLast?: boolean }) {
   const navigate = useNavigate();
 

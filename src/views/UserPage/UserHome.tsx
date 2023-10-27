@@ -5,7 +5,6 @@ import { useAppSelector } from "store/hooks";
 import { useParams } from "react-router-dom";
 import { useGetContentOfUserHomeQuery } from "store/serverAPIs/novelTime";
 import Spinner from "assets/Spinner";
-
 import { WritingSection } from "./UserPage.styles";
 import { Writing, Comment, WritingFilter, NoContent } from "./UserWriting.components";
 import contentMark from "./utils/contentMark";
