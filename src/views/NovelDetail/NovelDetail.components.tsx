@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { ThemeProvider } from "styled-components";
 import { NovelInDetailPage } from "store/serverAPIs/types";
 import { useAppDispatch } from "../../store/hooks";
 import { showBigImage } from "../../store/clientSlices/modalSlice";
@@ -63,123 +62,117 @@ export default function NovelDetailInfo({
     novelUrl2,
     novelUrl3,
   } = novel;
-  const theme = {
-    novelImg,
-  };
-
   const [isShowAll, handleShowAll] = useState(false);
 
   const dispatch = useAppDispatch();
 
   return (
-    <ThemeProvider theme={theme}>
-      <NovelContainer>
-        <NovelMainInfo>
-          <NovelImgBox onClick={() => dispatch(showBigImage(novelImg))}>
-            <NovelImgSmall />
-            <HandIconBox>
-              <HandIcon />
-            </HandIconBox>
-          </NovelImgBox>
+    <NovelContainer>
+      <NovelMainInfo>
+        <NovelImgBox onClick={() => dispatch(showBigImage(novelImg))}>
+          <NovelImgSmall novelImg={novelImg} />
+          <HandIconBox>
+            <HandIcon />
+          </HandIconBox>
+        </NovelImgBox>
 
-          <NovelInfoBox>
-            <NovelAboveDescTablet>
-              <NovelTitle>{novelTitle}</NovelTitle>
-              <NovelSubInfoBox>
-                <NovelInfoAuthorBox>
-                  <NovelInfoAuthor>{novelAuthor}</NovelInfoAuthor>
-                  <NovelInfoTablet>
-                    {novelIsEnd
-                      ? `${novelGenre} | 완결 | ${novelAge}`
-                      : `${novelGenre} | ${novelAge}`}
-                  </NovelInfoTablet>
+        <NovelInfoBox>
+          <NovelAboveDescTablet>
+            <NovelTitle>{novelTitle}</NovelTitle>
+            <NovelSubInfoBox>
+              <NovelInfoAuthorBox>
+                <NovelInfoAuthor>{novelAuthor}</NovelInfoAuthor>
+                <NovelInfoTablet>
+                  {novelIsEnd
+                    ? `${novelGenre} | 완결 | ${novelAge}`
+                    : `${novelGenre} | ${novelAge}`}
+                </NovelInfoTablet>
 
-                  <NovelInfoMobile>
-                    {novelIsEnd ? `${novelGenre} | 완결` : `${novelGenre}`}
-                  </NovelInfoMobile>
-                  <NovelInfoMobileAge>{novelAge}</NovelInfoMobileAge>
-                </NovelInfoAuthorBox>
+                <NovelInfoMobile>
+                  {novelIsEnd ? `${novelGenre} | 완결` : `${novelGenre}`}
+                </NovelInfoMobile>
+                <NovelInfoMobileAge>{novelAge}</NovelInfoMobileAge>
+              </NovelInfoAuthorBox>
 
-                {!!writingNoWithAllType && (
-                  <InfoIconBox>
-                    <TextIconBox>
-                      <TextIcon />
-                    </TextIconBox>
-                    <IconNumber>{writingNoWithAllType}</IconNumber>
-                  </InfoIconBox>
-                )}
-              </NovelSubInfoBox>
-            </NovelAboveDescTablet>
+              {!!writingNoWithAllType && (
+                <InfoIconBox>
+                  <TextIconBox>
+                    <TextIcon />
+                  </TextIconBox>
+                  <IconNumber>{writingNoWithAllType}</IconNumber>
+                </InfoIconBox>
+              )}
+            </NovelSubInfoBox>
+          </NovelAboveDescTablet>
 
-            <NovelDescTablet>{novelDesc}</NovelDescTablet>
-          </NovelInfoBox>
-        </NovelMainInfo>
+          <NovelDescTablet>{novelDesc}</NovelDescTablet>
+        </NovelInfoBox>
+      </NovelMainInfo>
 
-        {isShowAll && (
-          <NovelDescMobile>
-            <NovelDescEntire>{novelDesc}</NovelDescEntire>
-            <UpIconBox onClick={() => handleShowAll(false)}>
-              <UpIcon />
-            </UpIconBox>
-          </NovelDescMobile>
-        )}
-        {!isShowAll && (
-          <NovelDescMobile>
-            <NovelDescPartial>{novelDesc}</NovelDescPartial>
-            <DownIconBox>
-              <DownIcon onClick={() => handleShowAll(true)} />
-            </DownIconBox>
-          </NovelDescMobile>
-        )}
+      {isShowAll && (
+        <NovelDescMobile>
+          <NovelDescEntire>{novelDesc}</NovelDescEntire>
+          <UpIconBox onClick={() => handleShowAll(false)}>
+            <UpIcon />
+          </UpIconBox>
+        </NovelDescMobile>
+      )}
+      {!isShowAll && (
+        <NovelDescMobile>
+          <NovelDescPartial>{novelDesc}</NovelDescPartial>
+          <DownIconBox>
+            <DownIcon onClick={() => handleShowAll(true)} />
+          </DownIconBox>
+        </NovelDescMobile>
+      )}
 
-        <NovelPlatformBox>
-          <PlatformBorder>
-            <PlatformIconBox>
-              <RunnerIcon />
-            </PlatformIconBox>
+      <NovelPlatformBox>
+        <PlatformBorder>
+          <PlatformIconBox>
+            <RunnerIcon />
+          </PlatformIconBox>
 
-            {/* 넘어온 플랫폼에 한해 플랫폼 보이기 */}
-            <PlatformTextBox>
-              {[
-                { platform: novelPlatform, url: novelUrl },
-                { platform: novelPlatform2, url: novelUrl2 },
-                { platform: novelPlatform3, url: novelUrl3 },
-              ].map((_) => {
-                if (_.platform) {
-                  return (
-                    <PlatformText
-                      key={_.platform}
-                      platform={
-                        _.platform as "카카오페이지" | "네이버 시리즈" | "리디북스" | "조아라"
+          {/* 넘어온 플랫폼에 한해 플랫폼 보이기 */}
+          <PlatformTextBox>
+            {[
+              { platform: novelPlatform, url: novelUrl },
+              { platform: novelPlatform2, url: novelUrl2 },
+              { platform: novelPlatform3, url: novelUrl3 },
+            ].map((_) => {
+              if (_.platform) {
+                return (
+                  <PlatformText
+                    key={_.platform}
+                    platform={
+                      _.platform as "카카오페이지" | "네이버 시리즈" | "리디북스" | "조아라"
+                    }
+                    href={_.url.includes("https://") ? _.url : `https://${_.url}`}
+                    target="_blank"
+                  >
+                    {(() => {
+                      switch (_.platform) {
+                        case "카카오페이지":
+                          return "카카페";
+                        case "네이버 시리즈":
+                          return "시리즈";
+                        case "리디북스":
+                          return _.platform;
+                        case "조아라":
+                          return _.platform;
+                        default:
+                          return "플랫폼";
                       }
-                      href={_.url.includes("https://") ? _.url : `https://${_.url}`}
-                      target="_blank"
-                    >
-                      {(() => {
-                        switch (_.platform) {
-                          case "카카오페이지":
-                            return "카카페";
-                          case "네이버 시리즈":
-                            return "시리즈";
-                          case "리디북스":
-                            return _.platform;
-                          case "조아라":
-                            return _.platform;
-                          default:
-                            return "플랫폼";
-                        }
-                      })()}
-                    </PlatformText>
-                  );
-                }
-              })}
-            </PlatformTextBox>
-            <PlatformIconBox>
-              <ReaderIcon />
-            </PlatformIconBox>
-          </PlatformBorder>
-        </NovelPlatformBox>
-      </NovelContainer>
-    </ThemeProvider>
+                    })()}
+                  </PlatformText>
+                );
+              }
+            })}
+          </PlatformTextBox>
+          <PlatformIconBox>
+            <ReaderIcon />
+          </PlatformIconBox>
+        </PlatformBorder>
+      </NovelPlatformBox>
+    </NovelContainer>
   );
 }

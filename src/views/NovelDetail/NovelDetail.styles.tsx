@@ -1,9 +1,6 @@
 import theme, { styled } from "assets/styles/theme";
 import Icon from "assets/Icon";
 
-interface Props {
-  theme: { novelImg: string; userImg: string };
-}
 export const IconNumber = styled.span`
   padding-left: 5px;
   font-size: 19px;
@@ -301,21 +298,25 @@ export const NovelImgBox = styled.div`
     opacity: 0.7;
   `)}
 `;
-export const NovelImgSmall = styled.div<Props>`
-  /* div로 가로세로 비율 맞출 때 */
-  padding-top: 135%; //카카오페이지
-  /* padding-top: 146%; //시리즈, 리디북스 */
-  /* 
-    padding-top: 
-     ${(props) => (props.theme.novelImg.includes("dn-img-page.kakao.com") ? "135%" : "146%")};
-  */
+
+/* 가로세로 비율 맞추기 in div */
+// padding-top: 135%; // 카카오페이지
+// padding-top: 146%; // 시리즈, 리디북스
+/* padding-top: ${({ novelImg }) =>
+    novelImg.includes("dn-img-page.kakao.com") ? "135%" : "146%"};
+*/
+export const NovelImgSmall = styled.div<{ novelImg: string }>`
+  padding-top: 135%; // 카카오 페이지 이미지 비율
 
   border-radius: 5%;
 
-  ${(props) => !props.theme.novelImg && `border: 1px solid #e5e5e5;`};
+  ${({ novelImg }) => {
+    if (novelImg) return `background-image: url(${novelImg});`;
 
-  background-image: url(${(props) => props.theme.novelImg});
-  background-position: center; //다른 컴포넌트의 작품 이미지도 center로 맞출까
+    return `border: 1px solid #e5e5e5;`;
+  }}
+
+  background-position: center; // 다른 컴포넌트의 작품 이미지도 center로 맞출까
   background-repeat: no-repeat;
   background-size: cover;
 

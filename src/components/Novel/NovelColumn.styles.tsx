@@ -1,4 +1,4 @@
-import { styled } from "assets/styles/theme";
+import theme, { styled } from "assets/styles/theme";
 
 export const NovelLink = styled.div<{ isBorder?: true }>`
   display: flex;
@@ -57,7 +57,7 @@ export const NovelTitle = styled.div`
   //  "minmax(0, 1fr)" was set in "grid-template-columns: repeat(NUMBER, minmax(0, 1fr));" in its Grid Container <WritingSection>
 `;
 export const NovelSubInfoBox = styled.div`
-  color: ${(props) => props.theme.color.textGray};
+  color: ${theme.color.textGray};
   font-weight: 500;
   font-size: 14px;
 `;

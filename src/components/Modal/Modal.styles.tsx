@@ -26,24 +26,23 @@ export const NovelImgContainer = styled.div`
   ${theme.media.tablet(`
     width: auto;
     height:100%;
-  `)}/* position: static; */
+  `)}
 `;
 
 export const NovelImgBig = styled.img`
-  /* div로 가로세로 비율 맞출 때 */
-  /* padding-top: 135%; //카카오페이지 */
-  /* padding-top: 146%; //시리즈, 리디북스 */
-
   width: 100%;
   ${theme.media.tablet(`
     width: auto;
     height: 100%;
- `)}
+  `)}
 `;
+
+/* 가로세로 비율 맞추기 in div */
+// padding-top: 135%; // 카카오페이지
+// padding-top: 146%; // 시리즈, 리디북스
+
 // export const NovelImgBig = styled.div<{ src: string }>`
-//   /* padding-top: 135%; //카카오페이지 */
-//   /* padding-top: 146%; //시리즈, 리디북스 */
-//   /* padding-top: ${({ src }) => (src.includes("dn-img-page.kakao.com") ? "135%" : "146%")}; */
+//   padding-top: ${({ src }) => (src.includes("dn-img-page.kakao.com") ? "135%" : "146%")};
 
 //   background-image: url(${({ src }) => src});
 //   background-position-y: top;
