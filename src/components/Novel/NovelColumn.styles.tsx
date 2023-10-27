@@ -2,33 +2,37 @@ import { styled } from "assets/styles/theme";
 
 export const NovelLink = styled.div<{ isBorder?: true }>`
   display: flex;
-  padding: 12px 0;
-
-  @media (hover: hover) {
-    &:hover {
-      cursor: pointer;
-      opacity: 0.7;
-      color: rgba(100, 100, 100, 0.8);
-    }
-  }
 
   ${({ isBorder }) =>
     isBorder
       ? `
-      border: 1px solid rgba(0,0,0,0.1);
-      border-radius: 9px;
-      padding: 12px;
+        border: 1px solid rgba(0,0,0,0.1);
+        border-radius: 9px;
+        padding: 12px;
     `
       : `
-      border-bottom: 1px solid rgba(100, 100, 100, 0.2);
-      &:last-child { border-bottom: 0; }
+        padding: 12px 0;
+        border-bottom: 1px solid rgba(100, 100, 100, 0.2);
+        &:last-child { border-bottom: 0; }
   `}
+
+  cursor: pointer;
+
+  @media (hover: hover) {
+    &:hover {
+      opacity: 0.7;
+      color: rgba(100, 100, 100, 0.8);
+    }
+  }
 `;
+
 export const NovelInfoBox = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
-  margin-left: 10px;
+
+  width: calc(100% - 70px); // 100% - (width in NovelImg)
+  padding-left: 10px;
 `;
 
 export const NovelImg = styled.div<{ novelImg: string }>`
@@ -43,15 +47,14 @@ export const NovelImg = styled.div<{ novelImg: string }>`
   background-repeat: no-repeat;
   background-size: cover;
 `;
-export const NovelTitle = styled.div<{ infoWidth: number }>`
+export const NovelTitle = styled.div`
   font-weight: 500;
 
-  // 줄 넘어가면 ... 표시
-  display: inline-block;
-  width: ${(props) => props.infoWidth || 248}px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  // To set ellipsis to grid item,
+  //  "minmax(0, 1fr)" was set in "grid-template-columns: repeat(NUMBER, minmax(0, 1fr));" in its Grid Container <WritingSection>
 `;
 export const NovelSubInfoBox = styled.div`
   color: ${(props) => props.theme.color.textGray};

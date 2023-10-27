@@ -21,7 +21,7 @@ export const RightIconBox = styled.div`
   border-left: 1px solid ${(props) => props.theme.color.lightGray0_1};
 `;
 
-export const Text = styled.article<{ isLast?: boolean }>`
+export const ContainerForAll = styled.article<{ isLast?: boolean }>`
   border-bottom: 1px solid rgba(100, 100, 100, 0.2);
 
   &:last-of-type {

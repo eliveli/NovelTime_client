@@ -1,5 +1,5 @@
 import React, { useLayoutEffect, useRef } from "react";
-import { isCurrentPath, useComponentWidth, useModal } from "utils";
+import { isCurrentPath, useModal } from "utils";
 
 import { useNavigate } from "react-router-dom";
 import { NovelDetail } from "store/serverAPIs/types";
@@ -71,22 +71,11 @@ export default function NovelColumnDetail({
   novel: NovelDetail;
   isRecommend?: true;
 }) {
-  // props or default props
   const { novelId, novelImg, novelTitle, novelAuthor, novelGenre, novelDesc } = novel;
 
-  // calculate and gave the correct width to NovelInfoBox
-  // and set "width : 100%" in its child and descendant components
-  // as the result, arrow-button always can be placed in the end of the box
-  //  in previous code, the arrow button couldn't be in the end when desc is shorter than the width of box
-  const containerRef = useRef<HTMLDivElement>(null);
-  const containerWidth = useComponentWidth(containerRef);
+  const bodyWidth = document.body.clientWidth;
 
-  const infoRef = useRef<HTMLDivElement>(null);
-  const infoWidth = useComponentWidth(infoRef); // 인포컨테이너 width 받아와 제목 엘립시스에 적용
-
-  const screenWidth = window.screen.width;
-
-  const { isModal, handleModal, isShowModal } = useModal();
+  const { isModal, handleModal, isModalShown } = useModal();
 
   // (문제)모달 스크롤을 내린 후 모달을 닫으면 모달 탑 영역이 보이고 사라짐
   // (대처)닫기 버튼을 누른 직후 모달T의 스크롤y 값을 가져와 모달F에 적용
@@ -109,7 +98,6 @@ export default function NovelColumnDetail({
 
   return (
     <NovelLink
-      ref={containerRef}
       onClick={(event: React.MouseEvent<HTMLElement>) => {
         event.stopPropagation();
         event.preventDefault();
@@ -122,13 +110,13 @@ export default function NovelColumnDetail({
         navigate(`/novel-detail/${novelId}`);
       }}
     >
-      <NovelImg screenWidth={screenWidth} novelImg={novelImg} isRecommend={isRecommend} />
-      <NovelInfoBox containerWidth={containerWidth} screenWidth={screenWidth}>
-        <NovelTitle infoWidth={infoWidth}>{`[${novelGenre}] ${novelTitle}`}</NovelTitle>
-        <NovelSubInfoBox ref={infoRef}>
+      <NovelImg bodyWidth={bodyWidth} novelImg={novelImg} isRecommend={isRecommend} />
+      <NovelInfoBox bodyWidth={bodyWidth}>
+        <NovelTitle>{`[${novelGenre}] ${novelTitle}`}</NovelTitle>
+        <NovelSubInfoBox>
           <NovelAuthor>{novelAuthor}</NovelAuthor>
           <NovelDescBox>
-            <NovelDesc isRecommend={isRecommend}>{novelDesc}</NovelDesc>
+            <NovelDesc>{novelDesc}</NovelDesc>
             {isModal && (
               <DownIconBox
                 onClick={(event: React.MouseEvent<HTMLElement>) => {
@@ -159,7 +147,7 @@ export default function NovelColumnDetail({
             modalScrollY={modalScrollY}
             modalTRef={modalTRef}
             modalFRef={modalFRef}
-            isShowOn={isShowModal}
+            isShowOn={isModalShown}
             desc={novelDesc}
           />
         )}

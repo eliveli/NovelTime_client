@@ -1,5 +1,3 @@
-import { useRef } from "react";
-import { useComponentWidth } from "utils";
 import { useNavigate } from "react-router-dom";
 
 import {
@@ -27,8 +25,6 @@ type MyComponentProps = React.PropsWithChildren<{
 
 export default function NovelColumn({ novel, isBorder }: MyComponentProps) {
   const { novelId, novelImg, novelTitle, novelAuthor, novelGenre, novelIsEnd } = novel;
-  const infoRef = useRef<HTMLDivElement>(null);
-  const infoWidth = useComponentWidth(infoRef); // 인포컨테이너 width 받아와 제목 엘립시스에 적용
 
   const navigate = useNavigate();
 
@@ -40,8 +36,8 @@ export default function NovelColumn({ novel, isBorder }: MyComponentProps) {
       }}
     >
       <NovelImg novelImg={novelImg} />
-      <NovelInfoBox ref={infoRef}>
-        <NovelTitle infoWidth={infoWidth}>{novelTitle}</NovelTitle>
+      <NovelInfoBox>
+        <NovelTitle>{novelTitle}</NovelTitle>
         <NovelSubInfoBox>
           <NovelInfoLineHeight>{novelAuthor}</NovelInfoLineHeight>
           {novelIsEnd ? (

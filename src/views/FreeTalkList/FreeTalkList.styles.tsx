@@ -27,6 +27,7 @@ export const Talk = styled.article<{ isLast?: boolean }>`
 `;
 export const TalkMobileContnr = styled.div`
   display: flex;
+  width: 100%;
 
   @media screen and (min-width: 600px) {
     display: none;
@@ -54,9 +55,12 @@ export const TalkMainInfoContnr = styled.div`
 `;
 export const TalkInfoContnrTablet = styled.div`
   position: relative;
-  width: 74%;
+
   @media screen and (max-width: 767px) {
     width: 73%;
+  }
+  @media screen and (min-width: 768px) {
+    width: 74%;
   }
   height: 100%;
   display: flex;
@@ -77,20 +81,29 @@ export const FirstLineContainer = styled.div`
   padding-bottom: 3px;
 `;
 export const BesideImgContainer = styled.div`
-  width: 100%;
+  @media screen and (max-width: 599px) {
+    width: calc(100% - 43px);
+  }
+
+  @media screen and (min-width: 600px) {
+    width: calc(100% - 30px);
+  }
 `;
 
 export const UserImg = styled.div<{ userImg: Img }>`
   border-radius: 50%;
-  min-width: 43px;
-  height: 43px;
 
   ${({ userImg }) => !userImg.src && `border: 1px solid #e5e5e5;`};
 
   background-image: url(${({ userImg }) => userImg.src});
-  background-position: ${({ userImg }) => userImg.position} || center;
+  background-position: ${({ userImg }) => userImg.position || "center"};
   background-repeat: no-repeat;
   background-size: cover;
+
+  @media screen and (max-width: 599px) {
+    min-width: 43px;
+    height: 43px;
+  }
 
   @media screen and (min-width: 600px) {
     min-width: 30px;
@@ -132,10 +145,13 @@ export const CreateDate = styled.p`
 export const CommentLabel = styled.div`
   position: absolute;
   background-color: white;
-  top: -9px;
-  left: -10px;
-  transform: scaleY(-1);
   border-radius: 50%;
+
+  @media screen and (max-width: 599px) {
+    top: -9px;
+    left: -10px;
+    transform: scaleY(-1);
+  }
 
   @media screen and (min-width: 600px) {
     top: 20px;
@@ -143,12 +159,13 @@ export const CommentLabel = styled.div`
     transform: none;
   }
 `;
-export const TalkPreview = styled.div`
+export const TalkPreviewMobile = styled.div`
   position: relative;
   border: 1px dotted lightgray;
   border-radius: 10px;
   margin: 0 0 0 12px;
   padding: 6px 10px;
+  width: calc(100% - 12px);
 `;
 export const TalkImgTablet = styled.div<{ titleHeight: number; talkImg: string }>`
   border-radius: 6px;
@@ -317,12 +334,18 @@ export const IconNO = styled.span`
   font-size: 17px;
 `;
 
-export const TalkTitle = styled.div<{ talkImg?: string; isTalkDesc?: boolean }>`
+export const TalkTitle = styled.div<{ isTalkImg?: boolean; isTalkDesc?: boolean }>`
   font-weight: 500;
   font-size: 17px;
 
-  ${({ isTalkDesc, talkImg }) => {
-    if (!talkImg && !isTalkDesc) {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  width: 100%;
+
+  ${({ isTalkDesc, isTalkImg }) => {
+    if (!isTalkImg && !isTalkDesc) {
       return `
         @media screen and (max-width: 599px) {
           padding-bottom: 3px;
@@ -331,7 +354,7 @@ export const TalkTitle = styled.div<{ talkImg?: string; isTalkDesc?: boolean }>`
     `;
     }
 
-    if (!talkImg && isTalkDesc) {
+    if (!isTalkImg && isTalkDesc) {
       return `
         line-height: 1.2;
         padding-bottom: 3px;
@@ -340,10 +363,11 @@ export const TalkTitle = styled.div<{ talkImg?: string; isTalkDesc?: boolean }>`
     }
   }}
 `;
-
-export const TalkDesc = styled.div`
+export const TalkDescContainer = styled.div`
   padding: 6px 0;
   border-bottom: 1px dashed rgba(100, 100, 100, 0.1);
+`;
+export const TalkDesc = styled.div`
   line-height: 1.2;
 
   // set ellipsis
@@ -356,16 +380,17 @@ export const TalkDesc = styled.div`
   white-space: normal;
   text-align: left;
   word-wrap: break-word;
-
-  height: 67px; // 화면 표시되는 것 보며 맞춰야 함
-  @media screen and (max-width: 599px) {
-    height: 66px;
-  }
 `;
 
 export const NovelTitle = styled.div<{ isTalkDesc?: boolean }>`
   color: ${(props) => props.theme.color.textGray};
   font-weight: 500;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  width: 100%;
 
   ${({ isTalkDesc }) => {
     if (!isTalkDesc) {

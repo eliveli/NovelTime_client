@@ -8,7 +8,7 @@ import {
   LastLineContainer,
   NovelImg,
   UserName,
-  Text,
+  ContainerForAll,
   UserNameBox,
   IconBox,
   RecommendTitle,
@@ -46,7 +46,7 @@ export default function Recommend({ recommendInfo, isLast }: RecommendProps) {
   const dateToShow = adjustCreateDate(createDate);
 
   return (
-    <Text
+    <ContainerForAll
       isLast={isLast}
       onClick={() => {
         navigate(`/recommend-detail/${recommendId}`);
@@ -99,6 +99,6 @@ export default function Recommend({ recommendInfo, isLast }: RecommendProps) {
           </IconBox>
         </LastLineContainer>
       </UserContainer>
-    </Text>
+    </ContainerForAll>
   );
 }

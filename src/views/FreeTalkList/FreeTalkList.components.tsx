@@ -16,7 +16,7 @@ import {
   NovelTitle,
   TalkImg,
   IconNO,
-  TalkPreview,
+  TalkPreviewMobile,
   BesideImgContainer,
   TalkImgBox,
   IconContainer,
@@ -29,6 +29,7 @@ import {
   CommentLabel,
   TalkMainInfoContnr,
   TalkDesc,
+  TalkDescContainer,
 } from "./FreeTalkList.styles";
 
 // Displayed : screen size >= 600px
@@ -70,7 +71,13 @@ function TalkTablet({ talk }: { talk: TalkInList }) {
 
           <TitleContnr ref={titleHeightRef}>
             <TalkTitle isTalkDesc={!!talkDesc}>{talkTitle}</TalkTitle>
-            {talkDesc && <TalkDesc>{talkDesc}</TalkDesc>}
+
+            {talkDesc && (
+              <TalkDescContainer>
+                <TalkDesc>{talkDesc}</TalkDesc>
+              </TalkDescContainer>
+            )}
+
             <NovelTitle isTalkDesc={!!talkDesc}>{novelTitle}</NovelTitle>
           </TitleContnr>
 
@@ -145,17 +152,22 @@ function TalkMobile({ talk }: { talk: TalkInList }) {
           </IconsBox>
         </FirstLineContainer>
 
-        <TalkPreview>
+        <TalkPreviewMobile>
           <CommentLabel>
             <Icon.IconBox noPointer size={20} color="rgba(150,150,150,0.4)">
               <Icon.CommentLabel />
             </Icon.IconBox>
           </CommentLabel>
 
-          <TalkTitle talkImg={talkImg} isTalkDesc={!!talkDesc}>
+          <TalkTitle isTalkImg={!!talkImg} isTalkDesc={!!talkDesc}>
             {talkTitle}
           </TalkTitle>
-          {talkDesc && <TalkDesc>{talkDesc}</TalkDesc>}
+
+          {talkDesc && (
+            <TalkDescContainer>
+              <TalkDesc>{talkDesc}</TalkDesc>
+            </TalkDescContainer>
+          )}
 
           {/* Note. Check or Adjust styles if adding talkImg actually */}
 
@@ -166,7 +178,7 @@ function TalkMobile({ talk }: { talk: TalkInList }) {
           )}
 
           <NovelTitle isTalkDesc={!!talkDesc}>{novelTitle}</NovelTitle>
-        </TalkPreview>
+        </TalkPreviewMobile>
       </BesideImgContainer>
     </TalkMobileContnr>
   );

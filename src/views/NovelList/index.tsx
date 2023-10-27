@@ -199,7 +199,7 @@ export default function NovelList() {
         {isToolTipOpened && (
           <Note isWithShowAllBtn={!!novelsForLoginUser.data?.length}>
             {loginUserName || "방문자"}
-            님이 글을 남긴 소설을 기준으로 다른 독자가 본 소설을 추천해 드려요
+            님이 글을 남긴 소설을 기준으로 추천해 드려요
           </Note>
         )}
       </CategoryMark>

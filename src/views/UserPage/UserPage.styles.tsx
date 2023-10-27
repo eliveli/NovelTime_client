@@ -130,23 +130,28 @@ export const ProfileBtn = styled.button<{ isLogOut?: true }>`
 `;
 
 export const WritingSection = styled.section<{ isNoContent: boolean; isForListAll?: true }>`
-  // when there is content in mobile size or there is no content
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-
   margin-bottom: 7px;
 
-  // when there is content in tablet size
-  ${({ isNoContent }) =>
-    !isNoContent &&
-    theme.media.tablet(`
-    display: grid;
-    grid-template-columns: repeat(2,1fr);
-    grid-gap: 10px;
-  `)}
-
   ${({ isForListAll }) => isForListAll && "margin-top: 12px;"}
+
+  @media (max-width: 767px) {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  @media (min-width: 768px) {
+    ${({ isNoContent }) =>
+      isNoContent
+        ? `display: flex;
+          flex-direction: column;
+          gap: 10px;`
+        : `
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          grid-gap: 10px;
+      `}// "minmax(0, 1fr)" is necessary to set ellipsis to its grid item
+  }
 `;
 
 export const WritingContnr = styled.div<{

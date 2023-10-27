@@ -19,12 +19,20 @@ export const NovelLink = styled.div`
 `;
 
 export const NovelImg = styled.div<{
-  screenWidth: number;
+  bodyWidth: number;
   novelImg: string;
   isRecommend?: true;
 }>`
   height: auto;
-  min-width: ${({ screenWidth }) => (screenWidth < 500 ? 59 : 70)}px;
+
+  min-width: ${({ bodyWidth, isRecommend }) => {
+    if (isRecommend) return 92;
+
+    if (bodyWidth < 500) return 59;
+
+    return 70;
+  }}px;
+
   border-radius: 5%;
 
   ${({ novelImg }) => !novelImg && `border: 1px solid #e5e5e5;`};
@@ -32,36 +40,30 @@ export const NovelImg = styled.div<{
   background-image: url(${({ novelImg }) => novelImg});
   background-repeat: no-repeat;
   background-size: cover;
-
-  ${({ isRecommend }) => isRecommend && "min-width: 92px;"}
 `;
 
-export const NovelInfoBox = styled.div<{ containerWidth: number; screenWidth: number }>`
+export const NovelInfoBox = styled.div<{ bodyWidth: number }>`
   display: flex;
   flex-direction: column;
-  margin-left: 10px;
+  padding-left: 10px;
   justify-content: space-evenly;
 
   position: relative;
 
-  // (컨테이너 width) - (이미지 width) - (10px of 'margin-left')
-  width: ${({ screenWidth, containerWidth }) => {
-    const imgWidth = screenWidth < 500 ? 59 : 70;
-    const widthSet = containerWidth - imgWidth - 10;
-    return `${widthSet}px`;
+  ${({ bodyWidth }) => {
+    const imgWidth = bodyWidth < 500 ? 59 : 70;
+    return `width: calc(100% - ${imgWidth}px);`;
   }};
 `;
 
-export const NovelTitle = styled.div<{ infoWidth: number }>`
+export const NovelTitle = styled.div`
   font-weight: 500;
 
-  // 줄 넘어가면 ... 표시
-  display: inline-block;
-  width: ${(props) => props.infoWidth}px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 `;
+
 export const NovelSubInfoBox = styled.div`
   color: ${(props) => props.theme.color.textGray};
   font-weight: 500;
@@ -78,8 +80,7 @@ export const NovelDescBox = styled.div`
 
   width: 100%;
 `;
-export const NovelDesc = styled.div<{ isRecommend?: true }>`
-  //2줄 넘어가는 텍스트 ...표시
+export const NovelDesc = styled.div`
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
@@ -87,14 +88,10 @@ export const NovelDesc = styled.div<{ isRecommend?: true }>`
   -webkit-box-orient: vertical;
 
   white-space: normal;
-  height: 39px; // 화면 표시되는 것 보며 맞춰야 함
   text-align: left;
   word-wrap: break-word;
-
-  ${({ isRecommend }) => isRecommend && "height: 64px;"}
-
-  width: 100%;
 `;
+
 export const DownIconBox = styled.div`
   z-index: 1;
 
@@ -171,14 +168,16 @@ const descShowOn = keyframes`
 export const ModalContainerT = styled.div`
   font-size: 14px;
 
+  cursor: default;
+
   ${theme.media.hover(`
-      cursor:default;
       opacity: 1;
       background-color: white;`)}
-  white-space: pre-line; // line break 적용(with tab, use pre-wrap)
+
+  white-space: pre-line; // set line break (but with tab, use "pre-wrap")
 
   position: absolute;
-  width: 100%;
+  width: auto; // not 100%
   height: 100%;
   overflow-y: scroll;
 
@@ -200,6 +199,7 @@ export const ModalContainerT = styled.div`
   animation-duration: 0.5s;
   animation-fill-mode: forwards;
 `;
+
 export const ModalContainerF = styled.div`
   font-size: 14px;
 
@@ -210,7 +210,7 @@ export const ModalContainerF = styled.div`
   white-space: pre-line; // line break 적용
 
   position: absolute;
-  width: 100%;
+  width: auto; // not 100%
   height: 100%;
   overflow-y: scroll;
 
