@@ -69,16 +69,16 @@ export const ChatRoomCntnr = styled.div<{
   ${({ isRoomSpread }) => (isRoomSpread ? `width: 100%;` : `width:50%;`)}
 `;
 export const NextToImgContainer = styled.div<{ isRoomSpread: boolean }>`
-  width: 100%;
-  margin-left: 12px;
+  width: calc(100% - 45px);
+  padding-left: 12px;
 
   ${({ isRoomSpread }) => !isRoomSpread && "position: relative;"}
 `;
 
 export const UserImg = styled.div<{ userImg: Img }>`
-  border-radius: 50%;
   min-width: 45px;
   height: 45px;
+  border-radius: 50%;
 
   ${({ userImg }) => !userImg.src && `border: 1px solid #e5e5e5;`};
 
@@ -177,15 +177,13 @@ export const UnreadMessageNumber = styled.span<{ isForNav?: true }>`
   font-weight: ${({ isForNav }) => (isForNav ? 600 : 300)};
 `;
 
-export const MessageContent = styled.p<{ contnrWidth: number }>`
+export const MessageContent = styled.p`
   margin: 0;
   color: rgba(0, 0, 0, 0.7);
   font-size: 15px;
 
-  // 1줄 엘립시스 ...
   display: inline-block;
-  width: ${({ contnrWidth }) => contnrWidth - (45 + 12 + 10) - 2}px;
-  // container width - (img width + margin left + padding) - amount necessary
+  width: 100%;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

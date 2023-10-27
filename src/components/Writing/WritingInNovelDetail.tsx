@@ -1,5 +1,4 @@
-import { useRef } from "react";
-import { goToUserPage, useComponentWidth } from "utils";
+import { goToUserPage } from "utils";
 import { WritingWithoutGenre } from "store/serverAPIs/types";
 import { useNavigate } from "react-router-dom";
 import { RECOMMEND_DETAIL, TALK_DETAIL } from "utils/pathname";
@@ -14,7 +13,7 @@ import {
   UserNameBox,
   IconsBox,
   IconBox,
-  WritingTitleToShow,
+  WritingTitle,
   WritingImg,
   IconNO,
   WritingPreview,
@@ -31,14 +30,9 @@ export default function WritingInNovelDetail({ writing }: { writing: WritingWith
     userImg,
     createDate,
     likeNO,
-    commentNO, // undefined for recommend
+    commentNO, // undefined in recommend
     talkOrRecommend,
   } = writing;
-
-  // configure title ellipsis
-  const titleWidthRef = useRef<HTMLDivElement>(null);
-  const calcTitleWidth = useComponentWidth(titleWidthRef);
-  const titleWidth = calcTitleWidth - 40 - 4; // (component width) - (image width) - (extra)
 
   const navigate = useNavigate();
 
@@ -54,8 +48,9 @@ export default function WritingInNovelDetail({ writing }: { writing: WritingWith
     <WritingBG onClick={goToWritingPage}>
       <Writing>
         <UserImg userImg={userImg} onClick={(e) => goToUserPage(navigate, e, userName)} />
+
         <BesideImgContainer>
-          <FirstLineContainer ref={titleWidthRef}>
+          <FirstLineContainer>
             <UserNameBox>
               <UserName onClick={(e) => goToUserPage(navigate, e, userName)}>{userName}</UserName>
               <CreateDate>{createDate}</CreateDate>
@@ -79,7 +74,7 @@ export default function WritingInNovelDetail({ writing }: { writing: WritingWith
           </FirstLineContainer>
 
           <WritingPreview>
-            <WritingTitleToShow titleWidth={titleWidth}>{writingTitle}</WritingTitleToShow>
+            <WritingTitle>{writingTitle}</WritingTitle>
 
             {writingImg && (
               <WritingImgBox>

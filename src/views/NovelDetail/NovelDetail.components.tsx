@@ -15,8 +15,8 @@ import {
   NovelInfoMobile,
   NovelInfoTablet,
   NovelContainer,
-  NovelDescPart,
-  NovelDescAll,
+  NovelDescPartial,
+  NovelDescEntire,
   NovelPlatformBox,
   NovelDescMobile,
   DownIconBox,
@@ -26,8 +26,6 @@ import {
   NovelImgBox,
   TextIconBox,
   TextIcon,
-  LikeIconBox,
-  LikeIcon,
   InfoIconBox,
   IconNumber,
   HandIconBox,
@@ -36,7 +34,7 @@ import {
   RunnerIcon,
   ReaderIcon,
   NovelDescTablet,
-  NovelUpDescBox,
+  NovelAboveDescTablet,
   NovelInfoMobileAge,
   PlatformText,
   PlatformTextBox,
@@ -51,7 +49,6 @@ export default function NovelDetailInfo({
   writingNoWithAllType?: number;
 }) {
   const {
-    novelId,
     novelImg,
     novelTitle,
     novelAuthor,
@@ -69,8 +66,6 @@ export default function NovelDetailInfo({
   const theme = {
     novelImg,
   };
-  // const infoRef = useRef<HTMLDivElement>(null);
-  // const infoWidth = useComponentWidth(infoRef); // 인포컨테이너 width 받아와 제목 엘립시스에 적용
 
   const [isShowAll, handleShowAll] = useState(false);
 
@@ -88,7 +83,7 @@ export default function NovelDetailInfo({
           </NovelImgBox>
 
           <NovelInfoBox>
-            <NovelUpDescBox>
+            <NovelAboveDescTablet>
               <NovelTitle>{novelTitle}</NovelTitle>
               <NovelSubInfoBox>
                 <NovelInfoAuthorBox>
@@ -114,14 +109,15 @@ export default function NovelDetailInfo({
                   </InfoIconBox>
                 )}
               </NovelSubInfoBox>
-            </NovelUpDescBox>
+            </NovelAboveDescTablet>
 
             <NovelDescTablet>{novelDesc}</NovelDescTablet>
           </NovelInfoBox>
         </NovelMainInfo>
+
         {isShowAll && (
           <NovelDescMobile>
-            <NovelDescAll>{novelDesc}</NovelDescAll>
+            <NovelDescEntire>{novelDesc}</NovelDescEntire>
             <UpIconBox onClick={() => handleShowAll(false)}>
               <UpIcon />
             </UpIconBox>
@@ -129,12 +125,13 @@ export default function NovelDetailInfo({
         )}
         {!isShowAll && (
           <NovelDescMobile>
-            <NovelDescPart>{novelDesc}</NovelDescPart>
+            <NovelDescPartial>{novelDesc}</NovelDescPartial>
             <DownIconBox>
               <DownIcon onClick={() => handleShowAll(true)} />
             </DownIconBox>
           </NovelDescMobile>
         )}
+
         <NovelPlatformBox>
           <PlatformBorder>
             <PlatformIconBox>

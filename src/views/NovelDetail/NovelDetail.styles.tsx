@@ -21,21 +21,6 @@ export const TextIconBox = styled.div`
   max-height: 20px;
 `;
 export const TextIcon = styled(Icon.Text)``;
-export const LikeIconBox = styled.div`
-  display: flex;
-  align-items: center;
-  background-color: white;
-  color: rgba(100, 100, 100, 0.5);
-
-  min-width: 35px;
-  max-width: 35px;
-  min-height: 35px;
-  max-height: 35px;
-`;
-export const LikeIcon = styled(Icon.SmallHeart)`
-  width: 100%;
-  height: 100%;
-`;
 export const HandIconBox = styled.div`
   position: absolute;
   bottom: -2px;
@@ -116,30 +101,29 @@ export const NovelMainInfo = styled.div`
 
 export const NovelDescMobile = styled.div`
   display: flex;
-  align-items: flex-start;
+  align-items: flex-end;
   justify-content: space-between;
-  padding: 3px 0;
+  padding: 8px 0;
+  gap: 3px;
   border-bottom: 1px solid rgba(100, 100, 100, 0.2);
-  // 태블릿,데스크탑 X. only for Mobile Phone
+
   ${theme.media.tablet(`
     display:none;
   `)}
 `;
-export const NovelDescPart = styled.div`
-  padding: 5px 3px 5px 0;
 
-  //2줄 넘어가는 텍스트 ...표시
+export const NovelDescPartial = styled.div`
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
 
   white-space: normal;
-  height: 58px;
   text-align: left;
   word-wrap: break-word;
 `;
+
 export const NovelDescTablet = styled.div`
   width: 100%;
 
@@ -148,7 +132,7 @@ export const NovelDescTablet = styled.div`
   overflow: scroll;
   height: 130px;
 
-  white-space: pre-wrap; // line break 적용
+  white-space: pre-wrap; // for line break
 
   ${theme.media.mobile(`
     display: none;
@@ -161,24 +145,22 @@ export const NovelDescTablet = styled.div`
 
   ${theme.hideScrollBar}
 `;
-export const NovelDescAll = styled.div`
-  width: 100%;
-  padding: 5px 3px 5px 0;
 
-  overflow: scroll;
+export const NovelDescEntire = styled.div`
+  width: 100%;
   height: 120px; //화면 보며 조정
 
-  white-space: pre-line; // line break 적용
-
-  /* 태블릿 */
-  @media screen and (min-width: 768px) {
-    white-space: pre-wrap; // line break with tab
-  }
-
+  overflow: scroll;
   ${theme.hideScrollBar}
+
+  @media screen and (max-width: 767px) {
+    white-space: pre-line; // line break
+  }
+  @media screen and (min-width: 768px) {
+    white-space: pre-wrap; // line break including tab
+  }
 `;
 export const DownIconBox = styled.div`
-  margin-top: 8px;
   z-index: 1;
 
   border-radius: 50%;
@@ -206,7 +188,6 @@ export const DownIconBox = styled.div`
 `;
 
 export const UpIconBox = styled.div`
-  margin-top: 8px;
   z-index: 1;
 
   border-radius: 50%;
@@ -283,32 +264,40 @@ export const PlatformText = styled.a<{
 export const NovelInfoBox = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
-  margin-left: 10px;
-  width: 80%;
 
   border: 1px solid rgba(100, 100, 100, 0.2);
-  padding: 10px;
   border-radius: 10px;
 
+  margin-left: 10px;
+
+  // width : 100% - (width in NovelImgBox) - (margin-left in this component)
+  ${theme.media.mobile(`
+    width: calc(100% - 27% - 10px);
+    padding: 10px;
+    justify-content: space-evenly;
+  `)}
+
   ${theme.media.tablet(`
-  width: 76%;
-  padding: 8px 10px 10px 10px;
-  justify-content: space-between;
+    width: calc(100% - 24% - 10px);
+    padding: 8px 10px 10px 10px;
+    justify-content: space-between;
   `)}
 `;
+
 export const NovelImgBox = styled.div`
-  width: 27%;
+  position: relative;
+  cursor: pointer;
+
   min-width: 100px;
 
-  position: relative;
-
+  ${theme.media.mobile(`
+    width: 27%;
+  `)}
   ${theme.media.tablet(`
     width: 24%;
   `)}
 
   ${theme.media.hover(`
-    cursor: pointer;
     opacity: 0.7;
   `)}
 `;
@@ -326,7 +315,7 @@ export const NovelImgSmall = styled.div<Props>`
   ${(props) => !props.theme.novelImg && `border: 1px solid #e5e5e5;`};
 
   background-image: url(${(props) => props.theme.novelImg});
-  background-position: center; //다른 컴포넌트의 작품 이미지도 center로 맞춰야하나 말아야하나
+  background-position: center; //다른 컴포넌트의 작품 이미지도 center로 맞출까
   background-repeat: no-repeat;
   background-size: cover;
 
@@ -335,13 +324,19 @@ export const NovelImgSmall = styled.div<Props>`
   `)}
 `;
 export const NovelTitle = styled.div`
-  font-weight: 500;
-  font-size: 17px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 
+  width: 100%;
+
+  font-weight: 500;
+
+  ${theme.media.mobile(`
+    font-size: 17px;
+  `)}
   ${theme.media.tablet(`
     font-size: 21px;
-    margin-left: -2px;
-    margin-top: -1px;
   `)}
 `;
 export const NovelSubInfoBox = styled.div`
@@ -385,9 +380,11 @@ export const NovelInfoTablet = styled.div`
     display: none;
   `)}
 `;
-export const NovelUpDescBox = styled.div`
+export const NovelAboveDescTablet = styled.div`
+  width: 100%;
+
   ${theme.media.tablet(`
-    padding: 0px 4px 3px 2px;
+    padding: 0px 2px 3px 2px;
   `)}
 `;
 

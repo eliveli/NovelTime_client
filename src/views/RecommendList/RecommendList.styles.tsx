@@ -219,14 +219,13 @@ export const RecommendTitleOnDesc = styled.div`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  // set ellipsis line to 1
 `;
 
 export const RecommendDesc = styled.div`
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
-  -webkit-line-clamp: 3; // set ellipsis line to 3
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
 
   white-space: normal;
@@ -252,14 +251,13 @@ export const RecommendTitle = styled.div`
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    // set ellipsis line to 1
   }
 
   @media screen and (min-width: 768px) {
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
-    -webkit-line-clamp: 2; // set ellipsis line to 2
+    -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
 
     white-space: normal;

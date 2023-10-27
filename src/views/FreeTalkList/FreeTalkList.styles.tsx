@@ -370,7 +370,6 @@ export const TalkDescContainer = styled.div`
 export const TalkDesc = styled.div`
   line-height: 1.2;
 
-  // set ellipsis
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;

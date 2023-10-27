@@ -231,7 +231,8 @@ export const NewMsgContent = styled.p`
 
   margin: 0 0 -3px 0px;
   width: calc(100% + 3px);
-  // + 3px : 표시되는 마지막 글자 크기가 width와 맞아떨어지지 않을 때 우측 간격이 비는 것 보완
+  // -> +3px : 표시되는 마지막 글자 크기가 width와 맞아떨어지지 않을 때 우측 간격이 비는 것 보완
+  //           (부모의 padding 간격보다 작게 줌)
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

@@ -72,6 +72,7 @@ export default function NovelDetail() {
   return (
     <>
       {(novelInDetail.isFetching || writingsOfNovel.isFetching) && <Spinner styles="fixed" />}
+
       {novelInDetail.data && (
         <MainBG>
           <NovelDetailInfo

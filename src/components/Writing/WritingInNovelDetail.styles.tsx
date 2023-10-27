@@ -4,6 +4,7 @@ import { Img } from "store/serverAPIs/types";
 export const WritingBG = styled.article`
   width: 100%;
   margin: 0 auto;
+  padding: 0 5px;
   background-color: white;
   border-bottom: 1px solid rgba(150, 150, 150, 0.2);
 `;
@@ -26,21 +27,21 @@ export const FirstLineContainer = styled.div`
   justify-content: space-between;
   align-items: flex-start;
 
-  margin-left: 12px;
   padding-bottom: 3px;
   padding-top: 10px;
 
   border-bottom: 1px solid ${(props) => props.theme.color.lightGray100_1};
 `;
 export const BesideImgContainer = styled.div`
-  width: 100%;
+  width: calc(100% - 55px); // 100% - (width in UserImg)
+  padding-left: 12px;
 `;
 
 export const UserImg = styled.div<{ userImg: Img }>`
-  border-radius: 50%;
   min-width: 55px;
   height: 55px;
   margin-top: -4px;
+  border-radius: 50%;
 
   ${({ userImg }) => !userImg.src && `border: 1px solid #e5e5e5;`};
 
@@ -61,7 +62,6 @@ export const CreateDate = styled.p`
   padding-left: 12px;
 `;
 export const WritingPreview = styled.div`
-  padding-left: 12px;
   padding-top: 5px;
   padding-bottom: 5px;
 
@@ -97,13 +97,11 @@ export const IconNO = styled.span`
   font-size: 17px;
 `;
 
-export const WritingTitleToShow = styled.div<{ titleWidth: number }>`
+export const WritingTitle = styled.div`
   font-weight: 500;
   font-size: 16px;
 
-  // 1줄 엘립시스 ...
-  display: inline-block;
-  width: ${({ titleWidth }) => titleWidth || 205}px;
+  width: 100%;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

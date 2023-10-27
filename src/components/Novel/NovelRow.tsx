@@ -26,6 +26,7 @@ type MyComponentProps = React.PropsWithChildren<{
   isNotSubInfo?: true;
   isNotNavigation?: true;
 }>;
+
 const NovelRow = React.memo(
   ({ novel, isFromSameAuthor, isWidth100, isNotSubInfo, isNotNavigation }: MyComponentProps) => {
     const { novelId, novelImg, novelTitle, novelAuthor, novelGenre } = novel;

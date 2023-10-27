@@ -69,13 +69,12 @@ export const NovelTitleBox = styled.div`
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  height: 50px; // child인 Title 대신 적용. title에서 한 줄 제목 정렬 위해.
+  height: 50px; // fasten height regardless of text lines (for both line 1 and 2)
   margin-bottom: 7px;
 `;
 export const NovelTitle = styled.div`
   font-weight: 500;
 
-  //2줄 넘어가는 텍스트 ...표시
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;

@@ -1,12 +1,7 @@
 import MainBG from "components/MainBG";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  getCurrentRoomId,
-  useComponentWidth,
-  useWhetherItIsMobile,
-  useWhetherItIsTablet,
-} from "utils";
+import { getCurrentRoomId, useWhetherItIsMobile, useWhetherItIsTablet } from "utils";
 import ChatRoom from "views/ChatRoom";
 import { ChatRoomNav } from "views/Nav/Nav.components";
 import { CHAT_ROOM, CHAT_ROOM_LIST } from "utils/pathname";
@@ -90,10 +85,6 @@ function ChatRoomPreview({ chatRoom, isRoomSpread, roomIdSelected }: ChatRoomPre
     unreadMessageNo,
   } = chatRoom;
 
-  // set ellipsis with component width
-  const contnrRef = useRef<HTMLDivElement>(null);
-  const contnrWidth = useComponentWidth(contnrRef, !!roomIdSelected, isRoomSpread);
-
   const navigate = useNavigate();
 
   const currentDate = getCurrentDate();
@@ -101,7 +92,6 @@ function ChatRoomPreview({ chatRoom, isRoomSpread, roomIdSelected }: ChatRoomPre
 
   return (
     <ChatRoomPreviewContainer
-      ref={contnrRef}
       isRoom={!!roomIdSelected}
       isRoomSpread={isRoomSpread}
       isCurrentRoom={roomIdSelected === roomId}
@@ -120,7 +110,7 @@ function ChatRoomPreview({ chatRoom, isRoomSpread, roomIdSelected }: ChatRoomPre
             <UnreadMessageNo isRoomSpread={isRoomSpread} unreadMessageNo={unreadMessageNo} />
           )}
         </FirstLineInfoContnr>
-        <MessageContent contnrWidth={contnrWidth}>{latestMessageContent}</MessageContent>
+        <MessageContent>{latestMessageContent}</MessageContent>
       </NextToImgContainer>
     </ChatRoomPreviewContainer>
   );
