@@ -187,6 +187,7 @@ function TalkMobile({ talk }: { talk: TalkInList }) {
 export default function FreeTalk({ talk, isLast }: { talk: TalkInList; isLast?: boolean }) {
   const navigate = useNavigate();
 
+  // criterion to check it is mobile or not here : 600px screen width
   return (
     <Talk
       isLast={isLast}

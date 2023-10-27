@@ -30,9 +30,6 @@ export const NavBottomBG = styled.header`
 // 층별 내비게이션에 배경 입히려면 추가 컴포넌트 필요
 // 아래는 컨텐트 정렬용(화면 중앙 또는 전체(모바일,태블릿))
 export const NavContentBoxPC = styled.nav`
-  @media screen and (max-width: 1023px) {
-    display: none;
-  }
   width: 100%;
   max-width: 860px;
   margin: auto;
@@ -51,10 +48,6 @@ export const NavContentBoxMobile = styled.nav<{
   isMainBottom?: true;
   isDetail?: true;
 }>`
-  @media screen and (min-width: 1024px) {
-    display: none;
-  }
-
   width: 100%;
   max-width: 860px;
   margin: auto;
@@ -207,10 +200,6 @@ export const MyPageTablet = styled.button<{ isEditingBG?: boolean }>`
     padding: 6px 8px;
   }
 
-  @media screen and (max-width: 767px) {
-    display: none;
-  }
-
   ${theme.media.hover(
     `cursor: pointer;
     opacity: 0.7;
@@ -235,9 +224,6 @@ export const LoginText = styled.button`
     opacity: 0.7;
     color: rgba(100, 100, 100, 0.8);`,
   )}
-  @media screen and (max-width: 767px) {
-    display: none;
-  }
 `;
 
 export const LoginIconBox = styled(Icon.IconBox)`
@@ -247,10 +233,6 @@ export const LoginIconBox = styled(Icon.IconBox)`
   max-height: 27px;
 
   margin-left: 7px;
-
-  @media screen and (min-width: 768px) {
-    display: none;
-  }
 `;
 export const BackIcon = styled(Icon.BigLeft)``;
 export const ForwardIcon = styled(Icon.BigRight)``;
@@ -379,10 +361,6 @@ export const MyPageMobile = styled.div<{ userImg: Img; isEditingBG?: boolean }>`
   background-position: ${({ userImg }) => userImg.position || "center"};
   background-repeat: no-repeat;
   background-size: cover;
-
-  @media screen and (min-width: 768px) {
-    display: none;
-  }
 
   ${theme.media.hover(
     `cursor: pointer;

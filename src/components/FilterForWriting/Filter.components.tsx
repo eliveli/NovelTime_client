@@ -168,7 +168,8 @@ export function SortTablet({
     </SortTabletContainer>
   );
 }
-// now following is not used
+
+// Not used now
 export function SortTablet2() {
   return (
     <CustomArrowBox>
@@ -177,7 +178,7 @@ export function SortTablet2() {
           <SortTab
             key={_}
             onClick={() => {
-              // require server request //
+              // server request
             }}
           >
             {_}

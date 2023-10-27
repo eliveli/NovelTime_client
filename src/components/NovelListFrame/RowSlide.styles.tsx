@@ -4,11 +4,6 @@ import Icon from "../../assets/Icon";
 export const RowBG = styled.article``;
 
 export const LeftIcon = styled.div`
-  // 모바일, 태블릿은 아이콘 없음
-  @media screen and (max-width: 1023px) {
-    display: none;
-  }
-
   border-radius: 50%;
   background-color: white;
   box-shadow: 0 0 2px rgb(0 0 0 / 60%);
@@ -28,11 +23,6 @@ export const LeftIcon = styled.div`
   }
 `;
 export const RightIcon = styled.div`
-  // 모바일, 태블릿은 아이콘 없음
-  @media screen and (max-width: 1023px) {
-    display: none;
-  }
-
   border-radius: 50%;
   background-color: white;
   box-shadow: 0 0 2px rgb(0 0 0 / 60%);

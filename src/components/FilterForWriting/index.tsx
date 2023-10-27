@@ -28,20 +28,20 @@ export default function Filter({ children }: { children?: React.ReactNode }) {
     }
   }, [currentSearchWord]);
 
-  const isNotMobile = !useWhetherItIsMobile();
+  const isMobile = useWhetherItIsMobile();
   return (
     <FilterBG>
       <Genres />
 
       {/* sort with search-button */}
-      <ContainerWithSrchAlarm isSearch={isSearch} isNotMobile={isNotMobile}>
-        {isNotMobile && isSearch && (
-          <SearchAlarm>{`Search for ${writing} about Novel!`}</SearchAlarm>
-        )}
+      <ContainerWithSrchAlarm isSearch={isSearch} isNotMobile={!isMobile}>
+        {!isMobile && isSearch && <SearchAlarm>{`Search for ${writing} about Novel!`}</SearchAlarm>}
+
         <ContainerWithSrchBtn>
           {children}
-          <SortMobile />
-          <SortTablet isSearch={isSearch} />
+
+          {isMobile ? <SortMobile /> : <SortTablet isSearch={isSearch} />}
+
           <SearchBtn isSearch={isSearch} handleSearch={handleSearch} />
         </ContainerWithSrchBtn>
       </ContainerWithSrchAlarm>
@@ -52,6 +52,7 @@ export default function Filter({ children }: { children?: React.ReactNode }) {
   );
 }
 
+// Not used now
 export function SortOnly({
   marginBottom,
   height,
@@ -61,10 +62,15 @@ export function SortOnly({
   height?: number;
   borderOpacity?: number;
 }) {
+  const isMobile = useWhetherItIsMobile();
+
   return (
     <ContainerOnlySort marginBottom={marginBottom} height={height}>
-      <SortMobile borderOpacity={borderOpacity} />
-      <SortTablet isSearch={false} borderOpacity={borderOpacity} />
+      {isMobile ? (
+        <SortMobile borderOpacity={borderOpacity} />
+      ) : (
+        <SortTablet isSearch={false} borderOpacity={borderOpacity} />
+      )}
     </ContainerOnlySort>
   );
 }

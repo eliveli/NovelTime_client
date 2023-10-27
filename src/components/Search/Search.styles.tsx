@@ -60,10 +60,6 @@ export const SearchCategoryAll = styled.ul<{ isSearchPage?: true }>`
   border-top-width: 0px;
 
   z-index: 1;
-
-  ${theme.media.mobile(`
-    display: none;
-  `)}
 `;
 export const SearchCategoryLi = styled.li<{ selectedCategory: string; category: string }>`
   width: 100%;
@@ -149,10 +145,6 @@ export const MobileContainer = styled.div`
       opacity: 0.8;
     `)}
 
-  ${theme.media.tablet(`
-    display: none;
-  `)}
-
   white-space: nowrap;
   z-index: 1;
 `;
@@ -169,10 +161,6 @@ export const ContainerWithBtn = styled.div`
   ${theme.media.hover(`
       cursor: pointer;
       opacity: 0.8;
-    `)}
-
-  ${theme.media.mobile(`
-      display: none;
     `)}
 `;
 

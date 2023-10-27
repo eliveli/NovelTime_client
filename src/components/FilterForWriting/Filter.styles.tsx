@@ -26,14 +26,10 @@ export const Genre = styled.p<{ genreName: string; selectedGenre: string }>`
 `;
 
 export const SortMobileContainer = styled.div`
-  z-index: 1;
-
   display: inline-block;
   text-align: right;
   height: 100%;
-  ${theme.media.tablet(`
-        display: none;
-    `)}
+  z-index: 1;
 `;
 export const SortCategorySelected = styled.p`
   width: 100%;
@@ -49,10 +45,6 @@ export const SortTabletContainer = styled.div`
   position: relative;
   height: 100%;
   z-index: 2;
-
-  ${theme.media.mobile(`
-        display: none;
-    `)}
 `;
 export const SortCategoryAll = styled.ul`
   position: relative;

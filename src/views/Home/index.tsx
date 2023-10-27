@@ -13,7 +13,7 @@ import {
   useGetWeeklyNovelsFromPlatformQuery,
 } from "store/serverAPIs/novelTime";
 import { Img } from "store/serverAPIs/types";
-import { goToUserPage, matchPlatformName, useComponentWidth } from "utils";
+import { goToUserPage, matchPlatformName, useComponentWidth, useWhetherItIsMobile } from "utils";
 import FreeTalk from "views/FreeTalkList/FreeTalkList.components";
 import Recommend from "views/RecommendList/RecommendList.components";
 import { RowSlideSimple } from "components/NovelListFrame/RowSlide";
@@ -191,6 +191,8 @@ function UserRankSection({ category, rankList }: UserRankSectionProps) {
     }
   };
 
+  const isMobile = useWhetherItIsMobile();
+
   return (
     <RankSectionContnr ref={contnrRef}>
       <SectionMark>
@@ -213,14 +215,17 @@ function UserRankSection({ category, rankList }: UserRankSectionProps) {
               &nbsp;&nbsp;
             </Filter>
           ))}
-          <AllArrowContnr>
-            <ArrowContnr size={24} onClick={() => scrollRank(true)}>
-              <Icon.SmallLeft />
-            </ArrowContnr>
-            <ArrowContnr size={24} onClick={() => scrollRank(false)}>
-              <Icon.SmallRight />
-            </ArrowContnr>
-          </AllArrowContnr>
+
+          {!isMobile && (
+            <AllArrowContnr>
+              <ArrowContnr size={24} onClick={() => scrollRank(true)}>
+                <Icon.SmallLeft />
+              </ArrowContnr>
+              <ArrowContnr size={24} onClick={() => scrollRank(false)}>
+                <Icon.SmallRight />
+              </ArrowContnr>
+            </AllArrowContnr>
+          )}
         </FilterContnr>
       </SectionMark>
       <UserRankCntnr rankContnrWidth={rankContnrWidth} ref={rankContnrRef}>

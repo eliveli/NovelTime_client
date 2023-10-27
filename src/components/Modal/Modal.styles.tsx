@@ -149,10 +149,6 @@ export const MobileBG = styled.div`
   display: flex;
   flex-direction: column-reverse;
   align-items: flex-end;
-
-  ${theme.media.tablet(`
-    display: none;
-  `)}
 `;
 export const ClosingSpace = styled.div`
   width: 100%;

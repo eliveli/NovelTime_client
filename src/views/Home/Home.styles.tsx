@@ -139,11 +139,6 @@ export const Filter = styled.p<{ category: string; selectedCtgr: string }>`
 `;
 
 export const ArrowContnr = styled(Icon.IconBox)`
-  // 모바일은 아이콘 없음
-  @media screen and (max-width: 767px) {
-    display: none;
-  }
-
   border-radius: 50%;
   background-color: white;
   box-shadow: 0 0 2px rgb(0 0 0 / 60%);

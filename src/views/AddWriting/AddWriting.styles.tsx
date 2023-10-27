@@ -151,10 +151,6 @@ export const WritingContent = styled.textarea`
 export const SubmitBtnContnr = styled.div`
   display: flex;
   justify-content: flex-end;
-
-  @media screen and (max-width: 1023px) {
-    display: none;
-  }
 `;
 export const SubmitBtnPC = styled.button`
   padding: 7px 10px;

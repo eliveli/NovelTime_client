@@ -456,9 +456,11 @@ export default function AddWriting() {
             />
           </WritingContentContnr>
 
-          <SubmitBtnContnr>
-            <SubmitBtnPC onClick={submitToAddWriting}>작성</SubmitBtnPC>
-          </SubmitBtnContnr>
+          {isDesktop && (
+            <SubmitBtnContnr>
+              <SubmitBtnPC onClick={submitToAddWriting}>작성</SubmitBtnPC>
+            </SubmitBtnContnr>
+          )}
 
           {/* <ContentPlusContnrMobile>
             <ContentPlusAlignMobile>사진/간단텍스트설정/이모지</ContentPlusAlignMobile>

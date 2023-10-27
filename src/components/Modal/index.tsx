@@ -18,7 +18,7 @@ function ModalOpen({ category, isSecond }: { category: string; isSecond?: true }
     case "novelImage":
       return <NovelImage isSecond={isSecond} />;
     case "sortWriting":
-      return <SortWriting isSecond={isSecond} />;
+      return <SortWriting isSecond={isSecond} />; // Used on mobile
     case "filterContent":
       return <FilterContent isSecond={isSecond} />;
     case "login":

@@ -1,5 +1,5 @@
 import { ReactNode, useRef, useState } from "react";
-import { useComponentWidth } from "utils";
+import { useComponentWidth, useWhetherItIsDesktop } from "utils";
 import { CategoryMark } from "components/CategoryMark";
 import {
   RowSlideContainer,
@@ -106,6 +106,8 @@ export default function RowSlide({
     changeAlbumX(x);
   };
 
+  const isDesktop = useWhetherItIsDesktop();
+
   return (
     <RowBG>
       <CategoryMark
@@ -122,7 +124,7 @@ export default function RowSlide({
           <RowAlbum moveX={albumX}>{children}</RowAlbum>
         </RowAlbumContainer>
         {/* 이전 이미지 화살표(맨 처음 페이지 제외) */}
-        {currentPage.current > 1 && (
+        {isDesktop && currentPage.current > 1 && (
           <LeftIcon
             onClick={() => {
               slideAlbum(albumX + showAlbumWidth);
@@ -133,7 +135,7 @@ export default function RowSlide({
           </LeftIcon>
         )}
         {/* 다음 이미지 화살표(맨 끝 페이지 제외) */}
-        {isNextArrow && (
+        {isDesktop && isNextArrow && (
           <RightIcon
             onClick={() => {
               slideAlbum(albumX - showAlbumWidth);
