@@ -2,18 +2,16 @@ import theme, { styled } from "assets/styles/theme";
 import { Img } from "store/serverAPIs/types";
 import Icon from "../../assets/Icon";
 
-interface Props {
-  theme: { novelImg: string; userImg: Img };
-}
-
 export const RightIcon = styled(Icon.ListRight)`
-  margin: auto 0 auto 6px;
+  @media screen and (max-width: 767px) {
+    margin: auto 0 auto 6px;
+  }
 
-  /* 태블릿, PC */
   @media screen and (min-width: 768px) {
     margin-left: 8px;
   }
 `;
+
 export const RightIconBox = styled.div`
   display: flex;
   align-items: center;
@@ -24,45 +22,44 @@ export const RightIconBox = styled.div`
 `;
 
 export const Text = styled.article<{ isLast?: boolean }>`
-  /* 모바일 */
-  width: 100%;
-  padding: 12px 0 6px;
   border-bottom: 1px solid rgba(100, 100, 100, 0.2);
 
-  // it does not work when element is article
   &:last-of-type {
+    // it does not work when element is article
     border-bottom: 0;
   }
+
   // this is used in home page
   ${({ isLast }) => isLast && `border-bottom: 0;`}
 
   display: flex;
   flex-direction: column;
 
-  /* 태블릿, PC */
+  @media screen and (max-width: 767px) {
+    width: 100%;
+    padding: 12px 0 6px;
+  }
+
   @media screen and (min-width: 768px) {
     flex-direction: row;
-    padding: ${16 - 2}px 0 16px; // children인 두 컨테이너에 margin-top 2px임. 합하면 위쪽 간격 16px로써 아래 간격과 같음
+    padding: 16px 0;
   }
 
   ${theme.media.hover(
     `cursor: pointer;
-    opacity: 0.7;`,
+     opacity: 0.7;`,
   )}
 `;
-export const LastLineContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-`;
+
 export const UserContainer = styled.div`
-  width: 100%;
+  @media screen and (max-width: 767px) {
+    width: 100%;
+  }
 
-  /* 태블릿, PC */
   @media screen and (min-width: 768px) {
-    margin-top: 2px;
-    padding-left: 16px;
+    width: calc(50% + 8px);
 
+    padding-left: 16px;
     border-left: 8px dashed rgba(0, 0, 0, 0.1);
 
     display: flex;
@@ -71,54 +68,97 @@ export const UserContainer = styled.div`
   }
 `;
 
-export const NovelContainer = styled.div`
+export const NovelContainer = styled.div<{ isDesc: boolean }>`
   display: flex;
-  width: 100%;
 
-  /* 태블릿, PC */
+  ${({ isDesc }) => isDesc && `align-items: center;`}
+
+  @media screen and (max-width: 767px) {
+    width: 100%;
+  }
+
   @media screen and (min-width: 768px) {
-    margin-top: 2px;
     box-shadow: 0 0 2px rgb(0 0 0 / 10%);
+    width: calc(50% - 8px);
   }
 `;
+
+export const LastLineContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+`;
+
 export const NovelInfoBox = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 
-  margin-left: 6px;
-  width: 100%;
+  width: calc(100% - 70px);
 
-  /* 태블릿 , PC */
+  @media screen and (max-width: 767px) {
+    padding-left: 6px;
+  }
+
   @media screen and (min-width: 768px) {
-    margin-left: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
     justify-content: space-evenly;
   }
 `;
 
-export const NovelImg = styled.div<Props>`
-  /* 모바일 */
-  height: 80px;
-  min-width: 70px;
-  border-radius: 5%;
+export const NovelImg = styled.div<{ novelImg: string }>`
+  @media screen and (max-width: 767px) {
+    height: 80px;
+  }
 
-  ${(props) => !props.theme.novelImg && `border: 1px solid #e5e5e5;`}
-
-  background-image: url(${(props) => props.theme.novelImg});
-  background-repeat: no-repeat;
-  background-size: cover;
-
-  /* 태블릿, PC */
   @media screen and (min-width: 768px) {
     height: 100px;
   }
+
+  min-width: 70px;
+  border-radius: 5%;
+
+  ${({ novelImg }) => {
+    if (novelImg) {
+      return `
+        background-image: url(${novelImg});
+    `;
+    }
+
+    return `border: 1px solid #e5e5e5;`;
+  }}
+
+  background-repeat: no-repeat;
+  background-size: cover;
 `;
-export const UserImg = styled.div<Props>`
+
+export const NovelTitle = styled.div`
+  font-weight: 500;
+
+  display: inline-block;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`;
+
+export const NovelSubInfoBox = styled.div`
+  color: ${(props) => props.theme.color.textGray};
+  font-weight: 500;
+  font-size: 14px;
+`;
+export const NovelInfoLineHeight = styled.div`
+  line-height: 1.9;
+`;
+export const NovelInfo = styled.div``;
+
+export const UserImg = styled.div<{ userImg: Img }>`
   border-radius: 50%;
   min-width: 20px;
   height: 20px;
-  background-image: url(${(props) => props.theme.userImg.src});
-  background-position: ${(props) => props.theme.userImg.position || "center"};
+  background-image: url(${({ userImg }) => userImg.src});
+  background-position: ${({ userImg }) => userImg.position || "center"};
   background-repeat: no-repeat;
   background-size: cover;
 `;
@@ -126,7 +166,6 @@ export const UserNameBox = styled.div`
   display: flex;
   color: rgba(100, 100, 100, 0.9);
 
-  /* 태블릿, PC */
   @media screen and (min-width: 768px) {
     border-bottom: 1px dotted lightgray;
   }
@@ -140,62 +179,90 @@ export const CreateDate = styled.p`
   margin: 0;
   padding-left: 12px;
 `;
-export const RecommendPreview = styled.div`
-  border-radius: 5px;
-  box-shadow: 0 0 2px rgb(0 0 0 / 60%);
-
-  padding: 0 6px;
-  margin-bottom: 7px;
-  margin-top: 8px;
-
+export const RecommendPreview = styled.div<{ isDesc: boolean }>`
   display: flex;
   justify-content: space-between;
 
-  height: 43px;
+  border-radius: 5px;
+  box-shadow: 0 0 2px rgb(0 0 0 / 60%);
 
-  /* 태블릿, PC */
+  width: 100%;
+
+  @media screen and (max-width: 767px) {
+    margin-top: 8px;
+    margin-bottom: 7px;
+    padding: 0 6px;
+  }
+
   @media screen and (min-width: 768px) {
-    margin: 0;
     margin-bottom: 10px;
-    padding: 0px 8px;
-
-    height: 62px; //패딩 등 바뀌면 변경해야 함
+    padding: 0 8px;
   }
 `;
-export const RecommendTitle = styled.div<{ contnrWidth: number }>`
+
+export const TitleAndDescContainer = styled.div`
+  padding: 6px 8px 3px 4px;
+
+  @media screen and (max-width: 767px) {
+    width: calc(100% - 23px); // 100% - (width in RightIconBox)
+  }
+
+  @media screen and (min-width: 768px) {
+    width: calc(100% - 25px); // 100% - (width in RightIconBox)
+  }
+`;
+
+export const RecommendTitleOnDesc = styled.div`
   font-weight: 500;
 
-  margin-top: 9px;
-  margin-left: 5px;
-
-  // ... 1줄 엘립시스
-  width: ${(props) => props.contnrWidth - 11 - 28 - 11}px;
-  // (container width) - (left space) - (right icon space) - (extra space)
-
+  width: 100%;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  // set ellipsis line to 1
+`;
 
-  /* 태블릿, PC */
+export const RecommendDesc = styled.div`
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3; // set ellipsis line to 3
+  -webkit-box-orient: vertical;
+
+  white-space: normal;
+  text-align: left;
+  word-wrap: break-word;
+`;
+
+export const RecommendTitleContainer = styled.div`
+  @media screen and (max-width: 767px) {
+    padding: 9px 5px;
+    width: calc(100% - 23px); // 100% - (width in RightIconBox)
+  }
+
   @media screen and (min-width: 768px) {
-    margin: 0;
-    width: auto;
-    padding: 7px 10px 7px 2px;
+    padding: 6px 8px 4px 4px;
+  }
+`;
 
-    //텍스트 가운데정렬 : 2줄 엘립시스 적용으로 인해 설정 무시됨
-    // display: flex;
-    // align-content: center;
-    // align-items: center;
+export const RecommendTitle = styled.div`
+  font-weight: 500;
 
-    // ... 2줄 엘립시스
+  @media screen and (max-width: 767px) {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    // set ellipsis line to 1
+  }
+
+  @media screen and (min-width: 768px) {
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
-    -webkit-line-clamp: 2;
+    -webkit-line-clamp: 2; // set ellipsis line to 2
     -webkit-box-orient: vertical;
 
     white-space: normal;
-    height: 52px; // 화면 표시되는 것 보며 맞춰야 함
     text-align: left;
     word-wrap: break-word;
   }
@@ -210,33 +277,6 @@ export const IconBox = styled.div`
 export const IconNO = styled.span`
   font-size: 17px;
 `;
-export const NovelTitle = styled.div<{ contnrWidth: number }>`
-  font-weight: 500;
-
-  display: inline-block;
-
-  // ... 1줄 엘립시스
-
-  /* 모바일 */
-  width: ${(props) => props.contnrWidth - 70 - 6}px;
-  /* 태블릿, PC */
-  @media screen and (min-width: 768px) {
-    width: ${({ contnrWidth }) => contnrWidth / 2 - 12 - (70 + 10) - 10}px;
-  }
-
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-`;
-export const NovelSubInfoBox = styled.div`
-  color: ${(props) => props.theme.color.textGray};
-  font-weight: 500;
-  font-size: 14px;
-`;
-export const NovelInfoLineHeight = styled.div`
-  line-height: 1.9;
-`;
-export const NovelInfo = styled.div``;
 
 // (구분) img vs div의 backgorund-image (하기)
 // <img src="" />

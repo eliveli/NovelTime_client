@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { Img } from "store/serverAPIs/types";
+import { TalkInList } from "store/serverAPIs/types";
 import { adjustCreateDate, goToUserPage, useComponentHeight, useComponentWidth } from "utils";
 
 import Icon from "../../assets/Icon";
@@ -31,27 +31,19 @@ import {
   TalkDesc,
 } from "./FreeTalkList.styles";
 
-interface TalkProps {
-  talkId: string;
-
-  userName: string;
-  userImg: Img;
-  createDate: string;
-
-  likeNO: number;
-  commentNO: number;
-
-  talkTitle: string;
-  talkImg: string;
-
-  novelTitle: string;
-}
-
-const talkDesc = `가나다라마바사아자차...ㅌ.`;
-
 // Displayed : screen size >= 600px
-function TalkTablet({ talk }: { talk: TalkProps }) {
-  const { userName, userImg, createDate, likeNO, commentNO, talkTitle, talkImg, novelTitle } = talk;
+function TalkTablet({ talk }: { talk: TalkInList }) {
+  const {
+    userName,
+    userImg,
+    createDate,
+    likeNO,
+    commentNO,
+    talkTitle,
+    talkDesc,
+    talkImg,
+    novelTitle,
+  } = talk;
   const navigate = useNavigate();
 
   // to set the image width as title height
@@ -107,8 +99,18 @@ function TalkTablet({ talk }: { talk: TalkProps }) {
     </TalkTabletContnr>
   );
 }
-function TalkMobile({ talk }: { talk: TalkProps }) {
-  const { userName, userImg, createDate, likeNO, commentNO, talkTitle, talkImg, novelTitle } = talk;
+function TalkMobile({ talk }: { talk: TalkInList }) {
+  const {
+    userName,
+    userImg,
+    createDate,
+    likeNO,
+    commentNO,
+    talkTitle,
+    talkDesc,
+    talkImg,
+    novelTitle,
+  } = talk;
 
   const navigate = useNavigate();
 
@@ -170,7 +172,7 @@ function TalkMobile({ talk }: { talk: TalkProps }) {
   );
 }
 
-export default function FreeTalk({ talk, isLast }: { talk: TalkProps; isLast?: boolean }) {
+export default function FreeTalk({ talk, isLast }: { talk: TalkInList; isLast?: boolean }) {
   const navigate = useNavigate();
 
   return (

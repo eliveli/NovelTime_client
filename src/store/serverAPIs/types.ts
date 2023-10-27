@@ -24,7 +24,8 @@ export interface SimpleNovelWithoutId {
   novelGenre: string;
   novelIsEnd: boolean;
 }
-export type TalkList = {
+
+export type TalkInList = {
   talkId: string;
   userName: string;
   userImg: Img;
@@ -32,11 +33,14 @@ export type TalkList = {
   likeNO: number;
   commentNO: number;
   talkTitle: string;
+  talkDesc?: string; // used in search with writingDesc
   talkImg: string;
   novelTitle: string;
-}[];
+};
 
-export type RecommendList = {
+export type TalkList = TalkInList[];
+
+export type RecommendInList = {
   recommend: {
     recommendId: string;
     userName: string;
@@ -44,9 +48,12 @@ export type RecommendList = {
     createDate: string;
     likeNO: number;
     recommendTitle: string;
+    recommendDesc?: string; // used in search with writingDesc
   };
   novel: SimpleNovelWithoutId;
-}[];
+};
+
+export type RecommendList = RecommendInList[];
 
 export type WritingList =
   | { talks?: TalkList; recommends?: RecommendList; lastPageNo: number }

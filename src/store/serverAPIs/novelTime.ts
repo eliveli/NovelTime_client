@@ -183,7 +183,8 @@ export const novelTimeApi = createApi({
       providesTags: (result, error, arg) =>
         arg.writingType === "T" ? ["talkListUpdated"] : ["recommendListUpdated"],
       // list is updated and user goes here automatically when adding or deleting a post
-      // in other cases, it doesn't (such as the change of comment or like in a writing post, a post edited)
+      // in other cases, it doesn't
+      //   (such as the change of comment or like in a writing post, a post edited)
       //   to maintain the scroll position and the accumulated list with infinite-scroll
       //     when back to the list page.
       //   then some previous data might maintain,
