@@ -15,11 +15,14 @@ export const CommentMarkContainer = styled.div`
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid rgba(100, 100, 100, 0.1);
-  padding-bottom: 7px;
-  padding-left: 20px;
-  padding-right: 20px;
+
   ${theme.media.mobile(`
     padding: 0 16px;
+  `)}
+  ${theme.media.tablet(`
+    padding-bottom: 7px;
+    padding-left: 20px;
+    padding-right: 20px;
   `)}
 `;
 export const CommentMark = styled.span``;
@@ -27,63 +30,88 @@ export const CommentContainer = styled.div<{
   isReComment?: true;
 }>`
   display: flex;
-  padding: 12px 20px 6px;
-  ${theme.media.mobile(`
-    padding: 10px 12px 6px;
-  `)}
-
-  border-bottom: 1px dotted rgba(0, 0, 0, 0.1);
-
   font-size: 15px;
 
-  &:last-child {
-    border-bottom: 0;
+  @media (max-width: 767px) {
     ${({ isReComment }) =>
-      !isReComment &&
-      `padding-bottom: 12px;
+      isReComment
+        ? `
+          padding: 10px 0 4px;
+          margin-top: 5px;
+          border-top: 1px dotted rgba(0, 0, 0, 0.1);
+          border-bottom: 0;
+          `
+        : `padding: 10px 12px 6px;
+           border-bottom: 1px dotted rgba(0, 0, 0, 0.1);
     `}
+
+    &:last-child {
+      border-bottom: 0;
+      padding: ${({ isReComment }) => (isReComment ? `10px 0 4px` : `10px 12px 12px`)};
+    }
   }
 
-  ${({ isReComment }) =>
-    isReComment &&
-    `padding: 0;
-    padding-top: 10px;
-    margin-top: 5px;
-    border-top: 1px dotted rgba(0, 0, 0, 0.1);
-    border-bottom: 0;
-  `}
+  @media (min-width: 768px) {
+    ${({ isReComment }) =>
+      isReComment
+        ? `padding: 10px 0 0 0;
+          margin-top: 5px;
+          border-top: 1px dotted rgba(0, 0, 0, 0.1);
+          border-bottom: 0;
+        `
+        : `padding: 12px 20px;
+           border-bottom: 1px dotted rgba(0, 0, 0, 0.1);
+    `}
+
+    &:last-child {
+      border-bottom: 0;
+      padding: ${({ isReComment }) => (isReComment ? `10px 0 0 0` : `12px 20px 12px`)};
+    }
+  }
 `;
 
 export const DeletedCommentContainer = styled.div<{
   isReComment?: true;
 }>`
   display: flex;
-  flex-direction: column;
-  padding: 12px 20px 6px;
-  ${theme.media.mobile(`
-    padding: 10px 12px 6px;
-  `)}
-
-  border-bottom: 1px dotted rgba(0, 0, 0, 0.1);
-
   font-size: 15px;
 
-  &:last-child {
-    border-bottom: 0;
+  @media (max-width: 767px) {
     ${({ isReComment }) =>
-      !isReComment &&
-      `padding-bottom: 12px;
+      isReComment
+        ? `
+          padding: 10px 0 4px;
+          margin-top: 5px;
+          border-top: 1px dotted rgba(0, 0, 0, 0.1);
+          border-bottom: 0;
+          `
+        : `padding: 10px 12px 6px;
+           border-bottom: 1px dotted rgba(0, 0, 0, 0.1);
     `}
+
+    &:last-child {
+      border-bottom: 0;
+      padding: ${({ isReComment }) => (isReComment ? `10px 0 4px` : `10px 12px 12px`)};
+    }
   }
 
-  ${({ isReComment }) =>
-    isReComment &&
-    `padding: 0;
-    padding-top: 10px;
-    margin-top: 5px;
-    border-top: 1px dotted rgba(0, 0, 0, 0.1);
-    border-bottom: 0;
-  `}
+  @media (min-width: 768px) {
+    ${({ isReComment }) =>
+      isReComment
+        ? `padding: 10px 0 0 0;
+          margin-top: 5px;
+          border-top: 1px dotted rgba(0, 0, 0, 0.1);
+          border-bottom: 0;
+        `
+        : `padding: 12px 20px;
+           border-bottom: 1px dotted rgba(0, 0, 0, 0.1);
+    `}
+
+    &:last-child {
+      border-bottom: 0;
+      padding: ${({ isReComment }) => (isReComment ? `10px 0 0 0` : `12px 20px 12px`)};
+    }
+  }
 `;
 
 export const DeletedCommentFirstLineContainer = styled.div`
@@ -97,15 +125,12 @@ export const LeftSpaceOfDeletedComment = styled.div`
 export const DeletedComment = styled.div<{ isParentToMark: boolean; hasReComment: boolean }>`
   width: 100%;
 
-  padding: 4px 6px 2px;
-
   border-radius: 3px;
 
-  ${({ hasReComment }) => hasReComment && `padding: 4px 6px 4px;`}
+  ${({ hasReComment }) => (hasReComment ? `padding: 4px 6px 4px;` : `padding: 4px 6px 2px;`)}
 
   ${({ isParentToMark }) => isParentToMark && `border: 1px solid ${theme.color.mainLight};`}
   
-
   ${theme.media.tablet(`margin-top: -5px;`)}
 `;
 

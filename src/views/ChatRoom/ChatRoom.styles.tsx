@@ -34,9 +34,6 @@ export const UserAndContentContainer = styled.div<{ isMe?: true }>`
   display: flex;
   align-items: flex-start;
   padding: 9px 0;
-  ${theme.media.mobile(`
-    padding:9px 0;
-  `)}
 
   ${({ isMe }) => isMe && `justify-content: flex-end;`}
 `;

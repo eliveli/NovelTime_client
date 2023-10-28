@@ -52,22 +52,23 @@ export const NavContentBoxMobile = styled.nav<{
   max-width: 860px;
   margin: auto;
 
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
   height: ${({ isDetail, isMainBottom }) => {
     if (isDetail) return 50;
     if (isMainBottom) return 60;
     return 70;
   }}px;
 
-  padding: ${({ isMainBottom }) => (isMainBottom ? `0 0 2px 0` : `0 16px`)};
+  @media screen and (max-width: 767px) {
+    padding: ${({ isMainBottom }) => (isMainBottom ? `0 0 2px 0` : `0 16px`)};
+  }
 
-  // on tablet
   @media screen and (min-width: 768px) {
     padding: ${({ isMainBottom }) => (isMainBottom ? "0 0 2px 0" : "0 20px")};
   }
-
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
 `;
 
 export const ChatRoomNavContainer = styled.nav`
@@ -237,19 +238,23 @@ export const LoginIconBox = styled(Icon.IconBox)`
 export const BackIcon = styled(Icon.BigLeft)``;
 export const ForwardIcon = styled(Icon.BigRight)``;
 export const LeftIconBox = styled.div`
-  width: 32px;
-  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: rgba(100, 100, 100, 0.5);
+
+  ${theme.media.mobile(`
+    width: 32px;
+    height: 32px;
+    margin-right: 2px;
+  `)}
+
   ${theme.media.tablet(`
     width: 35px;
     height: 35px;
     margin-right: 7px;
   `)}
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-right: 2px;
-
-  color: rgba(100, 100, 100, 0.5);
 
   ${theme.media.hover(
     `cursor: pointer;
@@ -263,8 +268,11 @@ export const HomeIcon = styled(Icon.Home)`
   color: rgba(100, 100, 100, 0.5);
 `;
 export const HomeIconBox = styled.div`
-  width: 32px;
-  height: 32px;
+  ${theme.media.mobile(`
+    width: 32px;
+    height: 32px;
+  `)}
+
   ${theme.media.tablet(`
     width: 35px;
     height: 35px;

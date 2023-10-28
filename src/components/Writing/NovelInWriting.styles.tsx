@@ -3,18 +3,14 @@ import Icon from "assets/Icon";
 
 export const NovelSpace = styled.div<{ isRecommend?: true }>`
   width: 100%;
-  padding: 0 20px;
-  ${theme.media.mobile(`
-      padding: 0 12px;
-  `)}
 
-  ${({ isRecommend }) => isRecommend && "padding:0 0 20px 0;"}
+  @media (max-width: 767px) {
+    padding: ${({ isRecommend }) => (isRecommend ? `0 0 12px 0` : `0 12px`)};
+  }
 
-  ${({ isRecommend }) =>
-    isRecommend &&
-    theme.media.mobile(`
-      padding: 0 0 12px 0;
-  `)}
+  @media (min-width: 768px) {
+    padding: ${({ isRecommend }) => (isRecommend ? "0 0 20px 0" : `0 20px`)};
+  }
 `;
 export const NovelContainer = styled.div<{ isRecommend?: true }>`
   margin: 0 auto;

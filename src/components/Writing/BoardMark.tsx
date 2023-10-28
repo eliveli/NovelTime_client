@@ -1,10 +1,13 @@
 import theme, { styled } from "assets/styles/theme";
 
 const BoardTitleContainer = styled.div`
-  padding-left: 20px;
-  padding-right: 20px;
   ${theme.media.mobile(`
     padding: 0 12px;
+  `)}
+
+  ${theme.media.tablet(`
+    padding-left: 20px;
+    padding-right: 20px;
   `)}
 `;
 const BoardTitle = styled.p`
@@ -12,12 +15,15 @@ const BoardTitle = styled.p`
   padding: 2px 7px 0;
   border: 1px dotted rgba(0, 0, 0, 0.1);
   display: inline-block;
-  margin: 6px 0 16px;
   color: rgba(0, 0, 0, 0.6);
   font-weight: 500;
   font-size: 15px;
+
   ${theme.media.mobile(`
-      margin: 0 0 12px;
+    margin: 0 0 12px;
+  `)}
+  ${theme.media.tablet(`
+    margin: 6px 0 16px;
   `)}
 `;
 

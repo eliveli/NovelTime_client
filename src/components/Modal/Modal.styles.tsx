@@ -15,14 +15,17 @@ export const NovelImgBG = styled.div`
   ${theme.hideScrollBar}
 `;
 export const NovelImgContainer = styled.div`
-  width: 100%;
-
   display: flex;
   flex-direction: column-reverse;
   justify-content: center;
   align-items: center;
 
   position: relative;
+
+  ${theme.media.mobile(`
+    width: 100%;
+  `)}
+
   ${theme.media.tablet(`
     width: auto;
     height:100%;
@@ -30,7 +33,9 @@ export const NovelImgContainer = styled.div`
 `;
 
 export const NovelImgBig = styled.img`
-  width: 100%;
+  ${theme.media.mobile(`
+    width: 100%;
+  `)}
   ${theme.media.tablet(`
     width: auto;
     height: 100%;
@@ -99,16 +104,18 @@ export const ClosingBox = styled(Icon.IconBox)<{ isSmallWidth?: true; isProfile?
     right: 1px;
   `}
 
-  padding: 4px;
   align-self: flex-end;
   background-color: rgba(255, 255, 255, 0.9);
   border: 3px double rgba(150, 150, 150, 0.2);
   border-radius: 7px;
 
-  min-width: 30px;
-  max-width: 30px;
-  min-height: 30px;
-  max-height: 30px;
+  @media screen and (max-width: 767px) {
+    padding: 4px;
+    min-width: 30px;
+    max-width: 30px;
+    min-height: 30px;
+    max-height: 30px;
+  }
 
   @media screen and (min-width: 768px) {
     padding: 6px;
@@ -162,13 +169,12 @@ export const SortBox = styled.div`
 `;
 export const SortText = styled.p<{ selectedCategory: string; category: string }>`
   padding: 10px 0;
+  cursor: pointer;
+
   ${({ selectedCategory, category }) =>
     selectedCategory === category && `color: ${theme.color.main};`}
 
-  ${theme.media.hover(
-    `cursor: pointer;
-    opacity: 0.7;`,
-  )}
+  ${theme.media.hover(`opacity: 0.7;`)}
 `;
 export const TranslucentBG = styled.div<{ isEditingUserBG?: boolean }>`
   width: 100vw;
@@ -263,7 +269,6 @@ export const SocialCategory = styled.button<{
   isLink?: true;
 }>`
   width: 100%;
-
   padding: 13px 15px;
   display: flex;
   align-items: center;
@@ -274,8 +279,9 @@ export const SocialCategory = styled.button<{
   font-weight: 500;
   background-color: white;
   border: 0;
+  cursor: pointer;
 
-  ${theme.media.hover(`cursor: pointer; opacity: 0.7;`)}
+  ${theme.media.hover(`opacity: 0.7;`)}
 
   ${({ isKaKao }) =>
     isKaKao && `color: rgb(211 204 0 / 76%); box-shadow: 0 0 4px rgb(250 225 0 / 100%);`};
@@ -332,11 +338,13 @@ export const GuideImgAlbum = styled.div`
   gap: 20px;
 `;
 export const GuideImg = styled.img`
-  width: 300px; // same with the actual image width
   height: auto; // to get the original height among images that have different heights
 
   @media (max-width: 330px) {
     width: 280px;
+  }
+  @media (min-width: 331px) {
+    width: 300px; // same with the actual image width
   }
 
   border: 1px solid #a9a9a95e;
@@ -417,17 +425,15 @@ export const ButtonForAnswer = styled.div<{ isSingleButton?: true }>`
   justify-content: center;
   align-items: center;
 
+  color: rgba(100, 100, 100, 0.6);
+  font-weight: 500;
+  cursor: pointer;
+
   &:last-child {
     ${({ isSingleButton }) => !isSingleButton && "border-left: 1px solid rgba(0, 0, 0, 0.1);"}
   }
 
-  color: rgba(100, 100, 100, 0.6);
-  font-weight: 500;
-
-  ${theme.media.hover(
-    `cursor: pointer;
-    opacity: 0.7;`,
-  )}
+  ${theme.media.hover(`opacity: 0.7;`)}
 `;
 export const TextForAlertOrConfirm = styled.div`
   width: 100%;
@@ -605,23 +611,17 @@ export const GuideContainer = styled.div`
 `;
 export const ContainerToCreateNewList = styled.div`
   display: flex;
+  cursor: pointer;
 
-  ${theme.media.hover(
-    `cursor: pointer;
-     opacity: 0.7;`,
-  )}
+  ${theme.media.hover(`opacity: 0.7;`)}
 `;
 export const GuideText = styled.span<{ isHover?: true }>`
   color: #959595b0;
   font-size: 16px;
   font-weight: 500;
+  cursor: pointer;
 
-  ${({ isHover }) =>
-    isHover &&
-    theme.media.hover(
-      `cursor: pointer;
-       opacity: 0.7;`,
-    )}
+  ${({ isHover }) => isHover && theme.media.hover(`opacity: 0.7;`)}
 `;
 
 export const MyListsContainer = styled.div`

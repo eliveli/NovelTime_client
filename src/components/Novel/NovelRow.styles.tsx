@@ -24,24 +24,20 @@ export const NovelLink = styled.div<{ isWidth100?: true; isNotNavigation?: true 
       `}
     }
   }
+
   @media screen and (min-width: 560px) {
     min-width: 24%;
-    max-width: 24%;
-    ${({ isWidth100 }) => isWidth100 && `max-width:100%;`}
+    max-width: ${({ isWidth100 }) => (isWidth100 ? "100%" : "24%")};
   }
 
-  /* 태블릿 */
   @media screen and (min-width: 768px) {
     min-width: 20%;
-    max-width: 20%;
-    ${({ isWidth100 }) => isWidth100 && `max-width:100%;`}
+    max-width: ${({ isWidth100 }) => (isWidth100 ? "100%" : "20%")};
   }
 
-  /* PC */
   @media screen and (min-width: 1024px) {
     min-width: 16.66%;
-    max-width: 16.66%;
-    ${({ isWidth100 }) => isWidth100 && `max-width:100%;`}
+    max-width: ${({ isWidth100 }) => (isWidth100 ? "100%" : "16.66%")};
   }
 `;
 export const NovelInfoBox = styled.div`

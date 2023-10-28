@@ -17,7 +17,7 @@ export const TextIconBox = styled.div`
   min-height: 20px;
   max-height: 20px;
 `;
-export const TextIcon = styled(Icon.Text)``;
+
 export const HandIconBox = styled.div`
   position: absolute;
   bottom: -2px;
@@ -30,12 +30,14 @@ export const HandIconBox = styled.div`
 
   background-color: rgba(255, 255, 255, 0.6);
   border-radius: 50%;
-  color: rgba(0, 0, 0, 0.4);
 
-  min-width: 25px;
-  max-width: 25px;
-  min-height: 25px;
-  max-height: 25px;
+  ${theme.media.mobile(`
+    color: rgba(0, 0, 0, 0.4);
+    min-width: 25px;
+    max-width: 25px;
+    min-height: 25px;
+    max-height: 25px;
+  `)}
 
   ${theme.media.tablet(`
     color: rgba(0, 0, 0, 0.4);
@@ -45,7 +47,7 @@ export const HandIconBox = styled.div`
     max-height: 27px;
   `)}
 `;
-export const HandIcon = styled(Icon.Hand)``;
+
 export const PlatformIconBox = styled.div`
   display: flex;
   align-items: center;
@@ -53,12 +55,13 @@ export const PlatformIconBox = styled.div`
   background-color: rgba(255, 255, 255, 0.6);
   border-radius: 50%;
 
-  color: rgba(0, 0, 0, 0.4);
-
-  min-width: 25px;
-  max-width: 25px;
-  min-height: 25px;
-  max-height: 25px;
+  ${theme.media.mobile(`
+    color: rgba(0, 0, 0, 0.4);
+    min-width: 25px;
+    max-width: 25px;
+    min-height: 25px;
+    max-height: 25px;
+  `)}
 
   ${theme.media.tablet(`
     color: rgba(0, 0, 0, 0.4);
@@ -68,29 +71,31 @@ export const PlatformIconBox = styled.div`
     max-height: 27px;
   `)}
 `;
-export const RunnerIcon = styled(Icon.Runner)``;
-export const ReaderIcon = styled(Icon.Reader)``;
 
 export const InfoIconBox = styled.div`
   display: flex;
   align-items: center;
   gap: 0px;
+
   ${theme.media.tablet(`
     margin-bottom: 0;
   `)}
 `;
+
 export const NovelContainer = styled.article`
   width: 100%;
-
   padding: 12px 0;
 `;
 
 export const NovelMainInfo = styled.div`
   display: flex;
   width: 100%;
-
   padding: 3px 0;
-  border-bottom: 1px dotted rgba(100, 100, 100, 0.2);
+
+  ${theme.media.mobile(`
+    border-bottom: 1px dotted rgba(100, 100, 100, 0.2);
+  `)}
+
   ${theme.media.tablet(`
     border-bottom: 0;
   `)}
@@ -103,10 +108,6 @@ export const NovelDescMobile = styled.div`
   padding: 8px 0;
   gap: 3px;
   border-bottom: 1px solid rgba(100, 100, 100, 0.2);
-
-  ${theme.media.tablet(`
-    display:none;
-  `)}
 `;
 
 export const NovelDescPartial = styled.div`
@@ -131,10 +132,6 @@ export const NovelDescTablet = styled.div`
 
   white-space: pre-wrap; // for line break
 
-  ${theme.media.mobile(`
-    display: none;
-  `)}
-
   ${theme.media.tablet(`
     border: 1px solid rgba(100, 100, 100, 0.2);
     border-radius: 5px;
@@ -145,7 +142,7 @@ export const NovelDescTablet = styled.div`
 
 export const NovelDescEntire = styled.div`
   width: 100%;
-  height: 120px; //화면 보며 조정
+  height: 120px;
 
   overflow: scroll;
   ${theme.hideScrollBar}
@@ -169,6 +166,7 @@ export const DownIconBox = styled.div`
   min-height: 20px;
   max-height: 20px;
 
+  cursor: pointer;
   color: rgba(0, 0, 0, 0.3);
 
   @media screen and (min-width: 768px) {
@@ -177,7 +175,6 @@ export const DownIconBox = styled.div`
 
   @media (hover: hover) {
     &:hover {
-      cursor: pointer;
       opacity: 0.8;
       background-color: rgba(150, 150, 150, 0.3);
     }
@@ -196,6 +193,7 @@ export const UpIconBox = styled.div`
   min-height: 20px;
   max-height: 20px;
 
+  cursor: pointer;
   color: rgba(0, 0, 0, 0.3);
 
   @media screen and (min-width: 768px) {
@@ -203,12 +201,12 @@ export const UpIconBox = styled.div`
   }
   @media (hover: hover) {
     &:hover {
-      cursor: pointer;
       opacity: 0.8;
       background-color: rgba(150, 150, 150, 0.3);
     }
   }
 `;
+
 export const DownIcon = styled(Icon.SmallDown)`
   @media (hover: hover) {
     &:hover {
@@ -216,6 +214,7 @@ export const DownIcon = styled(Icon.SmallDown)`
     }
   }
 `;
+
 export const UpIcon = styled(Icon.SmallUp)`
   @media (hover: hover) {
     &:hover {
@@ -223,6 +222,7 @@ export const UpIcon = styled(Icon.SmallUp)`
     }
   }
 `;
+
 export const NovelPlatformBox = styled.div`
   display: flex;
   justify-content: flex-end;
@@ -258,6 +258,7 @@ export const PlatformText = styled.a<{
         : "gray"};
   }
 `;
+
 export const NovelInfoBox = styled.div`
   display: flex;
   flex-direction: column;
@@ -324,11 +325,11 @@ export const NovelImgSmall = styled.div<{ novelImg: string }>`
     height: 100%;
   `)}
 `;
+
 export const NovelTitle = styled.div`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-
   width: 100%;
 
   font-weight: 500;
@@ -340,6 +341,7 @@ export const NovelTitle = styled.div`
     font-size: 21px;
   `)}
 `;
+
 export const NovelSubInfoBox = styled.div`
   color: ${(props) => props.theme.color.textGray};
   font-weight: 500;
@@ -363,24 +365,12 @@ export const NovelInfoAuthor = styled.div`
 export const NovelInfoMobile = styled.div`
   line-height: 1.2;
   margin-top: 5px;
-
-  ${theme.media.tablet(`
-    display: none;
-  `)}
 `;
-export const NovelInfoMobileAge = styled.div`
+export const NovelInfoAgeMobile = styled.div`
   font-size: 12px;
   line-height: 1.9;
-
-  ${theme.media.tablet(`
-    display: none;
-  `)}
 `;
-export const NovelInfoTablet = styled.div`
-  ${theme.media.mobile(`
-    display: none;
-  `)}
-`;
+export const NovelInfoTablet = styled.div``;
 export const NovelAboveDescTablet = styled.div`
   width: 100%;
 
@@ -392,12 +382,15 @@ export const NovelAboveDescTablet = styled.div`
 export const NoContent = styled.div<{ isForOtherNovels?: true }>`
   border: 1px solid rgba(50, 50, 50, 0.1);
   border-radius: 9px;
-  padding: 10px;
   display: flex;
   justify-content: center;
   align-items: center;
 
   ${({ isForOtherNovels }) => isForOtherNovels && `margin-top: 12px;`}
+
+  ${theme.media.mobile(`
+    padding: 10px;
+  `)}
 
   ${theme.media.tablet(`
     padding: 17px;

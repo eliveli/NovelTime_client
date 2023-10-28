@@ -34,27 +34,33 @@ export const ChatRoomPreviewContainer = styled.div<{
   width: 100%;
   display: flex;
   align-items: center;
-
-  border-left: 1px solid rgba(0, 0, 0, 0.1);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-
-  ${({ isRoom }) => !isRoom && `border-left:0;`}
+  white-space: nowrap;
 
   ${({ isRoomSpread }) => isRoomSpread && `position: relative;`}
-      
-  white-space: nowrap;
-  padding: 16px 5px;
+
   ${theme.media.mobile(`
-    padding:12px 5px;
+    padding: 12px 5px;
+  `)}
+  ${theme.media.tablet(`
+    padding: 16px 5px;
   `)}
 
+  ${({ isCurrentRoom, isRoom }) => {
+    if (isCurrentRoom) return `border: 2px solid ${theme.color.mainLight};`;
+
+    if (isRoom) {
+      return `border-left: 1px solid rgba(0, 0, 0, 0.1); border-bottom: 1px solid rgba(0, 0, 0, 0.1);`;
+    }
+
+    return `border-left: 0; border-bottom: 1px solid rgba(0, 0, 0, 0.1);`;
+  }}
+
   ${({ isCurrentRoom }) =>
-    isCurrentRoom
-      ? `border: 2px solid ${theme.color.mainLight};`
-      : theme.media.hover(
-          `cursor: pointer;
-          opacity: 0.7;`,
-        )}
+    !isCurrentRoom &&
+    `${theme.media.hover(
+      `cursor: pointer;
+       opacity: 0.7;`,
+    )}`}
 `;
 export const ChatRoomCntnr = styled.div<{
   isRoomSpread: boolean;

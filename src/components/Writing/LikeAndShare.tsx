@@ -17,10 +17,13 @@ const IconContainer = styled.div`
   align-items: flex-end;
 
   border-top: 1px dotted rgba(0, 0, 0, 0.1);
-  padding: 8px 20px 0;
   margin-top: 18px;
+
   ${theme.media.mobile(`
-      padding: 8px 12px 0;
+    padding: 8px 12px 0;
+  `)}
+  ${theme.media.tablet(`
+    padding: 8px 20px 0;
   `)}
 `;
 const LikeNumber = styled.span`

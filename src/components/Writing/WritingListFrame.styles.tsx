@@ -15,13 +15,15 @@ export const WritingTabContainer = styled.div`
 export const WritingTab = styled.div<{ isTalk: boolean }>`
   width: 50%;
   text-align: center;
-  padding: 5px 0;
 
   ${({ isTalk }) => isTalk && "box-shadow: 0 0 6px rgb(0 0 0 / 14%);"}
   ${({ isTalk }) =>
     !isTalk &&
-    "border-top: 1px solid rgba(100, 100, 100, 0.2); border-bottom: 1px solid rgba(100, 100, 100, 0.2); "}
+    "border-top: 1px solid rgba(100, 100, 100, 0.2); border-bottom: 1px solid rgba(100, 100, 100, 0.2);"}
 
+  @media screen and (max-width: 767px) {
+    padding: 5px 0;
+  }
   @media screen and (min-width: 768px) {
     padding: 10px 0;
   }
@@ -35,10 +37,13 @@ export const WritingTab = styled.div<{ isTalk: boolean }>`
 `;
 export const WritingTabText = styled.h3`
   display: inline;
-  font-size: 18px;
   text-align: center;
   border-bottom: 2px dashed rgba(150, 150, 150, 0.3);
   margin: 18px 0;
+
+  ${theme.media.mobile(`
+    font-size: 18px;
+  `)}
 
   ${theme.media.tablet(`
     font-size: 20px;
@@ -63,7 +68,6 @@ export const ButtonContainer = styled.div<{ isForMyList?: true }>`
   height: 34px;
   border: 1px solid rgba(0, 0, 0, 0.1);
   align-items: flex-end;
-  padding: 4px 7px;
 
   ${({ isForMyList }) =>
     isForMyList &&
@@ -77,9 +81,14 @@ export const ButtonContainer = styled.div<{ isForMyList?: true }>`
 
   @media (max-width: 767px) {
     ${({ isForMyList }) =>
-      isForMyList &&
-      `padding: 4px 3px;
-    `}
+      isForMyList
+        ? `padding: 4px 3px;
+          `
+        : `padding: 4px 7px;`}
+  }
+
+  @media (min-width: 768px) {
+    padding: 4px 7px;
   }
 `;
 export const ButtonText = styled.span`

@@ -1,4 +1,4 @@
-import theme, { styled } from "assets/styles/theme";
+import { styled } from "assets/styles/theme";
 
 const NoContentComponent = styled.div`
   display: flex;
@@ -6,8 +6,13 @@ const NoContentComponent = styled.div`
   color: #57555591;
   font-weight: 400;
   font-size: 17px;
-  padding: 60px;
-  ${theme.media.desktop(`padding:120px;`)}
+
+  @media (max-width: 1023px) {
+    padding: 60px;
+  }
+  @media (min-width: 1024px) {
+    padding: 120px;
+  }
 `;
 
 export default function NoContent() {

@@ -3,11 +3,13 @@ import { keyframes } from "styled-components";
 
 export const DotLine = styled.div`
   margin: 5px 17px;
-  padding-top: 20px;
   border-top: 8px dashed rgba(0, 0, 0, 0.1);
 
   ${theme.media.mobile(`
     padding-top: 12px;
+  `)}
+  ${theme.media.tablet(`
+    padding-top: 20px;
   `)}
 `;
 // animation

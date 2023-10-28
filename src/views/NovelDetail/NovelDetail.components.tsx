@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { NovelInDetailPage } from "store/serverAPIs/types";
+import Icon from "assets/Icon";
+import { useWhetherItIsMobile } from "utils";
 import { useAppDispatch } from "../../store/hooks";
 import { showBigImage } from "../../store/clientSlices/modalSlice";
 
@@ -24,17 +26,13 @@ import {
   UpIcon,
   NovelImgBox,
   TextIconBox,
-  TextIcon,
   InfoIconBox,
   IconNumber,
   HandIconBox,
-  HandIcon,
   PlatformIconBox,
-  RunnerIcon,
-  ReaderIcon,
   NovelDescTablet,
   NovelAboveDescTablet,
-  NovelInfoMobileAge,
+  NovelInfoAgeMobile,
   PlatformText,
   PlatformTextBox,
   PlatformBorder,
@@ -62,9 +60,12 @@ export default function NovelDetailInfo({
     novelUrl2,
     novelUrl3,
   } = novel;
-  const [isShowAll, handleShowAll] = useState(false);
 
   const dispatch = useAppDispatch();
+
+  const [isShowAll, handleShowAll] = useState(false);
+
+  const isMobile = useWhetherItIsMobile();
 
   return (
     <NovelContainer>
@@ -72,32 +73,40 @@ export default function NovelDetailInfo({
         <NovelImgBox onClick={() => dispatch(showBigImage(novelImg))}>
           <NovelImgSmall novelImg={novelImg} />
           <HandIconBox>
-            <HandIcon />
+            <Icon.Hand />
           </HandIconBox>
         </NovelImgBox>
 
         <NovelInfoBox>
           <NovelAboveDescTablet>
             <NovelTitle>{novelTitle}</NovelTitle>
+
             <NovelSubInfoBox>
               <NovelInfoAuthorBox>
                 <NovelInfoAuthor>{novelAuthor}</NovelInfoAuthor>
-                <NovelInfoTablet>
-                  {novelIsEnd
-                    ? `${novelGenre} | 완결 | ${novelAge}`
-                    : `${novelGenre} | ${novelAge}`}
-                </NovelInfoTablet>
 
-                <NovelInfoMobile>
-                  {novelIsEnd ? `${novelGenre} | 완결` : `${novelGenre}`}
-                </NovelInfoMobile>
-                <NovelInfoMobileAge>{novelAge}</NovelInfoMobileAge>
+                {isMobile && (
+                  <>
+                    <NovelInfoMobile>
+                      {novelIsEnd ? `${novelGenre} | 완결` : `${novelGenre}`}
+                    </NovelInfoMobile>
+                    <NovelInfoAgeMobile>{novelAge}</NovelInfoAgeMobile>
+                  </>
+                )}
+
+                {!isMobile && (
+                  <NovelInfoTablet>
+                    {novelIsEnd
+                      ? `${novelGenre} | 완결 | ${novelAge}`
+                      : `${novelGenre} | ${novelAge}`}
+                  </NovelInfoTablet>
+                )}
               </NovelInfoAuthorBox>
 
               {!!writingNoWithAllType && (
                 <InfoIconBox>
                   <TextIconBox>
-                    <TextIcon />
+                    <Icon.Text />
                   </TextIconBox>
                   <IconNumber>{writingNoWithAllType}</IconNumber>
                 </InfoIconBox>
@@ -105,11 +114,11 @@ export default function NovelDetailInfo({
             </NovelSubInfoBox>
           </NovelAboveDescTablet>
 
-          <NovelDescTablet>{novelDesc}</NovelDescTablet>
+          {!isMobile && <NovelDescTablet>{novelDesc}</NovelDescTablet>}
         </NovelInfoBox>
       </NovelMainInfo>
 
-      {isShowAll && (
+      {isMobile && isShowAll && (
         <NovelDescMobile>
           <NovelDescEntire>{novelDesc}</NovelDescEntire>
           <UpIconBox onClick={() => handleShowAll(false)}>
@@ -117,7 +126,8 @@ export default function NovelDetailInfo({
           </UpIconBox>
         </NovelDescMobile>
       )}
-      {!isShowAll && (
+
+      {isMobile && !isShowAll && (
         <NovelDescMobile>
           <NovelDescPartial>{novelDesc}</NovelDescPartial>
           <DownIconBox>
@@ -129,7 +139,7 @@ export default function NovelDetailInfo({
       <NovelPlatformBox>
         <PlatformBorder>
           <PlatformIconBox>
-            <RunnerIcon />
+            <Icon.Runner />
           </PlatformIconBox>
 
           {/* 넘어온 플랫폼에 한해 플랫폼 보이기 */}
@@ -169,7 +179,7 @@ export default function NovelDetailInfo({
             })}
           </PlatformTextBox>
           <PlatformIconBox>
-            <ReaderIcon />
+            <Icon.Reader />
           </PlatformIconBox>
         </PlatformBorder>
       </NovelPlatformBox>

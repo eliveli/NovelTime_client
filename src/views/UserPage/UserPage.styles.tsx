@@ -3,9 +3,11 @@ import { Img } from "store/serverAPIs/types";
 import Icon from "../../assets/Icon";
 
 export const ProfileContnr = styled.div<{ whenBGisNot?: boolean }>`
-  height: 200px;
   background-color: ${({ whenBGisNot }) => !whenBGisNot && "#ff9c3db0"};
   margin-bottom: 7px;
+  ${theme.media.mobile(`
+    height: 200px;
+  `)}
   ${theme.media.tablet(`
     height: 250px;
   `)}
@@ -73,8 +75,11 @@ export const LogOutIconBox = styled(Icon.IconBox)`
 export const ProfileUserCntnr = styled.div`
   display: flex;
   align-items: flex-end;
-  margin-bottom: 16px;
-  margin-left: 16px;
+
+  ${theme.media.mobile(`
+    margin-bottom: 16px;
+    margin-left: 16px;
+  `)}
   ${theme.media.tablet(`
     margin-bottom: 20px;
     margin-left: 20px;

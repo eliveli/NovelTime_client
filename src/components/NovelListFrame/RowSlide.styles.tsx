@@ -61,17 +61,16 @@ export const SlideRight = styled(Icon.SmallRight)`
 `;
 
 export const RowAlbumContainer = styled.div`
-  /* 모바일 */
-  overflow-x: scroll;
+  @media screen and (max-width: 1023px) {
+    overflow-x: scroll;
+  }
+  @media screen and (min-width: 1024px) {
+    overflow: hidden;
+  }
 
   -ms-overflow-style: none;
   &::-webkit-scrollbar {
     display: none;
-  }
-
-  /* PC */
-  @media screen and (min-width: 1024px) {
-    overflow: hidden;
   }
 `;
 
@@ -80,13 +79,11 @@ export const RowAlbumContainer = styled.div`
 //   앨범 컨테이너는 앨범의 이동 위치를 최소값으로 오른쪽으로만 앨범 스크롤 가능
 //   - 이동한 위치의 왼쪽은 스크롤 불가
 export const RowAlbum = styled.div<{ moveX: number }>`
-  /* 모바일 */
   display: flex; // children 요소인 작품을 가로 방향으로 나열
 
   margin-left: -6px;
   margin-right: -6px;
 
-  /* PC */
   @media screen and (min-width: 1024px) {
     position: relative;
 
@@ -95,7 +92,6 @@ export const RowAlbum = styled.div<{ moveX: number }>`
   }
 `;
 export const RowSlideContainer = styled.div`
-  /* 태블릿 */
   @media screen and (min-width: 768px) {
     position: relative;
   }

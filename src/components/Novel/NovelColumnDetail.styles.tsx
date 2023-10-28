@@ -12,10 +12,9 @@ export const NovelLink = styled.div`
     border-bottom: 0;
   }
 
-  ${theme.media.hover(
-    `cursor: pointer;
-    color: rgba(100, 100, 100, 0.8);`,
-  )}
+  cursor: pointer;
+
+  ${theme.media.hover(`color: rgba(100, 100, 100, 0.8);`)}
 `;
 
 export const NovelImg = styled.div<{
@@ -105,16 +104,16 @@ export const DownIconBox = styled.div`
   max-height: 20px;
 
   color: rgba(0, 0, 0, 0.3);
+  cursor: pointer;
 
   ${theme.media.tablet(`
     margin-top: auto;
     margin-left: 3px;
-    `)}
+  `)}
 
   ${theme.media.hover(`
-      cursor: pointer;
-      opacity: 0.8;
-      background-color: rgba(150, 150, 150, 0.3);
+    opacity: 0.8;
+    background-color: rgba(150, 150, 150, 0.3);
   `)}
 `;
 
@@ -135,12 +134,12 @@ export const UpIconBox = styled.div`
   ${theme.media.tablet(`
     margin-top: auto;
     margin-left: 3px;
-    `)}
+  `)}
   ${theme.media.hover(`
-      cursor: pointer;
-      opacity: 0.8;
-      background-color: rgba(150, 150, 150, 0.3);
-    `)}
+    cursor: pointer;
+    opacity: 0.8;
+    background-color: rgba(150, 150, 150, 0.3);
+  `)}
 `;
 export const DownIcon = styled(Icon.SmallDown)`
   ${theme.media.hover(`

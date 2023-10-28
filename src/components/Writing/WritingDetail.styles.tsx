@@ -26,11 +26,14 @@ export const UserContainer = styled.div`
   display: flex;
   align-items: center;
   border-bottom: 1px dotted rgba(0, 0, 0, 0.1);
-  padding-bottom: 16px;
-  padding-left: 20px;
-  padding-right: 20px;
+
   ${theme.media.mobile(`
     padding: 0 12px 14px;
+  `)}
+  ${theme.media.tablet(`
+    padding-bottom: 16px;
+    padding-left: 20px;
+    padding-right: 20px;
   `)}
 `;
 
@@ -92,13 +95,16 @@ export const WritingTitle = styled.h3`
   font-weight: 500;
 `;
 export const WritingDesc = styled.p`
-  margin-bottom: 12px;
-  padding-left: 20px;
-  padding-right: 20px;
   ${theme.media.mobile(`
     margin-top: 14px;
-    padding: 0 12px;
     margin-bottom: 14px;
+    padding: 0 12px;
+  `)}
+
+  ${theme.media.tablet(`
+    margin-bottom: 12px;
+    padding-left: 20px;
+    padding-right: 20px;  
   `)}
 
   white-space: pre-wrap; // allow the line break

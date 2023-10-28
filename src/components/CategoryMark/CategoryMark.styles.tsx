@@ -45,11 +45,14 @@ export const LinkCategory = styled(Link)<{ isUserMark?: boolean; novelNO?: numbe
 `;
 export const CategoryDescContnr = styled.div`
   display: flex;
-  align-items: flex-end;
 
   ${theme.media.mobile(`
     flex-direction: column;
     align-items: flex-start;
+  `)}
+
+  ${theme.media.tablet(`
+    align-items: flex-end;
   `)}
 `;
 export const CategoryDescUserImg = styled.div<{ userImg: Img }>`
@@ -107,9 +110,9 @@ export const ShowAllText = styled.span<{ isUserNovelList?: true }>`
   ${({ isUserNovelList }) =>
     isUserNovelList &&
     `
-    color: rgba(0,0,0,0.5);
-    font-weight: 500;
-    font-size: 15px;
+      color: rgba(0,0,0,0.5);
+      font-weight: 500;
+      font-size: 15px;
     `}
 `;
 export const ShowAllIcon = styled(Icon.ListRight)`

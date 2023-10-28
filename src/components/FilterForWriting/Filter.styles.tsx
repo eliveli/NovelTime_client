@@ -15,14 +15,12 @@ export const GenreBox = styled.div`
 export const Genre = styled.p<{ genreName: string; selectedGenre: string }>`
   padding: 10px;
   white-space: nowrap;
+  cursor: pointer;
 
   ${({ genreName, selectedGenre }) =>
     genreName === selectedGenre && `border-bottom: 2px solid  ${theme.color.main};`}
 
-  ${theme.media.hover(
-    `cursor: pointer;
-    opacity: 0.7;`,
-  )}
+  ${theme.media.hover(`opacity: 0.7;`)}
 `;
 
 export const SortMobileContainer = styled.div`
@@ -69,17 +67,17 @@ export const SortCategoryLi = styled.li<{ selectedCategory: string; category: st
   display: flex;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
+
   border-bottom: 1px solid rgba(0, 0, 0, 0.2);
   &:last-child {
     border-bottom: 0;
   }
+
   ${({ selectedCategory, category }) =>
     selectedCategory === category && `color:${theme.color.main};`}
 
-  ${theme.media.hover(
-    `cursor: pointer;
-    opacity: 0.7;`,
-  )}
+  ${theme.media.hover(`opacity: 0.7;`)}
 `;
 export const ContainerWithBtn = styled.div<{ borderOpacity: number | undefined }>`
   width: 135px;
@@ -87,15 +85,12 @@ export const ContainerWithBtn = styled.div<{ borderOpacity: number | undefined }
   display: inline-flex;
   justify-content: center;
   align-items: center;
-
+  cursor: pointer;
   border-radius: 11px;
 
   border: 1px solid rgba(0, 0, 0, ${({ borderOpacity }) => borderOpacity || "0.2"});
 
-  ${theme.media.hover(`
-      cursor: pointer;
-      opacity: 0.8;
-    `)}
+  ${theme.media.hover(`opacity: 0.8;`)}
 `;
 export const DownIconBox = styled.div`
   z-index: 1;
@@ -173,11 +168,9 @@ export const SortTabletContainer2 = styled.select`
   }
 `;
 export const CustomArrowBox = styled.div`
-  display: inline-block;
+  ${theme.media.mobile(`display: none;`)}
+  ${theme.media.tablet(`display: inline-block;`)}
 
-  ${theme.media.mobile(`
-    display: none;
-  `)}
   position: relative;
   &:after {
     content: "";
