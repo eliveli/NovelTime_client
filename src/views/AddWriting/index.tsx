@@ -171,7 +171,7 @@ export default function AddWriting() {
   const titleChanged = useRef("");
   const contentChanged = useRef("");
 
-  // change height in WritingContentContnr whenever lines in title change
+  // change height in WritingContentContnr whenever lines change in title
   const [titleHeightChanged, getTitleHeight] = useState("28px");
 
   const writeTitle = useCallback(() => {
@@ -188,6 +188,12 @@ export default function AddWriting() {
 
     getTitleHeight(titleRef.current.style.height);
   }, []);
+
+  const preventEnter = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+    }
+  };
 
   const writeContent = () => {
     if (!contentRef.current) return;
@@ -449,7 +455,12 @@ export default function AddWriting() {
           </BoardContainer>
 
           <WritingTitleContnr>
-            <WritingTitle ref={titleRef} placeholder="글 제목을 입력하세요" onChange={writeTitle} />
+            <WritingTitle
+              ref={titleRef}
+              placeholder="글 제목을 입력하세요"
+              onChange={writeTitle}
+              onKeyPress={preventEnter}
+            />
           </WritingTitleContnr>
           {/* <ContentPlusCotnrPC>사진/간단텍스트설정/이모지</ContentPlusCotnrPC> */}
 

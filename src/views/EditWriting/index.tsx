@@ -1,5 +1,5 @@
 import MainBG from "components/MainBG";
-import { useCallback, useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { RECOMMEND_DETAIL, RECOMMEND_LIST, TALK_DETAIL, TALK_LIST } from "utils/pathname";
 import { useEditWritingMutation } from "store/serverAPIs/novelTime";
@@ -18,7 +18,7 @@ import {
   WritingContent,
   WritingTitle,
   WritingContentContnr,
-  WritingTitleContanr,
+  WritingTitleContnr,
   SubmitBtnPC,
   SubmitBtnContnr,
 } from "../AddWriting/AddWriting.styles";
@@ -34,7 +34,10 @@ export default function EditWriting() {
   const titleRef = useRef<HTMLTextAreaElement>(null);
   const contentRef = useRef<HTMLTextAreaElement>(null);
 
-  const setHeightOfTitle = useCallback(() => {
+  // change height in WritingContentContnr whenever lines change in title
+  const [titleHeightChanged, getTitleHeight] = useState("");
+
+  const setHeightOfTitle = () => {
     if (!titleRef.current) return;
 
     titleRef.current.style.height = "28px"; // Default: height of 1 line
@@ -42,7 +45,16 @@ export default function EditWriting() {
 
     // max-height : 5 lines of 124px
     titleRef.current.style.height = `${titleHeight <= 124 ? titleRef.current.scrollHeight : 124}px`;
-  }, []);
+
+    getTitleHeight(titleRef.current.style.height);
+  };
+
+  const preventEnter = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+    }
+  };
+
   const [editWriting, editWritingResult] = useEditWritingMutation();
 
   const loginUserId = useAppSelector((state) => state.loginUser.user.userId);
@@ -104,6 +116,8 @@ export default function EditWriting() {
 
     titleRef.current.value = writingTitle;
     contentRef.current.value = writingDesc;
+
+    setHeightOfTitle();
   }, []);
 
   // when clicking the submit button in nav bar on mobile or tablet
@@ -143,17 +157,18 @@ export default function EditWriting() {
         <Board>{writingType}</Board>
       </BoardContainer>
 
-      <WritingTitleContanr>
+      <WritingTitleContnr>
         <WritingTitle
           ref={titleRef}
           placeholder="글 제목을 입력하세요"
           onChange={setHeightOfTitle}
+          onKeyPress={preventEnter}
         />
-      </WritingTitleContanr>
+      </WritingTitleContnr>
 
       {/* <ContentPlusCotnrPC>사진/간단텍스트설정/이모지</ContentPlusCotnrPC> */}
 
-      <WritingContentContnr>
+      <WritingContentContnr titleHeight={titleHeightChanged}>
         <WritingContent ref={contentRef} placeholder="글 내용을 입력하세요" />
       </WritingContentContnr>
 
