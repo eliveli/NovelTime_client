@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 
+// it can be not accurate when y-scrollbar exists
 export default function useWhetherItIsTablet() {
   const [isDeskTop, handleDeskTop] = useState(false);
 

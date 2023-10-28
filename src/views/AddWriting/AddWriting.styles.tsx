@@ -6,6 +6,7 @@ export const NovelTitleContainer = styled.div`
   gap: 10px;
   justify-content: flex-start;
   align-items: center;
+  border-bottom: 1px solid rgba(100, 100, 100, 0.1);
 `;
 export const NovelTitle = styled.button`
   border-radius: 20px;
@@ -101,9 +102,9 @@ export const Board = styled.button<{
         )}
 `;
 
-export const WritingTitleContanr = styled.div`
+export const WritingTitleContnr = styled.div`
   border-bottom: 1px solid rgba(100, 100, 100, 0.1);
-  padding: 8px 0;
+  padding: 8px 2px;
   display: flex;
 `;
 export const WritingTitle = styled.textarea`
@@ -116,21 +117,38 @@ export const WritingTitle = styled.textarea`
   font-size: 16px;
   height: 28px;
   line-height: 1.5;
+
+  padding: 0;
 `;
-export const WritingContentContnr = styled.div`
-  padding: 8px 0;
+
+export const WritingContentContnr = styled.div<{ titleHeight?: string }>`
+  padding: 8px 2px;
+
+  @media screen and (max-width: 1023px) {
+    height: auto;
+  }
 
   @media screen and (min-width: 1024px) {
+    height: calc(
+      100vh - 61px - (61px + 54px + (${({ titleHeight }) => titleHeight} + 17px)) - 10px - 40px -
+        20px
+    );
+    // 100vh - (height in header) - (heights in upper components) - (margin-bottom in this component) - (height in SubmitBtnContnr) - (extra height below)
+    // .note. titleHeight + 17px === height in WritingTitleContnr
+
+    max-height: 600px;
+
     border-bottom: 1px solid rgba(100, 100, 100, 0.1);
     margin-bottom: 10px;
   }
 `;
 
-const screenHeight = window.screen.height;
 export const WritingContent = styled.textarea`
   margin: 0;
 
   width: 100%;
+  height: 100%;
+
   border: 0;
   resize: none;
   ${theme.hideScrollBar}
@@ -139,13 +157,7 @@ export const WritingContent = styled.textarea`
   font-size: 16px;
   line-height: 1.5;
 
-  height: 420px;
-  ${screenHeight < 700 && "height: 325px;"}
-  ${screenHeight > 1000 && "height: 640px;"}
-
-  @media screen and (min-width: 1024px) {
-    height: 400px;
-  }
+  padding: 0;
 `;
 
 export const SubmitBtnContnr = styled.div`

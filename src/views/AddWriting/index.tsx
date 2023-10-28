@@ -19,7 +19,7 @@ import {
   WritingContent,
   WritingTitle,
   WritingContentContnr,
-  WritingTitleContanr,
+  WritingTitleContnr,
   SubmitBtnPC,
   SubmitBtnContnr,
   Iframe,
@@ -171,6 +171,9 @@ export default function AddWriting() {
   const titleChanged = useRef("");
   const contentChanged = useRef("");
 
+  // change height in WritingContentContnr whenever lines in title change
+  const [titleHeightChanged, getTitleHeight] = useState("28px");
+
   const writeTitle = useCallback(() => {
     if (!titleRef.current) return;
 
@@ -182,6 +185,8 @@ export default function AddWriting() {
 
     // max-height : 5 lines of 124px
     titleRef.current.style.height = `${titleHeight <= 124 ? titleRef.current.scrollHeight : 124}px`;
+
+    getTitleHeight(titleRef.current.style.height);
   }, []);
 
   const writeContent = () => {
@@ -443,12 +448,12 @@ export default function AddWriting() {
             </Board>
           </BoardContainer>
 
-          <WritingTitleContanr>
+          <WritingTitleContnr>
             <WritingTitle ref={titleRef} placeholder="글 제목을 입력하세요" onChange={writeTitle} />
-          </WritingTitleContanr>
+          </WritingTitleContnr>
           {/* <ContentPlusCotnrPC>사진/간단텍스트설정/이모지</ContentPlusCotnrPC> */}
 
-          <WritingContentContnr>
+          <WritingContentContnr titleHeight={titleHeightChanged}>
             <WritingContent
               ref={contentRef}
               placeholder="글 내용을 입력하세요"
