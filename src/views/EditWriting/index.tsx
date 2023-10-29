@@ -157,7 +157,7 @@ export default function EditWriting() {
     <MainBG>
       {editWritingResult.isLoading && <Spinner styles="fixed" />}
 
-      <NovelTitleContainer ref={novelTitleContnrRef}>
+      <NovelTitleContainer ref={novelTitleContnrRef} isBorder>
         <NovelTitle>{novelTitle}</NovelTitle>
       </NovelTitleContainer>
 

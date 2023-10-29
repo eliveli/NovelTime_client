@@ -166,7 +166,7 @@ export const Comment = React.memo(({ commentInfo }: CommentInfo) => {
         <CreateDate>{createDate}</CreateDate>
       </CommentContentContnr>
       <CommentTalkTitle>
-        <WritingMark>&nbsp;[글]&nbsp;&nbsp;&nbsp;</WritingMark>
+        <WritingMark>[글]</WritingMark>
         {talkTitle}
       </CommentTalkTitle>
       <CommentNovelTitle>{novelTitle}</CommentNovelTitle>
@@ -174,7 +174,6 @@ export const Comment = React.memo(({ commentInfo }: CommentInfo) => {
   );
 });
 
-type FilterType = "프리톡" | "추천" | "댓글";
 interface WritingProps {
   writingCategory: string[];
   writingFilter: string;
@@ -231,11 +230,11 @@ export function WritingFilter({
   setCurrentContentFilter,
 }: WritingProps) {
   return (
-    <FilterContnr>
+    <FilterContnr category="contentInUserPage">
       {writingCategory.map((_) => (
         <Filter
-          category={_ as FilterType}
-          selectedCtgr={writingFilter as FilterType}
+          category={_} // "프리톡" | "추천" | "댓글"
+          selectedCtgr={writingFilter}
           onClick={() => {
             selectWritingFilter(_);
 
@@ -321,9 +320,7 @@ export function WritingFilter({
             }
           }}
         >
-          &nbsp;&nbsp;
           {_}
-          &nbsp;&nbsp;
         </Filter>
       ))}
     </FilterContnr>

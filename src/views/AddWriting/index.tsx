@@ -334,7 +334,7 @@ export default function AddWriting() {
       {addNovelWithURLResult.isLoading ||
         (addWritingResult.isLoading && <Spinner styles="fixed" />)}
 
-      <NovelTitleContainer ref={novelTitleContnrRef}>
+      <NovelTitleContainer ref={novelTitleContnrRef} isBorder={!isGettingNovel.onGoing}>
         <NovelTitle>
           {(!isGettingNovel.onGoing && novelForReview.novelTitle) || "소설제목"}
         </NovelTitle>
@@ -357,12 +357,13 @@ export default function AddWriting() {
         <>
           <NovelUrlContnr>
             <SrchGuideText
+              isPadding
               isHowTo
               onClick={() => {
                 dispatch(openFirstModal("getNovelURL"));
               }}
             >
-              &nbsp;&nbsp;어떻게 주소를 찾나요?&nbsp;&nbsp;
+              어떻게 주소를 찾나요?
             </SrchGuideText>
             <NovelUrl
               ref={novelUrlRef}
@@ -423,13 +424,14 @@ export default function AddWriting() {
 
           <NoteContainer>
             <SrchGuideText
+              isPadding
               onClick={() => {
                 handleGettingNovel({ onGoing: true, inGettingURL: false });
                 setIframeAddress(`${SEARCH_NOVEL}/iframe`);
                 setPlatformToGetURL({ withSharedLink: "시리즈", inNewTab: "" }); // initialize
               }}
             >
-              &nbsp;&nbsp;다시 노블타임에서 찾아보기&nbsp;&nbsp;
+              다시 노블타임에서 찾아보기
             </SrchGuideText>
 
             <SrchGuideText onClick={() => handleToolTip(true)}>유의사항</SrchGuideText>

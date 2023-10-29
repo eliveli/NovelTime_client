@@ -1,12 +1,13 @@
 import theme, { styled } from "assets/styles/theme";
 
-export const NovelTitleContainer = styled.div`
+export const NovelTitleContainer = styled.div<{ isBorder: boolean }>`
   padding: 10px 0;
   display: flex;
   gap: 10px;
   justify-content: flex-start;
   align-items: center;
-  border-bottom: 1px solid rgba(100, 100, 100, 0.1);
+
+  ${({ isBorder }) => isBorder && "border-bottom: 1px solid rgba(100, 100, 100, 0.1);"}
 `;
 export const NovelTitle = styled.button`
   border-radius: 20px;
@@ -50,14 +51,17 @@ export const Note = styled.div`
   padding: 4px;
 `;
 
-export const SrchGuideText = styled.span<{ isHowTo?: true }>`
+export const SrchGuideText = styled.span<{ isHowTo?: true; isPadding?: true }>`
   font-weight: 500;
   color: rgba(0, 0, 0, 0.4);
   font-size: 13px;
-  border-bottom: 1px dotted rgba(0, 0, 0, 0.1);
-
   display: inline-block;
-  margin-bottom: 10px;
+
+  padding: ${({ isPadding }) => (isPadding ? "0 6px" : 0)};
+
+  margin-bottom: ${({ isHowTo }) => (isHowTo ? 0 : 10)}px;
+  border-bottom: ${({ isHowTo }) => (isHowTo ? 0 : "1px dotted rgba(0, 0, 0, 0.1)")};
+  ${({ isHowTo }) => isHowTo && `position: absolute; right: 0; top: -21px;`}
 
   ${theme.media.hover(`
     cursor: pointer;
@@ -65,9 +69,6 @@ export const SrchGuideText = styled.span<{ isHowTo?: true }>`
     font-weight: 500;
     color: rgba(100, 100, 100, 0.8);
   `)}
-
-  ${({ isHowTo }) =>
-    isHowTo && `margin-bottom: 0; position: absolute; right: 0; top: -21px; border-bottom: 0px;`}
 `;
 export const Iframe = styled.iframe`
   width: 100%;

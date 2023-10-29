@@ -64,7 +64,6 @@ export default function CategoryMark({
             />
             <CategoryDescUserName>
               {`${novelListInSlide.user.userName}의 선호 리스트`}
-              &nbsp;
             </CategoryDescUserName>
           </CategoryDescUserContnr>
           <CategoryDesc isUserNovelList>{`: ${categoryText}`}</CategoryDesc>

@@ -18,6 +18,7 @@ import FreeTalk from "views/FreeTalkList/FreeTalkList.components";
 import Recommend from "views/RecommendList/RecommendList.components";
 import { RowSlideSimple } from "components/NovelListFrame/RowSlide";
 import { NOVEL_LIST } from "utils/pathname";
+import { Filter, FilterContnr } from "views/UserPage/UserPage.styles";
 import {
   UserAct,
   UserContnr,
@@ -25,8 +26,6 @@ import {
   UserInfo,
   UserName,
   UserRankCntnr,
-  Filter,
-  FilterContnr,
   UserRankNO,
   SectionTitle,
   SectionMark,
@@ -52,7 +51,7 @@ export function FilterForWeeklyNovelsFromPlatform({
   const categoryArray = ["카카페", "시리즈", "리디북스", "조아라"];
 
   return (
-    <FilterContnr isPlatformNovel>
+    <FilterContnr category="novelPlatform">
       {categoryArray.map((_) => (
         <Filter
           category={_}
@@ -61,9 +60,7 @@ export function FilterForWeeklyNovelsFromPlatform({
             setPlatformFilter(_);
           }}
         >
-          &nbsp;&nbsp;
           {_}
-          &nbsp;&nbsp;
         </Filter>
       ))}
     </FilterContnr>
@@ -200,7 +197,7 @@ function UserRankSection({ category, rankList }: UserRankSectionProps) {
           <TitleNormalStyle>{`${category} - `}</TitleNormalStyle>
           <TitleEmphasis>유저 활동</TitleEmphasis>
         </SectionTitle>
-        <FilterContnr>
+        <FilterContnr category="contentInHome">
           {subCategories.map((_) => (
             <Filter
               category={_}
@@ -210,9 +207,7 @@ function UserRankSection({ category, rankList }: UserRankSectionProps) {
                 rankContnrRef.current?.scrollTo(0, 0); // reset scroll value
               }}
             >
-              &nbsp;&nbsp;
               {_}
-              &nbsp;&nbsp;
             </Filter>
           ))}
 

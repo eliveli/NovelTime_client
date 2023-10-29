@@ -78,6 +78,7 @@ export const CategoryDescUserImg = styled.div<{ userImg: Img }>`
 export const CategoryDescUserName = styled.p`
   margin-top: 12px;
   margin-bottom: 0;
+  margin-right: 3px;
   font-size: 16px;
 `;
 

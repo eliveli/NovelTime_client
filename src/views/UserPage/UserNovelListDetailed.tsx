@@ -574,7 +574,6 @@ export default function UserNovelListDetailed({ isCreated }: { isCreated: boolea
                   />
                   {listDetailedResult.data.novelList.userName}
                   <ListTitleNormalStyle>의 리스트 : </ListTitleNormalStyle>
-                  &nbsp;
                   {listDetailedResult.data.novelList.listTitle}
                 </OthersTitleContnr>
               </ListTitle>
@@ -598,7 +597,6 @@ export default function UserNovelListDetailed({ isCreated }: { isCreated: boolea
                     <UserImg userImg={_.userImg as ProfileImg} isTitle />
                     {_.userName}
                     <ListTitleNormalStyle>의 리스트 : </ListTitleNormalStyle>
-                    &nbsp;
                     {_.listTitle}
                   </OthersTitleContnr>
                 </ListTitle>

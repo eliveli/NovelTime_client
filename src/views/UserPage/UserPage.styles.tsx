@@ -376,25 +376,33 @@ export const NovelTitle = styled.p<{ talkId?: string }>`
     font-weight: 500;
     font-size: 16px;`}
 `;
-export const FilterContnr = styled.div`
+export const FilterContnr = styled.div<{
+  category: "contentInUserPage" | "contentInHome" | "novelPlatform";
+}>`
   display: flex;
   align-items: flex-end;
   gap: 25px;
-  margin: 12px 0 12px 4px;
+  margin: ${({ category }) => {
+    if (category === "contentInUserPage") return "12px 0 12px 4px";
+    if (category === "contentInHome") return "4px 0 12px 4px";
+    return "9px 0 0 4px";
+  }};
 `;
 
-type FilterType = "프리톡" | "추천" | "댓글";
-export const Filter = styled.p<{ category: FilterType; selectedCtgr: FilterType }>`
+export const Filter = styled.p<{ category: string; selectedCtgr: string }>`
   margin: 0;
+  padding-left: 6px;
+  padding-right: 6px;
   font-weight: 500;
-  color: rgba(100, 100, 100, 0.6);
-  ${({ category, selectedCtgr }) =>
-    category === selectedCtgr
-      ? `color:${theme.color.main}; border-bottom: 3px solid ${theme.color.mainLight};`
-      : theme.media.hover(
-          `cursor: pointer;
-          opacity: 0.7;`,
-        )}
+
+  ${({ category, selectedCtgr }) => {
+    if (category === selectedCtgr) {
+      return `color:${theme.color.main}; border-bottom: 3px solid ${theme.color.mainLight};`;
+    }
+    return `color: rgba(100, 100, 100, 0.6); ${theme.media.hover(
+      `cursor: pointer; opacity: 0.7;`,
+    )}`;
+  }}
 `;
 
 export const CommentContentContnr = styled.div`
@@ -408,12 +416,10 @@ export const CommentContent = styled.p`
   font-weight: 500;
 `;
 export const CommentTalkTitle = styled.p`
-  margin: 0;
-  margin-top: -2px;
-  margin-bottom: 2px;
+  margin: -1px 0 0 0;
 
   display: flex;
-  align-items: center;
+  align-items: stretch;
 
   color: rgba(130, 130, 130, 0.9);
   font-size: 15px;
@@ -427,6 +433,8 @@ export const CommentNovelTitle = styled.p`
 export const WritingMark = styled.span`
   color: rgba(0, 0, 0, 0.5);
   font-size: 14px;
+  padding-left: 3px;
+  padding-right: 3px;
 `;
 export const ListTitleLimitHeightContnr = styled.div<{
   isListMore: boolean;
@@ -484,6 +492,7 @@ export const ListTitle = styled.span<{
 export const ListTitleNormalStyle = styled.span`
   color: rgba(100, 100, 100, 0.6);
   font-size: 12px;
+  margin-right: 3px;
 `;
 
 export const NovelContainer = styled.div`
