@@ -121,25 +121,39 @@ export const WritingTitle = styled.textarea`
   padding: 0;
 `;
 
-export const WritingContentContnr = styled.div<{ titleHeight: string }>`
+export const WritingContentContnr = styled.div<{
+  titleHeight: string;
+  novelTitleContnrHeight: string;
+}>`
   padding: 8px 2px;
 
   @media screen and (max-width: 767px) {
     height: calc(
-      100vh - 51px - (61px + 54px + (${({ titleHeight }) => titleHeight} + 17px)) - 16px
+      100vh - 51px -
+        (
+          ${({ novelTitleContnrHeight, titleHeight }) =>
+            `${novelTitleContnrHeight} + 54px + (${titleHeight} + 17px)`}
+        ) - 16px
     );
   }
 
   @media screen and (min-width: 768px) and (max-width: 1023px) {
     height: calc(
-      100vh - 51px - (61px + 54px + (${({ titleHeight }) => titleHeight} + 17px)) - 20px
+      100vh - 51px -
+        (
+          ${({ novelTitleContnrHeight, titleHeight }) =>
+            `${novelTitleContnrHeight} + 54px + (${titleHeight} + 17px)`}
+        ) - 20px
     );
   }
 
   @media screen and (min-width: 1024px) {
     height: calc(
-      100vh - 61px - (61px + 54px + (${({ titleHeight }) => titleHeight} + 17px)) - 10px - 40px -
-        20px
+      100vh - 61px -
+        (
+          ${({ novelTitleContnrHeight, titleHeight }) =>
+            `${novelTitleContnrHeight} + 54px + (${titleHeight} + 17px)`}
+        ) - 10px - 40px - 20px
     );
     // 100vh - (height in header) - (heights in upper components) - (margin-bottom in this component) - (height in SubmitBtnContnr) - (extra height below)
     // .note. titleHeight + 17px === height in WritingTitleContnr

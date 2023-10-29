@@ -5,7 +5,7 @@ import { RECOMMEND_DETAIL, RECOMMEND_LIST, TALK_DETAIL, TALK_LIST } from "utils/
 import { useEditWritingMutation } from "store/serverAPIs/novelTime";
 import Spinner from "assets/Spinner";
 import { handleAlert, openFirstModal } from "store/clientSlices/modalSlice";
-import { useWhetherItIsDesktop } from "utils";
+import { useComponentHeight, useWhetherItIsDesktop } from "utils";
 import {
   handleWritingToSubmitOnMobile,
   handleWritingToEdit,
@@ -34,6 +34,10 @@ export default function EditWriting() {
 
   const titleRef = useRef<HTMLTextAreaElement>(null);
   const contentRef = useRef<HTMLTextAreaElement>(null);
+
+  // adjust height in content considering this
+  const novelTitleContnrRef = useRef<HTMLDivElement>(null);
+  const novelTitleContnrHeight = useComponentHeight(novelTitleContnrRef);
 
   // change height in WritingContentContnr whenever lines change in title
   const [titleHeightChanged, getTitleHeight] = useState("");
@@ -153,7 +157,7 @@ export default function EditWriting() {
     <MainBG>
       {editWritingResult.isLoading && <Spinner styles="fixed" />}
 
-      <NovelTitleContainer>
+      <NovelTitleContainer ref={novelTitleContnrRef}>
         <NovelTitle>{novelTitle}</NovelTitle>
       </NovelTitleContainer>
 
@@ -172,7 +176,10 @@ export default function EditWriting() {
 
       {/* <ContentPlusCotnrPC>사진/간단텍스트설정/이모지</ContentPlusCotnrPC> */}
 
-      <WritingContentContnr titleHeight={titleHeightChanged}>
+      <WritingContentContnr
+        titleHeight={titleHeightChanged}
+        novelTitleContnrHeight={`${novelTitleContnrHeight}px`}
+      >
         <WritingContent ref={contentRef} placeholder="글 내용을 입력하세요" />
       </WritingContentContnr>
 

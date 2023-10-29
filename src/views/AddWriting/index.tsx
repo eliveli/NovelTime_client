@@ -6,7 +6,7 @@ import { NOVEL_DETAIL, RECOMMEND_LIST, SEARCH_NOVEL, TALK_LIST } from "utils/pat
 import { useAddNovelWithURLMutation, useAddWritingMutation } from "store/serverAPIs/novelTime";
 import Spinner from "assets/Spinner";
 import { handleAlert, openFirstModal } from "store/clientSlices/modalSlice";
-import { useWhetherItIsDesktop } from "utils";
+import { useComponentHeight, useWhetherItIsDesktop } from "utils";
 import { setSearchList } from "store/clientSlices/filterSlice";
 import { handleWritingToSubmitOnMobile } from "../../store/clientSlices/writingSlice";
 import { useAppSelector, useAppDispatch } from "../../store/hooks";
@@ -167,6 +167,10 @@ export default function AddWriting() {
 
   const titleRef = useRef<HTMLTextAreaElement>(null);
   const contentRef = useRef<HTMLTextAreaElement>(null);
+
+  // adjust height in content considering this
+  const novelTitleContnrRef = useRef<HTMLDivElement>(null);
+  const novelTitleContnrHeight = useComponentHeight(novelTitleContnrRef, isGettingNovel.onGoing);
 
   // keep current values while choosing novel again //
   const titleChanged = useRef("");
@@ -330,7 +334,7 @@ export default function AddWriting() {
       {addNovelWithURLResult.isLoading ||
         (addWritingResult.isLoading && <Spinner styles="fixed" />)}
 
-      <NovelTitleContainer>
+      <NovelTitleContainer ref={novelTitleContnrRef}>
         <NovelTitle>
           {(!isGettingNovel.onGoing && novelForReview.novelTitle) || "소설제목"}
         </NovelTitle>
@@ -468,7 +472,10 @@ export default function AddWriting() {
 
           {/* <ContentPlusCotnrPC>사진/간단텍스트설정/이모지</ContentPlusCotnrPC> */}
 
-          <WritingContentContnr titleHeight={titleHeightChanged}>
+          <WritingContentContnr
+            titleHeight={titleHeightChanged}
+            novelTitleContnrHeight={`${novelTitleContnrHeight}px`}
+          >
             <WritingContent
               ref={contentRef}
               placeholder="글 내용을 입력하세요"
