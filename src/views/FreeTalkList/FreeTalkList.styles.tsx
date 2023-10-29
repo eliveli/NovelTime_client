@@ -11,14 +11,14 @@ export const Talk = styled.article<{ isLast?: boolean }>`
   }
 
   padding: 12px 0;
-  border-bottom: 1px solid ${(props) => props.theme.color.lightGray100_2};
+
+  // "isLast" is used in home page
+  border-bottom: ${({ isLast }) => (isLast ? 0 : `1px solid ${theme.color.lightGray100_2}`)};
 
   // it does not work when element is article
   &:last-of-type {
     border-bottom: 0;
   }
-  // this is used in home page
-  ${({ isLast }) => isLast && `border-bottom: 0;`}
 
   ${theme.media.hover(
     `cursor: pointer;
@@ -46,11 +46,11 @@ export const TalkTabletContnr = styled.div`
 export const TalkMainInfoContnr = styled.div`
   display: flex;
   justify-content: space-between;
-
-  width: 70%;
-
   @media screen and (max-width: 767px) {
     width: 75%;
+  }
+  @media screen and (min-width: 768px) {
+    width: 70%;
   }
 `;
 export const TalkInfoContnrTablet = styled.div`
@@ -256,7 +256,6 @@ export const TalkImg = styled.div<{ talkImg: string; imgWidth: number }>`
   background-repeat: no-repeat;
   background-size: cover;
 
-  position: absolute;
   left: 0;
 
   display: inline-block; // 자식이미지 width 100% 아닐 때 가운데 정렬(with parent style)
@@ -264,35 +263,38 @@ export const TalkImg = styled.div<{ talkImg: string; imgWidth: number }>`
 
   /* now animation is only used at the device width 500px - 599px */
 
-  /* 모바일 */
-  animation-name: ${slideImgMobile};
-  animation-direction: alternate;
+  @media screen and (max-width: 499px) {
+    position: absolute;
+    animation-name: ${slideImgMobile};
+    animation-direction: alternate;
+  }
+
+  /* Only used now */
+  @media screen and (min-width: 500px) and (max-width: 767px) {
+    position: absolute;
+    animation-name: ${slideImgMobileRow};
+    animation-duration: 2.5s;
+  }
   animation-iteration-count: infinite;
   animation-timing-function: ease-in-out;
   animation-duration: 2s; // 문자열로 넣으면 작동 안 함... (X)"1s"(X)
   /* animation-delay: 1s; */
   /* animation-fill-mode: forwards; // 애니메이션 종료 후 마지막 keyframe 값 유지 */
 
-  /* now the following is only used */
-  @media screen and (min-width: 500px) {
-    animation-name: ${slideImgMobileRow};
-    animation-duration: 2.5s;
-  }
-
-  /* 태블릿 : now it is not used */
-  @media screen and (min-width: 768px) {
+  /* Not used now */
+  @media screen and (min-width: 768px) and (max-width: 1023px) {
     position: relative;
     animation-name: ${slideImgTablet};
     animation-duration: 3.5s;
   }
-  /* PC : now it is not used */
+  /* Not used now */
   @media screen and (min-width: 1024px) {
     position: relative;
     animation-name: ${slideImgPC};
     animation-duration: 4s;
   }
 
-  // when mouse hover use animation
+  // Use animation when mouse hover
   animation-play-state: paused;
   ${theme.media.hover(`
     animation-play-state: running;
@@ -303,14 +305,17 @@ export const IconsBox = styled.div`
   align-items: center;
   color: rgba(100, 100, 100, 0.9);
 
-  justify-content: space-between;
-  width: 93px;
-  gap: 9px;
+  @media screen and (max-width: 599px) {
+    width: 93px;
+    gap: 9px;
+    justify-content: space-between;
+  }
 
-  @media screen and (min-width: 600px) {
+  @media screen and (min-width: 600px) and (max-width: 767px) {
     flex-direction: column;
     width: 8%;
     gap: 0;
+    justify-content: space-between;
   }
   @media screen and (min-width: 768px) {
     flex-direction: row;
@@ -321,10 +326,13 @@ export const IconsBox = styled.div`
 `;
 export const IconContainer = styled.div`
   display: flex;
-  gap: 5px;
   align-items: center;
   justify-content: flex-start;
   width: 100%;
+
+  @media screen and (max-width: 599px) {
+    gap: 5px;
+  }
 
   @media screen and (min-width: 600px) {
     gap: 6px;

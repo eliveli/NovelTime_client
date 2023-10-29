@@ -203,8 +203,11 @@ export const PlatformContnrFirst = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 2px dotted rgba(100, 100, 100, 0.1);
-  border-radius: 0;
+
+  @media screen and (max-width: 699px) {
+    border-bottom: 2px dotted rgba(100, 100, 100, 0.1);
+    border-radius: 0;
+  }
 
   @media screen and (min-width: 700px) {
     border: 1px solid rgba(100, 100, 100, 0.1);
@@ -230,26 +233,33 @@ export const PlatformContnrSecond = styled.div`
 `;
 export const PlatformBtn = styled.button<{ selectedPlatform: string; platform: string }>`
   border-radius: 15px;
-  border: 1px solid rgba(0, 0, 0, 0.2);
   background-color: white;
-  color: rgba(0, 0, 0, 0.6);
   padding: 4px 6px;
   font-size: 13px;
   font-weight: 500;
   white-space: nowrap;
-  margin-left: 6px;
 
   @media screen and (max-width: 360px) {
     margin-left: 3px;
   }
+  @media screen and (min-width: 361px) {
+    margin-left: 6px;
+  }
+
+  color: ${({ selectedPlatform, platform }) =>
+    selectedPlatform === platform ? theme.color.main : "rgba(0, 0, 0, 0.6)"};
+
+  border: ${({ selectedPlatform, platform }) =>
+    selectedPlatform === platform
+      ? `1px solid ${theme.color.mainLight}`
+      : "1px solid rgba(0, 0, 0, 0.2)"};
 
   ${({ selectedPlatform, platform }) =>
-    selectedPlatform === platform
-      ? `border:1px solid ${theme.color.mainLight}; color:${theme.color.main};`
-      : theme.media.hover(
-          `cursor: pointer;
-          opacity: 0.7;`,
-        )}
+    selectedPlatform !== platform &&
+    theme.media.hover(
+      `cursor: pointer;
+       opacity: 0.7;`,
+    )}
 `;
 
 export const PlatformBtnContnr = styled.div<{ isNewTab?: true }>`
@@ -263,8 +273,11 @@ export const PlatformBtnContnr = styled.div<{ isNewTab?: true }>`
 export const AllPlatformContnr = styled.div`
   margin: 10px 0;
 
-  border: 1px solid rgba(100, 100, 100, 0.1);
   border-radius: 10px;
+
+  @media screen and (max-width: 699px) {
+    border: 1px solid rgba(100, 100, 100, 0.1);
+  }
 
   @media screen and (min-width: 700px) {
     border: 0;
@@ -278,9 +291,12 @@ export const PlatformNewTab = styled.a``;
 export const GuideText = styled.span`
   font-weight: 500;
   color: rgba(0, 0, 0, 0.5);
-  font-size: 15px;
+
   @media screen and (max-width: 360px) {
     font-size: 14px;
+  }
+  @media screen and (min-width: 361px) {
+    font-size: 15px;
   }
 `;
 export const SelectPlatform = styled.button`
@@ -339,8 +355,9 @@ export const ContentPlusContnrMobile = styled.div`
   z-index: 2;
   background-color: rgba(255, 255, 255, 0.9);
 
-  padding: 10px 16px;
-
+  @media screen and (max-width: 767px) {
+    padding: 10px 16px;
+  }
   @media screen and (min-width: 768px) {
     padding: 10px 20px;
   }

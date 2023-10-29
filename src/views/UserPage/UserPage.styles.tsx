@@ -517,9 +517,11 @@ export const NovelListContnr = styled.div`
   display: grid;
   justify-content: space-between;
   column-gap: 10px;
-  grid-template-columns: repeat(2, 1fr);
 
-  @media screen and (min-width: 500px) {
+  @media screen and (max-width: 499px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  @media screen and (min-width: 500px) and (max-width: 699px) {
     grid-template-columns: repeat(3, 1fr);
   }
 

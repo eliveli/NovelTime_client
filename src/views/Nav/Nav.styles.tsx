@@ -77,9 +77,10 @@ export const ChatRoomNavContainer = styled.nav`
   margin: auto;
   height: 50px;
 
-  padding: 0 16px;
+  @media (max-width: 767px) {
+    padding: 0 16px;
+  }
 
-  // on tablet
   @media (min-width: 768px) {
     padding: 0 8px;
   }
@@ -94,11 +95,14 @@ export const CatWalkingContainer = styled.div`
     width: 30%;
     padding-right: 32px;
   }
+
   display: flex;
   overflow: hidden;
-  justify-content: flex-end;
   align-items: center;
 
+  @media screen and (max-width: 511px) {
+    justify-content: flex-end;
+  }
   @media screen and (min-width: 512px) {
     justify-content: flex-start;
   }
@@ -161,8 +165,10 @@ export const NavContent = styled.span<{
   gap: 2px;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-end;
 
+  @media screen and (max-width: 1023px) {
+    justify-content: flex-end;
+  }
   @media screen and (min-width: 1024px) {
     justify-content: center;
   }

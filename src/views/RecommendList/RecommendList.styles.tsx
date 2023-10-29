@@ -22,27 +22,25 @@ export const RightIconBox = styled.div`
 `;
 
 export const ContainerForAll = styled.article<{ isLast?: boolean }>`
-  border-bottom: 1px solid rgba(100, 100, 100, 0.2);
+  // "isLast" is used in home page
+  border-bottom: ${({ isLast }) => (isLast ? 0 : "1px solid rgba(100, 100, 100, 0.2)")};
 
   &:last-of-type {
     // it does not work when element is article
     border-bottom: 0;
   }
 
-  // this is used in home page
-  ${({ isLast }) => isLast && `border-bottom: 0;`}
-
   display: flex;
-  flex-direction: column;
 
   @media screen and (max-width: 767px) {
     width: 100%;
     padding: 12px 0 6px;
+    flex-direction: column;
   }
 
   @media screen and (min-width: 768px) {
-    flex-direction: row;
     padding: 16px 0;
+    flex-direction: row;
   }
 
   ${theme.media.hover(
