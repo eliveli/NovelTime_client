@@ -11,18 +11,19 @@ export const CategoryContainer = styled.div`
   position: relative;
 `;
 
-export const LinkCategory = styled(Link)<{ isUserMark?: true; novelNo?: number }>`
+export const LinkCategory = styled(Link)<{ novelNo?: number }>`
   display: flex;
   align-items: center;
 
   @media (max-width: 767px) {
-    margin: ${({ isUserMark }) => (isUserMark ? "auto 0 5px auto" : "auto 0 0 auto")};
+    margin: auto 0 5px auto;
   }
   @media (min-width: 768px) {
-    margin: auto 0 0 auto;
+    margin: auto 0 1px auto;
   }
 
-  /* 슬라이드의 작품 수가 화면에 최대로 보일 수 있는 작품 수 보다 작으면 버튼 안 보여주기 */
+  // Not used now
+  // 슬라이드의 작품 수가 화면에 최대로 보일 수 있는 작품 수 보다 작으면 버튼 안 보여주기
   @media screen and (max-width: 559px) {
     ${({ novelNo }) => novelNo && novelNo <= 3 && `display:none;`}
   }
@@ -100,29 +101,26 @@ export const CategoryDesc = styled.p<{
       return "margin-bottom: 0;"; // + default margin is set too
     }}
 
-    ${({ isUserNovelList }) => isUserNovelList && "color: rgba(0,0,0,0.5); font-weight:600;"}
+    ${({ isUserNovelList }) =>
+      isUserNovelList && "color:rgba(100, 100, 100, 0.7); font-weight: 500;"}
   }
 
   @media (min-width: 768px) {
     margin-bottom: 0; // + default margin is set too
 
     ${({ isUserNovelList }) =>
-      isUserNovelList && `margin-top: 12px; color: rgba(0,0,0,0.5); font-weight:600;`}
+      isUserNovelList && `margin-top: 12px; color:rgba(100, 100, 100, 0.7); font-weight: 500;`}
   }
 `;
 
-export const ShowAllText = styled.span<{ isUserNovelList?: true }>`
-  ${({ isUserNovelList }) =>
-    isUserNovelList &&
-    `
-      color: rgba(0,0,0,0.5);
-      font-weight: 500;
-      font-size: 15px;
-    `}
+export const TextToShowAll = styled.span`
+  color: rgba(100, 100, 100, 0.6);
+  font-weight: 500;
+  font-size: 15px;
 `;
-export const ShowAllIcon = styled(Icon.ListRight)`
+export const IconToShowAll = styled(Icon.ListRight)`
   margin-left: 6px;
-  color: rgba(100, 100, 100, 0.5);
+  color: rgba(100, 100, 100, 0.4);
 `;
 export const CategoryDescUserContnr = styled.div`
   display: flex;

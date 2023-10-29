@@ -27,13 +27,14 @@ export function RowSlideSimple({ novelNO, children }: { novelNO: number; childre
     changeAlbumX(x);
   };
 
+  const isDesktop = useWhetherItIsDesktop();
   return (
     <RowSlideContainer>
       <RowAlbumContainer ref={albumContainerRef}>
         <RowAlbum moveX={albumX}>{children}</RowAlbum>
       </RowAlbumContainer>
       {/* 이전 이미지 화살표(맨 처음 페이지 제외) */}
-      {currentPage.current > 1 && (
+      {isDesktop && currentPage.current > 1 && (
         <LeftIcon
           onClick={() => {
             slideAlbum(albumX + showAlbumWidth);
@@ -44,7 +45,7 @@ export function RowSlideSimple({ novelNO, children }: { novelNO: number; childre
         </LeftIcon>
       )}
       {/* 다음 이미지 화살표(맨 끝 페이지 제외) */}
-      {isNextArrow && (
+      {isDesktop && isNextArrow && (
         <RightIcon
           onClick={() => {
             slideAlbum(albumX - showAlbumWidth);

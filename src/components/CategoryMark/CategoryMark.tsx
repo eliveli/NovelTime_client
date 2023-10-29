@@ -7,8 +7,8 @@ import {
   CategoryContainer,
   CategoryDesc,
   LinkCategory,
-  ShowAllText,
-  ShowAllIcon,
+  TextToShowAll,
+  IconToShowAll,
   CategoryDescContnr,
   CategoryDescUserImg,
   CategoryDescUserName,
@@ -71,11 +71,10 @@ export default function CategoryMark({
 
         <LinkCategory
           // novelNo={novelNo}
-          isUserMark
           to={`/user-page/${novelListInSlide.user.userName}/${novelListInSlide.path}/${novelListInSlide.listId}`}
         >
-          {isNotMobile && <ShowAllText isUserNovelList>이 리스트 모두 보기</ShowAllText>}
-          <ShowAllIcon />
+          {isNotMobile && <TextToShowAll>이 리스트 모두 보기</TextToShowAll>}
+          <IconToShowAll />
         </LinkCategory>
       </CategoryContainer>
     );
@@ -112,8 +111,8 @@ export default function CategoryMark({
 
       {!!path && (
         <LinkCategory to={path}>
-          <ShowAllText>전체보기</ShowAllText>
-          <ShowAllIcon />
+          {isNotMobile && <TextToShowAll>모두 보기</TextToShowAll>}
+          <IconToShowAll />
         </LinkCategory>
       )}
       {children}
