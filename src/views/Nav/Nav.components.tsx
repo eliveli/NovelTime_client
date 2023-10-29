@@ -179,7 +179,7 @@ export function NavPC() {
   );
 }
 
-// all below are for Mobile, Tablet, not for PC //
+// all belows are for Mobile, Tablet, not for PC //
 export function NavMobileMainTop() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();

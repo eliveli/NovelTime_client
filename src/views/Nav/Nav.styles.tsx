@@ -98,7 +98,10 @@ export const CatWalkingContainer = styled.div`
   overflow: hidden;
   justify-content: flex-end;
   align-items: center;
-  ${document.body.offsetWidth > 512 && "justify-content: flex-start;"}
+
+  @media screen and (min-width: 512px) {
+    justify-content: flex-start;
+  }
 `;
 export const CatWalking = styled.img`
   height: 50px;

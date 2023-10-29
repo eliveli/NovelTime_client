@@ -33,8 +33,8 @@ export default function Share({ isSecond }: { isSecond?: true }) {
   const socialList: SocialList = { FB: socialUrl.facebook, TW: socialUrl.twitter };
 
   const onSharingClick = (site: string) => {
-    const screenWidth = window.screen.width;
-    const screenHeight = window.screen.height;
+    const screenWidth = window.innerWidth;
+    const screenHeight = window.innerHeight;
     if (screenWidth <= 420 || screenHeight <= 420) {
       window.open(socialList[site], "sharer");
     } else {

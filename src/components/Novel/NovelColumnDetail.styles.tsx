@@ -18,19 +18,18 @@ export const NovelLink = styled.div`
 `;
 
 export const NovelImg = styled.div<{
-  bodyWidth: number;
   novelImg: string;
   isRecommend?: true;
 }>`
   height: auto;
 
-  min-width: ${({ bodyWidth, isRecommend }) => {
-    if (isRecommend) return 92;
+  @media (max-width: 499px) {
+    min-width: ${({ isRecommend }) => (isRecommend ? 92 : 59)}px;
+  }
 
-    if (bodyWidth < 500) return 59;
-
-    return 70;
-  }}px;
+  @media (min-width: 500px) {
+    min-width: ${({ isRecommend }) => (isRecommend ? 92 : 70)}px;
+  }
 
   border-radius: 5%;
 
@@ -41,7 +40,7 @@ export const NovelImg = styled.div<{
   background-size: cover;
 `;
 
-export const NovelInfoBox = styled.div<{ bodyWidth: number }>`
+export const NovelInfoBox = styled.div`
   display: flex;
   flex-direction: column;
   padding-left: 10px;
@@ -49,10 +48,13 @@ export const NovelInfoBox = styled.div<{ bodyWidth: number }>`
 
   position: relative;
 
-  ${({ bodyWidth }) => {
-    const imgWidth = bodyWidth < 500 ? 59 : 70;
-    return `width: calc(100% - ${imgWidth}px);`;
-  }};
+  @media (max-width: 499px) {
+    width: calc(100% - 59px);
+  }
+
+  @media (min-width: 500px) {
+    width: calc(100% - 70px);
+  }
 `;
 
 export const NovelTitle = styled.div`

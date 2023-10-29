@@ -1,13 +1,10 @@
 import { useState, useEffect } from "react";
 
-// it can be not accurate when y-scrollbar exists
 export default function useWhetherItIsMobile() {
   const [isMobile, handleMobile] = useState(false);
 
-  const checkItIsMobile = () => {
-    const windowWidth = window.innerWidth; // including scrollbar
-    return windowWidth < 768;
-  };
+  const checkItIsMobile = () => window.innerWidth < 768; // including scrollbar
+  // media query width matches window inner width (not html width)
 
   const handleResize = () => handleMobile(checkItIsMobile());
 

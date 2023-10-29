@@ -73,8 +73,6 @@ export default function NovelColumnDetail({
 }) {
   const { novelId, novelImg, novelTitle, novelAuthor, novelGenre, novelDesc } = novel;
 
-  const bodyWidth = document.body.clientWidth;
-
   const { isModal, handleModal, isModalShown } = useModal();
 
   // (문제)모달 스크롤을 내린 후 모달을 닫으면 모달 탑 영역이 보이고 사라짐
@@ -110,8 +108,8 @@ export default function NovelColumnDetail({
         navigate(`/novel-detail/${novelId}`);
       }}
     >
-      <NovelImg bodyWidth={bodyWidth} novelImg={novelImg} isRecommend={isRecommend} />
-      <NovelInfoBox bodyWidth={bodyWidth}>
+      <NovelImg novelImg={novelImg} isRecommend={isRecommend} />
+      <NovelInfoBox>
         <NovelTitle>{`[${novelGenre}] ${novelTitle}`}</NovelTitle>
         <NovelSubInfoBox>
           <NovelAuthor>{novelAuthor}</NovelAuthor>
