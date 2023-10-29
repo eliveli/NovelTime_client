@@ -51,12 +51,9 @@ function ButtonInNovelDetail({
 type Props = React.PropsWithChildren<{
   isTalk: boolean;
   selectWritingType: (writingType: "T" | "R") => void;
-  isShowAllMark?: boolean;
   categoryText: string;
   novelId: string;
-  writing: boolean;
   novelTitle: string;
-  fontSize?: number;
 }>;
 
 export default function WritingListFrame({
@@ -66,9 +63,6 @@ export default function WritingListFrame({
   isTalk,
   selectWritingType,
   children,
-  writing,
-  isShowAllMark,
-  fontSize,
 }: Props) {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -107,12 +101,7 @@ export default function WritingListFrame({
 
   return (
     <ColumnBG>
-      <CategoryMark
-        writing={writing}
-        isShowAllMark={isShowAllMark}
-        categoryText={categoryText}
-        fontSize={fontSize}
-      />
+      <CategoryMark categoryText={categoryText} />
 
       <ButtonsContainer>
         <ButtonInNovelDetail _onClick={handleToGoToWrite}>

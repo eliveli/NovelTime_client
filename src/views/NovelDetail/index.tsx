@@ -82,12 +82,10 @@ export default function NovelDetail() {
 
           <WritingListFrame
             novelId={novelId}
-            fontSize={20}
-            categoryText="Let's talk about the novel"
+            categoryText="Let's talk about the novel" // font size is set with this
             isTalk={writingOption.type === "T"}
             selectWritingType={selectWritingType}
             novelTitle={novelInDetail.data.novel.novelTitle}
-            writing
           >
             {writings.length ? (
               writings.map((writing) => (
@@ -105,9 +103,8 @@ export default function NovelDetail() {
           )}
 
           <RowSlide
-            categoryId="novelPublishedByTheAuthor"
             categoryText="작가의 다른 작품"
-            novelNO={novelInDetail.data.novelsPublishedByTheAuthor.length}
+            novelNo={novelInDetail.data.novelsPublishedByTheAuthor.length}
           >
             {isOtherNovelsOfTheAuthor &&
               novelInDetail.data.novelsPublishedByTheAuthor.map((novel) => {

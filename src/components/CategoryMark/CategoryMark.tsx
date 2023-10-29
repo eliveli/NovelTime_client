@@ -1,7 +1,8 @@
 import { useNavigate } from "react-router-dom";
-import { goToUserPage } from "utils";
+import { goToUserPage, useWhetherItIsMobile } from "utils";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { handleAlert, openFirstModal } from "store/clientSlices/modalSlice";
+import { Img } from "store/serverAPIs/types";
 import {
   CategoryContainer,
   CategoryDesc,
@@ -15,169 +16,103 @@ import {
   GoToAllContentBtn,
 } from "./CategoryMark.styles";
 
-export default function CategoryMark({
-  writing,
-  categoryId,
-  categoryText,
-  isShowAllMark,
-  novelId,
-  fontSize,
-  userMark,
-  novelNO, // not used now
-
-  infoFromUserPage,
-  linkPath,
-
-  isShowAllButton,
-
-  isNoContent,
-
-  children,
-}: {
-  writing?: boolean;
-  categoryId?: string;
-  categoryText: string; // category list request
-  isShowAllMark?: boolean;
-  novelId?: string; // writing list request by novelId
-  fontSize?: number;
-  userMark?: {
-    userImg: { src: string; position: string };
-    userName: string;
+type Props = React.PropsWithChildren<{
+  categoryText: string;
+  novelListInSlide?: {
+    user: {
+      userImg: Img;
+      userName: string;
+    };
+    path: string;
+    listId: string;
   };
-
-  infoFromUserPage?: {
+  userContent?: {
     userName: string;
     path: string;
-    list?: {
-      isMainCategory: boolean;
-      // true when user's all novel list mark, false when user's one novel list mark
-      listId?: string;
-    };
+    isNoContent: boolean;
+    isNovelList?: true;
   };
+  path?: string;
+  novelNo?: number;
+}>;
 
-  linkPath?: string;
-
-  isShowAllButton?: string;
-
-  isNoContent?: boolean;
-
-  novelNO?: number;
-  children?: React.ReactChild | React.ReactChildren | React.ReactNode;
-}) {
+export default function CategoryMark({
+  categoryText,
+  userContent,
+  novelListInSlide,
+  path,
+  novelNo, // not used now
+  children,
+}: Props) {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+
+  const fontSize = categoryText === "Let's talk about the novel" ? 20 : undefined;
+  const isNotMobile = !useWhetherItIsMobile();
 
   // Darken user content while editing userBG
   const isEditingBG = !!useAppSelector((state) => state.userProfile.temporaryUserBG.src);
 
-  if (linkPath) {
+  if (novelListInSlide) {
     return (
       <CategoryContainer>
-        <CategoryDesc fontSize={fontSize}>{categoryText}</CategoryDesc>
+        <CategoryDescContnr>
+          <CategoryDescUserContnr>
+            <CategoryDescUserImg
+              userImg={novelListInSlide.user.userImg}
+              onClick={(e) => goToUserPage(navigate, e, novelListInSlide.user.userName)}
+            />
+            <CategoryDescUserName>
+              {`${novelListInSlide.user.userName}의 선호 리스트`}
+              &nbsp;
+            </CategoryDescUserName>
+          </CategoryDescUserContnr>
+          <CategoryDesc isUserNovelList>{`: ${categoryText}`}</CategoryDesc>
+        </CategoryDescContnr>
 
-        {isShowAllMark && (
-          <LinkCategory to={linkPath}>
-            <ShowAllText>전체보기</ShowAllText>
-            <ShowAllIcon />
-          </LinkCategory>
-        )}
-      </CategoryContainer>
-    );
-  }
-  if (writing) {
-    return (
-      <CategoryContainer>
-        <CategoryDesc fontSize={fontSize}>{categoryText}</CategoryDesc>
-
-        {isShowAllMark && (
-          <LinkCategory to={`/novel-detail/${novelId as string}/writing-list`}>
-            <ShowAllText>전체보기</ShowAllText>
-            <ShowAllIcon />
-          </LinkCategory>
-        )}
-      </CategoryContainer>
-    );
-  }
-
-  // category mark for each novel list title on my novel list or other's novel list in user page
-  if (infoFromUserPage?.list?.isMainCategory === false) {
-    return (
-      <CategoryContainer>
-        {!userMark && <CategoryDesc isUserNovelList>{`: ${categoryText}`}</CategoryDesc>}
-        {userMark && (
-          <CategoryDescContnr>
-            <CategoryDescUserContnr>
-              <CategoryDescUserImg
-                userImg={userMark.userImg}
-                onClick={(e) => goToUserPage(navigate, e, userMark.userName)}
-              />
-              <CategoryDescUserName>
-                {`${userMark.userName}의 선호 리스트`}
-                &nbsp;
-              </CategoryDescUserName>
-            </CategoryDescUserContnr>
-            <CategoryDesc isUserNovelList isUserMark={userMark !== undefined}>
-              {`: ${categoryText}`}
-            </CategoryDesc>
-          </CategoryDescContnr>
-        )}
-        {/* the page is not show-all-page */}
-        {isShowAllMark && infoFromUserPage.list.listId && (
-          <LinkCategory
-            // novelNO={novelNO}
-            isUserMark={userMark !== undefined}
-            to={`/user-page/${infoFromUserPage.userName}/${infoFromUserPage.path}/${infoFromUserPage.list.listId}`}
-          >
-            <ShowAllText isUserNovelList>이 리스트 모두 보기</ShowAllText>
-            <ShowAllIcon />
-          </LinkCategory>
-        )}
+        <LinkCategory
+          // novelNo={novelNo}
+          isUserMark
+          to={`/user-page/${novelListInSlide.user.userName}/${novelListInSlide.path}/${novelListInSlide.listId}`}
+        >
+          {isNotMobile && <ShowAllText isUserNovelList>이 리스트 모두 보기</ShowAllText>}
+          <ShowAllIcon />
+        </LinkCategory>
       </CategoryContainer>
     );
   }
 
-  // category mark for all novel list or writings in user page
-  if (infoFromUserPage?.list?.isMainCategory || infoFromUserPage) {
-    // writing or novel list
-    const userPagePath = () => {
-      if (infoFromUserPage.list?.isMainCategory && infoFromUserPage.list.listId) {
-        return `/user-page/${infoFromUserPage.userName}/${infoFromUserPage.path}/${infoFromUserPage.list.listId}`;
-      }
-      if (infoFromUserPage.list?.isMainCategory) {
-        return `/user-page/${infoFromUserPage.userName}/${infoFromUserPage.path}`;
-      }
-      return `/user-page/${infoFromUserPage.userName}/${infoFromUserPage.path}`;
-    };
+  if (userContent) {
+    const userPagePath = `/user-page/${userContent.userName}/${userContent.path}`;
+
     return (
       <CategoryContainer>
-        <CategoryDesc fontSize={fontSize} isEditingBG={isEditingBG}>
-          {categoryText}
-        </CategoryDesc>
-
-        {isShowAllButton && (
-          <GoToAllContentBtn
-            isEditingBG={isEditingBG}
-            onClick={() => {
-              if (isNoContent) {
-                dispatch(openFirstModal("alert"));
-                dispatch(handleAlert({ text: "게시글이 존재하지 않아요." }));
-                return;
-              }
-              navigate(userPagePath());
-            }}
-          >
-            {isShowAllButton}
-          </GoToAllContentBtn>
-        )}
+        <CategoryDesc isEditingBG={isEditingBG}>{categoryText}</CategoryDesc>
+        <GoToAllContentBtn
+          isEditingBG={isEditingBG}
+          onClick={() => {
+            if (userContent.isNoContent) {
+              dispatch(openFirstModal("alert"));
+              dispatch(handleAlert({ text: "게시글이 존재하지 않아요." }));
+              return;
+            }
+            navigate(userPagePath);
+          }}
+        >
+          모두 보기
+        </GoToAllContentBtn>
       </CategoryContainer>
     );
   }
+
   return (
     <CategoryContainer>
-      <CategoryDesc isEditingBG={isEditingBG}>{categoryText}</CategoryDesc>
+      <CategoryDesc isEditingBG={isEditingBG} fontSize={fontSize}>
+        {categoryText}
+      </CategoryDesc>
 
-      {isShowAllMark && (
-        <LinkCategory to={`/novel-list/${categoryText}/${categoryId as string}`}>
+      {!!path && (
+        <LinkCategory to={path}>
           <ShowAllText>전체보기</ShowAllText>
           <ShowAllIcon />
         </LinkCategory>

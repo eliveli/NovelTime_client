@@ -288,7 +288,7 @@ export default function Home() {
     <MainBG isMarginBottom>
       {homeResult.isFetching && <Spinner styles="fixed" />}
 
-      <CategoryMark categoryText="소설 한담 new" linkPath="talk-list" />
+      <CategoryMark categoryText="소설 한담 new" path="talk-list" />
       {homeResult.data?.talkList?.map((talk, idx) => (
         <FreeTalk talk={talk} isLast={idx + 1 === homeResult.data?.talkList.length} />
       ))}
@@ -297,7 +297,7 @@ export default function Home() {
         <UserRankSection category="소설 한담" rankList={homeResult.data.talkUserRank} />
       )}
 
-      <CategoryMark categoryText="소설 추천 new" linkPath="recommend-list" />
+      <CategoryMark categoryText="소설 추천 new" path="recommend-list" />
       {homeResult.data?.recommendList?.map((recommendInfo, idx) => (
         <Recommend
           recommendInfo={recommendInfo}
@@ -317,16 +317,13 @@ export default function Home() {
 
       {userNovelListSelected?.map((list) => (
         <RowSlide
-          categoryId={list.listId}
           categoryText={list.listTitle}
-          novelNO={list.novel.length}
-          infoFromUserPage={{
-            userName: list.userName,
+          novelNo={list.novel.length}
+          novelListInSlide={{
+            user: { userImg: list.userImg, userName: list.userName },
             path: "novel-list/created",
-            list: { isMainCategory: false, listId: list.listId },
+            listId: list.listId,
           }}
-          userMark={{ userImg: list.userImg, userName: list.userName }}
-          isShowAllMark
         >
           {list.novel.map((_) => (
             <NovelRow key={_.novelId} novel={_} isNotSubInfo />
@@ -338,7 +335,7 @@ export default function Home() {
         <UserRankSection category="소설 리스트" rankList={homeResult.data.novelListUserRank} />
       )}
 
-      <CategoryMark categoryText={category.popularNovels} categoryId="popularNovels">
+      <CategoryMark categoryText={category.popularNovels}>
         <BtnToLoadContent onClick={() => navigate(`${NOVEL_LIST}/popularNovels`)}>
           모두 보기
         </BtnToLoadContent>
@@ -354,7 +351,7 @@ export default function Home() {
 
       <AddSpace height={16} />
 
-      <CategoryMark categoryText={category.weeklyNovels} categoryId="weeklyNovels">
+      <CategoryMark categoryText={category.weeklyNovels}>
         <BtnToLoadContent onClick={() => navigate(`${NOVEL_LIST}/weeklyNovels`)}>
           모두 보기
         </BtnToLoadContent>

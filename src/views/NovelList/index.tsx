@@ -106,7 +106,7 @@ export default function NovelList() {
         </SearchIconBox>
       </IconContainer>
 
-      <CategoryMark categoryText={category.popularNovels} categoryId="popularNovels">
+      <CategoryMark categoryText={category.popularNovels}>
         <BtnToLoadContent onClick={() => navigate(`${NOVEL_LIST}/popularNovels`)}>
           모두 보기
         </BtnToLoadContent>
@@ -122,7 +122,7 @@ export default function NovelList() {
 
       <Space height={9} />
 
-      <CategoryMark categoryText={category.weeklyNovels} categoryId="weeklyNovels">
+      <CategoryMark categoryText={category.weeklyNovels}>
         <BtnToLoadContent onClick={() => navigate(`${NOVEL_LIST}/weeklyNovels`)}>
           모두 보기
         </BtnToLoadContent>
@@ -143,7 +143,7 @@ export default function NovelList() {
 
       <Space />
 
-      <CategoryMark categoryText={category.listLiked} categoryId="listLiked">
+      <CategoryMark categoryText={category.listLiked}>
         <BtnToLoadContent onClick={() => navigate(`${NOVEL_LIST}/listLiked`)}>
           모두 보기
         </BtnToLoadContent>
@@ -181,7 +181,7 @@ export default function NovelList() {
 
       <Space height={9} />
 
-      <CategoryMark categoryText={category.novelsForYou} categoryId="novelsForYou">
+      <CategoryMark categoryText={category.novelsForYou}>
         {!!novelsForLoginUser.data?.length && (
           <BtnToLoadContent onClick={() => navigate(`${NOVEL_LIST}/novelsForYou`)}>
             모두 보기

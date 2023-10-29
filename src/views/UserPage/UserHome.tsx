@@ -55,16 +55,14 @@ export default function UserHome() {
       {isFetching && <Spinner styles="fixed" />}
 
       <CategoryMark
-        infoFromUserPage={{
+        userContent={{
           userName: userName as string,
           path: "writing/created",
+          isNoContent:
+            data?.talksUserCreated.length === 0 &&
+            data?.recommendsUserCreated.length === 0 &&
+            data?.commentsUserCreated.length === 0,
         }}
-        isShowAllButton="모두 보기"
-        isNoContent={
-          data?.talksUserCreated.length === 0 &&
-          data?.recommendsUserCreated.length === 0 &&
-          data?.commentsUserCreated.length === 0
-        }
         categoryText={myWritingMark}
       />
       <WritingFilter
@@ -100,12 +98,11 @@ export default function UserHome() {
       </WritingSection>
 
       <CategoryMark
-        infoFromUserPage={{
+        userContent={{
           userName: userName as string,
           path: "writing/liked",
+          isNoContent: data?.talksUserLikes.length === 0 && data?.recommendsUserLikes.length === 0,
         }}
-        isShowAllButton="모두 보기"
-        isNoContent={data?.talksUserLikes.length === 0 && data?.recommendsUserLikes.length === 0}
         categoryText={othersWritingMark}
       />
 
@@ -135,16 +132,13 @@ export default function UserHome() {
       </WritingSection>
 
       <CategoryMark
-        infoFromUserPage={{
+        userContent={{
           userName: userName as string,
           path: "novel-list/created",
-          list: {
-            isMainCategory: true,
-          },
+          isNovelList: true,
+          isNoContent: data?.novelLists.listsUserCreated.length === 0,
         }}
         categoryText={myListMark}
-        isShowAllButton="모두 보기"
-        isNoContent={data?.novelLists.listsUserCreated.length === 0}
       />
       {data?.novelLists.listsUserCreated.length ? (
         <WritingSection isNoContent={false} isForListAll>
@@ -157,16 +151,13 @@ export default function UserHome() {
       )}
 
       <CategoryMark
-        infoFromUserPage={{
+        userContent={{
           userName: userName as string,
           path: "novel-list/liked",
-          list: {
-            isMainCategory: true,
-          },
+          isNovelList: true,
+          isNoContent: data?.novelLists.listsUserLikes.length === 0,
         }}
         categoryText={othersListMark}
-        isShowAllButton="모두 보기"
-        isNoContent={data?.novelLists.listsUserLikes.length === 0}
       />
       {data?.novelLists.listsUserLikes.length ? (
         <WritingSection isNoContent={false} isForListAll>

@@ -11,27 +11,29 @@ export const CategoryContainer = styled.div`
   position: relative;
 `;
 
-export const LinkCategory = styled(Link)<{ isUserMark?: boolean; novelNO?: number }>`
+export const LinkCategory = styled(Link)<{ isUserMark?: true; novelNo?: number }>`
   display: flex;
   align-items: center;
-  margin: auto 0 0 auto;
 
-  ${({ isUserMark }) =>
-    isUserMark &&
-    theme.media.mobile(`
-    margin-bottom: 5px;
-  `)}
+  @media (max-width: 767px) {
+    margin: ${({ isUserMark }) => (isUserMark ? "auto 0 5px auto" : "auto 0 0 auto")};
+  }
+  @media (min-width: 768px) {
+    margin: auto 0 0 auto;
+  }
 
   /* 슬라이드의 작품 수가 화면에 최대로 보일 수 있는 작품 수 보다 작으면 버튼 안 보여주기 */
-    ${({ novelNO }) => novelNO && novelNO <= 3 && `display:none;`}
-  @media screen and (min-width: 560px) {
-    ${({ novelNO }) => novelNO && novelNO <= 4 && `display:none;`}
+  @media screen and (max-width: 559px) {
+    ${({ novelNo }) => novelNo && novelNo <= 3 && `display:none;`}
   }
-  @media screen and (min-width: 768px) {
-    ${({ novelNO }) => novelNO && novelNO <= 5 && `display:none;`}
+  @media screen and (min-width: 560px) and (max-width: 767px) {
+    ${({ novelNo }) => novelNo && novelNo <= 4 && `display:none;`}
+  }
+  @media screen and (min-width: 768px) and (max-width: 1023px) {
+    ${({ novelNo }) => novelNo && novelNo <= 5 && `display:none;`}
   }
   @media screen and (min-width: 1024px) {
-    ${({ novelNO }) => novelNO && novelNO <= 6 && `display:none;`}
+    ${({ novelNo }) => novelNo && novelNo <= 6 && `display:none;`}
   }
 
   @media (hover: hover) {
@@ -43,6 +45,7 @@ export const LinkCategory = styled(Link)<{ isUserMark?: boolean; novelNO?: numbe
     }
   }
 `;
+
 export const CategoryDescContnr = styled.div`
   display: flex;
 
@@ -72,41 +75,42 @@ export const CategoryDescUserImg = styled.div<{ userImg: Img }>`
     margin-bottom: -11px;
   `)}
 `;
-export const CategoryDescUserName = styled.p<{ fontSize?: number }>`
+export const CategoryDescUserName = styled.p`
   margin-top: 12px;
   margin-bottom: 0;
-  font-size: ${({ fontSize }) => fontSize || 16}px;
+  font-size: 16px;
 `;
+
 export const CategoryDesc = styled.p<{
   fontSize?: number;
   isUserNovelList?: true;
-  isUserMark?: boolean;
   isEditingBG?: boolean;
 }>`
-  margin-bottom: 0;
-
   font-size: ${({ fontSize }) => fontSize || 16}px;
 
-  ${({ isEditingBG }) => !isEditingBG && `border-bottom: 1px dotted lightgray;`}
+  border-bottom: ${({ isEditingBG, isUserNovelList }) => {
+    if (isUserNovelList || isEditingBG) return 0;
+    return `1px dotted lightgray`;
+  }};
 
-  ${({ isUserNovelList }) =>
-    isUserNovelList &&
-    `margin-top: 12px; border-bottom: 0; color: rgba(0,0,0,0.5); font-weight:600;`}
+  @media (max-width: 767px) {
+    ${({ isUserNovelList }) => {
+      if (isUserNovelList) return "margin: 0 0 0 32px;";
+      return "margin-bottom: 0;"; // + default margin is set too
+    }}
 
-  ${({ isUserMark }) =>
-    isUserMark &&
-    theme.media.mobile(`
-      margin: 0;
-      margin-left: 32px;
-  `)}
+    ${({ isUserNovelList }) => isUserNovelList && "color: rgba(0,0,0,0.5); font-weight:600;"}
+  }
+
+  @media (min-width: 768px) {
+    margin-bottom: 0; // + default margin is set too
+
+    ${({ isUserNovelList }) =>
+      isUserNovelList && `margin-top: 12px; color: rgba(0,0,0,0.5); font-weight:600;`}
+  }
 `;
 
 export const ShowAllText = styled.span<{ isUserNovelList?: true }>`
-  ${({ isUserNovelList }) =>
-    isUserNovelList &&
-    theme.media.mobile(`
-    display:none;
-  `)}
   ${({ isUserNovelList }) =>
     isUserNovelList &&
     `
@@ -139,6 +143,6 @@ export const GoToAllContentBtn = styled.button<{ isEditingBG?: boolean }>`
 
   ${theme.media.hover(
     `cursor: pointer;
-    opacity: 0.7;`,
+     opacity: 0.7;`,
   )}
 `;
