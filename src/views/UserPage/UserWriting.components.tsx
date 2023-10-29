@@ -2,7 +2,7 @@ import Icon from "assets/Icon";
 import React, { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { CommentUserCreated, TalkOrRecommend } from "store/serverAPIs/types";
-import { useComponentHeight } from "utils";
+import { adjustCreateDate, useComponentHeight } from "utils";
 import {
   CommntIcon,
   ContnrNearImg,
@@ -79,6 +79,8 @@ export const Writing = React.memo(({ writingInfo }: WritingInfo) => {
   const imgHeight = useComponentHeight(imgRef);
 
   const navigate = useNavigate();
+  const dateToShow = adjustCreateDate(createDate);
+
   // talk
   if (talkId) {
     return (
@@ -89,7 +91,7 @@ export const Writing = React.memo(({ writingInfo }: WritingInfo) => {
             {userName && <WritingUserName talkId={talkId}>{` : ${userName}`}</WritingUserName>}
             <CreateDate>
               {!userName && ` : `}
-              {createDate}
+              {dateToShow}
             </CreateDate>
             <IconsContnr>
               <IconInfoContnr>
@@ -129,7 +131,7 @@ export const Writing = React.memo(({ writingInfo }: WritingInfo) => {
           {userName && <WritingUserName>{` : ${userName}`}</WritingUserName>}
           <CreateDate>
             {!userName && ` : `}
-            {createDate}
+            {dateToShow}
           </CreateDate>
           <IconsContnr>
             <IconInfoContnr>
@@ -157,13 +159,15 @@ interface CommentInfo {
 }
 export const Comment = React.memo(({ commentInfo }: CommentInfo) => {
   const { commentId, commentContent, createDate, talkId, talkTitle, novelTitle } = commentInfo;
+  const dateToShow = adjustCreateDate(createDate);
+
   const navigate = useNavigate();
 
   return (
     <WritingContnr isComment onClick={() => navigate(`/talk-detail/${talkId}/${commentId}`)}>
       <CommentContentContnr>
         <CommentContent>{commentContent}</CommentContent>
-        <CreateDate>{createDate}</CreateDate>
+        <CreateDate>{dateToShow}</CreateDate>
       </CommentContentContnr>
       <CommentTalkTitle>
         <WritingMark>[글]</WritingMark>
