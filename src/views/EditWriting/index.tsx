@@ -5,6 +5,7 @@ import { RECOMMEND_DETAIL, RECOMMEND_LIST, TALK_DETAIL, TALK_LIST } from "utils/
 import { useEditWritingMutation } from "store/serverAPIs/novelTime";
 import Spinner from "assets/Spinner";
 import { handleAlert, openFirstModal } from "store/clientSlices/modalSlice";
+import { useWhetherItIsDesktop } from "utils";
 import {
   handleWritingToSubmitOnMobile,
   handleWritingToEdit,
@@ -40,10 +41,11 @@ export default function EditWriting() {
   const setHeightOfTitle = () => {
     if (!titleRef.current) return;
 
-    titleRef.current.style.height = "28px"; // Default: height of 1 line
+    titleRef.current.style.height = "28px"; // Default: height in 1 line
+
     const titleHeight = titleRef.current.scrollHeight; // current scroll height
 
-    // max-height : 5 lines of 124px
+    // max-height : 124px in 5 lines
     titleRef.current.style.height = `${titleHeight <= 124 ? titleRef.current.scrollHeight : 124}px`;
 
     getTitleHeight(titleRef.current.style.height);
@@ -145,6 +147,8 @@ export default function EditWriting() {
     }
   }, [writingId]);
 
+  const isDesktop = useWhetherItIsDesktop();
+
   return (
     <MainBG>
       {editWritingResult.isLoading && <Spinner styles="fixed" />}
@@ -172,10 +176,11 @@ export default function EditWriting() {
         <WritingContent ref={contentRef} placeholder="글 내용을 입력하세요" />
       </WritingContentContnr>
 
-      <SubmitBtnContnr>
-        <SubmitBtnPC onClick={submitToEditWriting}>수정</SubmitBtnPC>
-      </SubmitBtnContnr>
-
+      {isDesktop && (
+        <SubmitBtnContnr>
+          <SubmitBtnPC onClick={submitToEditWriting}>수정</SubmitBtnPC>
+        </SubmitBtnContnr>
+      )}
       {/* <ContentPlusContnrMobile>
         <ContentPlusAlignMobile>사진/간단텍스트설정/이모지</ContentPlusAlignMobile>
       </ContentPlusContnrMobile> */}

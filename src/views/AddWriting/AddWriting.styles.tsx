@@ -121,11 +121,19 @@ export const WritingTitle = styled.textarea`
   padding: 0;
 `;
 
-export const WritingContentContnr = styled.div<{ titleHeight?: string }>`
+export const WritingContentContnr = styled.div<{ titleHeight: string }>`
   padding: 8px 2px;
 
-  @media screen and (max-width: 1023px) {
-    height: auto;
+  @media screen and (max-width: 767px) {
+    height: calc(
+      100vh - 51px - (61px + 54px + (${({ titleHeight }) => titleHeight} + 17px)) - 16px
+    );
+  }
+
+  @media screen and (min-width: 768px) and (max-width: 1023px) {
+    height: calc(
+      100vh - 51px - (61px + 54px + (${({ titleHeight }) => titleHeight} + 17px)) - 20px
+    );
   }
 
   @media screen and (min-width: 1024px) {

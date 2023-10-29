@@ -168,6 +168,7 @@ export default function AddWriting() {
   const titleRef = useRef<HTMLTextAreaElement>(null);
   const contentRef = useRef<HTMLTextAreaElement>(null);
 
+  // keep current values while choosing novel again //
   const titleChanged = useRef("");
   const contentChanged = useRef("");
 
@@ -179,11 +180,12 @@ export default function AddWriting() {
 
     titleChanged.current = titleRef.current.value;
 
-    // set the height of title automatically
-    titleRef.current.style.height = "28px"; // Default: height of 1 line
+    // replace height with scrollable one
+    titleRef.current.style.height = "28px"; // Default: height in 1 line
+
     const titleHeight = titleRef.current.scrollHeight; // current scroll height
 
-    // max-height : 5 lines of 124px
+    // max-height : 124px in 5 lines
     titleRef.current.style.height = `${titleHeight <= 124 ? titleRef.current.scrollHeight : 124}px`;
 
     getTitleHeight(titleRef.current.style.height);
@@ -197,6 +199,7 @@ export default function AddWriting() {
 
   const writeContent = () => {
     if (!contentRef.current) return;
+
     contentChanged.current = contentRef.current?.value;
   };
 
@@ -462,6 +465,7 @@ export default function AddWriting() {
               onKeyPress={preventEnter}
             />
           </WritingTitleContnr>
+
           {/* <ContentPlusCotnrPC>사진/간단텍스트설정/이모지</ContentPlusCotnrPC> */}
 
           <WritingContentContnr titleHeight={titleHeightChanged}>
