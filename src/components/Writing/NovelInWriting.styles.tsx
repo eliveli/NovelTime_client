@@ -28,7 +28,7 @@ export const NovelDetailContainer = styled.div`
   border-top: 1px solid rgba(220, 220, 220, 0.5);
 `;
 export const NovelTitle = styled.p`
-  margin: 0 1px 0 0;
+  margin: 0;
   color: rgba(100, 100, 100, 0.8);
   font-weight: 500;
 `;
@@ -36,7 +36,7 @@ export const NovelTitleContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 45px;
+  padding: 6px 6px 6px 12px;
 
   ${theme.media.hover(
     `cursor: pointer;

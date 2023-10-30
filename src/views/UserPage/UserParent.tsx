@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import theme from "assets/styles/theme";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { setLoginUser, setAccessToken, setLogout } from "store/clientSlices/loginUserSlice";
@@ -10,9 +10,9 @@ import { useGetLogoutQuery, useGetUserInfoByUserNameQuery } from "store/serverAP
 import Spinner from "assets/Spinner";
 import { CHAT_ROOM_LIST, CHAT_ROOM } from "utils/pathname";
 import { useWhetherItIsMobile } from "utils";
-import { setUserProfile } from "store/clientSlices/userProfileSlice";
+import { User, setUserProfile } from "store/clientSlices/userProfileSlice";
 import socket from "store/serverAPIs/socket.io";
-import { ChatRoom } from "store/serverAPIs/types";
+import { ChatRoom, UserInfo } from "store/serverAPIs/types";
 import { initializeChat, setNewRoom } from "store/clientSlices/chatSlice";
 import {
   ProfileContnr,
@@ -29,39 +29,32 @@ import {
   UserImgAndName,
 } from "./UserPage.styles";
 
-function Profile() {
+function Profile({ user }: { user: User }) {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { userName: userNameFromURL } = useParams();
-  const {
-    userName: userNameFromSlice,
-    userImg: userImgFromSlice,
-    userBG: userBGFromSlice,
-  } = useAppSelector((state) => state.userProfile.user);
+
+  const isMobile = useWhetherItIsMobile();
+
   const loginUser = useAppSelector((state) => state.loginUser.user);
   const isLogin = !!loginUser.userId;
   const isLogout = useAppSelector((state) => state.loginUser.isLogout);
-  const isMobile = useWhetherItIsMobile();
 
-  // not to display a previous user even for a second just before getting new user with query
-  const userName = userNameFromSlice === userNameFromURL ? userNameFromSlice : "";
-  const userImg =
-    userNameFromSlice === userNameFromURL ? userImgFromSlice : { src: "", position: "" };
-  const userBG =
-    userNameFromSlice === userNameFromURL ? userBGFromSlice : { src: "", position: "" };
+  const { userName, userImg, userBG } = user;
 
   // userBG when user is changing the BG
   const tempUserBG = useAppSelector((state) => state.userProfile.temporaryUserBG);
 
-  // after logout remove access token and user info in store
+  // Handle logout ------------------------------------------------------------- //
   const logoutResult = useGetLogoutQuery(undefined, {
     skip: !isLogout,
   });
 
-  const rooms = useAppSelector((state) => state.chat.rooms);
+  // after logout remove access token and user info in store
+  useEffect(() => {
+    if (!logoutResult.data || !loginUser.userId) return;
 
-  if (logoutResult.data && loginUser.userId) {
     dispatch(setAccessToken(""));
+
     dispatch(
       setLoginUser({
         userId: "",
@@ -76,7 +69,7 @@ function Profile() {
         },
       }),
     );
-  }
+  }, [logoutResult.data, loginUser.userId]);
 
   const handleLogout = () => {
     dispatch(setLogout(true));
@@ -100,6 +93,10 @@ function Profile() {
 
     dispatch(openFirstModal("confirm"));
   };
+
+  // Handle chatroom --------------------------------------------------------- //
+
+  const rooms = useAppSelector((state) => state.chat.rooms);
 
   const handleMessage = async () => {
     if (!isLogin) {
@@ -125,12 +122,12 @@ function Profile() {
     // Create a new room if it doesn't exist
     socket.emit("create a room", loginUser.userId, userName);
   };
-
   type NewRoomResult = {
     status: number;
     data?: { room: ChatRoom };
     error?: { message?: string };
   };
+
   const setNewRoomWithSocket = ({ status, data, error }: NewRoomResult) => {
     if (status === 200 && data) {
       dispatch(setNewRoom(data.room));
@@ -168,7 +165,7 @@ function Profile() {
   )} ${theme.media.tablet(`display:none;`)} ${theme.media.desktop(`display:block;`)}`;
   //
   return (
-    <ProfileContnr whenBGisNot={!!tempUserBG.src || !!userBG.src}>
+    <ProfileContnr isUserBG={!!tempUserBG.src || !!userBG.src}>
       {logoutResult.isFetching && <Spinner styles="fixed" />}
 
       <ProfileBG
@@ -227,7 +224,30 @@ export default function UserParent() {
   const { data, isError, isFetching } = useGetUserInfoByUserNameQuery(userName as string, {
     skip: isLoginUser, // send request when this isn't login user
   });
+
+  const initialUser = {
+    userName: "",
+    userImg: {
+      src: "",
+      position: "",
+    },
+    userBG: {
+      src: "",
+      position: "",
+    },
+  };
+
+  const [user, setUser] = useState<UserInfo>(initialUser);
+
   useEffect(() => {
+    if (isLoginUser) {
+      setUser(loginUser);
+      dispatch(setUserProfile(loginUser));
+      return;
+    }
+
+    if (isFetching) return;
+
     if (isError) {
       dispatch(openFirstModal("alert"));
       dispatch(handleAlert({ text: "존재하지 않는 사용자입니다." }));
@@ -235,19 +255,16 @@ export default function UserParent() {
       return;
     }
 
-    if (isLoginUser) {
-      dispatch(setUserProfile(loginUser));
-      return;
-    }
-
     if (!isLoginUser && !!data) {
+      setUser(data);
       dispatch(setUserProfile(data));
     }
+
     //
     // "userName" in deps is required
     //   when navigating login user's page from other user's page
     //   by clicking the profile icon in nav bar
-  }, [data, userName, isError]);
+  }, [data, userName, isError, isFetching]);
 
   // Darken user content while editing userBG
   const isEditingBG = !!useAppSelector((state) => state.userProfile.temporaryUserBG.src);
@@ -255,7 +272,7 @@ export default function UserParent() {
   return (
     <>
       {isFetching && <Spinner styles="fixed" />}
-      <Profile />
+      <Profile user={user} />
 
       <UserContentContainer isEditingBG={isEditingBG}>
         <Outlet />

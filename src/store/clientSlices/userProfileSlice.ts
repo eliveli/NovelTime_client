@@ -1,13 +1,16 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { Img } from "store/serverAPIs/types";
+
+export type User = {
+  userName: string;
+  userImg: Img;
+  userBG: Img;
+};
 
 export type IsUserProfileState = {
-  user: {
-    userName: string;
-    userImg: { src: string; position: string };
-    userBG: { src: string; position: string };
-  };
-  temporaryUserBG: { src: string; position: string };
+  user: User;
+  temporaryUserBG: Img;
 };
 
 const initialState: IsUserProfileState = {
@@ -27,19 +30,13 @@ export const userProfileSlice = createSlice({
       state,
       action: PayloadAction<{
         userName: string;
-        userImg: { src: string; position: string };
-        userBG: { src: string; position: string };
+        userImg: Img;
+        userBG: Img;
       }>,
     ) => {
       state.user = action.payload;
     },
-    setTemporaryUserBG: (
-      state,
-      action: PayloadAction<{
-        src: string;
-        position: string;
-      }>,
-    ) => {
+    setTemporaryUserBG: (state, action: PayloadAction<Img>) => {
       state.temporaryUserBG = action.payload;
     },
   },

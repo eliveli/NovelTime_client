@@ -2,9 +2,11 @@ import theme, { styled } from "assets/styles/theme";
 import { Img } from "store/serverAPIs/types";
 import Icon from "../../assets/Icon";
 
-export const ProfileContnr = styled.div<{ whenBGisNot?: boolean }>`
-  background-color: ${({ whenBGisNot }) => !whenBGisNot && "#ff9c3db0"};
+export const ProfileContnr = styled.div<{ isUserBG: boolean }>`
   margin-bottom: 7px;
+
+  background-color: ${({ isUserBG }) => (isUserBG ? "transparent" : "rgb(255 156 61 / 63%)")};
+
   ${theme.media.mobile(`
     height: 200px;
   `)}
@@ -564,11 +566,11 @@ export const ButtonToEdit = styled.span<{ isNoBorder?: true }>`
 // I want to more btn fixed to the exact space,
 //  so I made the parent of the more btn positioned relative,
 // and made the btn positioned absolute, and set the detail position value.
-export const MoreBtnParent = styled.div`
+export const BtnParentForTitle = styled.div`
   position: relative;
   width: 100%;
 `;
-export const MoreBtnBoxBG = styled.div<{ isListMore: boolean }>`
+export const BtnBoxBGForTitle = styled.div<{ isListMore: boolean }>`
   padding-left: ${({ isListMore }) => (isListMore ? 0 : 4)}px;
   position: absolute;
   height: 32px;
@@ -576,7 +578,7 @@ export const MoreBtnBoxBG = styled.div<{ isListMore: boolean }>`
   right: 0;
   margin-top: 12px;
 `;
-export const MoreBtnBox = styled(Icon.IconBox)`
+export const BtnBoxForTitle = styled(Icon.IconBox)`
   border-radius: 50%;
   background-color: white;
   box-shadow: 0 0 2px rgb(0 0 0 / 60%);
