@@ -82,7 +82,7 @@ export default function NovelDetail() {
 
           <WritingListFrame
             novelId={novelId}
-            categoryText="Let's talk about the novel" // font size is set with this
+            categoryText="Let's talk about the novel" // font size is set with this in <CategoryMark>
             isTalk={writingOption.type === "T"}
             selectWritingType={selectWritingType}
             novelTitle={novelInDetail.data.novel.novelTitle}

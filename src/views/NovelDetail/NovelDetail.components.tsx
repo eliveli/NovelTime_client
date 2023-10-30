@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { NovelInDetailPage } from "store/serverAPIs/types";
 import Icon from "assets/Icon";
-import { useWhetherItIsMobile } from "utils";
+import { useComponentHeight, useWhetherItIsMobile } from "utils";
 import { useAppDispatch } from "../../store/hooks";
 import { showBigImage } from "../../store/clientSlices/modalSlice";
 
@@ -16,13 +16,12 @@ import {
   NovelInfoMobile,
   NovelInfoTablet,
   NovelContainer,
-  NovelDescPartial,
-  NovelDescEntire,
+  NovelDescPreview,
+  NovelDescFull,
   NovelPlatformBox,
   NovelDescMobile,
-  DownIconBox,
   DownIcon,
-  UpIconBox,
+  ArrowIconBox,
   UpIcon,
   NovelImgBox,
   TextIconBox,
@@ -46,8 +45,9 @@ export default function NovelDetailInfo({
   writingNoWithAllType?: number;
 }) {
   const {
-    novelImg,
+    novelId,
     novelTitle,
+    novelImg,
     novelAuthor,
     novelGenre,
     novelIsEnd,
@@ -64,6 +64,24 @@ export default function NovelDetailInfo({
   const dispatch = useAppDispatch();
 
   const [isShowAll, handleShowAll] = useState(false);
+
+  const descTablet = useRef<HTMLDivElement>(null);
+  const descMobile = useRef<HTMLDivElement>(null);
+  // - Don't combine refs. useComponentHeight below needs ref in param
+
+  // Don't display down icon for full description when line is 1 in description
+  const heightInDescMobile = useComponentHeight(descMobile, novelId, isShowAll);
+  const isLine1 = heightInDescMobile < 45;
+  // - In contrast, display the icon even if the line is 2, 3
+  //               (line 3 is the maximum line in preview description on mobile)
+  //   because line break is allowed in full description modal so that user can see with ease
+
+  // Initialize in description component if user clicks other novel the author created
+  useEffect(() => {
+    handleShowAll(false); // Display description folded on mobile
+
+    descTablet.current?.scrollTo(0, 0); // Scroll to top in description on tablet/desktop
+  }, [novelId]);
 
   const isMobile = useWhetherItIsMobile();
 
@@ -114,25 +132,29 @@ export default function NovelDetailInfo({
             </NovelSubInfoBox>
           </NovelAboveDescTablet>
 
-          {!isMobile && <NovelDescTablet>{novelDesc}</NovelDescTablet>}
+          {!isMobile && <NovelDescTablet ref={descTablet}>{novelDesc}</NovelDescTablet>}
         </NovelInfoBox>
       </NovelMainInfo>
 
       {isMobile && isShowAll && (
         <NovelDescMobile>
-          <NovelDescEntire>{novelDesc}</NovelDescEntire>
-          <UpIconBox onClick={() => handleShowAll(false)}>
+          <NovelDescFull>{novelDesc}</NovelDescFull>
+
+          <ArrowIconBox onClick={() => handleShowAll(false)}>
             <UpIcon />
-          </UpIconBox>
+          </ArrowIconBox>
         </NovelDescMobile>
       )}
 
       {isMobile && !isShowAll && (
         <NovelDescMobile>
-          <NovelDescPartial>{novelDesc}</NovelDescPartial>
-          <DownIconBox>
-            <DownIcon onClick={() => handleShowAll(true)} />
-          </DownIconBox>
+          <NovelDescPreview ref={descMobile}>{novelDesc}</NovelDescPreview>
+
+          {!isLine1 && (
+            <ArrowIconBox>
+              <DownIcon onClick={() => handleShowAll(true)} />
+            </ArrowIconBox>
+          )}
         </NovelDescMobile>
       )}
 

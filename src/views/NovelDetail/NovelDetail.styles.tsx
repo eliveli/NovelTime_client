@@ -110,7 +110,7 @@ export const NovelDescMobile = styled.div`
   border-bottom: 1px solid rgba(100, 100, 100, 0.2);
 `;
 
-export const NovelDescPartial = styled.div`
+export const NovelDescPreview = styled.div`
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
@@ -124,11 +124,11 @@ export const NovelDescPartial = styled.div`
 
 export const NovelDescTablet = styled.div`
   width: 100%;
-
+  height: 100%;
+  margin-top: 5px;
   padding: 3px 5px;
 
   overflow: scroll;
-  height: 130px;
 
   white-space: pre-wrap; // for line break
 
@@ -140,7 +140,7 @@ export const NovelDescTablet = styled.div`
   ${theme.hideScrollBar}
 `;
 
-export const NovelDescEntire = styled.div`
+export const NovelDescFull = styled.div`
   width: 100%;
   height: 120px;
 
@@ -154,7 +154,7 @@ export const NovelDescEntire = styled.div`
     white-space: pre-wrap; // line break including tab
   }
 `;
-export const DownIconBox = styled.div`
+export const ArrowIconBox = styled.div`
   z-index: 1;
 
   border-radius: 50%;
@@ -173,32 +173,6 @@ export const DownIconBox = styled.div`
     margin-left: 3px;
   }
 
-  @media (hover: hover) {
-    &:hover {
-      opacity: 0.8;
-      background-color: rgba(150, 150, 150, 0.3);
-    }
-  }
-`;
-
-export const UpIconBox = styled.div`
-  z-index: 1;
-
-  border-radius: 50%;
-  background-color: white;
-  box-shadow: 0 0 2px rgb(0 0 0 / 60%);
-
-  min-width: 20px;
-  max-width: 20px;
-  min-height: 20px;
-  max-height: 20px;
-
-  cursor: pointer;
-  color: rgba(0, 0, 0, 0.3);
-
-  @media screen and (min-width: 768px) {
-    margin-left: 3px;
-  }
   @media (hover: hover) {
     &:hover {
       opacity: 0.8;
