@@ -167,11 +167,11 @@ export type ParamToSearchForAll = {
     | "novelTitle"
     | "novelDesc"
     | "novelAuthor"
-    | "sample" // for novels by here
+    | "sample" // for novels with no search word
     | "writingTitle"
     | "writingDesc"
-    | "userName"
-    | "no"; // for writings by here
+    | "userName";
+  isSearchWord: boolean; // for writings with no search word
   searchWord: string; // note. it can't be empty string
   pageNo: number;
 };

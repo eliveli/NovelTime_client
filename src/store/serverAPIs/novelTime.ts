@@ -157,20 +157,27 @@ export const novelTimeApi = createApi({
         { type: "writingsOfNovelUpdated", id: arg.novelId + arg.writingType },
       ],
     }),
-
     searchForAll: builder.query<NovelOrWritingList, ParamToSearchForAll>({
       // use two apis depending on the search category
-      query: ({ searchCategory, searchType, searchWord, pageNo }) => {
+      query: ({ searchCategory, searchType, isSearchWord, searchWord, pageNo }) => {
         if (
           searchCategory === "novel" &&
-          ["novelTitle", "novelDesc", "novelAuthor", "sample"].includes(searchType)
+          ["novelTitle", "novelDesc", "novelAuthor"].includes(searchType)
         ) {
-          return `/novels/search/${searchType}/${searchWord}/${pageNo}`;
+          const searchTypeToSend = isSearchWord ? searchType : "sample";
+
+          return `/novels/search/${searchTypeToSend}/${searchWord}/${pageNo}`;
         }
 
-        if (["writingTitle", "writingDesc", "userName", "no"].includes(searchType)) {
-          return `/writing/${searchCategory}/all/${searchType}/${searchWord}/newDate/${pageNo}`;
+        if (
+          ["T", "R"].includes(searchCategory) &&
+          ["writingTitle", "writingDesc", "userName"].includes(searchType)
+        ) {
+          return `/writing/${searchCategory}/all/${searchType}/${String(
+            isSearchWord,
+          )}/${searchWord}/newDate/${pageNo}`;
         }
+
         return "";
       },
     }),

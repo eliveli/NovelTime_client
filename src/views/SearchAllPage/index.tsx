@@ -49,14 +49,11 @@ export default function SearchPage() {
 
   const isSettingTheList = useAppSelector((state) => state.filter.searchAll.isSettingTheList);
 
-  // to get [novel samples] or [writings regardless of search type] when search word isn't there
-  const searchTypeWithoutSearchWord =
-    !currentSearchWord && (searchCategoryMatched === "novel" ? "sample" : "no");
-
   const { isFetching, data } = useSearchForAllQuery(
     {
       searchCategory: searchCategoryMatched,
-      searchType: searchTypeWithoutSearchWord || searchTypeMatched,
+      searchType: searchTypeMatched,
+      isSearchWord: !!currentSearchWord,
       searchWord: currentSearchWord || "undefined", // it can't be empty string when passing to server
       pageNo: Number(currentPageNo),
     },
@@ -97,11 +94,18 @@ export default function SearchPage() {
       )}
 
       {listForInfntScroll?.talks?.map((talk) => (
-        <FreeTalk key={talk.talkId} talk={talk} />
+        <FreeTalk
+          key={talk.talkId}
+          talk={talk}
+          searchWord={searchTypeMatched === "writingDesc" ? currentSearchWord : undefined}
+        />
       ))}
 
       {listForInfntScroll?.recommends?.map((recommendInfo) => (
-        <Recommend recommendInfo={recommendInfo} />
+        <Recommend
+          recommendInfo={recommendInfo}
+          searchWord={searchTypeMatched === "writingDesc" ? currentSearchWord : undefined}
+        />
       ))}
 
       {/* on desktop */}
@@ -114,10 +118,22 @@ export default function SearchPage() {
         </ColumnDetailList>
       )}
 
-      {isForPagination && data?.talks?.map((talk) => <FreeTalk key={talk.talkId} talk={talk} />)}
+      {isForPagination &&
+        data?.talks?.map((talk) => (
+          <FreeTalk
+            key={talk.talkId}
+            talk={talk}
+            searchWord={searchTypeMatched === "writingDesc" ? currentSearchWord : undefined}
+          />
+        ))}
 
       {isForPagination &&
-        data?.recommends?.map((recommendInfo) => <Recommend recommendInfo={recommendInfo} />)}
+        data?.recommends?.map((recommendInfo) => (
+          <Recommend
+            recommendInfo={recommendInfo}
+            searchWord={searchTypeMatched === "writingDesc" ? currentSearchWord : undefined}
+          />
+        ))}
 
       {isForPagination && data && (
         <PageNOs selectedNo={Number(currentPageNo)} lastNo={data.lastPageNo} />
