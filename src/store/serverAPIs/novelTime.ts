@@ -179,7 +179,9 @@ export const novelTimeApi = createApi({
     getWritingsFiltered: builder.query<WritingList, ParamForGettingWritings>({
       // get writing list with search filter
       query: (params) =>
-        `/writing/${params.writingType}/${params.novelGenre}/${params.searchType}/${params.searchWord}/${params.sortBy}/${params.pageNo}`,
+        `/writing/${params.writingType}/${params.novelGenre}/${params.searchType}/${String(
+          params.isSearchWord,
+        )}/${params.searchWord}/${params.sortBy}/${params.pageNo}`,
       providesTags: (result, error, arg) =>
         arg.writingType === "T" ? ["talkListUpdated"] : ["recommendListUpdated"],
       // list is updated and user goes here automatically when adding or deleting a post

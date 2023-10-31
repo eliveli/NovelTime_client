@@ -44,10 +44,12 @@ export default function FreeTalkList() {
     {
       writingType: "T",
       novelGenre: genreMatched,
-      searchType: currentSearchWord === "" ? "no" : searchTypeMatched,
+      searchType: searchTypeMatched,
+      isSearchWord: !!currentSearchWord,
       searchWord: currentSearchWord || "undefined",
-      // ㄴwhen searchType is "no", user gets writings regardless of search type
-      // ㄴbut searchWord can't be empty string because parameter in path can't be empty
+      // ㄴwhen isSearchWord is "false", user gets writings regardless of search type
+      // ㄴin this case, searchType is only used for getting desc when searchType is "writingDesc"
+      // ㄴsearchWord can't be empty string as parameter in path can't be empty
       sortBy: sortTypeMatched,
       pageNo: Number(currentPageNo),
     },
@@ -106,11 +108,22 @@ export default function FreeTalkList() {
       )}
 
       {listForInfntScroll?.map((talk) => (
-        <FreeTalk key={talk.talkId} talk={talk} />
+        <FreeTalk
+          key={talk.talkId}
+          talk={talk}
+          searchWord={searchTypeMatched === "writingDesc" ? currentSearchWord : undefined}
+        />
       ))}
 
       {/* on desktop */}
-      {isForPagination && data?.talks?.map((talk) => <FreeTalk key={talk.talkId} talk={talk} />)}
+      {isForPagination &&
+        data?.talks?.map((talk) => (
+          <FreeTalk
+            key={talk.talkId}
+            talk={talk}
+            searchWord={searchTypeMatched === "writingDesc" ? currentSearchWord : undefined}
+          />
+        ))}
       {isForPagination && data && (
         <PageNOs selectedNo={Number(currentPageNo)} lastNo={data.lastPageNo} />
       )}

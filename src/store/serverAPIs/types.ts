@@ -75,7 +75,8 @@ export type NovelGenre =
 export type ParamForGettingWritings = {
   writingType: "T" | "R";
   novelGenre: NovelGenre;
-  searchType: "writingTitle" | "writingDesc" | "userName" | "novelTitle" | "no";
+  searchType: "writingTitle" | "writingDesc" | "userName" | "novelTitle";
+  isSearchWord: boolean;
   searchWord: string; // note. it can't be empty string
   sortBy: "newDate" | "oldDate" | "manyComments" | "fewComments" | "manyLikes" | "fewLikes";
   pageNo: number;

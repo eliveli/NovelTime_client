@@ -1,6 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
 import logger from "redux-logger";
-// import { configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
 import { setupListeners } from "@reduxjs/toolkit/query";
 import modalReducer from "./clientSlices/modalSlice";
 import writingReducer from "./clientSlices/writingSlice";

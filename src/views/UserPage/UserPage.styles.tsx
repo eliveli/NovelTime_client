@@ -347,6 +347,7 @@ export const CreateDate = styled.span`
   color: rgba(0, 0, 0, 0.8);
   font-weight: 500;
   font-size: 15px;
+  white-space: nowrap;
 `;
 export const IconsContnr = styled.div`
   display: flex;
@@ -409,12 +410,12 @@ export const Filter = styled.p<{ category: string; selectedCtgr: string }>`
 
 export const CommentContentContnr = styled.div`
   display: flex;
-  align-items: flex-end;
+  align-items: flex-start;
 `;
 export const CommentContent = styled.p`
   margin: 0;
   margin-right: 10px;
-  color: rgba(0, 0, 0, 0.8);
+  color: rgba(0, 0, 0, 0.5);
   font-weight: 500;
 `;
 export const CommentTalkTitle = styled.p`

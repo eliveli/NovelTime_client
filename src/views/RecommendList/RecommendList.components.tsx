@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { adjustCreateDate, goToUserPage } from "utils";
+import { adjustCreateDate, adjustWritingDesc, goToUserPage } from "utils";
 import { RecommendInList } from "store/serverAPIs/types";
 import Icon from "../../assets/Icon";
 
@@ -33,15 +33,18 @@ import {
 interface RecommendProps {
   recommendInfo: RecommendInList;
   isLast?: boolean;
+  searchWord?: string;
 }
 
-export default function Recommend({ recommendInfo, isLast }: RecommendProps) {
+export default function Recommend({ recommendInfo, isLast, searchWord }: RecommendProps) {
   const { recommend, novel } = recommendInfo;
   const { recommendId, userName, userImg, createDate, likeNO, recommendTitle, recommendDesc } =
     recommend;
   const { novelImg, novelTitle, novelAuthor, novelGenre, novelIsEnd } = novel;
 
   const navigate = useNavigate();
+
+  const recommendDescToShow = adjustWritingDesc(recommendDesc, searchWord);
 
   const dateToShow = adjustCreateDate(createDate);
 
@@ -52,7 +55,7 @@ export default function Recommend({ recommendInfo, isLast }: RecommendProps) {
         navigate(`/recommend-detail/${recommendId}`);
       }}
     >
-      <NovelContainer isDesc={!!recommendDesc}>
+      <NovelContainer isDesc={!!recommendDescToShow}>
         <NovelImg novelImg={novelImg} />
         <NovelInfoBox>
           <NovelTitle>{novelTitle}</NovelTitle>
@@ -68,11 +71,11 @@ export default function Recommend({ recommendInfo, isLast }: RecommendProps) {
       </NovelContainer>
 
       <UserContainer>
-        <RecommendPreview isDesc={!!recommendDesc}>
-          {recommendDesc ? (
+        <RecommendPreview isDesc={!!recommendDescToShow}>
+          {recommendDescToShow ? (
             <TitleAndDescContainer>
               <RecommendTitleOnDesc>{recommendTitle}</RecommendTitleOnDesc>
-              <RecommendDesc>{recommendDesc}</RecommendDesc>
+              <RecommendDesc>{recommendDescToShow}</RecommendDesc>
             </TitleAndDescContainer>
           ) : (
             <RecommendTitleContainer>

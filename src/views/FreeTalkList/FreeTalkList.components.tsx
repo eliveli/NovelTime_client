@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { TalkInList } from "store/serverAPIs/types";
 import {
   adjustCreateDate,
+  adjustWritingDesc,
   goToUserPage,
   useCheckWindowWidth,
   useComponentHeight,
@@ -38,7 +39,7 @@ import {
   TalkDescContainer,
 } from "./FreeTalkList.styles";
 
-function TalkTablet({ talk }: { talk: TalkInList }) {
+function TalkTablet({ talk, searchWord }: { talk: TalkInList; searchWord?: string }) {
   const {
     userName,
     userImg,
@@ -56,6 +57,8 @@ function TalkTablet({ talk }: { talk: TalkInList }) {
   // : when title height is long, image width should be long too
   const titleHeightRef = useRef<HTMLDivElement>(null);
   const titleHeight = useComponentHeight(titleHeightRef);
+
+  const talkDescToShow = adjustWritingDesc(talkDesc, searchWord);
 
   const dateToShow = adjustCreateDate(createDate);
 
@@ -75,15 +78,15 @@ function TalkTablet({ talk }: { talk: TalkInList }) {
           </CommentLabel>
 
           <TitleContnr ref={titleHeightRef}>
-            <TalkTitle isTalkDesc={!!talkDesc}>{talkTitle}</TalkTitle>
+            <TalkTitle isTalkDesc={!!talkDescToShow}>{talkTitle}</TalkTitle>
 
-            {talkDesc && (
+            {talkDescToShow && (
               <TalkDescContainer>
-                <TalkDesc>{talkDesc}</TalkDesc>
+                <TalkDesc>{talkDescToShow}</TalkDesc>
               </TalkDescContainer>
             )}
 
-            <NovelTitle isTalkDesc={!!talkDesc}>{novelTitle}</NovelTitle>
+            <NovelTitle isTalkDesc={!!talkDescToShow}>{novelTitle}</NovelTitle>
           </TitleContnr>
 
           {/* Note. Check or Adjust styles if adding talkImg actually */}
@@ -112,7 +115,7 @@ function TalkTablet({ talk }: { talk: TalkInList }) {
   );
 }
 
-function TalkMobile({ talk }: { talk: TalkInList }) {
+function TalkMobile({ talk, searchWord }: { talk: TalkInList; searchWord?: string }) {
   const {
     userName,
     userImg,
@@ -130,6 +133,8 @@ function TalkMobile({ talk }: { talk: TalkInList }) {
   // set image height as image width : for animation at screen size 500-599px
   const imgWidthRef = useRef<HTMLDivElement>(null);
   const imgWidth = useComponentWidth(imgWidthRef);
+
+  const talkDescToShow = adjustWritingDesc(talkDesc, searchWord);
 
   const dateToShow = adjustCreateDate(createDate);
 
@@ -165,13 +170,13 @@ function TalkMobile({ talk }: { talk: TalkInList }) {
             </Icon.IconBox>
           </CommentLabel>
 
-          <TalkTitle isTalkImg={!!talkImg} isTalkDesc={!!talkDesc}>
+          <TalkTitle isTalkImg={!!talkImg} isTalkDesc={!!talkDescToShow}>
             {talkTitle}
           </TalkTitle>
 
-          {talkDesc && (
+          {talkDescToShow && (
             <TalkDescContainer>
-              <TalkDesc>{talkDesc}</TalkDesc>
+              <TalkDesc>{talkDescToShow}</TalkDesc>
             </TalkDescContainer>
           )}
 
@@ -183,14 +188,22 @@ function TalkMobile({ talk }: { talk: TalkInList }) {
             </TalkImgBox>
           )}
 
-          <NovelTitle isTalkDesc={!!talkDesc}>{novelTitle}</NovelTitle>
+          <NovelTitle isTalkDesc={!!talkDescToShow}>{novelTitle}</NovelTitle>
         </TalkPreviewMobile>
       </BesideImgContainer>
     </TalkMobileContnr>
   );
 }
 
-export default function FreeTalk({ talk, isLast }: { talk: TalkInList; isLast?: boolean }) {
+export default function FreeTalk({
+  talk,
+  isLast,
+  searchWord,
+}: {
+  talk: TalkInList;
+  isLast?: boolean;
+  searchWord?: string;
+}) {
   const navigate = useNavigate();
   const isInTheWindowWidth = useCheckWindowWidth(599);
 
@@ -204,7 +217,11 @@ export default function FreeTalk({ talk, isLast }: { talk: TalkInList; isLast?: 
         navigate(`/talk-detail/${talk.talkId}`);
       }}
     >
-      {isInTheWindowWidth ? <TalkMobile talk={talk} /> : <TalkTablet talk={talk} />}
+      {isInTheWindowWidth ? (
+        <TalkMobile talk={talk} searchWord={searchWord} />
+      ) : (
+        <TalkTablet talk={talk} searchWord={searchWord} />
+      )}
     </Talk>
   );
 }

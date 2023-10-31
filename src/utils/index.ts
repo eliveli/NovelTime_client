@@ -26,6 +26,7 @@ import writeText from "./writeText";
 import goToUserPage from "./goToUserPage";
 import isCurrentPath from "./isCurrentPath";
 import getCurrentRoomId from "./getCurrentRoomId";
+import adjustWritingDesc from "./adjustWritingDesc";
 
 export {
   useResetFiltersFromUrlForWriting,
@@ -54,4 +55,5 @@ export {
   goToUserPage,
   isCurrentPath,
   getCurrentRoomId,
+  adjustWritingDesc,
 };
