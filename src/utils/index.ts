@@ -19,10 +19,11 @@ import useSearchListWithInfntScrollForWriting from "./useSearchListWithInfntScro
 import useResetFiltersFromUrlForWriting from "./useResetFiltersFromUrlForWriting";
 import adjustCreateDate from "./adjustCreateDate";
 import useWhetherItIsMobile from "./useWhetherItIsMobile";
+import useWhetherItIsTablet from "./useWhetherItIsTablet";
 import useWhetherItIsDesktop from "./useWhetherItIsDesktop";
+import useCheckWindowWidth from "./useCheckWindowWidth";
 import writeText from "./writeText";
 import goToUserPage from "./goToUserPage";
-import useWhetherItIsTablet from "./useWhetherItIsTablet";
 import isCurrentPath from "./isCurrentPath";
 import getCurrentRoomId from "./getCurrentRoomId";
 
@@ -46,8 +47,9 @@ export {
   useAsyncStateNumber,
   adjustCreateDate,
   useWhetherItIsMobile,
-  useWhetherItIsDesktop,
   useWhetherItIsTablet,
+  useWhetherItIsDesktop,
+  useCheckWindowWidth,
   writeText,
   goToUserPage,
   isCurrentPath,

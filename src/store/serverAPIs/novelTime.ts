@@ -366,13 +366,11 @@ export const novelTimeApi = createApi({
 
         return `/userContent/listDetailed/liked/${params.userName}/${params.listId}/${params.order}`;
       },
-      keepUnusedDataFor: 120,
       providesTags: (result, error, arg) => [{ type: "UserNovelListUpdated", id: arg.listId }],
     }),
     getAllListTitles: builder.query<AllTitlesAndOtherInfo, ParamsOfAllNovelListTitles>({
       query: (params) =>
         `/userContent/listDetailed/listTitles/${params.userName}/${params.isCreated}`,
-      keepUnusedDataFor: 120,
       providesTags: ["ListTitlesUpdatedInListDetailed"],
     }),
 
@@ -386,7 +384,10 @@ export const novelTimeApi = createApi({
         method: "POST",
         body: { listTitle },
       }),
-      invalidatesTags: (result, error, arg) => [{ type: "UserNovelListUpdated", id: arg.userName }],
+      invalidatesTags: (result, error, arg) => [
+        { type: "UserNovelListUpdated", id: arg.userName },
+        "ListTitlesUpdatedInListDetailed",
+      ],
     }),
     changeMyListTitle: builder.mutation<string, ParamToChangeListTitle>({
       query: ({ listId, listTitle }) => ({
@@ -400,6 +401,7 @@ export const novelTimeApi = createApi({
           id: arg.listId,
         },
         { type: "UserNovelListUpdated", id: arg.userName },
+        "ListTitlesUpdatedInListDetailed",
       ],
     }),
     deleteMyNovelList: builder.mutation<string, ParamToDeleteList>({
@@ -414,6 +416,7 @@ export const novelTimeApi = createApi({
           id: arg.listId,
         },
         { type: "UserNovelListUpdated", id: arg.userName },
+        "ListTitlesUpdatedInListDetailed",
       ],
     }),
 

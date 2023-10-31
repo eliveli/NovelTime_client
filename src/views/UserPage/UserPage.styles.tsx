@@ -438,31 +438,30 @@ export const WritingMark = styled.span`
   padding-left: 3px;
   padding-right: 3px;
 `;
-export const ListTitleLimitHeightContnr = styled.div<{
-  isListMore: boolean;
-  limitContnrWidth: number;
+export const ListTitlesContnr = styled.div<{
+  isTitlesScrollable: boolean;
+  isTitlesSpread: boolean;
 }>`
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
   margin-top: 12px;
 
-  width: ${({ limitContnrWidth }) => limitContnrWidth}px;
+  width: ${({ isTitlesScrollable }) => (isTitlesScrollable ? "calc(100% - 35px)" : "100%")};
 
-  ${({ isListMore }) =>
-    isListMore
-      ? ``
-      : `overflow-x: scroll; overflow-y: hidden; height: 32px;
-      `}
+  ${({ isTitlesSpread }) =>
+    !isTitlesSpread && `overflow-x: scroll; overflow-y: hidden; height: 32px;`}
+
   ${theme.hideScrollBar}
 `;
-export const ListTitleContnr = styled.div<{ isListMore: boolean; limitContnrWidth: number }>`
+export const ListTitles = styled.div<{
+  isTitlesSpread: boolean;
+}>`
   display: flex;
   align-items: flex-start;
   row-gap: 12px;
   column-gap: 12px;
-  ${({ isListMore }) => (isListMore ? `flex-wrap: wrap;` : ``)}
-  width: ${({ limitContnrWidth }) => limitContnrWidth}px;
+  ${({ isTitlesSpread }) => isTitlesSpread && `flex-wrap: wrap;`}
 `;
 export const ListTitle = styled.span<{
   listId?: string;
@@ -560,35 +559,24 @@ export const ButtonToEdit = styled.span<{ isNoBorder?: true }>`
   )}
 `;
 
-// make the parent of more btn //
-// the title list container is set overflow hidden,
-// so in the container, when title category is scrolled, more btn is scrolled too.
-// I want to more btn fixed to the exact space,
-//  so I made the parent of the more btn positioned relative,
-// and made the btn positioned absolute, and set the detail position value.
-export const BtnParentForTitle = styled.div`
+export const SpreadingBtnSpace = styled.div`
   position: relative;
+  height: 0; // to display <ListTitlesContnr> in the same line
   width: 100%;
 `;
-export const BtnBoxBGForTitle = styled.div<{ isListMore: boolean }>`
-  padding-left: ${({ isListMore }) => (isListMore ? 0 : 4)}px;
+
+// <ListTitlesContnr> and <SpreadingBtnBox> don't overlap each other in the same line
+export const SpreadingBtnBox = styled(Icon.IconBox)`
+  background-color: white;
   position: absolute;
+  right: 1px;
   height: 32px;
-  background-color: white;
-  right: 0;
-  margin-top: 12px;
-`;
-export const BtnBoxForTitle = styled(Icon.IconBox)`
+  margin-top: 14px;
   border-radius: 50%;
-  background-color: white;
   box-shadow: 0 0 2px rgb(0 0 0 / 60%);
   color: rgba(100, 100, 100, 0.4);
-  margin-right: 1px;
-  margin-top: 2px;
 `;
-export const ContainerWidth = styled.div`
-  width: 100%;
-`;
+
 export const HearIconBox = styled(Icon.IconBox)<{ isLike: boolean }>`
   order: -1;
   margin-right: -7px;

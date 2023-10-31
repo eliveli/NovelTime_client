@@ -532,7 +532,7 @@ export interface ParamsOfAllNovelListTitles {
 }
 
 export interface ParamsOfListDetailed {
-  accessToken?: string;
+  accessToken: string;
   userName: string;
   listId: string;
   order: number;
