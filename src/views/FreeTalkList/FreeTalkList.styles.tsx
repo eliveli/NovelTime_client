@@ -28,21 +28,14 @@ export const Talk = styled.article<{ isLast?: boolean }>`
 export const TalkMobileContnr = styled.div`
   display: flex;
   width: 100%;
-
-  @media screen and (min-width: 600px) {
-    display: none;
-  }
 `;
 export const TalkTabletContnr = styled.div`
   width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
-
-  @media screen and (max-width: 599px) {
-    display: none;
-  }
 `;
+
 export const TalkMainInfoContnr = styled.div`
   display: flex;
   justify-content: space-between;

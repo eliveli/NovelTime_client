@@ -1,7 +1,13 @@
 import React, { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { TalkInList } from "store/serverAPIs/types";
-import { adjustCreateDate, goToUserPage, useComponentHeight, useComponentWidth } from "utils";
+import {
+  adjustCreateDate,
+  goToUserPage,
+  useCheckWindowWidth,
+  useComponentHeight,
+  useComponentWidth,
+} from "utils";
 
 import Icon from "../../assets/Icon";
 import {
@@ -32,7 +38,6 @@ import {
   TalkDescContainer,
 } from "./FreeTalkList.styles";
 
-// Displayed : screen size >= 600px
 function TalkTablet({ talk }: { talk: TalkInList }) {
   const {
     userName,
@@ -106,6 +111,7 @@ function TalkTablet({ talk }: { talk: TalkInList }) {
     </TalkTabletContnr>
   );
 }
+
 function TalkMobile({ talk }: { talk: TalkInList }) {
   const {
     userName,
@@ -186,8 +192,8 @@ function TalkMobile({ talk }: { talk: TalkInList }) {
 
 export default function FreeTalk({ talk, isLast }: { talk: TalkInList; isLast?: boolean }) {
   const navigate = useNavigate();
+  const isInTheWindowWidth = useCheckWindowWidth(599);
 
-  // criterion to check it is mobile or not here : 600px screen width
   return (
     <Talk
       isLast={isLast}
@@ -198,8 +204,7 @@ export default function FreeTalk({ talk, isLast }: { talk: TalkInList; isLast?: 
         navigate(`/talk-detail/${talk.talkId}`);
       }}
     >
-      <TalkMobile talk={talk} />
-      <TalkTablet talk={talk} />
+      {isInTheWindowWidth ? <TalkMobile talk={talk} /> : <TalkTablet talk={talk} />}
     </Talk>
   );
 }

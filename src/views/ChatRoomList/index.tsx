@@ -1,7 +1,7 @@
 import MainBG from "components/MainBG";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getCurrentRoomId, useWhetherItIsMobile, useWhetherItIsTablet } from "utils";
+import { getCurrentRoomId, useWhetherItIsMobile } from "utils";
 import ChatRoom from "views/ChatRoom";
 import { ChatRoomNav } from "views/Nav/Nav.components";
 import { CHAT_ROOM, CHAT_ROOM_LIST } from "utils/pathname";
@@ -129,7 +129,6 @@ export default function ChatRoomList() {
 
   // Handle window resizing ----------------------------------------- //
   const isMobile = useWhetherItIsMobile();
-  const isTablet = useWhetherItIsTablet();
 
   useEffect(() => {
     if (!currentRoomId) {
@@ -138,12 +137,11 @@ export default function ChatRoomList() {
       return;
     }
 
-    if (isMobile && !isTablet) {
+    if (isMobile) {
       // don't write "if (!isTablet)" that causes continuous navigating between room and room list
-      // "if (isMobile)" works well too
       navigate(`${CHAT_ROOM}/${currentRoomId}`, { replace: true });
     }
-  }, [isMobile, isTablet, currentRoomId]);
+  }, [isMobile, currentRoomId]);
 
   return (
     <MainBG isChatRoomList>

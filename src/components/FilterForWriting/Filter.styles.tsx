@@ -145,7 +145,7 @@ export const ContainerOnlySort = styled.div<{
 `;
 
 // below is now not used
-// : just see that how to customize arrow in select tag
+// : just look at how to customize arrow in select tag
 
 export const SortTabletContainer2 = styled.select`
   height: 40px;
