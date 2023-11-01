@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import { handleAlert, openFirstModal } from "store/clientSlices/modalSlice";
+import { handleAlert, openFirstModal, openSecondModal } from "store/clientSlices/modalSlice";
 import { useCreateMyNovelListMutation } from "store/serverAPIs/novelTime";
 import Spinner from "assets/Spinner";
 import { useParams } from "react-router-dom";
@@ -25,24 +25,24 @@ export default function WriteNewListTitle({ isSecond }: { isSecond?: true }) {
 
   const [createList, createListResult] = useCreateMyNovelListMutation();
 
-  const openCurrentModal = () => {
-    dispatch(openFirstModal("writeNewListTitle"));
-  };
-
   const openPrevModal = () => {
     dispatch(openFirstModal("addToMyNovelList"));
   };
 
   const handleToCreateList = async () => {
     if (!titleRef.current?.value) {
-      dispatch(openFirstModal("alert"));
-      dispatch(
-        handleAlert({ text: "리스트 제목을 입력해 주세요", nextFunction: openCurrentModal }),
-      );
+      dispatch(openSecondModal("alert"));
+      dispatch(handleAlert({ text: "리스트 제목을 입력해 주세요" }));
       return;
     }
 
     if (createListResult.isLoading) return;
+
+    if (titleRef.current.value.length > 100) {
+      dispatch(openSecondModal("alert"));
+      dispatch(handleAlert({ text: "제목은 100자까지 가능합니다" }));
+      return;
+    }
 
     await createList({ listTitle: titleRef.current.value, userName: userName as string });
 

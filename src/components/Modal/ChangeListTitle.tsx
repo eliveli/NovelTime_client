@@ -1,5 +1,10 @@
 import { useRef } from "react";
-import { closeModal, handleAlert, openFirstModal } from "store/clientSlices/modalSlice";
+import {
+  closeModal,
+  handleAlert,
+  openFirstModal,
+  openSecondModal,
+} from "store/clientSlices/modalSlice";
 import { handleUserNovelListToEdit } from "store/clientSlices/userNovelListSlice";
 import { useChangeMyListTitleMutation } from "store/serverAPIs/novelTime";
 import { useParams } from "react-router-dom";
@@ -42,6 +47,12 @@ export default function ChangeListTitle({ isSecond }: { isSecond?: true }) {
     if (!titleRef.current?.value) return;
 
     if (changeListTitleResult.isLoading) return;
+
+    if (titleRef.current.value.length > 100) {
+      dispatch(openSecondModal("alert"));
+      dispatch(handleAlert({ text: "제목은 100자까지 가능합니다" }));
+      return;
+    }
 
     await changeListTitle({
       listId,

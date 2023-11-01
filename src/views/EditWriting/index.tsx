@@ -79,6 +79,12 @@ export default function EditWriting() {
       return;
     }
 
+    if (titleRef.current.value.length > 100) {
+      dispatch(openFirstModal("alert"));
+      dispatch(handleAlert({ text: "제목은 100자까지 가능합니다" }));
+      return;
+    }
+
     if (!contentRef.current?.value) {
       dispatch(openFirstModal("alert"));
       dispatch(handleAlert({ text: "내용을 입력해 주세요" }));

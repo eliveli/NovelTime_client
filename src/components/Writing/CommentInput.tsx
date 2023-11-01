@@ -49,6 +49,12 @@ export function ReCommentInputToCreateOnTablet() {
 
     if (addReCommentResult.isLoading) return; // prevent click while loading for prev request
 
+    if (textRef.current.value.length > 1000) {
+      dispatch(openFirstModal("alert"));
+      dispatch(handleAlert({ text: "1000자까지 입력할 수 있어요" }));
+      return;
+    }
+
     await addReComment({
       talkId,
       novelId,
@@ -138,6 +144,12 @@ export function ReCommentInputToEditOnTablet() {
     }
 
     if (editCommentResult.isLoading) return; // prevent click while loading for prev request
+
+    if (textRef.current.value.length > 1000) {
+      dispatch(openFirstModal("alert"));
+      dispatch(handleAlert({ text: "1000자까지 입력할 수 있어요" }));
+      return;
+    }
 
     await editComment({
       commentId: commentToEdit.commentId,
@@ -229,6 +241,13 @@ export function RootCommentInputToCreateOnTablet({
     if (!textRef.current?.value) return; // when comment content is empty
 
     if (addRootCommentResult.isLoading) return; // prevent click while loading for prev request
+
+    if (textRef.current.value.length > 1000) {
+      dispatch(openFirstModal("alert"));
+      dispatch(handleAlert({ text: "1000자까지 입력할 수 있어요" }));
+      return;
+    }
+
     await addRootComment({
       talkId,
       novelId,
@@ -305,6 +324,12 @@ export function RootCommentInputToEditOnTablet({
     }
 
     if (editCommentResult.isLoading) return; // prevent click while loading for prev request
+
+    if (textRef.current.value.length > 1000) {
+      dispatch(openFirstModal("alert"));
+      dispatch(handleAlert({ text: "1000자까지 입력할 수 있어요" }));
+      return;
+    }
 
     await editComment({
       commentId: commentToEdit.commentId,
@@ -406,6 +431,12 @@ export function CommentInputOnMobile({
 
     if (!textRef.current?.value) return; // when comment content is empty
 
+    if (textRef.current.value.length > 1000) {
+      dispatch(openFirstModal("alert"));
+      dispatch(handleAlert({ text: "1000자까지 입력할 수 있어요" }));
+      return;
+    }
+
     if (isRootCommentInput) {
       if (addRootCommentResult.isLoading) return; // prevent click while loading for prev request
 
@@ -466,6 +497,12 @@ export function CommentInputOnMobile({
     }
 
     if (editCommentResult.isLoading) return; // prevent click while loading for prev request
+
+    if (textRef.current.value.length > 1000) {
+      dispatch(openFirstModal("alert"));
+      dispatch(handleAlert({ text: "1000자까지 입력할 수 있어요" }));
+      return;
+    }
 
     await editComment({
       commentId: commentToEdit.commentId,

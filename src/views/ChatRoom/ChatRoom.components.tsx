@@ -74,6 +74,12 @@ export function MessageInput({
 
     if (!msgInputRef.current?.value || !msgInputCntnrRef.current) return;
 
+    if (msgInputRef.current.value.length > 1000) {
+      dispatch(openFirstModal("alert"));
+      dispatch(handleAlert({ text: "1000자까지 입력할 수 있어요" }));
+      return;
+    }
+
     sendMessage(msgInputRef.current.value);
 
     // initialize
