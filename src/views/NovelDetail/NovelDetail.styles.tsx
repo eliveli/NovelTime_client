@@ -124,7 +124,7 @@ export const NovelDescPreview = styled.div`
 
 export const NovelDescTablet = styled.div`
   width: 100%;
-  height: 100%;
+  height: 145px;
   margin-top: 5px;
   padding: 3px 5px;
 

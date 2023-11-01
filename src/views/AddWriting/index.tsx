@@ -136,15 +136,17 @@ export default function AddWriting() {
     if (addNovelWithURLResult.isLoading) return;
 
     await addNovelWithURL(novelUrlRef.current.value);
-
-    if (addNovelWithURLResult.isError) {
-      dispatch(openFirstModal("alert"));
-      dispatch(handleAlert({ text: "작품 url을 확인해 주세요" }));
-    }
   };
 
   useEffect(() => {
+    if (addNovelWithURLResult.isError) {
+      dispatch(openFirstModal("alert"));
+      dispatch(handleAlert({ text: "작품 url을 확인해 주세요" }));
+      return;
+    }
+
     if (!addNovelWithURLResult.data) return;
+
     if (!addNovelWithURLResult.data.novelId || !addNovelWithURLResult.data.novelTitle) {
       dispatch(openFirstModal("alert"));
       dispatch(handleAlert({ text: "작품 url을 확인해 주세요" }));
@@ -159,7 +161,7 @@ export default function AddWriting() {
     // close iframe and initialize related things
     handleGettingNovel({ onGoing: false, inGettingURL: false });
     setPlatformToGetURL({ withSharedLink: "시리즈", inNewTab: "" });
-  }, [addNovelWithURLResult.data]);
+  }, [addNovelWithURLResult.data, addNovelWithURLResult.isError]);
 
   const [isToolTipOpened, handleToolTip] = useState(false);
 

@@ -375,11 +375,11 @@ export function NavMobileDetail() {
   return (
     <NavContentBoxMobile isDetail>
       <IconsBox isLeft>
-        <LeftIconBox onClick={() => navigate(-1)}>
+        <LeftIconBox>
           {isCurrentPath(ADD_WRITING) || isCurrentPath(EDIT_WRITING) ? (
-            <Icon.CloseWriting />
+            <Icon.CloseWriting onClick={() => navigate("/", { replace: true })} />
           ) : (
-            <BackIcon />
+            <BackIcon onClick={() => navigate(-1)} />
           )}
         </LeftIconBox>
 
