@@ -58,38 +58,38 @@ export default function NovelDetailRecommend() {
 
   const [deleteWriting, deleteWritingResult] = useDeleteWritingMutation();
 
-  async function handleDelete() {
+  function handleDelete() {
     if (!recommend.data) return;
 
-    await deleteWriting({
+    deleteWriting({
       writingId: recommend.data.recommend.recommendId,
       writingType: "R",
       novelId: recommend.data.novel.novelId,
-    });
+    })
+      .then(() => {
+        // go to the recommend list page
+        if (isDesktop) {
+          navigate(
+            `${RECOMMEND_LIST}?genre=All&searchType=no&searchWord=&sortType=작성일New&pageNo=1`,
+            {
+              replace: true,
+            },
+          );
+        } else {
+          dispatch(
+            setSearchList({
+              listType: "recommend",
+              list: "reset",
+            }),
+          );
 
-    if (deleteWritingResult.isError) {
-      dispatch(openFirstModal("alert"));
-      dispatch(handleAlert({ text: `글을 삭제할 수 없습니다.\n새로고침 후 다시 시도해 보세요` }));
-    }
-
-    // go to the recommend list page
-    if (isDesktop) {
-      navigate(
-        `${RECOMMEND_LIST}?genre=All&searchType=no&searchWord=&sortType=작성일New&pageNo=1`,
-        {
-          replace: true,
-        },
-      );
-    } else {
-      dispatch(
-        setSearchList({
-          listType: "recommend",
-          list: "reset",
-        }),
-      );
-
-      navigate(RECOMMEND_LIST, { replace: true });
-    }
+          navigate(RECOMMEND_LIST, { replace: true });
+        }
+      })
+      .catch(() => {
+        dispatch(openFirstModal("alert"));
+        dispatch(handleAlert({ text: `글을 삭제할 수 없습니다.\n새로고침 후 다시 시도해 보세요` }));
+      });
   }
 
   const confirmDelete = () => {
@@ -100,18 +100,20 @@ export default function NovelDetailRecommend() {
         question: "글을 삭제하시겠습니까?",
         textForYes: "삭제",
         textForNo: "취소",
-        functionForYes: async () => handleDelete(),
+        functionForYes: handleDelete,
       }),
     );
 
     dispatch(openFirstModal("confirm"));
   };
+  //
+  useEffect(() => {
+    if (recommendId) return;
+    if (!recommend.isError) return;
 
-  if (!recommendId || recommend.isError) {
     dispatch(openFirstModal("alert"));
-    dispatch(handleAlert({ text: `글을 불러올 수 없습니다.` }));
-    navigate(-1);
-  }
+    dispatch(handleAlert({ text: `글을 불러올 수 없습니다.`, nextFunction: () => navigate(-1) }));
+  }, [recommendId, recommend.isError]);
 
   // Set meta tags //
   const metaTags = () => ({
@@ -127,6 +129,7 @@ export default function NovelDetailRecommend() {
 
     dispatch(setMetaTags(metaTags()));
   }, [recommend.data]);
+
   return (
     <>
       {recommend.data && <MetaTag tags={metaTags()} />}

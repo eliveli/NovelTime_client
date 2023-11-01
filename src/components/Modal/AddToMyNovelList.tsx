@@ -67,7 +67,7 @@ export default function AddToMyNovelList({ isSecond }: { isSecond?: true }) {
     dispatch(openFirstModal("addToMyNovelList"));
   };
 
-  const handleToAddNovelToLists = async () => {
+  const handleToAddNovelToLists = () => {
     if (!novelIdToAdd) {
       dispatch(openFirstModal("alert"));
       dispatch(handleAlert({ text: "담을 소설이 없습니다" }));
@@ -95,24 +95,22 @@ export default function AddToMyNovelList({ isSecond }: { isSecond?: true }) {
       listIDsToAddNovel = listsSelected.filter((_) => !initialLists.includes(_));
     }
 
-    await addOrRemoveNovelInList({
+    addOrRemoveNovelInList({
       novelId: novelIdToAdd,
       listIDsToAddNovel,
       listIDsToRemoveNovel,
       userName,
-    });
+    })
+      .then(() => {
+        // novels in the list are updated with provide and invalidate tags
 
-    // novels in the list are updated with provide and invalidate tags
-
-    if (addOrRemoveNovelInListResult.isError) {
-      dispatch(openFirstModal("alert"));
-      dispatch(handleAlert({ text: `리스트에 담을 수 없습니다.\n새로고침 후 시도해보세요` }));
-      return;
-    }
-
-    closeAndInitialize();
+        closeAndInitialize();
+      })
+      .catch(() => {
+        dispatch(openFirstModal("alert"));
+        dispatch(handleAlert({ text: `리스트에 담을 수 없습니다.\n새로고침 후 시도해보세요` }));
+      });
   };
-
   return (
     <TranslucentBG onClick={closeAndInitialize}>
       {myNovelListResult.isFetching && <Spinner styles="fixed" />}

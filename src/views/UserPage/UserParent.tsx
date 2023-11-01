@@ -250,8 +250,10 @@ export default function UserParent() {
 
     if (isError) {
       dispatch(openFirstModal("alert"));
-      dispatch(handleAlert({ text: "존재하지 않는 사용자입니다." }));
-      navigate("/");
+      dispatch(
+        handleAlert({ text: "존재하지 않는 사용자입니다.", nextFunction: () => navigate("/") }),
+      );
+
       return;
     }
 

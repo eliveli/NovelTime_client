@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import { handleAlert, openFirstModal, openSecondModal } from "store/clientSlices/modalSlice";
 import { useCreateMyNovelListMutation } from "store/serverAPIs/novelTime";
 import Spinner from "assets/Spinner";
@@ -29,7 +29,7 @@ export default function WriteNewListTitle({ isSecond }: { isSecond?: true }) {
     dispatch(openFirstModal("addToMyNovelList"));
   };
 
-  const handleToCreateList = async () => {
+  const handleToCreateList = () => {
     if (!titleRef.current?.value) {
       dispatch(openSecondModal("alert"));
       dispatch(handleAlert({ text: "리스트 제목을 입력해 주세요" }));
@@ -44,17 +44,15 @@ export default function WriteNewListTitle({ isSecond }: { isSecond?: true }) {
       return;
     }
 
-    await createList({ listTitle: titleRef.current.value, userName: userName as string });
-
-    // my novel lists updated automatically with provide and invalidate tags
-
-    if (createListResult.isError) {
-      dispatch(openFirstModal("alert"));
-      dispatch(handleAlert({ text: `리스트를 생성할 수 없습니다.\n새로고침 후 시도해보세요` }));
-      return;
-    }
-
-    openPrevModal();
+    createList({ listTitle: titleRef.current.value, userName: userName as string })
+      .then(() => {
+        // my novel lists updated automatically with provide and invalidate tags
+        openPrevModal();
+      })
+      .catch(() => {
+        dispatch(openFirstModal("alert"));
+        dispatch(handleAlert({ text: `리스트를 생성할 수 없습니다.\n새로고침 후 시도해보세요` }));
+      });
   };
 
   return (

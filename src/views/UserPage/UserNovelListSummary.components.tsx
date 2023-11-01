@@ -66,15 +66,13 @@ const UserNovelList = React.memo(
       dispatch(openFirstModal("changeListTitle"));
     };
 
-    async function handleToDelete() {
-      await deleteList({ listId, userName: userNameInParam as string });
-
-      if (deleteListResult.isError) {
+    function handleToDelete() {
+      deleteList({ listId, userName: userNameInParam as string }).catch(() => {
         dispatch(openFirstModal("alert"));
         dispatch(
           handleAlert({ text: `리스트를 삭제할 수 없습니다.\n새로고침 후 다시 시도해 보세요` }),
         );
-      }
+      });
     }
 
     const confirmDelete = () => {
@@ -85,7 +83,7 @@ const UserNovelList = React.memo(
           question: "리스트를 삭제하시겠습니까?",
           textForYes: "삭제",
           textForNo: "취소",
-          functionForYes: async () => handleToDelete(),
+          functionForYes: handleToDelete,
         }),
       );
 

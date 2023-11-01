@@ -213,43 +213,43 @@ export default function FreeTalkDetail() {
 
   const [deleteWriting, deleteWritingResult] = useDeleteWritingMutation();
 
-  async function handleDelete() {
+  function handleDelete() {
     if (!talk.data) return;
 
-    await deleteWriting({
+    deleteWriting({
       writingId: talk.data.talk.talkId,
       writingType: "T",
       novelId: talk.data.novel.novelId,
-    });
+    })
+      .then(() => {
+        // back to the novel-detail page
+        const { search } = window.location;
+        if (search === "?is-from-novel-detail=true" && talk.data) {
+          navigate(`${NOVEL_DETAIL}/${talk.data.novel.novelId}`, { replace: true });
+          return;
+        }
 
-    if (deleteWritingResult.isError) {
-      dispatch(openFirstModal("alert"));
-      dispatch(handleAlert({ text: `글을 삭제할 수 없습니다.\n새로고침 후 다시 시도해 보세요` }));
-    }
+        // back to the talk list page
+        if (isDesktop) {
+          navigate(`${TALK_LIST}?genre=All&searchType=no&searchWord=&sortType=작성일New&pageNo=1`, {
+            replace: true,
+          });
+          return;
+        }
 
-    // back to the novel-detail page
-    const { search } = window.location;
-    if (search === "?is-from-novel-detail=true") {
-      navigate(`${NOVEL_DETAIL}/${talk.data.novel.novelId}`, { replace: true });
-      return;
-    }
-
-    // back to the talk list page
-    if (isDesktop) {
-      navigate(`${TALK_LIST}?genre=All&searchType=no&searchWord=&sortType=작성일New&pageNo=1`, {
-        replace: true,
+        // on mobile
+        dispatch(
+          setSearchList({
+            listType: "talk",
+            list: "reset",
+          }),
+        );
+        navigate(TALK_LIST, { replace: true });
+      })
+      .catch(() => {
+        dispatch(openFirstModal("alert"));
+        dispatch(handleAlert({ text: `글을 삭제할 수 없습니다.\n새로고침 후 다시 시도해 보세요` }));
       });
-      return;
-    }
-
-    // on mobile
-    dispatch(
-      setSearchList({
-        listType: "talk",
-        list: "reset",
-      }),
-    );
-    navigate(TALK_LIST, { replace: true });
   }
 
   const confirmDelete = () => {
@@ -260,7 +260,7 @@ export default function FreeTalkDetail() {
         question: "글을 삭제하시겠습니까?",
         textForYes: "삭제",
         textForNo: "취소",
-        functionForYes: async () => handleDelete(),
+        functionForYes: handleDelete,
       }),
     );
 
@@ -274,11 +274,14 @@ export default function FreeTalkDetail() {
     dispatch(initializeCommentStates());
   }, [location]);
 
-  if (!talkId || talk.isError) {
+  //
+  useEffect(() => {
+    if (talkId) return;
+    if (!talk.isError) return;
+
     dispatch(openFirstModal("alert"));
-    dispatch(handleAlert({ text: `글을 불러올 수 없습니다.` }));
-    navigate(-1);
-  }
+    dispatch(handleAlert({ text: `글을 불러올 수 없습니다.`, nextFunction: () => navigate(-1) }));
+  }, [talkId, talk.isError]);
 
   // Set meta tags //
   const metaTags = () => ({

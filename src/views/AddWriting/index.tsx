@@ -123,7 +123,7 @@ export default function AddWriting() {
     }px`;
   }, []);
 
-  const submitToAddNovel = async () => {
+  const submitToAddNovel = () => {
     // give novel url to server and get the novel id and novel title
     if (!novelUrlRef.current) return;
 
@@ -135,16 +135,13 @@ export default function AddWriting() {
 
     if (addNovelWithURLResult.isLoading) return;
 
-    await addNovelWithURL(novelUrlRef.current.value);
+    addNovelWithURL(novelUrlRef.current.value).catch(() => {
+      dispatch(openFirstModal("alert"));
+      dispatch(handleAlert({ text: "작품 url을 확인해 주세요" }));
+    });
   };
 
   useEffect(() => {
-    if (addNovelWithURLResult.isError) {
-      dispatch(openFirstModal("alert"));
-      dispatch(handleAlert({ text: "작품 url을 확인해 주세요" }));
-      return;
-    }
-
     if (!addNovelWithURLResult.data) return;
 
     if (!addNovelWithURLResult.data.novelId || !addNovelWithURLResult.data.novelTitle) {
@@ -161,7 +158,7 @@ export default function AddWriting() {
     // close iframe and initialize related things
     handleGettingNovel({ onGoing: false, inGettingURL: false });
     setPlatformToGetURL({ withSharedLink: "시리즈", inNewTab: "" });
-  }, [addNovelWithURLResult.data, addNovelWithURLResult.isError]);
+  }, [addNovelWithURLResult.data]);
 
   const [isToolTipOpened, handleToolTip] = useState(false);
 
@@ -235,7 +232,7 @@ export default function AddWriting() {
   const navigate = useNavigate();
   const isDesktop = useWhetherItIsDesktop();
 
-  const submitToAddWriting = async () => {
+  const submitToAddWriting = () => {
     if (!loginUserId) {
       dispatch(openFirstModal("alert"));
       dispatch(handleAlert({ text: "먼저 로그인을 해 주세요" }));
@@ -273,47 +270,50 @@ export default function AddWriting() {
 
     if (addWritingResult.isLoading) return;
 
-    await addWriting({
+    addWriting({
       novelId: novelForReview.novelId,
       writingType: board === "FreeTalk" ? "T" : "R",
       writingTitle: titleChanged.current,
       writingDesc: contentChanged.current,
       writingImg: undefined, // treat this later
-    });
+    })
+      .then(() => {
+        // back to the novel-detail page
+        if (novelIdInSearchParam && novelTitleInSearchParam) {
+          navigate(`${NOVEL_DETAIL}/${novelIdInSearchParam}`, { replace: true });
+          return;
+        }
 
-    if (addWritingResult.isError) {
-      dispatch(openFirstModal("alert"));
-      dispatch(handleAlert({ text: `글을 등록할 수 없습니다.\n새로고침 후 다시 시도해 보세요` }));
-    }
+        // back to the list page
+        const pathToGoTo = board === "FreeTalk" ? TALK_LIST : RECOMMEND_LIST;
 
-    // back to the novel-detail page
-    if (novelIdInSearchParam && novelTitleInSearchParam) {
-      navigate(`${NOVEL_DETAIL}/${novelIdInSearchParam}`, { replace: true });
-      return;
-    }
+        // with search params on desktop
+        if (isDesktop) {
+          navigate(
+            `${pathToGoTo}?genre=All&searchType=no&searchWord=&sortType=작성일New&pageNo=1`,
+            {
+              replace: true,
+            },
+          );
+          return;
+        }
 
-    // back to the list page
-    const pathToGoTo = board === "FreeTalk" ? TALK_LIST : RECOMMEND_LIST;
+        // on mobile
+        const listType = board === "FreeTalk" ? "talk" : "recommend";
 
-    // with search params on desktop
-    if (isDesktop) {
-      navigate(`${pathToGoTo}?genre=All&searchType=no&searchWord=&sortType=작성일New&pageNo=1`, {
-        replace: true,
+        dispatch(
+          setSearchList({
+            listType,
+            list: "reset",
+          }),
+        );
+
+        navigate(pathToGoTo, { replace: true });
+      })
+      .catch(() => {
+        dispatch(openFirstModal("alert"));
+        dispatch(handleAlert({ text: `글을 등록할 수 없습니다.\n새로고침 후 다시 시도해 보세요` }));
       });
-      return;
-    }
-
-    // on mobile
-    const listType = board === "FreeTalk" ? "talk" : "recommend";
-
-    dispatch(
-      setSearchList({
-        listType,
-        list: "reset",
-      }),
-    );
-
-    navigate(pathToGoTo, { replace: true });
   };
 
   // when clicking the submit button in nav bar on mobile or tablet
@@ -322,9 +322,9 @@ export default function AddWriting() {
   );
 
   useEffect(() => {
-    async function submitOnMobile() {
+    function submitOnMobile() {
       if (isWritingToSubmitOnMobile) {
-        await submitToAddWriting();
+        submitToAddWriting();
         dispatch(handleWritingToSubmitOnMobile(false)); // initialize
       }
     }

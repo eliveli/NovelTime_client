@@ -154,7 +154,7 @@ export default function UserNovelListDetailed({ isCreated }: { isCreated: boolea
     setNovelsSelected([]);
   };
 
-  const handleToRemoveNovelFromList = async () => {
+  const handleToRemoveNovelFromList = () => {
     if (removeNovelsResult.isLoading) return;
 
     if (!novelsSelected.length) {
@@ -163,20 +163,23 @@ export default function UserNovelListDetailed({ isCreated }: { isCreated: boolea
       return;
     }
 
-    await removeNovels({
+    removeNovels({
       listId: listId as string,
       novelIDs: novelsSelected,
       userName: userName as string,
-    });
-
-    if (removeNovelsResult.isError) {
-      dispatch(openFirstModal("alert"));
-      dispatch(
-        handleAlert({ text: `리스트를 삭제할 수 없습니다.\n새로고침 후 다시 시도해 보세요` }),
-      );
-    }
-
-    finishOrCancelRemoving();
+    })
+      .then(() => {
+        finishOrCancelRemoving();
+      })
+      .catch(() => {
+        dispatch(openFirstModal("alert"));
+        dispatch(
+          handleAlert({
+            text: `리스트를 편집할 수 없습니다.\n새로고침 후 다시 시도해 보세요`,
+            nextFunction: finishOrCancelRemoving,
+          }),
+        );
+      });
   };
 
   // Cancel removing novels from the list if user opens the modal to edit profile

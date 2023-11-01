@@ -148,20 +148,19 @@ function CommentWritten({
     );
   };
 
-  async function handleDelete() {
-    await deleteComment({ commentId, novelId: argsForApis.novelId });
-
-    if (deleteCommentResult.isError) {
-      dispatch(openFirstModal("alert"));
-      dispatch(
-        handleAlert({ text: `코멘트를 삭제할 수 없습니다.\n새로고침 후 다시 시도해 보세요` }),
-      );
-      return;
-    }
-
-    if (getAllRootCommentPages) {
-      getAllRootCommentPages(); // when deleting a root comment
-    }
+  function handleDelete() {
+    deleteComment({ commentId, novelId: argsForApis.novelId })
+      .then(() => {
+        if (getAllRootCommentPages) {
+          getAllRootCommentPages(); // when deleting a root comment
+        }
+      })
+      .catch(() => {
+        dispatch(openFirstModal("alert"));
+        dispatch(
+          handleAlert({ text: `코멘트를 삭제할 수 없습니다.\n새로고침 후 다시 시도해 보세요` }),
+        );
+      });
   }
 
   const confirmDelete = () => {
@@ -172,7 +171,7 @@ function CommentWritten({
         question: "코멘트를 삭제하시겠습니까?",
         textForYes: "삭제",
         textForNo: "취소",
-        functionForYes: async () => handleDelete(),
+        functionForYes: handleDelete,
       }),
     );
 

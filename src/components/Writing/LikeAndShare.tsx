@@ -41,7 +41,7 @@ export default function LikeAndShare({ isLike, likeNO, writingId, writingType, n
     toggleLikeResult.data?.likeNo !== undefined ? toggleLikeResult.data.likeNo : likeNO;
 
   const dispatch = useAppDispatch();
-  const toggleLikeRequest = async () => {
+  const toggleLikeRequest = () => {
     if (!loginUserId) {
       dispatch(openFirstModal("alert"));
       dispatch(handleAlert({ text: "좋아요를 누르려면 로그인을 해 주세요." }));
@@ -50,22 +50,21 @@ export default function LikeAndShare({ isLike, likeNO, writingId, writingType, n
 
     if (toggleLikeResult.isLoading) return; // prevent click event as loading
 
-    await toggleLike({
+    toggleLike({
       contentType: "writing",
       contentId: writingId,
       forWriting: {
         writingType,
         novelId,
       },
-    });
-    if (toggleLikeResult.isError) {
+    }).catch(() => {
       dispatch(openFirstModal("alert"));
       dispatch(
         handleAlert({
           text: `좋아요 기능이 정상적으로 작동하지 않습니다.\n새로고침 후 시도해주세요`,
         }),
       );
-    }
+    });
   };
 
   return (

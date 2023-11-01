@@ -59,35 +59,38 @@ function App() {
 
   // don't dispatch when access token in cached data is the same with one in store
   // to prevent "too many rerender" right after login
-  // to avoid that : dispatch - change state in store - component render - dispatch - change state ...
+  // to avoid : dispatch - change state in store - component render - dispatch - change state...
   // store access token and user info
-  if (data && data.accessToken !== accessToken && isLogout === undefined) {
-    dispatch(setAccessToken(data.accessToken));
+  useEffect(() => {
+    if (data && !!data.accessToken && isLogout === undefined) {
+      dispatch(setAccessToken(data.accessToken));
 
-    handleNoneLogin(false);
-  }
-  if (data && !accessToken && isLogout === undefined) {
-    dispatch(setLoginUser(data.userInfo));
-  }
-  // error occurs as user didn't login(token doesn't exist) or refresh token is invalid or etc
-  //
-  // for non login user
-  //  who failed to login automatically with existing token right after entering website
-  //  in the reasons
-  //   : refresh token doesn't exist in cookie or the token expired or is invalid or etc
-  // prevent non login user from trying to get access token regularly with "pollingInterval"
-  if (!accessToken && error) {
-    handleNoneLogin(true);
-  }
-  //
-  // after login, immediately refresh browser
-  // this is required because user receives error message immediately after login
-  if (!!accessToken && error && "data" in error && error.data.message === "non login user") {
-    // cookie from server is set on next page loading
-    // so do refresh page
-    // eslint-disable-next-line no-self-assign
-    window.location.href = window.location.href;
-  }
+      handleNoneLogin(false);
+    }
+    if (data && !accessToken && isLogout === undefined) {
+      dispatch(setLoginUser(data.userInfo)); // exist or not
+    }
+    // error occurs as user didn't login(token doesn't exist) or refresh token is invalid or etc
+    //
+    // for non login user
+    //  who failed to login automatically with existing token right after entering website
+    //  in the reasons
+    //   : refresh token doesn't exist in cookie or the token expired or is invalid or etc
+    // prevent non login user from trying to get access token regularly with "pollingInterval"
+    if (!accessToken && error) {
+      handleNoneLogin(true);
+      return;
+    }
+    //
+    // after login, immediately refresh browser
+    // this is required because user receives error message immediately after login
+    if (!!accessToken && error && "data" in error && error.data.message === "non login user") {
+      // cookie from server is set on next page loading
+      // so do refresh page
+      // eslint-disable-next-line no-self-assign
+      window.location.href = window.location.href;
+    }
+  }, [data, accessToken, isLogout, error]);
 
   // 로그인 유저 인증
   // - OAuth 이용, 인가코드 받고 서버에 넘겨 줌.

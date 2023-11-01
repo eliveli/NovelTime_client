@@ -67,7 +67,7 @@ export default function EditWriting() {
 
   const navigate = useNavigate();
 
-  const submitToEditWriting = async () => {
+  const submitToEditWriting = () => {
     if (!loginUserId) {
       dispatch(openFirstModal("alert"));
       dispatch(handleAlert({ text: "먼저 로그인을 해 주세요" }));
@@ -93,33 +93,34 @@ export default function EditWriting() {
 
     if (editWritingResult.isLoading) return;
 
-    await editWriting({
+    editWriting({
       writingId,
       writingTitle: titleRef.current.value,
       writingDesc: contentRef.current.value,
       writingImg: undefined, // treat this later
       writingType: writingType === "FreeTalk" ? "T" : "R",
       novelId,
-    });
+    })
+      .then(() => {
+        const pathToGoTo = writingType === "FreeTalk" ? TALK_DETAIL : RECOMMEND_DETAIL;
 
-    if (editWritingResult.isError) {
-      dispatch(openFirstModal("alert"));
-      dispatch(handleAlert({ text: `글을 수정할 수 없습니다.\n새로고침 후 다시 시도해 보세요` }));
-    }
+        navigate(`${pathToGoTo}/${writingId}`, { replace: true }); // go to the writing detail page
 
-    const pathToGoTo = writingType === "FreeTalk" ? TALK_DETAIL : RECOMMEND_DETAIL;
-    navigate(`${pathToGoTo}/${writingId}`, { replace: true }); // go to the writing detail page
-
-    dispatch(
-      handleWritingToEdit({
-        writingId: "",
-        writingTitle: "",
-        writingDesc: "",
-        writingType: "FreeTalk",
-        novelId: "",
-        novelTitle: "",
-      }),
-    );
+        dispatch(
+          handleWritingToEdit({
+            writingId: "",
+            writingTitle: "",
+            writingDesc: "",
+            writingType: "FreeTalk",
+            novelId: "",
+            novelTitle: "",
+          }),
+        );
+      })
+      .catch(() => {
+        dispatch(openFirstModal("alert"));
+        dispatch(handleAlert({ text: `글을 수정할 수 없습니다.\n새로고침 후 다시 시도해 보세요` }));
+      });
   };
 
   // set the title and content to edit the post when entering at first
@@ -137,9 +138,9 @@ export default function EditWriting() {
     (state) => state.writing.isWritingToSubmitOnMobile,
   );
   useEffect(() => {
-    async function submitOnMobile() {
+    function submitOnMobile() {
       if (isWritingToSubmitOnMobile) {
-        await submitToEditWriting();
+        submitToEditWriting();
         dispatch(handleWritingToSubmitOnMobile(false)); // initialize
       }
     }

@@ -38,7 +38,7 @@ export function ReCommentInputToCreateOnTablet() {
 
   const dispatch = useAppDispatch();
 
-  const handleSubmitToCreate = async () => {
+  const handleSubmitToCreate = () => {
     if (!loginUserId) {
       dispatch(openFirstModal("alert"));
       dispatch(handleAlert({ text: "먼저 로그인을 해 주세요" }));
@@ -55,27 +55,27 @@ export function ReCommentInputToCreateOnTablet() {
       return;
     }
 
-    await addReComment({
+    addReComment({
       talkId,
       novelId,
       novelTitle,
       commentContent: textRef.current?.value,
       parentCommentId,
-    });
+    })
+      .then(() => {
+        // and update reComments automatically with the invalidate and provide tags
 
-    // and update reComments automatically with the invalidate and provide tags
-
-    if (addReCommentResult.isError) {
-      dispatch(openFirstModal("alert"));
-      dispatch(
-        handleAlert({ text: `코멘트를 추가할 수 없습니다.\n새로고침 후 다시 시도해 보세요` }),
-      );
-      return;
-    }
-
-    // initialize comment input
-    textRef.current.value = "";
-    textRef.current.style.height = "28px";
+        // initialize comment input
+        if (!textRef.current) return;
+        textRef.current.value = "";
+        textRef.current.style.height = "28px";
+      })
+      .catch(() => {
+        dispatch(openFirstModal("alert"));
+        dispatch(
+          handleAlert({ text: `코멘트를 추가할 수 없습니다.\n새로고침 후 다시 시도해 보세요` }),
+        );
+      });
   };
 
   const commentInputRef = useRef<HTMLDivElement>(null);
@@ -129,7 +129,7 @@ export function ReCommentInputToEditOnTablet() {
 
   const dispatch = useAppDispatch();
 
-  const handleSubmitToEdit = async () => {
+  const handleSubmitToEdit = () => {
     // provide a reComment to server
     if (!loginUserId) {
       dispatch(openFirstModal("alert"));
@@ -151,23 +151,22 @@ export function ReCommentInputToEditOnTablet() {
       return;
     }
 
-    await editComment({
+    editComment({
       commentId: commentToEdit.commentId,
       commentContent: textRef.current?.value,
-    });
+    })
+      .then(() => {
+        // comments will be updated automatically with the invalidate and provide tags
 
-    if (editCommentResult.isError) {
-      dispatch(openFirstModal("alert"));
-      dispatch(
-        handleAlert({ text: `코멘트를 수정할 수 없습니다.\n새로고침 후 다시 시도해 보세요` }),
-      );
-      return;
-    }
-
-    // comments will be updated automatically with the invalidate and provide tags
-
-    // initialize states for editing comment
-    dispatch(setCommentToEdit({ commentId: "", commentContent: "", parentUserName: "" }));
+        // initialize states for editing comment
+        dispatch(setCommentToEdit({ commentId: "", commentContent: "", parentUserName: "" }));
+      })
+      .catch(() => {
+        dispatch(openFirstModal("alert"));
+        dispatch(
+          handleAlert({ text: `코멘트를 수정할 수 없습니다.\n새로고침 후 다시 시도해 보세요` }),
+        );
+      });
   };
 
   const commentInputRef = useRef<HTMLDivElement>(null);
@@ -231,7 +230,7 @@ export function RootCommentInputToCreateOnTablet({
 
   const dispatch = useAppDispatch();
 
-  const handleSubmitToCreate = async () => {
+  const handleSubmitToCreate = () => {
     if (!loginUserId) {
       dispatch(openFirstModal("alert"));
       dispatch(handleAlert({ text: "먼저 로그인을 해 주세요" }));
@@ -248,26 +247,26 @@ export function RootCommentInputToCreateOnTablet({
       return;
     }
 
-    await addRootComment({
+    addRootComment({
       talkId,
       novelId,
       novelTitle,
       commentContent: textRef.current?.value,
-    });
+    })
+      .then(() => {
+        // initialize comment input
+        if (!textRef.current) return;
+        textRef.current.value = "";
+        textRef.current.style.height = "28px";
 
-    if (addRootCommentResult.isError) {
-      dispatch(openFirstModal("alert"));
-      dispatch(
-        handleAlert({ text: `코멘트를 추가할 수 없습니다.\n새로고침 후 다시 시도해 보세요` }),
-      );
-      return;
-    }
-
-    // initialize comment input
-    textRef.current.value = "";
-    textRef.current.style.height = "28px";
-
-    getAllRootCommentPages();
+        getAllRootCommentPages();
+      })
+      .catch(() => {
+        dispatch(openFirstModal("alert"));
+        dispatch(
+          handleAlert({ text: `코멘트를 추가할 수 없습니다.\n새로고침 후 다시 시도해 보세요` }),
+        );
+      });
   };
 
   const commentInputRef = useRef<HTMLDivElement>(null);
@@ -310,7 +309,7 @@ export function RootCommentInputToEditOnTablet({
 
   const dispatch = useAppDispatch();
 
-  const handleSubmitToEdit = async () => {
+  const handleSubmitToEdit = () => {
     if (!loginUserId) {
       dispatch(openFirstModal("alert"));
       dispatch(handleAlert({ text: "먼저 로그인을 해 주세요" }));
@@ -331,26 +330,27 @@ export function RootCommentInputToEditOnTablet({
       return;
     }
 
-    await editComment({
+    editComment({
       commentId: commentToEdit.commentId,
       commentContent: textRef.current?.value,
-    });
+    })
+      .then(() => {
+        // initialize comment input
+        if (!textRef.current) return;
+        textRef.current.value = "";
+        textRef.current.style.height = "28px";
 
-    if (editCommentResult.isError) {
-      dispatch(openFirstModal("alert"));
-      dispatch(
-        handleAlert({ text: `코멘트를 수정할 수 없습니다.\n새로고침 후 다시 시도해 보세요` }),
-      );
-      return;
-    }
-    // initialize comment input
-    textRef.current.value = "";
-    textRef.current.style.height = "28px";
+        getAllRootCommentPages();
 
-    getAllRootCommentPages();
-
-    // initialize states for editing comment
-    dispatch(setCommentToEdit({ commentId: "", commentContent: "", parentUserName: "" }));
+        // initialize states for editing comment
+        dispatch(setCommentToEdit({ commentId: "", commentContent: "", parentUserName: "" }));
+      })
+      .catch(() => {
+        dispatch(openFirstModal("alert"));
+        dispatch(
+          handleAlert({ text: `코멘트를 수정할 수 없습니다.\n새로고침 후 다시 시도해 보세요` }),
+        );
+      });
   };
 
   const commentInputRef = useRef<HTMLDivElement>(null);
@@ -421,7 +421,7 @@ export function CommentInputOnMobile({
 
   const dispatch = useAppDispatch();
 
-  const handleSubmitToCreate = async () => {
+  const handleSubmitToCreate = () => {
     // provide a rootComment or reComment to server
     if (!loginUserId) {
       dispatch(openFirstModal("alert"));
@@ -440,49 +440,55 @@ export function CommentInputOnMobile({
     if (isRootCommentInput) {
       if (addRootCommentResult.isLoading) return; // prevent click while loading for prev request
 
-      await addRootComment({
+      addRootComment({
         talkId,
         novelId,
         novelTitle,
         commentContent: textRef.current?.value,
-      });
+      })
+        .then(() => {
+          // initialize comment input
+          if (!textRef.current) return;
+          textRef.current.value = "";
+          textRef.current.style.height = "28px";
 
-      if (addRootCommentResult.isError) {
-        dispatch(openFirstModal("alert"));
-        dispatch(
-          handleAlert({ text: `코멘트를 추가할 수 없습니다.\n새로고침 후 다시 시도해 보세요` }),
-        );
-        return;
-      }
-
-      getAllRootCommentPages();
+          getAllRootCommentPages();
+        })
+        .catch(() => {
+          dispatch(openFirstModal("alert"));
+          dispatch(
+            handleAlert({ text: `코멘트를 추가할 수 없습니다.\n새로고침 후 다시 시도해 보세요` }),
+          );
+        });
+      //
     } else {
       if (addReCommentResult.isLoading) return; // prevent click while loading for prev request
 
-      await addReComment({
+      addReComment({
         talkId,
         novelId,
         novelTitle,
         commentContent: textRef.current?.value,
         parentCommentId: parentToWriteReComment.parentCommentId,
-      });
-      // and update reComments automatically with the invalidate and provide tags
+      })
+        .then(() => {
+          // and update reComments automatically with the invalidate and provide tags
 
-      if (addReCommentResult.isError) {
-        dispatch(openFirstModal("alert"));
-        dispatch(
-          handleAlert({ text: `코멘트를 추가할 수 없습니다.\n새로고침 후 다시 시도해 보세요` }),
-        );
-        return;
-      }
+          // initialize comment input
+          if (!textRef.current) return;
+          textRef.current.value = "";
+          textRef.current.style.height = "28px";
+        })
+        .catch(() => {
+          dispatch(openFirstModal("alert"));
+          dispatch(
+            handleAlert({ text: `코멘트를 추가할 수 없습니다.\n새로고침 후 다시 시도해 보세요` }),
+          );
+        });
     }
-
-    // initialize comment input
-    textRef.current.value = "";
-    textRef.current.style.height = "28px";
   };
 
-  const handleSubmitToEdit = async () => {
+  const handleSubmitToEdit = () => {
     // provide a rootComment or reComment to server
     if (!loginUserId) {
       dispatch(openFirstModal("alert"));
@@ -504,29 +510,28 @@ export function CommentInputOnMobile({
       return;
     }
 
-    await editComment({
+    editComment({
       commentId: commentToEdit.commentId,
       commentContent: textRef.current?.value,
-    });
+    })
+      .then(() => {
+        // comments will be updated depending on whether it is root comment or reComment //
+        //  when it is root comment
+        if (!commentToEdit.parentUserName) {
+          getAllRootCommentPages();
+        }
+        //  when it is reComment,
+        //  the list will be updated automatically with the invalidate and provide tags
 
-    if (editCommentResult.isError) {
-      dispatch(openFirstModal("alert"));
-      dispatch(
-        handleAlert({ text: `코멘트를 수정할 수 없습니다.\n새로고침 후 다시 시도해 보세요` }),
-      );
-      return;
-    }
-
-    // comments will be updated depending on whether it is root comment or reComment //
-    //  when it is root comment
-    if (!commentToEdit.parentUserName) {
-      getAllRootCommentPages();
-    }
-    //  when it is reComment,
-    //  the list will be updated automatically with the invalidate and provide tags
-
-    // initialize states for editing comment
-    dispatch(setCommentToEdit({ commentId: "", commentContent: "", parentUserName: "" }));
+        // initialize states for editing comment
+        dispatch(setCommentToEdit({ commentId: "", commentContent: "", parentUserName: "" }));
+      })
+      .catch(() => {
+        dispatch(openFirstModal("alert"));
+        dispatch(
+          handleAlert({ text: `코멘트를 수정할 수 없습니다.\n새로고침 후 다시 시도해 보세요` }),
+        );
+      });
   };
 
   const commentInputRef = useRef<HTMLDivElement>(null);
