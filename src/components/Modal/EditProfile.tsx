@@ -82,6 +82,8 @@ export default function EditProfile({ isSecond }: { isSecond?: true }) {
   const confirmUserName = async () => {
     const tempUserName = userNameRef.current?.value as string;
 
+    const emojiRegex = /\p{Emoji}/u;
+
     if (!tempUserName) {
       dispatch(openSecondModal("alert"));
       dispatch(
@@ -89,6 +91,10 @@ export default function EditProfile({ isSecond }: { isSecond?: true }) {
           text: "유저 네임을 입력해 주세요",
         }),
       );
+      //
+    } else if (emojiRegex.test(tempUserName)) {
+      dispatch(openSecondModal("alert"));
+      dispatch(handleAlert({ text: "이모티콘은 제외해 주세요" }));
       //
     } else if (userNameByte > 12) {
       // limit the text length by 12byte
