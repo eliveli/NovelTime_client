@@ -141,13 +141,8 @@ export default function FreeTalkDetail() {
       }
 
       setRootComments(commentList);
-
-      dispatch(setRootCommentIdToShowReComments(""));
-
       return;
     }
-
-    dispatch(setRootCommentIdToShowReComments(""));
 
     // accumulate root comments
     setRootComments((prev) => [...prev, ...commentList]);
