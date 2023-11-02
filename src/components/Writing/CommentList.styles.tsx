@@ -197,7 +197,10 @@ export const NextToImgContainer = styled.div`
   margin-left: 10px;
 `;
 export const UserName = styled.span<{ isParentToWriteReComment: boolean }>`
-  ${({ isParentToWriteReComment }) => isParentToWriteReComment && "color: rgba(3, 199, 90, 0.6);"}
+  font-weight: ${({ isParentToWriteReComment }) => (isParentToWriteReComment ? 400 : 300)};
+
+  color: ${({ isParentToWriteReComment }) =>
+    isParentToWriteReComment ? "rgba(3, 199, 90, 0.6)" : "inherit"};
 `;
 export const CommentSortContainer = styled.div`
   display: flex;
@@ -246,10 +249,10 @@ export const MarkParentAndChildComment = styled.span<{
   )}
 `;
 
-export const ReCommentMark = styled.span`
+export const ReCommentMark = styled.span<{ isSelected?: true }>`
   margin-left: 5px;
-  color: rgba(0, 0, 0, 0.4);
-  font-weight: 500;
+  color: ${({ isSelected }) => (isSelected ? "rgba(3, 199, 90, 0.6)" : "rgba(0, 0, 0, 0.4)")};
+  font-weight: ${({ isSelected }) => (isSelected ? 400 : 500)};
   font-size: 14px;
 `;
 export const ReCommentUser = styled.span`

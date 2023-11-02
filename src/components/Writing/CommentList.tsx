@@ -253,13 +253,14 @@ function CommentWritten({
 
                 {rootCommentIdToShowReComments === commentId && (
                   <ReCommentMark
+                    isSelected
                     onClick={() => {
                       dispatch(setRootCommentIdToShowReComments(""));
 
                       dispatch(setParentAndChildConnected({ parent: "", child: "" }));
                     }}
                   >
-                    답글 접기
+                    답글 취소
                   </ReCommentMark>
                 )}
               </ReCommentMarkContainer>
@@ -425,6 +426,7 @@ function CommentWritten({
 
             {rootCommentIdToShowReComments === commentId && (
               <ReCommentMark
+                isSelected
                 onClick={() => {
                   dispatch(setRootCommentIdToShowReComments(""));
 
@@ -438,7 +440,7 @@ function CommentWritten({
                   dispatch(setParentAndChildConnected({ parent: "", child: "" }));
                 }}
               >
-                답글 접기
+                답글 취소
               </ReCommentMark>
             )}
           </ReCommentMarkContainer>
@@ -520,6 +522,7 @@ export default function CommentList({
           })}
         </CommentSortContainer>
       </CommentMarkContainer>
+
       {rootComments.map((_, idx) => (
         <CommentWritten
           key={_.commentId}
