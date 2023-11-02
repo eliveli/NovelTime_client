@@ -1,16 +1,20 @@
 import theme, { styled } from "assets/styles/theme";
 
-export const ContainerToGoTo = styled.div`
-  margin-top: 10px;
+export const ContainerToGoTo = styled.div<{ isInAddWriting?: true }>`
+  margin-top: 50px;
   display: flex;
-  flex-direction: row;
+  flex-direction: ${({ isInAddWriting }) => (isInAddWriting ? "row" : "column")};
   justify-content: center;
   align-items: center;
 `;
-export const TextToGoTo = styled.span`
+
+export const TextToGoTo = styled.span<{ isMainText?: true }>`
   font-size: 13px;
   font-weight: 500;
-  color: rgba(0, 0, 0, 0.6);
+
+  color: ${({ isMainText }) => (isMainText ? "rgba(0, 0, 0, 0.6)" : "rgba(70, 70, 70, 0.6)")};
+
+  margin-top: ${({ isMainText }) => (isMainText ? 0 : 10)}px;
 `;
 export const BtnToGoTo = styled.button`
   border-radius: 15px;

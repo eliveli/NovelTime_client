@@ -11,6 +11,7 @@ import PageNOs from "components/PageNOs";
 import { useSearchForAllQuery } from "store/serverAPIs/novelTime";
 import FreeTalk from "views/FreeTalkList/FreeTalkList.components";
 import Recommend from "views/RecommendList/RecommendList.components";
+import { GoToNovelPlatformToSearch } from "views/SearchNovelIframe";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { NovelColumnDetail } from "../../components/Novel";
 
@@ -134,6 +135,8 @@ export default function SearchPage() {
             searchWord={searchTypeMatched === "writingDesc" ? currentSearchWord : undefined}
           />
         ))}
+
+      {searchCategoryMatched === "novel" && !!currentSearchWord && <GoToNovelPlatformToSearch />}
 
       {isForPagination && data && (
         <PageNOs selectedNo={Number(currentPageNo)} lastNo={data.lastPageNo} />

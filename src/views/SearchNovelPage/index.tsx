@@ -8,6 +8,7 @@ import { useSearchForNovelQuery } from "store/serverAPIs/novelTime";
 import Spinner from "assets/Spinner";
 import { setSearchList } from "store/clientSlices/filterSlice";
 import { useEffect } from "react";
+import { GoToNovelPlatformToSearch } from "views/SearchNovelIframe";
 import { NovelColumnDetail } from "../../components/Novel";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 
@@ -63,6 +64,7 @@ export default function SearchPage() {
 
       <SearchForNovel />
 
+      {/* on mobile/tablet */}
       {!isForPagination && !!listForInfntScroll?.length && (
         <ColumnDetailList categoryText={!currentSearchWord ? "작품을 검색해 보세요" : "검색 결과"}>
           {listForInfntScroll?.map((novel) => (
@@ -79,6 +81,9 @@ export default function SearchPage() {
           ))}
         </ColumnDetailList>
       )}
+
+      {!!currentSearchWord && <GoToNovelPlatformToSearch />}
+
       {isForPagination && data && (
         <PageNOs selectedNo={Number(currentPageNo)} lastNo={data.lastPageNo} />
       )}

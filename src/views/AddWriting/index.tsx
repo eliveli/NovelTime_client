@@ -107,6 +107,17 @@ export default function AddWriting() {
     false,
   );
 
+  // came here to search for novel in novel platform from search-novel page / search-all page
+  useEffect(() => {
+    const isToSearchInNovelPlatform = searchParams.get("isToSearchInNovelPlatform");
+
+    if (isToSearchInNovelPlatform === "true") {
+      handleGettingNovel({ onGoing: true, inGettingURL: true });
+
+      setIframeAddress("https://m.series.naver.com/search/search.series?t=novel&fs=default&q=");
+    }
+  }, []);
+
   const novelUrlRef = useRef<HTMLTextAreaElement>(null);
 
   const dispatch = useAppDispatch();

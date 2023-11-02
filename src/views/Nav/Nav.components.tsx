@@ -377,7 +377,15 @@ export function NavMobileDetail() {
       <IconsBox isLeft>
         <LeftIconBox>
           {isCurrentPath(ADD_WRITING) || isCurrentPath(EDIT_WRITING) ? (
-            <Icon.CloseWriting onClick={() => navigate("/", { replace: true })} />
+            <Icon.CloseWriting
+              onClick={() => {
+                if (window.location.search.includes("isToSearchInNovelPlatform")) {
+                  navigate(-1); // back to search-novel/search-all page
+                  return;
+                }
+                navigate("/", { replace: true });
+              }}
+            />
           ) : (
             <BackIcon onClick={() => navigate(-1)} />
           )}
