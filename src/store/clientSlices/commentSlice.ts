@@ -1,11 +1,13 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
+type RootCommentToShowReComments = { commentId: string; userName: string };
+
 export type IsCommentState = {
   commentSortType: "new" | "old";
   commentPageNo: number;
 
-  rootCommentIdToShowReComments: string;
+  rootCommentToShowReComments: RootCommentToShowReComments;
 
   parentToWriteReComment: {
     parentCommentId: string;
@@ -35,7 +37,7 @@ const initialState: IsCommentState = {
   commentSortType: "old",
   commentPageNo: 1,
 
-  rootCommentIdToShowReComments: "",
+  rootCommentToShowReComments: { commentId: "", userName: "" },
 
   parentToWriteReComment: {
     parentCommentId: "",
@@ -65,8 +67,8 @@ export const commentSlice = createSlice({
   name: "comment",
   initialState,
   reducers: {
-    setRootCommentIdToShowReComments: (state, action: PayloadAction<string>) => {
-      state.rootCommentIdToShowReComments = action.payload;
+    setRootCommentToShowReComments: (state, action: PayloadAction<RootCommentToShowReComments>) => {
+      state.rootCommentToShowReComments = action.payload;
     },
     setParentToWriteReComment: (
       state,
@@ -106,7 +108,10 @@ export const commentSlice = createSlice({
       state.commentIdFromUserPageForScroll = action.payload;
     },
     initializeCommentStates: (state) => {
-      state.rootCommentIdToShowReComments = "";
+      state.rootCommentToShowReComments = {
+        commentId: "",
+        userName: "",
+      };
       state.parentToWriteReComment = { parentCommentId: "", parentCommentUserName: "" };
       state.commentSortType = "old";
       state.commentPageNo = 1;
@@ -135,7 +140,7 @@ export const {
   setCommentIdFromUserPageForScroll,
   setCommentSortType,
   setArgsForApis,
-  setRootCommentIdToShowReComments,
+  setRootCommentToShowReComments,
   setParentToWriteReComment,
   setCommentPageNo,
   setCommentToEdit,

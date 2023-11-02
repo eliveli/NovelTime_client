@@ -33,8 +33,7 @@ import {
   setArgsForApis,
   setCommentIdFromUserPageForScroll,
   setCommentPageNo,
-  setParentToWriteReComment,
-  setRootCommentIdToShowReComments,
+  setParentAndChildConnected,
 } from "store/clientSlices/commentSlice";
 import {
   logoImg,
@@ -50,8 +49,8 @@ export default function FreeTalkDetail() {
 
   const commentSortType = useAppSelector((state) => state.comment.commentSortType);
   const commentPageNo = useAppSelector((state) => state.comment.commentPageNo);
-  const rootCommentIdToShowReComments = useAppSelector(
-    (state) => state.comment.rootCommentIdToShowReComments,
+  const rootCommentToShowReComments = useAppSelector(
+    (state) => state.comment.rootCommentToShowReComments,
   );
   const argsForApis = useAppSelector((state) => state.comment.argsForApis);
 
@@ -66,10 +65,10 @@ export default function FreeTalkDetail() {
 
   const reCommentsFromServer = useGetReCommentsQuery(
     {
-      rootCommentId: rootCommentIdToShowReComments,
+      rootCommentId: rootCommentToShowReComments.commentId,
       commentSortType,
     },
-    { skip: !rootCommentIdToShowReComments },
+    { skip: !rootCommentToShowReComments.commentId },
   );
 
   // simple way to update comments after adding a root comment //
@@ -141,20 +140,18 @@ export default function FreeTalkDetail() {
       }
 
       setRootComments(commentList);
+
+      // not to color parent and child connection when updating root comments
+      dispatch(setParentAndChildConnected({ parent: "", child: "" }));
+
       return;
     }
+
+    dispatch(setParentAndChildConnected({ parent: "", child: "" }));
 
     // accumulate root comments
     setRootComments((prev) => [...prev, ...commentList]);
   }, [commentPerPage.data]);
-
-  // not to color parent user name when updating root comments
-  useEffect(() => {
-    if (!rootCommentIdToShowReComments) {
-      dispatch(setParentToWriteReComment({ parentCommentId: "", parentCommentUserName: "" }));
-    }
-  }, [rootCommentIdToShowReComments]);
-
   // change reComment number of its root comment after adding/editing/deleting one
   //  it can run when getting reComments without adding new one
   //    then any won't change
@@ -164,7 +161,7 @@ export default function FreeTalkDetail() {
     for (let i = 0; i < rootComments.length; i += 1) {
       const rootComment = rootComments[i];
 
-      if (rootComment.commentId === rootCommentIdToShowReComments) {
+      if (rootComment.commentId === rootCommentToShowReComments.commentId) {
         // replace reCommentNo of current rootComment to show reComments
         // when reCommentNo is different from previous one
         if (rootComment.reCommentNo !== reCommentNo) {

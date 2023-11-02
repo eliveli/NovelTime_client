@@ -9,7 +9,7 @@ import {
   setCommentToEdit,
   setParentAndChildConnected,
   setParentToWriteReComment,
-  setRootCommentIdToShowReComments,
+  setRootCommentToShowReComments,
 } from "store/clientSlices/commentSlice";
 import { useDeleteCommentMutation } from "store/serverAPIs/novelTime";
 import { Comment, Img, ReCommentList } from "store/serverAPIs/types";
@@ -103,8 +103,8 @@ function CommentWritten({
   );
   const parentToWriteReComment = useAppSelector((state) => state.comment.parentToWriteReComment);
   const parentAndChildConnected = useAppSelector((state) => state.comment.parentAndChildConnected);
-  const rootCommentIdToShowReComments = useAppSelector(
-    (state) => state.comment.rootCommentIdToShowReComments,
+  const rootCommentToShowReComments = useAppSelector(
+    (state) => state.comment.rootCommentToShowReComments,
   );
   const argsForApis = useAppSelector((state) => state.comment.argsForApis);
 
@@ -153,7 +153,16 @@ function CommentWritten({
       .then(() => {
         if (getAllRootCommentPages) {
           getAllRootCommentPages(); // when deleting a root comment
+          return;
         }
+
+        // Change this to rootComment as it is deleted and can't be used
+        dispatch(
+          setParentToWriteReComment({
+            parentCommentId: rootCommentToShowReComments.commentId,
+            parentCommentUserName: rootCommentToShowReComments.userName,
+          }),
+        );
       })
       .catch(() => {
         dispatch(openFirstModal("alert"));
@@ -238,11 +247,11 @@ function CommentWritten({
                   <Icon.Comment />
                 </Icon.IconBox>
 
-                {rootCommentIdToShowReComments !== commentId && (
+                {rootCommentToShowReComments.commentId !== commentId && (
                   <ReCommentMark
                     onClick={() => {
                       // display reComments of this root comment
-                      dispatch(setRootCommentIdToShowReComments(commentId));
+                      dispatch(setRootCommentToShowReComments({ commentId, userName }));
 
                       dispatch(setParentAndChildConnected({ parent: "", child: "" }));
                     }}
@@ -251,11 +260,11 @@ function CommentWritten({
                   </ReCommentMark>
                 )}
 
-                {rootCommentIdToShowReComments === commentId && (
+                {rootCommentToShowReComments.commentId === commentId && (
                   <ReCommentMark
                     isSelected
                     onClick={() => {
-                      dispatch(setRootCommentIdToShowReComments(""));
+                      dispatch(setRootCommentToShowReComments({ commentId, userName }));
 
                       dispatch(setParentAndChildConnected({ parent: "", child: "" }));
                     }}
@@ -276,7 +285,7 @@ function CommentWritten({
     );
   }
 
-  if (isReComment && parentCommentId) {
+  if (isReComment) {
     return (
       <CommentContainer ref={commentRef} isReComment={isReComment}>
         <UserImgBox>
@@ -404,11 +413,11 @@ function CommentWritten({
               <Icon.Comment />
             </Icon.IconBox>
 
-            {rootCommentIdToShowReComments !== commentId && (
+            {rootCommentToShowReComments.commentId !== commentId && (
               <ReCommentMark
                 onClick={() => {
                   // display reComments of this root comment
-                  dispatch(setRootCommentIdToShowReComments(commentId));
+                  dispatch(setRootCommentToShowReComments({ commentId, userName }));
 
                   dispatch(
                     setParentToWriteReComment({
@@ -424,11 +433,11 @@ function CommentWritten({
               </ReCommentMark>
             )}
 
-            {rootCommentIdToShowReComments === commentId && (
+            {rootCommentToShowReComments.commentId === commentId && (
               <ReCommentMark
                 isSelected
                 onClick={() => {
-                  dispatch(setRootCommentIdToShowReComments(""));
+                  dispatch(setRootCommentToShowReComments({ commentId: "", userName: "" }));
 
                   dispatch(
                     setParentToWriteReComment({
@@ -457,7 +466,7 @@ function CommentWritten({
           ))}
 
         {/* write reComment */}
-        {!isMobile && rootCommentIdToShowReComments === commentId && (
+        {!isMobile && rootCommentToShowReComments.commentId === commentId && (
           <ReCommentInputToCreateOnTablet />
         )}
       </NextToImgContainer>
@@ -491,8 +500,8 @@ export default function CommentList({
   getAllRootCommentPages: () => void;
 }) {
   const commentSortType = useAppSelector((state) => state.comment.commentSortType);
-  const rootCommentIdToShowReComments = useAppSelector(
-    (state) => state.comment.rootCommentIdToShowReComments,
+  const rootCommentToShowReComments = useAppSelector(
+    (state) => state.comment.rootCommentToShowReComments,
   );
 
   const dispatch = useAppDispatch();
@@ -529,7 +538,7 @@ export default function CommentList({
           comment={_}
           isFirstComment={idx === 0}
           reCommentsOfRootComment={
-            rootCommentIdToShowReComments === _.commentId ? reComments : undefined
+            rootCommentToShowReComments.commentId === _.commentId ? reComments : undefined
           }
           getAllRootCommentPages={getAllRootCommentPages}
         />

@@ -74,6 +74,7 @@ export const DeletedCommentContainer = styled.div<{
   isReComment?: true;
 }>`
   display: flex;
+  flex-direction: column;
   font-size: 15px;
 
   @media (max-width: 767px) {
