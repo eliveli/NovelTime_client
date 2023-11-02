@@ -276,7 +276,7 @@ function CommentWritten({
     );
   }
 
-  if (isReComment && parentCommentUserName) {
+  if (isReComment && parentCommentId) {
     return (
       <CommentContainer ref={commentRef} isReComment={isReComment}>
         <UserImgBox>
@@ -300,7 +300,7 @@ function CommentWritten({
 
           {!isEdit && (
             <CommentContent ref={commentContentRef} isParentToMark={isParentToMark}>
-              <ReCommentUser>{`@${parentCommentUserName} `}</ReCommentUser>
+              <ReCommentUser>{`@${parentCommentUserName || "_"} `}</ReCommentUser>
               {commentContent}
               {!!isEdited && <MarkForEdited>수정됨</MarkForEdited>}
             </CommentContent>
@@ -308,7 +308,7 @@ function CommentWritten({
 
           {isEdit && isMobile && (
             <CommentContentToEdit ref={commentContentRef} isParentToMark={isParentToMark}>
-              <ReCommentUser>{`@${parentCommentUserName} `}</ReCommentUser>
+              <ReCommentUser>{`@${parentCommentUserName || "_"} `}</ReCommentUser>
               {commentContent}
             </CommentContentToEdit>
           )}
