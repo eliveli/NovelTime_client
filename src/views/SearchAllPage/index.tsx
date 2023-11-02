@@ -12,6 +12,7 @@ import { useSearchForAllQuery } from "store/serverAPIs/novelTime";
 import FreeTalk from "views/FreeTalkList/FreeTalkList.components";
 import Recommend from "views/RecommendList/RecommendList.components";
 import { GoToNovelPlatformToSearch } from "views/SearchNovelIframe";
+import { NoContent } from "components/Writing";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { NovelColumnDetail } from "../../components/Novel";
 
@@ -135,6 +136,11 @@ export default function SearchPage() {
             searchWord={searchTypeMatched === "writingDesc" ? currentSearchWord : undefined}
           />
         ))}
+
+      {searchCategoryMatched !== "novel" &&
+        !!currentSearchWord &&
+        !data?.talks?.length &&
+        !data?.recommends?.length && <NoContent />}
 
       {searchCategoryMatched === "novel" && !!currentSearchWord && <GoToNovelPlatformToSearch />}
 
