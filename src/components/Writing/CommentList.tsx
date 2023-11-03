@@ -204,10 +204,10 @@ function CommentWritten({
   // scroll to exact comment component when clicking the comment in user page
   useEffect(() => {
     if (commentRef.current && commentIdFromUserPageForScroll === commentId) {
-      // first useEffect in ScrollToTop executes after rendering nav component : see the App.tsx
-      // and page renders
-      // if you clicked the comment from user page,
-      // after comment rendering the following code will be executed if it is the comment you clicked in user page
+      // first useEffect in ScrollToTop executes after nav component renders : see the App.tsx
+      //  and page renders
+      // if an user clicks the comment in user page,
+      //  following will happen after comment renders if it is one the user clicked in user page
       commentRef.current.scrollIntoView({
         behavior: "smooth",
       });
@@ -215,10 +215,15 @@ function CommentWritten({
   }, []);
 
   useEffect(() => {
-    // after adding a comment,
-    // scroll to the comment that the user just created
-
     if (commentPageNo !== 0) return;
+
+    // Don't scroll if reComments opened (though the user created/deleted a root comment on tablet)
+    //  (comments are updated when creating/editing/deleting a rootComment/reComment.
+    //   so it's difficult to know what type of comment(root~/re~) caused the change
+    //    in current code logic)
+    if (rootCommentToShowReComments.commentId) return;
+
+    // scroll to the latest comment when root comments are updated
 
     if (commentSortType === "new" && isFirstComment === true) {
       commentRef.current?.scrollIntoView({

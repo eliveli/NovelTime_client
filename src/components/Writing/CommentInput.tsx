@@ -83,7 +83,7 @@ export function ReCommentInputToCreateOnTablet() {
   // for tablet or pc when reComment input is located under the root comment
 
   // after clicking the "답글 쓰기" for writing a reComment,
-  // scroll to the reComment input that is located under the reComments or just under the parent comment
+  // scroll to the reComment input that is in the bottom of the reComments section
   useEffect(() => {
     commentInputRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
   }, [parentCommentUserName]);

@@ -152,6 +152,7 @@ export default function FreeTalkDetail() {
     // accumulate root comments
     setRootComments((prev) => [...prev, ...commentList]);
   }, [commentPerPage.data]);
+  //
   // change reComment number of its root comment after adding/editing/deleting one
   //  it can run when getting reComments without adding new one
   //    then any won't change
