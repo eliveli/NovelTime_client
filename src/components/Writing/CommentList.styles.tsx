@@ -307,7 +307,7 @@ export const WriteTextCntnr = styled.div`
   position: relative;
 `;
 
-export const SpaceForUserNameOnTextArea = styled.span`
+export const SpaceForUserName = styled.span`
   position: absolute;
   top: 0;
   left: 0;
@@ -331,8 +331,15 @@ export const WriteText = styled.textarea<{ spaceForUserName?: number }>`
 
   color: rgba(0, 0, 0, 0.6);
   font-weight: 500;
-
   font-family: "Californian FB", D2Coding, Arial, sans-serif;
+
+  background-color: transparent;
+
+  ::placeholder {
+    color: rgba(100, 100, 100, 0.6);
+    font-size: 16px;
+    font-weight: 500;
+  }
 `;
 export const EmojiCntnr = styled(Icon.IconBox)`
   display: flex;

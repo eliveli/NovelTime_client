@@ -59,7 +59,6 @@ function CommentWritten({
 
   // used for reComment
   isReComment,
-  itsRootCommentWasDeleted, // a reComment's root comment was deleted
 }: {
   comment: {
     commentId: string;
@@ -80,7 +79,6 @@ function CommentWritten({
   getAllRootCommentPages?: () => void;
 
   isReComment?: true;
-  itsRootCommentWasDeleted?: boolean;
 }) {
   const {
     commentId,
@@ -252,7 +250,12 @@ function CommentWritten({
                     onClick={() => {
                       // display reComments of this root comment
                       dispatch(setRootCommentToShowReComments({ commentId, userName }));
-
+                      dispatch(
+                        setParentToWriteReComment({
+                          parentCommentId: "",
+                          parentCommentUserName: "",
+                        }),
+                      );
                       dispatch(setParentAndChildConnected({ parent: "", child: "" }));
                     }}
                   >
@@ -264,8 +267,13 @@ function CommentWritten({
                   <ReCommentMark
                     isSelected
                     onClick={() => {
-                      dispatch(setRootCommentToShowReComments({ commentId, userName }));
-
+                      dispatch(setRootCommentToShowReComments({ commentId: "", userName: "" }));
+                      dispatch(
+                        setParentToWriteReComment({
+                          parentCommentId: "",
+                          parentCommentUserName: "",
+                        }),
+                      );
                       dispatch(setParentAndChildConnected({ parent: "", child: "" }));
                     }}
                   >
@@ -279,6 +287,11 @@ function CommentWritten({
               reCommentsOfRootComment.map((_) => (
                 <CommentWritten key={_.commentId} isReComment comment={{ ..._ }} />
               ))}
+
+            {/* write reComment */}
+            {!isMobile && rootCommentToShowReComments.commentId === commentId && (
+              <ReCommentInputToCreateOnTablet />
+            )}
           </DeletedCommentNumberContainer>
         )}
       </DeletedCommentContainer>
@@ -326,28 +339,23 @@ function CommentWritten({
 
           <ReCommentButtonsContainer>
             <ReCommentMarkContainer>
-              {/* not allow to write reComment when its root comment was deleted */}
-              {itsRootCommentWasDeleted === false && (
-                <>
-                  <Icon.IconBox size={15}>
-                    <Icon.Comment />
-                  </Icon.IconBox>
-                  <ReCommentMark
-                    onClick={() => {
-                      dispatch(
-                        setParentToWriteReComment({
-                          parentCommentId: commentId,
-                          parentCommentUserName: userName,
-                        }),
-                      );
+              <Icon.IconBox size={15}>
+                <Icon.Comment />
+              </Icon.IconBox>
+              <ReCommentMark
+                onClick={() => {
+                  dispatch(
+                    setParentToWriteReComment({
+                      parentCommentId: commentId,
+                      parentCommentUserName: userName,
+                    }),
+                  );
 
-                      dispatch(setParentAndChildConnected({ parent: "", child: "" }));
-                    }}
-                  >
-                    답글 쓰기
-                  </ReCommentMark>
-                </>
-              )}
+                  dispatch(setParentAndChildConnected({ parent: "", child: "" }));
+                }}
+              >
+                답글 쓰기
+              </ReCommentMark>
             </ReCommentMarkContainer>
 
             {isReComment && parentCommentId && (
@@ -438,14 +446,12 @@ function CommentWritten({
                 isSelected
                 onClick={() => {
                   dispatch(setRootCommentToShowReComments({ commentId: "", userName: "" }));
-
                   dispatch(
                     setParentToWriteReComment({
                       parentCommentId: "",
                       parentCommentUserName: "",
                     }),
                   );
-
                   dispatch(setParentAndChildConnected({ parent: "", child: "" }));
                 }}
               >
@@ -457,12 +463,7 @@ function CommentWritten({
 
         {!!reCommentsOfRootComment?.length &&
           reCommentsOfRootComment.map((_) => (
-            <CommentWritten
-              key={_.commentId}
-              isReComment
-              comment={{ ..._ }}
-              itsRootCommentWasDeleted={!!isDeleted}
-            />
+            <CommentWritten key={_.commentId} isReComment comment={{ ..._ }} />
           ))}
 
         {/* write reComment */}

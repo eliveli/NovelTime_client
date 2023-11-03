@@ -16,7 +16,7 @@ import {
   WriteCommentSubmit,
   WriteText,
   WriteTextCntnr,
-  SpaceForUserNameOnTextArea,
+  SpaceForUserName,
 } from "./CommentList.styles";
 
 export function ReCommentInputToCreateOnTablet() {
@@ -33,8 +33,8 @@ export function ReCommentInputToCreateOnTablet() {
 
   const isNotMobile = !useWhetherItIsMobile();
 
-  const userNameOnTextAreaRef = useRef<HTMLSpanElement>(null);
-  const userNameWidth = useComponentWidth(userNameOnTextAreaRef);
+  const userNameNextToTextArea = useRef<HTMLSpanElement>(null);
+  const userNameWidth = useComponentWidth(userNameNextToTextArea);
 
   const dispatch = useAppDispatch();
 
@@ -91,14 +91,18 @@ export function ReCommentInputToCreateOnTablet() {
   return (
     <CommentInputContainerOnTablet ref={commentInputRef}>
       <WriteTextCntnr>
-        <SpaceForUserNameOnTextArea ref={userNameOnTextAreaRef}>
-          {`@${parentCommentUserName}`}
-        </SpaceForUserNameOnTextArea>
+        {parentCommentUserName && (
+          <SpaceForUserName ref={userNameNextToTextArea}>
+            {`@${parentCommentUserName}`}
+          </SpaceForUserName>
+        )}
 
         <WriteText
           ref={textRef}
           onChange={(e) => writeText(e, textRef, isNotMobile)}
           spaceForUserName={userNameWidth}
+          placeholder={parentCommentUserName ? "" : "삭제된 댓글입니다"}
+          disabled={!parentCommentUserName}
         />
         {/*
          <EmojiCntnr size={20}>
@@ -121,8 +125,8 @@ export function ReCommentInputToEditOnTablet() {
 
   const isNotMobile = !useWhetherItIsMobile();
 
-  const userNameOnTextAreaRef = useRef<HTMLSpanElement>(null);
-  const userNameWidth = useComponentWidth(userNameOnTextAreaRef);
+  const userNameNextToTextArea = useRef<HTMLSpanElement>(null);
+  const userNameWidth = useComponentWidth(userNameNextToTextArea);
 
   const commentToEdit = useAppSelector((state) => state.comment.commentToEdit);
   const textToEdit = commentToEdit.commentContent;
@@ -195,9 +199,9 @@ export function ReCommentInputToEditOnTablet() {
   return (
     <CommentInputContainerOnTablet ref={commentInputRef}>
       <WriteTextCntnr>
-        <SpaceForUserNameOnTextArea ref={userNameOnTextAreaRef}>
+        <SpaceForUserName ref={userNameNextToTextArea}>
           {`@${commentToEdit.parentUserName}`}
-        </SpaceForUserNameOnTextArea>
+        </SpaceForUserName>
 
         <WriteText
           ref={textRef}
@@ -413,8 +417,8 @@ export function CommentInputOnMobile({
   const isRootCommentInput = !parentToWriteReComment.parentCommentId;
 
   const textRef = useRef<HTMLTextAreaElement>(null);
-  const userNameOnTextAreaRef = useRef<HTMLSpanElement>(null);
-  const userNameWidth = useComponentWidth(userNameOnTextAreaRef, isRootCommentInput);
+  const userNameNextToTextArea = useRef<HTMLSpanElement>(null);
+  const userNameWidth = useComponentWidth(userNameNextToTextArea, isRootCommentInput);
 
   const commentToEdit = useAppSelector((state) => state.comment.commentToEdit);
   const textToEdit = commentToEdit.commentContent;
@@ -572,9 +576,9 @@ export function CommentInputOnMobile({
           />
         ) : (
           <>
-            <SpaceForUserNameOnTextArea ref={userNameOnTextAreaRef}>
+            <SpaceForUserName ref={userNameNextToTextArea}>
               {`@${commentToEdit.parentUserName || parentToWriteReComment.parentCommentUserName}`}
-            </SpaceForUserNameOnTextArea>
+            </SpaceForUserName>
             <WriteText
               ref={textRef}
               onChange={(e) => writeText(e, textRef, isNotMobile)}
