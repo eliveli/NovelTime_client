@@ -34,7 +34,7 @@ export function ReCommentInputToCreateOnTablet() {
   const isNotMobile = !useWhetherItIsMobile();
 
   const userNameNextToTextArea = useRef<HTMLSpanElement>(null);
-  const userNameWidth = useComponentWidth(userNameNextToTextArea);
+  const userNameWidth = useComponentWidth(userNameNextToTextArea, parentCommentId);
 
   const dispatch = useAppDispatch();
 
@@ -416,12 +416,16 @@ export function CommentInputOnMobile({
   const isNotMobile = !useWhetherItIsMobile();
   const isRootCommentInput = !parentToWriteReComment.parentCommentId;
 
-  const textRef = useRef<HTMLTextAreaElement>(null);
-  const userNameNextToTextArea = useRef<HTMLSpanElement>(null);
-  const userNameWidth = useComponentWidth(userNameNextToTextArea, isRootCommentInput);
-
   const commentToEdit = useAppSelector((state) => state.comment.commentToEdit);
   const textToEdit = commentToEdit.commentContent;
+
+  const textRef = useRef<HTMLTextAreaElement>(null);
+  const userNameNextToTextArea = useRef<HTMLSpanElement>(null);
+  const userNameWidth = useComponentWidth(
+    userNameNextToTextArea,
+    parentToWriteReComment.parentCommentId,
+    commentToEdit.commentId,
+  );
 
   const dispatch = useAppDispatch();
 

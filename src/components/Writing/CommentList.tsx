@@ -149,11 +149,20 @@ function CommentWritten({
   function handleDelete() {
     deleteComment({ commentId, novelId: argsForApis.novelId })
       .then(() => {
+        // when deleting a root comment
         if (getAllRootCommentPages) {
-          getAllRootCommentPages(); // when deleting a root comment
+          getAllRootCommentPages();
+
+          dispatch(
+            setParentToWriteReComment({
+              parentCommentId: "",
+              parentCommentUserName: "",
+            }),
+          );
           return;
         }
 
+        // when deleting a reComment
         // Change this to rootComment as it is deleted and can't be used
         dispatch(
           setParentToWriteReComment({
